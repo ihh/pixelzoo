@@ -23,7 +23,7 @@ typedef struct LocalOffset {
 typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
-  enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ } opcode;
+  enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE } opcode;
   double ignoreProb;
 } RuleCondition;
 
