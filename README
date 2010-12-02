@@ -1,0 +1,12 @@
+Libraries
+---------
+
+libxml2 (MIT license, included by default with the iPhone SDK)
+
+Red-Black Tree or Hashtable (for looking up Particle definitions)
+e.g. RBT code from
+http://oopweb.com/Algorithms/Documents/Sman/Volume/RedBlackTrees.html
+http://www.cs.utk.edu/~plank/plank/rbtree/rbtree.html
+http://www.mit.edu/~emin/source_code/red_black_tree/index.html
+etc.
+
