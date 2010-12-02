@@ -1,7 +1,6 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
-
 /* 32-bit cell state */
 typedef unsigned long State;
 #define StateMask 0xffffffff
@@ -56,4 +55,3 @@ typedef struct StochasticRule {
 } StochasticRule;
 
 #endif /* RULE_INCLUDED */
-
