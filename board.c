@@ -57,6 +57,8 @@ Particle* readBoard (Board* board, int x, int y) {
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
   State lhs, rhs;
+  if (randomDouble() <= cond->ignoreProb)
+    return 1;
   x += cond->loc.x;
   y += cond->loc.y;
   lhs = safeReadBoardState(board,x,y) & cond->mask;
