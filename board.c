@@ -28,3 +28,12 @@ void deleteBoard (Board* board) {
   free (board->by_type);
   free (board);
 }
+
+Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
+  Particle* p;
+  p = newParticle (name, nRules);
+  p->type = type;
+  board->by_type[type] = p;
+  return p;
+}
+

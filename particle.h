@@ -20,7 +20,7 @@ typedef struct Particle {
   StochasticRule* rule;
 } Particle;
 
-/* constructor/destructor are private to Board; do not use */
+/* constructor/destructor are private to Board; use newBoardParticle instead */
 Particle* newParticle (char* name, int nRules);
 void deleteParticle (Particle* particle);
 
