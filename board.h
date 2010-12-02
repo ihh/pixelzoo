@@ -15,7 +15,7 @@ typedef struct Board {
 Board* newBoard (int size);
 void deleteBoard (Board* board);
 Particle* newBoardParticle (Board* board, char* name, Type type, int nRules);
-void writeBoard (Board* board, int x, int y, State value);
+void writeBoard (Board* board, int x, int y, State state);
 Particle* readBoard (Board* board, int x, int y);
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds);
 

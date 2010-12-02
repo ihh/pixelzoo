@@ -12,6 +12,7 @@ Particle* newParticle (char* name, int nRules) {
   p->color.r = p->color.g = p->color.b = 0;
   p->nRules = nRules;
   p->rule = calloc (nRules, sizeof(StochasticRule));
+  p->totalRate = 0.;
   return p;
 }
 
