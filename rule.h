@@ -4,6 +4,7 @@
 
 /* 32-bit cell state */
 typedef unsigned long State;
+#define StateMask 0xffffffff
 
 /* 16-bit cell type */
 typedef unsigned short Type;
@@ -26,7 +27,7 @@ typedef struct RuleCondition {
 
 /*
   RuleOperation describes the following operation:
-   cell[dest] = (((cell[src] >> right_shift) + offset) & mask) << left_shift;
+  cell[dest] = (cell[dest] & (StateMask ^ (mask << left_shift))) | ((((cell[src] >> right_shift) + offset) & mask) << left_shift);
 */
 typedef struct RuleOperation {
   Coord src, dest;
