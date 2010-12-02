@@ -21,7 +21,7 @@ typedef struct GlobalCoord {
 
 /*
   RuleCondition describes the following conditional test:
-   randomDouble() <= ignoreProb  ||  (cell[loc] & mask  <opcode>  rhs & mask)
+   (randomDouble() <= ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs & mask)
 */
 typedef struct RuleCondition {
   LocalOffset loc;
