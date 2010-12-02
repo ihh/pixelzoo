@@ -8,16 +8,13 @@ typedef unsigned long State;
 /* 16-bit cell type */
 typedef unsigned short Type;
 #define TypeMask 0xffff
+#define NumTypes 0x10000
+#define MaxType  0xffff
 
 /* short-range relative co-ordinate offset */
 typedef struct LocalOffset {
   char x, y;
 } LocalOffset;
-
-/* global co-ordinate */
-typedef struct GlobalCoord {
-  unsigned long x, y;
-} GlobalCoord;
 
 /*
   RuleCondition describes the following conditional test:

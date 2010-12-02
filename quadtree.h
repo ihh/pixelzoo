@@ -3,14 +3,16 @@
 
 #include "rule.h"
 
+/* quad tree */
 typedef struct QuadTree {
     double* quadRate;
-    int K; // K = log_2(size)
+    unsigned char K; // K = log_2(size)
 } QuadTree;
 
 QuadTree* newQuadTree (int size);
-void updateQuadTree(QuadTree* quad, GlobalCoord* p, double val);
-void sampleQuadLeaf(QuadTree* quad, GlobalCoord* p_ret);
+void deleteQuadTree (QuadTree* quad);
+void updateQuadTree(QuadTree* quad, int x, int y, double val);
+void sampleQuadLeaf(QuadTree* quad, int* x_ret, int* y_ret);
 double topQuadRate(QuadTree* quad);
 
 #endif /* QUADTREE_INCLUDED */
