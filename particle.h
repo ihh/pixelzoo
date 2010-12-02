@@ -2,11 +2,7 @@
 #define PARTICLE_INCLUDED
 
 #include "rule.h"
-
-/* RGB color */
-typedef struct RGB {
-  unsigned char r, g, b;
-} RGB;
+#include "util.h"
 
 /*
   A Particle consists of:

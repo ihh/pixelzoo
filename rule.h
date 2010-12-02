@@ -10,16 +10,21 @@ typedef unsigned short Type;
 #define TypeMask 0xffff
 
 /* short-range relative co-ordinate offset */
-typedef struct Coord {
+typedef struct LocalOffset {
   char x, y;
-} Coord;
+} LocalOffset;
+
+/* global co-ordinate */
+typedef struct GlobalCoord {
+  unsigned long x, y;
+} GlobalCoord;
 
 /*
   RuleCondition describes the following conditional test:
    (cell[loc] & mask  <opcode>  rhs & mask)
 */
 typedef struct RuleCondition {
-  Coord loc;
+  LocalOffset loc;
   State mask, rhs;
   enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ } opcode;
 } RuleCondition;
@@ -29,7 +34,7 @@ typedef struct RuleCondition {
   cell[dest] = (cell[dest] & (StateMask ^ (mask << left_shift))) | ((((cell[src] >> right_shift) + offset) & mask) << left_shift);
 */
 typedef struct RuleOperation {
-  Coord src, dest;
+  LocalOffset src, dest;
   unsigned char right_shift, left_shift;
   State offset, mask;
 } RuleOperation;
