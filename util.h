@@ -6,7 +6,7 @@ typedef struct RGB {
   unsigned char r, g, b;
 } RGB;
 
-/* random numbers */
-double random();
+/* randomDouble() returns a random number between 0 and 1 */
+double randomDouble();
 
 #endif /* UTIL_INCLUDED */

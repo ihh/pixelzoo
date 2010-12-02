@@ -9,13 +9,14 @@
    a Type,
    a name (C string),
    an RGB color,
-   a variable number of StochasticRule's (all of the same Type as the Particle).
+   a variable number of StochasticRule's (all of the same Type as the Particle),
+   a total firing rate (the sum of the firing rates for all the StochasticRule's for this type).
  */
 typedef struct Particle {
   Type type;
   char* name;
   RGB color;
-  int rules;
+  int nRules;  /* number of rules */
   StochasticRule* rule;
 } Particle;
 

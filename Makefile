@@ -1,5 +1,12 @@
+CC = gcc
 
-CFILES = $(wildcard *.c)
+TARGET =
+OFILES = $(addsuffix .o,$(filter-out $(TARGET),$(basename $(wildcard *.c))))
 
-all:
-	echo $(CFILES)
+all: $(OFILES)
+
+clean:
+	rm $(OFILES) $(TARGET)
+
+.c.o:
+	$(CC) -c $< -o $@

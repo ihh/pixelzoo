@@ -21,12 +21,13 @@ typedef struct GlobalCoord {
 
 /*
   RuleCondition describes the following conditional test:
-   (cell[loc] & mask  <opcode>  rhs & mask)
+   randomDouble() <= ignoreProb  ||  (cell[loc] & mask  <opcode>  rhs & mask)
 */
 typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
   enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ } opcode;
+  double ignoreProb;
 } RuleCondition;
 
 /*
@@ -44,7 +45,7 @@ typedef struct RuleOperation {
    a Type,
    a fixed number of RuleCondition's,
    a fixed number of RuleOperation's,
-   a firing probability.
+   a firing rate (corresponding to the relative rate that this rule will be selected out of all rules applying to this Type)
  */
 
 /* first define the size of the condition & operation blocks */
@@ -54,8 +55,8 @@ typedef struct RuleOperation {
 /* now the struct */
 typedef struct StochasticRule {
   Type id;
-  RuleCondition[NumRuleConditions] cond;
-  RuleOperation[NumRuleOperations] op;
+  RuleCondition cond[NumRuleConditions];
+  RuleOperation op[NumRuleOperations];
   double prob;
 } StochasticRule;
 
