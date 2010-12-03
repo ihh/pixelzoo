@@ -117,10 +117,11 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
   int actualUpdates, x, y;
   double effectiveUpdates, elapsedTime, totalCells, acceptProb;
   clock_t start, now;
-  actualUpdates = effectiveUpdates = 0;
+  actualUpdates = 0;
+  effectiveUpdates = elapsedTime = 0.;
   totalCells = ((double) board->size) * ((double) board->size);
   start = clock();
-  while (1) {
+  while (topQuadRate(board->quad) > 0.) {
     now = clock();
     elapsedTime = (now - start) / CLOCKS_PER_SEC;
     if (elapsedTime > maxTimeInSeconds)
@@ -141,8 +142,8 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     evolveBoardCell (board, x, y);
   }
   if (updateRate_ret)
-    *updateRate_ret = effectiveUpdates / elapsedTime;
+    *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;
   if (minUpdateRate_ret)
-    *minUpdateRate_ret = actualUpdates / elapsedTime;
+    *minUpdateRate_ret = (elapsedTime > 0) ? (actualUpdates / elapsedTime) : 0.;
 }
 
