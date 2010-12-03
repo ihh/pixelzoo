@@ -20,12 +20,14 @@
 #define XMLBOARD_Y        "y"
 #define XMLBOARD_MASK     "mask"
 #define XMLBOARD_VAL      "val"
+#define XMLBOARD_VALHEX   "valx"
 #define XMLBOARD_OP       "op"
 #define XMLBOARD_IGNORE   "ignore"
 #define XMLBOARD_EXEC     "exec"
 #define XMLBOARD_SRC      "src"
 #define XMLBOARD_DEST     "dest"
 #define XMLBOARD_ADD      "add"
+#define XMLBOARD_ADDHEX   "addx"
 #define XMLBOARD_LSHIFT   "lshift"
 #define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
@@ -38,8 +40,10 @@
 #define CHILDSTRING(NODE,KEYWORD) CHILD(NODE,KEYWORD)->content
 #define CHILDINT(NODE,KEYWORD) atoi(CHILDSTRING(NODE,KEYWORD))
 #define CHILDFLOAT(NODE,KEYWORD) atof(CHILDSTRING(NODE,KEYWORD))
+#define CHILDHEX(NODE,KEYWORD) strtoul(CHILDSTRING(NODE,KEYWORD),0,16)
 #define OPTCHILDINT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDINT(NODE,KEYWORD) : (DEFAULT))
 #define OPTCHILDFLOAT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDFLOAT(NODE,KEYWORD) : (DEFAULT))
+#define OPTCHILDHEX(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDHEX(NODE,KEYWORD) : (DEFAULT))
 #define ATTR(NODE,KEYWORD) getAttrByName (NODE, XMLBOARD_ ## KEYWORD)
 
 /* prototypes for private builder methods */
@@ -68,7 +72,7 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
-      state = CHILDINT(node,STATE);
+      state = CHILDHEX(node,STATE);
       writeBoardState (board, x, y, state);
     }
 
@@ -119,7 +123,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle (CHILDSTRING(node,NAME), nRules);
-  p->type = CHILDINT(node,ID);
+  p->type = CHILDHEX(node,ID);
   if (color = CHILD(node,COLOR)) {
     p->color.r = CHILDINT(color,R);
     p->color.g = CHILDINT(color,G);
@@ -156,8 +160,8 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   } else
     cond->loc.x = cond->loc.y = 0;
 
-  cond->mask = OPTCHILDINT(node,MASK,StateMask);
-  cond->rhs = OPTCHILDINT(node,VAL,0);
+  cond->mask = OPTCHILDHEX(node,MASK,StateMask);
+  cond->rhs = OPTCHILDINT(node,VAL,OPTCHILDHEX(node,VALHEX,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
 
   cond->opcode = EQ;
@@ -191,8 +195,8 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   } else
     op->dest.x = op->dest.y = 0;
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  op->offset = OPTCHILDINT(node,ADD,0);
-  op->mask = OPTCHILDINT(node,MASK,StateMask);
+  op->offset = OPTCHILDINT(node,ADD,OPTCHILDHEX(node,ADDHEX,0));
+  op->mask = OPTCHILDHEX(node,MASK,StateMask);
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
 }
