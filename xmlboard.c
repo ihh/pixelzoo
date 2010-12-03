@@ -163,7 +163,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
     cond->loc.x = cond->loc.y = 0;
 
   cond->mask = OPTCHILDHEX(node,MASK,StateMask);
-  cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0)) & cond->mask;
+  cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
 
   rshift = OPTCHILDINT(node,RSHIFT,0);
