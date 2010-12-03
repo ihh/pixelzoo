@@ -29,11 +29,11 @@ typedef struct RuleCondition {
 
 /*
   RuleOperation describes the following operation:
-  if (randomDouble() >= failProb) {  cell[dest] = (cell[dest] & (StateMask ^ (mask << left_shift))) | ((((cell[src] >> right_shift) + offset) & mask) << left_shift);  }
+  if (randomDouble() >= failProb) {  cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | ((((cell[src] >> rightShift) + offset) & mask) << leftShift);  }
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
-  unsigned char right_shift, left_shift;
+  unsigned char rightShift, leftShift;
   State offset, mask;
   double failProb;
 } RuleOperation;

@@ -190,9 +190,9 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
     op->dest.y = OPTCHILDINT(dest,Y,0);
   } else
     op->dest.x = op->dest.y = 0;
-  op->right_shift = OPTCHILDINT(node,RSHIFT,0);
+  op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,ADD,0);
   op->mask = OPTCHILDINT(node,MASK,StateMask);
-  op->left_shift = OPTCHILDINT(node,LSHIFT,0);
+  op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
 }
