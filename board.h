@@ -43,6 +43,6 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state);  /* doe
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y);
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y);
 
-void evolveBoardCell (Board* board, int x, int y, double maxBoardRate);
+void evolveBoardCell (Board* board, int x, int y);
 
 #endif /* BOARD_INCLUDED */
