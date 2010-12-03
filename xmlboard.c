@@ -51,6 +51,7 @@
 xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
 xmlChar* getAttrByName (xmlNode* node, char* name);
 Particle* newParticleFromXmlNode (xmlNode* node);
+void initColorFromXmlNode (RGB* rgb, xmlNode* node);
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node);
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
@@ -125,17 +126,29 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
       ++nRules;
   p = newParticle (CHILDSTRING(node,NAME), nRules);
   p->type = OPTCHILDINT(node,DECID,CHILDHEX(node,HEXID));
-  if (color = CHILD(node,COLOR)) {
-    p->color.r = CHILDINT(color,R);
-    p->color.g = CHILDINT(color,G);
-    p->color.b = CHILDINT(color,B);
-  } else
+  if (color = CHILD(node,COLOR))
+    initColorFromXmlNode (&p->color, color);
+  else
     p->color.r = p->color.g = p->color.b = 255;
   n = 0;
   for (curNode = node; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       initRuleFromXmlNode (&p->rule[n++], curNode);
   return p;
+}
+
+void initColorFromXmlNode (RGB* rgb, xmlNode* node) {
+  unsigned long hex;
+  if (node->children) {
+    rgb->r = CHILDINT(node,R);
+    rgb->g = CHILDINT(node,G);
+    rgb->b = CHILDINT(node,B);
+  } else {
+    hex = strtoul(node->content,0,16);
+    rgb->r = (hex >> 16) & 0xff;
+    rgb->g = (hex >> 8) & 0xff;
+    rgb->b = hex & 0xff;
+  }
 }
 
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
