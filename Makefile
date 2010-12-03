@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -I/usr/include/libxml2
 
 TARGET =
 OFILES = $(addsuffix .o,$(filter-out $(TARGET),$(basename $(wildcard *.c))))

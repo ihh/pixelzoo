@@ -39,8 +39,7 @@ typedef struct RuleOperation {
 } RuleOperation;
 
 /*
-  A StochasticRule consists of:
-   a Type,
+  A StochasticRule (associated with a given Particle) consists of:
    a fixed number of RuleCondition's,
    a fixed number of RuleOperation's,
    a firing rate (corresponding to the relative rate that this rule will be selected out of all rules applying to this Type)
@@ -53,7 +52,6 @@ typedef struct RuleOperation {
 
 /* now the struct */
 typedef struct StochasticRule {
-  Type id;
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
   double rate, overloadRate;
