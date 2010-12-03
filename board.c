@@ -107,6 +107,7 @@ void evolveBoardCell (Board* board, int x, int y) {
   int n, k;
   double rand;
   StochasticRule* rule;
+  int *xUndo, *yUndo, *stateUndo;
   p = readBoardParticle (board, x, y);
   if (p) {
     rand = randomDouble() * p->totalRate;
