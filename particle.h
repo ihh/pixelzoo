@@ -21,7 +21,7 @@ typedef struct Particle {
   double totalRate, normalizedRate, totalOverloadRate;
 } Particle;
 
-/* constructor/destructor are private to Board; use newBoardParticle instead */
+/* constructor/destructor */
 Particle* newParticle (char* name, int nRules);
 void deleteParticle (Particle* particle);
 

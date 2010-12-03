@@ -31,14 +31,6 @@ void deleteBoard (Board* board) {
   free (board);
 }
 
-Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
-  Particle* p;
-  p = newParticle (name, nRules);
-  p->type = type;
-  board->by_type[type] = p;
-  return p;
-}
-
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
@@ -53,21 +45,25 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   }
 }
 
-void finalizeBoardRules (Board* board) {
-  unsigned long t;
+
+Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
   Particle* p;
+  p = newParticle (name, nRules);
+  p->type = type;
+  board->by_type[type] = p;
+  return p;
+}
+
+void addParticleToBoard (Particle* p, Board* board) {
+  unsigned long t;
   int r;
-  for (t = 0; t < NumTypes; ++t) {
-    p = board->by_type[t];
-    if (p) {
-      p->totalRate = p->totalOverloadRate = 0.;
-      for (r = 0; r < p->nRules; ++r) {
-	p->totalRate += p->rule[r].rate;
-	p->totalOverloadRate += p->rule[r].overloadRate;
-      }
-      p->normalizedRate = min (p->totalRate, 1.);
-    }
+  board->by_type[p->type] = p;
+  p->totalRate = p->totalOverloadRate = 0.;
+  for (r = 0; r < p->nRules; ++r) {
+    p->totalRate += p->rule[r].rate;
+    p->totalOverloadRate += p->rule[r].overloadRate;
   }
+  p->normalizedRate = min (p->totalRate, 1.);
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {

@@ -16,8 +16,7 @@ typedef struct Board {
 /* public methods */
 Board* newBoard (int size);
 void deleteBoard (Board* board);
-Particle* newBoardParticle (Board* board, char* name, Type type, int nRules);
-void finalizeBoardRules (Board* board);  /* call after setting up all particles & rules */
+void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) <= (BOARD_PTR)->size && (Y) >= 0 && (Y) <= (BOARD_PTR)->size)
