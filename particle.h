@@ -18,7 +18,7 @@ typedef struct Particle {
   RGB color;
   int nRules;  /* number of rules */
   StochasticRule* rule;
-  double totalRate;
+  double totalRate, normalizedRate;
 } Particle;
 
 /* constructor/destructor are private to Board; use newBoardParticle instead */

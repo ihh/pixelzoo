@@ -45,7 +45,7 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   p = board->by_type[t];
   if (p) {
     board->cell[x][y] = state;
-    updateQuadTree (board->quad, x, y, min (p->totalRate, 1.));  /* high particle rates get normalized to 1 here */
+    updateQuadTree (board->quad, x, y, p->normalizedRate);
   } else {
     board->cell[x][y] = 0;
     updateQuadTree (board->quad, x, y, 0.);
@@ -62,6 +62,7 @@ void finalizeBoardRules (Board* board) {
       p->totalRate = 0.;
       for (r = 0; r < p->nRules; ++r)
 	p->totalRate += p->rule[r].rate;
+      p->normalizedRate = min (p->totalRate, 1.);
     }
   }
 }

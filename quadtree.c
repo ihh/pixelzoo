@@ -30,6 +30,10 @@ void deleteQuadTree (QuadTree* quad) {
   free (quad);
 }
 
+double readQuadTree (QuadTree* quad, int x, int y) {
+  return quad->quadRate[quadNodeIndex(quad, x, y, quad->K)];
+}
+
 void updateQuadTree(QuadTree* quad, int x, int y, double val) {
   double oldVal, diff;
   int lev, n;
