@@ -5,7 +5,8 @@
 /* XML node names */
 #define XMLBOARD_SIZE     "size"
 #define XMLBOARD_PARTICLE "particle"
-#define XMLBOARD_ID       "id"
+#define XMLBOARD_DECID    "decid"
+#define XMLBOARD_HEXID    "hexid"
 #define XMLBOARD_NAME     "name"
 #define XMLBOARD_COLOR    "color"
 #define XMLBOARD_R        "r"
@@ -19,15 +20,15 @@
 #define XMLBOARD_X        "x"
 #define XMLBOARD_Y        "y"
 #define XMLBOARD_MASK     "mask"
-#define XMLBOARD_VAL      "val"
-#define XMLBOARD_VALHEX   "valx"
+#define XMLBOARD_DECVAL   "decval"
+#define XMLBOARD_HEXVAL   "hexval"
 #define XMLBOARD_OP       "op"
 #define XMLBOARD_IGNORE   "ignore"
 #define XMLBOARD_EXEC     "exec"
 #define XMLBOARD_SRC      "src"
 #define XMLBOARD_DEST     "dest"
-#define XMLBOARD_ADD      "add"
-#define XMLBOARD_ADDHEX   "addx"
+#define XMLBOARD_DECADD   "decadd"
+#define XMLBOARD_HEXADD   "hexadd"
 #define XMLBOARD_LSHIFT   "lshift"
 #define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
@@ -123,7 +124,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle (CHILDSTRING(node,NAME), nRules);
-  p->type = CHILDHEX(node,ID);
+  p->type = OPTCHILDINT(node,DECID,CHILDHEX(node,HEXID));
   if (color = CHILD(node,COLOR)) {
     p->color.r = CHILDINT(color,R);
     p->color.g = CHILDINT(color,G);
@@ -152,6 +153,7 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   xmlNode* loc;
   xmlChar* opcode;
+  int rshift;
 
   loc = CHILD(node,LOC);
   if (loc) {
@@ -161,8 +163,14 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
     cond->loc.x = cond->loc.y = 0;
 
   cond->mask = OPTCHILDHEX(node,MASK,StateMask);
-  cond->rhs = OPTCHILDINT(node,VAL,OPTCHILDHEX(node,VALHEX,0));
+  cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
+
+  rshift = OPTCHILDINT(node,RSHIFT,0);
+  if (rshift) {
+    cond->mask << rshift;
+    cond->rhs << rshift;
+  }
 
   cond->opcode = EQ;
   opcode = ATTR(node,OP);
@@ -195,7 +203,7 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   } else
     op->dest.x = op->dest.y = 0;
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  op->offset = OPTCHILDINT(node,ADD,OPTCHILDHEX(node,ADDHEX,0));
+  op->offset = OPTCHILDINT(node,DECADD,OPTCHILDHEX(node,HEXADD,0));
   op->mask = OPTCHILDHEX(node,MASK,StateMask);
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
