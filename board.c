@@ -115,7 +115,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, elapsedTime, totalCells, acceptProb;
+  double effectiveUpdates, elapsedTime, totalCells;
   clock_t start, now;
   actualUpdates = 0;
   effectiveUpdates = elapsedTime = 0.;
@@ -132,10 +132,10 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
                   = (1-p) * p * d/dp 1/(1-p)
                   = (1-p) * p * 1/(1-p)^2
                   = p / (1-p)
-                  = (1-q) / q   where q=acceptProb
+                  = (1-q) / q   where q = acceptProb = topQuadRate/totalCells
+       accepted + rejected = 1 + (1-q)/q = 1/q = totalCells/topQuadRate
     */
-    acceptProb = topQuadRate(board->quad) / totalCells;
-    effectiveUpdates += 1. + (1. - acceptProb) / acceptProb;
+    effectiveUpdates += totalCells / topQuadRate(board->quad);
     ++actualUpdates;
 
     sampleQuadLeaf (board->quad, &x, &y);
