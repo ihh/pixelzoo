@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "xmlboard.h"
 
 /* XML node names */
@@ -24,19 +25,26 @@
 #define XMLBOARD_EXEC     "exec"
 #define XMLBOARD_SRC      "src"
 #define XMLBOARD_DEST     "dest"
+#define XMLBOARD_ADD      "add"
+#define XMLBOARD_LSHIFT   "lshift"
+#define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
+#define XMLBOARD_INIT     "init"
+#define XMLBOARD_STATE    "state"
 
 /* private macros for matching XML nodes */
 #define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
-#define CHILD(NODE,KEYWORD) getChildByName (NODE, XMLBOARD_ ## KEYWORD)
+#define CHILD(NODE,KEYWORD) getNodeByName ((NODE)->children, XMLBOARD_ ## KEYWORD)
 #define CHILDSTRING(NODE,KEYWORD) CHILD(NODE,KEYWORD)->content
 #define CHILDINT(NODE,KEYWORD) atoi(CHILDSTRING(NODE,KEYWORD))
 #define CHILDFLOAT(NODE,KEYWORD) atof(CHILDSTRING(NODE,KEYWORD))
 #define OPTCHILDINT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDINT(NODE,KEYWORD) : (DEFAULT))
 #define OPTCHILDFLOAT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDFLOAT(NODE,KEYWORD) : (DEFAULT))
+#define ATTR(NODE,KEYWORD) getAttrByName (NODE, XMLBOARD_ ## KEYWORD)
 
 /* prototypes for private builder methods */
-xmlNode* getChildByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
+xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
+xmlChar* getAttrByName (xmlNode* node, char* name);
 Particle* newParticleFromXmlNode (xmlNode* node);
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node);
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
@@ -46,6 +54,8 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
 Board* newBoardFromXmlDocument (xmlDoc *doc) {
   Board *board;
   xmlNode *root, *node;
+  int x, y;
+  State state;
 
   root = xmlDocGetRootElement (doc);
   board = newBoard (CHILDINT(node,SIZE));
@@ -54,6 +64,14 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
     if (MATCHES(node,PARTICLE))
       addParticleToBoard (newParticleFromXmlNode(node), board);
 
+  for (node = root->children; node; node = node->next)
+    if (MATCHES(node,INIT)) {
+      x = CHILDINT(node,X);
+      y = CHILDINT(node,Y);
+      state = CHILDINT(node,STATE);
+      writeBoardState (board, x, y, state);
+    }
+
   return board;
 }
 
@@ -61,18 +79,34 @@ Board* newBoardFromXmlFile (const char* filename) {
   xmlDoc* doc;
   Board* board = NULL;
   doc = xmlReadFile (filename, NULL, 0);
-  if (doc != NULL)
+  if (doc)
+    board = newBoardFromXmlDocument (doc);
+  return board;
+}
+
+Board* newBoardFromXmlString (const char* string) {
+  xmlDoc* doc;
+  Board* board = NULL;
+  doc = xmlReadMemory (string, strlen(string), "noname.xml", NULL, 0);
+  if (doc)
     board = newBoardFromXmlDocument (doc);
   return board;
 }
 
 /* private builder methods */
-xmlNode* getChildByName (xmlNode* parent, char* childName) {
-  xmlNode* node;
-  for (node = parent->children; node; node = node->next)
-    if (node->type == XML_ELEMENT_NODE && strcmp (node->name, childName) == 0)
+xmlNode* getNodeByName (xmlNode* node, char* name) {
+  for (; node; node = node->next)
+    if (node->type == XML_ELEMENT_NODE && strcmp (node->name, name) == 0)
       return node;
   return (xmlNode*) NULL;
+}
+
+xmlChar* getAttrByName (xmlNode* node, char* name) {
+  xmlAttr* attr;
+  for (attr = node->properties; attr; attr = attr->next)
+    if (strcmp (attr->name, name) == 0)
+      return attr->children->content;
+  return (xmlChar*) NULL;
 }
 
 Particle* newParticleFromXmlNode (xmlNode* node) {
@@ -113,12 +147,52 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   xmlNode* loc;
+  xmlChar* opcode;
+
   loc = CHILD(node,LOC);
-  cond->loc.x = CHILDINT(loc,X);
-  cond->loc.y = CHILDINT(loc,Y);
-  /* more to go here */
+  if (loc) {
+    cond->loc.x = OPTCHILDINT(loc,X,0);
+    cond->loc.y = OPTCHILDINT(loc,Y,0);
+  } else
+    cond->loc.x = cond->loc.y = 0;
+
+  cond->mask = OPTCHILDINT(node,MASK,StateMask);
+  cond->rhs = OPTCHILDINT(node,VAL,0);
+  cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
+
+  cond->opcode = EQ;
+  opcode = ATTR(node,OP);
+  if (opcode) {
+    if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = EQ;
+    else if (strcmp(opcode,"!=")==0) cond->opcode = NEQ;
+    else if (strcmp(opcode,">")==0) cond->opcode = GT;
+    else if (strcmp(opcode,"<")==0) cond->opcode = LT;
+    else if (strcmp(opcode,">=")==0) cond->opcode = GEQ;
+    else if (strcmp(opcode,"<=")==0) cond->opcode = LEQ;
+    else if (strcmp(opcode,"1")==0) cond->opcode = TRUE;
+    else if (strcmp(opcode,"0")==0) cond->opcode = FALSE;
+  }
 }
 
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
-  /* more to go here */
+  xmlNode *src, *dest;
+  src = CHILD(node,SRC);
+  dest = CHILD(node,DEST);
+  if (src && !dest) dest = src;
+  else if (dest && !src) src = dest;
+  if (src) {
+    op->src.x = OPTCHILDINT(src,X,0);
+    op->src.y = OPTCHILDINT(src,Y,0);
+  } else
+    op->src.x = op->src.y = 0;
+  if (dest) {
+    op->dest.x = OPTCHILDINT(dest,X,0);
+    op->dest.y = OPTCHILDINT(dest,Y,0);
+  } else
+    op->dest.x = op->dest.y = 0;
+  op->right_shift = OPTCHILDINT(node,RSHIFT,0);
+  op->offset = OPTCHILDINT(node,ADD,0);
+  op->mask = OPTCHILDINT(node,MASK,StateMask);
+  op->left_shift = OPTCHILDINT(node,LSHIFT,0);
+  op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
 }
