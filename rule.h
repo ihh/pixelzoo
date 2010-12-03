@@ -18,7 +18,7 @@ typedef struct LocalOffset {
 
 /*
   RuleCondition describes the following conditional test:
-   (randomDouble() < ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs & mask)
+   (randomDouble() < ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs)
 */
 typedef struct RuleCondition {
   LocalOffset loc;

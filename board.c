@@ -73,7 +73,7 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
   x += cond->loc.x;
   y += cond->loc.y;
   lhs = readBoardState(board,x,y) & cond->mask;
-  rhs = cond->rhs & cond->mask;
+  rhs = cond->rhs;
   switch (cond->opcode) {
   case EQ: return lhs == rhs;
   case NEQ: return lhs != rhs;
