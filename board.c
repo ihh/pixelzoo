@@ -52,8 +52,18 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   }
 }
 
-Particle* readBoardParticle (Board* board, int x, int y) {
-  return board->by_type[readBoardState(board,x,y) & TypeMask];
+void finalizeBoardRules (Board* board) {
+  unsigned long t;
+  Particle* p;
+  int r;
+  for (t = 0; t < NumTypes; ++t) {
+    p = board->by_type[t];
+    if (p) {
+      p->totalRate = 0.;
+      for (r = 0; r < p->nRules; ++r)
+	p->totalRate += p->rule[r].rate;
+    }
+  }
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
@@ -115,16 +125,16 @@ void evolveBoardCell (Board* board, int x, int y) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, elapsedTime, totalCells;
+  double effectiveUpdates, targetUpdates, elapsedTime;
   clock_t start, now;
   actualUpdates = 0;
   effectiveUpdates = elapsedTime = 0.;
-  totalCells = ((double) board->size) * ((double) board->size);
+  targetUpdates = targetUpdatesPerCell * boardCells(board);
   start = clock();
   while (topQuadRate(board->quad) > 0.) {
     now = clock();
     elapsedTime = (now - start) / CLOCKS_PER_SEC;
-    if (elapsedTime > maxTimeInSeconds)
+    if (elapsedTime > maxTimeInSeconds || effectiveUpdates >= targetUpdates)
       break;
     /* estimate expected number of rejected moves per accepted move as follows:
        rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p=rejectProb
@@ -132,10 +142,10 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
                   = (1-p) * p * d/dp 1/(1-p)
                   = (1-p) * p * 1/(1-p)^2
                   = p / (1-p)
-                  = (1-q) / q   where q = acceptProb = topQuadRate/totalCells
-       accepted + rejected = 1 + (1-q)/q = 1/q = totalCells/topQuadRate
+                  = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
+       accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
     */
-    effectiveUpdates += totalCells / topQuadRate(board->quad);
+    effectiveUpdates += boardCells(board) / topQuadRate(board->quad);
     ++actualUpdates;
 
     sampleQuadLeaf (board->quad, &x, &y);
