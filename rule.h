@@ -18,23 +18,24 @@ typedef struct LocalOffset {
 
 /*
   RuleCondition describes the following conditional test:
-   (randomDouble() <= ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs & mask)
+   (randomDouble() < ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs & mask)
 */
 typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
-  enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE } opcode;
+  enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE, FALSE } opcode;
   double ignoreProb;
 } RuleCondition;
 
 /*
   RuleOperation describes the following operation:
-  cell[dest] = (cell[dest] & (StateMask ^ (mask << left_shift))) | ((((cell[src] >> right_shift) + offset) & mask) << left_shift);
+  if (randomDouble() >= failProb) {  cell[dest] = (cell[dest] & (StateMask ^ (mask << left_shift))) | ((((cell[src] >> right_shift) + offset) & mask) << left_shift);  }
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char right_shift, left_shift;
   State offset, mask;
+  double failProb;
 } RuleOperation;
 
 /*
@@ -54,7 +55,7 @@ typedef struct StochasticRule {
   Type id;
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
-  double prob;
+  double rate;
 } StochasticRule;
 
 #endif /* RULE_INCLUDED */

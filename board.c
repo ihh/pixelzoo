@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "board.h"
 
 Board* newBoard (int size) {
@@ -37,31 +38,31 @@ Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
   return p;
 }
 
-void writeBoard (Board* board, int x, int y, State state) {
+void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
   t = state & TypeMask;
   p = board->by_type[t];
   if (p) {
     board->cell[x][y] = state;
-    updateQuadTree (board->quad, x, y, p->totalRate);
+    updateQuadTree (board->quad, x, y, min (p->totalRate, 1.));
   } else {
     board->cell[x][y] = 0;
     updateQuadTree (board->quad, x, y, 0.);
   }
 }
 
-Particle* readBoard (Board* board, int x, int y) {
-  return board->by_type[safeReadBoardState(board,x,y) & TypeMask];
+Particle* readBoardParticle (Board* board, int x, int y) {
+  return board->by_type[readBoardState(board,x,y) & TypeMask];
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
   State lhs, rhs;
-  if (randomDouble() <= cond->ignoreProb)
+  if (randomDouble() < cond->ignoreProb)
     return 1;
   x += cond->loc.x;
   y += cond->loc.y;
-  lhs = safeReadBoardState(board,x,y) & cond->mask;
+  lhs = readBoardState(board,x,y) & cond->mask;
   rhs = cond->rhs & cond->mask;
   switch (cond->opcode) {
   case EQ: return lhs == rhs;
@@ -71,19 +72,77 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
   case GEQ: return lhs >= rhs;
   case LEQ: return lhs <= rhs;
   case TRUE: return 1;
-  default: break;
+  case FALSE: default: break;
   }
   return 0;
 }
 
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y) {
   int xSrc, ySrc;
+  if (randomDouble() < op->failProb)
+    return;
   xSrc = x + op->src.x;
   ySrc = y + op->src.y;
   x += op->dest.x;
   y += op->dest.y;
-  if (onBoard(board,x,y) && onBoard(board,xSrc,ySrc))  /* only check once */
-    writeBoard (board, x, y, 
-		(board->cell[x][y] & (StateMask ^ (op->mask << op->left_shift)))
-		| ((((board->cell[xSrc][ySrc] >> op->right_shift) + op->offset) & op->mask) << op->left_shift));
+  if (onBoard(board,x,y))  /* only check once */
+    writeBoardStateUnguarded (board, x, y, 
+			      (readBoardStateUnguarded(board,x,y) & (StateMask ^ (op->mask << op->left_shift)))
+			      | ((((readBoardState(board,xSrc,ySrc) >> op->right_shift) + op->offset) & op->mask) << op->left_shift));
 }
+
+void evolveBoardCell (Board* board, int x, int y) {
+  Particle* p;
+  int n, k;
+  double rand;
+  StochasticRule* rule;
+  p = readBoardParticle (board, x, y);
+  if (p) {
+    rand = randomDouble() * p->totalRate;
+    for (n = 0; n < p->nRules; ++n) {
+      rule = &p->rule[n];
+      if ((rand -= rule->rate) <= 0) {
+	for (k = 0; k < NumRuleConditions; ++k)
+	  if (!testRuleCondition (&rule->cond[k], board, x, y))
+	    return;  /* bail out of loops over k & n */
+	for (k = 0; k < NumRuleOperations; ++k)
+	  execRuleOperation (&rule->op[k], board, x, y);
+	return;  /* bail out of loop over n */
+      }
+    }
+  }
+}
+
+void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
+  int actualUpdates, x, y;
+  double effectiveUpdates, elapsedTime, totalCells, acceptProb;
+  clock_t start, now;
+  actualUpdates = effectiveUpdates = 0;
+  totalCells = ((double) board->size) * ((double) board->size);
+  start = clock();
+  while (1) {
+    now = clock();
+    elapsedTime = (now - start) / CLOCKS_PER_SEC;
+    if (elapsedTime > maxTimeInSeconds)
+      break;
+    /* estimate expected number of rejected moves per accepted move as follows:
+       rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p=rejectProb
+                  = (1-p) * p * d/dp \sum_{n=0}^{\infty} p^n
+                  = (1-p) * p * d/dp 1/(1-p)
+                  = (1-p) * p * 1/(1-p)^2
+                  = p / (1-p)
+                  = (1-q) / q   where q=acceptProb
+    */
+    acceptProb = topQuadRate(board->quad) / totalCells;
+    effectiveUpdates += 1. + (1. - acceptProb) / acceptProb;
+    ++actualUpdates;
+
+    sampleQuadLeaf (board->quad, &x, &y);
+    evolveBoardCell (board, x, y);
+  }
+  if (updateRate_ret)
+    *updateRate_ret = effectiveUpdates / elapsedTime;
+  if (minUpdateRate_ret)
+    *minUpdateRate_ret = actualUpdates / elapsedTime;
+}
+
