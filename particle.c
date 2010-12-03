@@ -2,13 +2,13 @@
 #include <string.h>
 #include "particle.h"
 
-Particle* newParticle (char* name, int nRules) {
+Particle* newParticle (const char* name, int nRules) {
   Particle* p;
   int r;
   p = malloc (sizeof (Particle));
   p->type = 0;
   p->name = calloc (strlen (name) + 1, sizeof(char));
-  strcpy (name, p->name);
+  strcpy ((char*) name, p->name);
   p->color.r = p->color.g = p->color.b = 0;
   p->nRules = nRules;
   p->rule = calloc (nRules, sizeof(StochasticRule));

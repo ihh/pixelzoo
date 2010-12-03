@@ -36,12 +36,12 @@
 #define XMLBOARD_STATE    "state"
 
 /* private macros for matching XML nodes */
-#define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
+#define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
 #define CHILD(NODE,KEYWORD) getNodeByName ((NODE)->children, XMLBOARD_ ## KEYWORD)
 #define CHILDSTRING(NODE,KEYWORD) CHILD(NODE,KEYWORD)->content
-#define CHILDINT(NODE,KEYWORD) atoi(CHILDSTRING(NODE,KEYWORD))
-#define CHILDFLOAT(NODE,KEYWORD) atof(CHILDSTRING(NODE,KEYWORD))
-#define CHILDHEX(NODE,KEYWORD) strtoul(CHILDSTRING(NODE,KEYWORD),0,16)
+#define CHILDINT(NODE,KEYWORD) atoi((const char*) CHILDSTRING(NODE,KEYWORD))
+#define CHILDFLOAT(NODE,KEYWORD) atof((const char*) CHILDSTRING(NODE,KEYWORD))
+#define CHILDHEX(NODE,KEYWORD) strtoul((const char*) CHILDSTRING(NODE,KEYWORD),0,16)
 #define OPTCHILDINT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDINT(NODE,KEYWORD) : (DEFAULT))
 #define OPTCHILDFLOAT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDFLOAT(NODE,KEYWORD) : (DEFAULT))
 #define OPTCHILDHEX(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDHEX(NODE,KEYWORD) : (DEFAULT))
@@ -102,7 +102,7 @@ Board* newBoardFromXmlString (const char* string) {
 /* private builder methods */
 xmlNode* getNodeByName (xmlNode* node, char* name) {
   for (; node; node = node->next)
-    if (node->type == XML_ELEMENT_NODE && strcmp (node->name, name) == 0)
+    if (node->type == XML_ELEMENT_NODE && strcmp ((const char*) node->name, name) == 0)
       return node;
   return (xmlNode*) NULL;
 }
@@ -110,7 +110,7 @@ xmlNode* getNodeByName (xmlNode* node, char* name) {
 xmlChar* getAttrByName (xmlNode* node, char* name) {
   xmlAttr* attr;
   for (attr = node->properties; attr; attr = attr->next)
-    if (strcmp (attr->name, name) == 0)
+    if (strcmp ((const char*) attr->name, name) == 0)
       return attr->children->content;
   return (xmlChar*) NULL;
 }
@@ -124,7 +124,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   for (curNode = node; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       ++nRules;
-  p = newParticle (CHILDSTRING(node,NAME), nRules);
+  p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
   p->type = OPTCHILDINT(node,DECID,CHILDHEX(node,HEXID));
   if (color = CHILD(node,COLOR))
     initColorFromXmlNode (&p->color, color);
@@ -144,7 +144,7 @@ void initColorFromXmlNode (RGB* rgb, xmlNode* node) {
     rgb->g = CHILDINT(node,G);
     rgb->b = CHILDINT(node,B);
   } else {
-    hex = strtoul(node->content,0,16);
+    hex = strtoul((const char*) node->content,0,16);
     rgb->r = (hex >> 16) & 0xff;
     rgb->g = (hex >> 8) & 0xff;
     rgb->b = hex & 0xff;
@@ -165,7 +165,7 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   xmlNode* loc;
-  xmlChar* opcode;
+  const char* opcode;
   int rshift;
 
   loc = CHILD(node,LOC);
@@ -186,7 +186,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   }
 
   cond->opcode = EQ;
-  opcode = ATTR(node,OP);
+  opcode = (const char*) ATTR(node,OP);
   if (opcode) {
     if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = EQ;
     else if (strcmp(opcode,"!=")==0) cond->opcode = NEQ;
