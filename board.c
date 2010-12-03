@@ -13,6 +13,7 @@ Board* newBoard (int size) {
   for (x = 0; x < size; ++x)
     board->cell[x] = calloc (size, sizeof(State));
   board->quad = newQuadTree (size);
+  board->overloadThreshold = 1.;
   return board;
 }
 
@@ -59,9 +60,11 @@ void finalizeBoardRules (Board* board) {
   for (t = 0; t < NumTypes; ++t) {
     p = board->by_type[t];
     if (p) {
-      p->totalRate = 0.;
-      for (r = 0; r < p->nRules; ++r)
+      p->totalRate = p->totalOverloadRate = 0.;
+      for (r = 0; r < p->nRules; ++r) {
 	p->totalRate += p->rule[r].rate;
+	p->totalOverloadRate += p->rule[r].overloadRate;
+      }
       p->normalizedRate = min (p->totalRate, 1.);
     }
   }
@@ -102,17 +105,17 @@ void execRuleOperation (RuleOperation* op, Board* board, int x, int y) {
 			      | ((((readBoardState(board,xSrc,ySrc) >> op->right_shift) + op->offset) & op->mask) << op->left_shift));
 }
 
-void evolveBoardCell (Board* board, int x, int y) {
+void evolveBoardCell (Board* board, int x, int y, int overloaded) {
   Particle* p;
   int n, k;
   double rand;
   StochasticRule* rule;
   p = readBoardParticle (board, x, y);
   if (p) {
-    rand = randomDouble() * p->totalRate;
+    rand = randomDouble() * (overloaded ? p->totalOverloadRate : p->totalRate);
     for (n = 0; n < p->nRules; ++n) {
       rule = &p->rule[n];
-      if ((rand -= rule->rate) <= 0) {
+      if ((rand -= (overloaded ? rule->overloadRate : rule->rate)) <= 0) {
 	for (k = 0; k < NumRuleConditions; ++k)
 	  if (!testRuleCondition (&rule->cond[k], board, x, y))
 	    return;  /* bail out of loops over k & n */
@@ -126,7 +129,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedTime;
+  double effectiveUpdates, targetUpdates, elapsedTime, firingRate;
   clock_t start, now;
   actualUpdates = 0;
   effectiveUpdates = elapsedTime = 0.;
@@ -138,7 +141,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     if (elapsedTime > maxTimeInSeconds || effectiveUpdates >= targetUpdates)
       break;
     /* estimate expected number of rejected moves per accepted move as follows:
-       rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p=rejectProb
+       rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p = rejectProb
                   = (1-p) * p * d/dp \sum_{n=0}^{\infty} p^n
                   = (1-p) * p * d/dp 1/(1-p)
                   = (1-p) * p * 1/(1-p)^2
@@ -146,11 +149,12 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
                   = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
        accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
     */
-    effectiveUpdates += boardCells(board) / topQuadRate(board->quad);
+    firingRate = boardFiringRate(board);
+    effectiveUpdates += 1. / firingRate;
     ++actualUpdates;
 
     sampleQuadLeaf (board->quad, &x, &y);
-    evolveBoardCell (board, x, y);
+    evolveBoardCell (board, x, y, firingRate > board->overloadThreshold);
   }
   if (updateRate_ret)
     *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;

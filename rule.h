@@ -44,6 +44,7 @@ typedef struct RuleOperation {
    a fixed number of RuleCondition's,
    a fixed number of RuleOperation's,
    a firing rate (corresponding to the relative rate that this rule will be selected out of all rules applying to this Type)
+   an overloaded firing rate (the firing rate that will be used when the board is too full)
  */
 
 /* first define the size of the condition & operation blocks */
@@ -55,7 +56,7 @@ typedef struct StochasticRule {
   Type id;
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
-  double rate;
+  double rate, overloadRate;
 } StochasticRule;
 
 #endif /* RULE_INCLUDED */

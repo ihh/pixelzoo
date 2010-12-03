@@ -10,6 +10,7 @@ typedef struct Board {
   int size;
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
+  double overloadThreshold;  /* when boardFiringRate>overloadThreshold, rules use overloadRate's instead of rate's */
 } Board;
 
 /* public methods */
@@ -43,6 +44,6 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state);  /* doe
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y);
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y);
 
-void evolveBoardCell (Board* board, int x, int y);
+void evolveBoardCell (Board* board, int x, int y, int overloaded);
 
 #endif /* BOARD_INCLUDED */
