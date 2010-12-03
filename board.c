@@ -146,4 +146,3 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
   if (minUpdateRate_ret)
     *minUpdateRate_ret = (elapsedTime > 0) ? (actualUpdates / elapsedTime) : 0.;
 }
-
