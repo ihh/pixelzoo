@@ -55,7 +55,6 @@ Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
 }
 
 void addParticleToBoard (Particle* p, Board* board) {
-  unsigned long t;
   int r;
   board->by_type[p->type] = p;
   p->totalRate = p->totalOverloadRate = 0.;
@@ -63,7 +62,7 @@ void addParticleToBoard (Particle* p, Board* board) {
     p->totalRate += p->rule[r].rate;
     p->totalOverloadRate += p->rule[r].overloadRate;
   }
-  p->normalizedRate = min (p->totalRate, 1.);
+  p->normalizedRate = MIN (p->totalRate, 1.);
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {

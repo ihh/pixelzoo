@@ -4,7 +4,6 @@
 
 Particle* newParticle (const char* name, int nRules) {
   Particle* p;
-  int r;
   p = malloc (sizeof (Particle));
   p->type = 0;
   p->name = calloc (strlen (name) + 1, sizeof(char));

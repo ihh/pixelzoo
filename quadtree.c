@@ -23,6 +23,7 @@ QuadTree* newQuadTree (int size) {
   }
   totalNodes = (4 * size * size - 1) / 3;
   quad->quadRate = calloc (totalNodes, sizeof(double));  /* initialized to zero */
+  return quad;
 }
 
 void deleteQuadTree (QuadTree* quad) {
@@ -41,7 +42,7 @@ void updateQuadTree(QuadTree* quad, int x, int y, double val) {
   diff = val - oldVal;
   for (lev = 0; lev <= quad->K; ++lev) {
     n = quadNodeIndex(quad, x, y, lev);
-    quad->quadRate[n] = max(quad->quadRate[n] + diff, 0);
+    quad->quadRate[n] = MAX (quad->quadRate[n] + diff, 0);
   }
 }
 

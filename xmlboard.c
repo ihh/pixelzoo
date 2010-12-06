@@ -3,7 +3,9 @@
 #include "xmlboard.h"
 
 /* XML node names */
+#define XMLBOARD_BOARD    "board"
 #define XMLBOARD_SIZE     "size"
+#define XMLBOARD_GRAMMAR  "grammar"
 #define XMLBOARD_PARTICLE "particle"
 #define XMLBOARD_DECID    "decid"
 #define XMLBOARD_HEXID    "hexid"
@@ -59,18 +61,21 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
 /* method defs */
 Board* newBoardFromXmlDocument (xmlDoc *doc) {
   Board *board;
-  xmlNode *root, *node;
+  xmlNode *root, *boardNode, *grammar, *node;
   int x, y;
   State state;
 
   root = xmlDocGetRootElement (doc);
-  board = newBoard (CHILDINT(node,SIZE));
 
-  for (node = root->children; node; node = node->next)
+  boardNode = CHILD(root,BOARD);
+  board = newBoard (CHILDINT(boardNode,SIZE));
+
+  grammar = CHILD(boardNode,GRAMMAR);
+  for (node = grammar->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
       addParticleToBoard (newParticleFromXmlNode(node), board);
 
-  for (node = root->children; node; node = node->next)
+  for (node = grammar->children; node; node = node->next)
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
@@ -119,14 +124,13 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   Particle* p;
   int nRules, n;
   xmlNode *curNode, *color;
-  xmlChar *content;
   nRules = 0;
   for (curNode = node; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
   p->type = OPTCHILDINT(node,DECID,CHILDHEX(node,HEXID));
-  if (color = CHILD(node,COLOR))
+  if ((color = CHILD(node,COLOR)))
     initColorFromXmlNode (&p->color, color);
   else
     p->color.r = p->color.g = p->color.b = 255;
@@ -181,8 +185,8 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
 
   rshift = OPTCHILDINT(node,RSHIFT,0);
   if (rshift) {
-    cond->mask << rshift;
-    cond->rhs << rshift;
+    cond->mask = cond->mask << rshift;
+    cond->rhs = cond->rhs << rshift;
   }
 
   cond->opcode = EQ;

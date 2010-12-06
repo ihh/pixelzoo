@@ -9,4 +9,8 @@ typedef struct RGB {
 /* randomDouble() returns a random number between 0 and 1 */
 double randomDouble();
 
+/* MIN and MAX */
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+
 #endif /* UTIL_INCLUDED */
