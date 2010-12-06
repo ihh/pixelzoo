@@ -17,7 +17,7 @@ all: $(OFILES)
 clean:
 	rm $(OFILES) $(TARGET)
 
-$(TARGET): $(OFILES)
+$(TARGET): $(OFILES) $(TARGET).c
 	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $@.c $(OFILES)
 
 .SUFFIXES :

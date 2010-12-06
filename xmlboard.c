@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "xmlboard.h"
@@ -7,8 +8,8 @@
 #define XMLBOARD_SIZE     "size"
 #define XMLBOARD_GRAMMAR  "grammar"
 #define XMLBOARD_PARTICLE "particle"
-#define XMLBOARD_DECID    "decid"
-#define XMLBOARD_HEXID    "hexid"
+#define XMLBOARD_DECTYPE  "type"
+#define XMLBOARD_HEXTYPE  "hextype"
 #define XMLBOARD_NAME     "name"
 #define XMLBOARD_COLOR    "color"
 #define XMLBOARD_R        "r"
@@ -22,14 +23,14 @@
 #define XMLBOARD_X        "x"
 #define XMLBOARD_Y        "y"
 #define XMLBOARD_MASK     "mask"
-#define XMLBOARD_DECVAL   "decval"
+#define XMLBOARD_DECVAL   "val"
 #define XMLBOARD_HEXVAL   "hexval"
 #define XMLBOARD_OP       "op"
 #define XMLBOARD_IGNORE   "ignore"
 #define XMLBOARD_EXEC     "exec"
 #define XMLBOARD_SRC      "src"
 #define XMLBOARD_DEST     "dest"
-#define XMLBOARD_DECADD   "decadd"
+#define XMLBOARD_DECADD   "add"
 #define XMLBOARD_HEXADD   "hexadd"
 #define XMLBOARD_LSHIFT   "lshift"
 #define XMLBOARD_RSHIFT   "rshift"
@@ -40,7 +41,7 @@
 /* private macros for matching XML nodes */
 #define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
 #define CHILD(NODE,KEYWORD) getNodeByName ((NODE)->children, XMLBOARD_ ## KEYWORD)
-#define CHILDSTRING(NODE,KEYWORD) CHILD(NODE,KEYWORD)->content
+#define CHILDSTRING(NODE,KEYWORD) getNodeContentOrComplain (CHILD(NODE,KEYWORD), XMLBOARD_ ## KEYWORD)
 #define CHILDINT(NODE,KEYWORD) atoi((const char*) CHILDSTRING(NODE,KEYWORD))
 #define CHILDFLOAT(NODE,KEYWORD) atof((const char*) CHILDSTRING(NODE,KEYWORD))
 #define CHILDHEX(NODE,KEYWORD) strtoul((const char*) CHILDSTRING(NODE,KEYWORD),0,16)
@@ -51,6 +52,7 @@
 
 /* prototypes for private builder methods */
 xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
+xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag);
 xmlChar* getAttrByName (xmlNode* node, char* name);
 Particle* newParticleFromXmlNode (xmlNode* node);
 void initColorFromXmlNode (RGB* rgb, xmlNode* node);
@@ -75,7 +77,7 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
     if (MATCHES(node,PARTICLE))
       addParticleToBoard (newParticleFromXmlNode(node), board);
 
-  for (node = grammar->children; node; node = node->next)
+  for (node = boardNode->children; node; node = node->next)
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
@@ -112,6 +114,12 @@ xmlNode* getNodeByName (xmlNode* node, char* name) {
   return (xmlNode*) NULL;
 }
 
+xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
+  if (!node)
+    fprintf (stderr, "Missing tag: %s\n", tag);
+  return node->children->content;
+}
+
 xmlChar* getAttrByName (xmlNode* node, char* name) {
   xmlAttr* attr;
   for (attr = node->properties; attr; attr = attr->next)
@@ -125,17 +133,17 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   int nRules, n;
   xmlNode *curNode, *color;
   nRules = 0;
-  for (curNode = node; curNode; curNode = curNode->next)
+  for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
-  p->type = OPTCHILDINT(node,DECID,CHILDHEX(node,HEXID));
+  p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
   if ((color = CHILD(node,COLOR)))
     initColorFromXmlNode (&p->color, color);
   else
     p->color.r = p->color.g = p->color.b = 255;
   n = 0;
-  for (curNode = node; curNode; curNode = curNode->next)
+  for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       initRuleFromXmlNode (&p->rule[n++], curNode);
   return p;
@@ -143,12 +151,12 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
 
 void initColorFromXmlNode (RGB* rgb, xmlNode* node) {
   unsigned long hex;
-  if (node->children) {
+  if (node->children->children) {
     rgb->r = CHILDINT(node,R);
     rgb->g = CHILDINT(node,G);
     rgb->b = CHILDINT(node,B);
   } else {
-    hex = strtoul((const char*) node->content,0,16);
+    hex = strtoul((const char*) node->children->content,0,16);
     rgb->r = (hex >> 16) & 0xff;
     rgb->g = (hex >> 8) & 0xff;
     rgb->b = hex & 0xff;
@@ -160,7 +168,7 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
   rule->rate = OPTCHILDFLOAT(node,RATE,1.);
   rule->overloadRate = OPTCHILDFLOAT(node,OVERLOAD,rule->rate);
   nCond = nOp = 0;
-  for (; node; node = node->next)
+  for (node = node->children; node; node = node->next)
     if (MATCHES(node,TEST))
       initConditionFromXmlNode (&rule->cond[nCond++], node);
     else if (MATCHES(node,EXEC))

@@ -6,7 +6,7 @@
 #include "quadtree.h"
 
 typedef struct Board {
-  Particle** by_type;  /* Type t; by_type[t] */
+  Particle** byType;  /* Type t; byType[t] */
   int size;
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
@@ -19,10 +19,10 @@ void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 
 /* macros to access board without bounds overrun errors */
-#define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) <= (BOARD_PTR)->size && (Y) >= 0 && (Y) <= (BOARD_PTR)->size)
+#define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
 #define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? readBoardStateUnguarded(BOARD_PTR,X,Y) : 0)
 #define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguarded(BOARD_PTR,X,Y,STATE); }
-#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->by_type[readBoardState(BOARD_PTR,X,Y) & TypeMask]
+#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[readBoardState(BOARD_PTR,X,Y) & TypeMask]
 
 /* number of cells on board */
 #define boardCells(BOARD_PTR) (((double) (BOARD_PTR)->size) * ((double) (BOARD_PTR)->size))

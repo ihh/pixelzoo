@@ -7,7 +7,7 @@ Board* newBoard (int size) {
   Board* board;
   int x;
   board = malloc (sizeof (Board));
-  board->by_type = calloc (NumTypes, sizeof(Particle*));
+  board->byType = calloc (NumTypes, sizeof(Particle*));
   board->size = size;
   board->cell = malloc (size * sizeof(State*));
   for (x = 0; x < size; ++x)
@@ -25,9 +25,9 @@ void deleteBoard (Board* board) {
     free (board->cell[x]);
   free (board->cell);
   for (t = 0; t < NumTypes; ++t)
-    if (board->by_type[(Type) t])
-      deleteParticle (board->by_type[(Type) t]);
-  free (board->by_type);
+    if (board->byType[(Type) t])
+      deleteParticle (board->byType[(Type) t]);
+  free (board->byType);
   free (board);
 }
 
@@ -35,7 +35,7 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
   t = state & TypeMask;
-  p = board->by_type[t];
+  p = board->byType[t];
   if (p) {
     board->cell[x][y] = state;
     updateQuadTree (board->quad, x, y, p->normalizedRate);
@@ -50,13 +50,13 @@ Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
   Particle* p;
   p = newParticle (name, nRules);
   p->type = type;
-  board->by_type[type] = p;
+  board->byType[type] = p;
   return p;
 }
 
 void addParticleToBoard (Particle* p, Board* board) {
   int r;
-  board->by_type[p->type] = p;
+  board->byType[p->type] = p;
   p->totalRate = p->totalOverloadRate = 0.;
   for (r = 0; r < p->nRules; ++r) {
     p->totalRate += p->rule[r].rate;
