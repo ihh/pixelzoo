@@ -22,7 +22,8 @@
 #define XMLBOARD_LOC      "loc"
 #define XMLBOARD_X        "x"
 #define XMLBOARD_Y        "y"
-#define XMLBOARD_MASK     "mask"
+#define XMLBOARD_DECMASK  "mask"
+#define XMLBOARD_HEXMASK  "hexmask"
 #define XMLBOARD_DECVAL   "val"
 #define XMLBOARD_HEXVAL   "hexval"
 #define XMLBOARD_OP       "op"
@@ -36,7 +37,6 @@
 #define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
 #define XMLBOARD_INIT     "init"
-#define XMLBOARD_STATE    "state"
 
 /* private macros for matching XML nodes */
 #define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
@@ -81,7 +81,7 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
-      state = CHILDHEX(node,STATE);
+      state = OPTCHILDINT(node,DECVAL,CHILDHEX(node,HEXVAL));
       writeBoardState (board, x, y, state);
     }
 
@@ -187,7 +187,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   } else
     cond->loc.x = cond->loc.y = 0;
 
-  cond->mask = OPTCHILDHEX(node,MASK,StateMask);
+  cond->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
   cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
 
@@ -227,7 +227,7 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
     op->dest = op->src;
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
-  op->mask = OPTCHILDHEX(node,MASK,StateMask);
+  op->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
 }
