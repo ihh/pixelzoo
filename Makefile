@@ -1,5 +1,5 @@
 SDL_CFLAGS  := $(shell sdl-config --cflags)
-SDL_LDFLAGS := -lSDL $(shell sdl-config --libs) -L/usr/X11R6/lib -lXi
+SDL_LDFLAGS := $(shell sdl-config --libs) -L/usr/X11R6/lib -lXi
 
 XML_CFLAGS  :=  -I/usr/include/libxml2
 XML_LDFLAGS :=  -L/usr/lib
