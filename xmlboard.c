@@ -30,8 +30,8 @@
 #define XMLBOARD_EXEC     "exec"
 #define XMLBOARD_SRC      "src"
 #define XMLBOARD_DEST     "dest"
-#define XMLBOARD_DECADD   "add"
-#define XMLBOARD_HEXADD   "hexadd"
+#define XMLBOARD_DECINC   "inc"
+#define XMLBOARD_HEXINC   "hexinc"
 #define XMLBOARD_LSHIFT   "lshift"
 #define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
@@ -215,8 +215,6 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   xmlNode *src, *dest;
   src = CHILD(node,SRC);
   dest = CHILD(node,DEST);
-  if (src && !dest) dest = src;
-  else if (dest && !src) src = dest;
   if (src) {
     op->src.x = OPTCHILDINT(src,X,0);
     op->src.y = OPTCHILDINT(src,Y,0);
@@ -226,9 +224,9 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
     op->dest.x = OPTCHILDINT(dest,X,0);
     op->dest.y = OPTCHILDINT(dest,Y,0);
   } else
-    op->dest.x = op->dest.y = 0;
+    op->dest = op->src;
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  op->offset = OPTCHILDINT(node,DECADD,OPTCHILDHEX(node,HEXADD,0));
+  op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
   op->mask = OPTCHILDHEX(node,MASK,StateMask);
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
