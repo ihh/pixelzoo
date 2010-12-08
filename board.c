@@ -98,8 +98,7 @@ void execRuleOperation (RuleOperation* op, Board* board, int x, int y) {
   if (onBoard(board,x,y))  /* only check once */
       writeBoardStateUnguarded (board, x, y, 
 				(readBoardStateUnguarded(board,x,y) & (StateMask ^ (op->mask << op->leftShift)))
-				| ((((op->rightShift >= BitsPerState ? (State) 0 : (State) (readBoardState(board,xSrc,ySrc) >> op->rightShift))
-				     + op->offset) & op->mask) << op->leftShift));
+				| (((((readBoardState(board,xSrc,ySrc) & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift));
 }
 
 void evolveBoardCell (Board* board, int x, int y, int overloaded) {

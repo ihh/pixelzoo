@@ -31,12 +31,16 @@ typedef struct RuleCondition {
 
 /*
   RuleOperation describes the following operation:
-  if (randomDouble() >= failProb) {  cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | ((((cell[src] >> rightShift) + offset) & mask) << leftShift);  }
+  if (randomDouble() >= failProb)
+    cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | (((((cell[src] & preMask) >> rightShift) + offset) & mask) << leftShift);
+
+  preMask is rarely used (defaults to StateMask), except to avoid a 32-bit architecture error when rightShift=0
+  (intuitively, "x >> 32" should equal zero if x is a 32-bit number, but on 32-bit Macs it seems to equal "x")
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
-  State offset, mask;
+  State offset, mask, preMask;
   double failProb;
 } RuleOperation;
 

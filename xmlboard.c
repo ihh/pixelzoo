@@ -230,4 +230,5 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   op->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
+  op->preMask = op->rightShift >= 32 ? 0 : StateMask;
 }
