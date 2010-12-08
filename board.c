@@ -13,8 +13,8 @@ Board* newBoard (int size) {
   for (x = 0; x < size; ++x)
     board->cell[x] = SafeCalloc (size, sizeof(State));
   board->quad = newQuadTree (size);
-  board->overloadThreshold = SafeMalloc (board->quad->K * sizeof(double));
-  for (x = 0; x < board->quad->K; ++x)
+  board->overloadThreshold = SafeMalloc ((board->quad->K + 1) * sizeof(double));
+  for (x = 0; x <= board->quad->K; ++x)
     board->overloadThreshold[x] = 1.;
   return board;
 }
@@ -111,7 +111,7 @@ void evolveBoardCell (Board* board, int x, int y) {
   p = readBoardParticle (board, x, y);
   if (p) {
     overloaded = 0;
-    for (n = 0; n < board->quad->K && !overloaded; ++n)
+    for (n = 0; n <= board->quad->K && !overloaded; ++n)
       if (boardLocalFiringRate(board,x,y,n) > board->overloadThreshold[n])
 	overloaded = 1;
     rand = randomDouble() * (overloaded ? p->totalOverloadRate : p->totalRate);
