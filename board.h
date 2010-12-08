@@ -10,8 +10,7 @@ typedef struct Board {
   int size;
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
-  int localOverloadQuadLevel;  /* quad-tree level at which firing rate will be sampled */
-  double localOverloadThreshold, globalOverloadThreshold;  /* when local/global firing rate passes threshold, rules use overloadRate's instead of rate's */
+  double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
 } Board;
 
 /* public methods */
@@ -45,6 +44,6 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state);  /* doe
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y);
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y);
 
-void evolveBoardCell (Board* board, int x, int y, int overloaded);
+void evolveBoardCell (Board* board, int x, int y);
 
 #endif /* BOARD_INCLUDED */

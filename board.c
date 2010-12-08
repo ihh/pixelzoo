@@ -7,14 +7,15 @@ Board* newBoard (int size) {
   Board* board;
   int x;
   board = SafeMalloc (sizeof (Board));
-  board->byType = calloc (NumTypes, sizeof(Particle*));
+  board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
   board->cell = SafeMalloc (size * sizeof(State*));
   for (x = 0; x < size; ++x)
-    board->cell[x] = calloc (size, sizeof(State));
+    board->cell[x] = SafeCalloc (size, sizeof(State));
   board->quad = newQuadTree (size);
-  board->localOverloadQuadLevel = 0;
-  board->localOverloadThreshold = board->globalOverloadThreshold = 1.;
+  board->overloadThreshold = SafeMalloc (board->quad->K * sizeof(double));
+  for (x = 0; x < board->quad->K; ++x)
+    board->overloadThreshold[x] = 1.;
   return board;
 }
 
@@ -101,13 +102,17 @@ void execRuleOperation (RuleOperation* op, Board* board, int x, int y) {
 				| (((((readBoardState(board,xSrc,ySrc) & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift));
 }
 
-void evolveBoardCell (Board* board, int x, int y, int overloaded) {
+void evolveBoardCell (Board* board, int x, int y) {
   Particle* p;
-  int n, k;
+  int n, k, overloaded;
   double rand;
   StochasticRule* rule;
   p = readBoardParticle (board, x, y);
   if (p) {
+    overloaded = 0;
+    for (n = 0; n < board->quad->K && !overloaded; ++n)
+      if (boardLocalFiringRate(board,x,y,n) > board->overloadThreshold[n])
+	overloaded = 1;
     rand = randomDouble() * (overloaded ? p->totalOverloadRate : p->totalRate);
     for (n = 0; n < p->nRules; ++n) {
       rule = &p->rule[n];
@@ -125,7 +130,7 @@ void evolveBoardCell (Board* board, int x, int y, int overloaded) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedTime, globalFiringRate, localFiringRate;
+  double effectiveUpdates, targetUpdates, elapsedTime;
   clock_t start, now;
   actualUpdates = 0;
   effectiveUpdates = elapsedTime = 0.;
@@ -145,13 +150,11 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
                   = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
        accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
     */
-    globalFiringRate = boardFiringRate(board);
-    effectiveUpdates += 1. / globalFiringRate;
+    effectiveUpdates += 1. / boardFiringRate(board);
     ++actualUpdates;
 
     sampleQuadLeaf (board->quad, &x, &y);
-    localFiringRate = boardLocalFiringRate(board,x,y,board->localOverloadQuadLevel);
-    evolveBoardCell (board, x, y, localFiringRate > board->localOverloadThreshold || globalFiringRate > board->globalOverloadThreshold);
+    evolveBoardCell (board, x, y);
   }
   if (updateRate_ret)
     *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;

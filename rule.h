@@ -32,10 +32,20 @@ typedef struct RuleCondition {
 /*
   RuleOperation describes the following operation:
   if (randomDouble() >= failProb)
+    cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | ((((cell[src] >> rightShift) + offset) & mask) << leftShift);
+
+  In practice, it is implemented as follows
+  if (randomDouble() >= failProb)
     cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | (((((cell[src] & preMask) >> rightShift) + offset) & mask) << leftShift);
 
-  preMask is rarely used (defaults to StateMask), except to avoid a 32-bit architecture error when rightShift=0
-  (intuitively, "x >> 32" should equal zero if x is a 32-bit number, but on 32-bit Macs it seems to equal "x")
+  where
+    preMask = (rightShift < 32) ? StateMask : 0
+
+  Why is preMask necessary? Well, I think that "x >> 32" should equal zero if x is a 32-bit number,
+  and on many computers/compilers it indeed seems to, but I swear that on my first-generation MacBook Air, it equaled "x".
+  "x>>y" worked fine on that computer for y<32, and "x>>32" equaled zero as expected in gdb, and on another laptop (2nd-gen MacBook Air).
+  Could be a gcc problem, could be a voodoo chicken fluke. Who knows.
+  BIZARRE.
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
