@@ -22,6 +22,7 @@ Board* newBoard (int size) {
 void deleteBoard (Board* board) {
   unsigned long t;
   int x;
+  free (board->overloadThreshold);
   deleteQuadTree (board->quad);
   for (x = 0; x < board->size; ++x)
     free (board->cell[x]);
