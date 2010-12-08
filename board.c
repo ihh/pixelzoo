@@ -6,10 +6,10 @@
 Board* newBoard (int size) {
   Board* board;
   int x;
-  board = malloc (sizeof (Board));
+  board = SafeMalloc (sizeof (Board));
   board->byType = calloc (NumTypes, sizeof(Particle*));
   board->size = size;
-  board->cell = malloc (size * sizeof(State*));
+  board->cell = SafeMalloc (size * sizeof(State*));
   for (x = 0; x < size; ++x)
     board->cell[x] = calloc (size, sizeof(State));
   board->quad = newQuadTree (size);
