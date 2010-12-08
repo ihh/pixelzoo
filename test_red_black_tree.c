@@ -71,7 +71,7 @@ int main() {
 	  printf("type key of node to query for\n");
 	  scanf("%i",&newKey);
 	  if ( ( newNode = RBExactQuery(tree,&newKey) ) ) {/*assignment*/
-	    printf("data found in tree at location %i\n",(int)newNode);
+	    printf("data found in tree at location %lx\n",(unsigned long)newNode);
 	  } else {
 	    printf("data not in tree\n");
 	  }
