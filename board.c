@@ -13,7 +13,8 @@ Board* newBoard (int size) {
   for (x = 0; x < size; ++x)
     board->cell[x] = calloc (size, sizeof(State));
   board->quad = newQuadTree (size);
-  board->overloadThreshold = 1.;
+  board->localOverloadQuadLevel = 0;
+  board->localOverloadThreshold = board->globalOverloadThreshold = 1.;
   return board;
 }
 
@@ -125,7 +126,7 @@ void evolveBoardCell (Board* board, int x, int y, int overloaded) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedTime, firingRate;
+  double effectiveUpdates, targetUpdates, elapsedTime, globalFiringRate, localFiringRate;
   clock_t start, now;
   actualUpdates = 0;
   effectiveUpdates = elapsedTime = 0.;
@@ -145,12 +146,13 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
                   = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
        accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
     */
-    firingRate = boardFiringRate(board);
-    effectiveUpdates += 1. / firingRate;
+    globalFiringRate = boardFiringRate(board);
+    effectiveUpdates += 1. / globalFiringRate;
     ++actualUpdates;
 
     sampleQuadLeaf (board->quad, &x, &y);
-    evolveBoardCell (board, x, y, firingRate > board->overloadThreshold);
+    localFiringRate = boardLocalFiringRate(board,x,y,board->localOverloadQuadLevel);
+    evolveBoardCell (board, x, y, localFiringRate > board->localOverloadThreshold || globalFiringRate > board->globalOverloadThreshold);
   }
   if (updateRate_ret)
     *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;

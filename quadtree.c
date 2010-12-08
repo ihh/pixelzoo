@@ -73,6 +73,10 @@ double topQuadRate(QuadTree* quad) {
   return quad->quadRate[0];
 }
 
+double getQuadRate (QuadTree* quad, int x, int y, int level) {
+  return quad->quadRate[quadNodeIndex(quad,x,y,level)];
+}
+
 int quadNodeIndex(QuadTree* quad, int x, int y, int level) {
   int nodesBeforeLevel, msbY, msbX;
   nodesBeforeLevel = ((1 << (level << 1)) - 1) / 3;

@@ -10,7 +10,8 @@ typedef struct Board {
   int size;
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
-  double overloadThreshold;  /* when boardFiringRate>overloadThreshold, rules use overloadRate's instead of rate's */
+  int localOverloadQuadLevel;  /* quad-tree level at which firing rate will be sampled */
+  double localOverloadThreshold, globalOverloadThreshold;  /* when local/global firing rate passes threshold, rules use overloadRate's instead of rate's */
 } Board;
 
 /* public methods */
@@ -29,6 +30,7 @@ void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibili
 
 /* board firing rate = mean rate at which rules are firing. ranges from 0 (empty) to 1 (full) */
 #define boardFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->quad) / boardCells(BOARD_PTR))
+#define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) (getQuadRate((BOARD_PTR)->quad,X,Y,LEVEL) / (double) quadCells((BOARD_PTR)->quad,LEVEL))
 
 /* evolveBoard
    attempts to update each cell targetUpdatesPerCell times, terminating if this limit is reached or maxTimeInSeconds has elapsed (whichever occurs first).
