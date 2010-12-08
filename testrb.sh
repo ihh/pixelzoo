@@ -1,5 +1,5 @@
 #!/bin/sh
-./test_red_black_tree<<EOF
+bin/test_red_black_tree<<EOF
 1
 1
 1

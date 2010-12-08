@@ -10,20 +10,24 @@ CFLAGS := $(SDL_CFLAGS) $(XML_CFLAGS)
 LIBS   := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
 
 TARGETS := sdltest test_red_black_tree
-OFILES  := $(addsuffix .o,$(filter-out $(TARGETS),$(basename $(wildcard *.c))))
 
-all: $(TARGETS)
+OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(wildcard *.c)))))
+XFILES  := $(addprefix bin/,$(TARGETS))
+
+all: $(XFILES)
 
 lib: $(OFILES)
 
 clean:
-	rm -rf *.o $(TARGETS) *~ *.dSYM
+	rm -rf obj/* bin/* *~ *.dSYM
 
-$(TARGETS): $(OFILES) $(addsuffix .c,$(TARGETS))
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $@.c $(OFILES)
+bin/%:  %.c $(OFILES) bin
+	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $*.c $(OFILES)
 
 .SUFFIXES :
-.SUFFIXES : .o .c
 
-.c.o:
+obj/%.o: %.c obj
 	$(CC) $(COPTS) $(CFLAGS) -c $< -o $@
+
+obj bin:
+	mkdir $@
