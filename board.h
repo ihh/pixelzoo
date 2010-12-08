@@ -20,7 +20,7 @@ void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibili
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
-#define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? readBoardStateUnguarded(BOARD_PTR,X,Y) : 0)
+#define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? (State) readBoardStateUnguarded(BOARD_PTR,X,Y) : (State) 0)
 #define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguarded(BOARD_PTR,X,Y,STATE); }
 #define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[readBoardState(BOARD_PTR,X,Y) & TypeMask]
 

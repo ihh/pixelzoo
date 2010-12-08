@@ -4,12 +4,14 @@
 /* 32-bit cell state */
 typedef unsigned long State;
 #define StateMask 0xffffffff
+#define BitsPerState 32
 
 /* 16-bit cell type */
 typedef unsigned short Type;
 #define TypeMask 0xffff
 #define NumTypes 0x10000
 #define MaxType  0xffff
+#define BitsPerType 32
 
 /* short-range relative co-ordinate offset */
 typedef struct LocalOffset {
