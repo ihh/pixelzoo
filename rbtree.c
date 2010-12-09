@@ -22,28 +22,28 @@
 /*  Modifies Input: none */
 /***********************************************************************/
 
-rb_tree* newRBTree( int (*CompFunc) (const void*,const void*),
+RBTree* newRBTree( int (*CompFunc) (const void*,const void*),
 			      void (*DestFunc) (void*),
 			      void (*ValueDestFunc) (void*),
 			      void (*PrintFunc) (const void*),
 			      void (*PrintValue)(void*)) {
-  rb_tree* newTree;
-  rb_node* temp;
+  RBTree* newTree;
+  RBNode* temp;
 
-  newTree=(rb_tree*) SafeMalloc(sizeof(rb_tree));
+  newTree=(RBTree*) SafeMalloc(sizeof(RBTree));
   newTree->Compare=  CompFunc;
   newTree->DestroyKey= DestFunc;
   newTree->PrintKey= PrintFunc;
   newTree->PrintValue= PrintValue;
   newTree->DestroyValue= ValueDestFunc;
 
-  /*  see the comment in the rb_tree structure in red_black_tree.h */
+  /*  see the comment in the RBTree structure in red_black_tree.h */
   /*  for valuermation on nil and root */
-  temp=newTree->nil= (rb_node*) SafeMalloc(sizeof(rb_node));
+  temp=newTree->nil= (RBNode*) SafeMalloc(sizeof(RBNode));
   temp->parent=temp->left=temp->right=temp;
   temp->red=0;
   temp->key=0;
-  temp=newTree->root= (rb_node*) SafeMalloc(sizeof(rb_node));
+  temp=newTree->root= (RBNode*) SafeMalloc(sizeof(RBNode));
   temp->parent=temp->left=temp->right=newTree->nil;
   temp->key=0;
   temp->red=0;
@@ -67,9 +67,9 @@ rb_tree* newRBTree( int (*CompFunc) (const void*,const void*),
 /*            accordingly. */
 /***********************************************************************/
 
-void LeftRotate(rb_tree* tree, rb_node* x) {
-  rb_node* y;
-  rb_node* nil=tree->nil;
+void LeftRotate(RBTree* tree, RBNode* x) {
+  RBNode* y;
+  RBNode* nil=tree->nil;
 
   /*  I originally wrote this function to use the sentinel for */
   /*  nil to avoid checking for nil.  However this introduces a */
@@ -122,9 +122,9 @@ void LeftRotate(rb_tree* tree, rb_node* x) {
 /*            accordingly. */
 /***********************************************************************/
 
-void RightRotate(rb_tree* tree, rb_node* y) {
-  rb_node* x;
-  rb_node* nil=tree->nil;
+void RightRotate(RBTree* tree, RBNode* y) {
+  RBNode* x;
+  RBNode* nil=tree->nil;
 
   /*  I originally wrote this function to use the sentinel for */
   /*  nil to avoid checking for nil.  However this introduces a */
@@ -173,11 +173,11 @@ void RightRotate(rb_tree* tree, rb_node* y) {
 /*            by the RBTreeInsert function and not by the user */
 /***********************************************************************/
 
-void TreeInsertHelp(rb_tree* tree, rb_node* z) {
+void TreeInsertHelp(RBTree* tree, RBNode* z) {
   /*  This function should only be called by InsertRBTree (see above) */
-  rb_node* x;
-  rb_node* y;
-  rb_node* nil=tree->nil;
+  RBNode* x;
+  RBNode* y;
+  RBNode* nil=tree->nil;
   
   z->left=z->right=nil;
   y=tree->root;
@@ -223,12 +223,12 @@ void TreeInsertHelp(rb_tree* tree, rb_node* z) {
 /*            value pointers and inserts it into the tree. */
 /***********************************************************************/
 
-rb_node * RBTreeInsert(rb_tree* tree, void* key, void* value) {
-  rb_node * y;
-  rb_node * x;
-  rb_node * newNode;
+RBNode * RBTreeInsert(RBTree* tree, void* key, void* value) {
+  RBNode * y;
+  RBNode * x;
+  RBNode * newNode;
 
-  x=(rb_node*) SafeMalloc(sizeof(rb_node));
+  x=(RBNode*) SafeMalloc(sizeof(RBNode));
   x->key=key;
   x->value=value;
 
@@ -293,10 +293,10 @@ rb_node * RBTreeInsert(rb_tree* tree, void* key, void* value) {
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
   
-rb_node* RBTreeSuccessor(rb_tree* tree,rb_node* x) { 
-  rb_node* y;
-  rb_node* nil=tree->nil;
-  rb_node* root=tree->root;
+RBNode* RBTreeSuccessor(RBTree* tree,RBNode* x) { 
+  RBNode* y;
+  RBNode* nil=tree->nil;
+  RBNode* root=tree->root;
 
   if (nil != (y = x->right)) { /* assignment to y is intentional */
     while(y->left != nil) { /* returns the minium of the right subtree of x */
@@ -328,10 +328,10 @@ rb_node* RBTreeSuccessor(rb_tree* tree,rb_node* x) {
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-rb_node* RBTreePredecessor(rb_tree* tree, rb_node* x) {
-  rb_node* y;
-  rb_node* nil=tree->nil;
-  rb_node* root=tree->root;
+RBNode* RBTreePredecessor(RBTree* tree, RBNode* x) {
+  RBNode* y;
+  RBNode* nil=tree->nil;
+  RBNode* root=tree->root;
 
   if (nil != (y = x->left)) { /* assignment to y is intentional */
     while(y->right != nil) { /* returns the maximum of the left subtree of x */
@@ -364,9 +364,9 @@ rb_node* RBTreePredecessor(rb_tree* tree, rb_node* x) {
 /*    Note:    This function should only be called from RBTreePrint */
 /***********************************************************************/
 
-void InorderTreePrint(rb_tree* tree, rb_node* x) {
-  rb_node* nil=tree->nil;
-  rb_node* root=tree->root;
+void InorderTreePrint(RBTree* tree, RBNode* x) {
+  RBNode* nil=tree->nil;
+  RBNode* root=tree->root;
   if (x != tree->nil) {
     InorderTreePrint(tree,x->left);
     printf("value=");
@@ -400,8 +400,8 @@ void InorderTreePrint(rb_tree* tree, rb_node* x) {
 /*    Note:    This function should only be called by deleteRBTree */
 /***********************************************************************/
 
-void TreeDestHelper(rb_tree* tree, rb_node* x) {
-  rb_node* nil=tree->nil;
+void TreeDestHelper(RBTree* tree, RBNode* x) {
+  RBNode* nil=tree->nil;
   if (x != nil) {
     TreeDestHelper(tree,x->left);
     TreeDestHelper(tree,x->right);
@@ -425,7 +425,7 @@ void TreeDestHelper(rb_tree* tree, rb_node* x) {
 /**/
 /***********************************************************************/
 
-void deleteRBTree(rb_tree* tree) {
+void deleteRBTree(RBTree* tree) {
   TreeDestHelper(tree,tree->root->left);
   free(tree->root);
   free(tree->nil);
@@ -447,7 +447,7 @@ void deleteRBTree(rb_tree* tree) {
 /**/
 /***********************************************************************/
 
-void RBTreePrint(rb_tree* tree) {
+void RBTreePrint(RBTree* tree) {
   InorderTreePrint(tree,tree->root->left);
 }
 
@@ -466,9 +466,9 @@ void RBTreePrint(rb_tree* tree) {
 /**/
 /***********************************************************************/
   
-rb_node* RBTreeFind(rb_tree* tree, void* q) {
-  rb_node* x=tree->root->left;
-  rb_node* nil=tree->nil;
+RBNode* RBTreeFind(RBTree* tree, void* q) {
+  RBNode* x=tree->root->left;
+  RBNode* nil=tree->nil;
   int compVal;
   if (x == nil) return(0);
   compVal=tree->Compare(x->key,(int*) q);
@@ -501,9 +501,9 @@ rb_node* RBTreeFind(rb_tree* tree, void* q) {
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-void RBTreeEraseFixUp(rb_tree* tree, rb_node* x) {
-  rb_node* root=tree->root->left;
-  rb_node* w;
+void RBTreeEraseFixUp(RBTree* tree, RBNode* x) {
+  RBNode* root=tree->root->left;
+  RBNode* w;
 
   while( (!x->red) && (root != x)) {
     if (x == x->parent->left) {
@@ -580,11 +580,11 @@ void RBTreeEraseFixUp(rb_tree* tree, rb_node* x) {
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-void RBTreeEraseUnguarded(rb_tree* tree, rb_node* z){
-  rb_node* y;
-  rb_node* x;
-  rb_node* nil=tree->nil;
-  rb_node* root=tree->root;
+void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
+  RBNode* y;
+  RBNode* x;
+  RBNode* nil=tree->nil;
+  RBNode* root=tree->root;
 
   y= ((z->left == nil) || (z->right == nil)) ? z : RBTreeSuccessor(tree,z);
   x= (y->left == nil) ? y->right : y->left;
@@ -631,8 +631,8 @@ void RBTreeEraseUnguarded(rb_tree* tree, rb_node* z){
 #endif
 }
 
-void RBTreeErase(rb_tree* tree, void* key) {
-  rb_node* node;
+void RBTreeErase(RBTree* tree, void* key) {
+  RBNode* node;
   if ( ( node = RBTreeFind (tree, key) ) ) /*assignment*/
     RBTreeEraseUnguarded(tree,node);
 }
@@ -649,11 +649,11 @@ void RBTreeErase(rb_tree* tree, void* key) {
 /*    Modifies Input: none */
 /***********************************************************************/
 
-stk_stack* RBTreeEnumerate(rb_tree* tree, void* low, void* high) {
+stk_stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   stk_stack* enumResultStack;
-  rb_node* nil=tree->nil;
-  rb_node* x=tree->root->left;
-  rb_node* lastBest=nil;
+  RBNode* nil=tree->nil;
+  RBNode* x=tree->root->left;
+  RBNode* lastBest=nil;
 
   enumResultStack=StackCreate();
   while(nil != x) {

@@ -4,38 +4,23 @@
 #include"util.h"
 #include"stack.h"
 
-/*  CONVENTIONS:  All data structures for red-black trees have the prefix */
-/*                "rb_" to prevent name conflicts. */
-/*                                                                      */
-/*                Function names: Each word in a function name begins with */
-/*                a capital letter.  An example funcntion name is  */
-/*                CreateRedTree(a,b,c). Furthermore, each function name */
-/*                should begin with a capital letter to easily distinguish */
-/*                them from variables. */
-/*                                                                     */
-/*                Variable names: Each word in a variable name begins with */
-/*                a capital letter EXCEPT the first letter of the variable */
-/*                name.  For example, int newLongInt.  Global variables have */
-/*                names beginning with "g".  An example of a global */
-/*                variable name is gNewtonsConstant. */
-
 /* comment out the line below to remove all the debugging assertion */
 /* checks from the compiled code.  */
 #define DEBUG_ASSERT 1
 
-typedef struct rb_node {
+typedef struct RBNode {
   void* key;
   void* value;
   int red; /* if red=0 then the node is black */
-  struct rb_node* left;
-  struct rb_node* right;
-  struct rb_node* parent;
-} rb_node;
+  struct RBNode* left;
+  struct RBNode* right;
+  struct RBNode* parent;
+} RBNode;
 
 
 /* Compare(a,b) should return 1 if *a > *b, -1 if *a < *b, and 0 otherwise */
 /* Destroy(a) takes a pointer to whatever key might be and frees it accordingly */
-typedef struct rb_tree {
+typedef struct RBTree {
   int (*Compare)(const void* a, const void* b); 
   void (*DestroyKey)(void* a);
   void (*DestroyValue)(void* a);
@@ -47,24 +32,24 @@ typedef struct rb_tree {
   /*  node which should always be black but has aribtrary children and */
   /*  parent and no key or value.  The point of using these sentinels is so */
   /*  that the root and nil nodes do not require special cases in the code */
-  rb_node* root;             
-  rb_node* nil;              
-} rb_tree;
+  RBNode* root;             
+  RBNode* nil;              
+} RBTree;
 
-rb_tree* newRBTree(int  (*KeyCompareFunc)(const void*, const void*),
-		   void (*KeyDestroyFunc)(void*), 
-		   void (*ValueDestroyFunc)(void*), 
-		   void (*KeyPrintFunc)(const void*),
-		   void (*ValuePrintFunc)(void*));
-void deleteRBTree(rb_tree*);
-rb_node* RBTreeInsert(rb_tree*, void* key, void* value);
-void RBTreeEraseUnguarded(rb_tree* , rb_node* );
-void RBTreeErase(rb_tree* , void* key);
-rb_node* RBTreeFind(rb_tree*, void* key);
-stk_stack* RBTreeEnumerate(rb_tree* tree,void* low, void* high);
-rb_node* RBTreePredecessor(rb_tree*,rb_node*);
-rb_node* RBTreeSuccessor(rb_tree*,rb_node*);
-void RBTreePrint(rb_tree*);
+RBTree* newRBTree(int  (*KeyCompareFunc)(const void*, const void*),
+		  void (*KeyDestroyFunc)(void*), 
+		  void (*ValueDestroyFunc)(void*), 
+		  void (*KeyPrintFunc)(const void*),
+		  void (*ValuePrintFunc)(void*));
+void deleteRBTree(RBTree*);
+RBNode* RBTreeInsert(RBTree*, void* key, void* value);
+void RBTreeEraseUnguarded(RBTree* , RBNode* );
+void RBTreeErase(RBTree* , void* key);
+RBNode* RBTreeFind(RBTree*, void* key);
+stk_stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);
+RBNode* RBTreePredecessor(RBTree*,RBNode*);
+RBNode* RBTreeSuccessor(RBTree*,RBNode*);
+void RBTreePrint(RBTree*);
 
 void NullFunction(void*);
 

@@ -15,8 +15,8 @@ int compareXYCoord (const void* av, const void* bv);
 void printXYCoord (const void* cv);
 
 /* mappings from (x,y) coords to values - basically wrappers for RBTree functions */
-typedef rb_tree XYMap;
-typedef rb_node XYMapNode;
+typedef RBTree XYMap;
+typedef RBNode XYMapNode;
 XYMap* newXYMap (void (*ValueDestroyFunc)(void*), 
 		 void (*ValuePrintFunc)(void*));
 void deleteXYMap (XYMap* map);
@@ -28,7 +28,7 @@ XYMapNode* XYMapFind (XYMap* map, int x, int y);
 typedef XYMap XYSet;
 typedef XYMapNode XYSetNode;
 XYSet* newXYSet();
-#define deleteXYSet(XYSET) XYMapDestroy((XYMap*)XYSET)
+#define deleteXYSet(XYSET) deleteXYMap((XYMap*)XYSET)
 #define XYSetInsert(XYSET,X,Y) ((XYSetNode*) XYMapInsert((XYMap*)XYSET,X,Y,NULL)
 #define XYSetErase(XYSET,X,Y) XYMapErase((XYMap*)XYSET,X,Y)
 #define XYSetFind(XYSET,X,Y) ((XYSetNode*) XYMapFind((XYMap*)XYSET,X,Y))

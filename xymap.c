@@ -39,21 +39,21 @@ XYMap* newXYMap (void (*ValueDestroyFunc)(void*),
 }
 
 void deleteXYMap (XYMap* map) {
-  deleteRBTree ((rb_tree*) map);
+  deleteRBTree ((RBTree*) map);
 }
 
 XYMapNode* XYMapInsert (XYMap* map, int x, int y, void* value) {
-  return (XYMapNode*) RBTreeInsert ((rb_tree*) map, (void*) newXYCoord(x,y), value);
+  return (XYMapNode*) RBTreeInsert ((RBTree*) map, (void*) newXYCoord(x,y), value);
 }
 
 void XYMapErase (XYMap* map, int x, int y) {
-  RBTreeErase ((rb_tree*) map, (void*) newXYCoord(x,y));
+  RBTreeErase ((RBTree*) map, (void*) newXYCoord(x,y));
 }
 
 XYMapNode* XYMapFind (XYMap* map, int x, int y) {
-  return (XYMapNode*) RBTreeFind ((rb_tree*) map, (void*) newXYCoord(x,y));
+  return (XYMapNode*) RBTreeFind ((RBTree*) map, (void*) newXYCoord(x,y));
 }
 
 XYSet* newXYSet() {
-  return newXYMap (NullFunction, NullFunction);
+  return (XYSet*) newXYMap (NullFunction, NullFunction);
 }

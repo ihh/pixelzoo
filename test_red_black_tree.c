@@ -34,8 +34,8 @@ int main() {
   int option=0;
   int newKey,newKey2;
   int* newInt;
-  rb_node* newNode;
-  rb_tree* tree;
+  RBNode* newNode;
+  RBTree* tree;
 
   tree=newRBTree(IntComp,IntDest,InfoDest,IntPrint,InfoPrint);
   while(option!=8) {
