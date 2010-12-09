@@ -60,7 +60,7 @@ void deleteRBTree(rb_tree*);
 rb_node* RBTreeInsert(rb_tree*, void* key, void* value);
 void RBTreeEraseUnguarded(rb_tree* , rb_node* );
 void RBTreeErase(rb_tree* , void* key);
-rb_node* RBTreeFind(rb_tree*, void*);
+rb_node* RBTreeFind(rb_tree*, void* key);
 stk_stack* RBTreeEnumerate(rb_tree* tree,void* low, void* high);
 rb_node* RBTreePredecessor(rb_tree*,rb_node*);
 rb_node* RBTreeSuccessor(rb_tree*,rb_node*);
