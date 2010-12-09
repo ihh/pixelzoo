@@ -37,7 +37,7 @@ int main() {
   rb_node* newNode;
   rb_tree* tree;
 
-  tree=RBTreeCreate(IntComp,IntDest,InfoDest,IntPrint,InfoPrint);
+  tree=newRBTree(IntComp,IntDest,InfoDest,IntPrint,InfoPrint);
   while(option!=8) {
     printf("choose one of the following:\n");
     printf("(1) add to tree\n(2) delete from tree\n(3) query\n");
@@ -61,7 +61,7 @@ int main() {
 	{
 	  printf("type key of node to remove\n");
 	  scanf("%i",&newKey);
-	  if ( ( newNode=RBExactQuery(tree,&newKey ) ) ) RBDelete(tree,newNode);/*assignment*/
+	  if ( ( newNode=RBTreeFind(tree,&newKey ) ) ) RBTreeEraseUnguarded(tree,newNode);/*assignment*/
 	  else printf("key not found in tree, no action taken\n");
 	}
 	break;
@@ -70,7 +70,7 @@ int main() {
 	{
 	  printf("type key of node to query for\n");
 	  scanf("%i",&newKey);
-	  if ( ( newNode = RBExactQuery(tree,&newKey) ) ) {/*assignment*/
+	  if ( ( newNode = RBTreeFind(tree,&newKey) ) ) {/*assignment*/
 	    printf("data found in tree at location %lx\n",(unsigned long)newNode);
 	  } else {
 	    printf("data not in tree\n");
@@ -81,8 +81,8 @@ int main() {
 	{
 	  printf("type key of node to find predecessor of\n");
 	  scanf("%i",&newKey);
-	  if ( ( newNode = RBExactQuery(tree,&newKey) ) ) {/*assignment*/
-	    newNode=TreePredecessor(tree,newNode);
+	  if ( ( newNode = RBTreeFind(tree,&newKey) ) ) {/*assignment*/
+	    newNode=RBTreePredecessor(tree,newNode);
 	    if(tree->nil == newNode) {
 	      printf("there is no predecessor for that node (it is a minimum)\n");
 	    } else {
@@ -97,8 +97,8 @@ int main() {
 	{
 	  printf("type key of node to find successor of\n");
 	  scanf("%i",&newKey);
-	  if ( (newNode = RBExactQuery(tree,&newKey) ) ) {
-	    newNode=TreeSuccessor(tree,newNode);
+	  if ( (newNode = RBTreeFind(tree,&newKey) ) ) {
+	    newNode=RBTreeSuccessor(tree,newNode);
 	    if(tree->nil == newNode) {
 	      printf("there is no successor for that node (it is a maximum)\n");
 	    } else {
@@ -113,7 +113,7 @@ int main() {
 	{
 	  printf("type low and high keys to see all keys between them\n");
 	  scanf("%i %i",&newKey,&newKey2);
-	  enumResult=RBEnumerate(tree,&newKey,&newKey2);	  
+	  enumResult=RBTreeEnumerate(tree,&newKey,&newKey2);	  
 	  while ( (newNode = StackPop(enumResult)) ) {
 	    tree->PrintKey(newNode->key);
 	    printf("\n");
@@ -128,7 +128,7 @@ int main() {
 	break;
       case 8:
 	{
-	  RBTreeDestroy(tree);
+	  deleteRBTree(tree);
 	  return 0;
 	}
 	break;
@@ -138,7 +138,3 @@ int main() {
   }
   return 0;
 }
-
-
-
-

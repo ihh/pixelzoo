@@ -3,16 +3,16 @@
 #include "rbtree.h"
 
 /***********************************************************************/
-/*  FUNCTION:  RBTreeCreate */
+/*  FUNCTION:  newRBTree */
 /**/
 /*  INPUTS:  All the inputs are names of functions.  CompFunc takes to */
 /*  void pointers to keys and returns 1 if the first arguement is */
 /*  "greater than" the second.   DestFunc takes a pointer to a key and */
 /*  destroys it in the appropriate manner when the node containing that */
-/*  key is deleted.  InfoDestFunc is similiar to DestFunc except it */
-/*  recieves a pointer to the info of a node and destroys it. */
+/*  key is deleted.  ValueDestFunc is similiar to DestFunc except it */
+/*  recieves a pointer to the value of a node and destroys it. */
 /*  PrintFunc recieves a pointer to the key of a node and prints it. */
-/*  PrintInfo recieves a pointer to the info of a node and prints it. */
+/*  PrintValue recieves a pointer to the value of a node and prints it. */
 /*  If RBTreePrint is never called the print functions don't have to be */
 /*  defined and NullFunction can be used.  */
 /**/
@@ -22,11 +22,11 @@
 /*  Modifies Input: none */
 /***********************************************************************/
 
-rb_tree* RBTreeCreate( int (*CompFunc) (const void*,const void*),
+rb_tree* newRBTree( int (*CompFunc) (const void*,const void*),
 			      void (*DestFunc) (void*),
-			      void (*InfoDestFunc) (void*),
+			      void (*ValueDestFunc) (void*),
 			      void (*PrintFunc) (const void*),
-			      void (*PrintInfo)(void*)) {
+			      void (*PrintValue)(void*)) {
   rb_tree* newTree;
   rb_node* temp;
 
@@ -34,11 +34,11 @@ rb_tree* RBTreeCreate( int (*CompFunc) (const void*,const void*),
   newTree->Compare=  CompFunc;
   newTree->DestroyKey= DestFunc;
   newTree->PrintKey= PrintFunc;
-  newTree->PrintInfo= PrintInfo;
-  newTree->DestroyInfo= InfoDestFunc;
+  newTree->PrintValue= PrintValue;
+  newTree->DestroyValue= ValueDestFunc;
 
   /*  see the comment in the rb_tree structure in red_black_tree.h */
-  /*  for information on nil and root */
+  /*  for valuermation on nil and root */
   temp=newTree->nil= (rb_node*) SafeMalloc(sizeof(rb_node));
   temp->parent=temp->left=temp->right=temp;
   temp->red=0;
@@ -77,7 +77,7 @@ void LeftRotate(rb_tree* tree, rb_node* x) {
   /*  the parent pointer of nil.  This can be a problem if a */
   /*  function which calls LeftRotate also uses the nil sentinel */
   /*  and expects the nil sentinel's parent pointer to be unchanged */
-  /*  after calling this function.  For example, when RBDeleteFixUP */
+  /*  after calling this function.  For example, when RBTreeEraseFixUP */
   /*  calls LeftRotate it expects the parent pointer of nil to be */
   /*  unchanged. */
 
@@ -132,7 +132,7 @@ void RightRotate(rb_tree* tree, rb_node* y) {
   /*  the parent pointer of nil.  This can be a problem if a */
   /*  function which calls LeftRotate also uses the nil sentinel */
   /*  and expects the nil sentinel's parent pointer to be unchanged */
-  /*  after calling this function.  For example, when RBDeleteFixUP */
+  /*  after calling this function.  For example, when RBTreeEraseFixUP */
   /*  calls LeftRotate it expects the parent pointer of nil to be */
   /*  unchanged. */
 
@@ -209,7 +209,7 @@ void TreeInsertHelp(rb_tree* tree, rb_node* z) {
 /*  FUNCTION:  RBTreeInsert */
 /**/
 /*  INPUTS:  tree is the red-black tree to insert a node which has a key */
-/*           pointed to by key and info pointed to by info.  */
+/*           pointed to by key and value pointed to by value.  */
 /**/
 /*  OUTPUT:  This function returns a pointer to the newly inserted node */
 /*           which is guarunteed to be valid until this node is deleted. */
@@ -220,17 +220,17 @@ void TreeInsertHelp(rb_tree* tree, rb_node* z) {
 /*  Modifies Input: tree */
 /**/
 /*  EFFECTS:  Creates a node node which contains the appropriate key and */
-/*            info pointers and inserts it into the tree. */
+/*            value pointers and inserts it into the tree. */
 /***********************************************************************/
 
-rb_node * RBTreeInsert(rb_tree* tree, void* key, void* info) {
+rb_node * RBTreeInsert(rb_tree* tree, void* key, void* value) {
   rb_node * y;
   rb_node * x;
   rb_node * newNode;
 
   x=(rb_node*) SafeMalloc(sizeof(rb_node));
   x->key=key;
-  x->info=info;
+  x->value=value;
 
   TreeInsertHelp(tree,x);
   newNode=x;
@@ -280,7 +280,7 @@ rb_node * RBTreeInsert(rb_tree* tree, void* key, void* info) {
 }
 
 /***********************************************************************/
-/*  FUNCTION:  TreeSuccessor  */
+/*  FUNCTION:  RBTreeSuccessor  */
 /**/
 /*    INPUTS:  tree is the tree in question, and x is the node we want the */
 /*             the successor of. */
@@ -293,7 +293,7 @@ rb_node * RBTreeInsert(rb_tree* tree, void* key, void* info) {
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
   
-rb_node* TreeSuccessor(rb_tree* tree,rb_node* x) { 
+rb_node* RBTreeSuccessor(rb_tree* tree,rb_node* x) { 
   rb_node* y;
   rb_node* nil=tree->nil;
   rb_node* root=tree->root;
@@ -328,7 +328,7 @@ rb_node* TreeSuccessor(rb_tree* tree,rb_node* x) {
 /*    Note:  uses the algorithm in _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-rb_node* TreePredecessor(rb_tree* tree, rb_node* x) {
+rb_node* RBTreePredecessor(rb_tree* tree, rb_node* x) {
   rb_node* y;
   rb_node* nil=tree->nil;
   rb_node* root=tree->root;
@@ -357,7 +357,7 @@ rb_node* TreePredecessor(rb_tree* tree, rb_node* x) {
 /*    OUTPUT:  none  */
 /**/
 /*    EFFECTS:  This function recursively prints the nodes of the tree */
-/*              inorder using the PrintKey and PrintInfo functions. */
+/*              inorder using the PrintKey and PrintValue functions. */
 /**/
 /*    Modifies Input: none */
 /**/
@@ -369,8 +369,8 @@ void InorderTreePrint(rb_tree* tree, rb_node* x) {
   rb_node* root=tree->root;
   if (x != tree->nil) {
     InorderTreePrint(tree,x->left);
-    printf("info=");
-    tree->PrintInfo(x->info);
+    printf("value=");
+    tree->PrintValue(x->value);
     printf("  key="); 
     tree->PrintKey(x->key);
     printf("  l->key=");
@@ -393,11 +393,11 @@ void InorderTreePrint(rb_tree* tree, rb_node* x) {
 /*    OUTPUT:  none  */
 /**/
 /*    EFFECTS:  This function recursively destroys the nodes of the tree */
-/*              postorder using the DestroyKey and DestroyInfo functions. */
+/*              postorder using the DestroyKey and DestroyValue functions. */
 /**/
 /*    Modifies Input: tree, x */
 /**/
-/*    Note:    This function should only be called by RBTreeDestroy */
+/*    Note:    This function should only be called by deleteRBTree */
 /***********************************************************************/
 
 void TreeDestHelper(rb_tree* tree, rb_node* x) {
@@ -406,14 +406,14 @@ void TreeDestHelper(rb_tree* tree, rb_node* x) {
     TreeDestHelper(tree,x->left);
     TreeDestHelper(tree,x->right);
     tree->DestroyKey(x->key);
-    tree->DestroyInfo(x->info);
+    tree->DestroyValue(x->value);
     free(x);
   }
 }
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBTreeDestroy */
+/*  FUNCTION:  deleteRBTree */
 /**/
 /*    INPUTS:  tree is the tree to destroy */
 /**/
@@ -425,7 +425,7 @@ void TreeDestHelper(rb_tree* tree, rb_node* x) {
 /**/
 /***********************************************************************/
 
-void RBTreeDestroy(rb_tree* tree) {
+void deleteRBTree(rb_tree* tree) {
   TreeDestHelper(tree,tree->root->left);
   free(tree->root);
   free(tree->nil);
@@ -441,7 +441,7 @@ void RBTreeDestroy(rb_tree* tree) {
 /*    OUTPUT:  none */
 /**/
 /*    EFFECT:  This function recursively prints the nodes of the tree */
-/*             inorder using the PrintKey and PrintInfo functions. */
+/*             inorder using the PrintKey and PrintValue functions. */
 /**/
 /*    Modifies Input: none */
 /**/
@@ -453,7 +453,7 @@ void RBTreePrint(rb_tree* tree) {
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBExactQuery */
+/*  FUNCTION:  RBTreeFind */
 /**/
 /*    INPUTS:  tree is the tree to print and q is a pointer to the key */
 /*             we are searching for */
@@ -466,7 +466,7 @@ void RBTreePrint(rb_tree* tree) {
 /**/
 /***********************************************************************/
   
-rb_node* RBExactQuery(rb_tree* tree, void* q) {
+rb_node* RBTreeFind(rb_tree* tree, void* q) {
   rb_node* x=tree->root->left;
   rb_node* nil=tree->nil;
   int compVal;
@@ -486,10 +486,10 @@ rb_node* RBExactQuery(rb_tree* tree, void* q) {
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBDeleteFixUp */
+/*  FUNCTION:  RBTreeEraseFixUp */
 /**/
 /*    INPUTS:  tree is the tree to fix and x is the child of the spliced */
-/*             out node in RBTreeDelete. */
+/*             out node in RBTreeEraseUnguarded. */
 /**/
 /*    OUTPUT:  none */
 /**/
@@ -501,7 +501,7 @@ rb_node* RBExactQuery(rb_tree* tree, void* q) {
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-void RBDeleteFixUp(rb_tree* tree, rb_node* x) {
+void RBTreeEraseFixUp(rb_tree* tree, rb_node* x) {
   rb_node* root=tree->root->left;
   rb_node* w;
 
@@ -559,34 +559,34 @@ void RBDeleteFixUp(rb_tree* tree, rb_node* x) {
   x->red=0;
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not black in RBDeleteFixUp");
+  Assert(!tree->nil->red,"nil not black in RBTreeEraseFixUp");
 #endif
 }
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBDelete */
+/*  FUNCTION:  RBTreeEraseUnguarded */
 /**/
 /*    INPUTS:  tree is the tree to delete node z from */
 /**/
 /*    OUTPUT:  none */
 /**/
-/*    EFFECT:  Deletes z from tree and frees the key and info of z */
-/*             using DestoryKey and DestoryInfo.  Then calls */
-/*             RBDeleteFixUp to restore red-black properties */
+/*    EFFECT:  Erases z from tree and frees the key and value of z */
+/*             using DestroyKey and DestroyValue.  Then calls */
+/*             RBTreeEraseFixUp to restore red-black properties */
 /**/
 /*    Modifies Input: tree, z */
 /**/
 /*    The algorithm from this function is from _Introduction_To_Algorithms_ */
 /***********************************************************************/
 
-void RBDelete(rb_tree* tree, rb_node* z){
+void RBTreeEraseUnguarded(rb_tree* tree, rb_node* z){
   rb_node* y;
   rb_node* x;
   rb_node* nil=tree->nil;
   rb_node* root=tree->root;
 
-  y= ((z->left == nil) || (z->right == nil)) ? z : TreeSuccessor(tree,z);
+  y= ((z->left == nil) || (z->right == nil)) ? z : RBTreeSuccessor(tree,z);
   x= (y->left == nil) ? y->right : y->left;
   if (root == (x->parent = y->parent)) { /* assignment of y->p to x->p is intentional */
     root->left=x;
@@ -600,14 +600,14 @@ void RBDelete(rb_tree* tree, rb_node* z){
   if (y != z) { /* y should not be nil in this case */
 
 #ifdef DEBUG_ASSERT
-    Assert( (y!=tree->nil),"y is nil in RBDelete\n");
+    Assert( (y!=tree->nil),"y is nil in RBTreeEraseUnguarded\n");
 #endif
     /* y is the node to splice out and x is its child */
 
-    if (!(y->red)) RBDeleteFixUp(tree,x);
+    if (!(y->red)) RBTreeEraseFixUp(tree,x);
   
     tree->DestroyKey(z->key);
-    tree->DestroyInfo(z->info);
+    tree->DestroyValue(z->value);
     y->left=z->left;
     y->right=z->right;
     y->parent=z->parent;
@@ -621,19 +621,25 @@ void RBDelete(rb_tree* tree, rb_node* z){
     free(z); 
   } else {
     tree->DestroyKey(y->key);
-    tree->DestroyInfo(y->info);
-    if (!(y->red)) RBDeleteFixUp(tree,x);
+    tree->DestroyValue(y->value);
+    if (!(y->red)) RBTreeEraseFixUp(tree,x);
     free(y);
   }
   
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not black in RBDelete");
+  Assert(!tree->nil->red,"nil not black in RBTreeEraseUnguarded");
 #endif
+}
+
+void RBTreeErase(rb_tree* tree, void* key) {
+  rb_node* node;
+  if ( ( node = RBTreeFind (tree, key) ) ) /*assignment*/
+    RBTreeEraseUnguarded(tree,node);
 }
 
 
 /***********************************************************************/
-/*  FUNCTION:  RBDEnumerate */
+/*  FUNCTION:  RBTreeEnumerate */
 /**/
 /*    INPUTS:  tree is the tree to look for keys >= low */
 /*             and <= high with respect to the Compare function */
@@ -643,7 +649,7 @@ void RBDelete(rb_tree* tree, rb_node* z){
 /*    Modifies Input: none */
 /***********************************************************************/
 
-stk_stack* RBEnumerate(rb_tree* tree, void* low, void* high) {
+stk_stack* RBTreeEnumerate(rb_tree* tree, void* low, void* high) {
   stk_stack* enumResultStack;
   rb_node* nil=tree->nil;
   rb_node* x=tree->root->left;
@@ -660,13 +666,13 @@ stk_stack* RBEnumerate(rb_tree* tree, void* low, void* high) {
   }
   while ( (lastBest != nil) && (1 != tree->Compare(low,lastBest->key))) {
     StackPush(enumResultStack,lastBest);
-    lastBest=TreePredecessor(tree,lastBest);
+    lastBest=RBTreePredecessor(tree,lastBest);
   }
   return(enumResultStack);
 }
       
 /*  NullFunction does nothing it is included so that it can be passed */
-/*  as a function to RBTreeCreate when no other suitable function has */
+/*  as a function to newRBTree when no other suitable function has */
 /*  been defined */
 
 void NullFunction(void * junk) { ; }

@@ -2,18 +2,6 @@
 #include <stdlib.h>
 #include "util.h"
 
-int XYCoordComp (const void* av, const void* bv) {
-  XYCoord *a, *b;
-  a = (XYCoord*) av;
-  b = (XYCoord*) bv;
-  if (a->y > b->y)
-    return +1;
-  else if (a->y == b->y)
-    return a->x > b->x ? +1 : (a->x == b->x ? 0 : -1);
-  /* a->y < b->y */
-  return -1;
-}
-
 double randomDouble() {
   return (double) rand() / (double) RAND_MAX;
 }

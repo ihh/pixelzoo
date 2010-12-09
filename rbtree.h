@@ -25,7 +25,7 @@
 
 typedef struct rb_node {
   void* key;
-  void* info;
+  void* value;
   int red; /* if red=0 then the node is black */
   struct rb_node* left;
   struct rb_node* right;
@@ -38,32 +38,34 @@ typedef struct rb_node {
 typedef struct rb_tree {
   int (*Compare)(const void* a, const void* b); 
   void (*DestroyKey)(void* a);
-  void (*DestroyInfo)(void* a);
+  void (*DestroyValue)(void* a);
   void (*PrintKey)(const void* a);
-  void (*PrintInfo)(void* a);
+  void (*PrintValue)(void* a);
   /*  A sentinel is used for root and for nil.  These sentinels are */
-  /*  created when RBTreeCreate is caled.  root->left should always */
+  /*  created when newRBTree is caled.  root->left should always */
   /*  point to the node which is the root of the tree.  nil points to a */
   /*  node which should always be black but has aribtrary children and */
-  /*  parent and no key or info.  The point of using these sentinels is so */
+  /*  parent and no key or value.  The point of using these sentinels is so */
   /*  that the root and nil nodes do not require special cases in the code */
   rb_node* root;             
   rb_node* nil;              
 } rb_tree;
 
-rb_tree* RBTreeCreate(int  (*CompFunc)(const void*, const void*),
-			     void (*DestFunc)(void*), 
-			     void (*InfoDestFunc)(void*), 
-			     void (*PrintFunc)(const void*),
-			     void (*PrintInfo)(void*));
-rb_node * RBTreeInsert(rb_tree*, void* key, void* info);
+rb_tree* newRBTree(int  (*KeyCompareFunc)(const void*, const void*),
+		   void (*KeyDestroyFunc)(void*), 
+		   void (*ValueDestroyFunc)(void*), 
+		   void (*KeyPrintFunc)(const void*),
+		   void (*ValuePrintFunc)(void*));
+void deleteRBTree(rb_tree*);
+rb_node* RBTreeInsert(rb_tree*, void* key, void* value);
+void RBTreeEraseUnguarded(rb_tree* , rb_node* );
+void RBTreeErase(rb_tree* , void* key);
+rb_node* RBTreeFind(rb_tree*, void*);
+stk_stack* RBTreeEnumerate(rb_tree* tree,void* low, void* high);
+rb_node* RBTreePredecessor(rb_tree*,rb_node*);
+rb_node* RBTreeSuccessor(rb_tree*,rb_node*);
 void RBTreePrint(rb_tree*);
-void RBDelete(rb_tree* , rb_node* );
-void RBTreeDestroy(rb_tree*);
-rb_node* TreePredecessor(rb_tree*,rb_node*);
-rb_node* TreeSuccessor(rb_tree*,rb_node*);
-rb_node* RBExactQuery(rb_tree*, void*);
-stk_stack * RBEnumerate(rb_tree* tree,void* low, void* high);
+
 void NullFunction(void*);
 
 #endif /* RED_BLACK_TREE_INCLUDED */
