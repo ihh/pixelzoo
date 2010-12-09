@@ -3,17 +3,22 @@
 
 int testEntropyGoal (Goal* goal, Board* board);
 int testEnclosuresGoal (Goal* goal, Board* board);
+Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize);
 
-Goal* newTrueGoal() {
+Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   Goal* g;
   g = SafeMalloc (sizeof (Goal));
-  g->goalType = True;
+  g->goalType = type;
   g->l = g->r = g->parent = NULL;
   g->tree = NULL;
-  g->dblData = NULL;
-  g->intData = NULL;
+  g->dblData = dblDataSize ? SafeMalloc(dblDataSize*sizeof(double)) : NULL;
+  g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(unsigned long)) : NULL;
   g->ownsParent = 0;
   return g;
+}
+
+Goal* newTrueGoal() {
+  return newGoal (True, 0, 0);
 }
 
 void deleteGoal (Goal* goal) {

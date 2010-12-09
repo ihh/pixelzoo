@@ -6,19 +6,22 @@
 #include "statemap.h"
 #include "list.h"
 
+/* GoalType enumeration */
+enum GoalType { Area,        /* subgoal (l) is met for given constant area */
+		Enclosures,  /* subgoal (l) is met in at least intData[0] enclosures within parent area satisfying (intData[1] <= enclosureArea <= intData[2]) */
+		Once,        /* subgoal (l) has been met at least once within parent area (caches result) */
+		And,         /* both subgoals (l & r) are met simultaneously within parent area */
+		Or,          /* at least one of the two subgoals (l & r) is met within parent area */
+		Not,         /* subgoal (l) is not met within parent area */
+		Entropy,     /* mask every state in parent area with intData[0], and keep states in ((StateSet*)tree). Goal is met if remaining states satisfy (intData[0] <= population <= intData[1]) and (dblData[0] <= entropy <= dblData[1]) */
+		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
+		True,        /* always met */
+		False        /* never met */
+};
+
 /* Goal */
 typedef struct Goal {
-  enum GoalType { Area,        /* subgoal (l) is met for given constant area */
-		  Enclosures,  /* subgoal (l) is met in at least intData[0] enclosures within parent area satisfying (intData[1] <= enclosureArea <= intData[2]) */
-		  Once,        /* subgoal (l) has been met at least once within parent area (caches result) */
-		  And,         /* both subgoals (l & r) are met simultaneously within parent area */
-		  Or,          /* at least one of the two subgoals (l & r) is met within parent area */
-		  Not,         /* subgoal (l) is not met within parent area */
-		  Entropy,     /* mask every state in parent area with intData[0], and keep states in ((StateSet*)tree). Goal is met if remaining states satisfy (intData[0] <= population <= intData[1]) and (dblData[0] <= entropy <= dblData[1]) */
-		  Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
-		  True,        /* always met */
-		  False        /* never met */
-  } goalType;
+  enum GoalType goalType;  /* type */
   struct Goal *l, *r, *parent;  /* parent & subgoals */
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
@@ -31,7 +34,7 @@ int testGoalMet (Goal* goal, Board* board);
 XYSet* getGoalArea (Goal* goal);  /* caller must call deleteXYSet() to dealloc */
 
 /* constructors */
-Goal* newTrueGoal();  /* also serves as a base constructor for all other Goal types */
+Goal* newTrueGoal();
 Goal* newAreaGoal (XYSet* area, Goal* subGoal);
 Goal* newEnclosuresGoal (Goal* parent, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections, Goal* subGoal);
 Goal* newOnceGoal (Goal* parent, Goal* l);

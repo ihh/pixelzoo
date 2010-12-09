@@ -5,8 +5,8 @@
 
 /* quad tree */
 typedef struct QuadTree {
-    double* quadRate;
-    unsigned char K; // K = log_2(size)
+  double* quadRate;
+  unsigned char K;  /* K = log_2(size) */
 } QuadTree;
 
 QuadTree* newQuadTree (int size);

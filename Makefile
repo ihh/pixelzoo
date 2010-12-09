@@ -4,10 +4,11 @@ SDL_LDFLAGS := $(shell sdl-config --libs) -L/usr/X11R6/lib -lXi
 XML_CFLAGS  := $(shell pkg-config --cflags libxml-2.0)
 XML_LDFLAGS := $(shell pkg-config --libs libxml-2.0)
 
-CC     := gcc
-COPTS  := -g -Wall
-CFLAGS := $(SDL_CFLAGS) $(XML_CFLAGS)
-LIBS   := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
+CC          := gcc
+COPTS       := -g -Wall
+CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS)
+ANSI        := -ansi
+LIBS        := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
 
 TARGETS := sdltest test_red_black_tree
 
@@ -27,7 +28,7 @@ bin/%:  %.c $(OFILES) bin
 .SUFFIXES :
 
 obj/%.o: %.c obj
-	$(CC) $(COPTS) $(CFLAGS) -c $< -o $@
+	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
 
 obj bin:
 	mkdir $@
