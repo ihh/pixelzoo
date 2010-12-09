@@ -39,7 +39,7 @@ typedef List XYList;
 typedef ListNode XYListNode;
 #define newXYList() ((XYList*) newList (deleteXYCoord, printXYCoord))
 #define deleteXYList(XYLISTPTR) deleteList ((List*) XYLISTPTR)
-#define XYListInsertBefore(XYLISTPTR,XYLISTNODEPTR,X,Y) ListInsertBefore ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR, newXYCoord(X,Y))
+#define XYListInsertBefore(XYLISTPTR,XYLISTNODEPTR,X,Y) ListInsertBefore ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR, (void*) newXYCoord(X,Y))
 #define XYListErase(XYLISTPTR,XYLISTNODEPTR) ListErase ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR)
 #define XYListAppend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,NULL,X,Y)
 #define XYListPrepend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,XYLISTPTR->head,X,Y)

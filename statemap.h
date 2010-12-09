@@ -15,9 +15,9 @@ typedef RBTree StateMap;
 typedef RBNode StateMapNode;
 #define newStateMap(ValueDestroyFunc,ValuePrintFunc) ((StateMap*) newRBTree(compareState,deleteState,ValueDestroyFunc,printState,ValuePrintFunc))
 #define deleteStateMap(STATEMAPPTR) deleteRBTree((RBTree*)STATEMAPPTR)
-#define StateMapInsert(STATEMAPPTR,STATE,VALUE) ((StateMapNode*) RBTreeInsert((RBTree*)STATEMAPPTR,newState(STATE),(void*)VALUE)
-#define StateMapErase(STATEMAPPTR,STATE) RBTreeErase((RBTree*)STATEMAPPTR,newState(STATE))
-#define StateMapFind(STATEMAPPTR,STATE) ((StateMapNode*) RBTreeFind((RBTree*)STATEMAPPTR,newState(STATE)))
+#define StateMapInsert(STATEMAPPTR,STATE,VALUE) ((StateMapNode*) RBTreeInsert((RBTree*)STATEMAPPTR,(void*)newState(STATE),(void*)VALUE)
+#define StateMapErase(STATEMAPPTR,STATE) RBTreeErase((RBTree*)STATEMAPPTR,(void*)newState(STATE))
+#define StateMapFind(STATEMAPPTR,STATE) ((StateMapNode*) RBTreeFind((RBTree*)STATEMAPPTR,(void*)newState(STATE)))
 
 /* StateSet, a value-less StateMap */
 typedef StateMap StateSet;
