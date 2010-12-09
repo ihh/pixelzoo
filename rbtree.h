@@ -44,10 +44,13 @@ RBNode* RBTreeInsert(RBTree*, void* key, void* value);
 void RBTreeEraseUnguarded(RBTree* , RBNode* );
 void RBTreeErase(RBTree* , void* key);
 RBNode* RBTreeFind(RBTree*, void* key);
-stk_stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);
+stk_stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);  /* set low and/or high to NULL for unbounded/semibounded enumeration */
 RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
 void RBTreePrint(RBTree*);  /* debug */
+
+void RBTreeRetain(RBTree*, const RBTree*);  /* retains all keys of first RBTree that are also in second RBTree */
+void RBTreeRemove(RBTree*, const RBTree*);  /* removes all keys of first RBTree that are also in second RBTree */
 
 /* void versions of print & delete */
 void RBTreePrintVoid(const void*);

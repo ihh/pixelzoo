@@ -16,16 +16,16 @@ stk_stack * StackJoin(stk_stack * stack1, stk_stack * stack2) {
   }
 }
 
-stk_stack * StackCreate() {
-  stk_stack * newStack;
+stk_stack * newStack() {
+  stk_stack * theStack;
   
-  newStack=(stk_stack *) SafeMalloc(sizeof(stk_stack));
-  newStack->top=newStack->tail=NULL;
-  return(newStack);
+  theStack=(stk_stack *) SafeMalloc(sizeof(stk_stack));
+  theStack->top=theStack->tail=NULL;
+  return(theStack);
 }
 
 
-void StackPush(stk_stack * theStack, DATA_TYPE newInfoPointer) {
+void StackPush(stk_stack * theStack, void* newInfoPointer) {
   stk_stack_node * newNode;
 
   if(!theStack->top) {
@@ -43,8 +43,8 @@ void StackPush(stk_stack * theStack, DATA_TYPE newInfoPointer) {
   
 }
 
-DATA_TYPE StackPop(stk_stack * theStack) {
-  DATA_TYPE popInfo;
+void* StackPop(stk_stack * theStack) {
+  void* popInfo;
   stk_stack_node * oldNode;
 
   if(theStack->top) {
@@ -58,19 +58,3 @@ DATA_TYPE StackPop(stk_stack * theStack) {
   }
   return(popInfo);
 }
-
-void StackDestroy(stk_stack * theStack,void DestFunc(void * a)) {
-  stk_stack_node * x=theStack->top;
-  stk_stack_node * y;
-
-  if(theStack) {
-    while(x) {
-      y=x->next;
-      DestFunc(x->info);
-      free(x);
-      x=y;
-    }
-    free(theStack);
-  }
-} 
-    

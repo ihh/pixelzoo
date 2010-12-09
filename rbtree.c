@@ -655,16 +655,16 @@ stk_stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   RBNode* x=tree->root->left;
   RBNode* lastBest=nil;
 
-  enumResultStack=StackCreate();
+  enumResultStack=newStack();
   while(nil != x) {
-    if ( 1 == (tree->Compare(x->key,high)) ) { /* x->key > high */
+    if ( high == NULL || 1 == (tree->Compare(x->key,high)) ) { /* x->key > high */
       x=x->left;
     } else {
       lastBest=x;
       x=x->right;
     }
   }
-  while ( (lastBest != nil) && (1 != tree->Compare(low,lastBest->key))) {
+  while ( (lastBest != nil) && (low == NULL || 1 != tree->Compare(low,lastBest->key))) {
     StackPush(enumResultStack,lastBest);
     lastBest=RBTreePredecessor(tree,lastBest);
   }
@@ -673,3 +673,27 @@ stk_stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
 
 void RBTreePrintVoid(const void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }
+
+void RBTreeRetain(RBTree* t, const RBTree* u) {
+  stk_stack* stack;
+  void* key;
+  stack = RBTreeEnumerate (t, NULL, NULL);
+  while (StackNotEmpty (stack)) {
+    key = StackPop (stack);
+    if (RBTreeFind ((RBTree*) u, key) == NULL)
+      RBTreeErase (t, key);
+  }
+  deleteStack (stack);
+}
+
+void RBTreeRemove(RBTree* t, const RBTree* u) {
+  stk_stack* stack;
+  void* key;
+  stack = RBTreeEnumerate (t, NULL, NULL);
+  while (StackNotEmpty (stack)) {
+    key = StackPop (stack);
+    if (RBTreeFind ((RBTree*) u, key) != NULL)
+      RBTreeErase (t, key);
+  }
+  deleteStack (stack);
+}
