@@ -22,16 +22,16 @@ Board* newBoard (int size) {
 void deleteBoard (Board* board) {
   unsigned long t;
   int x;
-  free (board->overloadThreshold);
+  SafeFree(board->overloadThreshold);
   deleteQuadTree (board->quad);
   for (x = 0; x < board->size; ++x)
-    free (board->cell[x]);
-  free (board->cell);
+    SafeFree(board->cell[x]);
+  SafeFree(board->cell);
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
       deleteParticle (board->byType[(Type) t]);
-  free (board->byType);
-  free (board);
+  SafeFree(board->byType);
+  SafeFree(board);
 }
 
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {

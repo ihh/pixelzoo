@@ -407,7 +407,7 @@ void TreeDestHelper(RBTree* tree, RBNode* x) {
     TreeDestHelper(tree,x->right);
     tree->DestroyKey(x->key);
     tree->DestroyValue(x->value);
-    free(x);
+    SafeFree(x);
   }
 }
 
@@ -427,9 +427,9 @@ void TreeDestHelper(RBTree* tree, RBNode* x) {
 
 void deleteRBTree(RBTree* tree) {
   TreeDestHelper(tree,tree->root->left);
-  free(tree->root);
-  free(tree->nil);
-  free(tree);
+  SafeFree(tree->root);
+  SafeFree(tree->nil);
+  SafeFree(tree);
 }
 
 
@@ -618,12 +618,12 @@ void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
     } else {
       z->parent->right=y;
     }
-    free(z); 
+    SafeFree(z); 
   } else {
     tree->DestroyKey(y->key);
     tree->DestroyValue(y->value);
     if (!(y->red)) RBTreeEraseFixUp(tree,x);
-    free(y);
+    SafeFree(y);
   }
   
 #ifdef DEBUG_ASSERT
@@ -649,8 +649,8 @@ void RBTreeErase(RBTree* tree, void* key) {
 /*    Modifies Input: none */
 /***********************************************************************/
 
-stk_stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
-  stk_stack* enumResultStack;
+Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
+  Stack* enumResultStack;
   RBNode* nil=tree->nil;
   RBNode* x=tree->root->left;
   RBNode* lastBest=nil;
@@ -675,10 +675,10 @@ void RBTreePrintVoid(const void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }
 
 void RBTreeRetain(RBTree* t, const RBTree* u) {
-  stk_stack* stack;
+  Stack* stack;
   void* key;
   stack = RBTreeEnumerate (t, NULL, NULL);
-  while (StackNotEmpty (stack)) {
+  while (!StackEmpty (stack)) {
     key = StackPop (stack);
     if (RBTreeFind ((RBTree*) u, key) == NULL)
       RBTreeErase (t, key);
@@ -687,10 +687,10 @@ void RBTreeRetain(RBTree* t, const RBTree* u) {
 }
 
 void RBTreeRemove(RBTree* t, const RBTree* u) {
-  stk_stack* stack;
+  Stack* stack;
   void* key;
   stack = RBTreeEnumerate (t, NULL, NULL);
-  while (StackNotEmpty (stack)) {
+  while (!StackEmpty (stack)) {
     key = StackPop (stack);
     if (RBTreeFind ((RBTree*) u, key) != NULL)
       RBTreeErase (t, key);

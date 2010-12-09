@@ -8,8 +8,9 @@ typedef int (*CompareFunction) (const void*, const void*);
 typedef void (*DestroyFunction) (void*);
 typedef void (*PrintFunction) (const void*);
 
-/* null function for generic containers */
-void NullFunction(void*);
+/* null functions for generic containers */
+void NullDestroyFunction(void*);
+void NullPrintFunction(const void*);
 
 /* RGB color */
 typedef struct RGB {
@@ -27,5 +28,6 @@ double randomDouble();
 void Assert(int assertion, char* error);
 void *SafeMalloc(size_t size);
 void *SafeCalloc(size_t count, size_t size);
+#define SafeFree(PTR) free(PTR)
 
 #endif /* UTIL_INCLUDED */

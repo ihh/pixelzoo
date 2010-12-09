@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "goal.h"
-#include "stack.h"
 
 Goal* newTrueGoal() {
   Goal* g;

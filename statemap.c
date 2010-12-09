@@ -9,7 +9,7 @@ State* newState(State s) {
 }
 
 void deleteState(void* a) {
-  free((State*)a);
+  SafeFree((State*)a);
 }
 
 int compareState(const void* a,const void* b) {

@@ -18,8 +18,8 @@ void deleteList(List* list) {
   for (node = list->head; node != NULL; node = node->next)
     (*list->Destroy) (node->value);
   for (node = list->head; node != NULL; node = node->next)
-    free (node);
-  free (list);
+    SafeFree(node);
+  SafeFree(list);
 }
 
 size_t ListSize (List* list) {
@@ -34,7 +34,7 @@ size_t ListSize (List* list) {
 void ListInsertBefore(List* list, ListNode* node, void* value) {
   ListNode *newNode, *prevNode;
   newNode = newListNode(value);
-  prevNode = (node == NULL) ? list->tail : node->prev;
+  prevNode = node ? node->prev : list->tail;
   if (prevNode) {
     prevNode->next = newNode;
     newNode->prev = prevNode;
@@ -49,6 +49,20 @@ void ListInsertBefore(List* list, ListNode* node, void* value) {
     list->tail = newNode;
 }
 
+List* ListSpliceBefore(List* list, ListNode* node, List* subList) {
+  ListNode *prevNode;
+  Assert (list->Destroy == subList->Destroy, "ListSpliceBefore: list element destructors don't match");
+  if (!ListEmpty (subList)) {
+    prevNode = node ? node->prev : list->tail;
+    *(prevNode ? &prevNode->next : &list->head) = subList->head;
+    *(node ? &node->prev : &list->tail) = subList->tail;
+    subList->head->prev = prevNode;
+    subList->tail->next = node;
+  }
+  SafeFree(subList);
+  return list;
+}
+
 void ListErase(List* list, ListNode* node) {
   Assert (node != NULL, "ListErase: null node pointer");
   if (node->prev)
@@ -60,7 +74,39 @@ void ListErase(List* list, ListNode* node) {
   if (list->tail == node)
     list->tail = node->prev;
   (*list->Destroy) (node->value);
-  free (node);
+  SafeFree(node);
+}
+
+void* ListPop (List* list) {
+  void* val;
+  if (ListEmpty(list))
+    val = NULL;
+  else {
+    val = list->tail->value;
+    if (list->tail->prev) {
+      list->tail->prev->next = NULL;
+      list->tail = list->tail->prev;
+    } else
+      list->head = list->tail = NULL;
+    SafeFree(list->tail);
+  }
+  return val;
+}
+
+void* ListShift (List* list) {
+  void* val;
+  if (ListEmpty(list))
+    val = NULL;
+  else {
+    val = list->head->value;
+    if (list->head->next) {
+      list->head->next = NULL;
+      list->head = list->head->next;
+    } else
+      list->head = list->tail = NULL;
+    SafeFree(list->head);
+  }
+  return val;
 }
 
 void ListPrint (List* list) {

@@ -10,7 +10,7 @@ QuadTree* newQuadTree (int size) {
   QuadTree* quad;
   int tmp, totalNodes;
 
-  quad = malloc (sizeof(QuadTree));
+  quad = SafeMalloc (sizeof(QuadTree));
 
   tmp = size;
   for (quad->K = 0; tmp > 1; ) {
@@ -27,8 +27,8 @@ QuadTree* newQuadTree (int size) {
 }
 
 void deleteQuadTree (QuadTree* quad) {
-  free (quad->quadRate);
-  free (quad);
+  SafeFree(quad->quadRate);
+  SafeFree(quad);
 }
 
 double readQuadTree (QuadTree* quad, int x, int y) {

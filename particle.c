@@ -16,7 +16,7 @@ Particle* newParticle (const char* name, int nRules) {
 }
 
 void deleteParticle (Particle* p) {
-  free (p->rule);
-  free (p->name);
-  free (p);
+  SafeFree(p->rule);
+  SafeFree(p->name);
+  SafeFree(p);
 }

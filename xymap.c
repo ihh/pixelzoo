@@ -24,7 +24,7 @@ int compareXYCoord (const void* av, const void* bv) {
 void deleteXYCoord (void* cv) {
   XYCoord *c;
   c = (XYCoord*) cv;
-  free(c);
+  SafeFree(c);
 }
 
 void printXYCoord (const void* cv) {

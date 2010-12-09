@@ -6,7 +6,7 @@
 /*  this file has functions to test a red-black tree of integers */
 
 void IntDest(void* a) {
-  free((int*)a);
+  SafeFree((int*)a);
 }
 
 
@@ -30,7 +30,7 @@ void InfoDest(void *a){
 }
 
 int main() {
-  stk_stack* enumResult;
+  Stack* enumResult;
   int option=0;
   int newKey,newKey2;
   int* newInt;
@@ -51,7 +51,7 @@ int main() {
 	{
 	  printf("type key for new node\n");
 	  scanf("%i",&newKey);
-	  newInt=(int*) malloc(sizeof(int));
+	  newInt=(int*) SafeMalloc(sizeof(int));
 	  *newInt=newKey;
 	  RBTreeInsert(tree,newInt,0);
 	}
@@ -118,7 +118,7 @@ int main() {
 	    tree->PrintKey(newNode->key);
 	    printf("\n");
 	  }
-	  free(enumResult);
+	  deleteStack(enumResult);
 	}
 	break;
       case 7:

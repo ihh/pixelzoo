@@ -2,7 +2,7 @@
 #define RED_BLACK_TREE_INCLUDED
 
 #include"util.h"
-#include"stack.h"
+#include"list.h"
 
 /* comment out the line below to remove all the debugging assertion */
 /* checks from the compiled code.  */
@@ -44,7 +44,7 @@ RBNode* RBTreeInsert(RBTree*, void* key, void* value);
 void RBTreeEraseUnguarded(RBTree* , RBNode* );
 void RBTreeErase(RBTree* , void* key);
 RBNode* RBTreeFind(RBTree*, void* key);
-stk_stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);  /* set low and/or high to NULL for unbounded/semibounded enumeration */
+Stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);  /* set low and/or high to NULL for unbounded/semibounded enumeration */
 RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
 void RBTreePrint(RBTree*);  /* debug */

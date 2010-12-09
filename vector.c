@@ -12,8 +12,8 @@ void deleteVector (Vector* vec) {
   for (ptr = vec->begin; ptr != vec->end; ++ptr)
     (*vec->Destroy) (*ptr);
   if (vec->begin != NULL)
-    free (vec->begin);
-  free (vec);
+    SafeFree(vec->begin);
+  SafeFree(vec);
 }
 
 void VectorReserve (Vector* vec, size_t n) {
@@ -23,7 +23,7 @@ void VectorReserve (Vector* vec, size_t n) {
     for (srcPtr = vec->begin, destPtr = newBegin; srcPtr != vec->end; ++srcPtr, ++destPtr)
       *destPtr = *srcPtr;
     if (vec->begin != NULL)
-      free (vec->begin);
+      SafeFree(vec->begin);
     vec->begin = newBegin;
     vec->end = destPtr;
     vec->endAlloc = newBegin + n;
