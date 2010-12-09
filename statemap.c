@@ -12,12 +12,12 @@ void deleteState(void* a) {
   SafeFree((State*)a);
 }
 
-int compareState(const void* a,const void* b) {
+int compareState(void* a,void* b) {
   if( *(State*)a > *(State*)b) return(1);
   if( *(State*)a < *(State*)b) return(-1);
   return(0);
 }
 
-void printState(const void* a) {
+void printState(void* a) {
   printf("%lu",*(State*)a);
 }

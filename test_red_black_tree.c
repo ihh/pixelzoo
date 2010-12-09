@@ -11,17 +11,17 @@ void IntDest(void* a) {
 
 
 
-int IntComp(const void* a,const void* b) {
+int IntComp(void* a, void* b) {
   if( *(int*)a > *(int*)b) return(1);
   if( *(int*)a < *(int*)b) return(-1);
   return(0);
 }
 
-void IntPrint(const void* a) {
+void IntPrint(void* a) {
   printf("%i",*(int*)a);
 }
 
-void InfoPrint(const void* a) {
+void InfoPrint(void* a) {
   ;
 }
 

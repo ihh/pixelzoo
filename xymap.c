@@ -9,7 +9,7 @@ XYCoord* newXYCoord (int x, int y) {
   return c;
 }
 
-int compareXYCoord (const void* av, const void* bv) {
+int compareXYCoord (void* av, void* bv) {
   XYCoord *a, *b;
   a = (XYCoord*) av;
   b = (XYCoord*) bv;
@@ -27,7 +27,7 @@ void deleteXYCoord (void* cv) {
   SafeFree(c);
 }
 
-void printXYCoord (const void* cv) {
+void printXYCoord (void* cv) {
   XYCoord *c;
   c = (XYCoord*) cv;
   printf ("(%d,%d)", c->x, c->y);

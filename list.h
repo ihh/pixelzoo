@@ -33,7 +33,7 @@ void ListPrint (List* list);  /* debug */
 #define ListEmpty(LIST) ((LIST)->head == NULL)
 
 /* void versions of print & delete */
-void ListPrintVoid(const void*);
+void ListPrintVoid(void*);
 void ListDeleteVoid(void*);
 
 /* A Stack is like a List, but never deletes its values & only returns them via StackPop */

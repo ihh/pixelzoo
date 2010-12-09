@@ -7,8 +7,8 @@
 /* State new/delete/compare/print functions */
 State* newState(State s);
 void deleteState(void* a);
-int compareState(const void* a,const void* b);
-void printState(const void* a);
+int compareState(void* a,void* b);
+void printState(void* a);
 
 /* StateMap, a map from State's (particle states) to arbitrary values */
 typedef RBTree StateMap;
@@ -22,7 +22,7 @@ typedef RBNode StateMapNode;
 /* StateSet, a value-less StateMap */
 typedef StateMap StateSet;
 typedef StateMapNode StateSetNode;
-#define newStateSet() ((StateSet*) newStateMap (NullFunction, NullFunction))
+#define newStateSet() ((StateSet*) newStateMap (NullDestroyFunction, NullPrintFunction))
 #define deleteStateSet(STATESETPTR) deleteStateMap((StateMap*)STATESETPTR)
 #define StateSetInsert(STATESETPTR,STATE) ((StateSetNode*) StateMapInsert((StateMap*)STATESETPTR,STATE,NULL)
 #define StateSetErase(STATESETPTR,STATE) StateMapErase((StateMap*)STATESETPTR,STATE)

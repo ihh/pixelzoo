@@ -14,7 +14,7 @@
 /*  PrintFunc recieves a pointer to the key of a node and prints it. */
 /*  PrintValue recieves a pointer to the value of a node and prints it. */
 /*  If RBTreePrint is never called the print functions don't have to be */
-/*  defined and NullFunction can be used.  */
+/*  defined and NullPrintFunction can be used.  */
 /**/
 /*  OUTPUT:  This function returns a pointer to the newly created */
 /*  red-black tree. */
@@ -22,11 +22,11 @@
 /*  Modifies Input: none */
 /***********************************************************************/
 
-RBTree* newRBTree( int (*CompFunc) (const void*,const void*),
-			      void (*DestFunc) (void*),
-			      void (*ValueDestFunc) (void*),
-			      void (*PrintFunc) (const void*),
-			      void (*PrintValue)(const void*)) {
+RBTree* newRBTree( int (*CompFunc) (void*,void*),
+		   void (*DestFunc) (void*),
+		   void (*ValueDestFunc) (void*),
+		   void (*PrintFunc) (void*),
+		   void (*PrintValue)(void*)) {
   RBTree* newTree;
   RBNode* temp;
 
@@ -48,6 +48,27 @@ RBTree* newRBTree( int (*CompFunc) (const void*,const void*),
   temp->key=0;
   temp->red=0;
   return(newTree);
+}
+
+RBTree* RBTreeDeepCopy(RBTree* tree, CopyFunction KeyCopyFunc, CopyFunction ValueCopyFunc) {
+  Stack *stack;
+  RBNode *treeNode;
+  RBTree *newTree;
+  newTree = newRBTree (tree->Compare, tree->DestroyKey, tree->DestroyValue, tree->PrintKey, tree->PrintValue);
+  stack = RBTreeEnumerate (tree, NULL, NULL);
+  while (!StackEmpty (stack)) {
+    treeNode = (RBNode*) StackPop (stack);
+    RBTreeInsert (newTree, (*KeyCopyFunc) (treeNode->key), (*ValueCopyFunc) (treeNode->value));
+  }
+  deleteStack (stack);
+  return newTree;
+}
+
+RBTree* RBTreeShallowCopy(RBTree* tree) {
+  RBTree* newTree;
+  newTree = RBTreeDeepCopy (tree, NullCopyFunction, NullCopyFunction);
+  newTree->DestroyKey = newTree->DestroyValue = NullDestroyFunction;
+  return newTree;
 }
 
 /***********************************************************************/
@@ -674,24 +695,24 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
 void RBTreePrintVoid(const void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }
 
-void RBTreeRetain(RBTree* t, const RBTree* u) {
+void RBTreeRetain(RBTree* t, RBTree* u) {
   Stack* stack;
   void* key;
   stack = RBTreeEnumerate (t, NULL, NULL);
   while (!StackEmpty (stack)) {
-    key = StackPop (stack);
+    key = ((RBNode*) StackPop (stack))->key;
     if (RBTreeFind ((RBTree*) u, key) == NULL)
       RBTreeErase (t, key);
   }
   deleteStack (stack);
 }
 
-void RBTreeRemove(RBTree* t, const RBTree* u) {
+void RBTreeRemove(RBTree* t, RBTree* u) {
   Stack* stack;
   void* key;
   stack = RBTreeEnumerate (t, NULL, NULL);
   while (!StackEmpty (stack)) {
-    key = StackPop (stack);
+    key = ((RBNode*) StackPop (stack))->key;
     if (RBTreeFind ((RBTree*) u, key) != NULL)
       RBTreeErase (t, key);
   }

@@ -1,15 +1,29 @@
 #include <stdio.h>
 #include "goal.h"
 
+int testEntropyGoal (Goal* goal, Board* board);
+int testEnclosuresGoal (Goal* goal, Board* board);
+
 Goal* newTrueGoal() {
   Goal* g;
   g = SafeMalloc (sizeof (Goal));
   g->goalType = True;
   g->l = g->r = g->parent = NULL;
   g->tree = NULL;
-  g->dbl = NULL;
-  g->state = NULL;
+  g->dblData = NULL;
+  g->intData = NULL;
+  g->ownsParent = 0;
   return g;
+}
+
+void deleteGoal (Goal* goal) {
+  SafeFreeOrNull (goal->intData);
+  SafeFreeOrNull (goal->dblData);
+  if (goal->tree) deleteRBTree (goal->tree);
+  if (goal->l) deleteGoal (goal->l);
+  if (goal->r) deleteGoal (goal->r);
+  if (goal->parent && goal->ownsParent) deleteGoal (goal->parent);
+  SafeFree (goal);
 }
 
 List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections) {
@@ -76,3 +90,58 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
   return enclosureList;
 }
 
+XYSet* getGoalArea (Goal* goal) {
+  return
+    goal->goalType == Area
+    ? (XYSet*) RBTreeShallowCopy (goal->tree)
+    : (goal->parent
+       ? getGoalArea (goal->parent)
+       : newXYSet());
+}
+
+int testGoalMet (Goal* goal, Board* board) {
+  Assert (goal != NULL, "testGoalMet: null goal");
+  switch (goal->goalType) {
+  case Area:
+    return goal->l ? testGoalMet(goal->l,board) : 1;
+  case Enclosures:
+    return testEnclosuresGoal (goal, board);
+    return 1;
+  case Once:
+    if (!*goal->intData)
+      if (testGoalMet(goal->l,board))
+	*goal->intData = 1;
+    return *goal->intData;
+  case And:
+    return testGoalMet(goal->l,board) && testGoalMet(goal->r,board);
+  case Or:
+    return testGoalMet(goal->l,board) || testGoalMet(goal->r,board);
+  case Not:
+    return !testGoalMet(goal->l,board);
+  case Entropy:
+    return testEntropyGoal (goal, board);
+  case Repeat:
+    if (testGoalMet(goal->l,board))
+      ++goal->intData[1];
+    else
+      goal->intData[1] = 0;
+    return goal->intData[1] >= goal->intData[0];
+  case True:
+    return 1;
+  case False:
+  default:
+    break;
+  }
+  return 0;
+}
+
+
+int testEntropyGoal (Goal* goal, Board* board) {
+  /* more to go here */
+  return 0;
+}
+
+int testEnclosuresGoal (Goal* goal, Board* board) {
+  /* more to go here */
+  return 0;
+}

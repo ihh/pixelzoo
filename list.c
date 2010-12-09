@@ -4,7 +4,7 @@
 ListNode* newListNode (void* value);
 
 List* newList(void (*DestroyFunc)(void*),
-	      void (*PrintFunc)(const void*)) {
+	      void (*PrintFunc)(void*)) {
   List* list;
   list = SafeMalloc (sizeof(List));
   list->Destroy = DestroyFunc;
@@ -123,5 +123,5 @@ ListNode* newListNode (void* value) {
   return newNode;
 }
 
-void ListPrintVoid(const void* list) { ListPrint ((List*) list); }
+void ListPrintVoid(void* list) { ListPrint ((List*) list); }
 void ListDeleteVoid(void* list) { deleteList ((List*) list); }

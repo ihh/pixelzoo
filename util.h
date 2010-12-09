@@ -4,13 +4,15 @@
 #include <stdlib.h>
 
 /* function pointer typedefs for generic containers */
-typedef int (*CompareFunction) (const void*, const void*);
+typedef int (*CompareFunction) (void*, void*);
 typedef void (*DestroyFunction) (void*);
-typedef void (*PrintFunction) (const void*);
+typedef void* (*CopyFunction) (void*);
+typedef void (*PrintFunction) (void*);
 
 /* null functions for generic containers */
-void NullDestroyFunction(void*);
-void NullPrintFunction(const void*);
+void NullDestroyFunction(void*);  /* does nothing */
+void* NullCopyFunction(void*);  /* returns the supplied parameter without doing anything */
+void NullPrintFunction(void*);  /* does nothing */
 
 /* RGB color */
 typedef struct RGB {
@@ -29,5 +31,6 @@ void Assert(int assertion, char* error);
 void *SafeMalloc(size_t size);
 void *SafeCalloc(size_t count, size_t size);
 #define SafeFree(PTR) free(PTR)
+#define SafeFreeOrNull(PTR) if (PTR) SafeFree(PTR);
 
 #endif /* UTIL_INCLUDED */

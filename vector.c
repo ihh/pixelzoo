@@ -1,6 +1,6 @@
 #include "vector.h"
 
-Vector* newVector (void (*DestroyFunc)(void*), void (*PrintFunc)(const void*)) {
+Vector* newVector (void (*DestroyFunc)(void*), void (*PrintFunc)(void*)) {
   Vector* vec;
   vec = SafeMalloc (sizeof (Vector));
   vec->begin = vec->end = vec->endAlloc = NULL;
