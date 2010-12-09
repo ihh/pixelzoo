@@ -100,7 +100,7 @@ void* ListShift (List* list) {
   else {
     val = list->head->value;
     if (list->head->next) {
-      list->head->next = NULL;
+      list->head->next->prev = NULL;
       list->head = list->head->next;
     } else
       list->head = list->tail = NULL;
