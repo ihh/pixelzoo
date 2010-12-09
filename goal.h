@@ -4,7 +4,7 @@
 #include "board.h"
 #include "xymap.h"
 #include "statemap.h"
-#include "vector.h"
+#include "list.h"
 
 /* Goal */
 typedef struct Goal {
@@ -34,6 +34,6 @@ Goal* newRepeatGoal (Goal* parent, Goal* subGoal, unsigned int minReps);
 void deleteGoal (Goal* goal);
 
 /* helpers */
-Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteVector to dealloc */
+List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteList to dealloc */
 
 #endif /* GOAL_INCLUDED */
