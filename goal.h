@@ -34,6 +34,6 @@ Goal* newRepeatGoal (Goal* parent, Goal* subGoal, unsigned int minReps);
 void deleteGoal (Goal* goal);
 
 /* helpers */
-Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a Vector of XYSet's; caller must call deleteVector to dealloc */
+Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteVector to dealloc */
 
 #endif /* GOAL_INCLUDED */

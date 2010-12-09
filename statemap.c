@@ -21,7 +21,3 @@ int compareState(const void* a,const void* b) {
 void printState(const void* a) {
   printf("%lu",*(State*)a);
 }
-
-StateSet* newStateSet() {
-  return (StateSet*) newStateMap (NullFunction, NullFunction);
-}
