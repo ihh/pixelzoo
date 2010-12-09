@@ -23,30 +23,21 @@ void deleteList(List* list) {
 }
 
 void ListInsertBefore(List* list, ListNode* node, void* value) {
-  ListNode* newNode;
+  ListNode *newNode, *prevNode;
   newNode = newListNode(value);
-  if (node == NULL) {
-    /* insert at end of list */
-    if (list->tail) {
-      list->tail->next = newNode;
-      newNode->prev = list->tail;
-    }
-    if (list->head == NULL)
-      list->head = newNode;
-    list->tail = newNode;
-  } else {
-    /* insert before node */
-    if (node->prev) {
-      node->prev->next = newNode;
-      newNode->prev = node->prev;
-    }
+  prevNode = (node == NULL) ? list->tail : node->prev;
+  if (prevNode) {
+    prevNode->next = newNode;
+    newNode->prev = prevNode;
+  }
+  if (node) {
     node->prev = newNode;
     newNode->next = node;
-    if (list->head == node)
-      list->head = newNode;
-    if (list->tail == NULL)
-      list->tail = newNode;
   }
+  if (list->head == node)
+    list->head = newNode;
+  if (list->tail == prevNode)
+    list->tail = newNode;
 }
 
 void ListErase(List* list, ListNode* node) {
