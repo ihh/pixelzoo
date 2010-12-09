@@ -4,6 +4,7 @@
 #include "board.h"
 #include "xymap.h"
 #include "statemap.h"
+#include "vector.h"
 
 /* Goal */
 typedef struct Goal {
@@ -21,18 +22,18 @@ XYSet* getGoalArea (Goal* goal, Board* board);  /* caller must call xySetDestroy
 /* constructors */
 Goal* newTrueGoal();  /* also serves as a base constructor for all other Goal types */
 Goal* newAreaGoal (XYSet* area, Goal* subGoal);
-Goal* newEnclosuresGoal (Goal* parent, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections, Goal* subGoal);
+Goal* newEnclosuresGoal (Goal* parent, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections, Goal* subGoal);
 Goal* newAndGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newOrGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newThenGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newNotGoal (Goal* parent, Goal* g);
-Goal* newEntropyGoal (Goal* parent, StateSet* particleTypeSet, unsigned int minCount, unsigned int maxCount, double minEntropy);
+Goal* newEntropyGoal (Goal* parent, State typeMask, StateSet* typeSet, unsigned int minCount, unsigned int maxCount, double minEntropy);
 Goal* newRepeatGoal (Goal* parent, Goal* subGoal, unsigned int minReps);
 
 /* destructor */
 void deleteGoal (Goal* goal);
 
 /* helpers */
-
+Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a Vector of XYSet's */
 
 #endif /* GOAL_INCLUDED */
