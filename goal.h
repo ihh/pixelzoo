@@ -17,7 +17,7 @@ typedef struct Goal {
 
 /* accessors */
 int testGoalAchieved (Goal* goal, Board* board);
-XYSet* getGoalArea (Goal* goal, Board* board);  /* caller must call xySetDestroy() to dealloc */
+XYSet* getGoalArea (Goal* goal, Board* board);  /* caller must call deleteXYSet() to dealloc */
 
 /* constructors */
 Goal* newTrueGoal();  /* also serves as a base constructor for all other Goal types */
@@ -34,6 +34,6 @@ Goal* newRepeatGoal (Goal* parent, Goal* subGoal, unsigned int minReps);
 void deleteGoal (Goal* goal);
 
 /* helpers */
-Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a Vector of XYSet's */
+Vector* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a Vector of XYSet's; caller must call deleteVector to dealloc */
 
 #endif /* GOAL_INCLUDED */
