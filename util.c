@@ -38,3 +38,9 @@ void *SafeCalloc(size_t count, size_t size) {
   }
   return(0);
 }
+
+/*  NullFunction does nothing; it is included so that it can be passed */
+/*  as a function to newRBTree, etc, when no other suitable function has */
+/*  been defined */
+
+void NullFunction(void * junk) { ; }

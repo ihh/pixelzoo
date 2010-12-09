@@ -1,6 +1,6 @@
 #include "vector.h"
 
-Vector* newVector (void (*DestroyFunc)(void*), void (*PrintFunc)(void*)) {
+Vector* newVector (void (*DestroyFunc)(void*), void (*PrintFunc)(const void*)) {
   Vector* vec;
   vec = SafeMalloc (sizeof (Vector));
   vec->begin = vec->end = vec->endAlloc = NULL;
@@ -49,5 +49,10 @@ void* VectorGet (Vector* vec, size_t n) {
 
 void VectorSet (Vector* vec, size_t n, void* value) {
   Assert (VectorInBounds(vec,n), "VectorGet: index out of bounds");
+  if (vec->begin[n])
+    (*vec->Destroy) (vec->begin[n]);
   vec->begin[n] = value;
 }
+
+void VectorPrintVoid(const void* vector) { VectorPrint ((Vector*) vector); }
+void VectorDeleteVoid(void* vector) { deleteVector ((Vector*) vector); }

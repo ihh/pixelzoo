@@ -21,7 +21,7 @@ void IntPrint(const void* a) {
   printf("%i",*(int*)a);
 }
 
-void InfoPrint(void* a) {
+void InfoPrint(const void* a) {
   ;
 }
 

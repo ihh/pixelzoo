@@ -26,7 +26,7 @@ RBTree* newRBTree( int (*CompFunc) (const void*,const void*),
 			      void (*DestFunc) (void*),
 			      void (*ValueDestFunc) (void*),
 			      void (*PrintFunc) (const void*),
-			      void (*PrintValue)(void*)) {
+			      void (*PrintValue)(const void*)) {
   RBTree* newTree;
   RBNode* temp;
 
@@ -670,9 +670,6 @@ stk_stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   }
   return(enumResultStack);
 }
-      
-/*  NullFunction does nothing it is included so that it can be passed */
-/*  as a function to newRBTree when no other suitable function has */
-/*  been defined */
 
-void NullFunction(void * junk) { ; }
+void RBTreePrintVoid(const void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
+void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }

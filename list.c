@@ -22,6 +22,15 @@ void deleteList(List* list) {
   free (list);
 }
 
+size_t ListSize (List* list) {
+  size_t n;
+  ListNode *node;
+  n = 0;
+  for (node = list->head; node; node = node->next)
+    ++n;
+  return n;
+}
+
 void ListInsertBefore(List* list, ListNode* node, void* value) {
   ListNode *newNode, *prevNode;
   newNode = newListNode(value);
@@ -67,3 +76,6 @@ ListNode* newListNode (void* value) {
   newNode->prev = newNode->next = NULL;
   return newNode;
 }
+
+void ListPrintVoid(const void* list) { ListPrint ((List*) list); }
+void ListDeleteVoid(void* list) { deleteList ((List*) list); }

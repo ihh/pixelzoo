@@ -3,6 +3,14 @@
 
 #include <stdlib.h>
 
+/* function pointer typedefs for generic containers */
+typedef int (*CompareFunction) (const void*, const void*);
+typedef void (*DestroyFunction) (void*);
+typedef void (*PrintFunction) (const void*);
+
+/* null function for generic containers */
+void NullFunction(void*);
+
 /* RGB color */
 typedef struct RGB {
   unsigned char r, g, b;
@@ -15,7 +23,7 @@ double randomDouble();
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
-/* misc functions */
+/* alloc functions */
 void Assert(int assertion, char* error);
 void *SafeMalloc(size_t size);
 void *SafeCalloc(size_t count, size_t size);

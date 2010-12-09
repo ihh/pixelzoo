@@ -4,15 +4,14 @@
 #include <stdlib.h>
 #include "util.h"
 
-/* Destroy(a) takes a pointer to whatever 'a' might be and frees it accordingly */
 typedef struct Vector {
-  void (*Destroy)(void* a);
-  void (*Print)(const void* a);
+  DestroyFunction Destroy;
+  PrintFunction Print;
   void **begin, **end, **endAlloc;
 } Vector;
 
-Vector* newVector (void (*DestroyFunc)(void*),
-		   void (*PrintFunc)(void*));
+Vector* newVector(DestroyFunction DestroyFunc,
+		  PrintFunction PrintFunc);
 void deleteVector (Vector* vec);
 void* VectorGet (Vector* vec, size_t n);
 void VectorSet (Vector* vec, size_t n, void* value);
@@ -23,5 +22,9 @@ void VectorPrint (Vector* vec);  /* debug */
 #define VectorSize(VEC) ((size_t) ((VEC)->end - (VEC)->begin))
 #define VectorCapacity(VEC) ((size_t) ((VEC)->endAlloc - (VEC)->begin))
 #define VectorInBounds(VEC,N) ((N) >= 0 && (N) < VectorSize(VEC))
+
+/* void versions of print & delete */
+void VectorPrintVoid(const void*);
+void VectorDeleteVoid(void*);
 
 #endif /* VECTOR_INCLUDED */
