@@ -19,7 +19,7 @@ typedef struct RBNode {
 
 
 /* Compare(a,b) should return 1 if *a > *b, -1 if *a < *b, and 0 otherwise */
-/* Destroy(a) takes a pointer to whatever key might be and frees it accordingly */
+/* Destroy(a) takes a pointer to whatever 'a' might be and frees it accordingly */
 typedef struct RBTree {
   int (*Compare)(const void* a, const void* b); 
   void (*DestroyKey)(void* a);
@@ -49,7 +49,7 @@ RBNode* RBTreeFind(RBTree*, void* key);
 stk_stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);
 RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
-void RBTreePrint(RBTree*);
+void RBTreePrint(RBTree*);  /* debug */
 
 void NullFunction(void*);
 

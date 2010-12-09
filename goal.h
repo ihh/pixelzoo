@@ -7,11 +7,11 @@
 
 /* Goal */
 typedef struct Goal {
-  enum GoalType { Area, Enclosures, Then, And, Or, True, Not, Particles, Entropy, Repeat } goalType;
-  struct Goal *l, *r, *parent;
-  RBTree *data;
-  double d1, d2;
-  int i1, i2;
+  enum GoalType { Area, Enclosures, Then, And, Or, True, Not, Entropy, Repeat } goalType;
+  struct Goal *l, *r, *parent;  /* parent & subgoals */
+  RBTree *tree;  /* red-black tree goal params */
+  double *dbl;  /* floating-point goal params */
+  State *state;  /* integer goal params */
 } Goal;
 
 /* accessors */
@@ -19,17 +19,20 @@ int testGoalAchieved (Goal* goal, Board* board);
 XYSet* getGoalArea (Goal* goal, Board* board);  /* caller must call xySetDestroy() to dealloc */
 
 /* constructors */
+Goal* newTrueGoal();  /* also serves as a base constructor for all other Goal types */
 Goal* newAreaGoal (XYSet* area, Goal* subGoal);
-Goal* newEnclosuresGoal (Goal* parent, int minEnclosureArea, int maxEnclosureArea, int allowDiagonalConnections, Goal* subGoal);
+Goal* newEnclosuresGoal (Goal* parent, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections, Goal* subGoal);
 Goal* newAndGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newOrGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newThenGoal (Goal* parent, Goal* l, Goal* r);
 Goal* newNotGoal (Goal* parent, Goal* g);
-Goal* newParticlesGoal (Goal* parent, StateSet* particleTypeSet, int minCount);
-Goal* newEntropyGoal (Goal* parent, StateSet* particleTypeSet, int minCount, double minEntropy);
-Goal* newRepeatGoal (Goal* parent, Goal* subGoal, int minReps);
+Goal* newEntropyGoal (Goal* parent, StateSet* particleTypeSet, unsigned int minCount, unsigned int maxCount, double minEntropy);
+Goal* newRepeatGoal (Goal* parent, Goal* subGoal, unsigned int minReps);
 
 /* destructor */
 void deleteGoal (Goal* goal);
+
+/* helpers */
+
 
 #endif /* GOAL_INCLUDED */
