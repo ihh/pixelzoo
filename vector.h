@@ -20,7 +20,7 @@ Vector* newVector(CopyFunction CopyFunc,
 void deleteVector (Vector* vec);
 Vector* VectorDeepCopy (Vector* vec);  /* uses CopyFunction to copy values */
 void* VectorGet (Vector* vec, size_t n);
-void VectorSet (Vector* vec, size_t n, void* value);
+void VectorSet (Vector* vec, size_t n, void* value);  /* uses DestroyFunction to delete previous value, if non-NULL */
 void VectorReserve (Vector* vec, size_t n);
 void VectorPushBack (Vector* vec, void* value);
 void VectorPrint (Vector* vec);  /* debug */

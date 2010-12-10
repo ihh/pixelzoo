@@ -65,7 +65,7 @@ void* VectorGet (Vector* vec, size_t n) {
 void VectorSet (Vector* vec, size_t n, void* value) {
   Assert (VectorInBounds(vec,n), "VectorGet: index out of bounds");
   if (vec->begin[n])
-    (*vec->Destroy) (vec->begin[n]);
+    (*vec->Destroy) (vec->begin[n]);  /* delete old value */
   vec->begin[n] = value;
 }
 
