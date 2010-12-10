@@ -40,6 +40,7 @@ bin/test_red_black_tree<<EOF
 2
 2
 4
+0
 7
 8
 EOF

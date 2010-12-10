@@ -703,6 +703,24 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   return(enumResultStack);
 }
 
+size_t RBTreeSize(RBTree* tree) {
+  size_t size;
+  RBNode* nil=tree->nil;
+  RBNode* x=tree->root->left;
+  RBNode* y=nil;
+
+  size = 0;
+  while(nil != x) {
+    y = x;
+    x = x->right;
+  }
+  while ( y != nil ) {
+    ++size;
+    y = RBTreePredecessor(tree,y);
+  }
+  return size;
+}
+
 void* RBTreeDeepCopyVoid(void* rbTree) { return (void*) RBTreeDeepCopy ((RBTree*) rbTree); }
 void RBTreePrintVoid(void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }

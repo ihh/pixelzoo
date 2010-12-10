@@ -30,8 +30,8 @@ typedef struct RBTree {
   /*  node which should always be black but has aribtrary children and */
   /*  parent and no key or value.  The point of using these sentinels is so */
   /*  that the root and nil nodes do not require special cases in the code */
-  RBNode* root;             
-  RBNode* nil;              
+  RBNode* root;
+  RBNode* nil;
 } RBTree;
 
 RBTree* newRBTree(CompareFunction KeyCompareFunc,
@@ -42,6 +42,7 @@ RBTree* newRBTree(CompareFunction KeyCompareFunc,
 		  PrintFunction KeyPrintFunc,
 		  PrintFunction ValuePrintFunc);
 void deleteRBTree(RBTree*);
+size_t RBTreeSize(RBTree* tree);
 RBTree* RBTreeDeepCopy(RBTree* tree);  /* uses CopyFunction's to copy keys & values */
 RBTree* RBTreeShallowCopy(RBTree* tree);  /* does not use CopyFunction's. Do not delete original tree before shallow-copying! */
 RBNode* RBTreeInsert(RBTree*, void* key, void* value);

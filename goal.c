@@ -43,6 +43,9 @@ List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSe
   XYCoord tempXYCoord;
   State state;
 
+  /* enclosureList is a List of List's (or more specifically, a list of XYList's),
+     so the copy, delete & print functions are the List versions of those functions:
+  */
   enclosureList = newList (ListDeepCopyVoid, ListDeleteVoid, ListPrintVoid);
 
   /* create an array of enclosure indices */

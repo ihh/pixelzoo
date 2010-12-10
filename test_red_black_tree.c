@@ -48,6 +48,7 @@ int main() {
 
   tree=newRBTree(IntComp,IntCopy,InfoCopy,IntDest,InfoDest,IntPrint,InfoPrint);
   while(option!=8) {
+    printf("Current tree size: %d\n",(int)RBTreeSize(tree));
     printf("choose one of the following:\n");
     printf("(0) copy tree\n(1) add to tree\n(2) delete from tree\n(3) query\n");
     printf("(4) find predecessor\n(5) find sucessor\n(6) enumerate\n");
