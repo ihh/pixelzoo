@@ -38,7 +38,7 @@ typedef XYMapNode XYSetNode;
 /* XYList */
 typedef List XYList;
 typedef ListNode XYListNode;
-#define newXYList() ((XYList*) newList (deleteXYCoord, printXYCoord))
+#define newXYList() ((XYList*) newList (copyXYCoord, deleteXYCoord, printXYCoord))
 #define deleteXYList(XYLISTPTR) deleteList ((List*) XYLISTPTR)
 #define XYListEmpty(XYLISTPTR) ListEmpty ((List*) XYLISTPTR)
 #define XYListSize(XYLISTPTR) ListSize ((List*) XYLISTPTR)
@@ -50,7 +50,7 @@ typedef ListNode XYListNode;
 
 /* XYVector */
 typedef Vector XYVector;
-#define newXYVector() ((XYVector*) newVector (deleteXYCoord, printXYCoord))
+#define newXYVector() ((XYVector*) newVector (copyXYCoord, deleteXYCoord, printXYCoord))
 #define deleteXYVector(XYVECPTR) deleteVector ((Vector*) XYVECPTR)
 #define XYVectorGet(XYVECPTR,N) VectorGet ((Vector*) XYVECPTR, N)
 #define XYVectorSet(XYVECPTR,N,X,Y) VectorSet ((Vector*) XYVECPTR, N, (void*) newXYCoord(X,Y))

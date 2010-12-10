@@ -3,10 +3,12 @@
 
 ListNode* newListNode (void* value);
 
-List* newList(void (*DestroyFunc)(void*),
+List* newList(void* (*CopyFunc)(void*),
+	      void (*DestroyFunc)(void*),
 	      void (*PrintFunc)(void*)) {
   List* list;
   list = SafeMalloc (sizeof(List));
+  list->Copy = CopyFunc;
   list->Destroy = DestroyFunc;
   list->Print = PrintFunc;
   list->head = list->tail = NULL;
@@ -20,6 +22,15 @@ void deleteList(List* list) {
   for (node = list->head; node != NULL; node = node->next)
     SafeFree(node);
   SafeFree(list);
+}
+
+List* ListDeepCopy (List* list) {
+  List* copyList;
+  ListNode* node;
+  copyList = newList (list->Copy, list->Destroy, list->Print);
+  for (node = list->head; node; node = node->next)
+    ListAppend (copyList, (*list->Copy) (node->value));
+  return copyList;
 }
 
 size_t ListSize (List* list) {
@@ -124,5 +135,6 @@ ListNode* newListNode (void* value) {
   return newNode;
 }
 
+void* ListDeepCopyVoid(void* list) { return (void*) ListDeepCopy ((List*) list); }
 void ListPrintVoid(void* list) { ListPrint ((List*) list); }
 void ListDeleteVoid(void* list) { deleteList ((List*) list); }

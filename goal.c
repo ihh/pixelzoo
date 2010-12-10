@@ -43,7 +43,7 @@ List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSe
   XYCoord tempXYCoord;
   State state;
 
-  enclosureList = newList (ListDeleteVoid, ListPrintVoid);
+  enclosureList = newList (ListDeepCopyVoid, ListDeleteVoid, ListPrintVoid);
 
   /* create an array of enclosure indices */
   mark = SafeMalloc (board->size * sizeof(int*));

@@ -10,14 +10,17 @@ typedef struct ListNode {
 } ListNode;
 
 typedef struct List {
+  CopyFunction Copy;
   DestroyFunction Destroy;
   PrintFunction Print;
   ListNode *head, *tail;
 } List;
 
-List* newList(DestroyFunction DestroyFunc,
+List* newList(CopyFunction CopyFunc,
+	      DestroyFunction DestroyFunc,
 	      PrintFunction PrintFunc);
 void deleteList(List* list);
+List* ListDeepCopy (List* list);  /* uses CopyFunction to copy values */
 size_t ListSize (List* list);
 ListNode* ListInsertBefore(List* list, ListNode* node, void* value);  /* call with node==NULL to insert at end of list */
 List* ListSpliceBefore(List* list, ListNode* node, List* subList);  /* frees list & subList, returns new list. Call with node==NULL to append subList at end of list */
@@ -32,14 +35,15 @@ void ListPrint (List* list);  /* debug */
 
 #define ListEmpty(LIST) ((LIST)->head == NULL)
 
-/* void versions of print & delete */
+/* void versions of copy, print & delete */
+void* ListDeepCopyVoid(void*);
 void ListPrintVoid(void*);
 void ListDeleteVoid(void*);
 
 /* A Stack is like a List, but never deletes its values & only returns them via StackPop */
 typedef List Stack;
 typedef ListNode StackNode;
-#define newStack() ((Stack*) newList(NullDestroyFunction,NullPrintFunction))
+#define newStack() ((Stack*) newList(NullCopyFunction,NullDestroyFunction,NullPrintFunction))
 #define deleteStack(STACK) deleteList((List*) STACK)
 #define StackJoin(STACK1,STACK2) ((Stack*) ListJoin((List*)STACK1,(List*)STACK2))
 #define StackPush(STACK,DATA) ListAppend((List*)STACK,DATA)

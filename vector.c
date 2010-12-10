@@ -1,8 +1,13 @@
 #include "vector.h"
 
-Vector* newVector (void (*DestroyFunc)(void*), void (*PrintFunc)(void*)) {
+Vector* newVector (void* (*CopyFunc)(void*),
+		   void (*DestroyFunc)(void*),
+		   void (*PrintFunc)(void*)) {
   Vector* vec;
   vec = SafeMalloc (sizeof (Vector));
+  vec->Copy = CopyFunc;
+  vec->Destroy = DestroyFunc;
+  vec->Print = PrintFunc;
   vec->begin = vec->end = vec->endAlloc = NULL;
   return vec;
 }
@@ -14,6 +19,16 @@ void deleteVector (Vector* vec) {
   if (vec->begin != NULL)
     SafeFree(vec->begin);
   SafeFree(vec);
+}
+
+Vector* VectorDeepCopy (Vector* vec) {
+  Vector* copyVec;
+  void** iter;
+  copyVec = newVector (vec->Copy, vec->Destroy, vec->Print);
+  VectorReserve (copyVec, VectorCapacity(vec));
+  for (iter = vec->begin; iter != vec->end; ++iter)
+    VectorPushBack (copyVec, (*vec->Copy) (*iter));
+  return copyVec;
 }
 
 void VectorReserve (Vector* vec, size_t n) {
@@ -54,5 +69,6 @@ void VectorSet (Vector* vec, size_t n, void* value) {
   vec->begin[n] = value;
 }
 
-void VectorPrintVoid(const void* vector) { VectorPrint ((Vector*) vector); }
+void* VectorDeepCopyVoid(void* vector) { return (void*) VectorDeepCopy ((Vector*) vector); }
+void VectorPrintVoid(void* vector) { VectorPrint ((Vector*) vector); }
 void VectorDeleteVoid(void* vector) { deleteVector ((Vector*) vector); }
