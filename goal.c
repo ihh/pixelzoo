@@ -34,7 +34,7 @@ void deleteGoal (Goal* goal) {
 List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections) {
   List *enclosureList;
   XYList *enclosure, *pointsToVisit;
-  int **mark, xLoop, yLoop, x, y, dx, dy, currentMark, enclosureDone;
+  int **mark, xLoop, yLoop, x, y, dx, dy, currentMark, enclosureDone, enclosureArea;
   State state;
 
   enclosureList = newList (ListDeleteVoid, ListPrintVoid);
@@ -84,7 +84,11 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
 	  }
 	}
 
-	ListAppend (enclosureList, enclosure);
+	enclosureArea = XYListSize (enclosure);
+	if (enclosureArea >= minEnclosureArea && enclosureArea <= maxEnclosureArea)
+	  ListAppend (enclosureList, (void*) enclosure);
+	else
+	  deleteXYList (enclosure);
       }
 
   /* cleanup & return */
