@@ -42,8 +42,8 @@ RBTree* newRBTree(CompareFunction KeyCompareFunc,
 		  PrintFunction KeyPrintFunc,
 		  PrintFunction ValuePrintFunc);
 void deleteRBTree(RBTree*);
-RBTree* RBTreeDeepCopy(RBTree* tree);
-RBTree* RBTreeShallowCopy(RBTree* tree);  /* do not delete original tree before shallow-copying! */
+RBTree* RBTreeDeepCopy(RBTree* tree);  /* uses CopyFunction's to copy keys & values */
+RBTree* RBTreeShallowCopy(RBTree* tree);  /* does not use CopyFunction's. Do not delete original tree before shallow-copying! */
 RBNode* RBTreeInsert(RBTree*, void* key, void* value);
 void RBTreeEraseUnguarded(RBTree* , RBNode* );
 void RBTreeErase(RBTree* , void* key);
@@ -56,8 +56,9 @@ void RBTreePrint(RBTree*);  /* debug */
 void RBTreeRetain(RBTree*, RBTree*);  /* retains all keys of first RBTree that are also in second RBTree */
 void RBTreeRemove(RBTree*, RBTree*);  /* removes all keys of first RBTree that are also in second RBTree */
 
-/* void versions of print & delete */
-void RBTreePrintVoid(const void*);
+/* void versions of copy, print & delete */
+void* RBTreeDeepCopyVoid(void*);
+void RBTreePrintVoid(void*);
 void RBTreeDeleteVoid(void*);
 
 #endif /* RED_BLACK_TREE_INCLUDED */

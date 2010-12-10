@@ -703,7 +703,8 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   return(enumResultStack);
 }
 
-void RBTreePrintVoid(const void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
+void* RBTreeDeepCopyVoid(void* rbTree) { return (void*) RBTreeDeepCopy ((RBTree*) rbTree); }
+void RBTreePrintVoid(void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }
 
 void RBTreeRetain(RBTree* t, RBTree* u) {
