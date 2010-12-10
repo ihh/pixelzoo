@@ -9,13 +9,14 @@
 /* GoalType enumeration */
 /* Where parent is undefined, "parent area" is entire board */
 enum GoalType { Area,        /* subgoal (l) is met for given constant area */
-		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating states in ((StateSet*)tree) as walls, and allowing diagonal connections if intData[1] is true.
-				Subgoal (l) is met in at least intData[2] enclosures satisfying (intData[3] <= enclosureArea <= intData[4]) */
+		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls, and allowing diagonal connections if intData[1] is true.
+				Goal is met if subgoal (l) is met in at least intData[2] enclosures satisfying (intData[3] <= enclosureArea <= intData[4]) */
 		Once,        /* subgoal (l) has been met at least once within parent area (caches result) */
 		And,         /* both subgoals (l & r) are met simultaneously within parent area */
 		Or,          /* at least one of the two subgoals (l & r) is met within parent area */
 		Not,         /* subgoal (l) is not met within parent area */
-		Entropy,     /* mask every state in parent area with intData[0], and keep states in ((StateSet*)tree). Goal is met if remaining states satisfy (intData[0] <= population <= intData[1]) and (dblData[0] <= entropy <= dblData[1]) */
+		Entropy,     /* mask every state in parent area with intData[0], and keep masked-states in ((StateSet*)tree).
+				Goal is met if remaining states satisfy (intData[0] <= population <= intData[1]) and (dblData[0] <= entropy <= dblData[1]) */
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
 		True,        /* always met */
 		False        /* never met */
