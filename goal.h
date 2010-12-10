@@ -7,7 +7,7 @@
 #include "list.h"
 
 /* GoalType enumeration */
-/* Where parent is undefined, "parent area" is entire board */
+/* When a goal has no parent, "parent area" is entire board */
 enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls, and allowing diagonal connections if intData[1] is true.
 				Goal is met if subgoal (l) is met in at least intData[2] enclosures satisfying (intData[3] <= enclosureArea <= intData[4]) */
