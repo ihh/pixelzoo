@@ -106,6 +106,9 @@ List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSe
 
   /* cleanup & return */
   deleteXYList (pointsToVisit);
+  for (x = 0; x < board->size; ++x)
+    SafeFree (mark[x]);
+  SafeFree (mark);
 
   return enclosureList;
 }
