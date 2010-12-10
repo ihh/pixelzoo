@@ -162,7 +162,6 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   XYSet *pointSet, *parentArea;
   Goal *tempAreaGoal;
   unsigned long wallMask, allowDiagonals, minEncSize, maxEncSize, minCount, count;
-  Assert (goal->parent == NULL, "testEnclosuresGoal: non-null parent");
   wallMask = goal->intData[0];
   allowDiagonals = goal->intData[1];
   minCount = goal->intData[2];
