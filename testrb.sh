@@ -10,6 +10,7 @@ bin/test_red_black_tree<<EOF
 4
 1
 5
+8
 7
 1
 9
@@ -41,8 +42,9 @@ bin/test_red_black_tree<<EOF
 2
 4
 0
-7
 8
+7
+9
 EOF
 
 exit 0

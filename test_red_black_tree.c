@@ -47,12 +47,11 @@ int main() {
   RBTree *tree, *treeCopy;
 
   tree=newRBTree(IntComp,IntCopy,InfoCopy,IntDest,InfoDest,IntPrint,InfoPrint);
-  while(option!=8) {
-    printf("Current tree size: %d\n",(int)RBTreeSize(tree));
+  while(option!=9) {
     printf("choose one of the following:\n");
     printf("(0) copy tree\n(1) add to tree\n(2) delete from tree\n(3) query\n");
     printf("(4) find predecessor\n(5) find sucessor\n(6) enumerate\n");
-    printf("(7) print tree\n(8) quit\n");
+    printf("(7) print tree\n(8) tree size\n(9) quit\n");
     do option=fgetc(stdin); while(-1 != option && isspace(option));
     option-='0';
     switch(option)
@@ -142,6 +141,11 @@ int main() {
 	}
 	break;
       case 8:
+	{
+	  printf("Size of tree: %d\n", (int) RBTreeSize(tree));
+	}
+	break;
+      case 9:
 	{
 	  deleteRBTree(tree);
 	  return 0;

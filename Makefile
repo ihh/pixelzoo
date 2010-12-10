@@ -22,13 +22,12 @@ lib: $(OFILES)
 clean:
 	rm -rf obj/* bin/* *~ *.dSYM
 
-bin/%:  %.c $(OFILES) bin
+bin/%:  %.c $(OFILES)
+	@test -e bin || mkdir bin
 	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $*.c $(OFILES)
 
 .SUFFIXES :
 
-obj/%.o: %.c obj
+obj/%.o: %.c
+	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
-
-obj bin:
-	mkdir $@
