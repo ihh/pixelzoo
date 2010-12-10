@@ -34,7 +34,7 @@ void deleteGoal (Goal* goal) {
 List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections) {
   List *enclosureList;
   XYList *enclosure, *pointsToVisit;
-  int **mark, xLoop, yLoop, x, y, dx, dy, currentMark, stackEmpty;
+  int **mark, xLoop, yLoop, x, y, dx, dy, currentMark, enclosureDone;
   State state;
 
   enclosureList = newList (ListDeleteVoid, ListPrintVoid);
@@ -63,8 +63,8 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
 
 	x = xLoop;
 	y = yLoop;
-
-	do {
+	enclosureDone = 0;
+	while (!enclosureDone) {
 	  mark[x][y] = currentMark;
 	  XYListAppend (enclosure, x, y);
 
@@ -74,17 +74,14 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
 		if (onBoard(board,x+dx,y+dy) && mark[x+dx][y+dy] == 0)
 		  XYListAppend (pointsToVisit, x+dx, y+dy);
 
-	  stackEmpty = 0;
 	  while (mark[x][y] != 0) {
 	    if (XYListEmpty (pointsToVisit)) {
-	      stackEmpty = 1;
+	      enclosureDone = 1;
 	      break;
 	    }
-	    x = ((XYCoord*) pointsToVisit->tail->value)->x;
-	    y = ((XYCoord*) pointsToVisit->tail->value)->y;
-	    XYListErase (pointsToVisit, pointsToVisit->tail);
+	    XYListPop (pointsToVisit, x, y);
 	  }
-	} while (!stackEmpty);
+	}
 
 	ListAppend (enclosureList, enclosure);
       }
@@ -139,7 +136,6 @@ int testGoalMet (Goal* goal, Board* board) {
   }
   return 0;
 }
-
 
 int testEntropyGoal (Goal* goal, Board* board) {
   /* more to go here */

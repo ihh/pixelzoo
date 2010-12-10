@@ -45,6 +45,7 @@ typedef ListNode XYListNode;
 #define XYListErase(XYLISTPTR,XYLISTNODEPTR) ListErase ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR)
 #define XYListAppend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,NULL,X,Y)
 #define XYListPrepend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,XYLISTPTR->head,X,Y)
+#define XYListPop(XYLISTPTR,X,Y) (X) = ((XYCoord*) XYLISTPTR->tail->value)->x; (Y) = ((XYCoord*) XYLISTPTR->tail->value)->y; XYListErase(XYLISTPTR,XYLISTPTR->tail);
 
 /* XYVector */
 typedef Vector XYVector;
