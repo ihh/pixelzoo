@@ -4,10 +4,6 @@
 
 #include "xmlboard.h"
 
-// stupid quoting bollix
-#define QUOTEME_(x) #x
-#define QUOTEME(x) QUOTEME_(x)
-
 //-----------------------------------------------------------------------------
 // SYMBOLIC CONSTANTS
 //-----------------------------------------------------------------------------

@@ -33,4 +33,8 @@ void *SafeCalloc(size_t count, size_t size);
 #define SafeFree(PTR) free(PTR)
 #define SafeFreeOrNull(PTR) if (PTR) SafeFree(PTR);
 
+/* stupid quoting bollix */
+#define QUOTEME_(x) #x
+#define QUOTEME(x) QUOTEME_(x)
+
 #endif /* UTIL_INCLUDED */

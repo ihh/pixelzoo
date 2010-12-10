@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "util.h"
 
+/* number of blocks that will be allocated the first time you push stuff onto an empty vector */
+#define DefaultInitialVectorCapacity ((size_t) 10)
+
 typedef struct Vector {
   CopyFunction Copy;
   DestroyFunction Destroy;

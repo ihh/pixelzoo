@@ -169,10 +169,13 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
   rule->overloadRate = OPTCHILDFLOAT(node,OVERLOAD,rule->rate);
   nCond = nOp = 0;
   for (node = node->children; node; node = node->next)
-    if (MATCHES(node,TEST))
+    if (MATCHES(node,TEST)) {
+      Assert (nCond < NumRuleConditions, "initRuleFromXmlNode: too many rule conditions");
       initConditionFromXmlNode (&rule->cond[nCond++], node);
-    else if (MATCHES(node,EXEC))
+    } else if (MATCHES(node,EXEC)) {
+      Assert (nOp < NumRuleOperations, "initRuleFromXmlNode: too many rule operations");
       initOperationFromXmlNode (&rule->op[nOp++], node);
+    }
 }
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {

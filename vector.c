@@ -47,7 +47,7 @@ void VectorReserve (Vector* vec, size_t n) {
 
 void VectorPushBack (Vector* vec, void* value) {
   if (vec->end == vec->endAlloc)
-    VectorReserve (vec, 2 * VectorSize(vec));  /* double the capacity each time, to avoid O(N^2) behavior */
+    VectorReserve (vec, vec->end == NULL ? DefaultInitialVectorCapacity : (2 * VectorCapacity(vec)));  /* double the capacity each time, to avoid O(N^2) behavior */
   *(vec->end++) = value;
 }
 
