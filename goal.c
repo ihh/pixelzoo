@@ -68,6 +68,7 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
 	  mark[x][y] = currentMark;
 	  XYListAppend (enclosure, x, y);
 
+	  /* loop over the neighborhood */
 	  for (dx = -1; dx <= +1; ++dx)
 	    for (dy = -1; dy <= +1; ++dy)
 	      if ((dx || dy) && (allowDiagonalConnections || (dx == 0 || dy == 0)))
