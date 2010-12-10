@@ -183,7 +183,7 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
       if (testGoalMet (goal->l, board))
 	++count;
       goal->l->parent = goal;  /* this is not really necessary, but what the heck */
-      deleteGoal (tempAreaGoal);
+      deleteGoal (tempAreaGoal);  /* this also deletes pointSet */
     }
   }
   deleteList (enclosureList);
