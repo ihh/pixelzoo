@@ -23,6 +23,8 @@
 /***********************************************************************/
 
 RBTree* newRBTree( int (*CompFunc) (void*,void*),
+		   void* (*CopyFunc) (void*),
+		   void* (*ValueCopyFunc) (void*),
 		   void (*DestFunc) (void*),
 		   void (*ValueDestFunc) (void*),
 		   void (*PrintFunc) (void*),
@@ -32,6 +34,8 @@ RBTree* newRBTree( int (*CompFunc) (void*,void*),
 
   newTree=(RBTree*) SafeMalloc(sizeof(RBTree));
   newTree->Compare=  CompFunc;
+  newTree->CopyKey= CopyFunc;
+  newTree->CopyValue= ValueCopyFunc;
   newTree->DestroyKey= DestFunc;
   newTree->PrintKey= PrintFunc;
   newTree->PrintValue= PrintValue;
@@ -50,15 +54,16 @@ RBTree* newRBTree( int (*CompFunc) (void*,void*),
   return(newTree);
 }
 
-RBTree* RBTreeDeepCopy(RBTree* tree, CopyFunction KeyCopyFunc, CopyFunction ValueCopyFunc) {
+RBTree* RBTreeDeepCopy(RBTree* tree) {
   Stack *stack;
   RBNode *treeNode;
   RBTree *newTree;
-  newTree = newRBTree (tree->Compare, tree->DestroyKey, tree->DestroyValue, tree->PrintKey, tree->PrintValue);
+  Assert (tree->CopyKey != NULL && tree->CopyValue != NULL, "RBTreeDeepCopy: no copy constructors provided");
+  newTree = newRBTree (tree->Compare, tree->CopyKey, tree->CopyValue, tree->DestroyKey, tree->DestroyValue, tree->PrintKey, tree->PrintValue);
   stack = RBTreeEnumerate (tree, NULL, NULL);
   while (!StackEmpty (stack)) {
     treeNode = (RBNode*) StackPop (stack);
-    RBTreeInsert (newTree, (*KeyCopyFunc) (treeNode->key), (*ValueCopyFunc) (treeNode->value));
+    RBTreeInsert (newTree, (*tree->CopyKey) (treeNode->key), (*tree->CopyValue) (treeNode->value));
   }
   deleteStack (stack);
   return newTree;
@@ -66,8 +71,14 @@ RBTree* RBTreeDeepCopy(RBTree* tree, CopyFunction KeyCopyFunc, CopyFunction Valu
 
 RBTree* RBTreeShallowCopy(RBTree* tree) {
   RBTree* newTree;
-  newTree = RBTreeDeepCopy (tree, NullCopyFunction, NullCopyFunction);
+  CopyFunction copyKey, copyValue;
+  copyKey = tree->CopyKey;
+  copyValue = tree->CopyValue;
+  tree->CopyKey = tree->CopyValue = NullCopyFunction;
+  newTree = RBTreeDeepCopy (tree);
   newTree->DestroyKey = newTree->DestroyValue = NullDestroyFunction;
+  tree->CopyKey = copyKey;
+  tree->CopyValue = copyValue;
   return newTree;
 }
 
@@ -678,14 +689,14 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
 
   enumResultStack=newStack();
   while(nil != x) {
-    if ( high == NULL || 1 == (tree->Compare(x->key,high)) ) { /* x->key > high */
+    if ( high != NULL && 1 == (*tree->Compare)(x->key,high)) { /* x->key > high */
       x=x->left;
     } else {
       lastBest=x;
       x=x->right;
     }
   }
-  while ( (lastBest != nil) && (low == NULL || 1 != tree->Compare(low,lastBest->key))) {
+  while ( (lastBest != nil) && (low == NULL || 1 != (*tree->Compare)(low,lastBest->key)) ) {  /* !(low > lastBest->key) == (low <= lastBest->key) */
     StackPush(enumResultStack,lastBest);
     lastBest=RBTreePredecessor(tree,lastBest);
   }

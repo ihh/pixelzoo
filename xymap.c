@@ -9,6 +9,10 @@ XYCoord* newXYCoord (int x, int y) {
   return c;
 }
 
+void* copyXYCoord (void* xyPtr) {
+  return (void*) newXYCoord (((XYCoord*)xyPtr)->x, ((XYCoord*)xyPtr)->y);
+}
+
 int compareXYCoord (void* av, void* bv) {
   XYCoord *a, *b;
   a = (XYCoord*) av;

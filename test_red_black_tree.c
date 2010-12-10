@@ -5,11 +5,16 @@
 
 /*  this file has functions to test a red-black tree of integers */
 
+void* IntCopy(void* a) {
+  int* aCopy;
+  aCopy = SafeMalloc(sizeof(int));
+  *aCopy = *(int*)a;
+  return (void*) aCopy;
+}
+
 void IntDest(void* a) {
   SafeFree((int*)a);
 }
-
-
 
 int IntComp(void* a, void* b) {
   if( *(int*)a > *(int*)b) return(1);
@@ -29,24 +34,33 @@ void InfoDest(void *a){
   ;
 }
 
+void* InfoCopy(void *a){
+  return a;
+}
+
 int main() {
   Stack* enumResult;
   int option=0;
   int newKey,newKey2;
-  int* newInt;
-  RBNode* newNode;
-  RBTree* tree;
+  int *newInt;
+  RBNode *newNode;
+  RBTree *tree, *treeCopy;
 
-  tree=newRBTree(IntComp,IntDest,InfoDest,IntPrint,InfoPrint);
+  tree=newRBTree(IntComp,IntCopy,InfoCopy,IntDest,InfoDest,IntPrint,InfoPrint);
   while(option!=8) {
     printf("choose one of the following:\n");
-    printf("(1) add to tree\n(2) delete from tree\n(3) query\n");
+    printf("(0) copy tree\n(1) add to tree\n(2) delete from tree\n(3) query\n");
     printf("(4) find predecessor\n(5) find sucessor\n(6) enumerate\n");
     printf("(7) print tree\n(8) quit\n");
     do option=fgetc(stdin); while(-1 != option && isspace(option));
     option-='0';
     switch(option)
       {
+      case 0:
+	treeCopy = RBTreeDeepCopy (tree);
+	deleteRBTree (tree);
+	tree = treeCopy;
+	break;
       case 1:
 	{
 	  printf("type key for new node\n");

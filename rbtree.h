@@ -17,11 +17,11 @@ typedef struct RBNode {
   struct RBNode* parent;
 } RBNode;
 
-
 /* Compare(a,b) should return 1 if *a > *b, -1 if *a < *b, and 0 otherwise */
 /* Destroy(a) takes a pointer to whatever 'a' might be and frees it accordingly */
 typedef struct RBTree {
   CompareFunction Compare;
+  CopyFunction CopyKey, CopyValue;
   DestroyFunction DestroyKey, DestroyValue;
   PrintFunction PrintKey, PrintValue;
   /*  A sentinel is used for root and for nil.  These sentinels are */
@@ -35,13 +35,15 @@ typedef struct RBTree {
 } RBTree;
 
 RBTree* newRBTree(CompareFunction KeyCompareFunc,
+		  CopyFunction KeyCopyFunc,
+		  CopyFunction ValueCopyFunc,
 		  DestroyFunction KeyDestroyFunc,
 		  DestroyFunction ValueDestroyFunc,
 		  PrintFunction KeyPrintFunc,
 		  PrintFunction ValuePrintFunc);
 void deleteRBTree(RBTree*);
-RBTree* RBTreeDeepCopy(RBTree* tree, CopyFunction KeyCopyFunc, CopyFunction ValueCopyFunc);
-RBTree* RBTreeShallowCopy(RBTree* tree);  /* do not delete original tree before copy! */
+RBTree* RBTreeDeepCopy(RBTree* tree);
+RBTree* RBTreeShallowCopy(RBTree* tree);  /* do not delete original tree before shallow-copying! */
 RBNode* RBTreeInsert(RBTree*, void* key, void* value);
 void RBTreeEraseUnguarded(RBTree* , RBNode* );
 void RBTreeErase(RBTree* , void* key);

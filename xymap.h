@@ -12,14 +12,15 @@ typedef struct XYCoord {
 
 /* various methods on (x,y) coords */
 XYCoord* newXYCoord (int x, int y);
-void deleteXYCoord (void* cv);
-int compareXYCoord (void* av, void* bv);
-void printXYCoord (void* cv);
+void* copyXYCoord (void* xyPtr);
+void deleteXYCoord (void* xyPtr);
+int compareXYCoord (void* aPtr, void* bPtr);
+void printXYCoord (void* xyPtr);
 
 /* mappings from (x,y) coords to values - basically wrappers for RBTree functions */
 typedef RBTree XYMap;
 typedef RBNode XYMapNode;
-#define newXYMap(ValueDestroyFunc,ValuePrintFunc) ((XYMap*) newRBTree (compareXYCoord, deleteXYCoord, ValueDestroyFunc, printXYCoord, ValuePrintFunc))
+#define newXYMap(ValueCopyFunc,ValueDestroyFunc,ValuePrintFunc) ((XYMap*) newRBTree (compareXYCoord, copyXYCoord, ValueCopyFunc, deleteXYCoord, ValueDestroyFunc, printXYCoord, ValuePrintFunc))
 #define deleteXYMap(XYMAPPTR) deleteRBTree ((RBTree*) XYMAPPTR)
 #define XYMapInsert(XYMAPPTR,X,Y,VALUE) ((XYMapNode*) RBTreeInsert ((RBTree*) XYMAPPTR, (void*) newXYCoord(X,Y), VALUE))
 #define XYMapErase(XYMAPPTR,X,Y,TEMPXYCOORD) ( (TEMPXYCOORD).x = X, (TEMPXYCOORD).y = Y, RBTreeErase ((RBTree*) XYMAPPTR, (void*) &TEMPXYCOORD))
@@ -28,7 +29,7 @@ typedef RBNode XYMapNode;
 /* typedefs & macros for XYSet, a value-less XYMap */
 typedef XYMap XYSet;
 typedef XYMapNode XYSetNode;
-#define newXYSet() ((XYSet*) newXYMap (NullDestroyFunction, NullPrintFunction))
+#define newXYSet() ((XYSet*) newXYMap (NullCopyFunction, NullDestroyFunction, NullPrintFunction))
 #define deleteXYSet(XYSETPTR) deleteXYMap((XYMap*)XYSETPTR)
 #define XYSetInsert(XYSETPTR,X,Y) ((XYSetNode*) XYMapInsert((XYMap*)XYSETPTR,X,Y,NULL))
 #define XYSetErase(XYSETPTR,X,Y,TEMPXYCOORD) XYMapErase((XYMap*)XYSETPTR,X,Y,TEMPXYCOORD)

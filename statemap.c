@@ -8,6 +8,10 @@ State* newState(State s) {
   return sPtr;
 }
 
+void* copyState(void* sPtr) {
+  return (void*) newState (*(State*)sPtr);
+}
+
 void deleteState(void* a) {
   SafeFree((State*)a);
 }
