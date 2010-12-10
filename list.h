@@ -19,7 +19,7 @@ List* newList(DestroyFunction DestroyFunc,
 	      PrintFunction PrintFunc);
 void deleteList(List* list);
 size_t ListSize (List* list);
-void ListInsertBefore(List* list, ListNode* node, void* value);  /* call with node==NULL to insert at end of list */
+ListNode* ListInsertBefore(List* list, ListNode* node, void* value);  /* call with node==NULL to insert at end of list */
 List* ListSpliceBefore(List* list, ListNode* node, List* subList);  /* frees list & subList, returns new list. Call with node==NULL to append subList at end of list */
 void ListErase(List* list, ListNode* node);
 void* ListPop (List* list);  /* removes last node in list, returns value; caller must dealloc by calling (*list->Destroy)(poppedItem) */

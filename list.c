@@ -31,7 +31,7 @@ size_t ListSize (List* list) {
   return n;
 }
 
-void ListInsertBefore(List* list, ListNode* node, void* value) {
+ListNode* ListInsertBefore(List* list, ListNode* node, void* value) {
   ListNode *newNode, *prevNode;
   newNode = newListNode(value);
   prevNode = node ? node->prev : list->tail;
@@ -47,6 +47,7 @@ void ListInsertBefore(List* list, ListNode* node, void* value) {
     list->head = newNode;
   if (list->tail == prevNode)
     list->tail = newNode;
+  return newNode;
 }
 
 List* ListSpliceBefore(List* list, ListNode* node, List* subList) {

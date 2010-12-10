@@ -13,12 +13,18 @@ Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   g->tree = NULL;
   g->dblData = dblDataSize ? SafeMalloc(dblDataSize*sizeof(double)) : NULL;
   g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(unsigned long)) : NULL;
-  g->ownsParent = 0;
   return g;
 }
 
 Goal* newTrueGoal() {
   return newGoal (True, 0, 0);
+}
+
+Goal* newAreaGoal (XYSet* area) {
+  Goal* g;
+  g = newGoal (Area, 0, 0);
+  g->tree = (RBTree*) area;
+  return g;
 }
 
 void deleteGoal (Goal* goal) {
@@ -27,7 +33,6 @@ void deleteGoal (Goal* goal) {
   if (goal->tree) deleteRBTree (goal->tree);
   if (goal->l) deleteGoal (goal->l);
   if (goal->r) deleteGoal (goal->r);
-  if (goal->parent && goal->ownsParent) deleteGoal (goal->parent);
   SafeFree (goal);
 }
 
@@ -66,14 +71,14 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
 	enclosureDone = 0;
 	while (!enclosureDone) {
 	  mark[x][y] = currentMark;
-	  XYListAppend (enclosure, x, y);
+	  (void) XYListAppend (enclosure, x, y);
 
 	  /* loop over the neighborhood */
 	  for (dx = -1; dx <= +1; ++dx)
 	    for (dy = -1; dy <= +1; ++dy)
 	      if ((dx || dy) && (allowDiagonalConnections || (dx == 0 || dy == 0)))
 		if (onBoard(board,x+dx,y+dy) && mark[x+dx][y+dy] == 0)
-		  XYListAppend (pointsToVisit, x+dx, y+dy);
+		  (void) XYListAppend (pointsToVisit, x+dx, y+dy);
 
 	  while (mark[x][y] != 0) {
 	    if (XYListEmpty (pointsToVisit)) {
@@ -142,12 +147,38 @@ int testGoalMet (Goal* goal, Board* board) {
   return 0;
 }
 
-int testEntropyGoal (Goal* goal, Board* board) {
-  /* more to go here */
-  return 0;
+int testEnclosuresGoal (Goal* goal, Board* board) {
+  List *enclosureList;
+  ListNode *enclosureListNode, *enclosureNode;
+  XYList *enclosure;
+  XYSet *pointSet;
+  Goal *tempAreaGoal;
+  unsigned long wallMask, allowDiagonals, minEncSize, maxEncSize, minCount, count;
+  Assert (goal->parent == NULL, "testEnclosuresGoal: non-null parent");
+  wallMask = goal->intData[0];
+  allowDiagonals = goal->intData[1];
+  minCount = goal->intData[2];
+  minEncSize = goal->intData[3];
+  maxEncSize = goal->intData[0];
+  enclosureList = getEnclosures (board, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
+  count = 0;
+  for (enclosureListNode = enclosureList->head; enclosureListNode && count < minCount; enclosureListNode = enclosureListNode->next) {
+    enclosure = (XYList*) enclosureListNode->value;
+    pointSet = newXYSet();
+    for (enclosureNode = enclosure->head; enclosureNode; enclosureNode = enclosureNode->next)
+      (void) XYSetInsert (pointSet, ((XYCoord*)enclosureNode->value)->x, ((XYCoord*)enclosureNode->value)->y);
+    tempAreaGoal = newAreaGoal (pointSet);
+    goal->parent = tempAreaGoal;
+    if (goal->l == NULL || testGoalMet (goal->l, board))
+      ++count;
+    goal->parent = NULL;
+    deleteGoal (tempAreaGoal);
+  }
+  deleteList (enclosureList);
+  return count >= minCount;
 }
 
-int testEnclosuresGoal (Goal* goal, Board* board) {
+int testEntropyGoal (Goal* goal, Board* board) {
   /* more to go here */
   return 0;
 }

@@ -30,7 +30,7 @@ typedef XYMap XYSet;
 typedef XYMapNode XYSetNode;
 #define newXYSet() ((XYSet*) newXYMap (NullDestroyFunction, NullPrintFunction))
 #define deleteXYSet(XYSETPTR) deleteXYMap((XYMap*)XYSETPTR)
-#define XYSetInsert(XYSETPTR,X,Y) ((XYSetNode*) XYMapInsert((XYMap*)XYSETPTR,X,Y,NULL)
+#define XYSetInsert(XYSETPTR,X,Y) ((XYSetNode*) XYMapInsert((XYMap*)XYSETPTR,X,Y,NULL))
 #define XYSetErase(XYSETPTR,X,Y,TEMPXYCOORD) XYMapErase((XYMap*)XYSETPTR,X,Y,TEMPXYCOORD)
 #define XYSetFind(XYSETPTR,X,Y,TEMPXYCOORD) ((XYSetNode*) XYMapFind((XYMap*)XYSETPTR,X,Y,TEMPXYCOORD))
 
@@ -41,7 +41,7 @@ typedef ListNode XYListNode;
 #define deleteXYList(XYLISTPTR) deleteList ((List*) XYLISTPTR)
 #define XYListEmpty(XYLISTPTR) ListEmpty ((List*) XYLISTPTR)
 #define XYListSize(XYLISTPTR) ListSize ((List*) XYLISTPTR)
-#define XYListInsertBefore(XYLISTPTR,XYLISTNODEPTR,X,Y) ListInsertBefore ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR, (void*) newXYCoord(X,Y))
+#define XYListInsertBefore(XYLISTPTR,XYLISTNODEPTR,X,Y) ((XYListNode*) ListInsertBefore ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR, (void*) newXYCoord(X,Y)))
 #define XYListErase(XYLISTPTR,XYLISTNODEPTR) ListErase ((List*) XYLISTPTR, (ListNode*) XYLISTNODEPTR)
 #define XYListAppend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,NULL,X,Y)
 #define XYListPrepend(XYLISTPTR,X,Y) XYListInsertBefore(XYLISTPTR,XYLISTPTR->head,X,Y)
