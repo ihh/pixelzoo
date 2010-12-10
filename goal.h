@@ -7,6 +7,7 @@
 #include "list.h"
 
 /* GoalType enumeration */
+/* Where parent is undefined, "parent area" is entire board */
 enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating states in ((StateSet*)tree) as walls, and allowing diagonal connections if intData[1] is true.
 				Subgoal (l) is met in at least intData[2] enclosures satisfying (intData[3] <= enclosureArea <= intData[4]) */
@@ -31,7 +32,7 @@ typedef struct Goal {
 
 /* accessors */
 int testGoalMet (Goal* goal, Board* board);
-XYSet* getGoalArea (Goal* goal);  /* caller must call deleteXYSet() to dealloc */
+XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */
 /* All parameters become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
@@ -49,6 +50,6 @@ Goal* newRepeatGoal (Goal* subGoal, unsigned int minReps);
 void deleteGoal (Goal* goal);
 
 /* helpers */
-List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteList to dealloc */
+List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteList to dealloc */
 
 #endif /* GOAL_INCLUDED */

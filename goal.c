@@ -36,10 +36,11 @@ void deleteGoal (Goal* goal) {
   SafeFree (goal);
 }
 
-List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections) {
+List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections) {
   List *enclosureList;
   XYList *enclosure, *pointsToVisit;
   int **mark, xLoop, yLoop, x, y, dx, dy, currentMark, enclosureDone, enclosureArea;
+  XYCoord tempXYCoord;
   State state;
 
   enclosureList = newList (ListDeleteVoid, ListPrintVoid);
@@ -56,6 +57,13 @@ List* getEnclosures (Board* board, State wallMask, StateSet* wallSet, unsigned i
       if (StateSetFind(wallSet,state))
 	mark[x][y] = -1;
     }
+
+  /* if we've been given a sub-area of the board to look at, mark everything outside that area as -1 */
+  if (area)
+    for (x = 0; x < board->size; ++x)
+      for (y = 0; y < board->size; ++y)
+	if (XYSetFind(area,x,y,tempXYCoord) == NULL)
+	  mark[x][y] = -1;
 
   /* loop over the board, starting a breadth-first search from every unvisited cell */
   pointsToVisit = newXYList();
@@ -108,7 +116,7 @@ XYSet* getGoalArea (Goal* goal) {
     ? (XYSet*) RBTreeShallowCopy (goal->tree)
     : (goal->parent
        ? getGoalArea (goal->parent)
-       : newXYSet());
+       : NULL);
 }
 
 int testGoalMet (Goal* goal, Board* board) {
@@ -151,7 +159,7 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   List *enclosureList;
   ListNode *enclosureListNode, *enclosureNode;
   XYList *enclosure;
-  XYSet *pointSet;
+  XYSet *pointSet, *parentArea;
   Goal *tempAreaGoal;
   unsigned long wallMask, allowDiagonals, minEncSize, maxEncSize, minCount, count;
   Assert (goal->parent == NULL, "testEnclosuresGoal: non-null parent");
@@ -159,22 +167,29 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   allowDiagonals = goal->intData[1];
   minCount = goal->intData[2];
   minEncSize = goal->intData[3];
-  maxEncSize = goal->intData[0];
-  enclosureList = getEnclosures (board, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
+  maxEncSize = goal->intData[4];
+  parentArea = getGoalArea (goal);
+  enclosureList = getEnclosures (board, parentArea, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
   count = 0;
   for (enclosureListNode = enclosureList->head; enclosureListNode && count < minCount; enclosureListNode = enclosureListNode->next) {
     enclosure = (XYList*) enclosureListNode->value;
     pointSet = newXYSet();
     for (enclosureNode = enclosure->head; enclosureNode; enclosureNode = enclosureNode->next)
       (void) XYSetInsert (pointSet, ((XYCoord*)enclosureNode->value)->x, ((XYCoord*)enclosureNode->value)->y);
-    tempAreaGoal = newAreaGoal (pointSet);
-    goal->parent = tempAreaGoal;
-    if (goal->l == NULL || testGoalMet (goal->l, board))
+    if (goal->l == NULL)
       ++count;
-    goal->parent = NULL;
-    deleteGoal (tempAreaGoal);
+    else {
+      tempAreaGoal = newAreaGoal (pointSet);
+      goal->l->parent = tempAreaGoal;
+      if (testGoalMet (goal->l, board))
+	++count;
+      goal->l->parent = goal;  /* this is not really necessary, but what the heck */
+      deleteGoal (tempAreaGoal);
+    }
   }
   deleteList (enclosureList);
+  if (parentArea)
+    deleteXYSet (parentArea);
   return count >= minCount;
 }
 
