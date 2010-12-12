@@ -216,7 +216,7 @@ void TreeInsertHelp(RBTree* tree, RBNode* z) {
   x=tree->root->left;
   while( x != nil) {
     y=x;
-    if (1 == tree->Compare(x->key,z->key)) { /* x.key > z.key */
+    if (0 < (*tree->Compare)(x->key,z->key)) { /* x.key > z.key */
       x=x->left;
     } else { /* x,key <= z.key */
       x=x->right;
@@ -224,7 +224,7 @@ void TreeInsertHelp(RBTree* tree, RBNode* z) {
   }
   z->parent=y;
   if ( (y == tree->root) ||
-       (1 == tree->Compare(y->key,z->key))) { /* y.key > z.key */
+       (0 < (*tree->Compare)(y->key,z->key))) { /* y.key > z.key */
     y->left=z;
   } else {
     y->right=z;
@@ -503,15 +503,15 @@ RBNode* RBTreeFind(RBTree* tree, void* q) {
   RBNode* nil=tree->nil;
   int compVal;
   if (x == nil) return(0);
-  compVal=tree->Compare(x->key,(int*) q);
+  compVal=(*tree->Compare)(x->key,(int*) q);
   while(0 != compVal) {/*assignemnt*/
-    if (1 == compVal) { /* x->key > q */
+    if (0 < compVal) { /* x->key > q */
       x=x->left;
     } else {
       x=x->right;
     }
     if ( x == nil) return(0);
-    compVal=tree->Compare(x->key,(int*) q);
+    compVal=(*tree->Compare)(x->key,(int*) q);
   }
   return(x);
 }
@@ -689,14 +689,14 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
 
   enumResultStack=newStack();
   while(nil != x) {
-    if ( high != NULL && 1 == (*tree->Compare)(x->key,high)) { /* x->key > high */
+    if ( high != NULL && 0 < (*tree->Compare)(x->key,high)) { /* x->key > high */
       x=x->left;
     } else {
       lastBest=x;
       x=x->right;
     }
   }
-  while ( (lastBest != nil) && (low == NULL || 1 != (*tree->Compare)(low,lastBest->key)) ) {  /* !(low > lastBest->key) == (low <= lastBest->key) */
+  while ( (lastBest != nil) && (low == NULL || 0 >= (*tree->Compare)(low,lastBest->key)) ) {  /* !(low > lastBest->key) == (low <= lastBest->key) */
     StackPush(enumResultStack,lastBest);
     lastBest=RBTreePredecessor(tree,lastBest);
   }

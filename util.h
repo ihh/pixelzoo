@@ -14,12 +14,21 @@ void NullDestroyFunction(void*);  /* does nothing */
 void* NullCopyFunction(void*);  /* returns the supplied parameter without doing anything */
 void NullPrintFunction(void*);  /* does nothing */
 
+/* container functions for ints */
+/* These are actually a bit wasteful, because we could just use the (void*) pointer to store the int value... hmm */
 /* functions for ints */
 void* IntNew(int a);
 void* IntCopy(void* a);
 void IntDestroy(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
+
+/* container functions for strings */
+void* StringNew(char *a);
+void* StringCopy(void* a);
+void StringDestroy(void* a);
+int StringCompare(void* a, void* b);
+void StringPrint(void* a);
 
 /* RGB color */
 typedef struct RGB {

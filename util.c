@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "util.h"
 
 double randomDouble() {
@@ -56,10 +57,7 @@ void* IntNew(int a) {
 }
 
 void* IntCopy(void* a) {
-  int* aCopy;
-  aCopy = SafeMalloc(sizeof(int));
-  *aCopy = *(int*)a;
-  return (void*) aCopy;
+  return IntNew (*(int*)a);
 }
 
 void IntDestroy(void* a) {
@@ -73,5 +71,30 @@ int IntCompare(void* a, void* b) {
 }
 
 void IntPrint(void* a) {
+  printf("%i",*(int*)a);
+}
+
+/* String* functions */
+void* StringNew(char *a) {
+  char *ptr;
+  ptr = (char*) SafeMalloc ((strlen(a) + 1) * sizeof(char));
+  (void) strcpy (ptr, a);
+  return (void*) ptr;
+}
+
+void* StringCopy(void* a) {
+  return StringNew ((char*) a);
+}
+
+void StringDestroy(void* a) {
+  SafeFree((int*)a);
+}
+
+int StringCompare(void* a, void* b) {
+  int cmp = strcmp ((char*)a, (char*)b);
+  return cmp > 0 ? +1 : (cmp < 0 ? -1 : 0);
+}
+
+void StringPrint(void* a) {
   printf("%i",*(int*)a);
 }
