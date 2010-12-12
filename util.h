@@ -14,6 +14,13 @@ void NullDestroyFunction(void*);  /* does nothing */
 void* NullCopyFunction(void*);  /* returns the supplied parameter without doing anything */
 void NullPrintFunction(void*);  /* does nothing */
 
+/* functions for ints */
+void* IntNew(int a);
+void* IntCopy(void* a);
+void IntDestroy(void* a);
+int IntCompare(void* a, void* b);
+void IntPrint(void* a);
+
 /* RGB color */
 typedef struct RGB {
   unsigned char r, g, b;

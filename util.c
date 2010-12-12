@@ -45,3 +45,33 @@ void *SafeCalloc(size_t count, size_t size) {
 void* NullCopyFunction(void * item) { return item; }
 void NullDestroyFunction(void * junk) { ; }
 void NullPrintFunction(void * junk) { ; }
+
+
+/* Int* functions */
+void* IntNew(int a) {
+  int *ptr;
+  ptr = (int*) SafeMalloc (sizeof (int));
+  *ptr = a;
+  return (void*) ptr;
+}
+
+void* IntCopy(void* a) {
+  int* aCopy;
+  aCopy = SafeMalloc(sizeof(int));
+  *aCopy = *(int*)a;
+  return (void*) aCopy;
+}
+
+void IntDestroy(void* a) {
+  SafeFree((int*)a);
+}
+
+int IntCompare(void* a, void* b) {
+  if( *(int*)a > *(int*)b) return(1);
+  if( *(int*)a < *(int*)b) return(-1);
+  return(0);
+}
+
+void IntPrint(void* a) {
+  printf("%i",*(int*)a);
+}

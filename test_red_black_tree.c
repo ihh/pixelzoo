@@ -5,32 +5,11 @@
 
 /*  this file has functions to test a red-black tree of integers */
 
-void* IntCopy(void* a) {
-  int* aCopy;
-  aCopy = SafeMalloc(sizeof(int));
-  *aCopy = *(int*)a;
-  return (void*) aCopy;
-}
-
-void IntDest(void* a) {
-  SafeFree((int*)a);
-}
-
-int IntComp(void* a, void* b) {
-  if( *(int*)a > *(int*)b) return(1);
-  if( *(int*)a < *(int*)b) return(-1);
-  return(0);
-}
-
-void IntPrint(void* a) {
-  printf("%i",*(int*)a);
-}
-
 void InfoPrint(void* a) {
   ;
 }
 
-void InfoDest(void *a){
+void InfoDestroy(void *a){
   ;
 }
 
@@ -46,7 +25,7 @@ int main() {
   RBNode *newNode;
   RBTree *tree, *treeCopy;
 
-  tree=newRBTree(IntComp,IntCopy,InfoCopy,IntDest,InfoDest,IntPrint,InfoPrint);
+  tree=newRBTree(IntCompare,IntCopy,InfoCopy,IntDestroy,InfoDestroy,IntPrint,InfoPrint);
   while(option!=9) {
     printf("choose one of the following:\n");
     printf("(0) copy tree\n(1) add to tree\n(2) delete from tree\n(3) query\n");

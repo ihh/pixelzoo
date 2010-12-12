@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include "goal.h"
 
+/* private function prototypes */
 int testEntropyGoal (Goal* goal, Board* board);
 int testEnclosuresGoal (Goal* goal, Board* board);
 Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize);
 
+/* function definitions */
 Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   Goal* g;
   g = SafeMalloc (sizeof (Goal));
@@ -24,6 +26,77 @@ Goal* newAreaGoal (XYSet* area) {
   Goal* g;
   g = newGoal (Area, 0, 0);
   g->tree = (RBTree*) area;
+  return g;
+}
+
+Goal* newEnclosuresGoal (State wallMask,
+			 StateSet* wallSet,
+			 unsigned long minNumEnclosures,
+			 unsigned long maxNumEnclosures,
+			 unsigned long minEnclosureArea,
+			 unsigned long maxEnclosureArea,
+			 unsigned char allowDiagonalConnections,
+			 Goal* subGoal) {
+  Goal* g;
+  g = newGoal (Enclosures, 0, 6);
+  g->tree = (RBTree*) wallSet;
+  g->intData[0] = wallMask;
+  g->intData[1] = allowDiagonalConnections;
+  g->intData[2] = minEnclosureArea;
+  g->intData[3] = maxEnclosureArea;
+  g->intData[4] = minNumEnclosures;
+  g->intData[5] = maxNumEnclosures;
+  g->l = subGoal;
+  return g;
+}
+
+Goal* newOnceGoal (Goal* l) {
+  Goal* g;
+  g = newGoal (Once, 0, 0);
+  g->l = l;
+  return g;
+}
+
+Goal* newAndGoal (Goal* l, Goal* r) {
+  Goal* g;
+  g = newGoal (And, 0, 0);
+  g->l = l;
+  g->r = r;
+  return g;
+}
+
+Goal* newOrGoal (Goal* l, Goal* r) {
+  Goal* g;
+  g = newGoal (Or, 0, 0);
+  g->l = l;
+  g->r = r;
+  return g;
+}
+
+Goal* newNotGoal (Goal* l) {
+  Goal* g;
+  g = newGoal (Not, 0, 0);
+  g->l = l;
+  return g;
+}
+
+Goal* newEntropyGoal (State typeMask, StateSet* typeSet, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
+  Goal* g;
+  g = newGoal (Entropy, 2, 3);
+  g->tree = (RBTree*) typeSet;
+  g->intData[0] = typeMask;
+  g->intData[1] = minCount;
+  g->intData[2] = maxCount;
+  g->dblData[0] = minEntropy;
+  g->dblData[1] = maxEntropy;
+  return g;
+}
+
+Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps) {
+  Goal* g;
+  g = newGoal (Repeat, 0, 1);
+  g->intData[0] = minReps;
+  g->l = subGoal;
   return g;
 }
 
@@ -167,12 +240,13 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   XYList *enclosure;
   XYSet *pointSet, *parentArea;
   Goal *tempAreaGoal;
-  unsigned long wallMask, allowDiagonals, minEncSize, maxEncSize, minCount, count;
+  long wallMask, allowDiagonals, minEncSize, maxEncSize, minCount, maxCount, count;
   wallMask = goal->intData[0];
   allowDiagonals = goal->intData[1];
-  minCount = goal->intData[2];
-  minEncSize = goal->intData[3];
-  maxEncSize = goal->intData[4];
+  minEncSize = goal->intData[2];
+  maxEncSize = goal->intData[3];
+  minCount = goal->intData[4];
+  maxCount = goal->intData[5];
   parentArea = getGoalArea (goal);
   enclosureList = getEnclosures (board, parentArea, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
   count = 0;
@@ -195,10 +269,48 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   deleteList (enclosureList);
   if (parentArea)
     deleteXYSet (parentArea);
-  return count >= minCount;
+  return count >= minCount && (maxCount == 0 || count <= maxCount);
 }
 
 int testEntropyGoal (Goal* goal, Board* board) {
-  /* more to go here */
-  return 0;
+  XYSet *parentArea;
+  int x, y, population, minPopulation, maxPopulation;
+  double entropy, minEntropy, maxEntropy;
+  StateSet *allowedStates;
+  StateMap *stateCount;
+  StateMapNode *stateCountNode;
+  State stateMask, maskedState;
+  Stack *stateCountEnum;
+  stateMask = goal->intData[0];
+  minPopulation = goal->intData[1];
+  maxPopulation = goal->intData[2];
+  minEntropy = goal->dblData[0];
+  maxEntropy = goal->dblData[1];
+  allowedStates = (StateSet*) goal->tree;
+  stateCount = newStateMap(IntCopy,IntDestroy,IntPrint);
+  parentArea = getGoalArea (goal);
+  for (x = 0; x < board->size; ++x)
+    for (y = 0; y < board->size; ++y) {
+      maskedState = readBoardState(board,x,y) & stateMask;
+      if (StateMapFind (allowedStates, maskedState)) {
+	stateCountNode = StateMapFind (stateCount, maskedState);
+	if (stateCountNode)
+	  ++*(int*)stateCountNode->value;
+	else
+	  (void) StateMapInsert (stateCount, maskedState, IntNew(1));
+	++population;
+      }
+    }
+  entropy = 0.;
+  stateCountEnum = RBTreeEnumerate (stateCount, NULL, NULL);
+  while ((stateCountNode = StackPop (stateCountEnum)))
+    entropy += (double) *(int*)stateCountNode->value / (double) population;
+  deleteStack (stateCountEnum);
+  if (parentArea)
+    deleteXYSet (parentArea);
+  deleteStateMap (stateCount);
+  return population >= minPopulation
+    && (maxPopulation == 0 || population <= maxPopulation)
+    && entropy >= minEntropy
+    && (maxEntropy <= 0 || entropy <= maxEntropy);
 }
