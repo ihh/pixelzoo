@@ -287,6 +287,7 @@ int testEntropyGoal (Goal* goal, Board* board) {
   minEntropy = goal->dblData[0];
   maxEntropy = goal->dblData[1];
   allowedStates = (StateSet*) goal->tree;
+  /* count state types */
   stateCount = newStateMap(IntCopy,IntDestroy,IntPrint);
   parentArea = getGoalArea (goal);
   for (x = 0; x < board->size; ++x)
@@ -301,10 +302,12 @@ int testEntropyGoal (Goal* goal, Board* board) {
 	++population;
       }
     }
+  /* calculate entropy */
   entropy = 0.;
   stateCountEnum = RBTreeEnumerate (stateCount, NULL, NULL);
   while ((stateCountNode = StackPop (stateCountEnum)))
     entropy += (double) *(int*)stateCountNode->value / (double) population;
+  /* cleanup & return */
   deleteStack (stateCountEnum);
   if (parentArea)
     deleteXYSet (parentArea);
