@@ -9,7 +9,13 @@ typedef struct Tool {
   QuadTree *brush;
   State state;
   double paintRate, rechargeRate;  /* mean number of particles deposited/refilled per second */
-  int reserve;  /* number of particles left to be deposited */
+  double reserve;  /* number of particles left to be deposited */
 } Tool;
+
+Tool* newTool();
+void deleteTool (Tool *tool);
+
+void useTool (Tool *tool, Board *board, int x, int y, double duration);
+void rechargeTool (Tool *tool, double duration);
 
 #endif /* TOOL_INCLUDED */

@@ -2,8 +2,9 @@
 #define CHALLENGE_INCLUDED
 
 #include <stdlib.h>
+#include <time.h>
 #include "goal.h"
-#include "list.h"
+#include "stringmap.h"
 
 /* Challenge */
 typedef struct Challenge {
@@ -20,5 +21,9 @@ typedef struct Challenge {
   char *tool;        /* award this tool (or, top it up) */
   char *nextStage;   /* destination stage */
 } Challenge;
+
+Challenge* newChallenge();
+void deleteChallenge (Challenge *challenge);
+
 
 #endif /* CHALLENGE_INCLUDED */

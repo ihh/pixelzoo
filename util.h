@@ -23,13 +23,6 @@ void IntDestroy(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
 
-/* container functions for strings */
-void* StringNew(char *a);
-void* StringCopy(void* a);
-void StringDestroy(void* a);
-int StringCompare(void* a, void* b);
-void StringPrint(void* a);
-
 /* RGB color */
 typedef struct RGB {
   unsigned char r, g, b;
