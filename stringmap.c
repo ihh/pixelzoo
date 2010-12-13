@@ -14,7 +14,7 @@ void* StringCopy(void* a) {
   return StringNew ((char*) a);
 }
 
-void StringDestroy(void* a) {
+void StringDelete(void* a) {
   SafeFree((int*)a);
 }
 

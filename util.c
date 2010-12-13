@@ -60,7 +60,7 @@ void* IntCopy(void* a) {
   return IntNew (*(int*)a);
 }
 
-void IntDestroy(void* a) {
+void IntDelete(void* a) {
   SafeFree((int*)a);
 }
 

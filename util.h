@@ -19,7 +19,7 @@ void NullPrintFunction(void*);  /* does nothing */
 /* functions for ints */
 void* IntNew(int a);
 void* IntCopy(void* a);
-void IntDestroy(void* a);
+void IntDelete(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
 

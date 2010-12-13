@@ -25,7 +25,7 @@ int main() {
   RBNode *newNode;
   RBTree *tree, *treeCopy;
 
-  tree=newRBTree(IntCompare,IntCopy,InfoCopy,IntDestroy,InfoDestroy,IntPrint,InfoPrint);
+  tree=newRBTree(IntCompare,IntCopy,InfoCopy,IntDelete,InfoDestroy,IntPrint,InfoPrint);
   while(option!=9) {
     printf("choose one of the following:\n");
     printf("(0) copy tree\n(1) add to tree\n(2) delete from tree\n(3) query\n");

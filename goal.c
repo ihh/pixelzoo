@@ -288,7 +288,7 @@ int testEntropyGoal (Goal* goal, Board* board) {
   maxEntropy = goal->dblData[1];
   allowedStates = (StateSet*) goal->tree;
   /* count state types */
-  stateCount = newStateMap(IntCopy,IntDestroy,IntPrint);
+  stateCount = newStateMap(IntCopy,IntDelete,IntPrint);
   parentArea = getGoalArea (goal);
   for (x = 0; x < board->size; ++x)
     for (y = 0; y < board->size; ++y) {

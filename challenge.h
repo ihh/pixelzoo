@@ -25,5 +25,4 @@ typedef struct Challenge {
 Challenge* newChallenge();
 void deleteChallenge (Challenge *challenge);
 
-
 #endif /* CHALLENGE_INCLUDED */

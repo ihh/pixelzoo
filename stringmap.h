@@ -8,14 +8,14 @@
 /* container functions for strings */
 void* StringNew(char *a);
 void* StringCopy(void* a);
-void StringDestroy(void* a);
+void StringDelete(void* a);
 int StringCompare(void* a, void* b);
 void StringPrint(void* a);
 
 /* mappings from strings to values - basically wrappers for RBTree functions */
 typedef RBTree StringMap;
 typedef RBNode StringMapNode;
-#define newStringMap(ValueCopyFunc,ValueDestroyFunc,ValuePrintFunc) ((StringMap*) newRBTree (StringCompare, StringCopy, ValueCopyFunc, StringDestroy, ValueDestroyFunc, StringPrint, ValuePrintFunc))
+#define newStringMap(ValueCopyFunc,ValueDestroyFunc,ValuePrintFunc) ((StringMap*) newRBTree (StringCompare, StringCopy, ValueCopyFunc, StringDelete, ValueDestroyFunc, StringPrint, ValuePrintFunc))
 #define deleteStringMap(STRINGMAPPTR) deleteRBTree ((RBTree*) STRINGMAPPTR)
 #define StringMapInsert(STRINGMAPPTR,STRING,VALUE) ((StringMapNode*) RBTreeInsert ((RBTree*) STRINGMAPPTR, (void*) StringNew(STRING), VALUE))
 #define StringMapErase(STRINGMAPPTR,STRING) RBTreeErase ((RBTree*) STRINGMAPPTR, (void*) STRING)

@@ -7,9 +7,8 @@
 
 typedef struct PlayState {
   Board *board;
-  StringMap *stageChallenges;
-  char *currentStage;
-  Vector *toolVector;
+  StringMap *stageChallenges, *toolBox;
+  char *currentStage, *selectedTool;
 } PlayState;
 
 

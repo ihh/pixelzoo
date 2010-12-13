@@ -3,16 +3,20 @@
 
 #include "quadtree.h"
 #include "rule.h"
+#include "board.h"
+#include "statemap.h"
 
 typedef struct Tool {
   char *name;  /* name of this tool */
-  QuadTree *brush;
-  State state;
+  QuadTree *brush;  /* brush shape */
+  State state;  /* state this tool paints */
+  StateSet *overwrite;  /* states this tool can overwrite */
+  State overwriteMask;  /* mask for overwrite */
   double paintRate, rechargeRate;  /* mean number of particles deposited/refilled per second */
-  double reserve;  /* number of particles left to be deposited */
+  double reserve, maxReserve;  /* reserve = number of particles left that can be deposited */
 } Tool;
 
-Tool* newTool();
+Tool* newTool (char *name, int size);
 void deleteTool (Tool *tool);
 
 void useTool (Tool *tool, Board *board, int x, int y, double duration);
