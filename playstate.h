@@ -2,13 +2,14 @@
 #define PLAY_STATE_INCLUDED
 
 #include "board.h"
-#include "tool.h"
-#include "challenge.h"
+#include "stringmap.h"
 
 typedef struct PlayState {
   Board *board;
-  StringMap *stageChallenges, *toolBox;
-  char *currentStage, *selectedTool;
+  StringMap *toolBox;  /* map from String's to Tool's */
+  StringMap *npc;  /* map from String's to NPC's */
+  char *selectedTool;
+  int coins, xp, alignment;
 } PlayState;
 
 /*

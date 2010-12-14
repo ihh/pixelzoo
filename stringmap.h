@@ -30,5 +30,24 @@ typedef StringMapNode StringSetNode;
 #define StringSetErase(STRINGSETPTR,STRING) StringMapErase((StringMap*)STRINGSETPTR,STRING)
 #define StringSetFind(STRINGSETPTR,STRING) ((StringSetNode*) StringMapFind((StringMap*)STRINGSETPTR,STRING))
 
+/* typedefs & macros for Dictionary, a map from Strings to Strings */
+typedef StringMap Dictionary;
+typedef StringMapNode DictionaryNode;
+#define newDictionary() ((Dictionary*) newStringMap (StringCopy, StringDelete, StringPrint))
+#define deleteDictionary(DICTPTR) deleteStringMap((StringMap*)DICTPTR)
+#define DictionaryInsert(DICTPTR,STRING1,STRING2) ((DictionaryNode*) StringMapInsert((StringMap*)DICTPTR,STRING1,STRING2))
+#define DictionaryErase(DICTPTR,STRING) StringMapErase((StringMap*)DICTPTR,STRING)
+#define DictionaryFind(DICTPTR,STRING) ((DictionaryNode*) StringMapFind((StringMap*)DICTPTR,STRING))
+
+/* StringVector */
+typedef Vector StringVector;
+#define newStringVector() ((StringVector*) newVector (StringCopy, StringDelete, StringPrint))
+#define deleteStringVector(STRINGVECPTR) deleteVector ((Vector*) STRINGVECPTR)
+#define StringVectorGet(STRINGVECPTR,N) VectorGet ((Vector*) STRINGVECPTR, N)
+#define StringVectorSet(STRINGVECPTR,N,STRING) VectorSet ((Vector*) STRINGVECPTR, N, (void*) StringNew(STRING))
+#define StringVectorReserve(STRINGVECPTR,N) VectorReserve ((Vector*) STRINGVECPTR, N)
+#define StringVectorPushBack(STRINGVECPTR,STRING) VectorPushBack ((Vector*) STRINGVECPTR, (void*) StringNew(STRING))
+#define StringVectorSize(STRINGVECPTR) VectorSize ((Vector*) STRINGVECPTR)
+
 
 #endif /* STRINGMAP_INCLUDED */

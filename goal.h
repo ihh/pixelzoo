@@ -1,9 +1,11 @@
 #ifndef GOAL_INCLUDED
 #define GOAL_INCLUDED
 
+#include "playstate.h"
 #include "board.h"
 #include "xymap.h"
 #include "statemap.h"
+#include "stringmap.h"
 #include "list.h"
 
 /* GoalType enumeration */
@@ -20,6 +22,10 @@ enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 		Entropy,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
 				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy <= dblData[1]) */
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
+		Coins,       /* TODO: intData[0] <= coins <= intData[1] */
+		XP,          /* TODO: intData[0] <= xp <= intData[1] */
+		Alignment,   /* TODO: intData[0] <= alignment <= intData[1] */
+		PlayerChoice,/* TODO: player is prompted with a given string, can choose "yes", "stop bugging me" or "ask again later" */
 		True,        /* always met */
 		False        /* never met */
 };
@@ -31,10 +37,11 @@ typedef struct Goal {
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
   unsigned long *intData;  /* integer goal params */
+  StringVector *stringData;  /* string params */
 } Goal;
 
 /* accessors */
-int testGoalMet (Goal* goal, Board* board);
+int testGoalMet (Goal* goal, PlayState* play);
 XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */

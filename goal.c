@@ -2,8 +2,8 @@
 #include "goal.h"
 
 /* private function prototypes */
-int testEntropyGoal (Goal* goal, Board* board);
-int testEnclosuresGoal (Goal* goal, Board* board);
+int testEntropyGoal (Goal* goal, PlayState* play);
+int testEnclosuresGoal (Goal* goal, PlayState* play);
 Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize);
 
 /* function definitions */
@@ -13,6 +13,7 @@ Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   g->goalType = type;
   g->l = g->r = g->parent = NULL;
   g->tree = NULL;
+  g->stringData = NULL;
   g->dblData = dblDataSize ? SafeMalloc(dblDataSize*sizeof(double)) : NULL;
   g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(unsigned long)) : NULL;
   return g;
@@ -103,6 +104,7 @@ Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps) {
 void deleteGoal (Goal* goal) {
   SafeFreeOrNull (goal->intData);
   SafeFreeOrNull (goal->dblData);
+  if (goal->stringData) deleteStringVector (goal->stringData);
   if (goal->tree) deleteRBTree (goal->tree);
   if (goal->l) deleteGoal (goal->l);
   if (goal->r) deleteGoal (goal->r);
@@ -198,29 +200,29 @@ XYSet* getGoalArea (Goal* goal) {
        : NULL);
 }
 
-int testGoalMet (Goal* goal, Board* board) {
+int testGoalMet (Goal* goal, PlayState* play) {
   Assert (goal != NULL, "testGoalMet: null goal");
   switch (goal->goalType) {
   case Area:
-    return goal->l ? testGoalMet(goal->l,board) : 1;
+    return goal->l ? testGoalMet(goal->l,play) : 1;
   case Enclosures:
-    return testEnclosuresGoal (goal, board);
+    return testEnclosuresGoal (goal, play);
     return 1;
   case Once:
     if (!*goal->intData)
-      if (testGoalMet(goal->l,board))
+      if (testGoalMet(goal->l,play))
 	*goal->intData = 1;
     return *goal->intData;
   case And:
-    return testGoalMet(goal->l,board) && testGoalMet(goal->r,board);
+    return testGoalMet(goal->l,play) && testGoalMet(goal->r,play);
   case Or:
-    return testGoalMet(goal->l,board) || testGoalMet(goal->r,board);
+    return testGoalMet(goal->l,play) || testGoalMet(goal->r,play);
   case Not:
-    return !testGoalMet(goal->l,board);
+    return !testGoalMet(goal->l,play);
   case Entropy:
-    return testEntropyGoal (goal, board);
+    return testEntropyGoal (goal, play);
   case Repeat:
-    if (testGoalMet(goal->l,board))
+    if (testGoalMet(goal->l,play))
       ++goal->intData[1];
     else
       goal->intData[1] = 0;
@@ -234,7 +236,7 @@ int testGoalMet (Goal* goal, Board* board) {
   return 0;
 }
 
-int testEnclosuresGoal (Goal* goal, Board* board) {
+int testEnclosuresGoal (Goal* goal, PlayState* play) {
   List *enclosureList;
   ListNode *enclosureListNode, *enclosureNode;
   XYList *enclosure;
@@ -248,7 +250,7 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   minCount = goal->intData[4];
   maxCount = goal->intData[5];
   parentArea = getGoalArea (goal);
-  enclosureList = getEnclosures (board, parentArea, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
+  enclosureList = getEnclosures (play->board, parentArea, wallMask, (StateSet*) goal->tree, minEncSize, maxEncSize, allowDiagonals);
   count = 0;
   for (enclosureListNode = enclosureList->head; enclosureListNode && count < minCount; enclosureListNode = enclosureListNode->next) {
     enclosure = (XYList*) enclosureListNode->value;
@@ -260,7 +262,7 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
     else {
       tempAreaGoal = newAreaGoal (pointSet);
       goal->l->parent = tempAreaGoal;
-      if (testGoalMet (goal->l, board))
+      if (testGoalMet (goal->l, play))
 	++count;
       goal->l->parent = goal;  /* this is not really necessary, but what the heck */
       deleteGoal (tempAreaGoal);  /* this also deletes pointSet */
@@ -272,7 +274,8 @@ int testEnclosuresGoal (Goal* goal, Board* board) {
   return count >= minCount && (maxCount == 0 || count <= maxCount);
 }
 
-int testEntropyGoal (Goal* goal, Board* board) {
+int testEntropyGoal (Goal* goal, PlayState* play) {
+  Board *board;
   XYSet *parentArea;
   int x, y, population, minPopulation, maxPopulation;
   double entropy, minEntropy, maxEntropy;
@@ -281,6 +284,7 @@ int testEntropyGoal (Goal* goal, Board* board) {
   StateMapNode *stateCountNode;
   State stateMask, maskedState;
   Stack *stateCountEnum;
+  board = play->board;
   stateMask = goal->intData[0];
   minPopulation = goal->intData[1];
   maxPopulation = goal->intData[2];
