@@ -90,33 +90,37 @@ void ListErase(List* list, ListNode* node) {
 }
 
 void* ListPop (List* list) {
+  ListNode *oldTail;
   void* val;
   if (ListEmpty(list))
     val = NULL;
   else {
-    val = list->tail->value;
-    if (list->tail->prev) {
-      list->tail->prev->next = NULL;
-      list->tail = list->tail->prev;
+    oldTail = list->tail;
+    val = oldTail->value;
+    if (oldTail->prev) {
+      oldTail->prev->next = NULL;
+      list->tail = oldTail->prev;
     } else
       list->head = list->tail = NULL;
-    SafeFree(list->tail);
+    SafeFree(oldTail);
   }
   return val;
 }
 
 void* ListShift (List* list) {
+  ListNode *oldHead;
   void* val;
   if (ListEmpty(list))
     val = NULL;
   else {
-    val = list->head->value;
-    if (list->head->next) {
-      list->head->next->prev = NULL;
-      list->head = list->head->next;
+    oldHead = list->head;
+    val = oldHead->value;
+    if (oldHead->next) {
+      oldHead->next->prev = NULL;
+      list->head = oldHead->next;
     } else
       list->head = list->tail = NULL;
-    SafeFree(list->head);
+    SafeFree(oldHead);
   }
   return val;
 }
