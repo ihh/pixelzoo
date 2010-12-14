@@ -5,12 +5,14 @@
 #include "rule.h"
 #include "board.h"
 #include "statemap.h"
+#include "xymap.h"
 
 typedef struct Tool {
   char *name;  /* name of this tool */
   QuadTree *brush;  /* brush shape */
   State state;  /* state this tool paints */
-  StateSet *overwrite;  /* states this tool can overwrite */
+  XYSet *overwriteLoc;  /* board locations this tool can overwrite */
+  StateSet *overwrite;  /* (masked) states this tool can overwrite */
   State overwriteMask;  /* mask for overwrite */
   double paintRate, rechargeRate;  /* mean number of particles deposited/refilled per second */
   double reserve, maxReserve;  /* reserve = number of particles left that can be deposited */
