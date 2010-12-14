@@ -15,17 +15,21 @@ enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 				and allowing diagonal connections if intData[1] is true.
 				Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
 				where (intData[4] <= N <= intData[5]) */
-		Once,        /* subgoal (l) has been met at least once within parent area (caches result) */
+		Once,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
 		And,         /* both subgoals (l & r) are met simultaneously within parent area */
 		Or,          /* at least one of the two subgoals (l & r) is met within parent area */
 		Not,         /* subgoal (l) is not met within parent area */
 		Entropy,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
 				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy <= dblData[1]) */
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
+
 		Coins,       /* TODO: intData[0] <= coins <= intData[1] */
 		XP,          /* TODO: intData[0] <= xp <= intData[1] */
 		Alignment,   /* TODO: intData[0] <= alignment <= intData[1] */
-		PlayerChoice,/* TODO: player is prompted with a given string, can choose "yes", "stop bugging me" or "ask again later" */
+		PlayerChoice,/* TODO: player is prompted with stringData[0], can choose "yes", "stop bugging me" or "ask again later" */
+		Rule,        /* TODO: rule named stringData[0] has been triggered N times, where intData[0] <= N <= intData[1] */
+		Achievement, /* TODO: achievment named stringData[0] is still locked (intData[0]=0) or has been unlocked (intData[0]=1) */
+
 		True,        /* always met */
 		False        /* never met */
 };

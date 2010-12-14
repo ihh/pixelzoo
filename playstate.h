@@ -3,13 +3,21 @@
 
 #include "board.h"
 #include "stringmap.h"
+#include "xymap.h"
 
 typedef struct PlayState {
   Board *board;
-  StringMap *toolBox;  /* map from String's to Tool's */
-  StringMap *npc;  /* map from String's to NPC's */
+
+  StringMap *allTools;  /* map from String's to Tool's */
+  StringSet *ownedTools;
   char *selectedTool;
+  XYCoord toolPos;
+
+  StringSet *achievments;
   int coins, xp, alignment;
+
+  StringMap *npc;  /* map from String's to NPC's */
+
 } PlayState;
 
 /*
