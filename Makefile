@@ -22,6 +22,9 @@ lib: $(OFILES)
 clean:
 	rm -rf obj/* bin/* *~ *.dSYM
 
+test: all
+	./testrb.sh && bin/sdltest
+
 bin/%:  %.c $(OFILES)
 	@test -e bin || mkdir bin
 	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $*.c $(OFILES)

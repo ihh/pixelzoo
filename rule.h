@@ -1,7 +1,18 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
-/* 32-bit cell state */
+/* 32-bit cell state.
+
+   The 16-bit LSW (least significant word) of the state is the Type.
+   The 16-bit MSW (most significant word) provides additional type-specific state.
+
+   All states of type zero (i.e. LSW=0) have zero update rate.
+   State 0x00000000, where LSW=MSW=0, is assumed to be empty space.
+   States with LSW=0 and MSW>0 are reserved.
+
+   A common convention is that the state with MSW=0 is "prototypical" for that LSW,
+   but this convention is not strictly enforced or required.
+ */
 typedef unsigned long State;
 #define StateMask 0xffffffff
 #define BitsPerState 32
@@ -11,7 +22,7 @@ typedef unsigned short Type;
 #define TypeMask 0xffff
 #define NumTypes 0x10000
 #define MaxType  0xffff
-#define BitsPerType 32
+#define BitsPerType 16
 
 /* short-range relative co-ordinate offset */
 typedef struct LocalOffset {
@@ -26,7 +37,7 @@ typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
   enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE, FALSE } opcode;
-  double ignoreProb, overloadIgnoreProb;
+  double ignoreProb, overloadIgnoreProb;  /* when board (or local region) is overloaded, overloadIgnoreProb will be used instead of ignoreProb */
 } RuleCondition;
 
 /*
@@ -51,7 +62,7 @@ typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
   State offset, mask, preMask;
-  double failProb, overloadFailProb;
+  double failProb, overloadFailProb;  /* when board (or local region) is overloaded, overloadFailProb will be used instead of failProb */
 } RuleOperation;
 
 /*

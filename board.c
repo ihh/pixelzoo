@@ -38,6 +38,8 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
   t = state & TypeMask;
+  if (t == 0 && state != 0)
+    state = 0;
   p = board->byType[t];
   if (p) {
     board->cell[x][y] = state;

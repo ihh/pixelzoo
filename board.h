@@ -37,10 +37,18 @@ void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibili
 */
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret);
 
-/* private helper methods & macros */
-#define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]   /* does not check for off-board co-ordinates. Use readBoardState macro instead */
-void writeBoardStateUnguarded (Board* board, int x, int y, State state);  /* does not check for off-board co-ordinates. Use writeBoardState macro instead */
+/* Private helper methods & macros */
 
+/* Board accessors.
+   The "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
+   The "write" method will refuse to write states in the reserved set (most significant word in range 0x0001-0xffff),
+   or states whose type field (least significant word) is not associated with a Particle in the Board's byType array.
+   Instead of writing these states, 0x00000000 will be written.
+*/
+#define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]
+void writeBoardStateUnguarded (Board* board, int x, int y, State state);
+
+/* Other helper methods */
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded);
 
