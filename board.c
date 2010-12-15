@@ -139,7 +139,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
   start = clock();
   while (topQuadRate(board->quad) > 0.) {
     now = clock();
-    elapsedTime = (now - start) / CLOCKS_PER_SEC;
+    elapsedTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
     if (elapsedTime > maxTimeInSeconds || effectiveUpdates >= targetUpdates)
       break;
     /* estimate expected number of rejected moves per accepted move as follows:

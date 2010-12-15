@@ -39,6 +39,9 @@ void render(void);
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
+  double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updateRate, minUpdateRate;
+  int iter = 0;
+
     init();
 
     int bDone = 0;
@@ -59,7 +62,9 @@ int main( int argc, char *argv[] )
             }
         }
 
-	evolveBoard (board, 1., .1, NULL, NULL);
+	evolveBoard (board, targetUpdatesPerCell, maxTimeInSeconds, &updateRate, &minUpdateRate);
+	if (++iter % (int) (1. + 1. / maxTimeInSeconds) == 0)
+	  printf ("targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g\n", targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board));
         
         render();
     }

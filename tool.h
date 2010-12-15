@@ -9,18 +9,22 @@
 
 typedef struct Tool {
   char *name;  /* name of this tool */
+
+  /* brush */
   QuadTree *brushIntensity;  /* brush probability distribution */
   XYMap *brushState;  /* optional XYCoord->State map for brush */
   State defaultBrushState;  /* if brushState==NULL, use this state for entire brush */
+
+  /* permissions */
   XYSet *overwriteLoc;  /* board locations this tool is allowed to overwrite */
   StateSet *overwriteStates;  /* (masked) states this tool is allowed to overwrite */
   State overwriteMask;  /* mask for overwriteStates */
-  double paintRate;  /* mean number of chunks deposited per second */
+
+  /* paint rate */
+  double paintRate;  /* mean number of particles deposited per second */
   double reserve;  /* number of particles left that can be deposited */
   double rechargeRate;  /* particle recharge rate, i.e. rate per second at which reserve is replenished */
   double maxReserve;  /* max value of reserve */
-  int particlesPerChunk;  /* particles per chunk */
-  int singleUse;  /* if true, brushIntensity[x][y] will be reset to zero after particle (x,y) deposited */
 } Tool;
 
 Tool* newTool (char *name, int size);
