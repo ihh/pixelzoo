@@ -68,9 +68,9 @@ void addParticleToBoard (Particle* p, Board* board) {
   p->normalizedRate = MIN (p->totalRate, 1.);
 }
 
-int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
+int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded) {
   State lhs, rhs;
-  if (randomDouble() < cond->ignoreProb)
+  if (randomDouble() < (overloaded ? cond->overloadIgnoreProb : cond->ignoreProb))
     return 1;
   x += cond->loc.x;
   y += cond->loc.y;
@@ -89,9 +89,9 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y) {
   return 0;
 }
 
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y) {
+void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded) {
   int xSrc, ySrc;
-  if (randomDouble() < op->failProb)
+  if (randomDouble() < (overloaded ? op->overloadFailProb : op->failProb))
     return;
   xSrc = x + op->src.x;
   ySrc = y + op->src.y;
@@ -119,10 +119,10 @@ void evolveBoardCell (Board* board, int x, int y) {
       rule = &p->rule[n];
       if ((rand -= (overloaded ? rule->overloadRate : rule->rate)) <= 0) {
 	for (k = 0; k < NumRuleConditions; ++k)
-	  if (!testRuleCondition (&rule->cond[k], board, x, y))
+	  if (!testRuleCondition (&rule->cond[k], board, x, y, overloaded))
 	    return;  /* bail out of loops over k & n */
 	for (k = 0; k < NumRuleOperations; ++k)
-	  execRuleOperation (&rule->op[k], board, x, y);
+	  execRuleOperation (&rule->op[k], board, x, y, overloaded);
 	return;  /* bail out of loop over n */
       }
     }

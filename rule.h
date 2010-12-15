@@ -26,7 +26,7 @@ typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
   enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE, FALSE } opcode;
-  double ignoreProb;
+  double ignoreProb, overloadIgnoreProb;
 } RuleCondition;
 
 /*
@@ -51,7 +51,7 @@ typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
   State offset, mask, preMask;
-  double failProb;
+  double failProb, overloadFailProb;
 } RuleOperation;
 
 /*

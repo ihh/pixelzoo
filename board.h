@@ -41,8 +41,8 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]   /* does not check for off-board co-ordinates. Use readBoardState macro instead */
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);  /* does not check for off-board co-ordinates. Use writeBoardState macro instead */
 
-int testRuleCondition (RuleCondition* cond, Board* board, int x, int y);
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y);
+int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
+void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded);
 
 void evolveBoardCell (Board* board, int x, int y);
 

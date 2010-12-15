@@ -193,6 +193,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   cond->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
   cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
+  cond->overloadIgnoreProb = OPTCHILDFLOAT(node,OVERLOAD,cond->ignoreProb);
 
   rshift = OPTCHILDINT(node,RSHIFT,0);
   if (rshift) {
@@ -233,5 +234,6 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   op->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
+  op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);
   op->preMask = op->rightShift >= 32 ? 0 : StateMask;
 }
