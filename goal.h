@@ -23,6 +23,7 @@ enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy <= dblData[1]) */
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
 
+		Board,       /* TODO: tree is an XY->State map; using (intData[0],intData[1]) as an XY-offset, at least intData[2] of the specified board positions must be in the specified states */
 		Coins,       /* TODO: intData[0] <= coins <= intData[1] */
 		XP,          /* TODO: intData[0] <= xp <= intData[1] */
 		Alignment,   /* TODO: intData[0] <= alignment <= intData[1] */

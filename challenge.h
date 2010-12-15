@@ -5,6 +5,7 @@
 #include <time.h>
 #include "goal.h"
 #include "stringmap.h"
+#include "xymap.h"
 
 /* Challenge */
 typedef struct Challenge {
@@ -21,6 +22,7 @@ typedef struct Challenge {
   char *rewardText;  /* print this text */
   char *tool;        /* award this tool (or, top it up) */
   char *achievement; /* unlock this achievement */
+  XYMap *writeState; /* XYCoord->State map; write this to board */
   char *nextStage;   /* destination stage */
 } Challenge;
 
