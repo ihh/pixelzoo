@@ -24,7 +24,13 @@ typedef unsigned short Type;
 #define MaxType  0xffff
 #define BitsPerType 16
 
-/* short-range relative co-ordinate offset */
+/* specific states */
+#define EmptyState 0
+#define EmptyType  0
+
+/* Short-range relative co-ordinate offset
+   1 byte for each of X & Y
+ */
 typedef struct LocalOffset {
   char x, y;
 } LocalOffset;

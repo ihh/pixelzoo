@@ -38,14 +38,14 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
   t = state & TypeMask;
-  if (t == 0 && state != 0)
-    state = 0;
+  if (t == EmptyType && state != EmptyState)
+    state = EmptyState;
   p = board->byType[t];
   if (p) {
     board->cell[x][y] = state;
     updateQuadTree (board->quad, x, y, p->normalizedRate);
   } else {
-    board->cell[x][y] = 0;
+    board->cell[x][y] = EmptyState;
     updateQuadTree (board->quad, x, y, 0.);
   }
 }
