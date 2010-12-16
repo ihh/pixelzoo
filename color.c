@@ -2,7 +2,10 @@
 #include "util.h"
 
 void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
-  /* From http://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV */
+  /*
+    Source: http://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV
+    Only difference is that 0<=H<1 instead of 0<=H<360
+  */
   int sextant;
   double C, X, M, Hdash;
   unsigned char c, x, m;
@@ -10,7 +13,7 @@ void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
   Assert (S >= 0 && S <= 1, "convertHSBtoRGB: S out of range");
   Assert (B >= 0 && B <= 1, "convertHSBtoRGB: B out of range");
   C = B * S;
-  Hdash = H / 60;
+  Hdash = H * 6;
   sextant = (int) Hdash;
   X = C * (1 - ABS((Hdash - (sextant - (sextant % 2))) - 1));   /* Hdash % 2 = Hdash - (sextant - (sextant % 2)) */
   M = B - C;
@@ -50,7 +53,7 @@ void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
 
   case 5:
     rgb->r = c;
-    rgb->g = 0;
+    rgb->g = m;
     rgb->b = x;
     break;
 

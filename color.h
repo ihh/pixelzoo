@@ -7,7 +7,7 @@ typedef struct RGB {
 } RGB;
 
 /* HSB to RGB:
-    0 <= H < 360
+    0 <= H < 1
     0 <= S <= 1
     0 <= B <= 1
 */

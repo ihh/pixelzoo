@@ -25,7 +25,7 @@ Board* newBoard (int size) {
       for (h = 0; h < PaletteHues; ++h) {
 	pal = ConvertPaletteHsbToPaletteIndex(h,s,b);
 	col = &board->palette[pal];
-	convertHSBtoRGB (360 * (double) h / PaletteHues,
+	convertHSBtoRGB ((double) h / PaletteHues,
 			 (double) s / (PaletteSaturations - 1),
 			 s == 0
 			 ? ((double) b / (PaletteBrightnesses - 1))
