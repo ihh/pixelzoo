@@ -8,7 +8,10 @@ Particle* newParticle (const char* name, int nRules) {
   p->type = 0;
   p->name = calloc (strlen (name) + 1, sizeof(char));
   strcpy ((char*) name, p->name);
-  p->color.r = p->color.g = p->color.b = 0;
+  p->colorRule.mask = 0;
+  p->colorRule.offset = PaletteMax;
+  p->colorRule.multiplier = 0;
+  p->colorRule.rightShift = 0;
   p->nRules = nRules;
   p->rule = calloc (nRules, sizeof(StochasticRule));
   p->totalRate = p->normalizedRate = 0.;

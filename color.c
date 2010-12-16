@@ -1,0 +1,62 @@
+#include "color.h"
+#include "util.h"
+
+void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
+  /* From http://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV */
+  int sextant;
+  double C, X, M, Hdash;
+  unsigned char c, x, m;
+  Assert (H >= 0 && H < 360, "convertHSBtoRGB: H out of range");
+  Assert (S >= 0 && S <= 1, "convertHSBtoRGB: S out of range");
+  Assert (B >= 0 && B <= 1, "convertHSBtoRGB: B out of range");
+  C = B * S;
+  Hdash = H / 60;
+  sextant = (int) Hdash;
+  X = C * (1 - ABS((Hdash - (sextant - (sextant % 2))) - 1));   /* Hdash % 2 = Hdash - (sextant - (sextant % 2)) */
+  M = B - C;
+  m = (unsigned char) (.5 + M * 255);
+  c = m + (unsigned char) (.5 + C * 255);
+  x = m + (unsigned char) (.5 + X * 255);
+  switch (sextant) {
+  case 0:
+    rgb->r = c;
+    rgb->g = x;
+    rgb->b = m;
+    break;
+
+  case 1:
+    rgb->r = x;
+    rgb->g = c;
+    rgb->b = m;
+    break;
+
+  case 2:
+    rgb->r = m;
+    rgb->g = c;
+    rgb->b = x;
+    break;
+
+  case 3:
+    rgb->r = m;
+    rgb->g = x;
+    rgb->b = c;
+    break;
+
+  case 4:
+    rgb->r = x;
+    rgb->g = m;
+    rgb->b = c;
+    break;
+
+  case 5:
+    rgb->r = c;
+    rgb->g = 0;
+    rgb->b = x;
+    break;
+
+  default:
+    /* should never get here */
+    rgb->r = rgb->g = rgb->b = 0xff;
+    break;
+  }
+}

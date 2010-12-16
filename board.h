@@ -12,14 +12,14 @@ typedef struct Board {
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
-  RGB sceneryColor[SceneryStates];  /* the palette for inactive Scenery states */
+  RGB palette[PaletteSize];  /* the palette */
 } Board;
 
 /* public methods */
 Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
-RGB* readBoardColor (Board* board, int x, int y);
+PaletteIndex readBoardColor (Board* board, int x, int y);
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)

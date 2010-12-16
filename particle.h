@@ -2,6 +2,7 @@
 #define PARTICLE_INCLUDED
 
 #include "rule.h"
+#include "color.h"
 #include "util.h"
 
 /*
@@ -15,7 +16,7 @@
 typedef struct Particle {
   Type type;
   char* name;
-  RGB color;
+  ColorRule colorRule;
   int nRules;  /* number of rules */
   StochasticRule* rule;
   double totalRate, normalizedRate, totalOverloadRate;

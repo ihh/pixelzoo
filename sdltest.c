@@ -18,6 +18,8 @@ const int SCREEN_HEIGHT   = BOARD_SCREEN_SIZE ;
 const int COLOR_DEPTH     = 8;
 const int UPDATE_INTERVAL = 30;
 
+Uint32 sdlColor[PaletteSize];
+
 //-----------------------------------------------------------------------------
 // GLOBALS
 //-----------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Board *board = NULL;
 int main(int argc, char *argv[]);
 void init(void);
 void shutDown(void);
-void renderPixel(int x, int y, Uint8 R, Uint8 G, Uint8 B);
+void renderPixel(int x, int y, PaletteIndex pal);
 Uint32 timeLeft(void);
 void render(double*);
 
@@ -83,7 +85,7 @@ int main( int argc, char *argv[] )
 void init( void )
 {
   int x, y;
-  State scenery;
+  PaletteIndex pal;
 
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
@@ -107,19 +109,23 @@ void init( void )
     //
 
     board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
-"<grammar><particle><name>drifter</name><type>1</type><color>ff7f7f</color>"
-"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift><fail>.01</fail></exec><exec><src><x>1</x></src><dest></dest><hexinc>1</hexinc><hexmask>0bff</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
-"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>10</hexinc><hexmask>0bff</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
-"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>100</hexinc><hexmask>0bff</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
-"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>400</hexinc><hexmask>0bff</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
+"<grammar><particle><name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80</hexmul><hexinc>3f</hexinc></color>"
+"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift><fail>.01</fail></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>0ffb</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"
+"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><hexmask>0ffb</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>10002</hexinc></exec></rule>"
+"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><hexmask>0ffb</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>10003</hexinc></exec></rule>"
+"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>89</hexinc><hexmask>0ffb</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>10004</hexinc></exec></rule>"
 "</particle></grammar><init><x>" QUOTEME(HALF_BOARD_SIZE) "</x><y>" QUOTEME(HALF_BOARD_SIZE) "</y><type>1</type></init></board></xml>");
 
-    /* scenery palette test */
-    scenery = 0;
-    for (y = 0; y < BOARD_SIZE && scenery <= SceneryMax; ++y)
-      for (x = 0; x < BOARD_SIZE && scenery <= SceneryMax; ++x)
+    /* palette test */
+    pal = 0;
+    for (y = 0; y < BOARD_SIZE && pal <= PaletteMax; ++y)
+      for (x = 0; x < BOARD_SIZE && pal <= PaletteMax; ++x)
 	if (!readBoardParticle (board, x, y))
-	  writeBoardStateUnguarded (board, x, y, scenery++);
+	  writeBoardStateUnguarded (board, x, y, pal++);
+
+    /* palette lookup */
+    for (pal = 0; pal <= PaletteMax; ++pal)
+      sdlColor[pal] = SDL_MapRGB( g_screenSurface->format, board->palette[pal].r, board->palette[pal].g, board->palette[pal].b );
 }
 
 //-----------------------------------------------------------------------------
@@ -136,9 +142,9 @@ void shutDown( void )
 // Name: renderPixel()
 // Desc: 
 //-----------------------------------------------------------------------------
-void renderPixel( int x, int y, Uint8 R, Uint8 G, Uint8 B )
+void renderPixel( int x, int y, PaletteIndex pal )
 {
-  Uint32 color = SDL_MapRGB( g_screenSurface->format, R, G, B );
+  Uint32 color = sdlColor[pal];
 
     switch( g_screenSurface->format->BytesPerPixel )
     {
@@ -239,11 +245,10 @@ void render( double* rate )
     int x, y, i, j;
     for (x = 0; x < BOARD_SIZE; ++x)
       for (y = 0; y < BOARD_SIZE; ++y) {
-	RGB* col = readBoardColor (board, x, y);
-	//	if (x==127 && y==25) printf("x=%d y=%d r=%d g=%d b=%d\n", x, y, col->r, col->g, col->b);
+	PaletteIndex pal = readBoardColor (board, x, y);
 	for (i = 0; i < PIXELS_PER_CELL; ++i)
 	  for (j = 0; j < PIXELS_PER_CELL; ++j)
-	    renderPixel( PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, col->r, col->g, col->b );
+	    renderPixel( PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, pal );
       }
 
     //

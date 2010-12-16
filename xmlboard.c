@@ -11,10 +11,6 @@
 #define XMLBOARD_DECTYPE  "type"
 #define XMLBOARD_HEXTYPE  "hextype"
 #define XMLBOARD_NAME     "name"
-#define XMLBOARD_COLOR    "color"
-#define XMLBOARD_R        "r"
-#define XMLBOARD_G        "g"
-#define XMLBOARD_B        "b"
 #define XMLBOARD_RULE     "rule"
 #define XMLBOARD_RATE     "rate"
 #define XMLBOARD_OVERLOAD "overload"
@@ -36,6 +32,9 @@
 #define XMLBOARD_LSHIFT   "lshift"
 #define XMLBOARD_RSHIFT   "rshift"
 #define XMLBOARD_FAIL     "fail"
+#define XMLBOARD_COLOR    "color"
+#define XMLBOARD_DECMUL   "mul"
+#define XMLBOARD_HEXMUL   "hexmul"
 #define XMLBOARD_INIT     "init"
 
 /* private macros for matching XML nodes */
@@ -55,7 +54,7 @@ xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->ne
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag);
 xmlChar* getAttrByName (xmlNode* node, char* name);
 Particle* newParticleFromXmlNode (xmlNode* node);
-void initColorFromXmlNode (RGB* rgb, xmlNode* node);
+void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node);
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
@@ -139,9 +138,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
   if ((color = CHILD(node,COLOR)))
-    initColorFromXmlNode (&p->color, color);
-  else
-    p->color.r = p->color.g = p->color.b = 255;
+    initColorRuleFromXmlNode (&p->colorRule, color);
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
@@ -149,18 +146,11 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   return p;
 }
 
-void initColorFromXmlNode (RGB* rgb, xmlNode* node) {
-  unsigned long hex;
-  if (node->children->children) {
-    rgb->r = CHILDINT(node,R);
-    rgb->g = CHILDINT(node,G);
-    rgb->b = CHILDINT(node,B);
-  } else {
-    hex = strtoul((const char*) node->children->content,0,16);
-    rgb->r = (hex >> 16) & 0xff;
-    rgb->g = (hex >> 8) & 0xff;
-    rgb->b = hex & 0xff;
-  }
+void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
+  colorRule->rightShift = OPTCHILDINT(node,RSHIFT,0);
+  colorRule->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,PaletteMask));
+  colorRule->multiplier = OPTCHILDINT(node,DECMUL,OPTCHILDHEX(node,HEXMUL,1));
+  colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {

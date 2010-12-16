@@ -23,18 +23,6 @@ void IntDelete(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
 
-/* RGB color */
-typedef struct RGB {
-  unsigned char r, g, b;
-} RGB;
-
-/* HSL to RGB:
-    0 <= H < 360
-    0 <= S <= 1
-    0 <= V <= 1
-*/
-void convertHSVtoRGB (double H, double S, double V, RGB* rgb);
-
 /* randomDouble() returns a random number between 0 and 1 */
 double randomDouble();
 

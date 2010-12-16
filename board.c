@@ -5,8 +5,9 @@
 
 Board* newBoard (int size) {
   Board *board;
-  int x, gray, hue, sat, bright, colFlag[SceneryStates];
+  int x, h, s, b;
   RGB *col;
+  PaletteIndex pal;
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
@@ -18,42 +19,19 @@ Board* newBoard (int size) {
   for (x = 0; x <= board->quad->K; ++x)
     board->overloadThreshold[x] = 1.;
 
-  /* scenery colors */
-  for (x = 0; x < SceneryStates; ++x)
-    colFlag[x] = 1;  /* prime factors of this debugging flag indicate number of ways/times it's been initialized */
-
-  for (gray = 0; gray < SceneryGrayLevels; ++gray) {
-    colFlag[GrayScenery(gray)] *= 3;
-    col = &board->sceneryColor[GrayScenery(gray)];
-    col->r = col->g = col->b = 255 * gray / (SceneryGrayLevels - 1);
-  }
-
-  for (hue = 0; hue < SceneryColorHues; ++hue)
-    for (bright = 0; bright < SceneryColorBrights; ++bright) {
-      colFlag[ColorScenery(hue,bright)] *= 5;
-      col = &board->sceneryColor[ColorScenery(hue,bright)];
-      convertHSVtoRGB (((double) hue) * 360 / SceneryColorHues,
-		       1.,
-		       ((double) bright + 1) / SceneryColorBrights, col);
-    }
-
-  for (hue = 0; hue < SceneryPaleColorHues; ++hue)
-    for (bright = 0; bright < SceneryPaleColorBrights; ++bright)
-      for (sat = 0; sat < SceneryPaleColorSaturations; ++sat) {
-	colFlag[PaleColorScenery(hue,sat,bright)] *= 7;
-	col = &board->sceneryColor[PaleColorScenery(hue,sat,bright)];
-	convertHSVtoRGB (((double) hue) * 360 / SceneryPaleColorHues,
-			 ((double) sat / (SceneryPaleColorSaturations + 1)),
-			 ((double) bright + 1) / SceneryPaleColorBrights, col);
+  /* palette */
+  for (b = 0; b < PaletteBrightnesses; ++b)
+    for (s = 0; s < PaletteSaturations; ++s)
+      for (h = 0; h < PaletteHues; ++h) {
+	pal = ConvertPaletteHsbToPaletteIndex(h,s,b);
+	col = &board->palette[pal];
+	convertHSBtoRGB (360 * (double) h / PaletteHues,
+			 (double) s / (PaletteSaturations - 1),
+			 s == 0
+			 ? ((double) b / (PaletteBrightnesses - 1))
+			 : ((double) (b + 1) / PaletteBrightnesses),
+			 col);
       }
-
-  for (x = 0; x <= SceneryMax; ++x) {
-    Assert (colFlag[x] <= 7, "color multiply initialized");
-    Assert (colFlag[x] > 1, "color uninitialized");
-    col = &board->sceneryColor[x];
-    if (x > 0)
-      Assert (col->r > 0 || col->g > 0 || col->b > 0, "nonzero color is black");
-  }
 
   return board;
 }
@@ -92,20 +70,20 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   }
 }
 
-RGB* readBoardColor (Board* board, int x, int y) {
+PaletteIndex readBoardColor (Board* board, int x, int y) {
   Particle *p;
   State s;
   Type t;
-  RGB *c;
-  c = &board->sceneryColor[0];  /* default to black */
+  PaletteIndex c;
+  c = 0;  /* default to black */
   s = readBoardState (board, x, y);
   t = StateType(s);
   if (t == EmptyType)
-    c = &board->sceneryColor[s % SceneryMax];
+    c = s & PaletteMask;  /* hard-wired shortcut for empties */
   else {
     p = board->byType[t];
     if (p)
-      c = &p->color;
+      c = evalColorRule (&p->colorRule, s);
   }
   return c;
 }

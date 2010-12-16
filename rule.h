@@ -6,9 +6,10 @@
    The 16-bit MSW (most significant word) of the state is the Type.
    The 16-bit LSW (least significant word) provides additional type-specific state.
 
-   All states of type zero (i.e. MSW=0) have zero update rate.
-   State 0x00000000, where LSW=MSW=0, is assumed to be empty space.
-   States with MSW=0 and LSW>0 are reserved (including e.g. scenery grayscale & colors, see below).
+   All states of type zero (i.e. MSW=0) are inert, i.e. they have zero update rate.
+   State 0x00000000, where LSW=MSW=0, is inert black space.
+   States with MSW=0 and 0<=LSW<=PaletteMax are inert pixels spanning the color palette.
+   States with MSW=0 and LSW>PaletteMax are reserved for future applications.
 
    A common convention is that the state with LSW=0 is "prototypical" for that MSW,
    but this convention is not strictly enforced or required.
@@ -33,41 +34,6 @@ typedef unsigned short Type;
 #define EmptyState 0
 #define EmptyType  0
 
-/* Scenery grayscale states */
-#define SceneryGrayLevels    256     /* number of scenery grayscale levels, including black */
-#define SceneryGrayMin       0x00    /* offset for scenery grayscale levels, starting at black (empty space) */
-#define SceneryGrayMax       0xff    /* SceneryGrayscaleMin + SceneryGrays */
-
-/* Scenery color states (full saturation)
-   (hue H,bright B) => state ((B + SceneryColorBrights * H) + SceneryColorMin)
-*/
-#define SceneryColorHues     256
-#define SceneryColorBrights  8
-#define SceneryColors        0x800    /* SceneryColorHues * SceneryColorBrights */
-#define SceneryColorMin      0x100
-#define SceneryColorMax      0x8ff    /* SceneryColorMin + SceneryColors - 1 */
-
-/* Scenery pale color states (partial saturation)
-   (hue H,saturation S,bright B) => state ((B + SceneryColorBrights * (S + SceneryColorSaturations * H)) + SceneryPaleColorMin)
-*/
-#define SceneryPaleColorHues         64
-#define SceneryPaleColorBrights      4
-#define SceneryPaleColorSaturations  4
-#define SceneryPaleColors            0x400    /* SceneryPaleColorHues * SceneryPaleColorBrights * SceneryPaleColorSaturations */
-#define SceneryPaleColorMin          0x900
-#define SceneryPaleColorMax          0xcff    /* SceneryPaleColorMin + SceneryColors - 1 */
-
-/* Scenery pixel state range */
-#define SceneryMax      SceneryPaleColorMax
-#define SceneryStates   0xd00
-
-/* macros for scenery states */
-#define GrayScenery(GrayLevel) ((GrayLevel) % SceneryGrayLevels)
-#define ColorScenery(Hue,Bright) ((((Bright) + SceneryColorBrights * (Hue)) % SceneryColors) + SceneryColorMin)
-#define PaleColorScenery(PaleHue,PaleSaturation,PaleBright) \
- ((((PaleBright) + SceneryPaleColorBrights * ((PaleSaturation) + SceneryPaleColorSaturations * (PaleHue))) % SceneryPaleColors) + SceneryPaleColorMin)
-
-
 /* Short-range relative co-ordinate offset
    1 byte each for X & Y
  */
@@ -76,7 +42,7 @@ typedef struct LocalOffset {
 } LocalOffset;
 
 /*
-  RuleCondition describes the following conditional test:
+  RuleCondition parameterizes the following conditional test:
    (randomDouble() < ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs)
 */
 typedef struct RuleCondition {
@@ -87,7 +53,7 @@ typedef struct RuleCondition {
 } RuleCondition;
 
 /*
-  RuleOperation describes the following operation:
+  RuleOperation parameterizes the following operation:
   if (randomDouble() >= failProb)
     cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | ((((cell[src] >> rightShift) + offset) & mask) << leftShift);
 
