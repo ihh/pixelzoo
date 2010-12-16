@@ -47,9 +47,12 @@ Board* newBoard (int size) {
 			 ((double) bright + 1) / SceneryPaleColorBrights, col);
       }
 
-  for (x = 0; x < SceneryStates; ++x) {
+  for (x = 0; x <= SceneryMax; ++x) {
     Assert (colFlag[x] <= 7, "color multiply initialized");
     Assert (colFlag[x] > 1, "color uninitialized");
+    col = &board->sceneryColor[x];
+    if (x > 0)
+      Assert (col->r > 0 || col->g > 0 || col->b > 0, "nonzero color is black");
   }
 
   return board;

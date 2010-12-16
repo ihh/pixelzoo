@@ -33,13 +33,13 @@ typedef unsigned short Type;
 #define EmptyState 0
 #define EmptyType  0
 
-/* Scenery grayscale pixels */
+/* Scenery grayscale states */
 #define SceneryGrayLevels    256     /* number of scenery grayscale levels, including black */
 #define SceneryGrayMin       0x00    /* offset for scenery grayscale levels, starting at black (empty space) */
 #define SceneryGrayMax       0xff    /* SceneryGrayscaleMin + SceneryGrays */
 
-/* Scenery color pixels - high-saturation
-   (hue H,bright B) => state H + SceneryColorHues * B + SceneryColorMin
+/* Scenery color states (full saturation)
+   (hue H,bright B) => state ((B + SceneryColorBrights * H) + SceneryColorMin)
 */
 #define SceneryColorHues     256
 #define SceneryColorBrights  8
@@ -47,25 +47,25 @@ typedef unsigned short Type;
 #define SceneryColorMin      0x100
 #define SceneryColorMax      0x8ff    /* SceneryColorMin + SceneryColors - 1 */
 
-/* Scenery color pixels - low-saturation
-   (hue H,saturation S,bright B) => state H + SceneryPaleColorHues * (B + SceneryPaleColorBrights * S) + SceneryPaleColorMin
+/* Scenery pale color states (partial saturation)
+   (hue H,saturation S,bright B) => state ((B + SceneryColorBrights * (S + SceneryColorSaturations * H)) + SceneryPaleColorMin)
 */
 #define SceneryPaleColorHues         64
-#define SceneryPaleColorBrights      2
+#define SceneryPaleColorBrights      4
 #define SceneryPaleColorSaturations  4
-#define SceneryPaleColors            0x200    /* SceneryPaleColorHues * SceneryPaleColorBrights * SceneryPaleColorSaturations */
+#define SceneryPaleColors            0x400    /* SceneryPaleColorHues * SceneryPaleColorBrights * SceneryPaleColorSaturations */
 #define SceneryPaleColorMin          0x900
-#define SceneryPaleColorMax          0xaff    /* SceneryPaleColorMin + SceneryColors - 1 */
+#define SceneryPaleColorMax          0xcff    /* SceneryPaleColorMin + SceneryColors - 1 */
 
-/* Scenery color pixels - state boundaries */
+/* Scenery pixel state range */
 #define SceneryMax      SceneryPaleColorMax
-#define SceneryStates   0xb00
+#define SceneryStates   0xd00
 
 /* macros for scenery states */
-#define GrayScenery(GrayLevel) ((255 * (GrayLevel) / (SceneryGrayLevels - 1)) % SceneryGrayLevels)
-#define ColorScenery(Hue,Bright) ((((Hue) + SceneryColorHues * (Bright)) % SceneryColors) + SceneryColorMin)
+#define GrayScenery(GrayLevel) ((GrayLevel) % SceneryGrayLevels)
+#define ColorScenery(Hue,Bright) ((((Bright) + SceneryColorBrights * (Hue)) % SceneryColors) + SceneryColorMin)
 #define PaleColorScenery(PaleHue,PaleSaturation,PaleBright) \
- ((((PaleHue) + SceneryPaleColorHues * ((PaleBright) + SceneryPaleColorBrights * (PaleSaturation))) % SceneryPaleColors) + SceneryPaleColorMin)
+ ((((PaleBright) + SceneryPaleColorBrights * ((PaleSaturation) + SceneryPaleColorSaturations * (PaleHue))) % SceneryPaleColors) + SceneryPaleColorMin)
 
 
 /* Short-range relative co-ordinate offset

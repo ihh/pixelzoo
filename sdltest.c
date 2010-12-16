@@ -240,6 +240,7 @@ void render( double* rate )
     for (x = 0; x < BOARD_SIZE; ++x)
       for (y = 0; y < BOARD_SIZE; ++y) {
 	RGB* col = readBoardColor (board, x, y);
+	//	if (x==127 && y==25) printf("x=%d y=%d r=%d g=%d b=%d\n", x, y, col->r, col->g, col->b);
 	for (i = 0; i < PIXELS_PER_CELL; ++i)
 	  for (j = 0; j < PIXELS_PER_CELL; ++j)
 	    renderPixel( PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, col->r, col->g, col->b );
