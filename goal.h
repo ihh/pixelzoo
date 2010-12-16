@@ -10,7 +10,9 @@
 
 /* GoalType enumeration */
 /* When a goal has no parent, "parent area" is entire board */
-enum GoalType { Area,        /* subgoal (l) is met for given constant area */
+enum GoalType { Area,        /* subgoal (l) is met for given constant area
+				TODO: if stringData[0] is defined, interpret it as an NPC name, and use focus location of that NPC as an XY offset
+			      */
 		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls,
 				and allowing diagonal connections if intData[1] is true.
 				Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
@@ -23,13 +25,16 @@ enum GoalType { Area,        /* subgoal (l) is met for given constant area */
 				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy <= dblData[1]) */
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
 
-		BoardState,  /* TODO: tree is an XY->State map; using (intData[0],intData[1]) as an XY-offset, at least intData[2] of the specified board positions must be in the specified states */
-		Coins,       /* TODO: intData[0] <= coins <= intData[1] */
-		XP,          /* TODO: intData[0] <= xp <= intData[1] */
-		Alignment,   /* TODO: intData[0] <= alignment <= intData[1] */
-		PlayerChoice,/* TODO: player is prompted with stringData[0], can choose "yes", "stop bugging me" or "ask again later" */
+		BoardState,  /* TODO: tree is an XY->State map; at least intData[2] of the specified board positions must be in the specified states
+				TODO: if stringData[0] is defined, interpret it as an NPC name, and use focus location of that NPC as an XY offset
+			     */
+		NPCState,    /* TODO: NPC with name stringData[0] is asleep/awake (intData[0]) and/or in a given set of states (tree = StringSet) */
+		Score,       /* TODO: intData[0] <= score[stringData[0]] <= intData[1] */
 		Rule,        /* TODO: rule named stringData[0] has been triggered N times, where intData[0] <= N <= intData[1] */
 		Achievement, /* TODO: achievment named stringData[0] is still locked (intData[0]=0) or has been unlocked (intData[0]=1) */
+
+		PlayerYesNo, /* TODO: player, prompted with stringData[0], chooses "yes" (alternatives: "stop bugging me", "ask again later") */
+		PlayerPlace, /* TODO: player must choose a location for NPC with name stringData[0] */
 
 		True,        /* always met */
 		False        /* never met */

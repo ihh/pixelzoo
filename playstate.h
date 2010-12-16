@@ -5,18 +5,18 @@
 #include "stringmap.h"
 #include "xymap.h"
 
+/* state of play */
 typedef struct PlayState {
   Board *board;
 
-  StringMap *allTools;  /* map from String's to Tool's */
+  StringMap *allTools;     /* map from String's to Tool's */
   StringSet *ownedTools;
   char *selectedTool;
   XYCoord toolPos;
 
-  StringSet *achievments;
-  int coins, xp, alignment;
-
-  StringMap *npc;  /* map from String's to NPC's */
+  StringSet *achievments;  /* achievments unlocked */
+  StringIntMap *scores;    /* coins, xp, alignment, etc */
+  StringMap *npc;          /* map from String's to NPC's */
 
 } PlayState;
 
@@ -24,7 +24,7 @@ typedef struct PlayState {
   Game threads (all on timers):
   Evolve thread: evolve board, recalculate overload, sleep
   Redraw thread: redraw board, sleep
-  Challenge thread: test goals -> award rewards, sleep
+  NPC thread: use tools, test goals -> award rewards, sleep
   Tool thread: use current selected tool (if active), recharge inactive tools, sleep
 
   UI events:

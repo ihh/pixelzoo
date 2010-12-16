@@ -15,8 +15,11 @@ void* NullCopyFunction(void*);  /* returns the supplied parameter without doing 
 void NullPrintFunction(void*);  /* does nothing */
 
 /* container functions for ints */
-/* These are actually a bit wasteful, because we could just use the (void*) pointer to store the int value... hmm */
-/* functions for ints */
+
+/* Functions for ints
+   (It's tempting to think that rather than allocating space, one could just use the (void*) pointer to store the int value;
+   however, this risks platform-specific errors/warnings due to differences in bytesize/signedness between void* and int)
+*/
 void* IntNew(int a);
 void* IntCopy(void* a);
 void IntDelete(void* a);

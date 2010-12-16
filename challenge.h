@@ -18,11 +18,11 @@ typedef struct Challenge {
   int timesAwarded, maxTimesAwarded;
   clock_t lastAwardTime;
   /* rewards. Any of the strings can be null, signifying no effect */
-  int coins, xp, alignment;  /* deltas to coins, xp, alignment (can be positive, negative or zero) */
+  StringIntMap *scoreDelta;  /* deltas to coins, xp, alignment, etc (can be positive, negative or zero) */
   char *rewardText;  /* print this text */
   char *tool;        /* award this tool (or, top it up) */
   char *achievement; /* unlock this achievement */
-  XYMap *writeState; /* XYCoord->State map; write this to board */
+  char *npcSleep, *npcWake;  /* names of NPC's to inactivate/activate */
   char *nextStage;   /* destination stage */
 } Challenge;
 
