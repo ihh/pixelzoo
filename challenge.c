@@ -1,28 +1,52 @@
 #include "challenge.h"
+#include "npc.h"
 
 Challenge* newChallenge() {
   Challenge* chal;
   chal = SafeMalloc (sizeof (Challenge));
-  chal->goal = NULL;
+
+  /* preconditions */
   chal->stage = newStringSet();
-  chal->nextStage = chal->tool = chal->achievement = chal->rewardText = chal->npcSleep = chal->npcWake = NULL;
-  chal->scoreDelta = NULL;
+  chal->goal = NULL;
   chal->goalTestRate = 1.;
   chal->delayBetweenAwards = 0.;
   chal->timesAwarded = 0;
   chal->maxTimesAwarded = 1;
+
+  /* rewards */
+  chal->scoreDelta = chal->toolReserveDelta = NULL;
+  chal->cutSceneText = chal->commentText = chal->nextStage = NULL;
+  chal->achievments = NULL;
+  chal->npcSendMessage = chal->npcAddChoice = chal->npcRemoveChoice = NULL;
+  chal->npcTransition = NoTransition;
+
   return chal;
 }
 
 void deleteChallenge (Challenge *challenge) {
-  SafeFreeOrNull (challenge->stage);
-  SafeFreeOrNull (challenge->rewardText);
-  SafeFreeOrNull (challenge->tool);
+  SafeFreeOrNull (challenge->cutSceneText);
+  SafeFreeOrNull (challenge->commentText);
   SafeFreeOrNull (challenge->nextStage);
-  if (challenge->scoreDelta)
-    deleteStringMap (challenge->scoreDelta);
+
+  deleteStringSet (challenge->stage);
+
   if (challenge->goal)
     deleteGoal (challenge->goal);
-  deleteStringSet (challenge->stage);
+
+  if (challenge->scoreDelta)
+    deleteStringIntMap (challenge->scoreDelta);
+  if (challenge->toolReserveDelta)
+    deleteStringIntMap (challenge->toolReserveDelta);
+
+  if (challenge->achievments)
+    deleteStringVector (challenge->achievments);
+
+  if (challenge->npcSendMessage)
+    deleteDictionary (challenge->npcSendMessage);
+  if (challenge->npcAddChoice)
+    deleteDictionary (challenge->npcAddChoice);
+  if (challenge->npcRemoveChoice);
+  deleteDictionary (challenge->npcRemoveChoice);
+
   SafeFree (challenge);
 }

@@ -16,7 +16,7 @@ typedef struct PlayState {
 
   StringSet *achievments;  /* achievments unlocked */
   StringIntMap *scores;    /* coins, xp, alignment, etc */
-  StringMap *npc;          /* map from String's to NPC's */
+  StringMap *npc;          /* map from String's (npc names) to NPC's */
 
 } PlayState;
 

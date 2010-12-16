@@ -11,7 +11,19 @@ typedef struct Tool {
   /* toolbox appearance */
   char *name;  /* name of this tool */
 
+  /* NPC tools
+     If npcName != NULL, tool will place the named NPC instead of spraying particles.
+     The NPC will also be put into stage npcStage, and woken up.
+     In this case, the brush & permissions are interpreted differently.
+     As with spray tools, every cell pointed to by the brush must be in a permitted location,
+     and contain one of the permitted overwrite particles.
+     However, unlike spray tools, no particles are actually sprayed (leave it to the NPC to do that);
+     TODO: implement this :-)
+  */
+  char *npcName, *npcStage;
+
   /* brush */
+  LocalOffset brushCenter;  /* usually negative, delta(x,y) of central cell in brush */
   QuadTree *brushIntensity;  /* brush probability distribution */
   XYMap *brushState;  /* optional XYCoord->State map for brush */
   State defaultBrushState;  /* if brushState==NULL, use this state for entire brush */

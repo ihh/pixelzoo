@@ -3,7 +3,7 @@
 
 #include "rule.h"
 
-/* quad tree */
+/* a fully-populated quad tree of double's with fast lookup & sampling */
 typedef struct QuadTree {
   double* quadRate;
   unsigned char K;  /* K = log_2(size) */

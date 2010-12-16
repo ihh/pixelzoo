@@ -33,8 +33,8 @@ enum GoalType { Area,        /* subgoal (l) is met for given constant area
 		Rule,        /* TODO: rule named stringData[0] has been triggered N times, where intData[0] <= N <= intData[1] */
 		Achievement, /* TODO: achievment named stringData[0] is still locked (intData[0]=0) or has been unlocked (intData[0]=1) */
 
-		PlayerYesNo, /* TODO: player, prompted with stringData[0], chooses "yes" (alternatives: "stop bugging me", "ask again later") */
-		PlayerPlace, /* TODO: player must choose a location for NPC with name stringData[0] */
+		GotMessage,  /* TODO: message stringData[0] was received from a player or NPC
+				NB meeting the goal will clear the message; the goal can be used in combination with Once to prevent side-effects of this */
 
 		True,        /* always met */
 		False        /* never met */

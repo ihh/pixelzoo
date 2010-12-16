@@ -17,13 +17,18 @@ typedef struct Challenge {
   double delayBetweenAwards;  /* time, in seconds, to wait after awarding before re-testing */
   int timesAwarded, maxTimesAwarded;
   clock_t lastAwardTime;
-  /* rewards. Any of the strings can be null, signifying no effect */
-  StringIntMap *scoreDelta;  /* deltas to coins, xp, alignment, etc (can be positive, negative or zero) */
-  char *rewardText;  /* print this text */
-  char *tool;        /* award this tool (or, top it up) */
-  char *achievement; /* unlock this achievement */
-  char *npcSleep, *npcWake;  /* names of NPC's to inactivate/activate */
-  char *nextStage;   /* destination stage */
+  /* rewards (or more generally, effects) of completing the goal.
+     Any of the pointers can be NULL, signifying no effect of that type
+  */
+  StringIntMap *scoreDelta, *toolReserveDelta;  /* deltas to scores (coins, xp, alignment, etc) or tool reserves. Can be positive, negative or zero. Tools with positive reserve deltas will be auto-added */
+  char *cutSceneText, *commentText;  /* print text, in the following order
+					1. If cutSceneText!=NULL, it is printed and the game is paused until the player reads it (i.e. a cut-scene, duh). The game then resumes.
+					2. If commentText!=NULL, it is printed in a speech balloon for a few seconds while the game continues.
+				     */
+  StringVector *achievments; /* unlock these achievments */
+  Dictionary *npcSendMessage, *npcAddChoice, *npcRemoveChoice;  /* map from names of NPC's to messages they should be sent, or choices that should be made available (or unavailable) to the player */
+  enum NpcTransition { NoTransition, Goto, Gosub, Return, Sleep } npcTransition;  /* type of transition this NPC should make */
+  char *nextStage;   /* destination stage (for Goto/Gosub transitions) */
 } Challenge;
 
 Challenge* newChallenge();
