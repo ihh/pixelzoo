@@ -15,7 +15,7 @@ Particle* newParticle (const char* name, int nRules) {
     p->colorRule[c].multiplier = 0;
     p->colorRule[c].rightShift = 0;
   }
-  p->colorRule[0].offset = 0xffffff;  /* this ensures that the default ColorRule's generate a white particle */
+  p->colorRule[0].offset = HSB24White;  /* this ensures that the default ColorRule's generate a white particle */
   p->nRules = nRules;
   p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
   p->totalRate = p->normalizedRate = 0.;

@@ -12,7 +12,7 @@ typedef struct Board {
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
-  RGB palette[PaletteSize];  /* the palette */
+  Palette palette;
 } Board;
 
 /* public methods */

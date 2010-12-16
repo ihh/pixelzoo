@@ -125,7 +125,7 @@ void init( void )
 
     /* palette lookup */
     for (pal = 0; pal <= PaletteMax; ++pal)
-      sdlColor[pal] = SDL_MapRGB( g_screenSurface->format, board->palette[pal].r, board->palette[pal].g, board->palette[pal].b );
+      sdlColor[pal] = SDL_MapRGB( g_screenSurface->format, board->palette.rgb[pal].r, board->palette.rgb[pal].g, board->palette.rgb[pal].b );
 }
 
 //-----------------------------------------------------------------------------

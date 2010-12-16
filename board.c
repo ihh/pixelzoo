@@ -5,9 +5,7 @@
 
 Board* newBoard (int size) {
   Board *board;
-  int x, h, s, b;
-  RGB *col;
-  PaletteIndex pal;
+  int x;
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
@@ -19,19 +17,7 @@ Board* newBoard (int size) {
   for (x = 0; x <= board->quad->K; ++x)
     board->overloadThreshold[x] = 1.;
 
-  /* palette */
-  for (b = 0; b < PaletteBrightnesses; ++b)
-    for (s = 0; s < PaletteSaturations; ++s)
-      for (h = 0; h < PaletteHues; ++h) {
-	pal = ConvertPaletteHsbToPaletteIndex(h,s,b);
-	col = &board->palette[pal];
-	convertHSBtoRGB ((double) h / PaletteHues,
-			 (double) s / (PaletteSaturations - 1),
-			 s == 0
-			 ? ((double) b / (PaletteBrightnesses - 1))
-			 : ((double) (b + 1) / PaletteBrightnesses),
-			 col);
-      }
+  initializePalette (&board->palette);
 
   return board;
 }

@@ -1,7 +1,7 @@
 #include "color.h"
 #include "util.h"
 
-void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
+void ConvertRealHsbToRgb (double H, double S, double B, RGB* rgb) {
   /*
     Source: http://en.wikipedia.org/wiki/HSL_and_HSV#From_HSV
     Only difference is that 0<=H<1 instead of 0<=H<360
@@ -62,4 +62,20 @@ void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
     rgb->r = rgb->g = rgb->b = 0xff;
     break;
   }
+}
+
+void initializePalette (Palette* palette) {
+  int h, s, b;
+  double hReal, sReal, bReal;
+  RGB *col;
+  PaletteIndex pal;
+
+  for (b = 0; b < PaletteBrightnesses; ++b)
+    for (s = 0; s < PaletteSaturations; ++s)
+      for (h = 0; h < PaletteHues; ++h) {
+	pal = ConvertPaletteHsbToPaletteIndex(h,s,b);
+	col = &palette->rgb[pal];
+	ConvertPaletteHsbToRealHsb (h, s, b, hReal, sReal, bReal);
+	ConvertRealHsbToRgb (hReal, sReal, bReal, col);
+      }
 }
