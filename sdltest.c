@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <SDL.h>
 
+#include <time.h>
+
 #include "xmlboard.h"
 
 //-----------------------------------------------------------------------------
@@ -31,7 +33,7 @@ void init(void);
 void shutDown(void);
 void renderPixel(int x, int y, Uint8 R, Uint8 G, Uint8 B);
 Uint32 timeLeft(void);
-void render(void);
+void render(double*);
 
 //-----------------------------------------------------------------------------
 // Name: main()
@@ -39,7 +41,7 @@ void render(void);
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updateRate, minUpdateRate;
+  double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updateRate, minUpdateRate, renderRate;
   int iter = 0;
 
     init();
@@ -63,10 +65,10 @@ int main( int argc, char *argv[] )
         }
 
 	evolveBoard (board, targetUpdatesPerCell, maxTimeInSeconds, &updateRate, &minUpdateRate);
+	render(&renderRate);
+
 	if (++iter % (int) (1. + 1. / maxTimeInSeconds) == 0)
-	  printf ("targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g\n", targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board));
-        
-        render();
+	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board));
     }
 
     shutDown();
@@ -80,6 +82,9 @@ int main( int argc, char *argv[] )
 //-----------------------------------------------------------------------------
 void init( void )
 {
+  int x, y;
+  State scenery;
+
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
         printf( "Unable to init SDL: %s\n", SDL_GetError() );
@@ -103,11 +108,18 @@ void init( void )
 
     board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
 "<grammar><particle><name>drifter</name><type>1</type><color>ff7f7f</color>"
-"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest><x>1</x></dest></exec><exec><rshift>32</rshift><fail>.01</fail></exec></rule>"
-"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest><x>-1</x></dest></exec><exec><rshift>32</rshift></exec></rule>"
-"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest><y>1</y></dest></exec><exec><rshift>32</rshift></exec></rule>"
-"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest><y>-1</y></dest></exec><exec><rshift>32</rshift></exec></rule>"
-"</particle></grammar><init><x>" QUOTEME(HALF_BOARD_SIZE) "</x><y>" QUOTEME(HALF_BOARD_SIZE) "</y><val>1</val></init></board></xml>");
+"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift><fail>.01</fail></exec><exec><src><x>1</x></src><dest></dest><hexinc>1</hexinc><hexmask>0bff</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
+"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>10</hexinc><hexmask>0bff</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
+"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>100</hexinc><hexmask>0bff</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
+"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>400</hexinc><hexmask>0bff</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><inc>1</inc><lshift>16</lshift></exec></rule>"
+"</particle></grammar><init><x>" QUOTEME(HALF_BOARD_SIZE) "</x><y>" QUOTEME(HALF_BOARD_SIZE) "</y><type>1</type></init></board></xml>");
+
+    /* scenery palette test */
+    scenery = 0;
+    for (y = 0; y < BOARD_SIZE && scenery <= SceneryMax; ++y)
+      for (x = 0; x < BOARD_SIZE && scenery <= SceneryMax; ++x)
+	if (!readBoardParticle (board, x, y))
+	  writeBoardStateUnguarded (board, x, y, scenery++);
 }
 
 //-----------------------------------------------------------------------------
@@ -126,7 +138,7 @@ void shutDown( void )
 //-----------------------------------------------------------------------------
 void renderPixel( int x, int y, Uint8 R, Uint8 G, Uint8 B )
 {
-    Uint32 color = SDL_MapRGB( g_screenSurface->format, R, G, B );
+  Uint32 color = SDL_MapRGB( g_screenSurface->format, R, G, B );
 
     switch( g_screenSurface->format->BytesPerPixel )
     {
@@ -200,9 +212,13 @@ Uint32 timeLeft( void )
 // Name: render()
 // Desc: 
 //-----------------------------------------------------------------------------
-void render( void )
+void render( double* rate )
 {
+  clock_t start, end;
+
     SDL_Delay( timeLeft() );
+
+    start = clock();
 
     SDL_FillRect( g_screenSurface, NULL, SDL_MapRGB( g_screenSurface->format, 0, 0, 0));
 
@@ -223,11 +239,10 @@ void render( void )
     int x, y, i, j;
     for (x = 0; x < BOARD_SIZE; ++x)
       for (y = 0; y < BOARD_SIZE; ++y) {
-	Particle* p = readBoardParticle (board, x, y);
-	if (p)
-	  for (i = 0; i < PIXELS_PER_CELL; ++i)
-	    for (j = 0; j < PIXELS_PER_CELL; ++j)
-	      renderPixel( PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, p->color.r, p->color.g, p->color.b );
+	RGB* col = readBoardColor (board, x, y);
+	for (i = 0; i < PIXELS_PER_CELL; ++i)
+	  for (j = 0; j < PIXELS_PER_CELL; ++j)
+	    renderPixel( PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, col->r, col->g, col->b );
       }
 
     //
@@ -238,4 +253,8 @@ void render( void )
         SDL_UnlockSurface( g_screenSurface );
 
     SDL_Flip( g_screenSurface );
+
+    end = clock();
+    if (rate)
+      *rate = (double) CLOCKS_PER_SEC / (double) (end - start);
 }

@@ -4,8 +4,9 @@
 #include "board.h"
 
 Board* newBoard (int size) {
-  Board* board;
-  int x;
+  Board *board;
+  int x, gray, hue, sat, bright, colFlag[SceneryStates];
+  RGB *col;
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
@@ -16,6 +17,41 @@ Board* newBoard (int size) {
   board->overloadThreshold = SafeMalloc ((board->quad->K + 1) * sizeof(double));
   for (x = 0; x <= board->quad->K; ++x)
     board->overloadThreshold[x] = 1.;
+
+  /* scenery colors */
+  for (x = 0; x < SceneryStates; ++x)
+    colFlag[x] = 1;  /* prime factors of this debugging flag indicate number of ways/times it's been initialized */
+
+  for (gray = 0; gray < SceneryGrayLevels; ++gray) {
+    colFlag[GrayScenery(gray)] *= 3;
+    col = &board->sceneryColor[GrayScenery(gray)];
+    col->r = col->g = col->b = 255 * gray / (SceneryGrayLevels - 1);
+  }
+
+  for (hue = 0; hue < SceneryColorHues; ++hue)
+    for (bright = 0; bright < SceneryColorBrights; ++bright) {
+      colFlag[ColorScenery(hue,bright)] *= 5;
+      col = &board->sceneryColor[ColorScenery(hue,bright)];
+      convertHSVtoRGB (((double) hue) * 360 / SceneryColorHues,
+		       1.,
+		       ((double) bright + 1) / SceneryColorBrights, col);
+    }
+
+  for (hue = 0; hue < SceneryPaleColorHues; ++hue)
+    for (bright = 0; bright < SceneryPaleColorBrights; ++bright)
+      for (sat = 0; sat < SceneryPaleColorSaturations; ++sat) {
+	colFlag[PaleColorScenery(hue,sat,bright)] *= 7;
+	col = &board->sceneryColor[PaleColorScenery(hue,sat,bright)];
+	convertHSVtoRGB (((double) hue) * 360 / SceneryPaleColorHues,
+			 ((double) sat / (SceneryPaleColorSaturations + 1)),
+			 ((double) bright + 1) / SceneryPaleColorBrights, col);
+      }
+
+  for (x = 0; x < SceneryStates; ++x) {
+    Assert (colFlag[x] <= 7, "color multiply initialized");
+    Assert (colFlag[x] > 1, "color uninitialized");
+  }
+
   return board;
 }
 
@@ -37,19 +73,39 @@ void deleteBoard (Board* board) {
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle* p;
-  t = state & TypeMask;
-  if (t == EmptyType && state != EmptyState)
-    state = EmptyState;
-  p = board->byType[t];
-  if (p) {
+  t = (state & TypeMask) >> TypeShift;
+  if (t == EmptyType) {
     board->cell[x][y] = state;
-    updateQuadTree (board->quad, x, y, p->normalizedRate);
-  } else {
-    board->cell[x][y] = EmptyState;
     updateQuadTree (board->quad, x, y, 0.);
+  } else {
+    p = board->byType[t];
+    if (p == NULL) {
+      board->cell[x][y] = EmptyState;
+      updateQuadTree (board->quad, x, y, 0.);
+    } else {
+      board->cell[x][y] = state;
+      updateQuadTree (board->quad, x, y, p->normalizedRate);
+    }
   }
 }
 
+RGB* readBoardColor (Board* board, int x, int y) {
+  Particle *p;
+  State s;
+  Type t;
+  RGB *c;
+  c = &board->sceneryColor[0];  /* default to black */
+  s = readBoardState (board, x, y);
+  t = StateType(s);
+  if (t == EmptyType)
+    c = &board->sceneryColor[s % SceneryMax];
+  else {
+    p = board->byType[t];
+    if (p)
+      c = &p->color;
+  }
+  return c;
+}
 
 Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
   Particle* p;

@@ -81,7 +81,7 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
-      state = OPTCHILDINT(node,DECVAL,CHILDHEX(node,HEXVAL));
+      state = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift));
       writeBoardState (board, x, y, state);
     }
 
@@ -195,7 +195,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
   cond->overloadIgnoreProb = OPTCHILDFLOAT(node,OVERLOAD,cond->ignoreProb);
 
-  rshift = OPTCHILDINT(node,RSHIFT,0);
+  rshift = OPTCHILDINT(node,RSHIFT,TypeShift);
   if (rshift) {
     cond->mask = cond->mask << rshift;
     cond->rhs = cond->rhs << rshift;

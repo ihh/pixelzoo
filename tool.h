@@ -8,6 +8,7 @@
 #include "xymap.h"
 
 typedef struct Tool {
+  /* toolbox appearance */
   char *name;  /* name of this tool */
 
   /* brush */
@@ -20,11 +21,12 @@ typedef struct Tool {
   StateSet *overwriteStates;  /* (masked) states this tool is allowed to overwrite */
   State overwriteMask;  /* mask for overwriteStates */
 
-  /* paint rate */
-  double paintRate;  /* mean number of particles deposited per second */
+  /* spray rate */
+  double sprayRate;  /* mean number of particles deposited per second */
   double reserve;  /* number of particles left that can be deposited */
   double rechargeRate;  /* particle recharge rate, i.e. rate per second at which reserve is replenished */
   double maxReserve;  /* max value of reserve */
+
 } Tool;
 
 Tool* newTool (char *name, int size);

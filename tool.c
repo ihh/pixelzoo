@@ -3,8 +3,8 @@
 #include "stringmap.h"
 
 /* by default, tool paints empty space onto empty space, i.e. does nothing */
-#define DefaultToolOldState 0
-#define DefaultToolNewState 0
+#define DefaultToolOldState EmptyState
+#define DefaultToolNewState EmptyState
 
 Tool* newTool (char *name, int size) {
   Tool *tool;
@@ -24,7 +24,7 @@ Tool* newTool (char *name, int size) {
   (void) StateSetInsert (tool->overwriteStates, DefaultToolOldState);
   tool->overwriteMask = TypeMask;
 
-  tool->paintRate = tool->rechargeRate = tool->reserve = tool->maxReserve = 1.;
+  tool->sprayRate = tool->rechargeRate = tool->reserve = tool->maxReserve = 1.;
 
   return tool;
 }
@@ -44,7 +44,7 @@ void useTool (Tool *tool, Board *board, int x, int y, double duration) {
   State maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
-  particles = (int) (.5 + tool->paintRate * duration);
+  particles = (int) (.5 + tool->sprayRate * duration);
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
     sampleQuadLeaf (tool->brushIntensity, &xOffset, &yOffset);
     newState = tool->defaultBrushState;

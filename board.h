@@ -4,6 +4,7 @@
 #include "rule.h"
 #include "particle.h"
 #include "quadtree.h"
+#include "util.h"
 
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
@@ -11,18 +12,20 @@ typedef struct Board {
   State** cell;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
+  RGB sceneryColor[SceneryStates];  /* the palette for inactive Scenery states */
 } Board;
 
 /* public methods */
 Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
+RGB* readBoardColor (Board* board, int x, int y);
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
 #define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? (State) readBoardStateUnguarded(BOARD_PTR,X,Y) : (State) 0)
 #define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguarded(BOARD_PTR,X,Y,STATE); }
-#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[readBoardState(BOARD_PTR,X,Y) & TypeMask]
+#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[(readBoardState(BOARD_PTR,X,Y) & TypeMask) >> TypeShift]
 
 /* number of cells on board */
 #define boardCells(BOARD_PTR) (((double) (BOARD_PTR)->size) * ((double) (BOARD_PTR)->size))
@@ -41,9 +44,6 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 
 /* Board accessors.
    The "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
-   The "write" method will refuse to write states in the reserved set (most significant word in range 0x0001-0xffff),
-   or states whose type field (least significant word) is not associated with a Particle in the Board's byType array.
-   Instead of writing these states, 0x00000000 will be written.
 */
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);
