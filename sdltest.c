@@ -109,7 +109,7 @@ void init( void )
     //
 
     board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
-"<grammar><particle><name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80</hexmul><hexinc>3f</hexinc></color>"
+"<grammar><particle><name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>"
 "<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift><fail>.01</fail></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>0ff9</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"
 "<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><hexmask>0ff9</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>10002</hexinc></exec></rule>"
 "<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><dest></dest><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><hexmask>0ff9</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>10003</hexinc></exec></rule>"

@@ -26,6 +26,11 @@ typedef unsigned short Type;
 #define MaxType     0xffff
 #define BitsPerType 16
 
+/* 16-bit type-specific "variables" */
+#define VarMask     0x0000ffff
+#define NumVars     0x10000
+#define BitsPerVar  16
+
 /* type <-> state conversion macros */
 #define StateType(STATE) (((STATE) & TypeMask) >> TypeShift)
 

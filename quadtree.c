@@ -22,7 +22,7 @@ QuadTree* newQuadTree (int size) {
     ++quad->K;
   }
   totalNodes = (4 * size * size - 1) / 3;
-  quad->quadRate = calloc (totalNodes, sizeof(double));  /* initialized to zero */
+  quad->quadRate = SafeCalloc (totalNodes, sizeof(double));  /* initialized to zero */
   return quad;
 }
 

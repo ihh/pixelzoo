@@ -13,6 +13,9 @@ typedef struct RGB {
 */
 void convertHSBtoRGB (double H, double S, double B, RGB* rgb);
 
+/* 24-bit HSB */
+typedef unsigned long HSB24;
+
 /* Particle color palette */
 typedef unsigned short PaletteIndex;
 
@@ -33,26 +36,47 @@ typedef unsigned short PaletteIndex;
 #define PaletteSize             0x1000
 
 /* palette macros */
+
+/* ConvertPaletteHsbToPaletteIndex:
+    0 <= PaletteHue < PaletteHues
+    0 <= PaletteSaturation < PaletteSaturations
+    0 <= PaletteBrightness < PaletteBrightnesses
+ */
 #define ConvertPaletteHsbToPaletteIndex(PaletteHue,PaletteSaturation,PaletteBrightness) \
   ((PaletteIndex) ((((PaletteHue) % PaletteHues) << PaletteHueShift)	\
 		   | (((PaletteSaturation) % PaletteSaturations) << PaletteSaturationShift) \
 		   | (((PaletteBrightness) % PaletteBrightnesses) << PaletteBrightnessShift)))
 
+/* ConvertRealHsbToPaletteIndex:
+    0 <= RealHue <= 1
+    0 <= RealSaturation <= 1
+    0 <= RealBrightness <= 1
+ */
 #define ConvertRealHsbToPaletteIndex(RealHue,RealSaturation,RealBrightness) \
-  ConvertPaletteHsbToPaletteIndex((int)(.5 + RealHue * PaletteHues),(int)(.5 + RealSaturation * PaletteSaturations),(int)(.5 + RealBrightness * PaletteBrightnesses))
+  ConvertPaletteHsbToPaletteIndex ((int) ((RealHue) * (PaletteHues - 1)), \
+				   (int) ((RealSaturation) * (PaletteSaturations - 1)), \
+				   (int) ((RealBrightness) * (PaletteBrightnesses - 1)))
+
+/* ConvertHsb24ToPaletteIndex:
+    0x000000 <= HSB <= 0xffffff
+ */
+#define ConvertHsb24ToPaletteIndex(HSB) \
+  ConvertRealHsbToPaletteIndex ( ((double)(((HSB)>>16)&0xff)) / 255., ((double)(((HSB)>>8)&0xff)) / 255., ((double)((HSB)&0xff)) / 255. )
 
 /*
   ColorRule parameterizes the following formula:
-  paletteIndex = (((state >> rightShift) & mask) * multiplier) + offset
+   hsb24 = (((state >> rightShift) & mask) * multiplier) + offset
+
+  where hsb24 is a 24-bit HSB value (0x00HHSSBB in hex)
 */
 typedef struct ColorRule {
-  PaletteIndex mask, offset;
+  unsigned long mask, offset;
   int multiplier;
   unsigned char rightShift;
 } ColorRule;
 
 /* ColorRule evaluation is simple enough to take place in a macro */
 #define evalColorRule(colorRulePtr,state) \
-  ((PaletteIndex) ((((((state) >> (colorRulePtr)->rightShift) & (colorRulePtr)->mask) * (colorRulePtr)->multiplier) + (colorRulePtr)->offset) & PaletteMask))
+  ((HSB24) (((((state) >> (colorRulePtr)->rightShift) & (colorRulePtr)->mask) * (colorRulePtr)->multiplier) + (colorRulePtr)->offset))
 
 #endif /* COLOR_INCLUDED */

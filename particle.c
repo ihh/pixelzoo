@@ -4,16 +4,20 @@
 
 Particle* newParticle (const char* name, int nRules) {
   Particle* p;
+  int c;
   p = SafeMalloc (sizeof (Particle));
   p->type = 0;
-  p->name = calloc (strlen (name) + 1, sizeof(char));
-  strcpy ((char*) name, p->name);
-  p->colorRule.mask = 0;
-  p->colorRule.offset = PaletteMax;
-  p->colorRule.multiplier = 0;
-  p->colorRule.rightShift = 0;
+  p->name = SafeMalloc ((strlen (name) + 1) * sizeof(char));
+  strcpy (p->name, (char*) name);
+  for (c = 0; c < NumColorRules; ++c) {
+    p->colorRule[c].mask = 0;
+    p->colorRule[c].offset = 0;
+    p->colorRule[c].multiplier = 0;
+    p->colorRule[c].rightShift = 0;
+  }
+  p->colorRule[0].offset = 0xffffff;  /* this ensures that the default ColorRule's generate a white particle */
   p->nRules = nRules;
-  p->rule = calloc (nRules, sizeof(StochasticRule));
+  p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
   p->totalRate = p->normalizedRate = 0.;
   return p;
 }
@@ -22,4 +26,13 @@ void deleteParticle (Particle* p) {
   SafeFree(p->rule);
   SafeFree(p->name);
   SafeFree(p);
+}
+
+PaletteIndex getParticleColor (Particle* particle, State state) {
+  int n;
+  HSB24 hsb;
+  hsb = 0;
+  for (n = 0; n < NumColorRules; ++n)
+    hsb = hsb + evalColorRule (&particle->colorRule[n], state);
+  return ConvertHsb24ToPaletteIndex(hsb);
 }

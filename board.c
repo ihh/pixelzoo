@@ -83,7 +83,7 @@ PaletteIndex readBoardColor (Board* board, int x, int y) {
   else {
     p = board->byType[t];
     if (p)
-      c = evalColorRule (&p->colorRule, s);
+      c = getParticleColor (p, s);
   }
   return c;
 }

@@ -129,26 +129,30 @@ xmlChar* getAttrByName (xmlNode* node, char* name) {
 
 Particle* newParticleFromXmlNode (xmlNode* node) {
   Particle* p;
-  int nRules, n;
-  xmlNode *curNode, *color;
+  int nRules, nColorRules, n;
+  xmlNode *curNode;
   nRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
-  p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
-  if ((color = CHILD(node,COLOR)))
-    initColorRuleFromXmlNode (&p->colorRule, color);
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       initRuleFromXmlNode (&p->rule[n++], curNode);
+  p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
+  nColorRules = 0;
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,COLOR)) {
+      Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
+      initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode);
+    }
   return p;
 }
 
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  colorRule->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,PaletteMask));
+  colorRule->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,VarMask));
   colorRule->multiplier = OPTCHILDINT(node,DECMUL,OPTCHILDHEX(node,HEXMUL,1));
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
