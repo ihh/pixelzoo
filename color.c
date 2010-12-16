@@ -9,7 +9,7 @@ void convertHSBtoRGB (double H, double S, double B, RGB* rgb) {
   int sextant;
   double C, X, M, Hdash;
   unsigned char c, x, m;
-  Assert (H >= 0 && H < 360, "convertHSBtoRGB: H out of range");
+  Assert (H >= 0 && H < 1, "convertHSBtoRGB: H out of range");
   Assert (S >= 0 && S <= 1, "convertHSBtoRGB: S out of range");
   Assert (B >= 0 && B <= 1, "convertHSBtoRGB: B out of range");
   C = B * S;
