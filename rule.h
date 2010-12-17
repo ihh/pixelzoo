@@ -1,6 +1,8 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
+#include "stringmap.h"
+
 /* 32-bit cell state.
 
    The 16-bit MSW (most significant word) of the state is the Type.
@@ -94,11 +96,12 @@ typedef struct RuleOperation {
 #define NumRuleConditions 6
 #define NumRuleOperations 6
 
-/* now the struct */
+/* now the rule struct itself */
 typedef struct StochasticRule {
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
   double rate, overloadRate;
+  StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
 } StochasticRule;
 
 #endif /* RULE_INCLUDED */

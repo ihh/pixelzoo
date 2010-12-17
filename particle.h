@@ -23,6 +23,7 @@ typedef struct Particle {
   int nRules;  /* number of rules */
   StochasticRule* rule;
   double totalRate, normalizedRate, totalOverloadRate;
+  StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
 } Particle;
 
 /* constructor/destructor */

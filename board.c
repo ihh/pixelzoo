@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "board.h"
+#include "notify.h"
 
 Board* newBoard (int size) {
   Board *board;
@@ -54,6 +55,7 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
       updateQuadTree (board->quad, x, y, p->normalizedRate);
     }
   }
+  /* TODO: check for BoardWatcher's, call appropriate ParticleNotifyFunction(s) */
 }
 
 PaletteIndex readBoardColor (Board* board, int x, int y) {
@@ -148,6 +150,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 	    return;  /* bail out of loops over k & n */
 	for (k = 0; k < NumRuleOperations; ++k)
 	  execRuleOperation (&rule->op[k], board, x, y, overloaded);
+	/* TODO: check for BoardWatcher's, call appropriate RuleNotifyFunction */
 	return;  /* bail out of loop over n */
       }
     }

@@ -22,7 +22,7 @@ typedef struct PlayState {
 
 /*
   Game threads (all on timers):
-  Evolve thread: evolve board, recalculate overload, sleep
+  Evolve thread: if not paused, evolve board, recalculate overload, sleep
   Redraw thread: redraw board, sleep
   NPC thread: use tools, test goals -> award rewards, sleep
   Tool thread: use current selected tool (if active), recharge inactive tools, sleep

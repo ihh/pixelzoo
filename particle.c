@@ -19,10 +19,13 @@ Particle* newParticle (const char* name, int nRules) {
   p->nRules = nRules;
   p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
   p->totalRate = p->normalizedRate = 0.;
+  p->watchers = NULL;
   return p;
 }
 
 void deleteParticle (Particle* p) {
+  if (p->watchers)
+    deleteStringMap (p->watchers);
   SafeFree(p->rule);
   SafeFree(p->name);
   SafeFree(p);
