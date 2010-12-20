@@ -9,7 +9,7 @@
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
   int size;
-  State** cell;   /* int x, y; cell[x][y] */
+  State **cell, **sync;   /* int x, y; cell[x][y] */
   QuadTree* quad;  /* private */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
@@ -49,9 +49,17 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);
 
+/* Board accessor for synchronous updates.
+ */
+void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state);
+
+/* Function pointer for board write.
+ */
+typedef void (*BoardWriteFunction) (Board*, int, int, State);
+
 /* Other helper methods */
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded);
+void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
 
 void evolveBoardCell (Board* board, int x, int y);
 

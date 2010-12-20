@@ -11,8 +11,11 @@ Board* newBoard (int size) {
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
   board->cell = SafeMalloc (size * sizeof(State*));
-  for (x = 0; x < size; ++x)
+  board->sync = SafeMalloc (size * sizeof(State*));
+  for (x = 0; x < size; ++x) {
     board->cell[x] = SafeCalloc (size, sizeof(State));
+    board->sync[x] = SafeCalloc (size, sizeof(State));
+  }
   board->quad = newQuadTree (size);
   board->overloadThreshold = SafeMalloc ((board->quad->K + 1) * sizeof(double));
   for (x = 0; x <= board->quad->K; ++x)
@@ -29,9 +32,12 @@ void deleteBoard (Board* board) {
   int x;
   SafeFree(board->overloadThreshold);
   deleteQuadTree (board->quad);
-  for (x = 0; x < board->size; ++x)
+  for (x = 0; x < board->size; ++x) {
     SafeFree(board->cell[x]);
+    SafeFree(board->sync[x]);
+  }
   SafeFree(board->cell);
+  SafeFree(board->sync);
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
       deleteParticle (board->byType[(Type) t]);
@@ -57,6 +63,10 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
     }
   }
   /* TODO: check for BoardWatcher's, call appropriate ParticleNotifyFunction(s) */
+}
+
+void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state) {
+  board->sync[x][y] = state;
 }
 
 PaletteIndex readBoardColor (Board* board, int x, int y) {
@@ -117,7 +127,7 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int over
   return 0;
 }
 
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded) {
+void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
   int xSrc, ySrc;
   if (randomDouble() < (overloaded ? op->overloadFailProb : op->failProb))
     return;
@@ -126,9 +136,9 @@ void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overl
   x += op->dest.x;
   y += op->dest.y;
   if (onBoard(board,x,y))  /* only check once */
-      writeBoardStateUnguarded (board, x, y, 
-				(readBoardStateUnguarded(board,x,y) & (StateMask ^ (op->mask << op->leftShift)))
-				| (((((readBoardState(board,xSrc,ySrc) & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift));
+    (*write) (board, x, y, 
+	      (readBoardStateUnguarded(board,x,y) & (StateMask ^ (op->mask << op->leftShift)))
+	      | (((((readBoardState(board,xSrc,ySrc) & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift));
 }
 
 void evolveBoardCell (Board* board, int x, int y) {
@@ -150,7 +160,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 	  if (!testRuleCondition (&rule->cond[k], board, x, y, overloaded))
 	    return;  /* bail out of loops over k & n */
 	for (k = 0; k < NumRuleOperations; ++k)
-	  execRuleOperation (&rule->op[k], board, x, y, overloaded);
+	  execRuleOperation (&rule->op[k], board, x, y, overloaded, writeBoardStateUnguarded);
 	/* TODO: check for BoardWatcher's, call appropriate RuleNotifyFunction */
 	return;  /* bail out of loop over n */
       }
