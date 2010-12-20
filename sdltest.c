@@ -70,7 +70,7 @@ int main( int argc, char *argv[] )
 	render(&renderRate);
 
 	if (++iter % (int) (1. + 1. / maxTimeInSeconds) == 0)
-	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board));
+	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g elapsedTime=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board), board->elapsedTime);
     }
 
     shutDown();
