@@ -21,7 +21,7 @@ Board* newBoard (int size) {
   board->asyncQuad = newQuadTree (size);
   board->syncUpdateQuad = newQuadTree (size);
   board->syncParticles = 0;
-  board->syncProportionAfterLastSync = 0.;
+  board->syncFiringRateAfterLastSync = 0.;
   board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
   for (x = 0; x <= board->syncQuad->K; ++x)
     board->overloadThreshold[x] = 1.;
@@ -248,7 +248,7 @@ void syncBoard (Board* board) {
   }
   /* freeze the update queue */
   copyQuadTree (board->syncQuad, board->syncUpdateQuad);
-  board->syncProportionAfterLastSync = boardSyncFiringRateProportion(board);
+  board->syncFiringRateAfterLastSync = boardSyncFiringRate(board);
 }
 
 int boardOverloaded (Board* board, int x, int y) {
@@ -282,7 +282,7 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedClockTime, syncProportion;
+  double effectiveUpdates, targetUpdates, elapsedClockTime, syncRate, asyncRate, totalRate;
   clock_t start, now;
 
   /* start the clocks */
@@ -314,18 +314,19 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
        Thus, whenever we do an actual async update, we update the board clocks accordingly.
      */
 
-    /* first update the clocks */
-    if (boardAsyncParticles(board) > 0)
-      if (boardAsyncFiringRate(board))
-	effectiveUpdates += (double) boardAsyncParticles(board) / boardAsyncFiringRate(board);  /* update board clock to count one accepted (sync or async) + rejected async */
-      else
-	effectiveUpdates += 1 + boardAsyncParticles(board);  /* update board clock to count one sync, and multiple implicitly rejected async */
-    else
-      ++effectiveUpdates;  /* update board clock to count one accepted sync */
+    /* calculate the sync & async rates */
+    syncRate = (boardSyncFiringRate(board) + board->syncFiringRateAfterLastSync) / 2.;
+    asyncRate = boardAsyncFiringRate(board);
+    totalRate = syncRate + asyncRate;
 
-    /* now decide, sync or async? */
-    syncProportion = (boardSyncFiringRateProportion(board) + board->syncProportionAfterLastSync) / 2.;
-    if (randomDouble() < syncProportion) {
+    /* update the clocks */
+    if (totalRate > 0)
+      effectiveUpdates += (double) 1. / totalRate;
+    else
+      effectiveUpdates += boardCells(board);
+
+    /* decide: sync or async? */
+    if (randomDouble() * totalRate < syncRate) {
 
       /* sync */
       if (topQuadRate (board->syncUpdateQuad) > 0.) {  /* any more synchronized cells on the queue? */
@@ -338,7 +339,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 	++actualUpdates;
 
       } else {
-	/* no more sync cells on queue, so update board */
+	/* no more sync cells on queue, so flush all synchronized updates to board */
 	syncBoard (board);
 	++board->syncUpdates;
       }
@@ -346,7 +347,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     } else {
       /* async */
       if (topQuadRate(board->asyncQuad) > 0.) {  /* any asynchronous cells on the queue? */
-	/* evolve a cell */
+	/* evolve a random cell */
 	sampleQuadLeaf (board->asyncQuad, &x, &y);
 	evolveBoardCell (board, x, y);
 	++actualUpdates;
