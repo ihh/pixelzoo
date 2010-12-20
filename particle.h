@@ -20,9 +20,10 @@ typedef struct Particle {
   Type type;
   char* name;
   ColorRule colorRule[NumColorRules];  /* results of ColorRule applications are summed */
+  int synchronous, shuffle;  /* if synchronous=1, will be updated synchronously vs randomly; if synchronous=shuffle=true, rules will be attempted in random order */
   int nRules;  /* number of rules */
   StochasticRule* rule;
-  double totalRate, normalizedRate, totalOverloadRate;
+  double totalRate, totalOverloadRate, asyncFiringRate, firingRate;
   StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
 } Particle;
 

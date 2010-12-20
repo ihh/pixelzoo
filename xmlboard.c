@@ -8,6 +8,8 @@
 #define XMLBOARD_SIZE     "size"
 #define XMLBOARD_GRAMMAR  "grammar"
 #define XMLBOARD_PARTICLE "particle"
+#define XMLBOARD_SYNC     "sync"
+#define XMLBOARD_SHUFFLE  "shuffle"
 #define XMLBOARD_DECTYPE  "type"
 #define XMLBOARD_HEXTYPE  "hextype"
 #define XMLBOARD_NAME     "name"
@@ -136,6 +138,11 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
     if (MATCHES(curNode,RULE))
       ++nRules;
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
+  if (CHILD(node,SYNC)) {
+    p->synchronous = 1;
+    if (CHILD(node,SHUFFLE))
+      p->shuffle = 1;
+  }
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))

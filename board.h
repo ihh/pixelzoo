@@ -10,10 +10,12 @@ typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
   int size;
   State **cell, **sync;   /* int x, y; cell[x][y] */
-  QuadTree* quad;  /* private */
+  QuadTree *async, *quad;  /* private: async = stochastic update rates, quad = total update rates */
+  int syncParticles;  /* number of synchronous particles currently on the board */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
+  int syncUpdates;  /* number of synchronous update cycles */
 } Board;
 
 /* public methods */
@@ -26,14 +28,18 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
 #define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? (State) readBoardStateUnguarded(BOARD_PTR,X,Y) : (State) 0)
 #define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguarded(BOARD_PTR,X,Y,STATE); }
-#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[(readBoardState(BOARD_PTR,X,Y) & TypeMask) >> TypeShift]
+#define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[StateType(readBoardState(BOARD_PTR,X,Y))]
+#define readBoardParticleUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->byType[StateType(readBoardStateUnguarded(BOARD_PTR,X,Y))]
 
 /* number of cells on board */
 #define boardCells(BOARD_PTR) (((double) (BOARD_PTR)->size) * ((double) (BOARD_PTR)->size))
 
 /* board firing rate = mean rate at which rules are firing. ranges from 0 (empty) to 1 (full) */
 #define boardFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->quad) / boardCells(BOARD_PTR))
+#define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->async) / boardCells(BOARD_PTR))
+#define boardSyncFiringRate(BOARD_PTR) (((double) (BOARD_PTR)->syncParticles) / boardCells(BOARD_PTR))
 #define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) (getQuadRate((BOARD_PTR)->quad,X,Y,LEVEL) / (double) quadCells((BOARD_PTR)->quad,LEVEL))
+#define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
 
 /* evolveBoard
    attempts to update each cell targetUpdatesPerCell times, terminating if this limit is reached or maxTimeInSeconds has elapsed (whichever occurs first).
@@ -61,6 +67,10 @@ typedef void (*BoardWriteFunction) (Board*, int, int, State);
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
 void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
 
+int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
+int boardOverloaded (Board* board, int x, int y);
+
 void evolveBoardCell (Board* board, int x, int y);
+void evolveBoardSync (Board* board);
 
 #endif /* BOARD_INCLUDED */
