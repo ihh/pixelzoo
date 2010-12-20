@@ -17,7 +17,7 @@ Board* newBoard (int size) {
   board->overloadThreshold = SafeMalloc ((board->quad->K + 1) * sizeof(double));
   for (x = 0; x <= board->quad->K; ++x)
     board->overloadThreshold[x] = 1.;
-  board->elapsedTime = 0.;
+  board->updatesPerCell = 0.;
 
   initializePalette (&board->palette);
 
@@ -160,17 +160,21 @@ void evolveBoardCell (Board* board, int x, int y) {
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedTime;
+  double effectiveUpdates, targetUpdates, elapsedTime, effectiveUpdatesPerCell;
   clock_t start, now;
   actualUpdates = 0;
-  effectiveUpdates = elapsedTime = 0.;
+  effectiveUpdates = elapsedTime = effectiveUpdatesPerCell = 0.;
   targetUpdates = targetUpdatesPerCell * boardCells(board);
   start = clock();
   while (topQuadRate(board->quad) > 0.) {
     now = clock();
     elapsedTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    if (elapsedTime > maxTimeInSeconds || effectiveUpdates >= targetUpdates) {
-      effectiveUpdates = targetUpdates;
+    if (elapsedTime > maxTimeInSeconds) {
+      effectiveUpdatesPerCell = effectiveUpdates / boardCells(board);
+      break;
+    }
+    if (effectiveUpdates >= targetUpdates) {
+      effectiveUpdatesPerCell = targetUpdatesPerCell;
       break;
     }
     /* estimate expected number of rejected moves per accepted move as follows:
@@ -188,7 +192,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     sampleQuadLeaf (board->quad, &x, &y);
     evolveBoardCell (board, x, y);
   }
-  board->elapsedTime += effectiveUpdates / boardCells(board);
+  board->updatesPerCell += effectiveUpdatesPerCell;
   if (updateRate_ret)
     *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;
   if (minUpdateRate_ret)

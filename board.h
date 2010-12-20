@@ -13,7 +13,7 @@ typedef struct Board {
   QuadTree* quad;  /* private */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
-  double elapsedTime;  /* time elapsed on this board, in units of expected updates per cell */
+  double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
 } Board;
 
 /* public methods */
