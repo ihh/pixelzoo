@@ -19,7 +19,7 @@ Particle* newParticle (const char* name, int nRules) {
   p->synchronous = p->shuffle = 0;
   p->nRules = p->attempts = nRules;
   p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
-  p->totalRate = p->totalOverloadRate = p->asyncFiringRate = p->firingRate = 0.;
+  p->totalRate = p->totalOverloadRate = p->asyncFiringRate = p->syncFiringRate = 0.;
   p->count = 0;
   p->watchers = NULL;
   return p;

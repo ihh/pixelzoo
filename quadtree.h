@@ -11,6 +11,7 @@ typedef struct QuadTree {
 
 QuadTree* newQuadTree (int size);
 void deleteQuadTree (QuadTree* quad);
+QuadTree* copyQuadTree (QuadTree* quad);
 double readQuadTree (QuadTree* quad, int x, int y);
 void updateQuadTree (QuadTree* quad, int x, int y, double val);
 void sampleQuadLeaf (QuadTree* quad, int* x_ret, int* y_ret);

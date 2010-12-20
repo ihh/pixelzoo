@@ -26,7 +26,7 @@ typedef struct Particle {
   /* rules */
   int nRules;  /* number of rules */
   StochasticRule* rule;
-  double totalRate, totalOverloadRate, asyncFiringRate, firingRate;
+  double totalRate, totalOverloadRate, asyncFiringRate, syncFiringRate;
   /* meta-info */
   int count;  /* number on the board */
   StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */

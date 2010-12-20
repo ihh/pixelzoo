@@ -17,11 +17,11 @@ Board* newBoard (int size) {
     board->cell[x] = SafeCalloc (size, sizeof(State));
     board->sync[x] = SafeCalloc (size, sizeof(State));
   }
-  board->quad = newQuadTree (size);
-  board->async = newQuadTree (size);
+  board->syncQuad = newQuadTree (size);
+  board->asyncQuad = newQuadTree (size);
   board->syncParticles = 0;
-  board->overloadThreshold = SafeMalloc ((board->quad->K + 1) * sizeof(double));
-  for (x = 0; x <= board->quad->K; ++x)
+  board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
+  for (x = 0; x <= board->syncQuad->K; ++x)
     board->overloadThreshold[x] = 1.;
   board->updatesPerCell = 0.;
   board->syncUpdates = 0;
@@ -35,8 +35,8 @@ void deleteBoard (Board* board) {
   unsigned long t;
   int x;
   SafeFree(board->overloadThreshold);
-  deleteQuadTree (board->quad);
-  deleteQuadTree (board->async);
+  deleteQuadTree (board->syncQuad);
+  deleteQuadTree (board->asyncQuad);
   for (x = 0; x < board->size; ++x) {
     SafeFree(board->cell[x]);
     SafeFree(board->sync[x]);
@@ -66,12 +66,12 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   /* update cell array & quad trees */
   if (p == NULL) {
     board->cell[x][y] = (t == EmptyType) ? state : EmptyState;  /* handle the EmptyType specially */
-    updateQuadTree (board->quad, x, y, 0.);
-    updateQuadTree (board->async, x, y, 0.);
+    updateQuadTree (board->asyncQuad, x, y, 0.);
+    updateQuadTree (board->syncQuad, x, y, 0.);
   } else {
     board->cell[x][y] = state;
-    updateQuadTree (board->quad, x, y, p->firingRate);
-    updateQuadTree (board->async, x, y, p->asyncFiringRate);
+    updateQuadTree (board->asyncQuad, x, y, p->asyncFiringRate);
+    updateQuadTree (board->syncQuad, x, y, p->syncFiringRate);
     /* update new count */
     ++p->count;
     if (p->synchronous)
@@ -129,8 +129,8 @@ void addParticleToBoard (Particle* p, Board* board) {
 	  rule->cumulativeOpDestIndex[n] = m;
       }
   }
-  p->firingRate = MIN (p->totalRate, 1.);
-  p->asyncFiringRate = p->synchronous ? 0. : p->firingRate;
+  p->syncFiringRate = p->synchronous ? 1. : 0.;
+  p->asyncFiringRate = p->synchronous ? 0. : MIN (p->totalRate, 1.);
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded) {
@@ -198,45 +198,49 @@ void evolveBoardSync (Board* board) {
   double rand, remainingRate, ruleRate;
   State *cellCol, *syncCol;
   StochasticRule* rule;
+  QuadTree* syncQuadCopy;
   size = board->size;
   /* copy board */
   for (x = 0; x < size; ++x)
     memcpy ((void*) board->sync[x], (void*) board->cell[x], size * sizeof(State));
+  syncQuadCopy = copyQuadTree (board->syncQuad);
   /* do updates */
-  for (x = 0; x < size; ++x)
-    for (y = 0; y < size; ++y) {
-      p = readBoardParticle (board, x, y);
-      if (p && p->synchronous) {
-	overloaded = boardOverloaded (board, x, y);
-	/* attempt each rule in random sequence, stopping when one succeeds */
-	ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
-	for (n = 0; n < p->nRules; ++n)
-	  ruleOrder[n] = n;
-	remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
-	for (n = 0; n < p->attempts; ++n) {
-	  if (p->shuffle) {
-	    rand = randomDouble() * remainingRate;
-	    for (swap = n; 1; ++swap) {
-	      rule = &p->rule[ruleOrder[swap]];
-	      ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-	      rand -= ruleRate;
-	      if (rand < 0. || swap == p->nRules - 1)
-		break;
-	    }
-	    ruleOrder[swap] = ruleOrder[n];
-	    remainingRate -= ruleRate;
-	  } else {
-	    rule = &p->rule[n];
+  while (topQuadRate (syncQuadCopy) > 0.) {
+    sampleQuadLeaf (syncQuadCopy, &x, &y);
+    updateQuadTree (syncQuadCopy, x, y, 0.);
+    p = readBoardParticle (board, x, y);
+    if (p && p->synchronous) {
+      overloaded = boardOverloaded (board, x, y);
+      /* attempt each rule in random sequence, stopping when one succeeds */
+      ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
+      for (n = 0; n < p->nRules; ++n)
+	ruleOrder[n] = n;
+      remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
+      for (n = 0; n < p->attempts; ++n) {
+	if (p->shuffle) {
+	  rand = randomDouble() * remainingRate;
+	  for (swap = n; 1; ++swap) {
+	    rule = &p->rule[ruleOrder[swap]];
 	    ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-	    if (randomDouble() > ruleRate)
-	      continue;
+	    rand -= ruleRate;
+	    if (rand < 0. || swap == p->nRules - 1)
+	      break;
 	  }
-	  if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
-	    break;
+	  ruleOrder[swap] = ruleOrder[n];
+	  remainingRate -= ruleRate;
+	} else {
+	  rule = &p->rule[n];
+	  ruleRate = (overloaded ? rule->overloadRate : rule->rate);
+	  if (randomDouble() > ruleRate)
+	    continue;
 	}
-	SafeFree (ruleOrder);
+	if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
+	  break;
       }
+      SafeFree (ruleOrder);
     }
+  }
+  deleteQuadTree (syncQuadCopy);
   /* update only the cells that changed */
   for (x = 0; x < size; ++x) {
     cellCol = board->cell[x];
@@ -249,7 +253,7 @@ void evolveBoardSync (Board* board) {
 
 int boardOverloaded (Board* board, int x, int y) {
   int n;
-  for (n = 0; n <= board->quad->K; ++n)
+  for (n = 0; n <= board->syncQuad->K; ++n)
     if (boardLocalFiringRate(board,x,y,n) > board->overloadThreshold[n])
       return 1;
   return 0;
@@ -305,7 +309,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
       break;
     }
     /* check if async quad tree empty */
-    if (topQuadRate(board->async) == 0.) {
+    if (topQuadRate(board->asyncQuad) == 0.) {
       effectiveUpdates += boardAsyncParticles(board);
       continue;
     }
@@ -322,7 +326,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     effectiveUpdates += 1. / boardAsyncFiringRate(board);
     ++actualUpdates;
 
-    sampleQuadLeaf (board->async, &x, &y);
+    sampleQuadLeaf (board->asyncQuad, &x, &y);
     evolveBoardCell (board, x, y);
   }
   effectiveUpdatesPerCell = effectiveUpdates / boardCells(board);

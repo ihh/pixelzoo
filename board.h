@@ -10,7 +10,7 @@ typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
   int size;
   State **cell, **sync;   /* int x, y; cell[x][y] */
-  QuadTree *async, *quad;  /* private: async = stochastic update rates, quad = total update rates */
+  QuadTree *asyncQuad, *syncQuad;  /* private: asyncQuad = stochastic update rates, syncQuad = sync update rates */
   int syncParticles;  /* number of synchronous particles currently on the board */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
@@ -35,10 +35,11 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 #define boardCells(BOARD_PTR) (((double) (BOARD_PTR)->size) * ((double) (BOARD_PTR)->size))
 
 /* board firing rate = mean rate at which rules are firing. ranges from 0 (empty) to 1 (full) */
-#define boardFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->quad) / boardCells(BOARD_PTR))
-#define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->async) / boardCells(BOARD_PTR))
-#define boardSyncFiringRate(BOARD_PTR) (((double) (BOARD_PTR)->syncParticles) / boardCells(BOARD_PTR))
-#define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) (getQuadRate((BOARD_PTR)->quad,X,Y,LEVEL) / (double) quadCells((BOARD_PTR)->quad,LEVEL))
+#define boardFiringRate(BOARD_PTR) ((topQuadRate((BOARD_PTR)->syncQuad) + topQuadRate((BOARD_PTR)->asyncQuad)) / boardCells(BOARD_PTR))
+#define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->asyncQuad) / boardCells(BOARD_PTR))
+#define boardSyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->syncQuad) / boardCells(BOARD_PTR))
+#define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) \
+  ((getQuadRate((BOARD_PTR)->syncQuad,X,Y,LEVEL) + getQuadRate((BOARD_PTR)->asyncQuad,X,Y,LEVEL)) / (double) quadCells((BOARD_PTR)->syncQuad,LEVEL))
 #define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
 
 /* evolveBoard

@@ -1,7 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "quadtree.h"
 #include "util.h"
+
+#define quadTreeSize(QUAD_PTR) (1 << (QUAD_PTR)->K)
+#define totalQuadTreeNodes(SIZE) ((4 * (SIZE) * (SIZE) - 1) / 3)
 
 int quadNodeIndex (QuadTree* quad, int x, int y, int level);
 int quadChildIndex (int parentIndex, int parentLevel, int whichChild);
@@ -21,9 +25,18 @@ QuadTree* newQuadTree (int size) {
     tmp = tmp >> 1;
     ++quad->K;
   }
-  totalNodes = (4 * size * size - 1) / 3;
+  totalNodes = totalQuadTreeNodes(size);
   quad->quadRate = SafeCalloc (totalNodes, sizeof(double));  /* initialized to zero */
   return quad;
+}
+
+QuadTree* copyQuadTree (QuadTree* quad) {
+  int size;
+  QuadTree *copy;
+  size = quadTreeSize (quad);
+  copy = newQuadTree (size);
+  memcpy (copy->quadRate, quad->quadRate, totalQuadTreeNodes(size) * sizeof(double));
+  return copy;
 }
 
 void deleteQuadTree (QuadTree* quad) {
