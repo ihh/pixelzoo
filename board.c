@@ -53,33 +53,29 @@ void deleteBoard (Board* board) {
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   Type t;
   Particle *p, *pOld;
+  /* get new Type & Particle, and old Particle */
   t = StateType(state);
+  p = board->byType[t];
   pOld = readBoardParticleUnguarded(board,x,y);
-  if (t == EmptyType) {
-    board->cell[x][y] = state;
+  /* decrement old count */
+  if (pOld) {
+    --pOld->count;
+    if (pOld->synchronous)
+      --board->syncParticles;
+  }
+  /* update cell array & quad trees */
+  if (p == NULL) {
+    board->cell[x][y] = (t == EmptyType) ? state : EmptyState;  /* handle the EmptyType specially */
     updateQuadTree (board->quad, x, y, 0.);
     updateQuadTree (board->async, x, y, 0.);
-    if (pOld && pOld->synchronous)
-      --board->syncParticles;
   } else {
-    p = board->byType[t];
-    if (p == NULL) {
-      board->cell[x][y] = EmptyState;
-      updateQuadTree (board->quad, x, y, 0.);
-      updateQuadTree (board->async, x, y, 0.);
-      if (pOld && pOld->synchronous)
-	--board->syncParticles;
-    } else {
-      board->cell[x][y] = state;
-      updateQuadTree (board->quad, x, y, p->firingRate);
-      updateQuadTree (board->async, x, y, p->asyncFiringRate);
-      if (p->synchronous) {
-	if (pOld == NULL || !pOld->synchronous)
-	  ++board->syncParticles;
-      } else
-	if (pOld && pOld->synchronous)
-	  --board->syncParticles;
-    }
+    board->cell[x][y] = state;
+    updateQuadTree (board->quad, x, y, p->firingRate);
+    updateQuadTree (board->async, x, y, p->asyncFiringRate);
+    /* update new count */
+    ++p->count;
+    if (p->synchronous)
+      ++board->syncParticles;
   }
   /* TODO: check for BoardWatcher's, call appropriate ParticleNotifyFunction(s) */
 }
@@ -199,6 +195,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 void evolveBoardSync (Board* board) {
   Particle* p;
   int x, y, size, n, swap, overloaded, *ruleOrder;
+  double rand, remainingRate, ruleRate;
   State *cellCol, *syncCol;
   StochasticRule* rule;
   size = board->size;
@@ -212,19 +209,30 @@ void evolveBoardSync (Board* board) {
       if (p && p->synchronous) {
 	overloaded = boardOverloaded (board, x, y);
 	/* attempt each rule in random sequence, stopping when one succeeds */
-	ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* Fisher-Yates shuffle */
+	ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
 	for (n = 0; n < p->nRules; ++n)
 	  ruleOrder[n] = n;
+	remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
 	for (n = 0; n < p->attempts; ++n) {
 	  if (p->shuffle) {
-	    swap = n + (int) (randomDouble() * (double) (p->nRules - n));
-	    rule = &p->rule[ruleOrder[swap]];
+	    rand = randomDouble() * remainingRate;
+	    for (swap = n; 1; ++swap) {
+	      rule = &p->rule[ruleOrder[swap]];
+	      ruleRate = (overloaded ? rule->overloadRate : rule->rate);
+	      rand -= ruleRate;
+	      if (rand < 0. || swap == p->nRules - 1)
+		break;
+	    }
 	    ruleOrder[swap] = ruleOrder[n];
-	  } else
+	    remainingRate -= ruleRate;
+	  } else {
 	    rule = &p->rule[n];
-	  if (randomDouble() < (overloaded ? rule->overloadRate : rule->rate))
-	    if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
-	      break;
+	    ruleRate = (overloaded ? rule->overloadRate : rule->rate);
+	    if (randomDouble() > ruleRate)
+	      continue;
+	  }
+	  if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
+	    break;
 	}
 	SafeFree (ruleOrder);
       }

@@ -23,9 +23,12 @@ typedef struct Particle {
   int synchronous, shuffle, attempts;  /* if synchronous=1, will be updated synchronously vs randomly;
 					  - if shuffle=1, at most #attempts rules will be attempted in random order.
 				       */
+  /* rules */
   int nRules;  /* number of rules */
   StochasticRule* rule;
   double totalRate, totalOverloadRate, asyncFiringRate, firingRate;
+  /* meta-info */
+  int count;  /* number on the board */
   StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
 } Particle;
 

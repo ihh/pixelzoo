@@ -44,7 +44,7 @@ void render(double*);
 int main( int argc, char *argv[] )
 {
   double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updateRate, minUpdateRate, renderRate;
-  int iter = 0;
+  int iter = 0, births = 0, deaths = 0;
 
     init();
 
@@ -66,11 +66,17 @@ int main( int argc, char *argv[] )
             }
         }
 
+	int oldDrifters = board->byType[1]->count;
 	evolveBoard (board, targetUpdatesPerCell, maxTimeInSeconds, &updateRate, &minUpdateRate);
+	int newDrifters = board->byType[1]->count;
+	if (newDrifters > oldDrifters)
+	  births += newDrifters - oldDrifters;
+	else if (oldDrifters > newDrifters)
+	  deaths += oldDrifters - newDrifters;
 	render(&renderRate);
 
 	if (++iter % (int) (1. + 1. / maxTimeInSeconds) == 0)
-	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g updatesPerCell=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board), board->updatesPerCell);
+	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g updatesPerCell=%g birthRate=%g deathRate=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board), board->updatesPerCell, (double) births / board->updatesPerCell, (double) deaths / board->updatesPerCell);
     }
 
     shutDown();
@@ -109,11 +115,14 @@ void init( void )
     //
 
     board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
-"<grammar><particle><name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>"
-"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift><fail>.1</fail></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>ffff0ff9</hexmask><fail>.1</fail></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"
-"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><hexmask>ffff0ff9</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>10002</hexinc></exec></rule>"
-"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><hexmask>ffff0ff9</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>10003</hexinc></exec></rule>"
-"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>89</hexinc><hexmask>ffff0ff9</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>10004</hexinc></exec></rule>"
+				  "<grammar><particle>"
+				  //"<sync/><shuffle/>"
+"<name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>"
+"<rule><rate>.01</rate><test><loc><x>1</x></loc><val>0</val></test><exec><src></src><dest><x>1</x></dest></exec></rule>"
+"<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>ff9</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"
+"<rule><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><hexmask>ff9</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>10002</hexinc></exec></rule>"
+"<rule><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><hexmask>ff9</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>10003</hexinc></exec></rule>"
+"<rule><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>89</hexinc><hexmask>ff9</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>10004</hexinc></exec></rule>"
 "</particle></grammar><init><x>" QUOTEME(HALF_BOARD_SIZE) "</x><y>" QUOTEME(HALF_BOARD_SIZE) "</y><type>1</type></init></board></xml>");
 
     /* palette test */
