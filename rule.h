@@ -92,9 +92,13 @@ typedef struct RuleOperation {
    an overloaded firing rate (the firing rate that will be used when the board is too full)
  */
 
-/* first define the size of the condition & operation blocks */
-#define NumRuleConditions 6
-#define NumRuleOperations 6
+/* first define the size of the condition & operation blocks
+   These sizes are chosen to allow the following models
+   (async, NumRuleConditions=6, NumRuleOperations=6)   RNA duplex diffusion with four connected neighbors per basepair unit
+   (sync,  NumRuleConditions=8, NumRuleOperations=1)   Conway's Life
+ */
+#define NumRuleConditions 8  /* minimum for Conway's Life */
+#define NumRuleOperations 6  /* minimum for RNA diffusion model */
 
 /* now the rule struct itself */
 typedef struct StochasticRule {
