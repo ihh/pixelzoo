@@ -19,12 +19,14 @@ Board* newBoard (int size) {
   }
   board->syncQuad = newQuadTree (size);
   board->asyncQuad = newQuadTree (size);
+  board->syncQuadCopy = newQuadTree (size);
   board->syncParticles = 0;
   board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
   for (x = 0; x <= board->syncQuad->K; ++x)
     board->overloadThreshold[x] = 1.;
   board->updatesPerCell = 0.;
   board->syncUpdates = 0;
+  board->syncState = SyncDone;
 
   initializePalette (&board->palette);
 
@@ -35,6 +37,7 @@ void deleteBoard (Board* board) {
   unsigned long t;
   int x;
   SafeFree(board->overloadThreshold);
+  deleteQuadTree (board->syncQuadCopy);
   deleteQuadTree (board->syncQuad);
   deleteQuadTree (board->asyncQuad);
   for (x = 0; x < board->size; ++x) {
@@ -192,55 +195,56 @@ void evolveBoardCell (Board* board, int x, int y) {
   }
 }
 
-void evolveBoardSync (Board* board) {
+void evolveBoardCellSync (Board* board, int x, int y) {
   Particle* p;
-  int x, y, size, n, swap, overloaded, *ruleOrder;
+  int n, swap, overloaded, *ruleOrder;
   double rand, remainingRate, ruleRate;
-  State *cellCol, *syncCol;
   StochasticRule* rule;
-  QuadTree* syncQuadCopy;
-  size = board->size;
-  /* copy board */
-  for (x = 0; x < size; ++x)
-    memcpy ((void*) board->sync[x], (void*) board->cell[x], size * sizeof(State));
-  syncQuadCopy = copyQuadTree (board->syncQuad);
-  /* do updates */
-  while (topQuadRate (syncQuadCopy) > 0.) {
-    sampleQuadLeaf (syncQuadCopy, &x, &y);
-    updateQuadTree (syncQuadCopy, x, y, 0.);
-    p = readBoardParticle (board, x, y);
-    if (p && p->synchronous) {
-      overloaded = boardOverloaded (board, x, y);
-      /* attempt each rule in random sequence, stopping when one succeeds */
-      ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
-      for (n = 0; n < p->nRules; ++n)
-	ruleOrder[n] = n;
-      remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
-      for (n = 0; n < p->attempts; ++n) {
-	if (p->shuffle) {
-	  rand = randomDouble() * remainingRate;
-	  for (swap = n; 1; ++swap) {
-	    rule = &p->rule[ruleOrder[swap]];
-	    ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-	    rand -= ruleRate;
-	    if (rand < 0. || swap == p->nRules - 1)
-	      break;
-	  }
-	  ruleOrder[swap] = ruleOrder[n];
-	  remainingRate -= ruleRate;
-	} else {
-	  rule = &p->rule[n];
+  /* do an update */
+  p = readBoardParticle (board, x, y);
+  if (p && p->synchronous) {
+    overloaded = boardOverloaded (board, x, y);
+    /* attempt each rule in random sequence, stopping when one succeeds */
+    ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
+    for (n = 0; n < p->nRules; ++n)
+      ruleOrder[n] = n;
+    remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
+    for (n = 0; n < p->attempts; ++n) {
+      if (p->shuffle) {
+	rand = randomDouble() * remainingRate;
+	for (swap = n; 1; ++swap) {
+	  rule = &p->rule[ruleOrder[swap]];
 	  ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-	  if (randomDouble() > ruleRate)
-	    continue;
+	  rand -= ruleRate;
+	  if (rand < 0. || swap == p->nRules - 1)
+	    break;
 	}
-	if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
-	  break;
+	ruleOrder[swap] = ruleOrder[n];
+	remainingRate -= ruleRate;
+      } else {
+	rule = &p->rule[n];
+	ruleRate = (overloaded ? rule->overloadRate : rule->rate);
+	if (randomDouble() > ruleRate)
+	  continue;
       }
-      SafeFree (ruleOrder);
+      if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
+	break;
     }
+    SafeFree (ruleOrder);
   }
-  deleteQuadTree (syncQuadCopy);
+}
+
+void freezeBoard (Board* board) {
+  int x;
+  for (x = 0; x < board->size; ++x)
+    memcpy ((void*) board->sync[x], (void*) board->cell[x], board->size * sizeof(State));
+  copyQuadTree (board->syncQuad, board->syncQuadCopy);
+}
+
+void syncBoard (Board* board) {
+  int x, y, size;
+  State *cellCol, *syncCol;
+  size = board->size;
   /* update only the cells that changed */
   for (x = 0; x < size; ++x) {
     cellCol = board->cell[x];
@@ -282,58 +286,105 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedTime, effectiveUpdatesPerCell;
+  double effectiveUpdates, targetUpdates, elapsedClockTime, boardTimeNow, idealBoardTimeToBeginNextSync;
   clock_t start, now;
-  /* start the clock */
+  targetUpdates = targetUpdatesPerCell * boardCells(board);
+  /* start the clocks */
   start = clock();
   actualUpdates = 0;
-  /* handle stochastic updates */
-  effectiveUpdates = elapsedTime = effectiveUpdatesPerCell = 0.;
-  targetUpdates = targetUpdatesPerCell * boardCells(board);
+  effectiveUpdates = elapsedClockTime = 0.;
+  /* main loop */
   while (1) {
     /* check if realtime clock deadline reached */
     now = clock();
-    elapsedTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    if (elapsedTime > maxTimeInSeconds)
+    elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
+    if (elapsedClockTime > maxTimeInSeconds)
       break;
-    /* handle outstanding synchronous updates */
-    while (board->syncUpdates < (int) board->updatesPerCell) {
-      actualUpdates += board->syncParticles;
-      effectiveUpdates += board->syncParticles;
-      ++board->syncUpdates;
-      evolveBoardSync (board);
-    }
     /* check if target update count reached */
     if (effectiveUpdates >= targetUpdates) {
       effectiveUpdates = targetUpdates;
       break;
     }
-    /* check if async quad tree empty */
-    if (topQuadRate(board->asyncQuad) == 0.) {
-      effectiveUpdates += boardAsyncParticles(board);
-      continue;
-    }
-    /* handle stochastic updates */
-    /* estimate expected number of rejected moves per accepted move as follows:
-       rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p = rejectProb
-                  = (1-p) * p * d/dp \sum_{n=0}^{\infty} p^n
-                  = (1-p) * p * d/dp 1/(1-p)
-                  = (1-p) * p * 1/(1-p)^2
-                  = p / (1-p)
-                  = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
-       accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
-    */
-    effectiveUpdates += 1. / boardAsyncFiringRate(board);
-    ++actualUpdates;
+    /* check sync state */
+    switch (board->syncState) {
+    case SyncDone:
+      /* do we need a sync?
+	 here, "board time" is equivalent to the clock in board->updatesPerCell,
+	 the current increment for which is boardCells(board) * effectiveUpdates.
+	 That is, when we exit the loop, we're gonna do this: board->updatesPerCell += effectiveUpdates / boardCells(board)
+      */
+      idealBoardTimeToBeginNextSync = (board->syncUpdates + 1) - boardSyncFiringRate(board);
+      boardTimeNow = board->updatesPerCell + (effectiveUpdates / boardCells(board));
+      if (boardTimeNow < idealBoardTimeToBeginNextSync) {  /* if condition evaluates true, then a sync is premature */
+	/* no need for a sync, so handle a stochastic update */
 
-    sampleQuadLeaf (board->asyncQuad, &x, &y);
-    evolveBoardCell (board, x, y);
+	/* check if async quad tree empty */
+	if (topQuadRate(board->asyncQuad) <= 0.) {
+	  /* advance the clock enough to begin the next sync */
+	  effectiveUpdates += boardCells(board) * (idealBoardTimeToBeginNextSync - boardTimeNow);
+	  continue;
+	}
+
+	/* estimate expected number of rejected moves per accepted move as follows:
+	   rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p = rejectProb
+	   = (1-p) * p * d/dp \sum_{n=0}^{\infty} p^n
+	   = (1-p) * p * d/dp 1/(1-p)
+	   = (1-p) * p * 1/(1-p)^2
+	   = p / (1-p)
+	   = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
+	   accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
+	*/
+	effectiveUpdates += 1. / boardAsyncFiringRate(board);
+	++actualUpdates;
+
+	sampleQuadLeaf (board->asyncQuad, &x, &y);
+	evolveBoardCell (board, x, y);
+	break;
+      }
+
+      /* it's time for a sync, but do we actually need one? */
+      if (board->syncParticles == 0) {
+	/* no need for sync, so just pretend we had one */
+	++board->syncUpdates;
+	break;
+      }
+
+      /* need a sync, so copy board & fall through to SyncPending... */
+      freezeBoard (board);
+      board->syncState = SyncPending;
+
+      /* sync pending */
+    case SyncPending:
+      /* any more synchronized cells to process? */
+      if (topQuadRate (board->syncQuadCopy) > 0.) {
+	/* randomly process a pending synchronized cell update */
+	sampleQuadLeaf (board->syncQuadCopy, &x, &y);
+	updateQuadTree (board->syncQuadCopy, x, y, 0.);
+
+	evolveBoardCellSync (board, x, y);
+
+	++actualUpdates;
+	++effectiveUpdates;
+
+      } else {
+	/* no more sync cells, so update board */
+	syncBoard (board);
+	++board->syncUpdates;
+	board->syncState = SyncDone;
+      }
+      /* end of SyncPending case */
+      break;
+
+    default:
+      Assert (0, "unknown board sync state");
+      break;
+    }
   }
-  effectiveUpdatesPerCell = effectiveUpdates / boardCells(board);
-  board->updatesPerCell += effectiveUpdatesPerCell;
-  /* calculate rates */
+  /* update board time */
+  board->updatesPerCell += effectiveUpdates / boardCells(board);
+  /* calculate update rates */
   if (updateRate_ret)
-    *updateRate_ret = (elapsedTime > 0) ? (effectiveUpdates / elapsedTime) : 0.;
+    *updateRate_ret = (elapsedClockTime > 0) ? (effectiveUpdates / elapsedClockTime) : 0.;
   if (minUpdateRate_ret)
-    *minUpdateRate_ret = (elapsedTime > 0) ? (actualUpdates / elapsedTime) : 0.;
+    *minUpdateRate_ret = (elapsedClockTime > 0) ? (actualUpdates / elapsedClockTime) : 0.;
 }

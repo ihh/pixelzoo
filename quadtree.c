@@ -4,7 +4,6 @@
 #include "quadtree.h"
 #include "util.h"
 
-#define quadTreeSize(QUAD_PTR) (1 << (QUAD_PTR)->K)
 #define totalQuadTreeNodes(SIZE) ((4 * (SIZE) * (SIZE) - 1) / 3)
 
 int quadNodeIndex (QuadTree* quad, int x, int y, int level);
@@ -30,13 +29,11 @@ QuadTree* newQuadTree (int size) {
   return quad;
 }
 
-QuadTree* copyQuadTree (QuadTree* quad) {
+void copyQuadTree (QuadTree* src, QuadTree* dest) {
   int size;
-  QuadTree *copy;
-  size = quadTreeSize (quad);
-  copy = newQuadTree (size);
-  memcpy (copy->quadRate, quad->quadRate, totalQuadTreeNodes(size) * sizeof(double));
-  return copy;
+  Assert (src->K == dest->K, "QuadTree sizes don't match");
+  size = quadTreeSize (src);
+  memcpy (dest->quadRate, src->quadRate, totalQuadTreeNodes(size) * sizeof(double));
 }
 
 void deleteQuadTree (QuadTree* quad) {

@@ -11,14 +11,17 @@ typedef struct QuadTree {
 
 QuadTree* newQuadTree (int size);
 void deleteQuadTree (QuadTree* quad);
-QuadTree* copyQuadTree (QuadTree* quad);
+void copyQuadTree (QuadTree* src, QuadTree* dest);
 double readQuadTree (QuadTree* quad, int x, int y);
 void updateQuadTree (QuadTree* quad, int x, int y, double val);
 void sampleQuadLeaf (QuadTree* quad, int* x_ret, int* y_ret);
 double topQuadRate (QuadTree* quad);
 double getQuadRate (QuadTree* quad, int x, int y, int level);
 
+/* macro for size */
+#define quadTreeSize(QUAD_PTR) (1 << (QUAD_PTR)->K)
+
 /* macro to get the number of cells at a particular quad level */
-#define quadCells(QUAD,LEVEL) (1 << (((QUAD)->K - LEVEL) << 1))
+#define quadCells(QUAD_PTR,LEVEL) (1 << ((LEVEL) << 1))
 
 #endif /* QUADTREE_INCLUDED */

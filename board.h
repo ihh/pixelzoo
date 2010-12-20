@@ -7,10 +7,11 @@
 #include "util.h"
 
 typedef struct Board {
+  enum BoardSyncState { SyncPending, SyncDone } syncState;
   Particle** byType;  /* Type t; byType[t] */
   int size;
   State **cell, **sync;   /* int x, y; cell[x][y] */
-  QuadTree *asyncQuad, *syncQuad;  /* private: asyncQuad = stochastic update rates, syncQuad = sync update rates */
+  QuadTree *asyncQuad, *syncQuad, *syncQuadCopy;  /* private: asyncQuad = stochastic update rates, syncQuad = sync update rates */
   int syncParticles;  /* number of synchronous particles currently on the board */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
@@ -74,6 +75,9 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 int boardOverloaded (Board* board, int x, int y);
 
 void evolveBoardCell (Board* board, int x, int y);
-void evolveBoardSync (Board* board);
+void evolveBoardCellSync (Board* board, int x, int y);
+
+void freezeBoard (Board* board);
+void syncBoard (Board* board);
 
 #endif /* BOARD_INCLUDED */
