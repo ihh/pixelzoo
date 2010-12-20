@@ -19,14 +19,14 @@ Board* newBoard (int size) {
   }
   board->syncQuad = newQuadTree (size);
   board->asyncQuad = newQuadTree (size);
-  board->syncQuadCopy = newQuadTree (size);
+  board->syncUpdateQuad = newQuadTree (size);
   board->syncParticles = 0;
+  board->syncProportionAfterLastSync = 0.;
   board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
   for (x = 0; x <= board->syncQuad->K; ++x)
     board->overloadThreshold[x] = 1.;
   board->updatesPerCell = 0.;
   board->syncUpdates = 0;
-  board->syncState = SyncDone;
 
   initializePalette (&board->palette);
 
@@ -37,7 +37,7 @@ void deleteBoard (Board* board) {
   unsigned long t;
   int x;
   SafeFree(board->overloadThreshold);
-  deleteQuadTree (board->syncQuadCopy);
+  deleteQuadTree (board->syncUpdateQuad);
   deleteQuadTree (board->syncQuad);
   deleteQuadTree (board->asyncQuad);
   for (x = 0; x < board->size; ++x) {
@@ -68,11 +68,11 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   }
   /* update cell array & quad trees */
   if (p == NULL) {
-    board->cell[x][y] = (t == EmptyType) ? state : EmptyState;  /* handle the EmptyType specially */
+    board->cell[x][y] = board->sync[x][y] = (t == EmptyType) ? state : EmptyState;  /* handle the EmptyType specially */
     updateQuadTree (board->asyncQuad, x, y, 0.);
     updateQuadTree (board->syncQuad, x, y, 0.);
   } else {
-    board->cell[x][y] = state;
+    board->cell[x][y] = board->sync[x][y] = state;
     updateQuadTree (board->asyncQuad, x, y, p->asyncFiringRate);
     updateQuadTree (board->syncQuad, x, y, p->syncFiringRate);
     /* update new count */
@@ -234,13 +234,6 @@ void evolveBoardCellSync (Board* board, int x, int y) {
   }
 }
 
-void freezeBoard (Board* board) {
-  int x;
-  for (x = 0; x < board->size; ++x)
-    memcpy ((void*) board->sync[x], (void*) board->cell[x], board->size * sizeof(State));
-  copyQuadTree (board->syncQuad, board->syncQuadCopy);
-}
-
 void syncBoard (Board* board) {
   int x, y, size;
   State *cellCol, *syncCol;
@@ -253,6 +246,9 @@ void syncBoard (Board* board) {
       if (syncCol[y] != cellCol[y])
 	writeBoardStateUnguarded (board, x, y, syncCol[y]);
   }
+  /* freeze the update queue */
+  copyQuadTree (board->syncQuad, board->syncUpdateQuad);
+  board->syncProportionAfterLastSync = boardSyncFiringRateProportion(board);
 }
 
 int boardOverloaded (Board* board, int x, int y) {
@@ -286,99 +282,77 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedClockTime, boardTimeNow, idealBoardTimeToBeginNextSync;
+  double effectiveUpdates, targetUpdates, elapsedClockTime, syncProportion;
   clock_t start, now;
-  targetUpdates = targetUpdatesPerCell * boardCells(board);
+
   /* start the clocks */
   start = clock();
   actualUpdates = 0;
   effectiveUpdates = elapsedClockTime = 0.;
+  targetUpdates = targetUpdatesPerCell * boardCells(board);
+
   /* main loop */
   while (1) {
+
     /* check if realtime clock deadline reached */
     now = clock();
     elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
     if (elapsedClockTime > maxTimeInSeconds)
       break;
+
     /* check if target update count reached */
     if (effectiveUpdates >= targetUpdates) {
       effectiveUpdates = targetUpdates;
       break;
     }
-    /* check sync state */
-    switch (board->syncState) {
-    case SyncDone:
-      /* do we need a sync?
-	 here, "board time" is equivalent to the clock in board->updatesPerCell,
-	 the current increment for which is boardCells(board) * effectiveUpdates.
-	 That is, when we exit the loop, we're gonna do this: board->updatesPerCell += effectiveUpdates / boardCells(board)
-      */
-      idealBoardTimeToBeginNextSync = (board->syncUpdates + 1) - boardSyncFiringRate(board);
-      boardTimeNow = board->updatesPerCell + (effectiveUpdates / boardCells(board));
-      if (boardTimeNow < idealBoardTimeToBeginNextSync) {  /* if condition evaluates true, then a sync is premature */
-	/* no need for a sync, so handle a stochastic update */
 
-	/* check if async quad tree empty */
-	if (topQuadRate(board->asyncQuad) <= 0.) {
-	  /* advance the clock enough to begin the next sync */
-	  effectiveUpdates += boardCells(board) * (idealBoardTimeToBeginNextSync - boardTimeNow);
-	  continue;
-	}
+    /* randomly do an asynchronous update, or process a synchronous one from the queue.
+       We aim to do one actual update (nearly) every time we go through this loop,
+       spending time on async/sync cells that is proportionate to their representation on the board.
+       However, every single "actual" async update corresponds to an "effective" number of async updates N, where N>=1
+       (due to empty space, low-firing rules, etc.)
+       Thus, whenever we do an actual async update, we update the board clocks accordingly.
+     */
 
-	/* estimate expected number of rejected moves per accepted move as follows:
-	   rejections = \sum_{n=0}^{\infty} n*(p^n)*(1-p)   where p = rejectProb
-	   = (1-p) * p * d/dp \sum_{n=0}^{\infty} p^n
-	   = (1-p) * p * d/dp 1/(1-p)
-	   = (1-p) * p * 1/(1-p)^2
-	   = p / (1-p)
-	   = (1-q) / q   where q = acceptProb = topQuadRate/boardCells
-	   accepted + rejected = 1 + (1-q)/q = 1/q = boardCells/topQuadRate
-	*/
-	effectiveUpdates += 1. / boardAsyncFiringRate(board);
-	++actualUpdates;
+    /* first update the clocks */
+    if (boardAsyncParticles(board) > 0)
+      if (boardAsyncFiringRate(board))
+	effectiveUpdates += (double) boardAsyncParticles(board) / boardAsyncFiringRate(board);  /* update board clock to count one accepted (sync or async) + rejected async */
+      else
+	effectiveUpdates += 1 + boardAsyncParticles(board);  /* update board clock to count one sync, and multiple implicitly rejected async */
+    else
+      ++effectiveUpdates;  /* update board clock to count one accepted sync */
 
-	sampleQuadLeaf (board->asyncQuad, &x, &y);
-	evolveBoardCell (board, x, y);
-	break;
-      }
+    /* now decide, sync or async? */
+    syncProportion = (boardSyncFiringRateProportion(board) + board->syncProportionAfterLastSync) / 2.;
+    if (randomDouble() < syncProportion) {
 
-      /* it's time for a sync, but do we actually need one? */
-      if (board->syncParticles == 0) {
-	/* no need for sync, so just pretend we had one */
-	++board->syncUpdates;
-	break;
-      }
+      /* sync */
+      if (topQuadRate (board->syncUpdateQuad) > 0.) {  /* any more synchronized cells on the queue? */
 
-      /* need a sync, so copy board & fall through to SyncPending... */
-      freezeBoard (board);
-      board->syncState = SyncPending;
-
-      /* sync pending */
-    case SyncPending:
-      /* any more synchronized cells to process? */
-      if (topQuadRate (board->syncQuadCopy) > 0.) {
 	/* randomly process a pending synchronized cell update */
-	sampleQuadLeaf (board->syncQuadCopy, &x, &y);
-	updateQuadTree (board->syncQuadCopy, x, y, 0.);
+	sampleQuadLeaf (board->syncUpdateQuad, &x, &y);
+	updateQuadTree (board->syncUpdateQuad, x, y, 0.);
 
 	evolveBoardCellSync (board, x, y);
-
 	++actualUpdates;
-	++effectiveUpdates;
 
       } else {
-	/* no more sync cells, so update board */
+	/* no more sync cells on queue, so update board */
 	syncBoard (board);
 	++board->syncUpdates;
-	board->syncState = SyncDone;
       }
-      /* end of SyncPending case */
-      break;
 
-    default:
-      Assert (0, "unknown board sync state");
-      break;
+    } else {
+      /* async */
+      if (topQuadRate(board->asyncQuad) > 0.) {  /* any asynchronous cells on the queue? */
+	/* evolve a cell */
+	sampleQuadLeaf (board->asyncQuad, &x, &y);
+	evolveBoardCell (board, x, y);
+	++actualUpdates;
+      }
     }
+
   }
   /* update board time */
   board->updatesPerCell += effectiveUpdates / boardCells(board);

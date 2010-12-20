@@ -116,7 +116,7 @@ void init( void )
 
     board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
 				  "<grammar><particle>"
-				  "<sync/><shuffle/>"
+				  //"<sync/><shuffle/>"
 "<name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>"
 "<rule><rate>.01</rate><test><loc><x>1</x></loc><val>0</val></test><exec><src></src><dest><x>1</x></dest></exec></rule>"
 "<rule><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>ff9</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"

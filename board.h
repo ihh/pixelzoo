@@ -7,12 +7,12 @@
 #include "util.h"
 
 typedef struct Board {
-  enum BoardSyncState { SyncPending, SyncDone } syncState;
   Particle** byType;  /* Type t; byType[t] */
   int size;
   State **cell, **sync;   /* int x, y; cell[x][y] */
-  QuadTree *asyncQuad, *syncQuad, *syncQuadCopy;  /* private: asyncQuad = stochastic update rates, syncQuad = sync update rates */
-  int syncParticles;  /* number of synchronous particles currently on the board */
+  QuadTree *asyncQuad, *syncQuad, *syncUpdateQuad;  /* asyncQuad = stochastic update rates AND queue, syncQuad = sync update rates, syncUpdateQuad = sync update queue */
+  int syncParticles;  /* number of synchronous particles on the board */
+  double syncProportionAfterLastSync;  /* value of boardSyncFiringRateProportion(board) right after last sync; used for smoothing */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
@@ -36,9 +36,10 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 #define boardCells(BOARD_PTR) (((double) (BOARD_PTR)->size) * ((double) (BOARD_PTR)->size))
 
 /* board firing rate = mean rate at which rules are firing. ranges from 0 (empty) to 1 (full) */
-#define boardFiringRate(BOARD_PTR) ((topQuadRate((BOARD_PTR)->syncQuad) + topQuadRate((BOARD_PTR)->asyncQuad)) / boardCells(BOARD_PTR))
+#define boardFiringRate(BOARD_PTR) (boardAsyncFiringRate(BOARD_PTR) + boardSyncFiringRate(BOARD_PTR))
 #define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->asyncQuad) / boardCells(BOARD_PTR))
 #define boardSyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->syncQuad) / boardCells(BOARD_PTR))
+#define boardSyncFiringRateProportion(BOARD_PTR) (boardSyncFiringRate(BOARD_PTR) / boardFiringRate(BOARD_PTR))
 #define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) \
   ((getQuadRate((BOARD_PTR)->syncQuad,X,Y,LEVEL) + getQuadRate((BOARD_PTR)->asyncQuad,X,Y,LEVEL)) / (double) quadCells((BOARD_PTR)->syncQuad,LEVEL))
 #define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
