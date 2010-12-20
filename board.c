@@ -115,12 +115,23 @@ Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
 }
 
 void addParticleToBoard (Particle* p, Board* board) {
-  int r;
+  int r, n, m;
+  StochasticRule *rule;
   board->byType[p->type] = p;
   p->totalRate = p->totalOverloadRate = 0.;
   for (r = 0; r < p->nRules; ++r) {
-    p->totalRate += p->rule[r].rate;
-    p->totalOverloadRate += p->rule[r].overloadRate;
+    rule = &p->rule[r];
+    p->totalRate += rule->rate;
+    p->totalOverloadRate += rule->overloadRate;
+    for (n = 1; n < NumRuleOperations; ++n)
+      for (m = n; m > 0; --m) {
+	if (rule->op[n].src.x == rule->op[n-m].dest.x
+	    && rule->op[n].src.y == rule->op[n-m].dest.y)
+	  rule->cumulativeOpSrcIndex[n] = m;
+	if (rule->op[n].dest.x == rule->op[n-m].dest.x
+	    && rule->op[n].dest.y == rule->op[n-m].dest.y)
+	  rule->cumulativeOpDestIndex[n] = m;
+      }
   }
   p->firingRate = MIN (p->totalRate, 1.);
   p->asyncFiringRate = p->synchronous ? 0. : p->firingRate;
@@ -147,19 +158,19 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int over
   return 0;
 }
 
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
-  int xSrc, ySrc;
+State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State oldSrcState, State oldDestState, int overloaded, BoardWriteFunction write) {
+  State newState;
   if (randomDouble() < (overloaded ? op->overloadFailProb : op->failProb))
-    return;
-  xSrc = x + op->src.x;
-  ySrc = y + op->src.y;
+    return oldDestState;
   x += op->dest.x;
   y += op->dest.y;
-  if (onBoard(board,x,y))  /* only check once */
-    if (op->mask)  /* a bit wasteful, but op->mask==0 otherwise does not function as an identity operation for synchronized particles */
-      (*write) (board, x, y, 
-		(readBoardStateUnguarded(board,x,y) & (StateMask ^ (op->mask << op->leftShift)))
-		| (((((readBoardState(board,xSrc,ySrc) & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift));
+  if (onBoard(board,x,y)) {  /* only check once */
+    newState = (oldDestState & (StateMask ^ (op->mask << op->leftShift)))
+      | (((((oldSrcState & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift);
+    (*write) (board, x, y, newState);
+    return newState;
+  }
+  return oldDestState;
 }
 
 void evolveBoardCell (Board* board, int x, int y) {
@@ -204,7 +215,7 @@ void evolveBoardSync (Board* board) {
 	ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* Fisher-Yates shuffle */
 	for (n = 0; n < p->nRules; ++n)
 	  ruleOrder[n] = n;
-	for (n = 0; n < p->nRules; ++n) {
+	for (n = 0; n < p->attempts; ++n) {
 	  if (p->shuffle) {
 	    swap = n + (int) (randomDouble() * (double) (p->nRules - n));
 	    rule = &p->rule[ruleOrder[swap]];
@@ -237,12 +248,23 @@ int boardOverloaded (Board* board, int x, int y) {
 }
 
 int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
-  int k;
-  for (k = 0; k < NumRuleConditions; ++k)
-    if (!testRuleCondition (&rule->cond[k], board, x, y, overloaded))
+  int k, mSrc, mDest;
+  RuleCondition *cond;
+  RuleOperation *op;
+  State intermediateState[NumRuleOperations], oldSrcState, oldDestState;
+  for (k = 0; k < NumRuleConditions; ++k) {
+    cond = &rule->cond[k];
+    if (!testRuleCondition (cond, board, x, y, overloaded))
       return 0;
-  for (k = 0; k < NumRuleOperations; ++k)
-    execRuleOperation (&rule->op[k], board, x, y, overloaded, write);
+  }
+  for (k = 0; k < NumRuleOperations; ++k) {
+    op = &rule->op[k];
+    mSrc = rule->cumulativeOpSrcIndex[k];
+    mDest = rule->cumulativeOpDestIndex[k];
+    oldSrcState = mSrc ? intermediateState[k - mSrc] : getRuleOperationOldSrcState(op,board,x,y);
+    oldDestState = mDest ? intermediateState[k - mDest] : getRuleOperationOldDestState(op,board,x,y);
+    intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, write);
+  }
   return 1;
 }
 
@@ -295,7 +317,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     sampleQuadLeaf (board->async, &x, &y);
     evolveBoardCell (board, x, y);
   }
-effectiveUpdatesPerCell = effectiveUpdates / boardCells(board);
+  effectiveUpdatesPerCell = effectiveUpdates / boardCells(board);
   board->updatesPerCell += effectiveUpdatesPerCell;
   /* calculate rates */
   if (updateRate_ret)

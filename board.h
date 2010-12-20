@@ -65,7 +65,9 @@ typedef void (*BoardWriteFunction) (Board*, int, int, State);
 
 /* Other helper methods */
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
-void execRuleOperation (RuleOperation* op, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
+State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State oldSrcState, State oldDestState, int overloaded, BoardWriteFunction write);  /* returns the newly-written State */
+#define getRuleOperationOldSrcState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->src.x,Y+(OP_PTR)->src.y)
+#define getRuleOperationOldDestState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->dest.x,Y+(OP_PTR)->dest.y)
 
 int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
 int boardOverloaded (Board* board, int x, int y);

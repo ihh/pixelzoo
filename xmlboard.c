@@ -10,6 +10,7 @@
 #define XMLBOARD_PARTICLE "particle"
 #define XMLBOARD_SYNC     "sync"
 #define XMLBOARD_SHUFFLE  "shuffle"
+#define XMLBOARD_ATTEMPTS "attempts"
 #define XMLBOARD_DECTYPE  "type"
 #define XMLBOARD_HEXTYPE  "hextype"
 #define XMLBOARD_NAME     "name"
@@ -140,8 +141,10 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
   if (CHILD(node,SYNC)) {
     p->synchronous = 1;
-    if (CHILD(node,SHUFFLE))
+    if (CHILD(node,SHUFFLE)) {
       p->shuffle = 1;
+      p->attempts = OPTCHILDINT(node,ATTEMPTS,nRules);
+    }
   }
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)

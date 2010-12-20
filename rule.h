@@ -106,6 +106,9 @@ typedef struct StochasticRule {
   RuleOperation op[NumRuleOperations];
   double rate, overloadRate;
   StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
+  /* the following indices are only important if write operations are being buffered for a synchronous update */
+  unsigned char cumulativeOpSrcIndex[NumRuleOperations];  /* if cumulativeOpSrcIndex[n]=m and m>0, then rule #n uses as its "src" the "dest" value of rule #m-n */
+  unsigned char cumulativeOpDestIndex[NumRuleOperations];  /* if cumulativeOpDestIndex[n]=m and m>0, then rule #n uses as its unmasked "dest" the "dest" value of rule #m-n */
 } StochasticRule;
 
 #endif /* RULE_INCLUDED */
