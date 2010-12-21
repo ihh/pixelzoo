@@ -20,9 +20,8 @@ typedef struct Particle {
   Type type;
   char* name;
   ColorRule colorRule[NumColorRules];  /* results of ColorRule applications are summed */
-  int synchronous, shuffle, attempts;  /* if synchronous=1, will be updated synchronously vs randomly;
-					  - if shuffle=1, at most #attempts rules will be attempted in random order.
-				       */
+  int synchronous, syncPeriod, shuffle, attempts;  /* if synchronous=1, will be updated synchronously vs randomly, every syncPeriod synchronous cycles;
+						      - if shuffle=1, at most #attempts rules will be attempted in random order. */
   /* rules */
   int nRules;  /* number of rules */
   StochasticRule* rule;

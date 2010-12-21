@@ -132,8 +132,9 @@ void addParticleToBoard (Particle* p, Board* board) {
 	  rule->cumulativeOpDestIndex[n] = m;
       }
   }
-  p->syncFiringRate = p->synchronous ? 1. : 0.;
   p->asyncFiringRate = p->synchronous ? 0. : MIN (p->totalRate, 1.);
+  p->syncFiringRate = p->synchronous ? 1. : 0.;
+  p->syncPeriod = p->synchronous ? MAX ((int) (1./p->totalRate), 1) : 0;
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded) {
@@ -202,7 +203,7 @@ void evolveBoardCellSync (Board* board, int x, int y) {
   StochasticRule* rule;
   /* do an update */
   p = readBoardParticle (board, x, y);
-  if (p && p->synchronous) {
+  if (p && p->synchronous && board->syncUpdates % p->syncPeriod == 0) {
     overloaded = boardOverloaded (board, x, y);
     /* attempt each rule in random sequence, stopping when one succeeds */
     ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
@@ -239,13 +240,14 @@ void syncBoard (Board* board) {
   State *cellCol, *syncCol;
   size = board->size;
   /* update only the cells that changed */
-  for (x = 0; x < size; ++x) {
-    cellCol = board->cell[x];
-    syncCol = board->sync[x];
-    for (y = 0; y < size; ++y)
-      if (syncCol[y] != cellCol[y])
-	writeBoardStateUnguarded (board, x, y, syncCol[y]);
-  }
+  if (board->syncFiringRateAfterLastSync > 0.)
+    for (x = 0; x < size; ++x) {
+      cellCol = board->cell[x];
+      syncCol = board->sync[x];
+      for (y = 0; y < size; ++y)
+	if (syncCol[y] != cellCol[y])
+	  writeBoardStateUnguarded (board, x, y, syncCol[y]);
+    }
   /* freeze the update queue */
   copyQuadTree (board->syncQuad, board->syncUpdateQuad);
   board->syncFiringRateAfterLastSync = boardSyncFiringRate(board);
@@ -306,6 +308,13 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
       break;
     }
 
+    /* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
+    while (topQuadRate (board->syncUpdateQuad) <= 0.
+	&& board->syncUpdates < (int) (board->updatesPerCell + effectiveUpdates / boardCells(board))) {
+      syncBoard (board);
+      ++board->syncUpdates;
+    }
+
     /* randomly do an asynchronous update, or process a synchronous one from the queue.
        We aim to do one actual update (nearly) every time we go through this loop,
        spending time on async/sync cells that is proportionate to their representation on the board.
@@ -314,38 +323,31 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
        Thus, whenever we do an actual async update, we update the board clocks accordingly.
      */
 
-    /* calculate the sync & async rates */
-    syncRate = (boardSyncFiringRate(board) + board->syncFiringRateAfterLastSync) / 2.;
+    /* calculate the sync & async firing rates */
+    syncRate = board->syncFiringRateAfterLastSync;
     asyncRate = boardAsyncFiringRate(board);
     totalRate = syncRate + asyncRate;
 
-    /* update the clocks */
+    /* update the board clock */
     if (totalRate > 0)
       effectiveUpdates += (double) 1. / totalRate;
     else
       effectiveUpdates += boardCells(board);
 
     /* decide: sync or async? */
-    if (randomDouble() * totalRate < syncRate) {
+    if (topQuadRate (board->syncUpdateQuad) > 0.
+	&& randomDouble() * totalRate < syncRate) {
 
-      /* sync */
-      if (topQuadRate (board->syncUpdateQuad) > 0.) {  /* any more synchronized cells on the queue? */
+      /* randomly process a pending synchronized cell update */
+      sampleQuadLeaf (board->syncUpdateQuad, &x, &y);
+      updateQuadTree (board->syncUpdateQuad, x, y, 0.);
 
-	/* randomly process a pending synchronized cell update */
-	sampleQuadLeaf (board->syncUpdateQuad, &x, &y);
-	updateQuadTree (board->syncUpdateQuad, x, y, 0.);
-
-	evolveBoardCellSync (board, x, y);
-	++actualUpdates;
-
-      } else {
-	/* no more sync cells on queue, so flush all synchronized updates to board */
-	syncBoard (board);
-	++board->syncUpdates;
-      }
+      evolveBoardCellSync (board, x, y);
+      ++actualUpdates;
 
     } else {
       /* async */
+
       if (topQuadRate(board->asyncQuad) > 0.) {  /* any asynchronous cells on the queue? */
 	/* evolve a random cell */
 	sampleQuadLeaf (board->asyncQuad, &x, &y);
