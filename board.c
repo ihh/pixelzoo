@@ -284,14 +284,15 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
   int actualUpdates, x, y;
-  double effectiveUpdates, targetUpdates, elapsedClockTime, syncRate, asyncRate, totalRate;
+  double currentBoardTime, targetBoardTime, elapsedClockTime, asyncEventRate, timeToTarget, timeToNextBoardSync, pendingSyncEventsToService, timeToNextSyncEvent, timeToNextAsyncEvent;
   clock_t start, now;
 
   /* start the clocks */
   start = clock();
   actualUpdates = 0;
-  effectiveUpdates = elapsedClockTime = 0.;
-  targetUpdates = targetUpdatesPerCell * boardCells(board);
+  elapsedClockTime = 0.;
+  currentBoardTime = board->updatesPerCell;
+  targetBoardTime = currentBoardTime + targetUpdatesPerCell;
 
   /* main loop */
   while (1) {
@@ -302,66 +303,64 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     if (elapsedClockTime > maxTimeInSeconds)
       break;
 
-    /* check if target update count reached */
-    if (effectiveUpdates >= targetUpdates) {
-      effectiveUpdates = targetUpdates;
+    /* check if board clock target reached */
+    timeToTarget = targetBoardTime - currentBoardTime;
+    if (timeToTarget <= 0) {
+      currentBoardTime = targetBoardTime;
       break;
     }
 
     /* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
-    while (topQuadRate (board->syncUpdateQuad) <= 0.
-	&& board->syncUpdates < (int) (board->updatesPerCell + effectiveUpdates / boardCells(board))) {
-      syncBoard (board);
-      ++board->syncUpdates;
+    while (1) {
+      timeToNextBoardSync = (double) board->syncUpdates + 1. - currentBoardTime;
+      pendingSyncEventsToService = topQuadRate (board->syncUpdateQuad);
+      if (pendingSyncEventsToService <= 0 && timeToNextBoardSync <= 0) {
+	syncBoard (board);
+	board->syncUpdates = (int) currentBoardTime;
+      } else
+	break;
     }
 
-    /* randomly do an asynchronous update, or process a synchronous one from the queue.
-       We aim to do one actual update (nearly) every time we go through this loop,
-       spending time on async/sync cells that is proportionate to their representation on the board.
-       However, every single "actual" async update corresponds to an "effective" number of async updates N, where N>=1
-       (due to empty space, low-firing rules, etc.)
-       Thus, whenever we do an actual async update, we update the board clocks accordingly.
-     */
+    /* calculate the time to the next sync event & the next async event */
+    timeToNextSyncEvent = pendingSyncEventsToService > 0 ? (MAX(timeToNextBoardSync,0.) / pendingSyncEventsToService) : (2*timeToTarget);
 
-    /* calculate the sync & async firing rates */
-    syncRate = board->syncFiringRateAfterLastSync;
-    asyncRate = boardAsyncFiringRate(board);
-    totalRate = syncRate + asyncRate;
-
-    /* update the board clock */
-    if (totalRate > 0)
-      effectiveUpdates += (double) 1. / totalRate;
-    else
-      effectiveUpdates += boardCells(board);
+    asyncEventRate = topQuadRate (board->asyncQuad);
+    timeToNextAsyncEvent = asyncEventRate > 0 ? (randomExp() / asyncEventRate) : (2*timeToTarget);
 
     /* decide: sync or async? */
-    if (topQuadRate (board->syncUpdateQuad) > 0.
-	&& randomDouble() * totalRate < syncRate) {
+    if (timeToNextSyncEvent < MIN(timeToNextAsyncEvent,timeToTarget)) {
 
-      /* randomly process a pending synchronized cell update */
+      currentBoardTime += timeToNextSyncEvent;
+
+      /* sync: randomly process a pending synchronized cell update */
       sampleQuadLeaf (board->syncUpdateQuad, &x, &y);
       updateQuadTree (board->syncUpdateQuad, x, y, 0.);
 
       evolveBoardCellSync (board, x, y);
       ++actualUpdates;
 
-    } else {
-      /* async */
+    } else if (timeToNextAsyncEvent < timeToTarget) {
 
-      if (topQuadRate(board->asyncQuad) > 0.) {  /* any asynchronous cells on the queue? */
-	/* evolve a random cell */
-	sampleQuadLeaf (board->asyncQuad, &x, &y);
-	evolveBoardCell (board, x, y);
-	++actualUpdates;
-      }
+      currentBoardTime += timeToNextAsyncEvent;
+
+      /* async: evolve a random cell */
+      sampleQuadLeaf (board->asyncQuad, &x, &y);
+
+      evolveBoardCell (board, x, y);
+      ++actualUpdates;
+
+    } else {
+      /* reached target time */
+      currentBoardTime = targetBoardTime;
+      break;  /* this 'break' is actually redundant */
     }
 
   }
-  /* update board time */
-  board->updatesPerCell += effectiveUpdates / boardCells(board);
   /* calculate update rates */
   if (updateRate_ret)
-    *updateRate_ret = (elapsedClockTime > 0) ? (effectiveUpdates / elapsedClockTime) : 0.;
+    *updateRate_ret = (elapsedClockTime > 0) ? ((currentBoardTime - board->updatesPerCell) / elapsedClockTime) : 0.;
   if (minUpdateRate_ret)
     *minUpdateRate_ret = (elapsedClockTime > 0) ? (actualUpdates / elapsedClockTime) : 0.;
+  /* update board time */
+  board->updatesPerCell = currentBoardTime;
 }

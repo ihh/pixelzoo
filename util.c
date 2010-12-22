@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "util.h"
 
 double randomDouble() {
   return (double) rand() / (double) RAND_MAX;
+}
+
+double randomExp() {
+  double r;
+  r = randomDouble();
+  return r > 0. ? -log(r) : 0.;
 }
 
 void Assert(int assertion, char* error) {

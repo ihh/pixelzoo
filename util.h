@@ -26,8 +26,11 @@ void IntDelete(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
 
-/* randomDouble() returns a random number between 0 and 1 */
+/* randomDouble() returns a uniformly-distributed random number between 0 and 1 */
 double randomDouble();
+
+/* randomExp() returns an exponentially-distributed random number between 0 and infinity */
+double randomExp();
 
 /* MIN, MAX, ABS */
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
