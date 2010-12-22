@@ -21,7 +21,7 @@ Board* newBoard (int size) {
   board->asyncQuad = newQuadTree (size);
   board->syncUpdateQuad = newQuadTree (size);
   board->syncParticles = 0;
-  board->syncFiringRateAfterLastSync = 0.;
+  board->lastSyncParticles = 0.;
   board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
   for (x = 0; x <= board->syncQuad->K; ++x)
     board->overloadThreshold[x] = 1.;
@@ -134,7 +134,8 @@ void addParticleToBoard (Particle* p, Board* board) {
   }
   p->asyncFiringRate = p->synchronous ? 0. : MIN (p->totalRate, 1.);
   p->syncFiringRate = p->synchronous ? 1. : 0.;
-  p->syncPeriod = p->synchronous ? MAX ((int) (1./p->totalRate), 1) : 0;
+  if (p->synchronous && p->syncPeriod == 0)
+    p->syncPeriod = MAX ((int) (1./p->totalRate), 1);  /* guess a sensible default for period */
 }
 
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded) {
@@ -198,19 +199,19 @@ void evolveBoardCell (Board* board, int x, int y) {
 
 void evolveBoardCellSync (Board* board, int x, int y) {
   Particle* p;
-  int n, swap, overloaded, *ruleOrder;
+  int n, wins, fails, swap, overloaded, *ruleOrder;
   double rand, remainingRate, ruleRate;
   StochasticRule* rule;
   /* do an update */
   p = readBoardParticle (board, x, y);
-  if (p && p->synchronous && board->syncUpdates % p->syncPeriod == 0) {
+  if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
     overloaded = boardOverloaded (board, x, y);
     /* attempt each rule in random sequence, stopping when one succeeds */
     ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
     for (n = 0; n < p->nRules; ++n)
       ruleOrder[n] = n;
     remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
-    for (n = 0; n < p->attempts; ++n) {
+    for (n = wins = fails = 0; n < p->nRules && wins < p->successes && fails < p->failures; ++n) {
       if (p->shuffle) {
 	rand = randomDouble() * remainingRate;
 	for (swap = n; 1; ++swap) {
@@ -229,7 +230,9 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	  continue;
       }
       if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
-	break;
+	++wins;
+      else
+	++fails;
     }
     SafeFree (ruleOrder);
   }
@@ -240,7 +243,7 @@ void syncBoard (Board* board) {
   State *cellCol, *syncCol;
   size = board->size;
   /* update only the cells that changed */
-  if (board->syncFiringRateAfterLastSync > 0.)
+  if (board->lastSyncParticles > 0)
     for (x = 0; x < size; ++x) {
       cellCol = board->cell[x];
       syncCol = board->sync[x];
@@ -250,7 +253,7 @@ void syncBoard (Board* board) {
     }
   /* freeze the update queue */
   copyQuadTree (board->syncQuad, board->syncUpdateQuad);
-  board->syncFiringRateAfterLastSync = boardSyncFiringRate(board);
+  board->lastSyncParticles = board->syncParticles;
 }
 
 int boardOverloaded (Board* board, int x, int y) {
@@ -283,7 +286,7 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
 }
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
-  int actualUpdates, x, y;
+  int actualUpdates, x, y, currentBoardSyncs;
   double currentBoardTime, targetBoardTime, elapsedClockTime, asyncEventRate, timeToTarget, timeToNextBoardSync, pendingSyncEventsToService, timeToNextSyncEvent, timeToNextAsyncEvent;
   clock_t start, now;
 
@@ -291,6 +294,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
   start = clock();
   actualUpdates = 0;
   elapsedClockTime = 0.;
+  currentBoardSyncs = board->syncUpdates;
   currentBoardTime = board->updatesPerCell;
   targetBoardTime = currentBoardTime + targetUpdatesPerCell;
 
@@ -312,11 +316,11 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 
     /* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
     while (1) {
-      timeToNextBoardSync = (double) board->syncUpdates + 1. - currentBoardTime;
+      timeToNextBoardSync = (double) currentBoardSyncs + 1. - currentBoardTime;
       pendingSyncEventsToService = topQuadRate (board->syncUpdateQuad);
       if (pendingSyncEventsToService <= 0 && timeToNextBoardSync <= 0) {
 	syncBoard (board);
-	board->syncUpdates = (int) currentBoardTime;
+	currentBoardSyncs = (int) currentBoardTime;
       } else
 	break;
     }
@@ -363,4 +367,5 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
     *minUpdateRate_ret = (elapsedClockTime > 0) ? (actualUpdates / elapsedClockTime) : 0.;
   /* update board time */
   board->updatesPerCell = currentBoardTime;
+  board->syncUpdates = currentBoardSyncs;
 }

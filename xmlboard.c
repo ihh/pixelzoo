@@ -10,7 +10,10 @@
 #define XMLBOARD_PARTICLE "particle"
 #define XMLBOARD_SYNC     "sync"
 #define XMLBOARD_SHUFFLE  "shuffle"
-#define XMLBOARD_ATTEMPTS "attempts"
+#define XMLBOARD_FAILS    "failures"
+#define XMLBOARD_SUCCEEDS "successes"
+#define XMLBOARD_PERIOD   "period"
+#define XMLBOARD_PHASE    "phase"
 #define XMLBOARD_DECTYPE  "type"
 #define XMLBOARD_HEXTYPE  "hextype"
 #define XMLBOARD_NAME     "name"
@@ -141,10 +144,12 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
   if (CHILD(node,SYNC)) {
     p->synchronous = 1;
-    if (CHILD(node,SHUFFLE)) {
+    if (CHILD(node,SHUFFLE))
       p->shuffle = 1;
-      p->attempts = OPTCHILDINT(node,ATTEMPTS,nRules);
-    }
+    p->failures = OPTCHILDINT(node,FAILS,nRules);
+    p->successes = OPTCHILDINT(node,SUCCEEDS,1);
+    p->syncPeriod = OPTCHILDINT(node,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
+    p->syncPhase = OPTCHILDINT(node,PHASE,0);
   }
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
