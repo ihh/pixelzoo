@@ -55,7 +55,7 @@ typedef struct LocalOffset {
 typedef struct RuleCondition {
   LocalOffset loc;
   State mask, rhs;
-  enum ConditionalOpcode { EQ, NEQ, GT, LT, GEQ, LEQ, TRUE, FALSE } opcode;
+  enum ConditionalOpcode { TestEQ, TestNEQ, TestGT, TestLT, TestGEQ, TestLEQ, TestTRUE, TestFALSE } opcode;
   double ignoreProb, overloadIgnoreProb;  /* when board (or local region) is overloaded, overloadIgnoreProb will be used instead of ignoreProb */
 } RuleCondition;
 

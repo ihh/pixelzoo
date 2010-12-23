@@ -147,14 +147,14 @@ int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int over
   lhs = readBoardState(board,x,y) & cond->mask;
   rhs = cond->rhs;
   switch (cond->opcode) {
-  case EQ: return lhs == rhs;
-  case NEQ: return lhs != rhs;
-  case GT: return lhs > rhs;
-  case LT: return lhs < rhs;
-  case GEQ: return lhs >= rhs;
-  case LEQ: return lhs <= rhs;
-  case TRUE: return 1;
-  case FALSE: default: break;
+  case TestEQ: return lhs == rhs;
+  case TestNEQ: return lhs != rhs;
+  case TestGT: return lhs > rhs;
+  case TestLT: return lhs < rhs;
+  case TestGEQ: return lhs >= rhs;
+  case TestLEQ: return lhs <= rhs;
+  case TestTRUE: return 1;
+  case TestFALSE: default: break;
   }
   return 0;
 }

@@ -210,17 +210,17 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
     cond->rhs = cond->rhs << rshift;
   }
 
-  cond->opcode = EQ;
+  cond->opcode = TestEQ;
   opcode = (const char*) ATTR(node,OP);
   if (opcode) {
-    if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = EQ;
-    else if (strcmp(opcode,"!=")==0) cond->opcode = NEQ;
-    else if (strcmp(opcode,">")==0) cond->opcode = GT;
-    else if (strcmp(opcode,"<")==0) cond->opcode = LT;
-    else if (strcmp(opcode,">=")==0) cond->opcode = GEQ;
-    else if (strcmp(opcode,"<=")==0) cond->opcode = LEQ;
-    else if (strcmp(opcode,"1")==0) cond->opcode = TRUE;
-    else if (strcmp(opcode,"0")==0) cond->opcode = FALSE;
+    if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = TestEQ;
+    else if (strcmp(opcode,"!=")==0) cond->opcode = TestNEQ;
+    else if (strcmp(opcode,">")==0) cond->opcode = TestGT;
+    else if (strcmp(opcode,"<")==0) cond->opcode = TestLT;
+    else if (strcmp(opcode,">=")==0) cond->opcode = TestGEQ;
+    else if (strcmp(opcode,"<=")==0) cond->opcode = TestLEQ;
+    else if (strcmp(opcode,"1")==0) cond->opcode = TestTRUE;
+    else if (strcmp(opcode,"0")==0) cond->opcode = TestFALSE;
   }
 }
 
