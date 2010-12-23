@@ -80,7 +80,6 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
     if (p->synchronous)
       ++board->syncParticles;
   }
-  /* TODO: check for BoardWatcher's, call appropriate ParticleNotifyFunction(s) */
 }
 
 void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state) {
@@ -190,7 +189,7 @@ void evolveBoardCell (Board* board, int x, int y) {
     for (n = 0; n < p->nRules; ++n) {
       rule = &p->rule[n];
       if ((rand -= (overloaded ? rule->overloadRate : rule->rate)) <= 0) {
-	(void) attemptRule (rule, board, x, y, overloaded, writeBoardStateUnguarded);
+	(void) attemptRule (p, rule, board, x, y, overloaded, writeBoardStateUnguarded);
 	return;
       }
     }
@@ -229,7 +228,7 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	if (randomDouble() > ruleRate)
 	  continue;
       }
-      if (attemptRule (rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
+      if (attemptRule (p, rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
 	++wins;
       else
 	++fails;
@@ -264,7 +263,7 @@ int boardOverloaded (Board* board, int x, int y) {
   return 0;
 }
 
-int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
+int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
   int k, mSrc, mDest;
   RuleCondition *cond;
   RuleOperation *op;
@@ -274,6 +273,10 @@ int attemptRule (StochasticRule* rule, Board* board, int x, int y, int overloade
     if (!testRuleCondition (cond, board, x, y, overloaded))
       return 0;
   }
+  /* TODO: check for BoardWatcher's:
+     if watchers != NULL, track changes in an XYMap (via stealth BoardWriteFunction that actually casts the Board* to XYMap* ? or just make BoardWriteFunction take void* ?), and alert the BoardWatcher's before actually doing the write.
+     if watchers == NULL, proceed as usual.
+  */
   for (k = 0; k < NumRuleOperations; ++k) {
     op = &rule->op[k];
     mSrc = rule->cumulativeOpSrcIndex[k];

@@ -11,7 +11,6 @@ Tool* newTool (char *name, int size) {
   int x, y;
   tool = SafeMalloc (sizeof(Tool));
   tool->name = StringCopy (name);
-  tool->npcName = tool->npcStage = NULL;
 
   tool->brushIntensity = newQuadTree (size);
   for (x = 0; x < size; ++x)
@@ -31,8 +30,6 @@ Tool* newTool (char *name, int size) {
 }
 
 void deleteTool (Tool *tool) {
-  SafeFreeOrNull (tool->npcName);
-  SafeFreeOrNull (tool->npcStage);
   deleteQuadTree (tool->brushIntensity);
   if (tool->brushState)
     deleteXYMap (tool->brushState);
@@ -47,7 +44,6 @@ void useTool (Tool *tool, Board *board, int x, int y, double duration) {
   State maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
-  Assert (tool->npcName == NULL, "TODO: implement NPC tools!");
   particles = (int) (.5 + tool->sprayRate * duration);
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
     sampleQuadLeaf (tool->brushIntensity, &xOffset, &yOffset);
