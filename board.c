@@ -11,12 +11,9 @@ Board* newBoard (int size) {
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->size = size;
-  board->cell = SafeMalloc (size * sizeof(State*));
-  board->sync = SafeMalloc (size * sizeof(State*));
-  for (x = 0; x < size; ++x) {
-    board->cell[x] = SafeCalloc (size, sizeof(State));
-    board->sync[x] = SafeCalloc (size, sizeof(State));
-  }
+  board->cell = SafeCalloc (size * size, sizeof(State));
+  board->sync = SafeCalloc (size * size, sizeof(State));
+  board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
   board->syncQuad = newQuadTree (size);
   board->asyncQuad = newQuadTree (size);
   board->syncUpdateQuad = newQuadTree (size);
@@ -35,17 +32,13 @@ Board* newBoard (int size) {
 
 void deleteBoard (Board* board) {
   unsigned long t;
-  int x;
   SafeFree(board->overloadThreshold);
   deleteQuadTree (board->syncUpdateQuad);
   deleteQuadTree (board->syncQuad);
   deleteQuadTree (board->asyncQuad);
-  for (x = 0; x < board->size; ++x) {
-    SafeFree(board->cell[x]);
-    SafeFree(board->sync[x]);
-  }
   SafeFree(board->cell);
   SafeFree(board->sync);
+  SafeFree(board->syncWrite);
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
       deleteParticle (board->byType[(Type) t]);
@@ -54,6 +47,7 @@ void deleteBoard (Board* board) {
 }
 
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
+  int i;
   Type t;
   Particle *p, *pOld;
   /* get new Type & Particle, and old Particle */
@@ -67,12 +61,13 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
       --board->syncParticles;
   }
   /* update cell array & quad trees */
+  i = boardIndex(board->size,x,y);
   if (p == NULL) {
-    board->cell[x][y] = board->sync[x][y] = (t == EmptyType) ? state : EmptyState;  /* handle the EmptyType specially */
+    if (t != EmptyType)  /* handle the EmptyType specially: allow it to keep its color state */
+      state = EmptyState;
     updateQuadTree (board->asyncQuad, x, y, 0.);
     updateQuadTree (board->syncQuad, x, y, 0.);
   } else {
-    board->cell[x][y] = board->sync[x][y] = state;
     updateQuadTree (board->asyncQuad, x, y, p->asyncFiringRate);
     updateQuadTree (board->syncQuad, x, y, p->syncFiringRate);
     /* update new count */
@@ -80,10 +75,16 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
     if (p->synchronous)
       ++board->syncParticles;
   }
+  board->cell[i] = state;
+  if (!board->syncWrite[i])
+    board->sync[i] = state;
 }
 
 void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state) {
-  board->sync[x][y] = state;
+  int i;
+  i = boardIndex(board->size,x,y);
+  board->sync[i] = state;
+  board->syncWrite[i] = 1;
 }
 
 PaletteIndex readBoardColor (Board* board, int x, int y) {
@@ -238,18 +239,23 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 }
 
 void syncBoard (Board* board) {
-  int x, y, size;
-  State *cellCol, *syncCol;
+  int x, y, size, i;
+  State *cell, *sync;
+  unsigned char *syncWrite;
+  cell = board->cell;
+  sync = board->sync;
+  syncWrite = board->syncWrite;
   size = board->size;
   /* update only the cells that changed */
   if (board->lastSyncParticles > 0)
-    for (x = 0; x < size; ++x) {
-      cellCol = board->cell[x];
-      syncCol = board->sync[x];
-      for (y = 0; y < size; ++y)
-	if (syncCol[y] != cellCol[y])
-	  writeBoardStateUnguarded (board, x, y, syncCol[y]);
-    }
+    for (x = 0; x < size; ++x)
+      for (y = 0; y < size; ++y) {
+	i = boardIndex(size,x,y);
+	if (syncWrite[i]) {
+	  writeBoardStateUnguarded (board, x, y, sync[i]);
+	  syncWrite[i] = 0;
+	}
+      }
   /* freeze the update queue */
   copyQuadTree (board->syncQuad, board->syncUpdateQuad);
   board->lastSyncParticles = board->syncParticles;

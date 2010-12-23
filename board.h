@@ -8,14 +8,15 @@
 
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
-  int size;
-  State **cell, **sync;   /* cell[x][y] is the current state at (x,y); sync[x][y] is the state pending the next synchronized update */
+  int size;  /* board is a square, this is the length of each side in cells */
+  State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */
+  unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y)] is true if sync[boardIndex(size,x,y)] should be written to cell[boardIndex(size,x,y)] at next board sync */
   QuadTree *asyncQuad, *syncQuad, *syncUpdateQuad;  /* asyncQuad = stochastic update rates AND queue, syncQuad = sync update rates, syncUpdateQuad = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
-  Palette palette;
+  Palette palette;  /* cell color scheme used by this Board */
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
-  int syncUpdates;  /* number of synchronous update cycles. This should always be equal to (int) updatesPerCell */
+  int syncUpdates;  /* number of board synchronizations. This is kept equal to (int) updatesPerCell */
 } Board;
 
 /* public methods */
@@ -53,7 +54,8 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 /* Board accessors.
    The "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
 */
-#define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[X][Y]
+#define boardIndex(SIZE,X,Y) ((X) + (SIZE) * (Y))
+#define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[boardIndex((BOARD_PTR)->size,X,Y)]
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);
 
 /* Board accessor for synchronous updates.
