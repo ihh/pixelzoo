@@ -280,7 +280,7 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
       return 0;
   }
   /* TODO: check for BoardWatcher's:
-     if watchers != NULL, track changes in an XYMap (via stealth BoardWriteFunction that actually casts the Board* to XYMap* ? or just make BoardWriteFunction take void* ?), and alert the BoardWatcher's before actually doing the write.
+     if watchers != NULL, track changes in an XYMap (via stealth BoardWriteFunction that actually casts the Board* to XYMap* ? or just make BoardWriteFunction take void* ?), and alert the BoardWatcher's before actually doing the write (allowing them to potentially modify the write).
      if watchers == NULL, proceed as usual.
   */
   for (k = 0; k < NumRuleOperations; ++k) {

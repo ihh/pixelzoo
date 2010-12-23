@@ -9,6 +9,7 @@
 typedef struct BoardWatcher BoardWatcher;
 
 /* only one type of message for rules: the rule has just been triggered.
+   It is possible for the RuleNotifyFunction to modify newState to modify the impact of the rule.
  */
 typedef void (*RuleNotifyFunction) (BoardWatcher *watcher,
 				    Board *board,
@@ -21,7 +22,9 @@ typedef void (*RuleNotifyFunction) (BoardWatcher *watcher,
 				    XYMap *oldState,      /* oldState: record of pre-rule states (map from XYCoord->State) */
 				    XYMap *newState);     /* newState: record of post-rule states (map from XYCoord->State) */
 
-/* Particles can receive several types of message, always sent after the Particle is written */
+/* Particles can receive several types of message, always sent right before the new state is written.
+   It is possible for the ParticleNotifyFunction to modify newState to modify the impact of the rule.
+ */
 typedef void (*ParticleNotifyFunction) (BoardWatcher *watcher,
 					Board *board,
 					Particle *ruleOwner,  /* Particle that owns this rule */

@@ -244,5 +244,5 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
   op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);
-  op->preMask = op->rightShift >= 32 ? 0 : StateMask;
+  op->preMask = op->rightShift >= BitsPerState ? 0 : StateMask;
 }
