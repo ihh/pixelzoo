@@ -56,8 +56,4 @@ void addParticleWatcher (Particle* particle, BoardWatcher* watcher);
 void removeRuleWatcher (StochasticRule* rule, char* name);
 void removeParticleWatcher (Particle* particle, char* name);
 
-/* null notify functions */
-void NullRuleNotify (BoardWatcher *watcher, Board *board, Particle *ruleOwner, StochasticRule *rule, int xOwner, int yOwner, int *ignored, int *failed, XYMap *oldState, XYMap *newState);
-void NullParticleNotify (BoardWatcher *watcher, Board *board, Particle *ruleOwner, StochasticRule *rule, Particle *affected, int xOwner, int yOwner, XYMap *oldState, XYMap *newState);
-
 #endif /* NOTIFY_INCLUDED */
