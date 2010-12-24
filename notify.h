@@ -28,8 +28,4 @@ void deleteCellWatcher (CellWatcher *watcher);
 int registerCellWatcher (Board *board, int x, int y, CellWatcher *watcher);  /* returns 1 if successful, 0 if cell already being watched */
 void unregisterCellWatcher (Board *board, CellWatcher *watcher);  /* unregisters all instances of this watcher on the board */
 
-/* Two types of CellWatcher: ExitPortal and ToolCharger */
-State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
-State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
-
 #endif /* NOTIFY_INCLUDED */
