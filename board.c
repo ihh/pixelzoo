@@ -57,7 +57,7 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   i = boardIndex(board->size,x,y);
   watcher = board->watcher[i];
   if (watcher)
-    state = (*watcher->notify) (watcher, board, x, y, state);
+    state = (*watcher->intercept) (watcher, board, x, y, state);
   /* get new Type & Particle, and old Particle */
   t = StateType(state);
   p = board->byType[t];
