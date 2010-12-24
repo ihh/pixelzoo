@@ -25,13 +25,13 @@ typedef struct Game {
   /* exit */
   Type exitType;  /* if this type's Particle count reaches zero, and entrants==0, then game is lost */
   int exitsToWin;  /* number of exitType's that must still exit the board before the game is won */
-  CellWatcher *exitPortalWatcher;
+  CellWatcher *exitPortalWatcher;  /* (Game*) context */
 
   /* time limit */
   double timeLimit;  /* when board->updatesPerCell exceeds this, game is lost */
 
   /* power-ups */
-  /* TODO: write me (use toolChargerIntercept in "notify.h"; may need a new struct to specify overwrite Type, the Tool, once-only, etc) */
+  /* TODO: write me (use toolChargerIntercept in "notify.h"; context struct specifies overwrite Type & bonus Tool*) */
 
 
 } Game;
