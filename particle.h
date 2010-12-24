@@ -29,7 +29,6 @@ typedef struct Particle {
   double totalRate, totalOverloadRate, asyncFiringRate, syncFiringRate;
   /* meta-info */
   int count;  /* number on the board */
-  StringMap* watchers;  /* BoardWatcher's (keyed by name), or NULL */
 } Particle;
 
 /* constructor/destructor */

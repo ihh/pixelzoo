@@ -13,6 +13,7 @@ Board* newBoard (int size) {
   board->size = size;
   board->cell = SafeCalloc (size * size, sizeof(State));
   board->sync = SafeCalloc (size * size, sizeof(State));
+  board->watcher = SafeCalloc (size * size, sizeof(BoardWatcher*));
   board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
   board->syncQuad = newQuadTree (size);
   board->asyncQuad = newQuadTree (size);
@@ -39,6 +40,7 @@ void deleteBoard (Board* board) {
   SafeFree(board->cell);
   SafeFree(board->sync);
   SafeFree(board->syncWrite);
+  SafeFree(board->watcher);
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
       deleteParticle (board->byType[(Type) t]);
@@ -50,6 +52,12 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   int i;
   Type t;
   Particle *p, *pOld;
+  BoardWatcher *watcher;
+  /* if there's a BoardWatcher watching this cell, allow it to intercept & modify the write */
+  i = boardIndex(board->size,x,y);
+  watcher = board->watcher[i];
+  if (watcher)
+    state = (*watcher->notify) (watcher, board, x, y, state);
   /* get new Type & Particle, and old Particle */
   t = StateType(state);
   p = board->byType[t];
@@ -61,7 +69,6 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
       --board->syncParticles;
   }
   /* update cell array & quad trees */
-  i = boardIndex(board->size,x,y);
   if (p == NULL) {
     if (t != EmptyType)  /* handle the EmptyType specially: allow it to keep its color state */
       state = EmptyState;
@@ -279,10 +286,6 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
     if (!testRuleCondition (cond, board, x, y, overloaded))
       return 0;
   }
-  /* TODO: check for BoardWatcher's:
-     if watchers != NULL, track changes in an XYMap (via stealth BoardWriteFunction that actually casts the Board* to XYMap* ? or just make BoardWriteFunction take void* ?), and alert the BoardWatcher's before actually doing the write (allowing them to potentially modify the write).
-     if watchers == NULL, proceed as usual.
-  */
   for (k = 0; k < NumRuleOperations; ++k) {
     op = &rule->op[k];
     mSrc = rule->cumulativeOpSrcIndex[k];
