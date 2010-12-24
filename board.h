@@ -6,14 +6,14 @@
 #include "quadtree.h"
 #include "util.h"
 
-typedef struct BoardWatcher BoardWatcher;
+typedef struct CellWatcher CellWatcher;
 
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
   int size;  /* board is a square, this is the length of each side in cells */
   State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */
   unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y)] is true if sync[boardIndex(size,x,y)] should be written to cell[boardIndex(size,x,y)] at next board sync */
-  BoardWatcher **watcher;  /* notify[boardIndex(size,x,y)] is pointer to BoardWatcher object that intercepts & potentially modifies writes to cell (x,y) */
+  CellWatcher **watcher;  /* notify[boardIndex(size,x,y)] is pointer to CellWatcher object that intercepts & potentially modifies writes to cell (x,y) */
   QuadTree *asyncQuad, *syncQuad, *syncUpdateQuad;  /* asyncQuad = stochastic update rates AND queue, syncQuad = sync update rates, syncUpdateQuad = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */

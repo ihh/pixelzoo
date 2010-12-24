@@ -7,23 +7,24 @@
 #include "xymap.h"
 
 /* WriteInterceptFunction is called when the rule has just been triggered, but before the new state is written.
-   It is possible for the RuleNotifyFunction to modify newDests to change the impact of the rule.
+   The return value of WriteInterceptFunction is the State that will actually be written.
  */
-typedef State (*WriteInterceptFunction) (BoardWatcher *watcher,
+typedef State (*WriteInterceptFunction) (CellWatcher *watcher,
 					 Board *board,
 					 int x,
 					 int y,
 					 State state);
 
-/* a BoardWatcher is a WriteInterceptFunction and some context */
-struct BoardWatcher {
-  char *name;
-  WriteInterceptFunction intercept;
+/* a CellWatcher is a WriteInterceptFunction and some context */
+struct CellWatcher {
+  WriteInterceptFunction intercept;  /* function that maps intercepted writes to actual writes */
   void *context;   /* pointer to miscellaneous extra context */
+  DestroyFunction contextDestroy;  /* function to free memory associated with context */
 };
 
 /* methods */
-BoardWatcher* newBoardWatcher (char *name, WriteInterceptFunction intercept, void *context);  /* copies 'name' */
-void deleteBoardWatcher (BoardWatcher* watcher);
+CellWatcher* newCellWatcher (WriteInterceptFunction intercept, void *context, DestroyFunction contextDestroy);
+void deleteCellWatcher (CellWatcher *watcher);
+int registerCellWatcher (Board *board, int x, int y, CellWatcher *watcher);  /* returns 1 if successful, 0 if cell already being watched */
 
 #endif /* NOTIFY_INCLUDED */

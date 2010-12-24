@@ -13,7 +13,7 @@ Board* newBoard (int size) {
   board->size = size;
   board->cell = SafeCalloc (size * size, sizeof(State));
   board->sync = SafeCalloc (size * size, sizeof(State));
-  board->watcher = SafeCalloc (size * size, sizeof(BoardWatcher*));
+  board->watcher = SafeCalloc (size * size, sizeof(CellWatcher*));
   board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
   board->syncQuad = newQuadTree (size);
   board->asyncQuad = newQuadTree (size);
@@ -52,8 +52,8 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   int i;
   Type t;
   Particle *p, *pOld;
-  BoardWatcher *watcher;
-  /* if there's a BoardWatcher watching this cell, allow it to intercept & modify the write */
+  CellWatcher *watcher;
+  /* if there's a CellWatcher watching this cell, allow it to intercept & modify the write */
   i = boardIndex(board->size,x,y);
   watcher = board->watcher[i];
   if (watcher)
