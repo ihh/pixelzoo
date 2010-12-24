@@ -61,7 +61,7 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
   /* get new Type & Particle, and old Particle */
   t = StateType(state);
   p = board->byType[t];
-  pOld = readBoardParticleUnguarded(board,x,y);
+  pOld = board->byType[StateType(board->cell[i])];
   /* decrement old count */
   if (pOld) {
     --pOld->count;
