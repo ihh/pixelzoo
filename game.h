@@ -56,9 +56,8 @@ typedef ToolCharger* ToolChargerContext;
 /*
   Game threads (all on timers):
   Judge thread: test win/lose conditions, end game or sleep
-  Evolve thread: if not paused, evolve board, recalculate overload, sleep
+  Evolve thread: if not paused, use current selected tool (if active), recharge inactive tools, evolve board, recalculate overload, sleep
   Redraw thread: redraw board, sleep
-  Tool thread: use current selected tool (if active), recharge inactive tools, sleep
 
   UI events:
   Key press (or toolbar touch): select current tool
