@@ -56,15 +56,17 @@ int main( int argc, char *argv[] )
         return;
     }
 
-    for ( i=0; i<5; ++i ) {
-        printf("Changing value to %d\n", i);
-        global_data = i;
-        SDL_Delay(1000);
+    renderThread = SDL_CreateThread(renderThreadFunc, game);
+    if ( renderThread == NULL ) {
+        fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
+        return;
     }
 
-    printf("Signaling thread to quit\n");
-    global_data = -1;
-    SDL_WaitThread(thread, NULL);
+    judgeThread = SDL_CreateThread(judgeThreadFunc, game);
+    if ( judgeThread == NULL ) {
+        fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
+        return;
+    }
 
     init();
 
