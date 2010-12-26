@@ -46,6 +46,7 @@ int main( int argc, char *argv[] )
   
   sdlGame = newSDLGame();
 
+  // COMMENTED OUT FOR DEBUGGING
   /*
   evolveThread = SDL_CreateThread(evolveThreadFunc, sdlGame->game);
   if ( evolveThread == NULL ) {
@@ -60,7 +61,7 @@ int main( int argc, char *argv[] )
     return 1;
   }
 
-  while( sdlGame->game != NULL && sdlGame->game->gameState != GameQuit )
+  while( sdlGame->game->gameState != GameQuit )
     {
       SDL_Event event;
 
@@ -78,7 +79,8 @@ int main( int argc, char *argv[] )
     }
 
   SDL_WaitThread(renderThread, NULL);
-  SDL_WaitThread(evolveThread, NULL);
+  // COMMENTED OUT FOR DEBUGGING
+  //  SDL_WaitThread(evolveThread, NULL);
 
   deleteSDLGame(sdlGame);
 
@@ -99,7 +101,10 @@ SDLGame* newSDLGame( void )
   // Initialize Game...
   //
 
-  sdlGame->game = NULL;
+  //  sdlGame->game = newGame();
+  sdlGame->game = SafeMalloc (sizeof (Game));
+  sdlGame->game->gameState = GameOn;
+  // COMMENTED OUT FOR DEBUGGING
   /*
   sdlGame->game = newGameFromXmlString("<xml>"
 				       "<game>"
@@ -137,8 +142,9 @@ SDLGame* newSDLGame( void )
 
   atexit( SDL_Quit );
 
-  int size = 128;
+  // COMMENTED OUT FOR DEBUGGING
   //  int size = sdlGame->game->board->size;
+  int size = 128;
   sdlGame->g_screenSurface = SDL_SetVideoMode( size * PIXELS_PER_CELL,
 					       size * PIXELS_PER_CELL,
 					       COLOR_DEPTH, 
@@ -150,6 +156,7 @@ SDLGame* newSDLGame( void )
       exit(1);
     }
 
+  // COMMENTED OUT FOR DEBUGGING
   /* init palette lookup */
   //  for (pal = 0; pal <= PaletteMax; ++pal)
   //    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
@@ -260,6 +267,8 @@ int renderThreadFunc( void *voidSdlGame )
 }
 
 void render(SDLGame* sdlGame) {
+  printf ("rendering\n");
+
   SDL_FillRect( sdlGame->g_screenSurface, NULL, SDL_MapRGB( sdlGame->g_screenSurface->format, 0, 0, 0));
 
   //
@@ -276,6 +285,7 @@ void render(SDLGame* sdlGame) {
   // Plot each cell as a single pixel...
   //
 
+  // COMMENTED OUT FOR DEBUGGING
   /*
   int x, y, i, j;
   int size = sdlGame->game->board->size;
