@@ -24,12 +24,12 @@ typedef struct Game {
   /* entrance */
   XYCoord entrancePos;
   State entryState;
-  int entrants;  /* number of entryState's remaining to place at entrancePos */
+  int totalEntrants, remainingEntrants;  /* number of entryState's to place at entrancePos */
   double entranceRate;
 
   /* exit */
-  Type exitType;  /* if this type's Particle count reaches zero, and entrants==0, then game is lost */
-  int exitsToWin;  /* number of exitType's that must still exit the board; if this reaches zero, the game is won */
+  Type exitType;  /* if this type's Particle count reaches zero, and remainingEntrants==0, then game is lost */
+  int exitsToWin, exitsSoFar;  /* number of exitType's that must still exit the board; if exitsSoFar >= exitsToWin, the game is won */
   CellWatcher *exitPortalWatcher;  /* (Game*) context */
 
   /* time limit */
