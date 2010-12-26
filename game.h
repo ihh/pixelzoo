@@ -54,6 +54,9 @@ struct ToolCharger {
   Tool *tool;
 };
 
+ToolCharger* newToolCharger();
+void deleteToolCharger (void* charger);
+
 typedef Game* ExitPortalContext;
 typedef ToolCharger* ToolChargerContext;
 

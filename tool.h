@@ -31,7 +31,8 @@ typedef struct Tool {
 } Tool;
 
 Tool* newTool (char *name, int size);
-void deleteTool (Tool *tool);
+void deleteTool (void *tool);
+void printTool (void *tool);
 
 void useTool (Tool *tool, Board *board, int x, int y, double duration);
 void rechargeTool (Tool *tool, double duration);

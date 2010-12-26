@@ -14,6 +14,10 @@ void NullDestroyFunction(void*);  /* does nothing */
 void* NullCopyFunction(void*);  /* returns the supplied parameter without doing anything */
 void NullPrintFunction(void*);  /* does nothing */
 
+/* abort functions for when null functions should never be called */
+void AbortDestroyFunction(void*);
+void* AbortCopyFunction(void*);
+
 /* container functions for ints */
 
 /* Functions for ints
@@ -38,6 +42,7 @@ double randomExp();
 #define ABS(X)   ((X) >= 0 ? (X) : -(X))
 
 /* alloc functions */
+void Abort(char* error);
 void Assert(int assertion, char* error);
 void *SafeMalloc(size_t size);
 void *SafeCalloc(size_t count, size_t size);

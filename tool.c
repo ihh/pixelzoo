@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "tool.h"
 #include "util.h"
 #include "stringmap.h"
@@ -29,7 +30,9 @@ Tool* newTool (char *name, int size) {
   return tool;
 }
 
-void deleteTool (Tool *tool) {
+void deleteTool (void *voidTool) {
+  Tool *tool;
+  tool = (Tool*) voidTool;
   deleteQuadTree (tool->brushIntensity);
   if (tool->brushState)
     deleteXYMap (tool->brushState);
@@ -63,4 +66,10 @@ void useTool (Tool *tool, Board *board, int x, int y, double duration) {
 
 void rechargeTool (Tool *tool, double duration) {
     tool->reserve = MIN (tool->reserve + tool->rechargeRate * duration, tool->maxReserve);
+}
+
+void printTool (void *voidTool) {
+  Tool *tool;
+  tool = (Tool*) voidTool;
+  printf ("Tool %s : reserve %g / %g\n", tool->name, tool->reserve, tool->maxReserve);
 }

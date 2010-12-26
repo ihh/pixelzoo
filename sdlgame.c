@@ -97,7 +97,9 @@ SDLGame* newSDLGame( void )
   // Initialize Game...
   //
 
-  sdlGame->game = newGameFromXmlString("<xml><board><size>128</size>"
+  sdlGame->game = newGameFromXmlString("<xml>"
+				       "<game>"
+				       "<board><size>128</size>"
 				       "<grammar>"
 				       "<particle>"
 				       "<sync/><shuffle/>"
@@ -116,12 +118,10 @@ SDLGame* newSDLGame( void )
 				       "<rule><rate>.03</rate><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>20003</hexinc></exec></rule>"
 				       "<rule><rate>.03</rate><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>20004</hexinc></exec></rule>"
 				       "</particle>"
-				       "</grammar><init><x>64</x><y>64</y><type>1</type></init></board></xml>");
+				       "</grammar><init><x>64</x><y>64</y><type>1</type></init></board>"
+				       "</game>"
+				       "</xml>");
 
-
-  /* palette lookup */
-  for (pal = 0; pal <= PaletteMax; ++pal)
-    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -143,6 +143,12 @@ SDLGame* newSDLGame( void )
       exit(1);
     }
 
+  /* init palette lookup */
+  for (pal = 0; pal <= PaletteMax; ++pal)
+    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
+
+
+  /* return */
   return sdlGame;
 }
 

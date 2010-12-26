@@ -14,6 +14,11 @@ double randomExp() {
   return r > 0. ? -log(r) : 0.;
 }
 
+void Abort(char* error) {
+  printf("Abort: %s\n",error);
+  exit(-1);
+}
+
 void Assert(int assertion, char* error) {
   if(!assertion) {
     printf("Assertion Failed: %s\n",error);
@@ -54,6 +59,9 @@ void* NullCopyFunction(void * item) { return item; }
 void NullDestroyFunction(void * junk) { ; }
 void NullPrintFunction(void * junk) { ; }
 
+/* Abort null functions */
+void AbortDestroyFunction(void* junk) { Abort ("Unimplemented destroy function called"); }
+void* AbortCopyFunction(void* junk) { Abort ("Unimplemented copy function called"); return NULL; }
 
 /* Int* functions */
 void* IntNew(int a) {
