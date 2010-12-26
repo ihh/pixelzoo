@@ -12,11 +12,14 @@ typedef struct ToolCharger ToolCharger;
 typedef struct Game {
   /* board */
   Board *board;
+  double updatesPerSecond;  /* rate at which to run the Board */
+  enum GameState { GameOn, GameWon, GameLost, GameQuit } gameState;
 
   /* toolbox */
   List *allTools;     /* all Tool's, including empty/locked */
   Tool *selectedTool;
   XYCoord toolPos;
+  int toolActive;
 
   /* entrance */
   XYCoord entrancePos;
@@ -40,6 +43,7 @@ typedef struct Game {
 /* Game methods */
 Game* newGame();
 void deleteGame (Game *game);
+void updateGameState (Game *game);  /* tests win/lose conditions */
 
 /* Two types of CellWatcher: ExitPortal and ToolCharger */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);

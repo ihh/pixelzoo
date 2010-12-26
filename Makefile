@@ -10,7 +10,7 @@ CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS)
 ANSI        := -ansi
 LIBS        := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
 
-TARGETS := bigtest sdltest test_red_black_tree
+TARGETS := test_red_black_tree sdltest sdlgame
 
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(wildcard *.c)))))
 XFILES  := $(addprefix bin/,$(TARGETS))
