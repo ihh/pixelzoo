@@ -2,63 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "xmlboard.h"
-
-/* XML node names */
-#define XMLBOARD_BOARD    "board"
-#define XMLBOARD_SIZE     "size"
-#define XMLBOARD_GRAMMAR  "grammar"
-#define XMLBOARD_PARTICLE "particle"
-#define XMLBOARD_SYNC     "sync"
-#define XMLBOARD_SHUFFLE  "shuffle"
-#define XMLBOARD_FAILS    "failures"
-#define XMLBOARD_SUCCEEDS "successes"
-#define XMLBOARD_PERIOD   "period"
-#define XMLBOARD_PHASE    "phase"
-#define XMLBOARD_DECTYPE  "type"
-#define XMLBOARD_HEXTYPE  "hextype"
-#define XMLBOARD_NAME     "name"
-#define XMLBOARD_RULE     "rule"
-#define XMLBOARD_RATE     "rate"
-#define XMLBOARD_OVERLOAD "overload"
-#define XMLBOARD_TEST     "test"
-#define XMLBOARD_LOC      "loc"
-#define XMLBOARD_X        "x"
-#define XMLBOARD_Y        "y"
-#define XMLBOARD_DECMASK  "mask"
-#define XMLBOARD_HEXMASK  "hexmask"
-#define XMLBOARD_DECVAL   "val"
-#define XMLBOARD_HEXVAL   "hexval"
-#define XMLBOARD_OP       "op"
-#define XMLBOARD_IGNORE   "ignore"
-#define XMLBOARD_EXEC     "exec"
-#define XMLBOARD_SRC      "src"
-#define XMLBOARD_DEST     "dest"
-#define XMLBOARD_DECINC   "inc"
-#define XMLBOARD_HEXINC   "hexinc"
-#define XMLBOARD_LSHIFT   "lshift"
-#define XMLBOARD_RSHIFT   "rshift"
-#define XMLBOARD_FAIL     "fail"
-#define XMLBOARD_COLOR    "color"
-#define XMLBOARD_DECMUL   "mul"
-#define XMLBOARD_HEXMUL   "hexmul"
-#define XMLBOARD_INIT     "init"
-
-/* private macros for matching XML nodes */
-#define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLBOARD_ ## KEYWORD) == 0)
-#define CHILD(NODE,KEYWORD) getNodeByName ((NODE)->children, XMLBOARD_ ## KEYWORD)
-#define CHILDSTRING(NODE,KEYWORD) getNodeContentOrComplain (CHILD(NODE,KEYWORD), XMLBOARD_ ## KEYWORD)
-#define CHILDINT(NODE,KEYWORD) atoi((const char*) CHILDSTRING(NODE,KEYWORD))
-#define CHILDFLOAT(NODE,KEYWORD) atof((const char*) CHILDSTRING(NODE,KEYWORD))
-#define CHILDHEX(NODE,KEYWORD) strtoul((const char*) CHILDSTRING(NODE,KEYWORD),0,16)
-#define OPTCHILDINT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDINT(NODE,KEYWORD) : (DEFAULT))
-#define OPTCHILDFLOAT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDFLOAT(NODE,KEYWORD) : (DEFAULT))
-#define OPTCHILDHEX(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDHEX(NODE,KEYWORD) : (DEFAULT))
-#define ATTR(NODE,KEYWORD) getAttrByName (NODE, XMLBOARD_ ## KEYWORD)
+#include "xmlutil.h"
 
 /* prototypes for private builder methods */
-xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
-xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag);
-xmlChar* getAttrByName (xmlNode* node, char* name);
 Particle* newParticleFromXmlNode (xmlNode* node);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node);
@@ -111,27 +57,6 @@ Board* newBoardFromXmlString (const char* string) {
   return board;
 }
 
-/* private builder methods */
-xmlNode* getNodeByName (xmlNode* node, char* name) {
-  for (; node; node = node->next)
-    if (node->type == XML_ELEMENT_NODE && strcmp ((const char*) node->name, name) == 0)
-      return node;
-  return (xmlNode*) NULL;
-}
-
-xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
-  if (!node)
-    fprintf (stderr, "Missing tag: %s\n", tag);
-  return node->children->content;
-}
-
-xmlChar* getAttrByName (xmlNode* node, char* name) {
-  xmlAttr* attr;
-  for (attr = node->properties; attr; attr = attr->next)
-    if (strcmp ((const char*) attr->name, name) == 0)
-      return attr->children->content;
-  return (xmlChar*) NULL;
-}
 
 Particle* newParticleFromXmlNode (xmlNode* node) {
   Particle* p;
