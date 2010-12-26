@@ -30,6 +30,7 @@ int main(int argc, char *argv[]);
 SDLGame* newSDLGame(void);
 void deleteSDLGame(SDLGame*);
 void render(SDLGame*);
+void renderAndDelay(SDLGame*);
 void renderPixel(SDL_Surface*, int x, int y, Uint32 color);
 
 int evolveThreadFunc ( void *voidGame );
@@ -42,27 +43,31 @@ int renderThreadFunc( void *voidSdlGame );
 int main( int argc, char *argv[] )
 {
   SDLGame *sdlGame = NULL;
-  SDL_Thread *evolveThread, *renderThread;
+  SDL_Thread *evolveThread;
+  // COMMENTED OUT FOR DEBUGGING - BECAUSE IT SEGFAULTS
+  //  SDL_Thread *renderThread;
   
   sdlGame = newSDLGame();
 
-  // COMMENTED OUT FOR DEBUGGING
-  /*
   evolveThread = SDL_CreateThread(evolveThreadFunc, sdlGame->game);
   if ( evolveThread == NULL ) {
     fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
     return 1;
   }
-  */
 
+  // COMMENTED OUT FOR DEBUGGING BECAUSE IT SEGFAULTS
+  /*
   renderThread = SDL_CreateThread(renderThreadFunc, sdlGame);
   if ( renderThread == NULL ) {
     fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
     return 1;
   }
+  */
 
   while( sdlGame->game->gameState != GameQuit )
     {
+      renderAndDelay (sdlGame);  // DEBUG - BECAUSE IT SEGFAULTS IF IN A SEPARATE THREAD
+
       SDL_Event event;
 
       while( SDL_PollEvent( &event ) )
@@ -78,9 +83,9 @@ int main( int argc, char *argv[] )
         }
     }
 
-  SDL_WaitThread(renderThread, NULL);
-  // COMMENTED OUT FOR DEBUGGING
-  //  SDL_WaitThread(evolveThread, NULL);
+  // COMMENTED OUT FOR DEBUGGING BECAUSE IT SEGFAULTS
+  //  SDL_WaitThread(renderThread, NULL);
+  SDL_WaitThread(evolveThread, NULL);
 
   deleteSDLGame(sdlGame);
 
@@ -101,11 +106,6 @@ SDLGame* newSDLGame( void )
   // Initialize Game...
   //
 
-  //  sdlGame->game = newGame();
-  sdlGame->game = SafeMalloc (sizeof (Game));
-  sdlGame->game->gameState = GameOn;
-  // COMMENTED OUT FOR DEBUGGING
-  /*
   sdlGame->game = newGameFromXmlString("<xml>"
 				       "<game>"
 				       "<board><size>128</size>"
@@ -130,8 +130,6 @@ SDLGame* newSDLGame( void )
 				       "</grammar><init><x>64</x><y>64</y><type>1</type></init></board>"
 				       "</game>"
 				       "</xml>");
-  */
-
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -142,9 +140,7 @@ SDLGame* newSDLGame( void )
 
   atexit( SDL_Quit );
 
-  // COMMENTED OUT FOR DEBUGGING
-  //  int size = sdlGame->game->board->size;
-  int size = 128;
+  int size = sdlGame->game->board->size;
   sdlGame->g_screenSurface = SDL_SetVideoMode( size * PIXELS_PER_CELL,
 					       size * PIXELS_PER_CELL,
 					       COLOR_DEPTH, 
@@ -156,10 +152,9 @@ SDLGame* newSDLGame( void )
       exit(1);
     }
 
-  // COMMENTED OUT FOR DEBUGGING
   /* init palette lookup */
-  //  for (pal = 0; pal <= PaletteMax; ++pal)
-  //    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
+  for (pal = 0; pal <= PaletteMax; ++pal)
+    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
 
 
   /* return */
@@ -173,9 +168,7 @@ SDLGame* newSDLGame( void )
 void deleteSDLGame( SDLGame* sdlGame )
 {
   SDL_FreeSurface( sdlGame->g_screenSurface );
-  // COMMENTED OUT FOR DEBUGGING
-  //  deleteGame(sdlGame->game);
-  SafeFree (sdlGame->game);  // DEBUG
+  deleteGame(sdlGame->game);
   SafeFree (sdlGame);
 }
 
@@ -254,23 +247,26 @@ int evolveThreadFunc(void *voidGame)
 int renderThreadFunc( void *voidSdlGame )
 {
   SDLGame* sdlGame = (SDLGame*) voidSdlGame;
-  double renderPeriodInSeconds = 1. / RENDER_RATE, elapsedClockTime;
 
   while ( sdlGame->game->gameState != GameQuit ) {
-    clock_t start, now;
-    start = clock();
-    render (sdlGame);
-    now = clock();
-    elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    SDL_Delay(1000 * MAX(0.,renderPeriodInSeconds - elapsedClockTime));
+    renderAndDelay (sdlGame);
   }
+
   printf("Render thread quitting\n");
   return(0);
 }
 
-void render(SDLGame* sdlGame) {
-  printf ("rendering\n");
+void renderAndDelay(SDLGame* sdlGame) {
+  double renderPeriodInSeconds = 1. / RENDER_RATE, elapsedClockTime;
+  clock_t start, now;
+  start = clock();
+  render (sdlGame);
+  now = clock();
+  elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
+  SDL_Delay(1000 * MAX(0.,renderPeriodInSeconds - elapsedClockTime));
+}
 
+void render(SDLGame* sdlGame) {
   SDL_FillRect( sdlGame->g_screenSurface, NULL, SDL_MapRGB( sdlGame->g_screenSurface->format, 0, 0, 0));
 
   //
@@ -287,8 +283,6 @@ void render(SDLGame* sdlGame) {
   // Plot each cell as a single pixel...
   //
 
-  // COMMENTED OUT FOR DEBUGGING
-  /*
   int x, y, i, j;
   int size = sdlGame->game->board->size;
   for (x = 0; x < size; ++x)
@@ -298,7 +292,6 @@ void render(SDLGame* sdlGame) {
 	for (j = 0; j < PIXELS_PER_CELL; ++j)
 	  renderPixel( sdlGame->g_screenSurface, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, sdlGame->sdlColor[pal] );
     }
-  */
 
   //
   // Unlock the screen's surface...
