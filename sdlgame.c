@@ -173,7 +173,9 @@ SDLGame* newSDLGame( void )
 void deleteSDLGame( SDLGame* sdlGame )
 {
   SDL_FreeSurface( sdlGame->g_screenSurface );
-  deleteGame(sdlGame->game);
+  // COMMENTED OUT FOR DEBUGGING
+  //  deleteGame(sdlGame->game);
+  SafeFree (sdlGame->game);  // DEBUG
   SafeFree (sdlGame);
 }
 
