@@ -30,7 +30,7 @@ int main(int argc, char *argv[]);
 SDLGame* newSDLGame(void);
 void deleteSDLGame(SDLGame*);
 void render(SDLGame*);
-void renderPixel(SDLGame*, int x, int y, PaletteIndex pal);
+void renderPixel(SDL_Surface*, int x, int y, Uint32 color);
 
 int evolveThreadFunc ( void *voidGame );
 int renderThreadFunc( void *voidSdlGame );
@@ -46,11 +46,13 @@ int main( int argc, char *argv[] )
   
   sdlGame = newSDLGame();
 
+  /*
   evolveThread = SDL_CreateThread(evolveThreadFunc, sdlGame->game);
   if ( evolveThread == NULL ) {
     fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
     return 1;
   }
+  */
 
   renderThread = SDL_CreateThread(renderThreadFunc, sdlGame);
   if ( renderThread == NULL ) {
@@ -58,7 +60,7 @@ int main( int argc, char *argv[] )
     return 1;
   }
 
-  while( sdlGame->game->gameState != GameQuit )
+  while( sdlGame->game != NULL && sdlGame->game->gameState != GameQuit )
     {
       SDL_Event event;
 
@@ -97,6 +99,8 @@ SDLGame* newSDLGame( void )
   // Initialize Game...
   //
 
+  sdlGame->game = NULL;
+  /*
   sdlGame->game = newGameFromXmlString("<xml>"
 				       "<game>"
 				       "<board><size>128</size>"
@@ -121,6 +125,7 @@ SDLGame* newSDLGame( void )
 				       "</grammar><init><x>64</x><y>64</y><type>1</type></init></board>"
 				       "</game>"
 				       "</xml>");
+  */
 
 
   /* init SDL */
@@ -132,8 +137,10 @@ SDLGame* newSDLGame( void )
 
   atexit( SDL_Quit );
 
-  sdlGame->g_screenSurface = SDL_SetVideoMode( sdlGame->game->board->size * PIXELS_PER_CELL,
-					       sdlGame->game->board->size * PIXELS_PER_CELL,
+  int size = 128;
+  //  int size = sdlGame->game->board->size;
+  sdlGame->g_screenSurface = SDL_SetVideoMode( size * PIXELS_PER_CELL,
+					       size * PIXELS_PER_CELL,
 					       COLOR_DEPTH, 
 					       SDL_HWSURFACE | SDL_DOUBLEBUF );
 
@@ -144,8 +151,8 @@ SDLGame* newSDLGame( void )
     }
 
   /* init palette lookup */
-  for (pal = 0; pal <= PaletteMax; ++pal)
-    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
+  //  for (pal = 0; pal <= PaletteMax; ++pal)
+  //    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
 
 
   /* return */
@@ -167,11 +174,8 @@ void deleteSDLGame( SDLGame* sdlGame )
 // Name: renderPixel()
 // Desc: 
 //-----------------------------------------------------------------------------
-void renderPixel( SDLGame *sdlGame, int x, int y, PaletteIndex pal )
+void renderPixel( SDL_Surface *g_screenSurface, int x, int y, Uint32 color )
 {
-  SDL_Surface *g_screenSurface = sdlGame->g_screenSurface;
-  Uint32 color = sdlGame->sdlColor[pal];
-
   switch( g_screenSurface->format->BytesPerPixel )
     {
     case 1: // Assuming 8-bpp
@@ -272,6 +276,7 @@ void render(SDLGame* sdlGame) {
   // Plot each cell as a single pixel...
   //
 
+  /*
   int x, y, i, j;
   int size = sdlGame->game->board->size;
   for (x = 0; x < size; ++x)
@@ -279,8 +284,9 @@ void render(SDLGame* sdlGame) {
       PaletteIndex pal = readBoardColor (sdlGame->game->board, x, y);
       for (i = 0; i < PIXELS_PER_CELL; ++i)
 	for (j = 0; j < PIXELS_PER_CELL; ++j)
-	  renderPixel( sdlGame, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, pal );
+	  renderPixel( sdlGame->g_screenSurface, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, sdlGame->sdlColor[pal] );
     }
+  */
 
   //
   // Unlock the screen's surface...
