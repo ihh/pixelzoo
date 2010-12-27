@@ -25,11 +25,11 @@
 </particle>
 
 <particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
-<rule><rate>.0009</rate><test><loc><x>1</x></loc><val>0</val></test><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10000</hexinc></exec></rule>
-<rule><rate>.03</rate><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>20001</hexinc></exec></rule>
-<rule><rate>.03</rate><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>20002</hexinc></exec></rule>
-<rule><rate>.03</rate><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>20003</hexinc></exec></rule>
-<rule><rate>.03</rate><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>20004</hexinc></exec></rule>
+<rule><rate>.0009</rate><test><loc><x>1</x></loc><val>0</val></test><exec><dest><x>1</x></dest><src><mask>0</mask></src><hexinc>10000</hexinc></exec></rule>
+<rule><rate>.03</rate><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><src><mask>0</mask></src></exec><exec><dest><x>1</x></dest><src><mask>0</mask></src><hexinc>20001</hexinc></exec></rule>
+<rule><rate>.03</rate><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><src><mask>0</mask></src></exec><exec><dest><x>-1</x></dest><src><mask>0</mask></src><hexinc>20002</hexinc></exec></rule>
+<rule><rate>.03</rate><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><src><mask>0</mask></src></exec><exec><dest><y>1</y></dest><src><mask>0</mask></src><hexinc>20003</hexinc></exec></rule>
+<rule><rate>.03</rate><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><src><mask>0</mask></src></exec><exec><dest><y>-1</y></dest><src><mask>0</mask></src><hexinc>20004</hexinc></exec></rule>
 </particle>
 
 </grammar><init><x>64</x><y>64</y><type>1</type></init></board>

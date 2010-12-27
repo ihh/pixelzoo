@@ -68,14 +68,13 @@ typedef struct RuleCondition {
   if (randomDouble() >= failProb)
     cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | (((((cell[src] & preMask) >> rightShift) + offset) & mask) << leftShift);
 
-  where
-    preMask = (rightShift < 32) ? StateMask : 0
-
-  Why is preMask necessary? Well, I think that "x >> 32" should equal zero if x is a 32-bit number,
+  Why is preMask necessary? On the face of it, it doesn't add any functionality... Well, I think that "x >> 32" should equal zero if x is a 32-bit number,
   and on many computers/compilers it indeed seems to, but I swear that on my first-generation MacBook Air, it equaled "x".
   "x>>y" worked fine on that computer for y<32, and "x>>32" equaled zero as expected in gdb, and on another laptop (2nd-gen MacBook Air).
   Could be a gcc problem, could be a voodoo chicken fluke. Who knows.
   BIZARRE.
+  In any case, setting preMask to zero directly, as <src><mask>0</mask></src>, seems like a bit more convenient/transparent/stable a way to zero out the source cell
+  than specifying <rshift>32</rshift>; plus, preMask does actually allow certain hacks, so I eventually added it into xmlboard.c in the form shown.
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
