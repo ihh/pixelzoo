@@ -27,7 +27,7 @@ typedef struct SDLGame {
 // PROTOTYPES
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[]);
-SDLGame* newSDLGame(void);
+SDLGame* newSDLGame(char *filename);
 void deleteSDLGame(SDLGame*);
 void render(SDLGame*);
 void renderAndDelay(SDLGame*);
@@ -46,8 +46,13 @@ int main( int argc, char *argv[] )
   SDL_Thread *evolveThread;
   // COMMENTED OUT FOR DEBUGGING - BECAUSE IT SEGFAULTS
   //  SDL_Thread *renderThread;
+
+  if (argc != 2) {
+    printf ("Usage: %s <XML game file>\n", argv[0]);
+    Abort ("Missing game file");
+  }
   
-  sdlGame = newSDLGame();
+  sdlGame = newSDLGame (argv[1]);
 
   evolveThread = SDL_CreateThread(evolveThreadFunc, sdlGame->game);
   if ( evolveThread == NULL ) {
@@ -117,7 +122,7 @@ int main( int argc, char *argv[] )
 // Name: newSDLGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-SDLGame* newSDLGame( void )
+SDLGame* newSDLGame( char *filename )
 {
   PaletteIndex pal;
 
@@ -127,40 +132,7 @@ SDLGame* newSDLGame( void )
   // Initialize Game...
   //
 
-  sdlGame->game = newGameFromXmlString("<xml>"
-				       "<game>"
-				       "<rate>100</rate>"
-				       "<tool>"
-				       "<name>mytool</name>"
-				       "<size>8</size>"
-				       "<hexstate>10000</hexstate>"
-				       "<reserve>100</reserve>"
-				       "<recharge>100</recharge>"
-				       "</tool>"
-				       "<entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>"
-				       "<exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>"
-				       "<board><size>128</size>"
-				       "<grammar>"
-				       "<particle>"
-				       "<sync/><shuffle/>"
-				       "<name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>80ffff</hexinc></color>"
-				       "<rule><rate>.0009</rate><test><loc><x>1</x></loc><val>0</val></test><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>20000</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><hexmask>ff9</hexmask></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10001</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><hexmask>ff9</hexmask></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>10002</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><hexmask>ff9</hexmask></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>10003</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>89</hexinc><hexmask>ff9</hexmask></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>10004</hexinc></exec></rule>"
-				       "</particle>"
-				
-				       "<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>"
-				       "<rule><rate>.0009</rate><test><loc><x>1</x></loc><val>0</val></test><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>10000</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><x>1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><x>1</x></dest><rshift>32</rshift><hexinc>20001</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><x>-1</x></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><x>-1</x></dest><rshift>32</rshift><hexinc>20002</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><y>1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>1</y></dest><rshift>32</rshift><hexinc>20003</hexinc></exec></rule>"
-				       "<rule><rate>.03</rate><test><loc><y>-1</y></loc><val>0</val><ignore>.05</ignore></test><exec><rshift>32</rshift></exec><exec><dest><y>-1</y></dest><rshift>32</rshift><hexinc>20004</hexinc></exec></rule>"
-				       "</particle>"
-				       "</grammar><init><x>64</x><y>64</y><type>1</type></init></board>"
-				       "</game>"
-				       "</xml>");
+  sdlGame->game = newGameFromXmlFile(filename);
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )

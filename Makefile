@@ -23,6 +23,9 @@ clean:
 	rm -rf obj/* bin/* *~ *.dSYM
 
 test: all
+	bin/sdlgame t/testgame.xml
+
+oldtest: all
 	./testrb.sh && bin/sdltest
 
 bin/%:  %.c $(OFILES)
