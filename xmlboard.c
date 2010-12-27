@@ -163,17 +163,15 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);
 
   defaultPreMask = op->rightShift >= BitsPerState ? 0 : StateMask;
+  op->preMask = OPTCHILDINT(node,DECPREMASK,OPTCHILDHEX(node,HEXPREMASK,defaultPreMask));
 
   src = CHILD(node,SRC);
   dest = CHILD(node,DEST);
   if (src) {
     op->src.x = OPTCHILDINT(src,X,0);
     op->src.y = OPTCHILDINT(src,Y,0);
-    op->preMask = OPTCHILDINT(src,DECMASK,OPTCHILDHEX(src,HEXMASK,defaultPreMask));
-  } else {
+  } else
     op->src.x = op->src.y = 0;
-    op->preMask = defaultPreMask;
-  }
   if (dest) {
     op->dest.x = OPTCHILDINT(dest,X,0);
     op->dest.y = OPTCHILDINT(dest,Y,0);

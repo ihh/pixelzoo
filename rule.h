@@ -73,8 +73,8 @@ typedef struct RuleCondition {
   "x>>y" worked fine on that computer for y<32, and "x>>32" equaled zero as expected in gdb, and on another laptop (2nd-gen MacBook Air).
   Could be a gcc problem, could be a voodoo chicken fluke. Who knows.
   BIZARRE.
-  In any case, setting preMask to zero directly, as <src><mask>0</mask></src>, seems like a bit more convenient/transparent/stable a way to zero out the source cell
-  than specifying <rshift>32</rshift>; plus, preMask does actually allow certain hacks, so I eventually added it into xmlboard.c in the form shown.
+  In any case, setting preMask to zero directly, seems like a bit more convenient/transparent/stable a way to zero out the source cell than using rshift;
+  plus, preMask does actually allow certain hacks, so I eventually added it into the XML.
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
