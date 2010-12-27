@@ -297,7 +297,7 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
   return 1;
 }
 
-void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret) {
+void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {
   int actualUpdates, x, y, currentBoardSyncs;
   double currentBoardTime, targetBoardTime, elapsedClockTime, asyncEventRate, timeToTarget, timeToNextBoardSync, pendingSyncEventsToService, timeToNextSyncEvent, timeToNextAsyncEvent;
   clock_t start, now;
@@ -373,10 +373,12 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 
   }
   /* calculate update rates */
-  if (updateRate_ret)
-    *updateRate_ret = (elapsedClockTime > 0) ? ((currentBoardTime - board->updatesPerCell) / elapsedClockTime) : 0.;
-  if (minUpdateRate_ret)
-    *minUpdateRate_ret = (elapsedClockTime > 0) ? (actualUpdates / elapsedClockTime) : 0.;
+  if (updatesPerCell_ret)
+    *updatesPerCell_ret = currentBoardTime - board->updatesPerCell;
+  if (actualUpdates_ret)
+    *actualUpdates_ret = actualUpdates;
+  if (elapsedTimeInSeconds_ret)
+    *elapsedTimeInSeconds_ret = elapsedClockTime;
   /* update board time */
   board->updatesPerCell = currentBoardTime;
   board->syncUpdates = currentBoardSyncs;

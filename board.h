@@ -48,9 +48,12 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 
 /* evolveBoard
    attempts to update each cell targetUpdatesPerCell times, terminating if this limit is reached or maxTimeInSeconds has elapsed (whichever occurs first).
-   returns the update rate (cells updated/second) & the estimated lower bound (i.e. what the update rate would be if all rules were firing).
+   return values:
+   *updatesPerCell_ret = elapsed time on board clock
+   *actualUpdates_ret = the actual number of cells updated
+   *elapsedTimeInSeconds_ret = the actual elapsed time in seconds
 */
-void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double* updateRate_ret, double* minUpdateRate_ret);
+void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret);
 
 /* Private helper methods & macros */
 

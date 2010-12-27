@@ -13,10 +13,10 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
 
 /* method defs */
 Board* newBoardFromXmlDocument (xmlDoc *doc) {
-  return newBoardFromXmlNode (xmlDocGetRootElement (doc));
+  return newBoardFromXmlRoot (xmlDocGetRootElement (doc));
 }
 
-Board* newBoardFromXmlNode (xmlNode *root) {
+Board* newBoardFromXmlRoot (xmlNode *root) {
   Board *board;
   xmlNode *boardNode, *grammar, *node;
   int x, y;

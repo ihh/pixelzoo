@@ -6,6 +6,8 @@
 #include "stringmap.h"
 #include "xymap.h"
 
+#define DefaultUpdatesPerSecond 100
+
 typedef struct ToolCharger ToolCharger;
 
 /* state of play */
@@ -24,7 +26,7 @@ typedef struct Game {
   /* entrance */
   XYCoord entrancePos;
   State entryState;
-  int totalEntrants, remainingEntrants;  /* number of entryState's to place at entrancePos */
+  int totalEntrants, entrantsSoFar;  /* number of entryState's to place at entrancePos */
   double entranceRate;
 
   /* exit */
@@ -33,7 +35,7 @@ typedef struct Game {
   CellWatcher *exitPortalWatcher;  /* (Game*) context */
 
   /* time limit */
-  double timeLimit;  /* when board->updatesPerCell exceeds this, game is lost */
+  double timeLimit;  /* when (board->updatesPerCell / game->updatesPerSecond) exceeds this, game is lost */
 
   /* power-ups */
   List *charger;  /* all ToolCharger's */
@@ -43,6 +45,8 @@ typedef struct Game {
 /* Game methods */
 Game* newGame();
 void deleteGame (Game *game);
+void makeEntrances (Game *game);
+void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
 void updateGameState (Game *game);  /* tests win/lose conditions */
 
 /* Two types of CellWatcher: ExitPortal and ToolCharger */
@@ -50,6 +54,7 @@ State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, Sta
 State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
 
 struct ToolCharger {
+  CellWatcher *watcher;
   Type overwriteType;  /* cell must be overwritten with this Type to get Tool bonus */
   Tool *tool;
 };

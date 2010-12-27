@@ -9,6 +9,10 @@ xmlNode* getNodeByName (xmlNode* node, char* name) {
   return (xmlNode*) NULL;
 }
 
+xmlChar* getNodeContent (xmlNode* node) {
+  return node->children->content;
+}
+
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
   if (!node)
     fprintf (stderr, "Missing tag: %s\n", tag);

@@ -46,7 +46,7 @@
 
 /* methods */
 Board* newBoardFromXmlDocument (xmlDoc *doc);
-Board* newBoardFromXmlNode (xmlNode *node);
+Board* newBoardFromXmlRoot (xmlNode *root);
 Board* newBoardFromXmlFile (const char* filename);
 Board* newBoardFromXmlString (const char* string);
 

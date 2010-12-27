@@ -19,10 +19,10 @@ Tool* newTool (char *name, int size) {
       updateQuadTree (tool->brushIntensity, x, y, 1.);
   tool->brushState = NULL;
   tool->defaultBrushState = DefaultToolNewState;
+  tool->brushCenter.x = tool->brushCenter.y = size / 2;
 
-  tool->overwriteLoc = newXYSet();
-  tool->overwriteStates = newStateSet();
-  (void) StateSetInsert (tool->overwriteStates, DefaultToolOldState);
+  tool->overwriteDisallowLoc = NULL;
+  tool->overwriteStates = NULL;
   tool->overwriteMask = TypeMask;
 
   tool->sprayRate = tool->rechargeRate = tool->reserve = tool->maxReserve = 1.;
@@ -36,8 +36,10 @@ void deleteTool (void *voidTool) {
   deleteQuadTree (tool->brushIntensity);
   if (tool->brushState)
     deleteXYMap (tool->brushState);
-  deleteXYSet (tool->overwriteLoc);
-  deleteStateSet (tool->overwriteStates);
+  if (tool->overwriteDisallowLoc)
+    deleteXYSet (tool->overwriteDisallowLoc);
+  if (tool->overwriteStates)
+    deleteStateSet (tool->overwriteStates);
   StringDelete (tool->name);
   SafeFree (tool);
 }
@@ -54,12 +56,16 @@ void useTool (Tool *tool, Board *board, int x, int y, double duration) {
     if (tool->brushState)
       if ((xyNode = XYMapFind(tool->brushState,x,y,xyTmp)))
 	newState = *(State*)xyNode->value;
-    xPaint = x + xOffset;
-    yPaint = y + yOffset;
-    maskedOldState = readBoardState(board,xPaint,yPaint) & tool->overwriteMask;
-    if (StateSetFind (tool->overwriteStates, maskedOldState)) {
-      writeBoardState (board, xPaint, yPaint, newState);
-      tool->reserve = MAX (tool->reserve - 1, 0.);
+    xPaint = x + xOffset - tool->brushCenter.x;
+    yPaint = y + yOffset - tool->brushCenter.y;
+    if (onBoard (board, xPaint, yPaint)) {
+      if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
+	maskedOldState = readBoardStateUnguarded(board,xPaint,yPaint) & tool->overwriteMask;
+	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
+	  writeBoardStateUnguarded (board, xPaint, yPaint, newState);
+	  tool->reserve = MAX (tool->reserve - 1, 0.);
+	}
+      }
     }
   }
 }

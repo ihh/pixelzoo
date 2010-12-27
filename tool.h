@@ -12,13 +12,13 @@ typedef struct Tool {
   char *name;  /* name of this tool */
 
   /* brush */
-  LocalOffset brushCenter;  /* usually negative, delta(x,y) of central cell in brush */
+  LocalOffset brushCenter;  /* delta(x,y) of central cell in brush */
   QuadTree *brushIntensity;  /* brush probability distribution */
   XYMap *brushState;  /* optional XYCoord->State map for brush */
   State defaultBrushState;  /* if brushState==NULL, use this state for entire brush */
 
   /* permissions */
-  XYSet *overwriteLoc;  /* board locations this tool is allowed to overwrite */
+  XYSet *overwriteDisallowLoc;  /* board locations this tool is NOT allowed to overwrite */
   StateSet *overwriteStates;  /* (masked) states this tool is allowed to overwrite */
   State overwriteMask;  /* mask for overwriteStates */
 
@@ -30,7 +30,7 @@ typedef struct Tool {
 
 } Tool;
 
-Tool* newTool (char *name, int size);
+Tool* newTool (char *name, int size);  /* copies name */
 void deleteTool (void *tool);
 void printTool (void *tool);
 

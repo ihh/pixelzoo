@@ -108,6 +108,16 @@ SDLGame* newSDLGame( void )
 
   sdlGame->game = newGameFromXmlString("<xml>"
 				       "<game>"
+				       "<rate>100</rate>"
+				       "<tool>"
+				       "<name>mytool</name>"
+				       "<size>8</size>"
+				       "<hexstate>10000</hexstate>"
+				       "<reserve>100</reserve>"
+				       "<recharge>100</recharge>"
+				       "</tool>"
+				       "<entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>"
+				       "<exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>"
 				       "<board><size>128</size>"
 				       "<grammar>"
 				       "<particle>"
@@ -229,16 +239,19 @@ void renderPixel( SDL_Surface *g_screenSurface, int x, int y, Uint32 color )
 int evolveThreadFunc(void *voidGame)
 {
   Game *game = (Game*) voidGame;
-  double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->updatesPerSecond, updateRate, minUpdateRate, elapsedClockTime;
+  double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->updatesPerSecond, updatesPerCell, evolveTime, loopTime;
+  int actualUpdates;
 
   while ( game->gameState != GameQuit ) {
     clock_t start, now;
     start = clock();
-    evolveBoard (game->board, targetUpdatesPerCell, updatePeriodInSeconds, &updateRate, &minUpdateRate);
+    evolveBoard (game->board, targetUpdatesPerCell, updatePeriodInSeconds, &updatesPerCell, &actualUpdates, &evolveTime);
+    useTools (game, updatesPerCell);
+    makeEntrances (game);
     updateGameState (game);
     now = clock();
-    elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    SDL_Delay(1000 * MAX(0.,updatePeriodInSeconds - elapsedClockTime));
+    loopTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
+    SDL_Delay(1000 * MAX(0.,updatePeriodInSeconds - loopTime));
   }
   printf("Evolve thread quitting\n");
   return(0);

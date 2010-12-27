@@ -43,8 +43,8 @@ void render(double*);
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updateRate, minUpdateRate, renderRate;
-  int iter = 0, births = 0, deaths = 0;
+  double targetUpdatesPerCell = 1., maxTimeInSeconds = .01, updatesPerCell, elapsedTime, renderRate;
+  int iter = 0, births = 0, deaths = 0, actualUpdates;
 
     init();
 
@@ -67,7 +67,7 @@ int main( int argc, char *argv[] )
         }
 
 	int oldDrifters = board->byType[1]->count;
-	evolveBoard (board, targetUpdatesPerCell, maxTimeInSeconds, &updateRate, &minUpdateRate);
+	evolveBoard (board, targetUpdatesPerCell, maxTimeInSeconds, &updatesPerCell, &actualUpdates, &elapsedTime);
 	int newDrifters = board->byType[1]->count;
 	if (newDrifters > oldDrifters)
 	  births += newDrifters - oldDrifters;
@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
 	render(&renderRate);
 
 	if (++iter % (int) (1. + 1. / maxTimeInSeconds) == 0)
-	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g updatesPerCell=%g birthRate=%g deathRate=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updateRate, minUpdateRate, boardFiringRate(board), board->updatesPerCell, (double) births / board->updatesPerCell, (double) deaths / board->updatesPerCell);
+	  printf ("renderRate=%g targetUpdateRate=%g updateRate=%g minUpdateRate=%g boardFiringRate=%g updatesPerCell=%g birthRate=%g deathRate=%g\n", renderRate, targetUpdatesPerCell / maxTimeInSeconds, updatesPerCell / elapsedTime, (double) actualUpdates / elapsedTime / boardCells(board), boardFiringRate(board), board->updatesPerCell, (double) births / board->updatesPerCell, (double) deaths / board->updatesPerCell);
     }
 
     shutDown();

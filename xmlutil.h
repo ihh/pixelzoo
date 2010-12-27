@@ -14,9 +14,14 @@
 #define OPTCHILDFLOAT(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDFLOAT(NODE,KEYWORD) : (DEFAULT))
 #define OPTCHILDHEX(NODE,KEYWORD,DEFAULT) (CHILD(NODE,KEYWORD) ? CHILDHEX(NODE,KEYWORD) : (DEFAULT))
 #define ATTR(NODE,KEYWORD) getAttrByName (NODE, XMLZOO_ ## KEYWORD)
+#define NODESTRINGVAL(NODE) getNodeContent(NODE)
+#define NODEINTVAL(NODE) atoi ((const char*) getNodeContent(NODE))
+#define NODEFLOATVAL(NODE) atof ((const char*) getNodeContent(NODE))
+#define NODEHEXVAL(NODE) strtoul ((const char*) getNodeContent(NODE),0,16)
 
 /* prototypes for private builder methods */
 xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
+xmlChar* getNodeContent (xmlNode* node);
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag);
 xmlChar* getAttrByName (xmlNode* node, char* name);
 
