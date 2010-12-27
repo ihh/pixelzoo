@@ -72,14 +72,35 @@ int main( int argc, char *argv[] )
 
       while( SDL_PollEvent( &event ) )
         {
-	  if( event.type == SDL_QUIT )  
-	    sdlGame->game->gameState = GameQuit;
-
-	  if( event.type == SDL_KEYDOWN )
+	  switch( event.type ) 
             {
+	    case SDL_QUIT:
+	      sdlGame->game->gameState = GameQuit;
+	      break;
+
+	    case SDL_KEYDOWN:
 	      if( event.key.keysym.sym == SDLK_ESCAPE ) 
 		sdlGame->game->gameState = GameQuit;
-            }
+	      break;
+
+	    case SDL_MOUSEMOTION:
+	      sdlGame->game->toolPos.x = event.motion.x / PIXELS_PER_CELL;
+	      sdlGame->game->toolPos.y = event.motion.y / PIXELS_PER_CELL;
+	      break;
+
+	    case SDL_MOUSEBUTTONUP:
+	      if ( event.button.button == SDL_BUTTON_LEFT)
+		sdlGame->game->toolActive = 0;
+	      break;
+
+	    case SDL_MOUSEBUTTONDOWN:
+	      if ( event.button.button == SDL_BUTTON_LEFT)
+		sdlGame->game->toolActive = 1;
+	      break;
+
+	    default:
+	      break;
+	    }
         }
     }
 

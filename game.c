@@ -94,7 +94,8 @@ State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, Sta
   game = (Game*) watcher->context;
   if (StateType(state) == game->exitType) {
     ++game->exitsSoFar;
-    printf ("Evacuated %d %s(s), need %d to win\n", game->exitsSoFar, game->board->byType[game->exitType]->name, game->exitsToWin);
+    if (game->exitsSoFar <= game->exitsToWin)
+      printf ("Evacuated %d %s%s, need %d to win\n", game->exitsSoFar, game->board->byType[game->exitType]->name, game->exitsSoFar > 1 ? "s" : "", game->exitsToWin);
   }
   return readBoardStateUnguarded(board,x,y);
 }
