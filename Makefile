@@ -1,8 +1,11 @@
-SDL_CFLAGS  := $(shell sdl-config --cflags)
-SDL_LDFLAGS := $(shell sdl-config --libs) -L/usr/X11R6/lib -lXi
+SDLCONFIG = sdl-config
+PKGCONFIG = pkg-config
 
-XML_CFLAGS  := $(shell pkg-config --cflags libxml-2.0)
-XML_LDFLAGS := $(shell pkg-config --libs libxml-2.0)
+SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
+SDL_LDFLAGS := $(shell $(SDLCONFIG) --libs) -L/usr/X11R6/lib -lXi
+
+XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
+XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
 
 CC          := gcc
 COPTS       := -g -Wall
