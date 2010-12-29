@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface pixelzooViewController : UIViewController {
-
+	NSInteger appState;
 }
+
+@property(nonatomic) NSInteger appState;
 
 @end
 
