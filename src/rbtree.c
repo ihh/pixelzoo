@@ -42,13 +42,13 @@ RBTree* newRBTree( int (*CompFunc) (void*,void*),
   newTree->DestroyValue= ValueDestFunc;
 
   /*  see the comment in the RBTree structure in red_black_tree.h */
-  /*  for valuermation on nil and root */
-  temp=newTree->nil= (RBNode*) SafeMalloc(sizeof(RBNode));
+  /*  for valuermation on nilt and root */
+  temp=newTree->nilt= (RBNode*) SafeMalloc(sizeof(RBNode));
   temp->parent=temp->left=temp->right=temp;
   temp->red=0;
   temp->key=0;
   temp=newTree->root= (RBNode*) SafeMalloc(sizeof(RBNode));
-  temp->parent=temp->left=temp->right=newTree->nil;
+  temp->parent=temp->left=temp->right=newTree->nilt;
   temp->key=0;
   temp->red=0;
   return(newTree);
@@ -86,7 +86,7 @@ RBTree* RBTreeShallowCopy(RBTree* tree) {
 /*  FUNCTION:  LeftRotate */
 /**/
 /*  INPUTS:  This takes a tree so that it can access the appropriate */
-/*           root and nil pointers, and the node to rotate on. */
+/*           root and nilt pointers, and the node to rotate on. */
 /**/
 /*  OUTPUT:  None */
 /**/
@@ -101,23 +101,23 @@ RBTree* RBTreeShallowCopy(RBTree* tree) {
 
 void LeftRotate(RBTree* tree, RBNode* x) {
   RBNode* y;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
 
   /*  I originally wrote this function to use the sentinel for */
-  /*  nil to avoid checking for nil.  However this introduces a */
+  /*  nilt to avoid checking for nilt.  However this introduces a */
   /*  very subtle bug because sometimes this function modifies */
-  /*  the parent pointer of nil.  This can be a problem if a */
-  /*  function which calls LeftRotate also uses the nil sentinel */
-  /*  and expects the nil sentinel's parent pointer to be unchanged */
+  /*  the parent pointer of nilt.  This can be a problem if a */
+  /*  function which calls LeftRotate also uses the nilt sentinel */
+  /*  and expects the nilt sentinel's parent pointer to be unchanged */
   /*  after calling this function.  For example, when RBTreeEraseFixUP */
-  /*  calls LeftRotate it expects the parent pointer of nil to be */
+  /*  calls LeftRotate it expects the parent pointer of nilt to be */
   /*  unchanged. */
 
   y=x->right;
   x->right=y->left;
 
-  if (y->left != nil) y->left->parent=x; /* used to use sentinel here */
-  /* and do an unconditional assignment instead of testing for nil */
+  if (y->left != nilt) y->left->parent=x; /* used to use sentinel here */
+  /* and do an unconditional assignment instead of testing for nilt */
   
   y->parent=x->parent;   
 
@@ -132,7 +132,7 @@ void LeftRotate(RBTree* tree, RBNode* x) {
   x->parent=y;
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not red in LeftRotate");
+  Assert(!tree->nilt->red,"nilt not red in LeftRotate");
 #endif
 }
 
@@ -141,7 +141,7 @@ void LeftRotate(RBTree* tree, RBNode* x) {
 /*  FUNCTION:  RighttRotate */
 /**/
 /*  INPUTS:  This takes a tree so that it can access the appropriate */
-/*           root and nil pointers, and the node to rotate on. */
+/*           root and nilt pointers, and the node to rotate on. */
 /**/
 /*  OUTPUT:  None */
 /**/
@@ -156,23 +156,23 @@ void LeftRotate(RBTree* tree, RBNode* x) {
 
 void RightRotate(RBTree* tree, RBNode* y) {
   RBNode* x;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
 
   /*  I originally wrote this function to use the sentinel for */
-  /*  nil to avoid checking for nil.  However this introduces a */
+  /*  nilt to avoid checking for nilt.  However this introduces a */
   /*  very subtle bug because sometimes this function modifies */
-  /*  the parent pointer of nil.  This can be a problem if a */
-  /*  function which calls LeftRotate also uses the nil sentinel */
-  /*  and expects the nil sentinel's parent pointer to be unchanged */
+  /*  the parent pointer of nilt.  This can be a problem if a */
+  /*  function which calls LeftRotate also uses the nilt sentinel */
+  /*  and expects the nilt sentinel's parent pointer to be unchanged */
   /*  after calling this function.  For example, when RBTreeEraseFixUP */
-  /*  calls LeftRotate it expects the parent pointer of nil to be */
+  /*  calls LeftRotate it expects the parent pointer of nilt to be */
   /*  unchanged. */
 
   x=y->left;
   y->left=x->right;
 
-  if (nil != x->right)  x->right->parent=y; /*used to use sentinel here */
-  /* and do an unconditional assignment instead of testing for nil */
+  if (nilt != x->right)  x->right->parent=y; /*used to use sentinel here */
+  /* and do an unconditional assignment instead of testing for nilt */
 
   /* instead of checking if x->parent is the root as in the book, we */
   /* count on the root sentinel to implicitly take care of this case */
@@ -186,7 +186,7 @@ void RightRotate(RBTree* tree, RBNode* y) {
   y->parent=x;
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not red in RightRotate");
+  Assert(!tree->nilt->red,"nilt not red in RightRotate");
 #endif
 }
 
@@ -209,12 +209,12 @@ void TreeInsertHelp(RBTree* tree, RBNode* z) {
   /*  This function should only be called by InsertRBTree (see above) */
   RBNode* x;
   RBNode* y;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   
-  z->left=z->right=nil;
+  z->left=z->right=nilt;
   y=tree->root;
   x=tree->root->left;
-  while( x != nil) {
+  while( x != nilt) {
     y=x;
     if (0 < (*tree->Compare)(x->key,z->key)) { /* x.key > z.key */
       x=x->left;
@@ -231,7 +231,7 @@ void TreeInsertHelp(RBTree* tree, RBNode* z) {
   }
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not red in TreeInsertHelp");
+  Assert(!tree->nilt->red,"nilt not red in TreeInsertHelp");
 #endif
 }
 
@@ -306,7 +306,7 @@ RBNode * RBTreeInsert(RBTree* tree, void* key, void* value) {
   return(newNode);
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not red in RBTreeInsert");
+  Assert(!tree->nilt->red,"nilt not red in RBTreeInsert");
   Assert(!tree->root->red,"root not red in RBTreeInsert");
 #endif
 }
@@ -327,21 +327,21 @@ RBNode * RBTreeInsert(RBTree* tree, void* key, void* value) {
   
 RBNode* RBTreeSuccessor(RBTree* tree,RBNode* x) { 
   RBNode* y;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* root=tree->root;
 
-  if (nil != (y = x->right)) { /* assignment to y is intentional */
-    while(y->left != nil) { /* returns the minium of the right subtree of x */
+  if (nilt != (y = x->right)) { /* assignment to y is intentional */
+    while(y->left != nilt) { /* returns the minium of the right subtree of x */
       y=y->left;
     }
     return(y);
   } else {
     y=x->parent;
-    while(x == y->right) { /* sentinel used instead of checking for nil */
+    while(x == y->right) { /* sentinel used instead of checking for nilt */
       x=y;
       y=y->parent;
     }
-    if (y == root) return(nil);
+    if (y == root) return(nilt);
     return(y);
   }
 }
@@ -362,18 +362,18 @@ RBNode* RBTreeSuccessor(RBTree* tree,RBNode* x) {
 
 RBNode* RBTreePredecessor(RBTree* tree, RBNode* x) {
   RBNode* y;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* root=tree->root;
 
-  if (nil != (y = x->left)) { /* assignment to y is intentional */
-    while(y->right != nil) { /* returns the maximum of the left subtree of x */
+  if (nilt != (y = x->left)) { /* assignment to y is intentional */
+    while(y->right != nilt) { /* returns the maximum of the left subtree of x */
       y=y->right;
     }
     return(y);
   } else {
     y=x->parent;
     while(x == y->left) { 
-      if (y == root) return(nil); 
+      if (y == root) return(nilt); 
       x=y;
       y=y->parent;
     }
@@ -397,18 +397,18 @@ RBNode* RBTreePredecessor(RBTree* tree, RBNode* x) {
 /***********************************************************************/
 
 void InorderTreePrint(RBTree* tree, RBNode* x) {
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* root=tree->root;
-  if (x != tree->nil) {
+  if (x != tree->nilt) {
     InorderTreePrint(tree,x->left);
     printf("value=");
     tree->PrintValue(x->value);
     printf("  key="); 
     tree->PrintKey(x->key);
     printf("  l->key=");
-    if( x->left == nil) printf("NULL"); else tree->PrintKey(x->left->key);
+    if( x->left == nilt) printf("NULL"); else tree->PrintKey(x->left->key);
     printf("  r->key=");
-    if( x->right == nil) printf("NULL"); else tree->PrintKey(x->right->key);
+    if( x->right == nilt) printf("NULL"); else tree->PrintKey(x->right->key);
     printf("  p->key=");
     if( x->parent == root) printf("NULL"); else tree->PrintKey(x->parent->key);
     printf("  red=%i\n",x->red);
@@ -433,8 +433,8 @@ void InorderTreePrint(RBTree* tree, RBNode* x) {
 /***********************************************************************/
 
 void TreeDestHelper(RBTree* tree, RBNode* x) {
-  RBNode* nil=tree->nil;
-  if (x != nil) {
+  RBNode* nilt=tree->nilt;
+  if (x != nilt) {
     TreeDestHelper(tree,x->left);
     TreeDestHelper(tree,x->right);
     tree->DestroyKey(x->key);
@@ -460,7 +460,7 @@ void TreeDestHelper(RBTree* tree, RBNode* x) {
 void deleteRBTree(RBTree* tree) {
   TreeDestHelper(tree,tree->root->left);
   SafeFree(tree->root);
-  SafeFree(tree->nil);
+  SafeFree(tree->nilt);
   SafeFree(tree);
 }
 
@@ -500,9 +500,9 @@ void RBTreePrint(RBTree* tree) {
   
 RBNode* RBTreeFind(RBTree* tree, void* q) {
   RBNode* x=tree->root->left;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   int compVal;
-  if (x == nil) return(0);
+  if (x == nilt) return(0);
   compVal=(*tree->Compare)(x->key,(int*) q);
   while(0 != compVal) {/*assignemnt*/
     if (0 < compVal) { /* x->key > q */
@@ -510,7 +510,7 @@ RBNode* RBTreeFind(RBTree* tree, void* q) {
     } else {
       x=x->right;
     }
-    if ( x == nil) return(0);
+    if ( x == nilt) return(0);
     compVal=(*tree->Compare)(x->key,(int*) q);
   }
   return(x);
@@ -591,7 +591,7 @@ void RBTreeEraseFixUp(RBTree* tree, RBNode* x) {
   x->red=0;
 
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not black in RBTreeEraseFixUp");
+  Assert(!tree->nilt->red,"nilt not black in RBTreeEraseFixUp");
 #endif
 }
 
@@ -615,11 +615,11 @@ void RBTreeEraseFixUp(RBTree* tree, RBNode* x) {
 void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
   RBNode* y;
   RBNode* x;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* root=tree->root;
 
-  y= ((z->left == nil) || (z->right == nil)) ? z : RBTreeSuccessor(tree,z);
-  x= (y->left == nil) ? y->right : y->left;
+  y= ((z->left == nilt) || (z->right == nilt)) ? z : RBTreeSuccessor(tree,z);
+  x= (y->left == nilt) ? y->right : y->left;
   if (root == (x->parent = y->parent)) { /* assignment of y->p to x->p is intentional */
     root->left=x;
   } else {
@@ -629,10 +629,10 @@ void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
       y->parent->right=x;
     }
   }
-  if (y != z) { /* y should not be nil in this case */
+  if (y != z) { /* y should not be nilt in this case */
 
 #ifdef DEBUG_ASSERT
-    Assert( (y!=tree->nil),"y is nil in RBTreeEraseUnguarded\n");
+    Assert( (y!=tree->nilt),"y is nilt in RBTreeEraseUnguarded\n");
 #endif
     /* y is the node to splice out and x is its child */
 
@@ -659,7 +659,7 @@ void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
   }
   
 #ifdef DEBUG_ASSERT
-  Assert(!tree->nil->red,"nil not black in RBTreeEraseUnguarded");
+  Assert(!tree->nilt->red,"nilt not black in RBTreeEraseUnguarded");
 #endif
 }
 
@@ -683,12 +683,12 @@ void RBTreeErase(RBTree* tree, void* key) {
 
 Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
   Stack* enumResultStack;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* x=tree->root->left;
-  RBNode* lastBest=nil;
+  RBNode* lastBest=nilt;
 
   enumResultStack=newStack();
-  while(nil != x) {
+  while(nilt != x) {
     if ( high != NULL && 0 < (*tree->Compare)(x->key,high)) { /* x->key > high */
       x=x->left;
     } else {
@@ -696,7 +696,7 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
       x=x->right;
     }
   }
-  while ( (lastBest != nil) && (low == NULL || 0 >= (*tree->Compare)(low,lastBest->key)) ) {  /* !(low > lastBest->key) == (low <= lastBest->key) */
+  while ( (lastBest != nilt) && (low == NULL || 0 >= (*tree->Compare)(low,lastBest->key)) ) {  /* !(low > lastBest->key) == (low <= lastBest->key) */
     StackPush(enumResultStack,lastBest);
     lastBest=RBTreePredecessor(tree,lastBest);
   }
@@ -705,16 +705,16 @@ Stack* RBTreeEnumerate(RBTree* tree, void* low, void* high) {
 
 size_t RBTreeSize(RBTree* tree) {
   size_t size;
-  RBNode* nil=tree->nil;
+  RBNode* nilt=tree->nilt;
   RBNode* x=tree->root->left;
-  RBNode* y=nil;
+  RBNode* y=nilt;
 
   size = 0;
-  while(nil != x) {
+  while(nilt != x) {
     y = x;
     x = x->right;
   }
-  while ( y != nil ) {
+  while ( y != nilt ) {
     ++size;
     y = RBTreePredecessor(tree,y);
   }

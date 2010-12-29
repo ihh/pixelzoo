@@ -24,14 +24,15 @@ typedef struct RBTree {
   CopyFunction CopyKey, CopyValue;
   DestroyFunction DestroyKey, DestroyValue;
   PrintFunction PrintKey, PrintValue;
-  /*  A sentinel is used for root and for nil.  These sentinels are */
+  /*  A sentinel is used for root and for nilt.  These sentinels are */
   /*  created when newRBTree is caled.  root->left should always */
-  /*  point to the node which is the root of the tree.  nil points to a */
+  /*  point to the node which is the root of the tree.  nilt points to a */
   /*  node which should always be black but has aribtrary children and */
   /*  parent and no key or value.  The point of using these sentinels is so */
-  /*  that the root and nil nodes do not require special cases in the code */
+  /*  that the root and nilt nodes do not require special cases in the code */
+  /* ("nil" renamed to "nilt" to avoid objective-C clash - IH 12/29/2010) */
   RBNode* root;
-  RBNode* nil;
+  RBNode* nilt;
 } RBTree;
 
 RBTree* newRBTree(CompareFunction KeyCompareFunc,

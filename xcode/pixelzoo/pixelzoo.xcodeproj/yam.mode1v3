@@ -202,24 +202,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>28BDF9A712CBE52E00173B45</string>
+				<string>28BDFA0912CBEA1000173B45</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>pixelzooViewController.h</string>
+				<string>pixelzooViewController.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>28BDF9A812CBE52E00173B45</string>
+						<string>28BDFA0A12CBEA1000173B45</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>pixelzooViewController.h</string>
+						<string>pixelzooViewController.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>28BDF9A912CBE52E00173B45</string>
+						<string>28BDFA0F12CBEA3A00173B45</string>
 						<key>history</key>
 						<array>
-							<string>28BDF8DC12CBDEA800173B45</string>
+							<string>28BDFA0E12CBEA3A00173B45</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>38 650 750 502 0 0 1920 1178 </string>
+				<string>15 671 750 502 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -309,15 +309,15 @@
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
-								<string>28BDF9A312CBE51100173B45</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
-								<string>1C37FABC05509CD000000102</string>
+								<string>29B97323FDCFA39411CA2CEA</string>
+								<string>19C28FACFE9D520D11CA2CBB</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>7</integer>
-									<integer>6</integer>
+									<integer>5</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -357,7 +357,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>pixelzooViewController.m</string>
+								<string>pixelzooViewController.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -365,19 +365,20 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>pixelzooViewController.m</string>
+										<string>pixelzooViewController.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>28BDF9A412CBE52E00173B45</string>
+										<string>28BDFA0D12CBEA3A00173B45</string>
 										<key>history</key>
 										<array>
 											<string>28FB698D12CAF83C00DF775A</string>
 											<string>28FB69F812CB097A00DF775A</string>
-											<string>28FB69F912CB097A00DF775A</string>
-											<string>28FB69FA12CB097A00DF775A</string>
-											<string>28FB69FB12CB097A00DF775A</string>
-											<string>28C4EAE712CBBA7C00DF95F2</string>
+											<string>28BDF9F012CBE97E00173B45</string>
+											<string>28BDF9F812CBE9DB00173B45</string>
+											<string>28BDF9F912CBE9DB00173B45</string>
+											<string>28BDFA0612CBEA1000173B45</string>
+											<string>28BDFA0712CBEA1000173B45</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -578,8 +579,8 @@
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>28FB697712CAF7C600DF775A</string>
-		<string>28BDF9A712CBE52E00173B45</string>
 		<string>/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo.xcodeproj</string>
+		<string>28BDFA0912CBEA1000173B45</string>
 	</array>
 	<key>WindowString</key>
 	<string>640 505 1280 673 0 0 1920 1178 </string>
@@ -603,7 +604,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>pixelzooViewController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -620,6 +621,8 @@
 							<string>218pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -672,7 +675,7 @@
 			<key>WindowToolGUID</key>
 			<string>28FB697712CAF7C600DF775A</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>

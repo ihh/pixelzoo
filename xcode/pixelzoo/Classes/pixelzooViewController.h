@@ -9,16 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface pixelzooViewController : UIViewController {
+	NSTimer *redrawTimer;
+	NSTimer *evolveTimer;
+	
 	UIImageView *drawImage;
-
-	NSInteger appState;
 
 	CGPoint lastPoint;
 	BOOL mouseSwiped;	
 	int mouseMoved;
 }
-
-@property(nonatomic) NSInteger appState;
 
 @end
 

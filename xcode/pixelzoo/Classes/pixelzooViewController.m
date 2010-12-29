@@ -8,6 +8,12 @@
 
 #import "pixelzooViewController.h"
 
+#include "xmlgame.h"
+
+/* global constants */
+#define RENDER_PERIOD (1/60)   /* time between redraws in seconds */
+
+
 @implementation pixelzooViewController
 
 /*
@@ -44,6 +50,17 @@
  }
  */
 
+
+/* Rendering */
+-(void)startRedrawTimer
+{       
+    redrawTimer = [NSTimer scheduledTimerWithTimeInterval:RENDER_PERIOD target:self selector:@selector(setNeedsDisplay) userInfo:self repeats:YES];
+}
+
+- (void)drawRect:(CGRect)rect
+{   
+//    [super drawRect];
+}
 
 
 /* Event handlers */

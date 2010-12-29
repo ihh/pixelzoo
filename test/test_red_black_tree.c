@@ -76,7 +76,7 @@ int main() {
 	  scanf("%i",&newKey);
 	  if ( ( newNode = RBTreeFind(tree,&newKey) ) ) {/*assignment*/
 	    newNode=RBTreePredecessor(tree,newNode);
-	    if(tree->nil == newNode) {
+	    if(tree->nilt == newNode) {
 	      printf("there is no predecessor for that node (it is a minimum)\n");
 	    } else {
 	      printf("predecessor has key %i\n",*(int*)newNode->key);
@@ -92,7 +92,7 @@ int main() {
 	  scanf("%i",&newKey);
 	  if ( (newNode = RBTreeFind(tree,&newKey) ) ) {
 	    newNode=RBTreeSuccessor(tree,newNode);
-	    if(tree->nil == newNode) {
+	    if(tree->nilt == newNode) {
 	      printf("there is no successor for that node (it is a maximum)\n");
 	    } else {
 	      printf("successor has key %i\n",*(int*)newNode->key);
