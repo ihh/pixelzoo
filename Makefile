@@ -9,13 +9,13 @@ XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
 
 CC          := gcc
 COPTS       := -g -Wall
-CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS)
+CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS) -Isrc
 ANSI        := -ansi
 LIBS        := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
 
 TARGETS := test_red_black_tree sdltest sdlgame
 
-OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(wildcard *.c)))))
+OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
 all: $(XFILES)
@@ -29,14 +29,14 @@ test: all
 	bin/sdlgame t/testgame.xml
 
 oldtest: all
-	./testrb.sh && bin/sdltest
+	test/testrb.sh && bin/sdltest
 
-bin/%:  %.c $(OFILES)
+bin/%:  test/%.c $(OFILES)
 	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ $*.c $(OFILES)
+	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ test/$*.c $(OFILES)
 
 .SUFFIXES :
 
-obj/%.o: %.c
+obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
