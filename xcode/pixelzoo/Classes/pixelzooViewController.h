@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#include "xmlgame.h"
+
+#define GAME_XML_FILENAME "testgame"
+
 @interface pixelzooViewController : UIViewController {
+	Game *game;
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 	

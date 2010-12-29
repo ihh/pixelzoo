@@ -32,6 +32,7 @@
 		28BDF9E412CBE53800173B45 /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D112CBE53800173B45 /* xmlutil.c */; };
 		28BDF9E512CBE53800173B45 /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D312CBE53800173B45 /* xymap.c */; };
 		28BDF9ED12CBE65400173B45 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28BDF9EC12CBE65400173B45 /* libxml2.dylib */; };
+		28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28BDFA4712CBEEB400173B45 /* testgame.xml */; };
 		28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,7 @@
 		28BDF9D312CBE53800173B45 /* xymap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xymap.c; path = ../../src/xymap.c; sourceTree = SOURCE_ROOT; };
 		28BDF9D412CBE53800173B45 /* xymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xymap.h; path = ../../src/xymap.h; sourceTree = SOURCE_ROOT; };
 		28BDF9EC12CBE65400173B45 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		28BDFA4712CBEEB400173B45 /* testgame.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = testgame.xml; path = ../../t/testgame.xml; sourceTree = SOURCE_ROOT; };
 		28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooViewController.h; sourceTree = "<group>"; };
 		28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				28BDFA4712CBEEB400173B45 /* testgame.xml */,
 				2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* pixelzoo-Info.plist */,
@@ -250,6 +253,7 @@
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */,
+				28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

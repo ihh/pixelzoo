@@ -8,8 +8,6 @@
 
 #import "pixelzooViewController.h"
 
-#include "xmlgame.h"
-
 /* global constants */
 #define RENDER_PERIOD (1/60)   /* time between redraws in seconds */
 
@@ -37,10 +35,27 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	NSString *gameFilePath = [[NSBundle mainBundle] pathForResource:@GAME_XML_FILENAME ofType:@"xml"];  
+//	NSLog(@"gameFilePath=%@",gameFilePath);
+	NSData *gameXMLData = [NSData dataWithContentsOfFile:gameFilePath];  
+	if (gameXMLData) {  
+		// initialize the game  
+		NSString *gameXMLString = [[NSString alloc] initWithData:gameXMLData encoding:NSUTF8StringEncoding];
+		game = newGameFromXmlString([gameXMLString UTF8String]);
+	} else {
+		NSLog(@"Couldn't find game XML file");
+	}
+
+	if (game == NULL)
+		NSLog(@"Couldn't get Game");
+	
 	drawImage = [[UIImageView alloc] initWithImage:nil];
 	drawImage.frame = self.view.frame;
 	[self.view addSubview:drawImage];
+
 	self.view.backgroundColor = [UIColor blackColor];
+
 	mouseMoved = 0;
 }
 
@@ -51,12 +66,19 @@
  */
 
 
-/* Rendering */
--(void)startRedrawTimer
+
+/* Timers: board updates & rendering */
+-(void)startTimers
 {       
     redrawTimer = [NSTimer scheduledTimerWithTimeInterval:RENDER_PERIOD target:self selector:@selector(setNeedsDisplay) userInfo:self repeats:YES];
+	// TODO: evolveTimer
 }
 
+/* Board updates */
+
+
+
+/* Rendering */
 - (void)drawRect:(CGRect)rect
 {   
 //    [super drawRect];
