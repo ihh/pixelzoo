@@ -10,6 +10,11 @@
 
 @interface pixelzooViewController : UIViewController {
 	NSInteger appState;
+
+	CGPoint lastPoint;
+	UIImageView *drawImage;
+	BOOL mouseSwiped;	
+	int mouseMoved;
 }
 
 @property(nonatomic) NSInteger appState;

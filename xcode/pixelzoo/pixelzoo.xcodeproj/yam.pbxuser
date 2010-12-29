@@ -1,10 +1,39 @@
 // !$*UTF8*$!
 {
+	1D3623240D0F684500981E51 /* pixelzooAppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1291, 786}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 502}";
+		};
+	};
+	1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1291, 786}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 697}";
+		};
+	};
 	1D6058900D05DD3D006BFB54 /* pixelzoo */ = {
 		activeExec = 0;
 		executables = (
 			28FB696A12CAF7C100DF775A /* pixelzoo */,
 		);
+	};
+	28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1291, 786}}";
+			sepNavSelRange = "{350, 0}";
+			sepNavVisRange = "{0, 403}";
+			sepNavWindowFrame = "{{38, 594}, {750, 558}}";
+		};
+	};
+	28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1291, 1820}}";
+			sepNavSelRange = "{1834, 0}";
+			sepNavVisRange = "{164, 1859}";
+		};
 	};
 	28FB696A12CAF7C100DF775A /* pixelzoo */ = {
 		isa = PBXExecutable;
@@ -22,6 +51,7 @@
 		dataTipSortType = 0;
 		debuggerPlugin = GDBDebugging;
 		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
 		enableDebugStr = 1;
 		environmentEntries = (
 		);
@@ -57,11 +87,7 @@
 		vrLen = 185;
 		vrLoc = 0;
 	};
-	28FB698E12CAF83C00DF775A /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
-	};
-	28FB698F12CAF83C00DF775A /* PBXTextBookmark */ = {
+	28FB69F812CB097A00DF775A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 1";
@@ -70,6 +96,56 @@
 		rType = 0;
 		vrLen = 379;
 		vrLoc = 0;
+	};
+	28FB69F912CB097A00DF775A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* pixelzooAppDelegate.h */;
+		name = "pixelzooAppDelegate.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 502;
+		vrLoc = 0;
+	};
+	28FB69FA12CB097A00DF775A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */;
+		name = "pixelzooAppDelegate.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 697;
+		vrLoc = 0;
+	};
+	28FB69FB12CB097A00DF775A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 17";
+		rLen = 0;
+		rLoc = 350;
+		rType = 0;
+		vrLen = 403;
+		vrLoc = 0;
+	};
+	28FB69FD12CB097A00DF775A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 54";
+		rLen = 19;
+		rLoc = 1648;
+		rType = 0;
+		vrLen = 1840;
+		vrLoc = 0;
+	};
+	28FB6A3D12CB0EA300DF775A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 58";
+		rLen = 0;
+		rLoc = 1834;
+		rType = 0;
+		vrLen = 1859;
+		vrLoc = 164;
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
@@ -85,7 +161,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					341,
+					1113,
 					20,
 					48,
 					43,
@@ -102,13 +178,17 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 315291681;
-			PBXWorkspaceStateSaveDate = 315291681;
+			PBXPerProjectTemplateStateSaveDate = 315296685;
+			PBXWorkspaceStateSaveDate = 315296685;
 		};
 		perUserProjectItems = {
 			28FB698D12CAF83C00DF775A /* PBXTextBookmark */ = 28FB698D12CAF83C00DF775A /* PBXTextBookmark */;
-			28FB698E12CAF83C00DF775A /* PBXBookmark */ = 28FB698E12CAF83C00DF775A /* PBXBookmark */;
-			28FB698F12CAF83C00DF775A /* PBXTextBookmark */ = 28FB698F12CAF83C00DF775A /* PBXTextBookmark */;
+			28FB69F812CB097A00DF775A /* PBXTextBookmark */ = 28FB69F812CB097A00DF775A /* PBXTextBookmark */;
+			28FB69F912CB097A00DF775A /* PBXTextBookmark */ = 28FB69F912CB097A00DF775A /* PBXTextBookmark */;
+			28FB69FA12CB097A00DF775A /* PBXTextBookmark */ = 28FB69FA12CB097A00DF775A /* PBXTextBookmark */;
+			28FB69FB12CB097A00DF775A /* PBXTextBookmark */ = 28FB69FB12CB097A00DF775A /* PBXTextBookmark */;
+			28FB69FD12CB097A00DF775A /* PBXTextBookmark */ = 28FB69FD12CB097A00DF775A /* PBXTextBookmark */;
+			28FB6A3D12CB0EA300DF775A /* PBXTextBookmark */ = 28FB6A3D12CB0EA300DF775A /* PBXTextBookmark */;
 		};
 		sourceControlManager = 28FB697912CAF7C600DF775A /* Source Control */;
 		userBuildSettings = {
