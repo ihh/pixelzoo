@@ -37,6 +37,9 @@ double randomDouble();
 double randomExp();
 
 /* MIN, MAX, ABS */
+#undef MIN
+#undef MAX
+#undef ABS
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define ABS(X)   ((X) >= 0 ? (X) : -(X))
