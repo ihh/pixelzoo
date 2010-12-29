@@ -9,7 +9,7 @@
 #import "pixelzooViewController.h"
 
 /* global constants */
-#define RENDER_PERIOD (1/60)   /* time between redraws in seconds */
+#define REDRAWS_PER_SECOND 60   /* frame rate */
 
 
 @implementation pixelzooViewController
@@ -32,9 +32,28 @@
  }
  */
 
+/*
+ // Implement loadView to create a view hierarchy programmatically, without using a nib.
+ */
+- (void)loadView {
+	NSLog(@"loadView");
+	self.view = self.gameView;
+}
+
+// generate gameView on access
+- (pixelzooView *)gameView {
+    if (gameView == nil) {
+        gameView = [[pixelzooView alloc] initWithFrame:CGRectZero];
+        gameView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        gameView.backgroundColor = [UIColor blackColor];
+    }
+    return gameView;
+}
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	NSLog(@"viewDidLoad");
 	
 	NSString *gameFilePath = [[NSBundle mainBundle] pathForResource:@GAME_XML_FILENAME ofType:@"xml"];  
 //	NSLog(@"gameFilePath=%@",gameFilePath);
@@ -50,40 +69,43 @@
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
 	
-	drawImage = [[UIImageView alloc] initWithImage:nil];
-	drawImage.frame = self.view.frame;
-	[self.view addSubview:drawImage];
-
-	self.view.backgroundColor = [UIColor blackColor];
+//	drawImage = [[UIImageView alloc] initWithImage:nil];
+//	drawImage.frame = self.view.frame;
+//	[self.view addSubview:drawImage];
 
 	mouseMoved = 0;
-}
 
-/*
- // Implement loadView to create a view hierarchy programmatically, without using a nib.
- - (void)loadView {
- }
- */
+	[self startTimers];
+}
 
 
 
 /* Timers: board updates & rendering */
 -(void)startTimers
 {       
-    redrawTimer = [NSTimer scheduledTimerWithTimeInterval:RENDER_PERIOD target:self selector:@selector(setNeedsDisplay) userInfo:self repeats:YES];
-	// TODO: evolveTimer
+	double renderPeriod = 1. / REDRAWS_PER_SECOND;
+	renderPeriod = 3;//DEBUG
+    redrawTimer = [NSTimer scheduledTimerWithTimeInterval:renderPeriod target:self selector:@selector(triggerRedraw) userInfo:self repeats:YES];
+
+	double evolvePeriod = 1 / game->updatesPerSecond;
+    evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
 }
 
 /* Board updates */
-
+- (void)callGameLoop
+{   
+	int updates;
+	gameLoop (game, 1., MAX_PROPORTION_TIME_EVOLVING, NULL, &updates, NULL);
+//	NSLog(@"%d updates",updates);
+}
 
 
 /* Rendering */
-- (void)drawRect:(CGRect)rect
+- (void)triggerRedraw
 {   
-//    [super drawRect];
+	NSLog(@"triggerRedraw");
+	[self.view setNeedsDisplay];
 }
-
 
 /* Event handlers */
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -92,7 +114,7 @@
     UITouch *touch = [touches anyObject];
     
     if ([touch tapCount] == 2) {
-        drawImage.image = nil;
+//        drawImage.image = nil;
         return;
     }
 	
@@ -108,7 +130,7 @@
     CGPoint currentPoint = [touch locationInView:self.view];
     currentPoint.y -= 20;
     
-    
+/*    
     UIGraphicsBeginImageContext(self.view.frame.size);
     [drawImage.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
@@ -120,7 +142,8 @@
     CGContextStrokePath(UIGraphicsGetCurrentContext());
     drawImage.image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+ */  
+ 
     lastPoint = currentPoint;
 	
 }
@@ -130,12 +153,13 @@
     UITouch *touch = [touches anyObject];
     
     if ([touch tapCount] == 2) {
-        drawImage.image = nil;
+//        drawImage.image = nil;
         return;
     }
     
     
     if(!mouseSwiped) {
+/*
         UIGraphicsBeginImageContext(self.view.frame.size);
         [drawImage.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
@@ -147,7 +171,8 @@
         CGContextFlush(UIGraphicsGetCurrentContext());
         drawImage.image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-    }
+*/
+ }
 }
 
 /* release, dealloc */

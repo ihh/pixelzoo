@@ -11,6 +11,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
@@ -42,6 +43,8 @@
 		1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* pixelzoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pixelzoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2800A65E12CBFF99002BC1FC /* pixelzooView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooView.h; sourceTree = "<group>"; };
+		2800A65F12CBFF99002BC1FC /* pixelzooView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooView.m; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = pixelzooViewController.xib; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
@@ -111,6 +114,8 @@
 				1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */,
+				2800A65E12CBFF99002BC1FC /* pixelzooView.h */,
+				2800A65F12CBFF99002BC1FC /* pixelzooView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -284,6 +289,7 @@
 				28BDF9E312CBE53800173B45 /* xmlgame.c in Sources */,
 				28BDF9E412CBE53800173B45 /* xmlutil.c in Sources */,
 				28BDF9E512CBE53800173B45 /* xymap.c in Sources */,
+				2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

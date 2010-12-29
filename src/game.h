@@ -45,6 +45,9 @@ typedef struct Game {
 /* Game methods */
 Game* newGame();
 void deleteGame (Game *game);
+void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
+
+/* helpers */
 void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
 void updateGameState (Game *game);  /* tests win/lose conditions */

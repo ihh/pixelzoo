@@ -32,6 +32,19 @@ void deleteGame (Game *game) {
   SafeFree (game);
 }
 
+void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell_ret, int *actualUpdates, double *evolveTime) {
+  double maxUpdateTimeInSeconds, actualUpdatesPerCell;
+  maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetUpdatesPerCell / game->updatesPerSecond;
+
+  evolveBoard (game->board, targetUpdatesPerCell, maxUpdateTimeInSeconds, &actualUpdatesPerCell, actualUpdates, evolveTime);
+  useTools (game, actualUpdatesPerCell);
+  makeEntrances (game);
+  updateGameState (game);
+
+  if (actualUpdatesPerCell_ret)
+    *actualUpdatesPerCell_ret = actualUpdatesPerCell;
+}
+
 void useTools (Game *game, double duration) {
   ListNode *node;
   Tool *tool;

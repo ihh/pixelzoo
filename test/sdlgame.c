@@ -238,10 +238,9 @@ int evolveThreadFunc(void *voidGame)
   while ( game->gameState != GameQuit ) {
     clock_t start, now;
     start = clock();
-    evolveBoard (game->board, targetUpdatesPerCell, updatePeriodInSeconds, &updatesPerCell, &actualUpdates, &evolveTime);
-    useTools (game, updatesPerCell);
-    makeEntrances (game);
-    updateGameState (game);
+
+    gameLoop (game, targetUpdatesPerCell, 1., &updatesPerCell, &actualUpdates, &evolveTime);
+
     now = clock();
     loopTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
     SDL_Delay(1000 * MAX(0.,updatePeriodInSeconds - loopTime));
