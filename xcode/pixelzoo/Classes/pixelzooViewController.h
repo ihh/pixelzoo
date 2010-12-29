@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface pixelzooViewController : UIViewController {
+	UIImageView *drawImage;
+
 	NSInteger appState;
 
 	CGPoint lastPoint;
-	UIImageView *drawImage;
 	BOOL mouseSwiped;	
 	int mouseMoved;
 }
