@@ -7,6 +7,7 @@
 //
 
 #import "pixelzooViewController.h"
+#import "pixelzooView.h"
 
 @implementation pixelzooViewController
 
@@ -65,7 +66,7 @@
 	}
 	
 	// tell view about all our good stuff (hacky, this)
-	[[self view] setController:self];
+	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 	
 	mouseMoved = 0;
 

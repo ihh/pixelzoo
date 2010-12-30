@@ -202,24 +202,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>28EE231812CC57C500FD9A77</string>
+				<string>289C85FF12CCF9E900084D9B</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>testgame.xml</string>
+				<string>pixelzooViewController.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>28EE231912CC57C500FD9A77</string>
+						<string>289C860012CCF9E900084D9B</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>testgame.xml</string>
+						<string>pixelzooViewController.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>28D42A1412CC65C4009EDF82</string>
+						<string>289C860312CCFA4100084D9B</string>
 						<key>history</key>
 						<array>
-							<string>28D9C67212CC635700C3C0DB</string>
+							<string>289C85F912CCF9C900084D9B</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>15 187 914 586 0 0 1280 778 </string>
+				<string>224 127 914 586 0 0 1280 778 </string>
 			</dict>
 		</dict>
 	</array>
@@ -369,7 +369,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>28D42A1312CC65C4009EDF82</string>
+										<string>289C860212CCFA4100084D9B</string>
 										<key>history</key>
 										<array>
 											<string>28BDFA2612CBEBB800173B45</string>
@@ -389,7 +389,7 @@
 											<string>28D9C66512CC622B00C3C0DB</string>
 											<string>28D9C66612CC622B00C3C0DB</string>
 											<string>28D42A1112CC65C4009EDF82</string>
-											<string>28D42A1212CC65C4009EDF82</string>
+											<string>28D42A1312CC65C4009EDF82</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -401,14 +401,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1063, 466}}</string>
+								<string>{{0, 0}, {1063, 461}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 105 1280 673 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>466pt</string>
+							<string>461pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -421,14 +421,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 471}, {1063, 161}}</string>
+								<string>{{0, 466}, {1063, 166}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 105 1280 673 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>161pt</string>
+							<string>166pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -447,9 +447,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>28D42A0412CC640F009EDF82</string>
+				<string>289C85AF12CCEFC400084D9B</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>28D42A0512CC640F009EDF82</string>
+				<string>289C85B012CCEFC400084D9B</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -587,11 +587,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>28FB697712CAF7C600DF775A</string>
-		<string>28EE231812CC57C500FD9A77</string>
 		<string>1C78EAAD065D492600B07095</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo.xcodeproj</string>
+		<string>289C85FF12CCF9E900084D9B</string>
+		<string>28FB697712CAF7C600DF775A</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 105 1280 673 0 0 1280 778 </string>
@@ -610,12 +610,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>pixelzooViewController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -671,7 +673,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>28FB697712CAF7C600DF775A</string>
-				<string>28D42A0712CC640F009EDF82</string>
+				<string>289C85B212CCEFC400084D9B</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -684,7 +686,7 @@
 			<key>WindowToolGUID</key>
 			<string>28FB697712CAF7C600DF775A</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -793,13 +795,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>28D42A0812CC640F009EDF82</string>
+				<string>289C85B312CCEFC400084D9B</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>28D42A0912CC640F009EDF82</string>
-				<string>28D42A0A12CC640F009EDF82</string>
-				<string>28D42A0B12CC640F009EDF82</string>
-				<string>28D42A0C12CC640F009EDF82</string>
-				<string>28D42A0D12CC640F009EDF82</string>
+				<string>289C85B412CCEFC400084D9B</string>
+				<string>289C85B512CCEFC400084D9B</string>
+				<string>289C85B612CCEFC400084D9B</string>
+				<string>289C85B712CCEFC400084D9B</string>
+				<string>289C85B812CCEFC400084D9B</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -926,8 +928,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -963,7 +963,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>28D42A0E12CC640F009EDF82</string>
+				<string>289C85B912CCEFC400084D9B</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
@@ -973,7 +973,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
