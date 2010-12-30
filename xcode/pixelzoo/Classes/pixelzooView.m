@@ -17,6 +17,7 @@
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
 		NSLog(@"initWithFrame");
+
 		redraws = 0;
     }
     return self;
@@ -32,15 +33,10 @@
 
 	++redraws;
 	
+	// get controller info
 	Game *game = [controller game];
+	CGFloat cellSize = [controller cellSize];
 	
-	// get cell dimensions
-	CGFloat width = self.frame.size.width;
-	CGFloat height = self.frame.size.height;
-	// NSLog(@"w=%f h=%f",width,height);
-	CGFloat dim = MIN(width,height);
-	CGFloat cellSize = dim / game->board->size;
-
 	// Get the graphics context and clear it
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextClearRect(ctx, rect);
@@ -68,8 +64,6 @@
 //    CGContextSetRGBFillColor(ctx, 255, 0, 0, 1);
 //    CGContextFillRect(ctx, CGRectMake(10, 10, 50, 50));
 }
-
-
 
 - (void)dealloc {
     [super dealloc];

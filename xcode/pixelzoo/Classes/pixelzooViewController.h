@@ -38,5 +38,7 @@
 - (void)triggerRedraw;
 - (void)callGameLoop;
 
+- (CGFloat)cellSize;
+
 @end
 

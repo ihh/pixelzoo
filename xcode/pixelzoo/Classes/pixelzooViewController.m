@@ -103,6 +103,17 @@
 	[self.view setNeedsDisplay];
 }
 
+
+- (CGFloat) cellSize {
+	CGFloat width = self.view.frame.size.width;
+	CGFloat height = self.view.frame.size.height;
+	
+	CGFloat dim = MIN(width,height);
+	CGFloat cs = (int) (dim / game->board->size);
+	
+	return cs;
+}
+
 /* Event handlers */
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
@@ -115,33 +126,23 @@
     }
 	
     lastPoint = [touch locationInView:self.view];
-    lastPoint.y -= 20;
-	
+
+	CGFloat cellSize = [self cellSize];
+	game->toolPos.x = lastPoint.x / cellSize;
+	game->toolPos.y = lastPoint.y / cellSize;
+
+	game->toolActive = 1;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     mouseSwiped = YES;
     
     UITouch *touch = [touches anyObject];   
-    CGPoint currentPoint = [touch locationInView:self.view];
-    currentPoint.y -= 20;
-    
-/*    
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    [drawImage.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-    CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-    CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 1.0, 0.0, 0.0, 1.0);
-    CGContextBeginPath(UIGraphicsGetCurrentContext());
-    CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-    CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), currentPoint.x, currentPoint.y);
-    CGContextStrokePath(UIGraphicsGetCurrentContext());
-    drawImage.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
- */  
- 
-    lastPoint = currentPoint;
+    lastPoint = [touch locationInView:self.view];
 	
+	CGFloat cellSize = [self cellSize];
+	game->toolPos.x = lastPoint.x / cellSize;
+	game->toolPos.y = lastPoint.y / cellSize;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -153,22 +154,11 @@
         return;
     }
     
-    
     if(!mouseSwiped) {
-/*
-        UIGraphicsBeginImageContext(self.view.frame.size);
-        [drawImage.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 5.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 1.0, 0.0, 0.0, 1.0);
-        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-        CGContextFlush(UIGraphicsGetCurrentContext());
-        drawImage.image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-*/
- }
+		/* tapped in place */
+	}
+	game->toolActive = 0;
+
 }
 
 /* release, dealloc */
