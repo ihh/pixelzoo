@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "pixelzooView.h"
 
 // PixelZoo includes
 #include "xmlgame.h"
@@ -25,14 +24,14 @@
 
 	UIColor *boardColor[PaletteMax];
 	
-//	UIImageView *drawImage;
-
 	CGPoint lastPoint;
 	BOOL mouseSwiped;	
 	int mouseMoved;
 }
 
-- (pixelzooView *)gameView;
+@property(readonly) Game *game;
+@property(readonly) UIColor **boardColor;
+
 - (void)startTimers;
 - (void)triggerRedraw;
 - (void)callGameLoop;

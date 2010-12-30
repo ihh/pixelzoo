@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+#import "pixelzooViewController.h"
+
+// PixelZoo includes
+#include "game.h"
 
 @interface pixelzooView : UIView {
-
+	pixelzooViewController *controller;
 }
 
-- (void)drawRect:(CGRect)rect;
+@property(readwrite,assign) pixelzooViewController *controller;
 
 @end

@@ -14,6 +14,12 @@
 
 @implementation pixelzooViewController
 
+@synthesize game;
+
+-(UIColor**) boardColor {
+	return boardColor;
+}
+
 /*
  // The designated initializer. Override to perform setup that is required before the view is loaded.
  - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -62,12 +68,9 @@
 		boardColor[c] = [UIColor colorWithRed:r green:g blue:b alpha:1];
 	}
 	
-//	drawImage = [[UIImageView alloc] initWithImage:nil];
-//	drawImage.frame = self.view.frame;
-//	[self.view addSubview:drawImage];
-
-	self.view.backgroundColor = [UIColor blackColor];
-
+	// tell view about all our good stuff (hacky, this)
+	[[self view] setController:self];
+	
 	mouseMoved = 0;
 
 	[self startTimers];
@@ -79,7 +82,6 @@
 -(void)startTimers
 {       
 	double renderPeriod = 1. / REDRAWS_PER_SECOND;
-	renderPeriod = 1;//DEBUG
     redrawTimer = [NSTimer scheduledTimerWithTimeInterval:renderPeriod target:self selector:@selector(triggerRedraw) userInfo:self repeats:YES];
 
 	double evolvePeriod = 1 / game->updatesPerSecond;
@@ -98,7 +100,7 @@
 /* Rendering */
 - (void)triggerRedraw
 {   
-	NSLog(@"triggerRedraw");
+//	NSLog(@"triggerRedraw");
 	[self.view setNeedsDisplay];
 }
 
