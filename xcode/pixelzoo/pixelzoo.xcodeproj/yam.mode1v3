@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>2800A68E12CC0156002BC1FC</string>
+						<string>2800A6B912CC0323002BC1FC</string>
 						<key>history</key>
 						<array>
 							<string>2825176E12CBFE3100414A11</string>
@@ -314,7 +314,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>7</integer>
+									<integer>5</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -357,7 +357,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>pixelzooView.m</string>
+								<string>pixelzooViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -365,11 +365,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>pixelzooView.m</string>
+										<string>pixelzooViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>2800A68D12CC0156002BC1FC</string>
+										<string>2800A6B812CC0323002BC1FC</string>
 										<key>history</key>
 										<array>
 											<string>28FB698D12CAF83C00DF775A</string>
@@ -380,11 +380,11 @@
 											<string>28BDFA8B12CBF39500173B45</string>
 											<string>28BDFAB912CBF82C00173B45</string>
 											<string>2825176612CBFE2200414A11</string>
-											<string>2800A68112CC011E002BC1FC</string>
-											<string>2800A68912CC0156002BC1FC</string>
-											<string>2800A68A12CC0156002BC1FC</string>
-											<string>2800A68B12CC0156002BC1FC</string>
-											<string>2800A68C12CC0156002BC1FC</string>
+											<string>2800A69D12CC0211002BC1FC</string>
+											<string>2800A6A612CC02A4002BC1FC</string>
+											<string>2800A6A712CC02A4002BC1FC</string>
+											<string>2800A6B612CC0323002BC1FC</string>
+											<string>2800A6B712CC0323002BC1FC</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>

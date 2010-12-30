@@ -19,7 +19,6 @@
 // Game data
 @interface pixelzooViewController : UIViewController {
 	Game *game;
-	pixelzooView *gameView;
 	
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;

@@ -32,24 +32,6 @@
  }
  */
 
-/*
- // Implement loadView to create a view hierarchy programmatically, without using a nib.
- */
-- (void)loadView {
-	NSLog(@"loadView");
-	self.view = self.gameView;
-}
-
-// generate gameView on access
-- (pixelzooView *)gameView {
-    if (gameView == nil) {
-        gameView = [[pixelzooView alloc] initWithFrame:CGRectZero];
-        gameView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        gameView.backgroundColor = [UIColor blackColor];
-    }
-    return gameView;
-}
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -73,6 +55,8 @@
 //	drawImage.frame = self.view.frame;
 //	[self.view addSubview:drawImage];
 
+	self.view.backgroundColor = [UIColor blackColor];
+
 	mouseMoved = 0;
 
 	[self startTimers];
@@ -84,7 +68,7 @@
 -(void)startTimers
 {       
 	double renderPeriod = 1. / REDRAWS_PER_SECOND;
-	renderPeriod = 3;//DEBUG
+	renderPeriod = 1;//DEBUG
     redrawTimer = [NSTimer scheduledTimerWithTimeInterval:renderPeriod target:self selector:@selector(triggerRedraw) userInfo:self repeats:YES];
 
 	double evolvePeriod = 1 / game->updatesPerSecond;

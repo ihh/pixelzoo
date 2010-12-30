@@ -25,7 +25,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1134;
 		vrLoc = 634;
@@ -35,7 +35,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 46";
 		rLen = 0;
-		rLoc = 1606;
+		rLoc = 1093;
 		rType = 0;
 		vrLen = 1266;
 		vrLoc = 634;
@@ -45,7 +45,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 24";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 594;
 		vrLoc = 32;
@@ -55,7 +55,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1134;
 		vrLoc = 634;
@@ -65,7 +65,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 41";
 		rLen = 0;
-		rLoc = 1440;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1266;
 		vrLoc = 634;
@@ -75,7 +75,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 24";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 594;
 		vrLoc = 32;
@@ -85,7 +85,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 68";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1167;
 		vrLoc = 634;
@@ -95,7 +95,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 73";
 		rLen = 0;
-		rLoc = 2315;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 1033;
 		vrLoc = 1593;
@@ -105,7 +105,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 24";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 594;
 		vrLoc = 32;
@@ -115,7 +115,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1134;
 		vrLoc = 634;
@@ -125,7 +125,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 46";
 		rLen = 0;
-		rLoc = 1606;
+		rLoc = 1093;
 		rType = 0;
 		vrLen = 1158;
 		vrLoc = 812;
@@ -135,7 +135,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 24";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 594;
 		vrLoc = 32;
@@ -143,15 +143,15 @@
 	2800A65E12CBFF99002BC1FC /* pixelzooView.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1002, 411}}";
-			sepNavSelRange = "{201, 0}";
-			sepNavVisRange = "{0, 210}";
+			sepNavSelRange = "{235, 0}";
+			sepNavVisRange = "{0, 242}";
 		};
 	};
 	2800A65F12CBFF99002BC1FC /* pixelzooView.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1002, 520}}";
-			sepNavSelRange = "{576, 0}";
-			sepNavVisRange = "{166, 463}";
+			sepNavIntBoundsRect = "{{0, 0}, {1002, 494}}";
+			sepNavSelRange = "{364, 0}";
+			sepNavVisRange = "{0, 565}";
 		};
 	};
 	2800A66112CBFFD1002BC1FC /* PBXTextBookmark */ = {
@@ -159,7 +159,7 @@
 		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
 		name = "pixelzooView.m: 25";
 		rLen = 0;
-		rLoc = 475;
+		rLoc = 502;
 		rType = 0;
 		vrLen = 581;
 		vrLoc = 0;
@@ -199,7 +199,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1340;
 		vrLoc = 321;
@@ -209,7 +209,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 40";
 		rLen = 0;
-		rLoc = 1065;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1240;
 		vrLoc = 423;
@@ -219,7 +219,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 42";
 		rLen = 0;
-		rLoc = 1068;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1274;
 		vrLoc = 227;
@@ -229,7 +229,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 25";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 600;
 		vrLoc = 32;
@@ -259,7 +259,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 42";
 		rLen = 0;
-		rLoc = 1094;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 423;
@@ -269,7 +269,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 40";
 		rLen = 0;
-		rLoc = 1082;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 970;
 		vrLoc = 612;
@@ -279,7 +279,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 52";
 		rLen = 0;
-		rLoc = 1440;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1238;
 		vrLoc = 227;
@@ -289,7 +289,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 26";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 621;
 		vrLoc = 32;
@@ -328,8 +328,8 @@
 		comments = "Accessing unknown 'gameView' getter method";
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
-		rLen = 1;
-		rLoc = 39;
+		rLen = 0;
+		rLoc = 33;
 		rType = 1;
 	};
 	2800A67E12CC010B002BC1FC /* PBXTextBookmark */ = {
@@ -337,7 +337,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 40";
 		rLen = 0;
-		rLoc = 1064;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 491;
 		vrLoc = 920;
@@ -357,7 +357,7 @@
 		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
 		name = "pixelzooView.m: 25";
 		rLen = 0;
-		rLoc = 475;
+		rLoc = 502;
 		rType = 0;
 		vrLen = 574;
 		vrLoc = 0;
@@ -366,8 +366,8 @@
 		isa = PBXTextBookmark;
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
-		rLen = 29;
-		rLoc = 1126;
+		rLen = 0;
+		rLoc = 927;
 		rType = 0;
 		vrLen = 1119;
 		vrLoc = 634;
@@ -387,7 +387,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 35";
 		rLen = 0;
-		rLoc = 639;
+		rLoc = 614;
 		rType = 0;
 		vrLen = 495;
 		vrLoc = 217;
@@ -397,7 +397,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 27";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 607;
 		vrLoc = 32;
@@ -417,7 +417,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 110";
 		rLen = 0;
-		rLoc = 3077;
+		rLoc = 2616;
 		rType = 0;
 		vrLen = 893;
 		vrLoc = 2434;
@@ -427,7 +427,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 35";
 		rLen = 0;
-		rLoc = 659;
+		rLoc = 634;
 		rType = 0;
 		vrLen = 545;
 		vrLoc = 167;
@@ -437,7 +437,7 @@
 		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
 		name = "pixelzooView.m: 25";
 		rLen = 0;
-		rLoc = 475;
+		rLoc = 502;
 		rType = 0;
 		vrLen = 574;
 		vrLoc = 0;
@@ -447,7 +447,7 @@
 		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
 		name = "pixelzooView.m: 30";
 		rLen = 0;
-		rLoc = 576;
+		rLoc = 561;
 		rType = 0;
 		vrLen = 463;
 		vrLoc = 166;
@@ -457,9 +457,289 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 27";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 607;
+		vrLoc = 32;
+	};
+	2800A69112CC019C002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65E12CBFF99002BC1FC /* pixelzooView.h */;
+		name = "pixelzooView.h: 13";
+		rLen = 0;
+		rLoc = 201;
+		rType = 0;
+		vrLen = 210;
+		vrLoc = 0;
+	};
+	2800A69212CC019C002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 30";
+		rLen = 0;
+		rLoc = 561;
+		rType = 0;
+		vrLen = 490;
+		vrLoc = 139;
+	};
+	2800A69312CC019C002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 18";
+		rLen = 0;
+		rLoc = 336;
+		rType = 0;
+		vrLen = 511;
+		vrLoc = 140;
+	};
+	2800A69412CC019C002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 27";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 607;
+		vrLoc = 32;
+	};
+	2800A69712CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 35";
+		rLen = 0;
+		rLoc = 634;
+		rType = 0;
+		vrLen = 544;
+		vrLoc = 167;
+	};
+	2800A69812CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 51";
+		rLen = 0;
+		rLoc = 927;
+		rType = 0;
+		vrLen = 1094;
+		vrLoc = 317;
+	};
+	2800A69912CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 28";
+		rLen = 30;
+		rLoc = 505;
+		rType = 0;
+		vrLen = 516;
+		vrLoc = 140;
+	};
+	2800A69A12CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65E12CBFF99002BC1FC /* pixelzooView.h */;
+		name = "pixelzooView.h: 13";
+		rLen = 0;
+		rLoc = 201;
+		rType = 0;
+		vrLen = 210;
+		vrLoc = 0;
+	};
+	2800A69B12CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65E12CBFF99002BC1FC /* pixelzooView.h */;
+		name = "pixelzooView.h: 16";
+		rLen = 0;
+		rLoc = 235;
+		rType = 0;
+		vrLen = 242;
+		vrLoc = 0;
+	};
+	2800A69C12CC01D1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 27";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 607;
+		vrLoc = 32;
+	};
+	2800A69D12CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65E12CBFF99002BC1FC /* pixelzooView.h */;
+		name = "pixelzooView.h: 16";
+		rLen = 0;
+		rLoc = 235;
+		rType = 0;
+		vrLen = 242;
+		vrLoc = 0;
+	};
+	2800A69E12CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 35";
+		rLen = 0;
+		rLoc = 634;
+		rType = 0;
+		vrLen = 544;
+		vrLoc = 167;
+	};
+	2800A69F12CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 109";
+		rLen = 0;
+		rLoc = 2615;
+		rType = 0;
+		vrLen = 808;
+		vrLoc = 2236;
+	};
+	2800A6A012CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 28";
+		rLen = 30;
+		rLoc = 505;
+		rType = 0;
+		vrLen = 516;
+		vrLoc = 140;
+	};
+	2800A6A112CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 25";
+		rLen = 0;
+		rLoc = 427;
+		rType = 0;
+		vrLen = 474;
+		vrLoc = 140;
+	};
+	2800A6A212CC0211002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 27";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 651;
+		vrLoc = 32;
+	};
+	2800A6A612CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */;
+		name = "pixelzooAppDelegate.m: 31";
+		rLen = 0;
+		rLoc = 687;
+		rType = 0;
+		vrLen = 690;
+		vrLoc = 0;
+	};
+	2800A6A712CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */;
+		name = "pixelzooView.m: 21";
+		rLen = 0;
+		rLoc = 364;
+		rType = 0;
+		vrLen = 565;
+		vrLoc = 0;
+	};
+	2800A6A812CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 35";
+		rLen = 0;
+		rLoc = 634;
+		rType = 0;
+		vrLen = 544;
+		vrLoc = 167;
+	};
+	2800A6A912CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 109";
+		rLen = 0;
+		rLoc = 2615;
+		rType = 0;
+		vrLen = 771;
+		vrLoc = 2273;
+	};
+	2800A6AA12CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 42";
+		rLen = 0;
+		rLoc = 927;
+		rType = 0;
+		vrLen = 992;
+		vrLoc = 854;
+	};
+	2800A6AB12CC02A4002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 27";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 607;
+		vrLoc = 32;
+	};
+	2800A6AE12CC02C1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 76";
+		rLen = 0;
+		rLoc = 1767;
+		rType = 0;
+		vrLen = 834;
+		vrLoc = 1535;
+	};
+	2800A6AF12CC02C1002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 27";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 607;
+		vrLoc = 32;
+	};
+	2800A6B612CC0323002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 22";
+		rLen = 0;
+		rLoc = 448;
+		rType = 0;
+		vrLen = 520;
+		vrLoc = 167;
+	};
+	2800A6B712CC0323002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 34";
+		rLen = 0;
+		rLoc = 927;
+		rType = 0;
+		vrLen = 1255;
+		vrLoc = 318;
+	};
+	2800A6B812CC0323002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
+		name = "pixelzooViewController.m: 30";
+		rLen = 0;
+		rLoc = 834;
+		rType = 0;
+		vrLen = 688;
+		vrLoc = 2552;
+	};
+	2800A6B912CC0323002BC1FC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
+		name = "pixelzooViewController.h: 26";
+		rLen = 0;
+		rLoc = 500;
+		rType = 0;
+		vrLen = 603;
 		vrLoc = 32;
 	};
 	2825176512CBFE2200414A11 /* PBXTextBookmark */ = {
@@ -497,7 +777,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 99";
 		rLen = 0;
-		rLoc = 3077;
+		rLoc = 2616;
 		rType = 0;
 		vrLen = 949;
 		vrLoc = 1044;
@@ -507,7 +787,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 44";
 		rLen = 0;
-		rLoc = 1557;
+		rLoc = 1044;
 		rType = 0;
 		vrLen = 1228;
 		vrLoc = 634;
@@ -517,7 +797,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 47";
 		rLen = 0;
-		rLoc = 2313;
+		rLoc = 1852;
 		rType = 0;
 		vrLen = 1066;
 		vrLoc = 0;
@@ -527,7 +807,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 24";
 		rLen = 0;
-		rLoc = 525;
+		rLoc = 500;
 		rType = 0;
 		vrLen = 587;
 		vrLoc = 45;
@@ -537,7 +817,7 @@
 		fRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */;
 		name = "pixelzooViewController.m: 102";
 		rLen = 0;
-		rLoc = 3077;
+		rLoc = 2616;
 		rType = 0;
 		vrLen = 982;
 		vrLoc = 2008;
@@ -547,7 +827,7 @@
 		fRef = 28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */;
 		name = "pixelzooViewController.h: 22";
 		rLen = 0;
-		rLoc = 498;
+		rLoc = 473;
 		rType = 0;
 		vrLen = 563;
 		vrLoc = 0;
@@ -659,16 +939,16 @@
 	28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {691, 520}}";
-			sepNavSelRange = "{525, 0}";
-			sepNavVisRange = "{32, 607}";
+			sepNavSelRange = "{500, 0}";
+			sepNavVisRange = "{32, 603}";
 			sepNavWindowFrame = "{{38, 594}, {750, 558}}";
 		};
 	};
 	28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1020, 2717}}";
-			sepNavSelRange = "{3077, 0}";
-			sepNavVisRange = "{2434, 893}";
+			sepNavIntBoundsRect = "{{0, 0}, {1020, 2431}}";
+			sepNavSelRange = "{834, 0}";
+			sepNavVisRange = "{2552, 688}";
 			sepNavWindowFrame = "{{617, 130}, {914, 642}}";
 		};
 	};
@@ -807,6 +1087,34 @@
 			2800A68C12CC0156002BC1FC /* PBXTextBookmark */ = 2800A68C12CC0156002BC1FC /* PBXTextBookmark */;
 			2800A68D12CC0156002BC1FC /* PBXTextBookmark */ = 2800A68D12CC0156002BC1FC /* PBXTextBookmark */;
 			2800A68E12CC0156002BC1FC /* PBXTextBookmark */ = 2800A68E12CC0156002BC1FC /* PBXTextBookmark */;
+			2800A69112CC019C002BC1FC /* PBXTextBookmark */ = 2800A69112CC019C002BC1FC /* PBXTextBookmark */;
+			2800A69212CC019C002BC1FC /* PBXTextBookmark */ = 2800A69212CC019C002BC1FC /* PBXTextBookmark */;
+			2800A69312CC019C002BC1FC /* PBXTextBookmark */ = 2800A69312CC019C002BC1FC /* PBXTextBookmark */;
+			2800A69412CC019C002BC1FC /* PBXTextBookmark */ = 2800A69412CC019C002BC1FC /* PBXTextBookmark */;
+			2800A69712CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69712CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69812CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69812CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69912CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69912CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69A12CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69A12CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69B12CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69B12CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69C12CC01D1002BC1FC /* PBXTextBookmark */ = 2800A69C12CC01D1002BC1FC /* PBXTextBookmark */;
+			2800A69D12CC0211002BC1FC /* PBXTextBookmark */ = 2800A69D12CC0211002BC1FC /* PBXTextBookmark */;
+			2800A69E12CC0211002BC1FC /* PBXTextBookmark */ = 2800A69E12CC0211002BC1FC /* PBXTextBookmark */;
+			2800A69F12CC0211002BC1FC /* PBXTextBookmark */ = 2800A69F12CC0211002BC1FC /* PBXTextBookmark */;
+			2800A6A012CC0211002BC1FC /* PBXTextBookmark */ = 2800A6A012CC0211002BC1FC /* PBXTextBookmark */;
+			2800A6A112CC0211002BC1FC /* PBXTextBookmark */ = 2800A6A112CC0211002BC1FC /* PBXTextBookmark */;
+			2800A6A212CC0211002BC1FC /* PBXTextBookmark */ = 2800A6A212CC0211002BC1FC /* PBXTextBookmark */;
+			2800A6A612CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6A612CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6A712CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6A712CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6A812CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6A812CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6A912CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6A912CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6AA12CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6AA12CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6AB12CC02A4002BC1FC /* PBXTextBookmark */ = 2800A6AB12CC02A4002BC1FC /* PBXTextBookmark */;
+			2800A6AE12CC02C1002BC1FC /* PBXTextBookmark */ = 2800A6AE12CC02C1002BC1FC /* PBXTextBookmark */;
+			2800A6AF12CC02C1002BC1FC /* PBXTextBookmark */ = 2800A6AF12CC02C1002BC1FC /* PBXTextBookmark */;
+			2800A6B612CC0323002BC1FC /* PBXTextBookmark */ = 2800A6B612CC0323002BC1FC /* PBXTextBookmark */;
+			2800A6B712CC0323002BC1FC /* PBXTextBookmark */ = 2800A6B712CC0323002BC1FC /* PBXTextBookmark */;
+			2800A6B812CC0323002BC1FC /* PBXTextBookmark */ = 2800A6B812CC0323002BC1FC /* PBXTextBookmark */;
+			2800A6B912CC0323002BC1FC /* PBXTextBookmark */ = 2800A6B912CC0323002BC1FC /* PBXTextBookmark */;
 			2825176512CBFE2200414A11 = 2825176512CBFE2200414A11 /* PBXTextBookmark */;
 			2825176612CBFE2200414A11 = 2825176612CBFE2200414A11 /* PBXTextBookmark */;
 			2825176712CBFE2200414A11 = 2825176712CBFE2200414A11 /* PBXTextBookmark */;
