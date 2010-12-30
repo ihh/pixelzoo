@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>2800A6B912CC0323002BC1FC</string>
+						<string>2800A6C712CC0574002BC1FC</string>
 						<key>history</key>
 						<array>
 							<string>2825176E12CBFE3100414A11</string>
@@ -369,7 +369,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>2800A6B812CC0323002BC1FC</string>
+										<string>2800A6C612CC0574002BC1FC</string>
 										<key>history</key>
 										<array>
 											<string>28FB698D12CAF83C00DF775A</string>
@@ -383,8 +383,8 @@
 											<string>2800A69D12CC0211002BC1FC</string>
 											<string>2800A6A612CC02A4002BC1FC</string>
 											<string>2800A6A712CC02A4002BC1FC</string>
-											<string>2800A6B612CC0323002BC1FC</string>
-											<string>2800A6B712CC0323002BC1FC</string>
+											<string>2800A6BA12CC0509002BC1FC</string>
+											<string>2800A6BB12CC0509002BC1FC</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -584,8 +584,8 @@
 	<array>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>28FB697712CAF7C600DF775A</string>
-		<string>2845266712CBFB010027BBC7</string>
 		<string>1C78EAAD065D492600B07095</string>
+		<string>2845266712CBFB010027BBC7</string>
 		<string>/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

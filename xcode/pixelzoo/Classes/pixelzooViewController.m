@@ -37,6 +37,7 @@
     [super viewDidLoad];
 	NSLog(@"viewDidLoad");
 	
+	// Load the game XML
 	NSString *gameFilePath = [[NSBundle mainBundle] pathForResource:@GAME_XML_FILENAME ofType:@"xml"];  
 //	NSLog(@"gameFilePath=%@",gameFilePath);
 	NSData *gameXMLData = [NSData dataWithContentsOfFile:gameFilePath];  
@@ -50,6 +51,16 @@
 
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
+
+	// create color palette
+	int c;
+	RGB *rgb =game->board->palette.rgb;
+	for (c = 0; c < PaletteMax; ++c) {
+		CGFloat r = (CGFloat) rgb->r / RGB_max;
+		CGFloat g = (CGFloat) rgb->g / RGB_max;
+		CGFloat b = (CGFloat) rgb->b / RGB_max;
+		boardColor[c] = [UIColor colorWithRed:r green:g blue:b alpha:1];
+	}
 	
 //	drawImage = [[UIImageView alloc] initWithImage:nil];
 //	drawImage.frame = self.view.frame;

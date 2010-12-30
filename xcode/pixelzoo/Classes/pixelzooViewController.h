@@ -22,6 +22,8 @@
 	
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
+
+	UIColor *boardColor[PaletteMax];
 	
 //	UIImageView *drawImage;
 

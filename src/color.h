@@ -2,6 +2,7 @@
 #define COLOR_INCLUDED
 
 /* RGB color struct */
+#define RGB_max 255
 typedef struct RGB {
   unsigned char r, g, b;
 } RGB;
