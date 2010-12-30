@@ -19,7 +19,8 @@ typedef struct Board {
   double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
   Palette palette;  /* cell color scheme used by this Board */
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
-  int syncUpdates;  /* number of board synchronizations. This is kept equal to (int) updatesPerCell */
+  double updatesPerCellAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
+  int syncUpdates;  /* number of board synchronizations */
 } Board;
 
 /* public methods */

@@ -80,16 +80,19 @@
 	double renderPeriod = 1. / REDRAWS_PER_SECOND;
     redrawTimer = [NSTimer scheduledTimerWithTimeInterval:renderPeriod target:self selector:@selector(triggerRedraw) userInfo:self repeats:YES];
 
-	double evolvePeriod = 1 / game->updatesPerSecond;
+	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
     evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
 }
 
 /* Board updates */
 - (void)callGameLoop
 {   
-	int updates;
-	gameLoop (game, 1., MAX_PROPORTION_TIME_EVOLVING, NULL, &updates, NULL);
-//	NSLog(@"%d updates",updates);
+	double targetUpdatesPerCell = game->updatesPerSecond / GAMELOOP_CALLS_PER_SECOND;
+	double actualUpdatesPerCell, elapsedTime;
+	int cellUpdates;
+	gameLoop (game, targetUpdatesPerCell, MAX_PROPORTION_TIME_EVOLVING, &actualUpdatesPerCell, &cellUpdates, &elapsedTime);
+	if (actualUpdatesPerCell < targetUpdatesPerCell)
+		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d target:%g actual:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell);
 }
 
 

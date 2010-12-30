@@ -1,6 +1,6 @@
 <xml>
 <game>
-<rate>100</rate>
+<rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
 <tool>
 <name>mytool</name>
 <size>8</size>

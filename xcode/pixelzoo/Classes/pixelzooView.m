@@ -47,19 +47,19 @@
 
 	// draw cells in specified area
 	int x, y;
-	UIColor **boardColor = [controller boardColor];
+//	UIColor **boardColor = [controller boardColor];
 	
 	for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
 		for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
 			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
-			UIColor *cellColor = boardColor[cellColorIndex];
-			//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
+//			UIColor *cellColor = boardColor[cellColorIndex];
+//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
 			
 			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-			if (cellColorIndex>0)
+//			if (cellColorIndex>0)
 				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-			else
-				CGContextSetRGBFillColor(ctx, redraws%2, 0, 1-(redraws%2), 1);
+//			else
+//				CGContextSetRGBFillColor(ctx, 0, (CGFloat)ABS(((redraws*8)%512)-256)/256, 0, 1);  // DEBUG
 
 			CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
 		}
