@@ -8,10 +8,6 @@
 
 #import "pixelzooViewController.h"
 
-/* global constants */
-#define REDRAWS_PER_SECOND 60   /* frame rate */
-
-
 @implementation pixelzooViewController
 
 @synthesize game;

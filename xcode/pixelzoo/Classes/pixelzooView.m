@@ -17,6 +17,7 @@
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
 		NSLog(@"initWithFrame");
+		redraws = 0;
     }
     return self;
 }
@@ -29,6 +30,8 @@
 {   
 //	NSLog(@"drawRect");
 
+	++redraws;
+	
 	Game *game = [controller game];
 	
 	// get cell dimensions
@@ -45,6 +48,7 @@
 	// draw cells in specified area
 	int x, y;
 	UIColor **boardColor = [controller boardColor];
+	
 	for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
 		for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
 			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
@@ -52,10 +56,12 @@
 			//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
 			
 			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-			CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-			
 			if (cellColorIndex>0)
-				CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
+				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
+			else
+				CGContextSetRGBFillColor(ctx, redraws%2, 0, 1-(redraws%2), 1);
+
+			CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
 		}
 	}
 	// Draw a red solid square

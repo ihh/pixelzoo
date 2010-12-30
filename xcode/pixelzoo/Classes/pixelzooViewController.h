@@ -14,6 +14,7 @@
 // PixelZoo game constants
 #define GAME_XML_FILENAME "testgame"
 #define MAX_PROPORTION_TIME_EVOLVING  .9
+#define REDRAWS_PER_SECOND 60   /* frame rate */
 
 // Game data
 @interface pixelzooViewController : UIViewController {

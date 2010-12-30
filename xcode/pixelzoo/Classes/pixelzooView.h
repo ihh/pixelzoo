@@ -15,6 +15,7 @@
 
 @interface pixelzooView : UIView {
 	pixelzooViewController *controller;
+	int redraws;
 }
 
 @property(readwrite,assign) pixelzooViewController *controller;

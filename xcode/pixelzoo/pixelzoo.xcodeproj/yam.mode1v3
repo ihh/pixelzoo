@@ -202,24 +202,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>2800A74012CC0DC5002BC1FC</string>
+				<string>2800A73012CC0CBC002BC1FC</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>pixelzooViewController.m</string>
+				<string>pixelzooView.h</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>2800A74112CC0DC5002BC1FC</string>
+						<string>2800A73112CC0CBC002BC1FC</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>pixelzooViewController.m</string>
+						<string>pixelzooView.h</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>2800A81C12CC1429002BC1FC</string>
+						<string>2840139B12CC19AA003F8494</string>
 						<key>history</key>
 						<array>
-							<string>2800A73A12CC0DBB002BC1FC</string>
+							<string>2800A84112CC1828002BC1FC</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>617 186 914 586 0 0 1920 1178 </string>
+				<string>615 187 914 586 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -256,10 +256,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>2800A81D12CC1429002BC1FC</string>
+						<string>2840139C12CC19AA003F8494</string>
 						<key>history</key>
 						<array>
-							<string>2800A76712CC0F24002BC1FC</string>
+							<string>2800A84012CC1828002BC1FC</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -282,24 +282,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>2800A73012CC0CBC002BC1FC</string>
+				<string>2800A74012CC0DC5002BC1FC</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>pixelzooView.h</string>
+				<string>pixelzooViewController.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>2800A73112CC0CBC002BC1FC</string>
+						<string>2800A74112CC0DC5002BC1FC</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>pixelzooView.h</string>
+						<string>pixelzooViewController.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>2800A81E12CC1429002BC1FC</string>
+						<string>2840139D12CC19AA003F8494</string>
 						<key>history</key>
 						<array>
-							<string>2800A77E12CC0FA0002BC1FC</string>
+							<string>2800A83F12CC1828002BC1FC</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -315,7 +315,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>615 187 914 586 0 0 1920 1178 </string>
+				<string>617 186 914 586 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -449,7 +449,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>2800A81B12CC1429002BC1FC</string>
+										<string>2840139A12CC19AA003F8494</string>
 										<key>history</key>
 										<array>
 											<string>28FB698D12CAF83C00DF775A</string>
@@ -462,10 +462,10 @@
 											<string>2825176612CBFE2200414A11</string>
 											<string>2800A6D212CC06C3002BC1FC</string>
 											<string>2800A74412CC0E1B002BC1FC</string>
-											<string>2800A7FD12CC1391002BC1FC</string>
-											<string>2800A80C12CC13F2002BC1FC</string>
-											<string>2800A80D12CC13F2002BC1FC</string>
-											<string>2800A80E12CC13F2002BC1FC</string>
+											<string>2840139612CC19AA003F8494</string>
+											<string>2840139712CC19AA003F8494</string>
+											<string>2840139812CC19AA003F8494</string>
+											<string>2840139912CC19AA003F8494</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -477,14 +477,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1063, 491}}</string>
+								<string>{{0, 0}, {1063, 486}}</string>
 								<key>RubberWindowFrame</key>
 								<string>640 505 1280 673 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>491pt</string>
+							<string>486pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -497,14 +497,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 496}, {1063, 136}}</string>
+								<string>{{0, 491}, {1063, 141}}</string>
 								<key>RubberWindowFrame</key>
 								<string>640 505 1280 673 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>136pt</string>
+							<string>141pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -523,9 +523,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>2800A63D12CBFE61002BC1FC</string>
+				<string>2840135412CC1873003F8494</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>2800A63E12CBFE61002BC1FC</string>
+				<string>2840135512CC1873003F8494</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -665,10 +665,10 @@
 	<array>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>28FB697712CAF7C600DF775A</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>2800A73012CC0CBC002BC1FC</string>
-		<string>2800A76C12CC0F31002BC1FC</string>
 		<string>2800A74012CC0DC5002BC1FC</string>
+		<string>2800A76C12CC0F31002BC1FC</string>
+		<string>2800A73012CC0CBC002BC1FC</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -693,7 +693,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>pixelzooViewController.m</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -710,8 +710,6 @@
 							<string>241pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -751,7 +749,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>28FB697712CAF7C600DF775A</string>
-				<string>2800A64112CBFE61002BC1FC</string>
+				<string>2840135912CC1873003F8494</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -764,7 +762,7 @@
 			<key>WindowToolGUID</key>
 			<string>28FB697712CAF7C600DF775A</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -873,13 +871,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>2800A64212CBFE61002BC1FC</string>
+				<string>2840135A12CC1873003F8494</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>2800A64312CBFE61002BC1FC</string>
-				<string>2800A64412CBFE61002BC1FC</string>
-				<string>2800A64512CBFE61002BC1FC</string>
-				<string>2800A64612CBFE61002BC1FC</string>
-				<string>2800A64712CBFE61002BC1FC</string>
+				<string>2840135B12CC1873003F8494</string>
+				<string>2840135C12CC1873003F8494</string>
+				<string>2840135D12CC1873003F8494</string>
+				<string>2840135E12CC1873003F8494</string>
+				<string>2840135F12CC1873003F8494</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -1043,7 +1041,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>2800A64812CBFE61002BC1FC</string>
+				<string>2840136012CC1873003F8494</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
