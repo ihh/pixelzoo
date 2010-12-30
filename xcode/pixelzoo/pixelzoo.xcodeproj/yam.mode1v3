@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>28EE232512CC58A200FD9A77</string>
+						<string>28EE233E12CC5C2500FD9A77</string>
 						<key>history</key>
 						<array>
 							<string>28EE231312CC57C100FD9A77</string>
@@ -270,6 +270,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -314,8 +316,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>13</integer>
-									<integer>12</integer>
+									<integer>5</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -350,14 +352,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>testgame.xml</string>
+								<string>pixelzooViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -365,11 +365,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>testgame.xml</string>
+										<string>pixelzooViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>28EE232412CC58A200FD9A77</string>
+										<string>28EE233D12CC5C2500FD9A77</string>
 										<key>history</key>
 										<array>
 											<string>28BDFA2612CBEBB800173B45</string>
@@ -384,12 +384,12 @@
 											<string>28EE22FD12CC578000FD9A77</string>
 											<string>28EE22FE12CC578000FD9A77</string>
 											<string>28EE22FF12CC578000FD9A77</string>
-											<string>28EE230012CC578000FD9A77</string>
-											<string>28EE230112CC578000FD9A77</string>
-											<string>28EE230312CC578000FD9A77</string>
 											<string>28EE230412CC578000FD9A77</string>
-											<string>28EE232212CC58A200FD9A77</string>
-											<string>28EE232312CC58A200FD9A77</string>
+											<string>28EE232A12CC5B2E00FD9A77</string>
+											<string>28EE232B12CC5B2E00FD9A77</string>
+											<string>28EE232C12CC5B2E00FD9A77</string>
+											<string>28EE233B12CC5C2500FD9A77</string>
+											<string>28EE233C12CC5C2500FD9A77</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
