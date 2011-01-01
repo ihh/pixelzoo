@@ -1,7 +1,6 @@
 #ifndef GOAL_INCLUDED
 #define GOAL_INCLUDED
 
-#include "playstate.h"
 #include "board.h"
 #include "xymap.h"
 #include "statemap.h"
@@ -11,31 +10,22 @@
 /* GoalType enumeration */
 /* When a goal has no parent, "parent area" is entire board */
 enum GoalType { Area,        /* subgoal (l) is met for given constant area
-				TODO: if stringData[0] is defined, interpret it as an NPC name, and use focus location of that NPC as an XY offset
 			      */
+
 		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls,
 				and allowing diagonal connections if intData[1] is true.
 				Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
 				where (intData[4] <= N <= intData[5]) */
+
+		Entropy,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
+				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
+
 		Once,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
 		And,         /* both subgoals (l & r) are met simultaneously within parent area */
 		Or,          /* at least one of the two subgoals (l & r) is met within parent area */
 		Not,         /* subgoal (l) is not met within parent area */
-		Entropy,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
-				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy <= dblData[1]) */
+
 		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
-
-		BoardState,  /* TODO: tree is an XY->State map; at least intData[2] of the specified board positions must be in the specified states
-				TODO: if stringData[0] is defined, interpret it as an NPC name, and use focus location of that NPC as an XY offset
-			     */
-		NPCState,    /* TODO: NPC with name stringData[0] is asleep/awake (intData[0]) and/or in a given set of states (tree = StringSet) */
-		Score,       /* TODO: intData[0] <= score[stringData[0]] <= intData[1] */
-		RuleEvent,        /* TODO: intData[0]'th rule for particle named stringData[0] has been triggered N times, where intData[1] <= N <= intData[2] */
-		ParticleEvent,    /* TODO: particle named stringData[0] has been created/destroyed (intData[0]) N times, where intData[1] <= N <= intData[2] */
-		Achievement, /* TODO: achievment named stringData[0] is still locked (intData[0]=0) or has been unlocked (intData[0]=1) */
-
-		GotMessage,  /* TODO: message stringData[0] was received from a player or NPC
-				NB meeting the goal will clear the message; the goal can be used in combination with Once to prevent side-effects of this */
 
 		True,        /* always met */
 		False        /* never met */

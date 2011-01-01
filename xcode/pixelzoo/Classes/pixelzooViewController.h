@@ -19,13 +19,17 @@
 
 // Game data
 @interface pixelzooViewController : UIViewController {
+	// PixelZoo game
 	Game *game;
-	
+
+	// timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 
+	// palette
 	UIColor *boardColor[PaletteMax];
-	
+
+	// touch tracking
 	CGPoint lastPoint;
 	BOOL mouseSwiped;	
 	int mouseMoved;

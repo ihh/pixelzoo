@@ -43,26 +43,26 @@
 
 	// draw cells in specified area
 	int x, y;
-//	UIColor **boardColor = [controller boardColor];
+// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
+	//	UIColor **boardColor = [controller boardColor];
 	
 	for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
 		for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
+			// Get cell color
 			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
+			
+// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
 //			UIColor *cellColor = boardColor[cellColorIndex];
 //			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
-			
-			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-//			if (cellColorIndex>0)
-				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-//			else
-//				CGContextSetRGBFillColor(ctx, 0, (CGFloat)ABS(((redraws*8)%512)-256)/256, 0, 1);  // DEBUG
 
+			// Look up RGB dynamically - doesn't seem to hurt performance much even though it's in inner draw loop
+			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
+			CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
+
+			// Fill rectangle
 			CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
 		}
 	}
-	// Draw a red solid square
-//    CGContextSetRGBFillColor(ctx, 255, 0, 0, 1);
-//    CGContextFillRect(ctx, CGRectMake(10, 10, 50, 50));
 }
 
 - (void)dealloc {

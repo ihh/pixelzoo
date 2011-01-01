@@ -13,6 +13,7 @@
 
 @synthesize game;
 
+// accessor for palette array (not sure how to synthesize an accessor for a C-style array of known size)
 -(UIColor**) boardColor {
 	return boardColor;
 }
@@ -56,6 +57,7 @@
 		NSLog(@"Couldn't get Game");
 
 	// create color palette
+	// this doesn't really seem to work... hmm
 	int c;
 	RGB *rgb =game->board->palette.rgb;
 	for (c = 0; c < PaletteMax; ++c) {
@@ -65,11 +67,14 @@
 		boardColor[c] = [UIColor colorWithRed:r green:g blue:b alpha:1];
 	}
 	
-	// tell view about all our good stuff (hacky, this)
-	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 	
-	mouseMoved = 0;
+	// tell view about its controller (hacky, this)
+	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 
+	// reset touch tracking vars
+	mouseMoved = 0;
+	
+	// start triggerRedraw & callGameLoop threads
 	[self startTimers];
 }
 
@@ -105,6 +110,7 @@
 }
 
 
+// cellSize method - calculates the size of a cell. Called by View's drawRect method
 - (CGFloat) cellSize {
 	CGFloat width = self.view.frame.size.width;
 	CGFloat height = self.view.frame.size.height;
@@ -122,7 +128,7 @@
     UITouch *touch = [touches anyObject];
     
     if ([touch tapCount] == 2) {
-//        drawImage.image = nil;
+//        double-tap
         return;
     }
 	
