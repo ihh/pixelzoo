@@ -9,26 +9,26 @@
 
 /* GoalType enumeration */
 /* When a goal has no parent, "parent area" is entire board */
-enum GoalType { Area,        /* subgoal (l) is met for given constant area
-			      */
+enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
+				  */
 
-		Enclosures,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls,
-				and allowing diagonal connections if intData[1] is true.
-				Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
-				where (intData[4] <= N <= intData[5]) */
+		EnclosuresGoal,  /* define enclosures by masking every state in parent area with intData[0], treating masked-states in ((StateSet*)tree) as walls,
+				    and allowing diagonal connections if intData[1] is true.
+				    Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
+				    where (intData[4] <= N <= intData[5]) */
 
-		Entropy,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
-				Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
+		EntropyGoal,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
+				    Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
 
-		Once,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
-		And,         /* both subgoals (l & r) are met simultaneously within parent area */
-		Or,          /* at least one of the two subgoals (l & r) is met within parent area */
-		Not,         /* subgoal (l) is not met within parent area */
+		OnceGoal,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
+		AndGoal,         /* both subgoals (l & r) are met simultaneously within parent area */
+		OrGoal,          /* at least one of the two subgoals (l & r) is met within parent area */
+		NotGoal,         /* subgoal (l) is not met within parent area */
 
-		Repeat,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
+		RepeatGoal,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
 
-		True,        /* always met */
-		False        /* never met */
+		TrueGoal,        /* always met */
+		FalseGoal        /* never met */
 };
 
 /* Goal */
@@ -48,6 +48,7 @@ XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole b
 /* Constructors */
 /* All parameters become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
 Goal* newTrueGoal();
+Goal* newFalseGoal();
 Goal* newAreaGoal (XYSet* area);
 Goal* newEnclosuresGoal (State wallMask,
 			 StateSet* wallSet,

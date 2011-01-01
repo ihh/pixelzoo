@@ -138,7 +138,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   }
 
   cond->opcode = TestEQ;
-  opcode = (const char*) ATTR(node,OP);
+  opcode = ATTR(node,OP);
   if (opcode) {
     if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = TestEQ;
     else if (strcmp(opcode,"!=")==0) cond->opcode = TestNEQ;

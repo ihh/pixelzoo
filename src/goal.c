@@ -20,12 +20,16 @@ Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
 }
 
 Goal* newTrueGoal() {
-  return newGoal (True, 0, 0);
+  return newGoal (TrueGoal, 0, 0);
+}
+
+Goal* newFalseGoal() {
+  return newGoal (FalseGoal, 0, 0);
 }
 
 Goal* newAreaGoal (XYSet* area) {
   Goal* g;
-  g = newGoal (Area, 0, 0);
+  g = newGoal (AreaGoal, 0, 0);
   g->tree = (RBTree*) area;
   return g;
 }
@@ -39,7 +43,7 @@ Goal* newEnclosuresGoal (State wallMask,
 			 unsigned char allowDiagonalConnections,
 			 Goal* subGoal) {
   Goal* g;
-  g = newGoal (Enclosures, 0, 6);
+  g = newGoal (EnclosuresGoal, 0, 6);
   g->tree = (RBTree*) wallSet;
   g->intData[0] = wallMask;
   g->intData[1] = allowDiagonalConnections;
@@ -53,14 +57,14 @@ Goal* newEnclosuresGoal (State wallMask,
 
 Goal* newOnceGoal (Goal* l) {
   Goal* g;
-  g = newGoal (Once, 0, 0);
+  g = newGoal (OnceGoal, 0, 0);
   g->l = l;
   return g;
 }
 
 Goal* newAndGoal (Goal* l, Goal* r) {
   Goal* g;
-  g = newGoal (And, 0, 0);
+  g = newGoal (AndGoal, 0, 0);
   g->l = l;
   g->r = r;
   return g;
@@ -68,7 +72,7 @@ Goal* newAndGoal (Goal* l, Goal* r) {
 
 Goal* newOrGoal (Goal* l, Goal* r) {
   Goal* g;
-  g = newGoal (Or, 0, 0);
+  g = newGoal (OrGoal, 0, 0);
   g->l = l;
   g->r = r;
   return g;
@@ -76,14 +80,14 @@ Goal* newOrGoal (Goal* l, Goal* r) {
 
 Goal* newNotGoal (Goal* l) {
   Goal* g;
-  g = newGoal (Not, 0, 0);
+  g = newGoal (NotGoal, 0, 0);
   g->l = l;
   return g;
 }
 
 Goal* newEntropyGoal (State typeMask, StateSet* typeSet, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
   Goal* g;
-  g = newGoal (Entropy, 2, 3);
+  g = newGoal (EntropyGoal, 2, 3);
   g->tree = (RBTree*) typeSet;
   g->intData[0] = typeMask;
   g->intData[1] = minCount;
@@ -95,7 +99,7 @@ Goal* newEntropyGoal (State typeMask, StateSet* typeSet, unsigned long minCount,
 
 Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps) {
   Goal* g;
-  g = newGoal (Repeat, 0, 1);
+  g = newGoal (RepeatGoal, 0, 1);
   g->intData[0] = minReps;
   g->l = subGoal;
   return g;
@@ -193,7 +197,7 @@ List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSe
 
 XYSet* getGoalArea (Goal* goal) {
   return
-    goal->goalType == Area
+    goal->goalType == AreaGoal
     ? (XYSet*) RBTreeShallowCopy (goal->tree)
     : (goal->parent
        ? getGoalArea (goal->parent)
@@ -203,33 +207,33 @@ XYSet* getGoalArea (Goal* goal) {
 int testGoalMet (Goal* goal, Board *board) {
   Assert (goal != NULL, "testGoalMet: null goal");
   switch (goal->goalType) {
-  case Area:
+  case AreaGoal:
     return goal->l ? testGoalMet(goal->l,board) : 1;
-  case Enclosures:
+  case EnclosuresGoal:
     return testEnclosuresGoal (goal, board);
     return 1;
-  case Once:
+  case OnceGoal:
     if (!*goal->intData)
       if (testGoalMet(goal->l,board))
 	*goal->intData = 1;
     return *goal->intData;
-  case And:
+  case AndGoal:
     return testGoalMet(goal->l,board) && testGoalMet(goal->r,board);
-  case Or:
+  case OrGoal:
     return testGoalMet(goal->l,board) || testGoalMet(goal->r,board);
-  case Not:
+  case NotGoal:
     return !testGoalMet(goal->l,board);
-  case Entropy:
+  case EntropyGoal:
     return testEntropyGoal (goal, board);
-  case Repeat:
+  case RepeatGoal:
     if (testGoalMet(goal->l,board))
       ++goal->intData[1];
     else
       goal->intData[1] = 0;
     return goal->intData[1] >= goal->intData[0];
-  case True:
+  case TrueGoal:
     return 1;
-  case False:
+  case FalseGoal:
   default:
     break;
   }

@@ -2,6 +2,7 @@
 #include "notify.h"
 #include "xmlgame.h"
 #include "xmlboard.h"
+#include "xmlgoal.h"
 #include "xmlutil.h"
 
 /* prototypes for private builder methods */
