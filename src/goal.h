@@ -1,7 +1,7 @@
 #ifndef GOAL_INCLUDED
 #define GOAL_INCLUDED
 
-#include "board.h"
+#include "game.h"
 #include "xymap.h"
 #include "statemap.h"
 #include "stringmap.h"
@@ -42,7 +42,7 @@ typedef struct Goal {
 } Goal;
 
 /* accessors */
-int testGoalMet (Goal* goal, PlayState* play);
+int testGoalMet (Goal* goal, Board *board);
 XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */
