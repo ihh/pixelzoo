@@ -22,6 +22,15 @@ typedef struct EntrancePortal {
 
 /* exit portal */
 typedef struct ExitPortal {
+  enum PortalState { PortalWaiting,    /* exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
+		     PortalCounting,   /* exit portal counting incoming Particle's */
+		     PortalOpen,       /* exit portal count reached */
+		     PortalDead        /* aliveGoal not met */
+  } portalState;
+
+  Goal *aliveGoal;  /* if this goal fails, portal's population is extinct */
+  Goal *openGoal;  /* player must meet this goal for the exit to open */
+
   Type type;
   int toWin, soFar;  /* number of type's that must exit / have exited the board */
   CellWatcher *watcher;  /* (Game*) context */
@@ -32,10 +41,7 @@ typedef struct Game {
   /* board */
   Board *board;
   double updatesPerSecond;  /* rate at which to run the Board */
-  enum GameState { GameOn,       /* initial state: exit portal "closed", i.e. ignoring incoming Particle's. Player must meet survival goal */
-		   GameExitOpen, /* "stable" goal met; exit portal "open", i.e. counting incoming Particle's */
-		   GameWon,      /* exit portal count reached */
-		   GameLost,     /* "alive" goal not met */
+  enum GameState { GameOn,       /* keep playing */
 		   GameTimeUp,   /* the time limit has expired */
 		   GameQuit      /* player quit */
   } gameState;
@@ -48,11 +54,6 @@ typedef struct Game {
 
   /* entrance */
   EntrancePortal theEntrance;
-
-  /* exitOpenGoal: player must meet this for the exit to open
-     aliveGoal: if this goal fails, player's population is dead
-  */
-  Goal *aliveGoal, *exitOpenGoal;
 
   /* exit portal */
   ExitPortal theExit;
@@ -73,7 +74,7 @@ Game* newGame();
 void deleteGame (Game *game);
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
 
-#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState != GameQuit)
+#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn)
 #define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }
 
 /* helpers */
