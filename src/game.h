@@ -5,17 +5,40 @@
 #include "tool.h"
 #include "stringmap.h"
 #include "xymap.h"
+#include "goal.h"
 
 #define DefaultUpdatesPerSecond 100
 
+/* power-up */
 typedef struct ToolCharger ToolCharger;
+
+/* entrance portal */
+typedef struct EntrancePortal {
+  XYCoord pos;
+  State state;
+  int total, soFar;  /* number of entryState's to place at entrancePos */
+  double rate;
+} EntrancePortal;
+
+/* exit portal */
+typedef struct ExitPortal {
+  Type type;
+  int toWin, soFar;  /* number of type's that must exit / have exited the board */
+  CellWatcher *watcher;  /* (Game*) context */
+} ExitPortal;
 
 /* state of play */
 typedef struct Game {
   /* board */
   Board *board;
   double updatesPerSecond;  /* rate at which to run the Board */
-  enum GameState { GameOn, GameWon, GameLost, GameQuit } gameState;
+  enum GameState { GameOn,       /* initial state: exit portal "closed", i.e. ignoring incoming Particle's. Player must meet survival goal */
+		   GameExitOpen, /* "stable" goal met; exit portal "open", i.e. counting incoming Particle's */
+		   GameWon,      /* exit portal count reached */
+		   GameLost,     /* "alive" goal not met */
+		   GameTimeUp,   /* the time limit has expired */
+		   GameQuit      /* player quit */
+  } gameState;
 
   /* toolbox */
   List *allTools;     /* all Tool's, including empty/locked */
@@ -24,21 +47,24 @@ typedef struct Game {
   int toolActive;
 
   /* entrance */
-  XYCoord entrancePos;
-  State entryState;
-  int totalEntrants, entrantsSoFar;  /* number of entryState's to place at entrancePos */
-  double entranceRate;
+  EntrancePortal theEntrance;
 
-  /* exit */
-  Type exitType;  /* if this type's Particle count reaches zero, and remainingEntrants==0, then game is lost */
-  int exitsToWin, exitsSoFar;  /* number of exitType's that must still exit the board; if exitsSoFar >= exitsToWin, the game is won */
-  CellWatcher *exitPortalWatcher;  /* (Game*) context */
+  /* exitOpenGoal: player must meet this for the exit to open
+     aliveGoal: if this goal fails, player's population is dead
+  */
+  Goal *aliveGoal, *exitOpenGoal;
+
+  /* exit portal */
+  ExitPortal theExit;
 
   /* time limit */
-  double timeLimit;  /* when (board->updatesPerCell / game->updatesPerSecond) exceeds this, game is lost */
+  double timeLimit;  /* when (board->updatesPerCell / game->updatesPerSecond) exceeds this, game  */
 
   /* power-ups */
   List *charger;  /* all ToolCharger's */
+
+  /* dummy CellWatcher for write protects */
+  CellWatcher *writeProtectWatcher;
 
 } Game;
 
@@ -47,14 +73,18 @@ Game* newGame();
 void deleteGame (Game *game);
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
 
+#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState != GameQuit)
+#define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }
+
 /* helpers */
 void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
 void updateGameState (Game *game);  /* tests win/lose conditions */
 
-/* Two types of CellWatcher: ExitPortal and ToolCharger */
+/* Types of CellWatcher: ExitPortal, ToolCharger and WriteProtect */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
 State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
+State writeProtectIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
 
 struct ToolCharger {
   CellWatcher *watcher;
@@ -79,7 +109,7 @@ typedef ToolCharger* ToolChargerContext;
   Mouse down (or board touch): set current tool active flag
   Mouse move (or board touch): set current tool x, y
   Mouse up (or board touch release): clear tool active flag
- */
+*/
 
 
 #endif /* GAME_INCLUDED */

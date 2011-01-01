@@ -69,7 +69,7 @@ int main( int argc, char *argv[] )
   }
   */
 
-  while( sdlGame->game->gameState != GameQuit )
+  while( gameRunning(sdlGame->game) )
     {
       renderAndDelay (sdlGame);  // DEBUG - BECAUSE IT SEGFAULTS IF IN A SEPARATE THREAD
 
@@ -80,12 +80,12 @@ int main( int argc, char *argv[] )
 	  switch( event.type ) 
             {
 	    case SDL_QUIT:
-	      sdlGame->game->gameState = GameQuit;
+	      quitGame(sdlGame->game);
 	      break;
 
 	    case SDL_KEYDOWN:
 	      if( event.key.keysym.sym == SDLK_ESCAPE ) 
-		sdlGame->game->gameState = GameQuit;
+		quitGame(sdlGame->game);
 	      break;
 
 	    case SDL_MOUSEMOTION:
@@ -235,7 +235,7 @@ int evolveThreadFunc(void *voidGame)
   double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->updatesPerSecond, updatesPerCell, evolveTime, loopTime;
   int actualUpdates;
 
-  while ( game->gameState != GameQuit ) {
+  while ( gameRunning(game) ) {
     clock_t start, now;
     start = clock();
 
@@ -253,7 +253,7 @@ int renderThreadFunc( void *voidSdlGame )
 {
   SDLGame* sdlGame = (SDLGame*) voidSdlGame;
 
-  while ( sdlGame->game->gameState != GameQuit ) {
+  while ( gameRunning(sdlGame->game) ) {
     renderAndDelay (sdlGame);
   }
 

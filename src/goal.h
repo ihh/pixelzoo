@@ -1,7 +1,7 @@
 #ifndef GOAL_INCLUDED
 #define GOAL_INCLUDED
 
-#include "game.h"
+#include "board.h"
 #include "xymap.h"
 #include "statemap.h"
 #include "stringmap.h"

@@ -6,6 +6,7 @@
 
 /* XML node names */
 #define XMLZOO_GAME       "game"
+#define XMLZOO_PROTECT    "protect"
 #define XMLZOO_ENTRANCE   "entrance"
 #define XMLZOO_COUNT      "count"
 #define XMLZOO_EXIT       "exit"

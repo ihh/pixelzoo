@@ -54,19 +54,23 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   Assert (game->allTools->head != NULL, "You need some tools!");
   game->selectedTool = (Tool*) game->allTools->head->value;
 
+  for (node = gameNode->children; node; node = node->next)
+    if (MATCHES(node,PROTECT))
+      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->writeProtectWatcher);
+
   entranceNode = CHILD(gameNode,ENTRANCE);
-  game->entrancePos.x = CHILDINT(entranceNode,X);
-  game->entrancePos.y = CHILDINT(entranceNode,Y);
-  game->entryState = OPTCHILDINT(entranceNode,DECSTATE,CHILDHEX(entranceNode,HEXSTATE));
-  game->totalEntrants = CHILDINT(entranceNode,COUNT);
-  game->entranceRate = OPTCHILDFLOAT(entranceNode,RATE,1.);
+  game->theEntrance.pos.x = CHILDINT(entranceNode,X);
+  game->theEntrance.pos.y = CHILDINT(entranceNode,Y);
+  game->theEntrance.state = OPTCHILDINT(entranceNode,DECSTATE,CHILDHEX(entranceNode,HEXSTATE));
+  game->theEntrance.total = CHILDINT(entranceNode,COUNT);
+  game->theEntrance.rate = OPTCHILDFLOAT(entranceNode,RATE,1.);
 
   exitNode = CHILD(gameNode,EXIT);
   for (node = exitNode->children; node; node = node->next)
     if (MATCHES(node,LOC))
-      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->exitPortalWatcher);
-  game->exitsToWin = CHILDINT(exitNode,COUNT);
-  game->exitType = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(entranceNode,HEXTYPE));
+      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
+  game->theExit.toWin = CHILDINT(exitNode,COUNT);
+  game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(entranceNode,HEXTYPE));
 
   game->timeLimit = OPTCHILDFLOAT(gameNode,TIME,-1.);
 
