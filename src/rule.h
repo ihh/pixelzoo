@@ -3,17 +3,18 @@
 
 #include "stringmap.h"
 
-/* 32-bit cell state.
+/* 64-bit cell state.
 
-   The 16-bit MSW (most significant word) of the state is the Type.
-   The 16-bit LSW (least significant word) provides additional type-specific state.
+   The 16 most significant bits of the state form the Type.
+   The 48 bits beneath this are the Vars, providing additional type-specific state.
 
-   All states of type zero (i.e. MSW=0) are inert, i.e. they have zero update rate.
-   State 0x00000000, where LSW=MSW=0, is inert black space.
-   States with MSW=0 and 0<=LSW<=PaletteMax are inert pixels spanning the color palette.
-   States with MSW=0 and LSW>PaletteMax are reserved for future applications.
+   All states with Type=0 are inert, i.e. they have zero update rate:
+    State 0x0000000000000000 is inert black space.
+    States 0 <= S <= PaletteMax are inert pixels spanning the color palette.
+    States PaletteMax < S < 0x0001000000000000 are reserved for future applications
+     (the upper bound being the first state with Type=1).
 
-   A common convention is that the state with LSW=0 is "prototypical" for that MSW,
+   A common convention is that the state with Vars=0 is "prototypical" for that Type,
    but this convention is not strictly enforced or required.
  */
 typedef unsigned long long int State;
