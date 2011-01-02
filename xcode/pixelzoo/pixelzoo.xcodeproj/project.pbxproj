@@ -1,0 +1,390 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623260D0F684500981E51 /* pixelzooAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */; };
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */; };
+		280F1C9A12CF1A4A00C8FA38 /* goal.c in Sources */ = {isa = PBXBuildFile; fileRef = 280F1C9812CF1A4A00C8FA38 /* goal.c */; };
+		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */; };
+		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		28BDF9D512CBE53800173B45 /* board.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B212CBE53800173B45 /* board.c */; };
+		28BDF9D612CBE53800173B45 /* color.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B412CBE53800173B45 /* color.c */; };
+		28BDF9D712CBE53800173B45 /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B612CBE53800173B45 /* game.c */; };
+		28BDF9D812CBE53800173B45 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B812CBE53800173B45 /* list.c */; };
+		28BDF9D912CBE53800173B45 /* notify.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9BA12CBE53800173B45 /* notify.c */; };
+		28BDF9DA12CBE53800173B45 /* particle.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9BC12CBE53800173B45 /* particle.c */; };
+		28BDF9DB12CBE53800173B45 /* quadtree.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9BE12CBE53800173B45 /* quadtree.c */; };
+		28BDF9DC12CBE53800173B45 /* rbtree.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9C012CBE53800173B45 /* rbtree.c */; };
+		28BDF9DD12CBE53800173B45 /* statemap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9C312CBE53800173B45 /* statemap.c */; };
+		28BDF9DE12CBE53800173B45 /* stringmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9C512CBE53800173B45 /* stringmap.c */; };
+		28BDF9DF12CBE53800173B45 /* tool.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9C712CBE53800173B45 /* tool.c */; };
+		28BDF9E012CBE53800173B45 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9C912CBE53800173B45 /* util.c */; };
+		28BDF9E112CBE53800173B45 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9CB12CBE53800173B45 /* vector.c */; };
+		28BDF9E212CBE53800173B45 /* xmlboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9CD12CBE53800173B45 /* xmlboard.c */; };
+		28BDF9E312CBE53800173B45 /* xmlgame.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9CF12CBE53800173B45 /* xmlgame.c */; };
+		28BDF9E412CBE53800173B45 /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D112CBE53800173B45 /* xmlutil.c */; };
+		28BDF9E512CBE53800173B45 /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D312CBE53800173B45 /* xymap.c */; };
+		28BDF9ED12CBE65400173B45 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28BDF9EC12CBE65400173B45 /* libxml2.dylib */; };
+		28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28BDFA4712CBEEB400173B45 /* testgame.xml */; };
+		28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28D740DC12CF221200D402B8 /* xmlgoal.c */; };
+		28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623240D0F684500981E51 /* pixelzooAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooAppDelegate.m; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* pixelzoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pixelzoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2800A65E12CBFF99002BC1FC /* pixelzooView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooView.h; sourceTree = "<group>"; };
+		2800A65F12CBFF99002BC1FC /* pixelzooView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooView.m; sourceTree = "<group>"; };
+		280F1C9812CF1A4A00C8FA38 /* goal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = goal.c; path = ../../src/goal.c; sourceTree = SOURCE_ROOT; };
+		280F1C9912CF1A4A00C8FA38 /* goal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = goal.h; path = ../../src/goal.h; sourceTree = SOURCE_ROOT; };
+		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = pixelzooViewController.xib; sourceTree = "<group>"; };
+		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		28BDF9B212CBE53800173B45 /* board.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = board.c; path = ../../src/board.c; sourceTree = SOURCE_ROOT; };
+		28BDF9B312CBE53800173B45 /* board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = board.h; path = ../../src/board.h; sourceTree = SOURCE_ROOT; };
+		28BDF9B412CBE53800173B45 /* color.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = color.c; path = ../../src/color.c; sourceTree = SOURCE_ROOT; };
+		28BDF9B512CBE53800173B45 /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = color.h; path = ../../src/color.h; sourceTree = SOURCE_ROOT; };
+		28BDF9B612CBE53800173B45 /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = game.c; path = ../../src/game.c; sourceTree = SOURCE_ROOT; };
+		28BDF9B712CBE53800173B45 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = game.h; path = ../../src/game.h; sourceTree = SOURCE_ROOT; };
+		28BDF9B812CBE53800173B45 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = list.c; path = ../../src/list.c; sourceTree = SOURCE_ROOT; };
+		28BDF9B912CBE53800173B45 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = list.h; path = ../../src/list.h; sourceTree = SOURCE_ROOT; };
+		28BDF9BA12CBE53800173B45 /* notify.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = notify.c; path = ../../src/notify.c; sourceTree = SOURCE_ROOT; };
+		28BDF9BB12CBE53800173B45 /* notify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = notify.h; path = ../../src/notify.h; sourceTree = SOURCE_ROOT; };
+		28BDF9BC12CBE53800173B45 /* particle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = particle.c; path = ../../src/particle.c; sourceTree = SOURCE_ROOT; };
+		28BDF9BD12CBE53800173B45 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = particle.h; path = ../../src/particle.h; sourceTree = SOURCE_ROOT; };
+		28BDF9BE12CBE53800173B45 /* quadtree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = quadtree.c; path = ../../src/quadtree.c; sourceTree = SOURCE_ROOT; };
+		28BDF9BF12CBE53800173B45 /* quadtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quadtree.h; path = ../../src/quadtree.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C012CBE53800173B45 /* rbtree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rbtree.c; path = ../../src/rbtree.c; sourceTree = SOURCE_ROOT; };
+		28BDF9C112CBE53800173B45 /* rbtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rbtree.h; path = ../../src/rbtree.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C212CBE53800173B45 /* rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule.h; path = ../../src/rule.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C312CBE53800173B45 /* statemap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = statemap.c; path = ../../src/statemap.c; sourceTree = SOURCE_ROOT; };
+		28BDF9C412CBE53800173B45 /* statemap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statemap.h; path = ../../src/statemap.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C512CBE53800173B45 /* stringmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stringmap.c; path = ../../src/stringmap.c; sourceTree = SOURCE_ROOT; };
+		28BDF9C612CBE53800173B45 /* stringmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringmap.h; path = ../../src/stringmap.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C712CBE53800173B45 /* tool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tool.c; path = ../../src/tool.c; sourceTree = SOURCE_ROOT; };
+		28BDF9C812CBE53800173B45 /* tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tool.h; path = ../../src/tool.h; sourceTree = SOURCE_ROOT; };
+		28BDF9C912CBE53800173B45 /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = util.c; path = ../../src/util.c; sourceTree = SOURCE_ROOT; };
+		28BDF9CA12CBE53800173B45 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = ../../src/util.h; sourceTree = SOURCE_ROOT; };
+		28BDF9CB12CBE53800173B45 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vector.c; path = ../../src/vector.c; sourceTree = SOURCE_ROOT; };
+		28BDF9CC12CBE53800173B45 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vector.h; path = ../../src/vector.h; sourceTree = SOURCE_ROOT; };
+		28BDF9CD12CBE53800173B45 /* xmlboard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlboard.c; path = ../../src/xmlboard.c; sourceTree = SOURCE_ROOT; };
+		28BDF9CE12CBE53800173B45 /* xmlboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlboard.h; path = ../../src/xmlboard.h; sourceTree = SOURCE_ROOT; };
+		28BDF9CF12CBE53800173B45 /* xmlgame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgame.c; path = ../../src/xmlgame.c; sourceTree = SOURCE_ROOT; };
+		28BDF9D012CBE53800173B45 /* xmlgame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgame.h; path = ../../src/xmlgame.h; sourceTree = SOURCE_ROOT; };
+		28BDF9D112CBE53800173B45 /* xmlutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlutil.c; path = ../../src/xmlutil.c; sourceTree = SOURCE_ROOT; };
+		28BDF9D212CBE53800173B45 /* xmlutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlutil.h; path = ../../src/xmlutil.h; sourceTree = SOURCE_ROOT; };
+		28BDF9D312CBE53800173B45 /* xymap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xymap.c; path = ../../src/xymap.c; sourceTree = SOURCE_ROOT; };
+		28BDF9D412CBE53800173B45 /* xymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xymap.h; path = ../../src/xymap.h; sourceTree = SOURCE_ROOT; };
+		28BDF9EC12CBE65400173B45 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		28BDFA4712CBEEB400173B45 /* testgame.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = testgame.xml; path = ../../t/testgame.xml; sourceTree = SOURCE_ROOT; };
+		28D740DC12CF221200D402B8 /* xmlgoal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgoal.c; path = ../../src/xmlgoal.c; sourceTree = SOURCE_ROOT; };
+		28D740DD12CF221200D402B8 /* xmlgoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgoal.h; path = ../../src/xmlgoal.h; sourceTree = SOURCE_ROOT; };
+		28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooViewController.h; sourceTree = "<group>"; };
+		28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooViewController.m; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* pixelzoo_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzoo_Prefix.pch; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* pixelzoo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pixelzoo-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
+				28BDF9ED12CBE65400173B45 /* libxml2.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623240D0F684500981E51 /* pixelzooAppDelegate.h */,
+				1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */,
+				28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */,
+				2800A65E12CBFF99002BC1FC /* pixelzooView.h */,
+				2800A65F12CBFF99002BC1FC /* pixelzooView.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* pixelzoo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		28BDF9A312CBE51100173B45 /* PixelZoo sources */ = {
+			isa = PBXGroup;
+			children = (
+				28BDF9B212CBE53800173B45 /* board.c */,
+				28BDF9B312CBE53800173B45 /* board.h */,
+				28BDF9B412CBE53800173B45 /* color.c */,
+				28BDF9B512CBE53800173B45 /* color.h */,
+				28BDF9B612CBE53800173B45 /* game.c */,
+				28BDF9B712CBE53800173B45 /* game.h */,
+				280F1C9812CF1A4A00C8FA38 /* goal.c */,
+				280F1C9912CF1A4A00C8FA38 /* goal.h */,
+				28BDF9B812CBE53800173B45 /* list.c */,
+				28BDF9B912CBE53800173B45 /* list.h */,
+				28BDF9BA12CBE53800173B45 /* notify.c */,
+				28BDF9BB12CBE53800173B45 /* notify.h */,
+				28BDF9BC12CBE53800173B45 /* particle.c */,
+				28BDF9BD12CBE53800173B45 /* particle.h */,
+				28BDF9BE12CBE53800173B45 /* quadtree.c */,
+				28BDF9BF12CBE53800173B45 /* quadtree.h */,
+				28BDF9C012CBE53800173B45 /* rbtree.c */,
+				28BDF9C112CBE53800173B45 /* rbtree.h */,
+				28BDF9C212CBE53800173B45 /* rule.h */,
+				28BDF9C312CBE53800173B45 /* statemap.c */,
+				28BDF9C412CBE53800173B45 /* statemap.h */,
+				28BDF9C512CBE53800173B45 /* stringmap.c */,
+				28BDF9C612CBE53800173B45 /* stringmap.h */,
+				28BDF9C712CBE53800173B45 /* tool.c */,
+				28BDF9C812CBE53800173B45 /* tool.h */,
+				28BDF9C912CBE53800173B45 /* util.c */,
+				28BDF9CA12CBE53800173B45 /* util.h */,
+				28BDF9CB12CBE53800173B45 /* vector.c */,
+				28BDF9CC12CBE53800173B45 /* vector.h */,
+				28BDF9CD12CBE53800173B45 /* xmlboard.c */,
+				28BDF9CE12CBE53800173B45 /* xmlboard.h */,
+				28BDF9EC12CBE65400173B45 /* libxml2.dylib */,
+				28BDF9CF12CBE53800173B45 /* xmlgame.c */,
+				28BDF9D012CBE53800173B45 /* xmlgame.h */,
+				28D740DC12CF221200D402B8 /* xmlgoal.c */,
+				28D740DD12CF221200D402B8 /* xmlgoal.h */,
+				28BDF9D112CBE53800173B45 /* xmlutil.c */,
+				28BDF9D212CBE53800173B45 /* xmlutil.h */,
+				28BDF9D312CBE53800173B45 /* xymap.c */,
+				28BDF9D412CBE53800173B45 /* xymap.h */,
+			);
+			name = "PixelZoo sources";
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				28BDF9A312CBE51100173B45 /* PixelZoo sources */,
+				32CA4F630368D1EE00C91783 /* pixelzoo_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				28BDFA4712CBEEB400173B45 /* testgame.xml */,
+				2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */,
+				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
+				8D1107310486CEB800E47090 /* pixelzoo-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* pixelzoo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "pixelzoo" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = pixelzoo;
+			productName = pixelzoo;
+			productReference = 1D6058910D05DD3D006BFB54 /* pixelzoo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "pixelzoo" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* pixelzoo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */,
+				28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				1D3623260D0F684500981E51 /* pixelzooAppDelegate.m in Sources */,
+				28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */,
+				28BDF9D512CBE53800173B45 /* board.c in Sources */,
+				28BDF9D612CBE53800173B45 /* color.c in Sources */,
+				28BDF9D712CBE53800173B45 /* game.c in Sources */,
+				28BDF9D812CBE53800173B45 /* list.c in Sources */,
+				28BDF9D912CBE53800173B45 /* notify.c in Sources */,
+				28BDF9DA12CBE53800173B45 /* particle.c in Sources */,
+				28BDF9DB12CBE53800173B45 /* quadtree.c in Sources */,
+				28BDF9DC12CBE53800173B45 /* rbtree.c in Sources */,
+				28BDF9DD12CBE53800173B45 /* statemap.c in Sources */,
+				28BDF9DE12CBE53800173B45 /* stringmap.c in Sources */,
+				28BDF9DF12CBE53800173B45 /* tool.c in Sources */,
+				28BDF9E012CBE53800173B45 /* util.c in Sources */,
+				28BDF9E112CBE53800173B45 /* vector.c in Sources */,
+				28BDF9E212CBE53800173B45 /* xmlboard.c in Sources */,
+				28BDF9E312CBE53800173B45 /* xmlgame.c in Sources */,
+				28BDF9E412CBE53800173B45 /* xmlutil.c in Sources */,
+				28BDF9E512CBE53800173B45 /* xymap.c in Sources */,
+				2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */,
+				280F1C9A12CF1A4A00C8FA38 /* goal.c in Sources */,
+				28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pixelzoo_Prefix.pch;
+				INFOPLIST_FILE = "pixelzoo-Info.plist";
+				PRODUCT_NAME = pixelzoo;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pixelzoo_Prefix.pch;
+				INFOPLIST_FILE = "pixelzoo-Info.plist";
+				PRODUCT_NAME = pixelzoo;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
+				PREBINDING = NO;
+				SDKROOT = iphonesimulator3.2;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				SDKROOT = iphoneos3.1.3;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "pixelzoo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "pixelzoo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

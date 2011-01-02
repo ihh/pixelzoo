@@ -1,0 +1,1174 @@
+Tpixelzoo
+v7
+r0
+t315590894.471904
+cCheck dependencies
+cProcessInfoPlistFile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/Info.plist pixelzoo-Info.plist
+cCompileXIB /Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib
+cCompileXIB /Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib
+cCpResource build/Debug-iphonesimulator/pixelzoo.app/testgame.xml ../../t/testgame.xml
+cProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+cProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/main.o /Users/yam/pixelzoo/xcode/pixelzoo/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooAppDelegate.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooViewController.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/board.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/color.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/game.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/list.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/notify.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/particle.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/quadtree.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/rbtree.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/statemap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/stringmap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/tool.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/util.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/vector.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlboard.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgame.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlutil.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xymap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooView.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/goal.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c normal i386 c com.apple.compilers.gcc.4_2
+cCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgoal.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c normal i386 c com.apple.compilers.gcc.4_2
+cLd /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo normal i386
+cGenerateDSYMFile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app.dSYM /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo
+cTouch /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk
+c000000004B69B45C00000000000000EE
+t1265218652
+s238
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004B2B4CC3000000000026EE30
+t1261128899
+s2551344
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGColor.h
+c000000004B2B4CC300000000000011D3
+t1261128899
+s4563
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004B2B4DC8000000000027E880
+t1261129160
+s2615424
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004B2B4DAE0000000000001355
+t1261129134
+s4949
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004B2B61620000000000000788
+t1261134178
+s1928
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004B2B62B500000000016721E0
+t1261134517
+s23536096
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2/libxml/tree.h
+c000000004B2B4D4E0000000000008F14
+t1261129038
+s36628
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/math.h
+c000000004748A10600000000000004B7
+t1195942150
+s1207
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/stdio.h
+c000000004748A1330000000000003D1D
+t1195942195
+s15645
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/stdlib.h
+c000000004748A1330000000000002A79
+t1195942195
+s10873
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/string.h
+c000000004748A1330000000000001731
+t1195942195
+s5937
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/time.h
+c000000004748A133000000000000178E
+t1195942195
+s6030
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/lib/libxml2.dylib
+c000000004B2B4D4E0000000000124950
+t1261129038
+s1198416
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk
+c000000004BF195730000000000000110
+t1274123635
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004BA03AB3000000000026F020
+t1268791987
+s2551840
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004B9F1DE40000000000289C20
+t1268719076
+s2661408
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004B9F1DD60000000000001355
+t1268719062
+s4949
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004BA6CAEC000000000000098F
+t1269222124
+s2447
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004BA6CB31000000000214E400
+t1269222193
+s34923520
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/libxml2/libxml/tree.h
+c000000004B9F1D980000000000008F14
+t1268719000
+s36628
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/math.h
+c000000004748A10600000000000004B7
+t1195942150
+s1207
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/stdio.h
+c000000004748A1330000000000003D1D
+t1195942195
+s15645
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/stdlib.h
+c000000004748A1330000000000002A79
+t1195942195
+s10873
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/string.h
+c000000004748A1330000000000001731
+t1195942195
+s5937
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/time.h
+c000000004748A133000000000000178E
+t1195942195
+s6030
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/lib/libxml2.dylib
+c000000004B9F1D990000000000122A80
+t1268719001
+s1190528
+
+N/Users/yam/pixelzoo/src/board.h
+c000000004D1C1D320000000000001527
+t1293688114
+s5415
+i"rule.h"
+i"particle.h"
+i"quadtree.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/src/color.h
+c000000004D1BCD680000000000001252
+t1293667688
+s4690
+
+N/Users/yam/pixelzoo/src/game.h
+c000000004D1F51280000000000000E56
+t1293898024
+s3670
+i"board.h"
+i"tool.h"
+i"stringmap.h"
+i"xymap.h"
+i"goal.h"
+
+N/Users/yam/pixelzoo/src/goal.h
+c000000004D1EE8FA0000000000000CCB
+t1293871354
+s3275
+i"board.h"
+i"xymap.h"
+i"statemap.h"
+i"stringmap.h"
+i"list.h"
+
+N/Users/yam/pixelzoo/src/list.h
+c000000004D1B75860000000000000878
+t1293645190
+s2168
+i<stdlib.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/src/notify.h
+c000000004D1B758600000000000004FA
+t1293645190
+s1274
+i"rule.h"
+i"particle.h"
+i"board.h"
+i"xymap.h"
+
+N/Users/yam/pixelzoo/src/particle.h
+c000000004D1B758600000000000005D3
+t1293645190
+s1491
+i"rule.h"
+i"color.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/src/quadtree.h
+c000000004D1B7586000000000000036C
+t1293645190
+s876
+i"rule.h"
+
+N/Users/yam/pixelzoo/src/rbtree.h
+c000000004D1BB34B0000000000000A74
+t1293661003
+s2676
+i"util.h"
+i"list.h"
+
+N/Users/yam/pixelzoo/src/rule.h
+c000000004D1B7586000000000000130B
+t1293645190
+s4875
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/src/statemap.h
+c000000004D1B75860000000000000656
+t1293645190
+s1622
+i"rbtree.h"
+i"rule.h"
+
+N/Users/yam/pixelzoo/src/stringmap.h
+c000000004D1B75860000000000000E35
+t1293645190
+s3637
+i"rbtree.h"
+i"list.h"
+i"vector.h"
+
+N/Users/yam/pixelzoo/src/tool.h
+c000000004D1B7586000000000000056D
+t1293645190
+s1389
+i"quadtree.h"
+i"rule.h"
+i"board.h"
+i"statemap.h"
+i"xymap.h"
+
+N/Users/yam/pixelzoo/src/util.h
+c000000004D1BB4470000000000000742
+t1293661255
+s1858
+i<stdlib.h>
+
+N/Users/yam/pixelzoo/src/vector.h
+c000000004D1B758600000000000004EB
+t1293645190
+s1259
+i<stdlib.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/src/xmlboard.h
+c000000004D1EE7EE00000000000006E0
+t1293871086
+s1760
+i<libxml/tree.h>
+i"board.h"
+
+N/Users/yam/pixelzoo/src/xmlgame.h
+c000000004D1EDEC00000000000000420
+t1293868736
+s1056
+i<libxml/tree.h>
+i"game.h"
+
+N/Users/yam/pixelzoo/src/xmlgoal.h
+c000000004D1EEA11000000000000030C
+t1293871633
+s780
+i<libxml/tree.h>
+i"goal.h"
+
+N/Users/yam/pixelzoo/src/xmlutil.h
+c000000004D1EE77000000000000006DA
+t1293870960
+s1754
+i<libxml/tree.h>
+
+N/Users/yam/pixelzoo/src/xymap.h
+c000000004D1B75860000000000000CE6
+t1293645190
+s3302
+i"rbtree.h"
+i"list.h"
+i"vector.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c
+c000000004D1C1EB50000000000002FE0
+t1293688501
+s12256
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i<time.h>
+i"board.h"
+i"notify.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c
+c000000004D1B758600000000000006F4
+t1293645190
+s1780
+i"color.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c
+c000000004D1F511B000000000000175D
+t1293898011
+s5981
+i<stdio.h>
+i"game.h"
+i"notify.h"
+i"tool.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c
+c000000004D1EE8F000000000000025B6
+t1293871344
+s9654
+i<stdio.h>
+i"goal.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c
+c000000004D1B75860000000000000E0E
+t1293645190
+s3598
+i"list.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c
+c000000004D1B758600000000000003B3
+t1293645190
+s947
+i"notify.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c
+c000000004D1B758600000000000004BD
+t1293645190
+s1213
+i<stdlib.h>
+i<string.h>
+i"particle.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c
+c000000004D1B75860000000000000CD1
+t1293645190
+s3281
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i"quadtree.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c
+c000000004D1BB30E0000000000005831
+t1293660942
+s22577
+i<stdio.h>
+i<stdlib.h>
+i"rbtree.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c
+c000000004D1B758600000000000001DD
+t1293645190
+s477
+i<stdio.h>
+i"statemap.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c
+c000000004D1B75860000000000000218
+t1293645190
+s536
+i<string.h>
+i<stdio.h>
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c
+c000000004D1B75860000000000000A8C
+t1293645190
+s2700
+i<stdio.h>
+i"tool.h"
+i"util.h"
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c
+c000000004D1B758600000000000007CF
+t1293645190
+s1999
+i<stdio.h>
+i<stdlib.h>
+i<string.h>
+i<math.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c
+c000000004D1B758600000000000008DE
+t1293645190
+s2270
+i"vector.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c
+c000000004D1EEA750000000000001853
+t1293871733
+s6227
+i<stdio.h>
+i<stdlib.h>
+i<string.h>
+i"xmlboard.h"
+i"xmlutil.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c
+c000000004D1EEA7D00000000000015E8
+t1293871741
+s5608
+i<string.h>
+i"notify.h"
+i"xmlgame.h"
+i"xmlboard.h"
+i"xmlgoal.h"
+i"xmlutil.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.h
+c000000004D1EDEC00000000000000420
+t1293868736
+s1056
+i<libxml/tree.h>
+i"game.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c
+c000000004D1EEA2A000000000000049A
+t1293871658
+s1178
+i<string.h>
+i"xmlgoal.h"
+i"xmlutil.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c
+c000000004D1B7586000000000000030E
+t1293645190
+s782
+i<string.h>
+i"xmlutil.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c
+c000000004D1B758600000000000002CC
+t1293645190
+s716
+i<stdio.h>
+i"XYmap.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/../../t/testgame.xml
+c000000004D1C21200000000000000C32
+t1293689120
+s3122
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.h
+c000000004D1B758600000000000001F6
+t1293645190
+s502
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m
+c000000004D1B758600000000000002B9
+t1293645190
+s697
+i"pixelzooAppDelegate.h"
+i"pixelzooViewController.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.h
+c000000004D1C2A060000000000000190
+t1293691398
+s400
+i<UIKit/UIKit.h>
+i"pixelzooViewController.h"
+i"game.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m
+c000000004D1E3CE100000000000007E7
+t1293827297
+s2023
+i"pixelzooView.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.h
+c000000004D1E3AF60000000000000382
+t1293826806
+s898
+i<UIKit/UIKit.h>
+i"xmlgame.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m
+c000000004D1E3DA60000000000001447
+t1293827494
+s5191
+i"pixelzooViewController.h"
+i"pixelzooView.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/untitled.h
+c000000004D1BC80200000000000000CA
+t1293666306
+s202
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/Classes/untitled.m
+c000000004D1BC8020000000000000239
+t1293666306
+s569
+i"untitled.h"
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib
+c000000004D1CC22F000000000000546B
+t1293730351
+s21611
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app
+t1293898094
+s272
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app.dSYM
+t1293898094
+s102
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/Info.plist
+t1293898091
+s597
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/MainWindow.nib
+t1293898092
+s1629
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/PkgInfo
+t1293898091
+s8
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo
+t1293898094
+s88424
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzooViewController.nib
+t1293898092
+s1151
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/testgame.xml
+t1293898092
+s3122
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/board.o
+t1293898093
+s18520
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/color.o
+t1293898093
+s5160
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/game.o
+t1293898093
+s14416
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/goal.o
+t1293898094
+s18144
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/list.o
+t1293898093
+s7560
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/main.o
+t1293898093
+s5940
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/notify.o
+t1293898093
+s6016
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/particle.o
+t1293898093
+s5156
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzoo.LinkFileList
+c000000004D1F516B0000000000000B18
+t1293898091
+s2840
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooAppDelegate.o
+t1293898093
+s43588
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooView.o
+t1293898094
+s38564
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooViewController.o
+t1293898093
+s48472
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/quadtree.o
+t1293898093
+s8212
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/rbtree.o
+t1293898093
+s16140
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/statemap.o
+t1293898093
+s3256
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/stringmap.o
+t1293898093
+s3340
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/tool.o
+t1293898093
+s9020
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/untitled.o
+t2
+s0
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/util.o
+t1293898093
+s7296
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/vector.o
+t1293898093
+s6312
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlboard.o
+t1293898094
+s21544
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgame.o
+t1293898094
+s22648
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgoal.o
+t1293898094
+s7320
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlutil.o
+t1293898094
+s7072
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xymap.o
+t1293898094
+s3552
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/main.m
+c000000004D1B7586000000000000017B
+t1293645190
+s379
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib
+c000000004D1B75860000000000001A49
+t1293645190
+s6729
+
+N/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch
+c000000004D1B758600000000000000B9
+t1293645190
+s185
+i<Foundation/Foundation.h>
+i<UIKit/UIKit.h>
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-atwxnlqqsjnnvhgokluvberctgwx/pixelzoo_Prefix.pch.gch
+t1293659581
+s2138480
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-aznjmcbztidaltdwdazcwqrhmrum/pixelzoo_Prefix.pch.gch
+t1293728680
+s13805456
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch.gch
+t1293898093
+s13026768
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ddizxlrwzmakudaqblutfapdjcwb/pixelzoo_Prefix.pch.gch
+t1293645255
+s13026768
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch.gch
+t1293898092
+s2138480
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-fbilolozpdjrrdfddpejubdlfojp/pixelzoo_Prefix.pch.gch
+t1293728679
+s2138480
+
+Npixelzoo-Info.plist
+c000000004D1B7586000000000000038D
+t1293645190
+s909
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies315590891#315590891#0(0"0(0#1#0"4300911832#0"0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/board.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.394714
+e315590893.520163
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/board.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c315590893#315590893#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c4300911832#1945"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/board.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/board.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/color.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.467511
+e315590893.518087
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/color.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c315590893#315590893#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c4300911832#1945"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/color.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/color.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/game.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.519031
+e315590893.651171
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/game.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c315590893#315590893#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/game.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/game.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/goal.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c normal i386 c com.apple.compilers.gcc.4_2
+s315590894.171559
+e315590894.347537
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/goal.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c315590894#315590894#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/goal.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/goal.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/list.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.520258
+e315590893.574683
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/list.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c315590893#315590893#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/list.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/list.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/main.o /Users/yam/pixelzoo/xcode/pixelzoo/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315590893.283783
+e315590893.334275
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/main.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@49"Compile /Users/yam/pixelzoo/xcode/pixelzoo/main.m315590893#315590893#0(0"0(0#0#41"/Users/yam/pixelzoo/xcode/pixelzoo/main.m4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/main.m -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/main.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/notify.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.574794
+e315590893.652982
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/notify.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c315590893#315590893#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c4300911832#1947"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/notify.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/notify.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/particle.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.651282
+e315590893.705896
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/particle.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@63"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c315590893#315590893#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c4300911832#1951"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/particle.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/particle.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooAppDelegate.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315590893.285276
+e315590893.394595
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooAppDelegate.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@72"Compile /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m315590893#315590893#0(0"0(0#0#64"/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m4300911832#1981"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooAppDelegate.m -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooAppDelegate.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooView.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315590894.169419
+e315590894.349061
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooView.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@65"Compile /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m315590894#315590894#0(0"0(0#0#57"/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m4300911832#1967"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooView.m -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooView.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooViewController.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315590893.334388
+e315590893.467330
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooViewController.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@75"Compile /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m315590893#315590893#0(0"0(0#0#67"/Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m4300911832#1987"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/Classes/pixelzooViewController.m -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzooViewController.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/quadtree.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.653063
+e315590893.718447
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/quadtree.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@63"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c315590893#315590893#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c4300911832#1951"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/quadtree.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/quadtree.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/rbtree.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.706008
+e315590893.804805
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/rbtree.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c315590893#315590893#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c4300911832#1947"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/rbtree.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/rbtree.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/statemap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.718558
+e315590893.759982
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/statemap.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@63"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c315590893#315590893#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c4300911832#1951"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/statemap.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/statemap.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/stringmap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.760101
+e315590893.808590
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/stringmap.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@64"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c315590893#315590893#0(0"0(0#0#56"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c4300911832#1953"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/stringmap.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/stringmap.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/tool.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.804949
+e315590893.865586
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/tool.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c315590893#315590893#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/tool.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/tool.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/untitled.o /Users/yam/pixelzoo/xcode/pixelzoo/Classes/untitled.m normal i386 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/util.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.808682
+e315590893.868509
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/util.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c315590893#315590893#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c4300911832#1943"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/util.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/util.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/vector.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.865697
+e315590893.917044
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/vector.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c315590893#315590893#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c4300911832#1947"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/vector.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/vector.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlboard.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.868599
+e315590894.013476
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlboard.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@63"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c315590893#315590894#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c4300911832#1951"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlboard.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlboard.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgame.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c normal i386 c com.apple.compilers.gcc.4_2
+s315590893.917153
+e315590894.031298
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgame.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c315590893#315590894#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c4300911832#1949"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgame.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgame.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgoal.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c normal i386 c com.apple.compilers.gcc.4_2
+s315590894.347672
+e315590894.413711
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgoal.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c315590894#315590894#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c4300911832#1949"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlgoal.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlgoal.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlutil.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c normal i386 c com.apple.compilers.gcc.4_2
+s315590894.013594
+e315590894.169303
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlutil.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c315590894#315590894#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c4300911832#1949"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xmlutil.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xmlutil.o0#
+
+CCompileC build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xymap.o /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c normal i386 c com.apple.compilers.gcc.4_2
+s315590894.031408
+e315590894.171477
+r1
+xCompileC
+xbuild/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xymap.o
+x/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c315590894#315590894#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c4300911832#1945"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/pixelzoo/../../src/xymap.c -o /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/xymap.o0#
+
+CCompileXIB /Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib
+s315590891.938761
+e315590892.272576
+r1
+xCompileXIB
+x/Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib
+lSLF07#2@25"CompileXIB MainWindow.xib315590891#315590892#0(0"0(0#0#49"/Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib4300911832#471"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 3.1.3    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/MainWindow.nib /Users/yam/pixelzoo/xcode/pixelzoo/MainWindow.xib0#
+
+CCompileXIB /Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib
+s315590891.939408
+e315590892.239539
+r1
+xCompileXIB
+x/Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib
+lSLF07#2@37"CompileXIB pixelzooViewController.xib315590891#315590892#0(0"0(0#0#61"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib4300911832#495"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv IBC_MINIMUM_COMPATIBILITY_VERSION 3.1.3    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/ibtool --errors --warnings --notices --output-format human-readable-text --compile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzooViewController.nib /Users/yam/pixelzoo/xcode/pixelzoo/pixelzooViewController.xib0#
+
+CCpResource build/Debug-iphonesimulator/pixelzoo.app/testgame.xml ../../t/testgame.xml
+s315590892.239633
+e315590892.247150
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/pixelzoo.app/testgame.xml
+x../../t/testgame.xml
+lSLF07#2@25"Copy ../../t/testgame.xml315590892#315590892#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/pixelzoo/../../t/testgame.xml4300911832#453"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks /Users/yam/pixelzoo/xcode/pixelzoo/../../t/testgame.xml /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app0#
+
+CGenerateDSYMFile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app.dSYM /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo
+s315590894.442763
+e315590894.469014
+r1
+xGenerateDSYMFile
+x/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app.dSYM
+x/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo
+lSLF07#2@112"GenerateDSYMFile build/Debug-iphonesimulator/pixelzoo.app.dSYM build/Debug-iphonesimulator/pixelzoo.app/pixelzoo315590894#315590894#0(0"0(0#0#84"/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo4300911832#374"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo -o /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app.dSYM0#
+
+CLd /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo normal i386
+s315590894.413820
+e315590894.442648
+r1
+xLd
+x/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo
+xnormal
+xi386
+lSLF07#2@89"Link /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo315590894#315590894#0(0"0(0#0#0"4300911832#856"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv MACOSX_DEPLOYMENT_TARGET 10.5    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -L/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -filelist /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/Objects-normal/i386/pixelzoo.LinkFileList -mmacosx-version-min=10.5 -framework Foundation -framework UIKit -framework CoreGraphics -lxml2 -o /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/pixelzoo0#
+
+CProcessInfoPlistFile /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/Info.plist pixelzoo-Info.plist
+s315590891.935476
+e315590891.938687
+r1
+xProcessInfoPlistFile
+x/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/Info.plist
+xpixelzoo-Info.plist
+lSLF07#2@27"Process pixelzoo-Info.plist315590891#315590891#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo-Info.plist4300911832#470"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility pixelzoo-Info.plist -genpkginfo /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app/Info.plist0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-atwxnlqqsjnnvhgokluvberctgwx/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 c com.apple.compilers.gcc.4_2
+s315352380.945849
+e315352381.163598
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-atwxnlqqsjnnvhgokluvberctgwx/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315352380#315352381#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#2188"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/local/prism/bin:/usr/local/ec2-api-tools/bin:/opt/local/bin:/opt/local/sbin:/usr/local/src/paml4/bin:/usr/local/src/hmmer-2.3.2.bin.powerpc-apple-osx/binaries:/usr/local/exonerate-1.0.0-osx/bin:/Users/yam/dart/bin:/Users/yam/dart/perl:/Users/yam/gfftools:/Users/yam/perl:/Users/yam/perl:/Users/yam/dart/bin:/Users/yam/dart/perl:/home/yam/j2sdk1.4.2_07/bin:/home/yam/apache-ant-1.6.2/bin:/usr/gcc/bin:/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-atwxnlqqsjnnvhgokluvberctgwx/pixelzoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-aznjmcbztidaltdwdazcwqrhmrum/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s315421479.658887
+e315421480.834388
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-aznjmcbztidaltdwdazcwqrhmrum/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315421479#315421480#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#1834"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-aznjmcbztidaltdwdazcwqrhmrum/pixelzoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s315590892.272705
+e315590893.283531
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315590892#315590893#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#1838"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-cczmmckyrqetgzdiapjxakyrcyxs/pixelzoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ddizxlrwzmakudaqblutfapdjcwb/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s315338054.240926
+e315338055.419409
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ddizxlrwzmakudaqblutfapdjcwb/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315338054#315338055#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#1730"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ddizxlrwzmakudaqblutfapdjcwb/pixelzoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 c com.apple.compilers.gcc.4_2
+s315590892.273707
+e315590892.378662
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315590892#315590892#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#1828"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30000 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.1.3.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-ewsmhrvvyhvxdmhhsmtnogkxgxwg/pixelzoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-fbilolozpdjrrdfddpejubdlfojp/pixelzoo_Prefix.pch.gch pixelzoo_Prefix.pch normal i386 c com.apple.compilers.gcc.4_2
+s315421479.659974
+e315421479.739622
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-fbilolozpdjrrdfddpejubdlfojp/pixelzoo_Prefix.pch.gch
+xpixelzoo_Prefix.pch
+xnormal
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@30"Precompile pixelzoo_Prefix.pch315421479#315421479#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch4300911832#1824"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D__IPHONE_OS_VERSION_MIN_REQUIRED=30200 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk -fvisibility=hidden -mmacosx-version-min=10.5 -gdwarf-2 -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/pixelzoo-project-headers.hmap -F/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator -I/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/include -I/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources/i386 -I/Users/yam/pixelzoo/xcode/pixelzoo/build/pixelzoo.build/Debug-iphonesimulator/pixelzoo.build/DerivedSources -c /Users/yam/pixelzoo/xcode/pixelzoo/pixelzoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/pixelzoo_Prefix-fbilolozpdjrrdfddpejubdlfojp/pixelzoo_Prefix.pch.gch0#
+
+CTouch /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app
+s315590894.469105
+e315590894.471872
+r1
+xTouch
+x/Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app
+lSLF07#2@81"Touch /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app315590894#315590894#0(0"0(0#0#0"4300911832#271"    cd /Users/yam/pixelzoo/xcode/pixelzoo    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/yam/pixelzoo/xcode/pixelzoo/build/Debug-iphonesimulator/pixelzoo.app0#
+
