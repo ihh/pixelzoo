@@ -23,5 +23,5 @@ int compareState(void* a,void* b) {
 }
 
 void printState(void* a) {
-  printf("%lu",*(State*)a);
+  printf("%llu",*(State*)a);
 }

@@ -16,22 +16,23 @@
    A common convention is that the state with LSW=0 is "prototypical" for that MSW,
    but this convention is not strictly enforced or required.
  */
-typedef unsigned long State;
-#define StateMask 0xffffffff
-#define BitsPerState 32
+typedef unsigned long long int State;
+#define StateMask 0xffffffffffffffff
+#define BitsPerState 64
 
 /* 16-bit cell type */
-typedef unsigned short Type;
-#define TypeMask    0xffff0000
-#define TypeShift   16
+typedef unsigned short int Type;
+#define TypeMask    0xffff000000000000
+#define TypeShift   48
 #define NumTypes    0x10000
 #define MaxType     0xffff
 #define BitsPerType 16
 
 /* 16-bit type-specific "variables" */
-#define VarMask     0x0000ffff
-#define NumVars     0x10000
-#define BitsPerVar  16
+typedef unsigned long long int Vars;
+#define VarMask     0x0000ffffffffffff
+#define NumVars     0x1000000000000
+#define BitsPerVar  48
 
 /* type <-> state conversion macros */
 #define StateType(STATE) (((STATE) & TypeMask) >> TypeShift)
@@ -62,19 +63,7 @@ typedef struct RuleCondition {
 /*
   RuleOperation parameterizes the following operation:
   if (randomDouble() >= failProb)
-    cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | ((((cell[src] >> rightShift) + offset) & mask) << leftShift);
-
-  In practice, it is implemented as follows
-  if (randomDouble() >= failProb)
     cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | (((((cell[src] & preMask) >> rightShift) + offset) & mask) << leftShift);
-
-  Why is preMask necessary? On the face of it, it doesn't add any functionality... Well, I think that "x >> 32" should equal zero if x is a 32-bit number,
-  and on many computers/compilers it indeed seems to, but I swear that on my first-generation MacBook Air, it equaled "x".
-  "x>>y" worked fine on that computer for y<32, and "x>>32" equaled zero as expected in gdb, and on another laptop (2nd-gen MacBook Air).
-  Could be a gcc problem, could be a voodoo chicken fluke. Who knows.
-  BIZARRE.
-  In any case, setting preMask to zero directly, seems like a bit more convenient/transparent/stable a way to zero out the source cell than using rshift;
-  plus, preMask does actually allow certain hacks, so I eventually added it into the XML.
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
@@ -92,7 +81,7 @@ typedef struct RuleOperation {
  */
 
 /* first define the size of the condition & operation blocks
-   These sizes are chosen to allow the following models
+   These sizes were chosen with reference to the following models:
    (async, NumRuleConditions=6, NumRuleOperations=6)   RNA duplex diffusion with four connected neighbors per basepair unit
    (sync,  NumRuleConditions=8, NumRuleOperations=1)   Conway's Life
  */
