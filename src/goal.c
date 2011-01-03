@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "goal.h"
+#include "tool.h"
+#include "game.h"
 
 /* private function prototypes */
 int testEntropyGoal (Goal* goal, Board *board);
@@ -13,9 +15,9 @@ Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   g->goalType = type;
   g->l = g->r = g->parent = NULL;
   g->tree = NULL;
-  g->stringData = NULL;
   g->dblData = dblDataSize ? SafeMalloc(dblDataSize*sizeof(double)) : NULL;
   g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(unsigned long)) : NULL;
+  g->context = NULL;
   return g;
 }
 
@@ -106,10 +108,83 @@ Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps) {
   return g;
 }
 
+Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell) {
+  Goal *g;
+  g = newGoal (BoardTimeGoal, 2, 0);
+  g->dblData[0] = minUpdatesPerCell;
+  g->dblData[1] = maxUpdatesPerCell;
+  return g;
+}
+
+Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve) {
+  Goal *g;
+  g = newGoal (CheckToolGoal, 2, 0);
+  g->dblData[0] = minReserve;
+  g->dblData[1] = maxReserve;
+  g->context = tool;
+  return g;
+}
+
+Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCount) {
+  Goal *g;
+  g = newGoal (CheckPortalGoal, 0, 3);
+  g->intData[0] = portalState;
+  g->intData[1] = minCount;
+  g->intData[2] = maxCount;
+  g->context = portal;
+  return g;
+}
+
+Goal *newCheckGameStateGoal (void *game, int gameState) {
+  Goal *g;
+  g = newGoal (CheckGameStateGoal, 0, 1);
+  g->intData[0] = gameState;
+  g->context = game;
+  return g;
+}
+
+Goal *newChargeToolPseudoGoal (void *tool, double reserveDelta) {
+  Goal *g;
+  g = newGoal (ChargeToolPseudoGoal, 1, 0);
+  g->dblData[0] = reserveDelta;
+  g->context = tool;
+  return g;
+}
+
+Goal *newSetPortalStatePseudoGoal (void *portal, int portalState) {
+  Goal *g;
+  g = newGoal (SetPortalStatePseudoGoal, 0, 1);
+  g->intData[0] = portalState;
+  g->context = portal;
+  return g;
+}
+
+Goal *newSetGameStatePseudoGoal (void *game, int gameState) {
+  Goal *g;
+  g = newGoal (SetGameStatePseudoGoal, 0, 1);
+  g->intData[0] = gameState;
+  g->context = game;
+  return g;
+}
+
+Goal *newUseToolPseudoGoal (void *tool, double duration) {
+  Goal *g;
+  g = newGoal (UseToolPseudoGoal, 1, 0);
+  g->dblData[0] = duration;
+  g->context = tool;
+  return g;
+}
+
+Goal *newPrintMessagePseudoGoal (const char* message) {
+  Goal *g;
+  g = newGoal (PrintMessagePseudoGoal, 0, 0);
+  g->context = (void*) message;
+  return g;
+}
+
 void deleteGoal (Goal* goal) {
   SafeFreeOrNull (goal->intData);
   SafeFreeOrNull (goal->dblData);
-  if (goal->stringData) deleteStringVector (goal->stringData);
   if (goal->tree) deleteRBTree (goal->tree);
   if (goal->l) deleteGoal (goal->l);
   if (goal->r) deleteGoal (goal->r);
@@ -206,47 +281,116 @@ XYSet* getGoalArea (Goal* goal) {
 }
 
 int testGoalMet (Goal* goal, Board *board) {
-  int lGoalMet, rGoalMet;
+  int lGoalMet, rGoalMet, soFar, areaPoints, randPointIndex, x, y;
+  Tool *tool;
+  XYSet *area;
+  XYSetNode *areaNode;
+  XYCoord *pos;
+
   Assert (goal != NULL, "testGoalMet: null goal");
+
   switch (goal->goalType) {
   case AreaGoal:
     return goal->l ? testGoalMet(goal->l,board) : 1;
+
   case EnclosuresGoal:
     return testEnclosuresGoal (goal, board);
     return 1;
+
   case OnceGoal:
     if (!*goal->intData)
       if (testGoalMet(goal->l,board))
 	*goal->intData = 1;
     return *goal->intData;
+
   case AndGoal:
     lGoalMet = testGoalMet(goal->l,board);
     rGoalMet = testGoalMet(goal->r,board);
     return lGoalMet && rGoalMet;
+
   case OrGoal:
     lGoalMet = testGoalMet(goal->l,board);
     rGoalMet = testGoalMet(goal->r,board);
     return lGoalMet || rGoalMet;
+
   case LazyAndGoal:
     return testGoalMet(goal->l,board) ? testGoalMet(goal->r,board) : 0;
+
   case LazyOrGoal:
     return testGoalMet(goal->l,board) ? 1 : testGoalMet(goal->r,board);
+
   case NotGoal:
     return !testGoalMet(goal->l,board);
+
   case EntropyGoal:
     return testEntropyGoal (goal, board);
+
   case RepeatGoal:
     if (testGoalMet(goal->l,board))
       ++goal->intData[1];
     else
       goal->intData[1] = 0;
     return goal->intData[1] >= goal->intData[0];
+
+  case BoardTimeGoal:
+    return goal->dblData[0] <= board->updatesPerCell && (goal->dblData[1] <= 0. || board->updatesPerCell <= goal->dblData[1]);
+
+  case CheckToolGoal:
+    tool = (Tool*) goal->context;
+    return goal->dblData[0] <= tool->reserve && tool->reserve <= goal->dblData[1];
+
+  case CheckPortalGoal:
+    soFar = ((ExitPortal*) goal->context)->soFar;
+    return ((ExitPortal*) goal->context)->portalState == goal->intData[0] && goal->intData[1] <= soFar && (goal->intData[2] <= 0 || soFar <= goal->intData[2]);
+
+  case CheckGameStateGoal:
+    return ((Game*) goal->context)->gameState == goal->intData[0];
+
+  case ChargeToolPseudoGoal:
+    tool = (Tool*) goal->context;
+    tool->reserve = MAX (tool->reserve + goal->dblData[0], tool->maxReserve);
+    return 1;
+
+  case SetPortalStatePseudoGoal:
+    ((ExitPortal*) goal->context)->portalState = goal->intData[0];
+    return 1;
+
+  case SetGameStatePseudoGoal:
+    ((Game*) goal->context)->gameState = goal->intData[0];
+    return 1;
+
+  case UseToolPseudoGoal:
+    /* sample a point from the parent area. This is a slightly clumsy/inefficient implementation, but that shouldn't matter much here */
+    area = getGoalArea (goal);
+    if (area) {
+      areaPoints = RBTreeSize (area);
+      randPointIndex = randomInt (areaPoints);
+      areaNode = RBTreeFirst (area);
+      while (randPointIndex-- > 0)
+	areaNode = RBTreeSuccessor (area, areaNode);
+      pos = (XYCoord*) areaNode->key;
+      x = pos->x;
+      y = pos->y;
+      deleteXYSet (area);
+    } else {
+      x = randomInt (board->size);
+      y = randomInt (board->size);
+    }
+    useTool ((Tool*) goal->context, board, x, y, goal->dblData[0]);
+    return 1;
+
+  case PrintMessagePseudoGoal:
+    printf ("%s\n", (char*) goal->context);
+    return 1;
+
   case TrueGoal:
     return 1;
+
   case FalseGoal:
   default:
     break;
   }
+
   return 0;
 }
 

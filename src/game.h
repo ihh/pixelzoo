@@ -1,13 +1,16 @@
 #ifndef GAME_INCLUDED
 #define GAME_INCLUDED
 
+#include <time.h>
 #include "board.h"
 #include "tool.h"
 #include "stringmap.h"
 #include "xymap.h"
 #include "goal.h"
 
-#define DefaultUpdatesPerSecond 100
+/* default rates */
+#define DefaultUpdatesPerSecond   100
+#define DefaultGoalTestsPerSecond 1
 
 /* power-up */
 typedef struct ToolCharger ToolCharger;
@@ -22,17 +25,14 @@ typedef struct EntrancePortal {
 
 /* exit portal */
 typedef struct ExitPortal {
-  enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
-		     PortalCounting,   /* the endgame: exit portal is "open" and counting incoming Particle's */
-		     PortalUnlocked,   /* the "win" outcome: exit portal count reached */
-		     PortalDestroyed   /* the "fail" outcome: aliveGoal not met */
+  enum PortalState { PortalWaiting = 0,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
+		     PortalCounting = 1,   /* the endgame: exit portal is "open" and counting incoming Particle's */
+		     PortalUnlocked = 2,   /* the "win" outcome: exit portal count reached */
+		     PortalDestroyed = 3   /* the "fail" outcome: aliveGoal not met */
   } portalState;
 
-  Goal *liveGoal;  /* if this goal fails, portal's population is extinct */
-  Goal *openGoal;  /* player must meet this goal for the exit to open and the portal to move into the PortalCounting state */
-
   Type type;
-  int toWin, soFar;  /* number of type's that must exit / have exited the board */
+  int soFar;  /* number of type's that have exited the board */
   CellWatcher *watcher;  /* (Game*) context */
 } ExitPortal;
 
@@ -40,11 +40,17 @@ typedef struct ExitPortal {
 typedef struct Game {
   /* board */
   Board *board;
-  double updatesPerSecond;  /* rate at which to run the Board */
-  enum GameState { GameOn,       /* keep playing */
-		   GameTimeUp,   /* the time limit has expired */
-		   GameQuit      /* player quit */
+  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
+		   GameWon = 1,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
+		   GameLost = 2,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
+		   GamePaused = 3,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
+		   GameQuit = 4      /* game over, no way out of this state */
   } gameState;
+
+  /* timing */
+  double updatesPerSecond;     /* rate at which to run the Board. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
+  double goalTestsPerSecond;   /* rate at which to test Goal */
+  clock_t lastGoalTestTime;
 
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
@@ -52,14 +58,14 @@ typedef struct Game {
   XYCoord toolPos;
   int toolActive;
 
+  /* Game logic */
+  Goal *goal;    /* results of testing this Goal are discarded; use PseudoGoal's to drive game state */
+
   /* entrance */
   EntrancePortal theEntrance;
 
   /* exit portal */
   ExitPortal theExit;
-
-  /* time limit */
-  double timeLimit;  /* when (board->updatesPerCell / game->updatesPerSecond) exceeds this, game  */
 
   /* power-ups */
   List *charger;  /* all ToolCharger's */
@@ -74,7 +80,7 @@ Game* newGame();
 void deleteGame (Game *game);
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
 
-#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn)
+#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn || (GAME_PTR)->gameState == GameWon || (GAME_PTR)->gameState == GameLost)
 #define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }
 
 /* helpers */

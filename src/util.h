@@ -30,10 +30,13 @@ void IntDelete(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
 
-/* randomDouble() returns a uniformly-distributed random number between 0 and 1 */
+/* randomDouble() returns a uniformly-distributed real number between 0 and 1 */
 double randomDouble();
 
-/* randomExp() returns an exponentially-distributed random number between 0 and infinity */
+/* randomInt(N) returns a uniformly-distributed integer from 0 to N-1 */
+int randomInt(int);
+
+/* randomExp() returns an exponentially-distributed real number between 0 and infinity */
 double randomExp();
 
 /* DUMP */

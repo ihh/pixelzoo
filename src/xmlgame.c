@@ -35,7 +35,7 @@ Game* newGameFromXmlDocument (xmlDoc *doc) {
 
 Game* newGameFromXmlRoot (xmlNode *root) {
   Game *game;
-  xmlNode *gameNode, *entranceNode, *exitNode, *node;
+  xmlNode *gameNode, *entranceNode, *exitNode, *goalNode, *node;
   Tool *tool, *selectedTool;
 
   gameNode = CHILD(root,GAME);
@@ -73,10 +73,11 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   for (node = exitNode->children; node; node = node->next)
     if (MATCHES(node,LOC))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
-  game->theExit.toWin = CHILDINT(exitNode,COUNT);
   game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(entranceNode,HEXTYPE));
 
-  game->timeLimit = OPTCHILDFLOAT(gameNode,TIME,-1.);
+  goalNode = CHILD (gameNode, GOAL);
+  if (goalNode)
+    game->goal = newGoalFromXmlNode (goalNode, game);
 
   return game;
 }

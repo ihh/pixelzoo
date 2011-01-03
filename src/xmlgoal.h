@@ -3,6 +3,7 @@
 
 #include <libxml/tree.h>
 #include "goal.h"
+#include "game.h"
 
 /* XML node names */
 #define XMLZOO_GOAL            "goal"
@@ -17,6 +18,15 @@
 #define XMLZOO_REPEAT_GOAL     "repeat"
 #define XMLZOO_TRUE_GOAL       "true"
 #define XMLZOO_FALSE_GOAL      "false"
+#define XMLZOO_TIME_GOAL       "time"
+#define XMLZOO_TESTTOOL_GOAL   "tool"
+#define XMLZOO_TESTEXIT_GOAL   "exit"
+#define XMLZOO_TESTGAME_GOAL   "game"
+#define XMLZOO_CHARGE_GOAL     "charge"
+#define XMLZOO_SETEXIT_GOAL    "setexit"
+#define XMLZOO_SETGAME_GOAL    "setgame"
+#define XMLZOO_USETOOL_GOAL    "use"
+#define XMLZOO_PRINT_GOAL      "print"
 
 #define XMLZOO_REPS_GPARAM     "reps"
 #define XMLZOO_GOAL_GPARAM     "goal"
@@ -32,8 +42,13 @@
 #define XMLZOO_HEXTYPE_GPARAM  "hextype"
 #define XMLZOO_MASK_GPARAM     "mask"
 #define XMLZOO_LAZY_GPARAM     "lazy"
+#define XMLZOO_TOOLNAME_GPARAM "name"
+#define XMLZOO_RESERVE_GPARAM  "reserve"
+#define XMLZOO_STATE_GPARAM    "state"
+#define XMLZOO_TEXT_GPARAM     "text"
+#define XMLZOO_DURATION_GPARAM "duration"
 
 /* methods */
-Goal* newGoalFromXmlNode (xmlNode *node);
+Goal* newGoalFromXmlNode (xmlNode *node, Game *game);
 
 #endif /* XMLGOAL_INCLUDED */

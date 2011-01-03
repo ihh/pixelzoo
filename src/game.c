@@ -8,8 +8,10 @@ Game* newGame() {
   Game *game;
   game = SafeMalloc (sizeof (Game));
   game->board = NULL;
-  game->updatesPerSecond = DefaultUpdatesPerSecond;
   game->gameState = GameOn;
+  game->updatesPerSecond = DefaultUpdatesPerSecond;
+  game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
+  game->lastGoalTestTime = clock();
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
   game->selectedTool = NULL;
   game->toolActive = 0;
@@ -19,10 +21,9 @@ Game* newGame() {
   game->theEntrance.rate = 1.;
   game->theExit.portalState = PortalWaiting;
   game->theExit.type = EmptyType;
-  game->theExit.toWin = game->theExit.soFar = 0;
+  game->theExit.soFar = 0;
   game->theExit.watcher = newCellWatcher (exitPortalIntercept, (void*) game, NullDestroyFunction);
-  game->theExit.liveGoal = game->theExit.openGoal = NULL;
-  game->timeLimit = 0.;
+  game->goal = NULL;
   game->charger = newList (AbortCopyFunction, deleteToolCharger, NullPrintFunction);
   game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) NULL, NullDestroyFunction);
   return game;
@@ -33,10 +34,8 @@ void deleteGame (Game *game) {
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
   deleteList (game->charger);
-  if (game->theExit.liveGoal)
-    deleteGoal (game->theExit.liveGoal);
-  if (game->theExit.openGoal)
-    deleteGoal (game->theExit.openGoal);
+  if (game->goal)
+    deleteGoal (game->goal);
   SafeFree (game);
 }
 
@@ -45,7 +44,8 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
   maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetUpdatesPerCell / game->updatesPerSecond;
 
   evolveBoard (game->board, targetUpdatesPerCell, maxUpdateTimeInSeconds, &actualUpdatesPerCell, actualUpdates, evolveTime);
-  useTools (game, actualUpdatesPerCell);
+  if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
+    useTools (game, actualUpdatesPerCell);
   makeEntrances (game);
   updateGameState (game);
 
@@ -82,46 +82,17 @@ void makeEntrances (Game *game) {
 }
 
 void updateGameState (Game *game) {
-  /* define macros for the transitions between states */
-#define GameOpeningComplete (game->theExit.openGoal == NULL || testGoalMet (game->theExit.openGoal, game->board))
-#define GameExitComplete (game->theExit.soFar >= game->theExit.toWin)
-#define GameNotAlive (game->theExit.liveGoal != NULL && !testGoalMet (game->theExit.liveGoal, game->board))
-#define GameOutOfTime (game->timeLimit > 0. && (game->board->updatesPerCell / game->updatesPerSecond) >= game->timeLimit)
+  clock_t now;
 
-  /* switch on current state */
-  if (game->gameState == GameOn) {
-    if (GameOutOfTime) {
-      printf ("Out of time - you lose!\n");
-      game->gameState = GameTimeUp;
+  /* check the clock - time for a goal test? */
+  now = clock();
+  if ((now - game->lastGoalTestTime) / CLOCKS_PER_SEC < 1. / game->goalTestsPerSecond)
+    return;
+  game->lastGoalTestTime = now;
 
-    } else {
-      switch (game->theExit.portalState) {
-
-      case PortalWaiting:
-	if (GameOpeningComplete) {
-	  printf ("The exit portal has opened: the evacuation can begin...\n");
-	  game->theExit.portalState = PortalCounting;
-	} else if (GameNotAlive) {
-	  printf ("Population extinct - you lose!\n");
-	  game->theExit.portalState = PortalDestroyed;
-	}
-	break;
-
-      case PortalCounting:
-	if (GameExitComplete) {
-	  printf ("Successful evacuation - you win! You may continue to the next level.\n");
-	  game->theExit.portalState = PortalUnlocked;
-	} else if (GameNotAlive) {
-	  printf ("Population extinct - you lose!\n");
-	  game->theExit.portalState = PortalDestroyed;
-	}
-
-	/* all other states are final */
-      default:
-	break;
-      }
-    }
-  }
+  /* delegate game logic to Goal */
+  if (game->gameState == GameOn && game->goal != NULL)
+    (void) testGoalMet (game->goal, game->board);
 }
 
 ToolCharger* newToolCharger() {
@@ -146,8 +117,7 @@ State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, Sta
   if (game->gameState == GameOn && game->theExit.portalState == PortalCounting) {
     if (StateType(state) == game->theExit.type) {
       ++game->theExit.soFar;
-      if (game->theExit.soFar <= game->theExit.toWin)
-	printf ("Evacuated %d %s%s, need %d to win\n", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s" : "", game->theExit.toWin);
+      printf ("Evacuated %d %s%s\n", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s" : "");
     }
   }
   return readBoardStateUnguarded(board,x,y);

@@ -4,8 +4,12 @@
 #include <math.h>
 #include "util.h"
 
+int randomInt (int N) {
+  return (int) (randomDouble() * (double) N);
+}
+
 double randomDouble() {
-  return (double) rand() / (double) RAND_MAX;
+  return (double) rand() / ((double) RAND_MAX + 1.);   /* the +1 ensures that this function never returns 1 */
 }
 
 double randomExp() {

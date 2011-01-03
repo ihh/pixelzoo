@@ -53,6 +53,8 @@ RBNode* RBTreeFind(RBTree*, void* key);
 Stack* RBTreeEnumerate(RBTree* tree,void* low, void* high);  /* set low and/or high to NULL for unbounded/semibounded enumeration */
 RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
+RBNode* RBTreeFirst(RBTree*);
+RBNode* RBTreeLast(RBTree*);
 void RBTreePrint(RBTree*);  /* debug */
 
 void RBTreeRetain(RBTree*, RBTree*);  /* retains all keys of first RBTree that are also in second RBTree */

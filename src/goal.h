@@ -2,6 +2,7 @@
 #define GOAL_INCLUDED
 
 #include "board.h"
+#include "tool.h"
 #include "xymap.h"
 #include "statemap.h"
 #include "stringmap.h"
@@ -20,7 +21,7 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 		EntropyGoal,     /* for every state S in parent area, if (S & TypeMask) is in ((StateSet*)tree), then add (S & intData[0]) to set.
 				    Goal is met if states in set satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
 
-		OnceGoal,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
+		OnceGoal,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l, so after it's true for the first time, it's never tested again) */
 		AndGoal,         /* both subgoals (l & r) are met simultaneously within parent area. Both l & r are guaranteed to be evaluated */
 		OrGoal,          /* at least one of the two subgoals (l & r) is met within parent area. Both l & r are guaranteed to be evaluated */
 		LazyAndGoal,     /* both subgoals (l & r) are met simultaneously within parent area. r is not evaluated unless l evaluates true */
@@ -28,10 +29,22 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 		NotGoal,         /* subgoal (l) is not met within parent area */
 
 		RepeatGoal,      /* subgoal (l) is currently met & has been met consecutively at least intData[0] times within parent area */
+		BoardTimeGoal,   /* dblData[0] <= board->updatesPerCell <= dblData[1] */
 
 		TrueGoal,        /* always met */
-		FalseGoal        /* never met */
-};
+		FalseGoal,       /* never met */
+
+		CheckToolGoal,               /* dblData[0] <= ((Tool*)context)->reserve <= dblData[1] */
+		CheckPortalGoal,             /* ((ExitPortal*)context)->portalState == intData[0] && intData[1] <= ((ExitPortal*)context)->soFar <= intData[2] */
+		CheckGameStateGoal,          /* ((Game*)context)->gameState == intData[0] */
+
+/* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
+		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], returns true */
+		SetPortalStatePseudoGoal,    /* sets ((ExitPortal*)context)->portalState = intData[0], returns true */
+		SetGameStatePseudoGoal,      /* sets ((Game*)context)->gameState = intData[0], returns true */
+		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true */
+		PrintMessagePseudoGoal       /* prints (char*) context, returns true */
+		};
 
 /* Goal */
 typedef struct Goal {
@@ -40,7 +53,7 @@ typedef struct Goal {
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
   unsigned long *intData;  /* integer goal params */
-  StringVector *stringData;  /* string params */
+  void *context;  /* misc extra context */
 } Goal;
 
 /* accessors */
@@ -66,6 +79,17 @@ Goal* newOrGoal (Goal* l, Goal* r, int lazy);
 Goal* newNotGoal (Goal* g);
 Goal* newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
 Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps);
+Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell);
+
+Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve);
+Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCount);
+Goal *newCheckGameStateGoal (void *game, int gameState);
+
+Goal *newChargeToolPseudoGoal (void *tool, double reserveDelta);
+Goal *newSetPortalStatePseudoGoal (void *portal, int portalState);
+Goal *newSetGameStatePseudoGoal (void *game, int gameState);
+Goal *newUseToolPseudoGoal (void *tool, double duration);
+Goal *newPrintMessagePseudoGoal (const char* message);
 
 /* destructor */
 void deleteGoal (Goal* goal);
