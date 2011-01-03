@@ -10,10 +10,11 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
   XYSet *area;
   StateSet *wallSet, *typeSet;
   int n;
-  Assert (goalNode != NULL, "newGoalFromXmlNode: null goal node");
-  goal = NULL;
-  goalTypeAttr = ATTR(goalNode,GOALTYPE);
 
+  goal = NULL;
+  Assert (goalNode != NULL, "newGoalFromXmlNode: null goal node");
+
+  goalTypeAttr = ATTR(goalNode,GOALTYPE);
   if (ATTRMATCHES (goalTypeAttr, AREA_GOAL)) {
     area = newXYSet();
     for (node = goalNode->children; node; node = node->next)
@@ -90,6 +91,9 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
 
   } else if (ATTRMATCHES (goalTypeAttr, FALSE_GOAL)) {
     goal = newFalseGoal();
+
+  } else {
+    Abort ("Unknown goal type");
   }
 
   return goal;
