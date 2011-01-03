@@ -18,7 +18,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
   if (ATTRMATCHES (goalTypeAttr, AREA_GOAL)) {
     area = newXYSet();
     for (node = goalNode->children; node; node = node->next)
-      if (MATCHES(node,POS_GPARAM))
+      if (MATCHES (node, POS_GPARAM))
 	(void) XYSetInsert (area, CHILDINT(node,X), CHILDINT(node,Y));
     subGoalNode = CHILD (goalNode, GOAL_GPARAM);
     goal = newAreaGoal (area,
@@ -28,7 +28,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
     /* currently the XML adapter sets up the EnclosuresGoal to determine whether a given state is a wall by examining Type only, ignoring Vars */
     wallSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
-      if (MATCHES(node,WALL_GPARAM))
+      if (MATCHES (node, WALL_GPARAM))
 	(void) StateSetInsert (wallSet, OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift);  /* hardwired to match Type bits only */
     subGoalNode = CHILD (goalNode, GOAL_GPARAM);
     countNode = CHILD (goalNode, COUNT_GPARAM);
@@ -45,12 +45,12 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
   } else if (ATTRMATCHES (goalTypeAttr, COUNT_GOAL)) {
     typeSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
-      if (MATCHES(node,DECTYPE_GPARAM))
+      if (MATCHES (node, DECTYPE_GPARAM))
 	(void) StateSetInsert (typeSet, decToSignedLongLong ((const char*) getNodeContent(node)));
-      else if (MATCHES(node,HEXTYPE_GPARAM))
+      else if (MATCHES (node, HEXTYPE_GPARAM))
 	(void) StateSetInsert (typeSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)));
     countNode = CHILD (goalNode, COUNT_GPARAM);
-    entropyNode = CHILD(goalNode,ENTROPY_GPARAM);
+    entropyNode = CHILD (goalNode, ENTROPY_GPARAM);
     goal = newEntropyGoal (typeSet,
 			   OPTCHILDHEX(goalNode,MASK_GPARAM,StateMask),
 			   countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0) : 0,
@@ -63,28 +63,28 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode) {
 
   } else if (ATTRMATCHES (goalTypeAttr, AND_GOAL)) {
     for (n = 0, node = goalNode->children; node; node = node->next)
-      if (MATCHES(node,GOAL_GPARAM)) {
+      if (MATCHES (node, GOAL_GPARAM)) {
 	Assert (n < 2, "More than 2 subgoals in " XMLPREFIX(AND_GOAL));
 	subGoal[n++] = newGoalFromXmlNode (node);
       }
     Assert (n == 2, "Fewer than 2 subgoals in " XMLPREFIX(AND_GOAL));
-    goal = newAndGoal (subGoal[0], subGoal[1]);
+    goal = newAndGoal (subGoal[0], subGoal[1], CHILD (goalNode, LAZY_GPARAM) != NULL);
 
   } else if (ATTRMATCHES (goalTypeAttr, OR_GOAL)) {
     for (n = 0, node = goalNode->children; node; node = node->next)
-      if (MATCHES(node,GOAL_GPARAM)) {
+      if (MATCHES (node, GOAL_GPARAM)) {
 	Assert (n < 2, "More than 2 subgoals in " XMLPREFIX(OR_GOAL));
 	subGoal[n++] = newGoalFromXmlNode (node);
       }
     Assert (n == 2, "Fewer than 2 subgoals in " XMLPREFIX(OR_GOAL));
-    goal = newOrGoal (subGoal[0], subGoal[1]);
+    goal = newOrGoal (subGoal[0], subGoal[1], CHILD (goalNode, LAZY_GPARAM) != NULL);
 
   } else if (ATTRMATCHES (goalTypeAttr, NOT_GOAL)) {
     goal = newNotGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM)));
 
   } else if (ATTRMATCHES (goalTypeAttr, REPEAT_GOAL)) {
-    goal = newRepeatGoal (newGoalFromXmlNode(CHILD(goalNode,GOAL_GPARAM)),
-			  CHILDINT(goalNode,REPS_GPARAM));
+    goal = newRepeatGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM)),
+			  CHILDINT (goalNode, REPS_GPARAM));
 
   } else if (ATTRMATCHES (goalTypeAttr, TRUE_GOAL)) {
     goal = newTrueGoal();

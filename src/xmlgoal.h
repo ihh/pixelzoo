@@ -31,6 +31,7 @@
 #define XMLZOO_DECTYPE_GPARAM  "type"
 #define XMLZOO_HEXTYPE_GPARAM  "hextype"
 #define XMLZOO_MASK_GPARAM     "mask"
+#define XMLZOO_LAZY_GPARAM     "lazy"
 
 /* methods */
 Goal* newGoalFromXmlNode (xmlNode *node);

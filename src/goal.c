@@ -63,17 +63,17 @@ Goal* newOnceGoal (Goal* l) {
   return g;
 }
 
-Goal* newAndGoal (Goal* l, Goal* r) {
+Goal* newAndGoal (Goal* l, Goal* r, int lazy) {
   Goal* g;
-  g = newGoal (AndGoal, 0, 0);
+  g = newGoal (lazy ? LazyAndGoal : AndGoal, 0, 0);
   g->l = l;
   g->r = r;
   return g;
 }
 
-Goal* newOrGoal (Goal* l, Goal* r) {
+Goal* newOrGoal (Goal* l, Goal* r, int lazy) {
   Goal* g;
-  g = newGoal (OrGoal, 0, 0);
+  g = newGoal (lazy ? LazyOrGoal : OrGoal, 0, 0);
   g->l = l;
   g->r = r;
   return g;
@@ -206,6 +206,7 @@ XYSet* getGoalArea (Goal* goal) {
 }
 
 int testGoalMet (Goal* goal, Board *board) {
+  int lGoalMet, rGoalMet;
   Assert (goal != NULL, "testGoalMet: null goal");
   switch (goal->goalType) {
   case AreaGoal:
@@ -219,9 +220,17 @@ int testGoalMet (Goal* goal, Board *board) {
 	*goal->intData = 1;
     return *goal->intData;
   case AndGoal:
-    return testGoalMet(goal->l,board) && testGoalMet(goal->r,board);
+    lGoalMet = testGoalMet(goal->l,board);
+    rGoalMet = testGoalMet(goal->r,board);
+    return lGoalMet && rGoalMet;
   case OrGoal:
-    return testGoalMet(goal->l,board) || testGoalMet(goal->r,board);
+    lGoalMet = testGoalMet(goal->l,board);
+    rGoalMet = testGoalMet(goal->r,board);
+    return lGoalMet || rGoalMet;
+  case LazyAndGoal:
+    return testGoalMet(goal->l,board) ? testGoalMet(goal->r,board) : 0;
+  case LazyOrGoal:
+    return testGoalMet(goal->l,board) ? 1 : testGoalMet(goal->r,board);
   case NotGoal:
     return !testGoalMet(goal->l,board);
   case EntropyGoal:
