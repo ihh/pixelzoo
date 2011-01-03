@@ -20,7 +20,17 @@
 
 #define XMLZOO_REPS_GPARAM     "reps"
 #define XMLZOO_GOAL_GPARAM     "goal"
-
+#define XMLZOO_POS_GPARAM      "pos"
+#define XMLZOO_WALL_GPARAM     "wall"
+#define XMLZOO_COUNT_GPARAM    "count"
+#define XMLZOO_AREA_GPARAM     "area"
+#define XMLZOO_MIN_GPARAM      "min"
+#define XMLZOO_MAX_GPARAM      "max"
+#define XMLZOO_MOORE_GPARAM    "moore"
+#define XMLZOO_ENTROPY_GPARAM  "entropy"
+#define XMLZOO_DECTYPE_GPARAM  "type"
+#define XMLZOO_HEXTYPE_GPARAM  "hextype"
+#define XMLZOO_MASK_GPARAM     "mask"
 
 /* methods */
 Goal* newGoalFromXmlNode (xmlNode *node);

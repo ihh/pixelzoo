@@ -27,10 +27,11 @@ Goal* newFalseGoal() {
   return newGoal (FalseGoal, 0, 0);
 }
 
-Goal* newAreaGoal (XYSet* area) {
+Goal* newAreaGoal (XYSet* area, Goal *subGoal) {
   Goal* g;
   g = newGoal (AreaGoal, 0, 0);
   g->tree = (RBTree*) area;
+  g->l = subGoal;
   return g;
 }
 
@@ -85,11 +86,11 @@ Goal* newNotGoal (Goal* l) {
   return g;
 }
 
-Goal* newEntropyGoal (State typeMask, StateSet* typeSet, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
+Goal* newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
   Goal* g;
   g = newGoal (EntropyGoal, 2, 3);
   g->tree = (RBTree*) typeSet;
-  g->intData[0] = typeMask;
+  g->intData[0] = stateMask;
   g->intData[1] = minCount;
   g->intData[2] = maxCount;
   g->dblData[0] = minEntropy;
@@ -264,7 +265,7 @@ int testEnclosuresGoal (Goal* goal, Board *board) {
     if (goal->l == NULL)
       ++count;
     else {
-      tempAreaGoal = newAreaGoal (pointSet);
+      tempAreaGoal = newAreaGoal (pointSet, NULL);
       goal->l->parent = tempAreaGoal;
       if (testGoalMet (goal->l, board))
 	++count;
@@ -285,7 +286,8 @@ int testEntropyGoal (Goal* goal, Board *board) {
   StateSet *allowedStates;
   StateMap *stateCount;
   StateMapNode *stateCountNode;
-  State stateMask, maskedState;
+  State state, stateMask, maskedState;
+  Type type;
   Stack *stateCountEnum;
   stateMask = goal->intData[0];
   minPopulation = goal->intData[1];
@@ -298,8 +300,10 @@ int testEntropyGoal (Goal* goal, Board *board) {
   parentArea = getGoalArea (goal);
   for (x = 0; x < board->size; ++x)
     for (y = 0; y < board->size; ++y) {
-      maskedState = readBoardState(board,x,y) & stateMask;
+      state = readBoardStateUnguarded(board,x,y);
+      type = StateType (state);
       if (StateMapFind (allowedStates, maskedState)) {
+	maskedState = state & stateMask;
 	stateCountNode = StateMapFind (stateCount, maskedState);
 	if (stateCountNode)
 	  ++*(int*)stateCountNode->value;

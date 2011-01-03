@@ -36,6 +36,10 @@ double randomDouble();
 /* randomExp() returns an exponentially-distributed random number between 0 and infinity */
 double randomExp();
 
+/* DUMP */
+#undef DUMP
+#define DUMP(x, fmt) printf("%s:%u: %s=" fmt, __FILE__, __LINE__, #x, x)
+
 /* MIN, MAX, ABS */
 #undef MIN
 #undef MAX

@@ -17,8 +17,8 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 				    Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
 				    where (intData[4] <= N <= intData[5]) */
 
-		EntropyGoal,     /* mask every state in parent area with intData[0], and keep the subset of masked-states that are in ((StateSet*)tree).
-				    Goal is met if remaining states satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
+		EntropyGoal,     /* for every state S in parent area, if (S & TypeMask) is in ((StateSet*)tree), then add (S & intData[0]) to set.
+				    Goal is met if states in set satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
 
 		OnceGoal,        /* subgoal (l) has been met at least once within parent area (has the effect of caching evaluation of l) */
 		AndGoal,         /* both subgoals (l & r) are met simultaneously within parent area */
@@ -34,7 +34,7 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 /* Goal */
 typedef struct Goal {
   enum GoalType goalType;  /* type */
-  struct Goal *l, *r, *parent;  /* parent & subgoals */
+  struct Goal *l, *r, *parent;  /* subgoals & parent */
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
   unsigned long *intData;  /* integer goal params */
@@ -49,7 +49,7 @@ XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole b
 /* All parameters become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
 Goal* newTrueGoal();
 Goal* newFalseGoal();
-Goal* newAreaGoal (XYSet* area);
+Goal* newAreaGoal (XYSet* area, Goal *subGoal);
 Goal* newEnclosuresGoal (State wallMask,
 			 StateSet* wallSet,
 			 unsigned long minNumEnclosures,
@@ -62,7 +62,7 @@ Goal* newOnceGoal (Goal* l);
 Goal* newAndGoal (Goal* l, Goal* r);
 Goal* newOrGoal (Goal* l, Goal* r);
 Goal* newNotGoal (Goal* g);
-Goal* newEntropyGoal (State typeMask, StateSet* typeSet, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
+Goal* newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
 Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps);
 
 /* destructor */
