@@ -47,7 +47,7 @@ typedef struct Game {
   } gameState;
 
   /* toolbox */
-  List *allTools;     /* all Tool's, including empty/locked */
+  StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
   Tool *selectedTool;
   XYCoord toolPos;
   int toolActive;

@@ -36,6 +36,7 @@ Game* newGameFromXmlDocument (xmlDoc *doc) {
 Game* newGameFromXmlRoot (xmlNode *root) {
   Game *game;
   xmlNode *gameNode, *entranceNode, *exitNode, *node;
+  Tool *tool, *selectedTool;
 
   gameNode = CHILD(root,GAME);
  
@@ -45,15 +46,17 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   game->updatesPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultUpdatesPerSecond);
 
   for (node = gameNode->children; node; node = node->next)
-    if (MATCHES(node,TOOL))
-      ListInsertBefore (game->allTools, NULL, newToolFromXmlNode (node));
+    if (MATCHES(node,TOOL)) {
+      selectedTool = tool = newToolFromXmlNode (node);
+      (void) StringMapInsert (game->toolByName, tool->name, tool);
+    }
 
   for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,CHARGER))
-      ListInsertBefore (game->charger, NULL, newToolChargerFromXmlNode (game, node));
+      (void) ListInsertBefore (game->charger, NULL, newToolChargerFromXmlNode (game, node));
 
-  Assert (game->allTools->head != NULL, "You need some tools!");
-  game->selectedTool = (Tool*) game->allTools->head->value;
+  Assert (RBTreeSize(game->toolByName) > 0 && selectedTool != NULL, "You need some tools!");
+  game->selectedTool = selectedTool;
 
   for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,PROTECT))
@@ -131,22 +134,14 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
 }
 
 ToolCharger* newToolChargerFromXmlNode (Game *game, xmlNode* chargerNode) {
-  ListNode *listNode;
-  Tool *tool;
+  StringMapNode *toolNode;
   ToolCharger *charger;
   char *toolName;
   charger = newToolCharger();
   charger->overwriteType = OPTCHILDINT(chargerNode,DECTYPE,CHILDHEX(chargerNode,HEXTYPE));
   toolName = (char*) CHILDSTRING(chargerNode,NAME);
-  charger->tool = NULL;
-  for (listNode = game->allTools->head; listNode; listNode = listNode->next) {
-    tool = (Tool*) listNode->value;
-    if (strcmp (tool->name, toolName) == 0) {
-      charger->tool = tool;
-      break;
-    }
-  }
-  Assert (charger->tool != NULL, "Couldn't find tool");
+  toolNode = StringMapFind (game->toolByName, toolName);
+  Assert (toolNode != NULL, "Couldn't find tool");
+  charger->tool = (Tool*) toolNode->value;
   return charger;
 }
-

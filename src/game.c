@@ -10,7 +10,7 @@ Game* newGame() {
   game->board = NULL;
   game->updatesPerSecond = DefaultUpdatesPerSecond;
   game->gameState = GameOn;
-  game->allTools = newList (AbortCopyFunction, deleteTool, printTool);
+  game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
   game->selectedTool = NULL;
   game->toolActive = 0;
   game->theEntrance.total = game->theEntrance.soFar = 0;
@@ -29,7 +29,7 @@ Game* newGame() {
 }
 
 void deleteGame (Game *game) {
-  deleteList (game->allTools);
+  deleteStringMap (game->toolByName);
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
   deleteList (game->charger);
@@ -54,15 +54,18 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
 }
 
 void useTools (Game *game, double duration) {
-  ListNode *node;
+  RBNode *node;
   Tool *tool;
-  for (node = game->allTools->head; node != NULL; node = node->next) {
+  Stack *enumResult;
+  enumResult = RBTreeEnumerate (game->toolByName, NULL, NULL);	  
+  while ((node = (RBNode*) StackPop (enumResult))) {
     tool = (Tool*) node->value;
     if (tool == game->selectedTool && game->toolActive)
       useTool (tool, game->board, game->toolPos.x, game->toolPos.y, duration);
     else
       rechargeTool (tool, duration);
   }
+  deleteStack (enumResult);
 }
 
 void makeEntrances (Game *game) {

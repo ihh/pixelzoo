@@ -42,7 +42,6 @@ void ListDeleteVoid(void*);
 
 /* A Stack is like a List, but never deletes its values & only returns them via StackPop */
 typedef List Stack;
-typedef ListNode StackNode;
 #define newStack() ((Stack*) newList(NullCopyFunction,NullDestroyFunction,NullPrintFunction))
 #define deleteStack(STACK) deleteList((List*) STACK)
 #define StackJoin(STACK1,STACK2) ((Stack*) ListJoin((List*)STACK1,(List*)STACK2))
