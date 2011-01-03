@@ -4,7 +4,7 @@
 
 Particle* newParticle (const char* name, int nRules) {
   Particle* p;
-  int c;
+  int c, r, op;
   p = SafeMalloc (sizeof (Particle));
   p->type = 0;
   p->name = SafeMalloc ((strlen (name) + 1) * sizeof(char));
@@ -19,6 +19,10 @@ Particle* newParticle (const char* name, int nRules) {
   p->synchronous = p->shuffle = p->syncPeriod = p->syncPhase = 0;
   p->nRules = p->failures = p->successes = nRules;
   p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
+  for (r = 0; r < nRules; ++r)
+    for (op = 0; op < NumRuleOperations; ++op) {
+      p->rule[r].op[op].modulus = 1;  /* guard against zero modulus */
+    }
   p->totalRate = p->totalOverloadRate = p->asyncFiringRate = p->syncFiringRate = 0.;
   p->count = 0;
   return p;

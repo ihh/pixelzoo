@@ -127,8 +127,10 @@ void addParticleToBoard (Particle* p, Board* board) {
 	p->totalRate = p->totalOverloadRate = 0.;
 	for (r = 0; r < p->nRules; ++r) {
 		rule = &p->rule[r];
+		/* accumulate rates */
 		p->totalRate += rule->rate;
 		p->totalOverloadRate += rule->overloadRate;
+		/* check for recurrent writes to the same cell */
 		for (n = 1; n < NumRuleOperations; ++n)
 			for (m = n; m > 0; --m) {
 				if (rule->op[n].src.x == rule->op[n-m].dest.x
@@ -173,8 +175,8 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 	x += op->dest.x;
 	y += op->dest.y;
 	if (onBoard(board,x,y)) {  /* only check once */
-		newState = (oldDestState & (StateMask ^ (op->mask << op->leftShift)))
-		| (((((oldSrcState & op->preMask) >> op->rightShift) + op->offset) & op->mask) << op->leftShift);
+		newState = (oldDestState & (StateMask ^ op->destMask))
+		  | ((((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) % op->modulus) << op->leftShift) & op->destMask);
 		(*write) (board, x, y, newState);
 		return newState;
 	}

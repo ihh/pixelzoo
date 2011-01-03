@@ -3,7 +3,7 @@
 
 #include "stringmap.h"
 
-/* 64-bit cell state.
+/* State: 64-bit cell state.
 
    The 16 most significant bits of the state form the Type.
    The 48 bits beneath this are the Vars, providing additional type-specific state.
@@ -18,24 +18,25 @@
    but this convention is not strictly enforced or required.
  */
 typedef unsigned long long int State;
-#define StateMask 0xffffffffffffffff
+#define StateMask    0xffffffffffffffff
+#define MaxState     0xffffffffffffffff
 #define BitsPerState 64
 
-/* 16-bit cell type */
+/* Type: 16-bit cell type */
 typedef unsigned short int Type;
-#define TypeMask    0xffff000000000000
-#define TypeShift   48
-#define NumTypes    0x10000
-#define MaxType     0xffff
-#define BitsPerType 16
+#define TypeMask     0xffff000000000000
+#define BitsPerType  16
+#define MaxType      0xffff
+#define NumTypes     0x10000
+#define TypeShift    48
 
-/* 16-bit type-specific "variables" */
+/* Vars: 48-bit type-specific variables */
 typedef unsigned long long int Vars;
-#define VarMask     0x0000ffffffffffff
-#define NumVars     0x1000000000000
-#define BitsPerVar  48
+#define VarsMask     0x0000ffffffffffff
+#define BitsPerVars  48
+#define NumVars      0x1000000000000
 
-/* type <-> state conversion macros */
+/* Type <-> State conversion macros */
 #define StateType(STATE) (((STATE) & TypeMask) >> TypeShift)
 
 /* Reserved states & types */
@@ -64,12 +65,12 @@ typedef struct RuleCondition {
 /*
   RuleOperation parameterizes the following operation:
   if (randomDouble() >= failProb)
-    cell[dest] = (cell[dest] & (StateMask ^ (mask << leftShift))) | (((((cell[src] & preMask) >> rightShift) + offset) & mask) << leftShift);
+    cell[dest] = (cell[dest] & (StateMask ^ destMask)) | ((((((cell[src] & srcMask) >> rightShift) + offset) % modulus) << leftShift) & destMask);
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
-  State offset, mask, preMask;
+  State offset, modulus, srcMask, destMask;
   double failProb, overloadFailProb;  /* when board (or local region) is overloaded, overloadFailProb will be used instead of failProb */
 } RuleOperation;
 

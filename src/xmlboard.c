@@ -94,7 +94,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
 
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  colorRule->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,VarMask));
+  colorRule->mask = OPTCHILDHEX(node,MASK,VarsMask);
   colorRule->multiplier = OPTCHILDINT(node,DECMUL,OPTCHILDHEX(node,HEXMUL,1));
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
@@ -126,7 +126,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   } else
     cond->loc.x = cond->loc.y = 0;
 
-  cond->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
+  cond->mask = OPTCHILDHEX(node,MASK,StateMask);
   cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
   cond->overloadIgnoreProb = OPTCHILDFLOAT(node,OVERLOAD,cond->ignoreProb);
@@ -153,17 +153,20 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
 
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
   xmlNode *src, *dest;
-  State defaultPreMask;
+  State defaultSrcMask;
 
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
-  op->mask = OPTCHILDINT(node,DECMASK,OPTCHILDHEX(node,HEXMASK,StateMask));
+  op->modulus = OPTCHILDINT(node,DECMOD,OPTCHILDHEX(node,HEXMOD,0));
+  if (op->modulus == 0)  /* guard against zero-modulus arithmetic exceptions */
+    op->modulus = MAX(NumVars,NumTypes);  /* assumption of default modulus: types & vars are never inc'd simultaneously */
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
   op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);
 
-  defaultPreMask = op->rightShift >= BitsPerState ? 0 : StateMask;
-  op->preMask = OPTCHILDINT(node,DECPREMASK,OPTCHILDHEX(node,HEXPREMASK,defaultPreMask));
+  defaultSrcMask = op->rightShift >= BitsPerState ? 0 : StateMask;
+  op->srcMask = OPTCHILDHEX(node,SRCMASK,defaultSrcMask);
+  op->destMask = OPTCHILDHEX(node,DESTMASK,StateMask);
 
   src = CHILD(node,SRC);
   dest = CHILD(node,DEST);
