@@ -157,9 +157,6 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
 
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
-  op->modulus = OPTCHILDINT(node,DECMOD,OPTCHILDHEX(node,HEXMOD,0));
-  if (op->modulus == 0)  /* guard against zero-modulus arithmetic exceptions */
-    op->modulus = MAX(NumVars,NumTypes);  /* assumption of default modulus: types & vars are never inc'd simultaneously */
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
   op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
   op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);

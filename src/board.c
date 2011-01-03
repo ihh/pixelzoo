@@ -176,7 +176,7 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 	y += op->dest.y;
 	if (onBoard(board,x,y)) {  /* only check once */
 		newState = (oldDestState & (StateMask ^ op->destMask))
-		  | ((((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) % op->modulus) << op->leftShift) & op->destMask);
+		  | (((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) << op->leftShift) & op->destMask);
 		(*write) (board, x, y, newState);
 		return newState;
 	}

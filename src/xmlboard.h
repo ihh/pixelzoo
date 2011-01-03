@@ -37,8 +37,6 @@
 #define XMLZOO_DEST        "dest"
 #define XMLZOO_DECINC      "inc"
 #define XMLZOO_HEXINC      "hexinc"
-#define XMLZOO_DECMOD      "mod"
-#define XMLZOO_HEXMOD      "hexmod"
 #define XMLZOO_LSHIFT      "lshift"
 #define XMLZOO_RSHIFT      "rshift"
 #define XMLZOO_FAIL        "fail"

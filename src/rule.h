@@ -65,12 +65,12 @@ typedef struct RuleCondition {
 /*
   RuleOperation parameterizes the following operation:
   if (randomDouble() >= failProb)
-    cell[dest] = (cell[dest] & (StateMask ^ destMask)) | ((((((cell[src] & srcMask) >> rightShift) + offset) % modulus) << leftShift) & destMask);
+    cell[dest] = (cell[dest] & (StateMask ^ destMask)) | (((((cell[src] & srcMask) >> rightShift) + offset) << leftShift) & destMask);
 */
 typedef struct RuleOperation {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
-  State offset, modulus, srcMask, destMask;
+  State offset, srcMask, destMask;
   double failProb, overloadFailProb;  /* when board (or local region) is overloaded, overloadFailProb will be used instead of failProb */
 } RuleOperation;
 
