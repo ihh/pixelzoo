@@ -21,7 +21,7 @@ Game* newGame() {
   game->theExit.type = EmptyType;
   game->theExit.toWin = game->theExit.soFar = 0;
   game->theExit.watcher = newCellWatcher (exitPortalIntercept, (void*) game, NullDestroyFunction);
-  game->theExit.aliveGoal = game->theExit.openGoal = NULL;
+  game->theExit.liveGoal = game->theExit.openGoal = NULL;
   game->timeLimit = 0.;
   game->charger = newList (AbortCopyFunction, deleteToolCharger, NullPrintFunction);
   game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) NULL, NullDestroyFunction);
@@ -33,8 +33,8 @@ void deleteGame (Game *game) {
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
   deleteList (game->charger);
-  if (game->theExit.aliveGoal)
-    deleteGoal (game->theExit.aliveGoal);
+  if (game->theExit.liveGoal)
+    deleteGoal (game->theExit.liveGoal);
   if (game->theExit.openGoal)
     deleteGoal (game->theExit.openGoal);
   SafeFree (game);
@@ -82,7 +82,7 @@ void updateGameState (Game *game) {
   /* define macros for the transitions between states */
 #define GameOpeningComplete (game->theExit.openGoal == NULL || testGoalMet (game->theExit.openGoal, game->board))
 #define GameExitComplete (game->theExit.soFar >= game->theExit.toWin)
-#define GameNotAlive (game->theExit.aliveGoal != NULL && !testGoalMet (game->theExit.aliveGoal, game->board))
+#define GameNotAlive (game->theExit.liveGoal != NULL && !testGoalMet (game->theExit.liveGoal, game->board))
 #define GameOutOfTime (game->timeLimit > 0. && (game->board->updatesPerCell / game->updatesPerSecond) >= game->timeLimit)
 
   /* switch on current state */
@@ -96,21 +96,21 @@ void updateGameState (Game *game) {
 
       case PortalWaiting:
 	if (GameOpeningComplete) {
-	  printf ("The exit portal is now open!\n");
+	  printf ("The exit portal has opened: the evacuation can begin...\n");
 	  game->theExit.portalState = PortalCounting;
 	} else if (GameNotAlive) {
 	  printf ("Population extinct - you lose!\n");
-	  game->theExit.portalState = PortalDead;
+	  game->theExit.portalState = PortalDestroyed;
 	}
 	break;
 
       case PortalCounting:
 	if (GameExitComplete) {
-	  printf ("Successful evacuation - you win! You may exit to the next level.\n");
-	  game->theExit.portalState = PortalOpen;
+	  printf ("Successful evacuation - you win! You may continue to the next level.\n");
+	  game->theExit.portalState = PortalUnlocked;
 	} else if (GameNotAlive) {
 	  printf ("Population extinct - you lose!\n");
-	  game->theExit.portalState = PortalDead;
+	  game->theExit.portalState = PortalDestroyed;
 	}
 
 	/* all other states are final */

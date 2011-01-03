@@ -22,14 +22,14 @@ typedef struct EntrancePortal {
 
 /* exit portal */
 typedef struct ExitPortal {
-  enum PortalState { PortalWaiting,    /* exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
-		     PortalCounting,   /* exit portal counting incoming Particle's */
-		     PortalOpen,       /* exit portal count reached */
-		     PortalDead        /* aliveGoal not met */
+  enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
+		     PortalCounting,   /* the endgame: exit portal is "open" and counting incoming Particle's */
+		     PortalUnlocked,   /* the "win" outcome: exit portal count reached */
+		     PortalDestroyed   /* the "fail" outcome: aliveGoal not met */
   } portalState;
 
-  Goal *aliveGoal;  /* if this goal fails, portal's population is extinct */
-  Goal *openGoal;  /* player must meet this goal for the exit to open */
+  Goal *liveGoal;  /* if this goal fails, portal's population is extinct */
+  Goal *openGoal;  /* player must meet this goal for the exit to open and the portal to move into the PortalCounting state */
 
   Type type;
   int toWin, soFar;  /* number of type's that must exit / have exited the board */
