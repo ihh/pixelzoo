@@ -50,7 +50,7 @@ typedef struct Game {
   /* timing */
   double updatesPerSecond;     /* rate at which to run the Board. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
   double goalTestsPerSecond;   /* rate at which to test Goal */
-  clock_t lastGoalTestTime;
+  double lastGoalTestTime;     /* time is "Board time", i.e. measured in updates/cell/second */
 
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "goal.h"
 #include "tool.h"
 #include "game.h"
@@ -58,9 +59,11 @@ Goal* newEnclosuresGoal (State wallMask,
   return g;
 }
 
-Goal* newOnceGoal (Goal* l) {
+Goal* newCachedGoal (Goal* l, int reps) {
   Goal* g;
-  g = newGoal (OnceGoal, 0, 0);
+  g = newGoal (CachedGoal, 0, 2);
+  g->intData[0] = reps;
+  g->intData[1] = 0;
   g->l = l;
   return g;
 }
@@ -297,11 +300,13 @@ int testGoalMet (Goal* goal, Board *board) {
     return testEnclosuresGoal (goal, board);
     return 1;
 
-  case OnceGoal:
-    if (!*goal->intData)
-      if (testGoalMet(goal->l,board))
-	*goal->intData = 1;
-    return *goal->intData;
+  case CachedGoal:
+    if (goal->intData[1] >= goal->intData[0])
+      return 1;
+    lGoalMet = testGoalMet(goal->l,board);
+    if (lGoalMet)
+      ++goal->intData[1];
+    return lGoalMet;
 
   case AndGoal:
     lGoalMet = testGoalMet(goal->l,board);
@@ -435,19 +440,18 @@ int testEnclosuresGoal (Goal* goal, Board *board) {
 int testEntropyGoal (Goal* goal, Board *board) {
   XYSet *parentArea;
   int x, y, population, minPopulation, maxPopulation;
-  double entropy, minEntropy, maxEntropy;
-  StateSet *allowedStates;
+  double prob, entropy, minEntropy, maxEntropy;
+  StateSet *allowedTypes;
   StateMap *stateCount;
   StateMapNode *stateCountNode;
-  State state, stateMask, maskedState;
-  Type type;
+  State state, type, stateMask, maskedState;  /* NB we store type as a State, because allowedTypes is a StateSet */
   Stack *stateCountEnum;
   stateMask = goal->intData[0];
   minPopulation = goal->intData[1];
   maxPopulation = goal->intData[2];
   minEntropy = goal->dblData[0];
   maxEntropy = goal->dblData[1];
-  allowedStates = (StateSet*) goal->tree;
+  allowedTypes = (StateSet*) goal->tree;
   /* count state types */
   stateCount = newStateMap(IntCopy,IntDelete,IntPrint);
   parentArea = getGoalArea (goal);
@@ -455,7 +459,7 @@ int testEntropyGoal (Goal* goal, Board *board) {
     for (y = 0; y < board->size; ++y) {
       state = readBoardStateUnguarded(board,x,y);
       type = StateType (state);
-      if (StateMapFind (allowedStates, maskedState)) {
+      if (StateMapFind (allowedTypes, type)) {
 	maskedState = state & stateMask;
 	stateCountNode = StateMapFind (stateCount, maskedState);
 	if (stateCountNode)
@@ -468,13 +472,16 @@ int testEntropyGoal (Goal* goal, Board *board) {
   /* calculate entropy */
   entropy = 0.;
   stateCountEnum = RBTreeEnumerate (stateCount, NULL, NULL);
-  while ((stateCountNode = StackPop (stateCountEnum)))
-    entropy += (double) *(int*)stateCountNode->value / (double) population;
+  while ((stateCountNode = StackPop (stateCountEnum))) {
+    prob = (double) *(int*)stateCountNode->value / (double) population;
+    entropy -= prob * log(prob);
+  }
+  entropy /= log(2);
   /* cleanup & return */
   deleteStack (stateCountEnum);
+  deleteStateMap (stateCount);
   if (parentArea)
     deleteXYSet (parentArea);
-  deleteStateMap (stateCount);
   return population >= minPopulation
     && (maxPopulation == 0 || population <= maxPopulation)
     && entropy >= minEntropy

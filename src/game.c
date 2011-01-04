@@ -11,7 +11,7 @@ Game* newGame() {
   game->gameState = GameOn;
   game->updatesPerSecond = DefaultUpdatesPerSecond;
   game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
-  game->lastGoalTestTime = clock();
+  game->lastGoalTestTime = 0;
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
   game->selectedTool = NULL;
   game->toolActive = 0;
@@ -82,13 +82,13 @@ void makeEntrances (Game *game) {
 }
 
 void updateGameState (Game *game) {
-  clock_t now;
+  double elapsedBoardTime;
 
   /* check the clock - time for a goal test? */
-  now = clock();
-  if ((now - game->lastGoalTestTime) / CLOCKS_PER_SEC < 1. / game->goalTestsPerSecond)
+  elapsedBoardTime = game->board->updatesPerCell - game->lastGoalTestTime;
+  if (elapsedBoardTime < game->updatesPerSecond / game->goalTestsPerSecond)
     return;
-  game->lastGoalTestTime = now;
+  game->lastGoalTestTime = game->board->updatesPerCell;
 
   /* delegate game logic to Goal */
   if (game->gameState == GameOn && game->goal != NULL)

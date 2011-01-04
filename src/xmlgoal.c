@@ -5,11 +5,11 @@
 
 Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   Goal *goal, *subGoal[2];
-  const char *goalTypeAttr;
+  const char *goalTypeAttr, *enumText;
   xmlNode *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode;
   XYSet *area;
   StateSet *wallSet, *typeSet;
-  int n;
+  int n, lazy, cached, enumState;
   Tool *tool;
 
   goal = NULL;
@@ -43,13 +43,14 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			      CHILD(goalNode,MOORE_GPARAM) == NULL,  /* if using Moore (as opposed to von Neumann) topology, diagonal connections are not allowed */
 			      subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
 
-  } else if (ATTRMATCHES (goalTypeAttr, COUNT_GOAL)) {
+  } else if (ATTRMATCHES (goalTypeAttr, POPULATION_GOAL)) {
     typeSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
       if (MATCHES (node, DECTYPE_GPARAM))
 	(void) StateSetInsert (typeSet, decToSignedLongLong ((const char*) getNodeContent(node)));
       else if (MATCHES (node, HEXTYPE_GPARAM))
 	(void) StateSetInsert (typeSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)));
+    Assert (RBTreeSize(typeSet) > 0, "In " XMLPREFIX(POPULATION_GOAL) " goal: no specified types to count");
     countNode = CHILD (goalNode, COUNT_GPARAM);
     entropyNode = CHILD (goalNode, ENTROPY_GPARAM);
     goal = newEntropyGoal (typeSet,
@@ -59,26 +60,45 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MIN_GPARAM,0) : 0,
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MAX_GPARAM,-1) : -1);
 
-  } else if (ATTRMATCHES (goalTypeAttr, ONCE_GOAL)) {
-    goal = newOnceGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game));
+  } else if (ATTRMATCHES (goalTypeAttr, CACHED_GOAL)) {
+    goal = newCachedGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game),
+			  OPTCHILDINT (goalNode, REPS_GPARAM, 1));
 
   } else if (ATTRMATCHES (goalTypeAttr, AND_GOAL)) {
+    lazy = CHILD (goalNode, LAZY_GPARAM) != NULL;
+    cached = CHILD (goalNode, CACHED_GPARAM) != NULL;
     for (n = 0, node = goalNode->children; node; node = node->next)
       if (MATCHES (node, GOAL_GPARAM)) {
-	Assert (n < 2, "More than 2 subgoals in " XMLPREFIX(AND_GOAL));
-	subGoal[n++] = newGoalFromXmlNode (node, game);
+	if (n == 2) {
+	  subGoal[0] = newAndGoal (subGoal[0], subGoal[1], lazy);
+	  --n;
+	}
+	subGoal[n] = newGoalFromXmlNode (node, game);
+	if (cached)
+	  subGoal[n] = newCachedGoal (subGoal[n], 1);
+	++n;
       }
-    Assert (n == 2, "Fewer than 2 subgoals in " XMLPREFIX(AND_GOAL));
-    goal = newAndGoal (subGoal[0], subGoal[1], CHILD (goalNode, LAZY_GPARAM) != NULL);
+    if (n < 2)
+      subGoal[1] = newTrueGoal();
+    goal = newAndGoal (subGoal[0], subGoal[1], lazy);
 
   } else if (ATTRMATCHES (goalTypeAttr, OR_GOAL)) {
+    lazy = CHILD (goalNode, LAZY_GPARAM) != NULL;
+    cached = CHILD (goalNode, CACHED_GPARAM) != NULL;
     for (n = 0, node = goalNode->children; node; node = node->next)
       if (MATCHES (node, GOAL_GPARAM)) {
-	Assert (n < 2, "More than 2 subgoals in " XMLPREFIX(OR_GOAL));
-	subGoal[n++] = newGoalFromXmlNode (node, game);
+	if (n == 2) {
+	  subGoal[0] = newOrGoal (subGoal[0], subGoal[1], lazy);
+	  --n;
+	}
+	subGoal[n] = newGoalFromXmlNode (node, game);
+	if (cached)
+	  subGoal[n] = newCachedGoal (subGoal[n], 1);
+	++n;
       }
-    Assert (n == 2, "Fewer than 2 subgoals in " XMLPREFIX(OR_GOAL));
-    goal = newOrGoal (subGoal[0], subGoal[1], CHILD (goalNode, LAZY_GPARAM) != NULL);
+    if (n < 2)
+      subGoal[1] = newFalseGoal();
+    goal = newOrGoal (subGoal[0], subGoal[1], lazy);
 
   } else if (ATTRMATCHES (goalTypeAttr, NOT_GOAL)) {
     goal = newNotGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game));
@@ -88,8 +108,8 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			  CHILDINT (goalNode, REPS_GPARAM));
 
   } else if (ATTRMATCHES (goalTypeAttr, TIME_GOAL)) {
-    goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.),
-			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.));
+    goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->updatesPerSecond,
+			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->updatesPerSecond);
 
   } else if (ATTRMATCHES (goalTypeAttr, TESTTOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
@@ -100,14 +120,27 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 
   } else if (ATTRMATCHES (goalTypeAttr, TESTEXIT_GOAL)) {
     countNode = CHILD (goalNode, COUNT_GPARAM);
+    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+    enumState = -1;
+    MATCHENUM (enumState, enumText, PortalWaiting);
+    MATCHENUM (enumState, enumText, PortalCounting);
+    MATCHENUM (enumState, enumText, PortalUnlocked);
+    MATCHENUM (enumState, enumText, PortalDestroyed);
+    Assert (enumState >= 0, "Attempt to find unknown portal state");
     goal = newCheckPortalGoal ((void*) &game->theExit,
-			       CHILDINT (goalNode, STATE_GPARAM),
+			       enumState,
 			       countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0.) : 0.,
 			       countNode ? OPTCHILDINT(countNode,MAX_GPARAM,-1.) : -1.);
 
   } else if (ATTRMATCHES (goalTypeAttr, TESTGAME_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+    enumState = -1;
+    MATCHENUM (enumState, enumText, GameOn);
+    MATCHENUM (enumState, enumText, GameWon);
+    MATCHENUM (enumState, enumText, GameLost);
+    Assert (enumState >= 0, "Attempt to find unknown game state");
     goal = newCheckGameStateGoal ((void*) game,
-				  CHILDINT (goalNode, STATE_GPARAM));
+				  enumState);
 
   } else if (ATTRMATCHES (goalTypeAttr, CHARGE_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
@@ -115,12 +148,23 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 				    OPTCHILDFLOAT(goalNode,RESERVE_GPARAM,tool->maxReserve));
 
   } else if (ATTRMATCHES (goalTypeAttr, SETEXIT_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+    enumState = -1;
+    MATCHENUM (enumState, enumText, PortalCounting);
+    MATCHENUM (enumState, enumText, PortalUnlocked);
+    MATCHENUM (enumState, enumText, PortalDestroyed);
+    Assert (enumState >= 0, "Attempt to set unknown portal state");
     goal = newSetPortalStatePseudoGoal ((void*) &game->theExit,
-					CHILDINT (goalNode, STATE_GPARAM));
+					enumState);
 
   } else if (ATTRMATCHES (goalTypeAttr, SETGAME_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+    enumState = -1;
+    MATCHENUM (enumState, enumText, GameWon);
+    MATCHENUM (enumState, enumText, GameLost);
+    Assert (enumState >= 0, "Attempt to set unknown game state");
     goal = newSetGameStatePseudoGoal ((void*) game,
-				      CHILDINT (goalNode, STATE_GPARAM));
+				      enumState);
 
   } else if (ATTRMATCHES (goalTypeAttr, USETOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;

@@ -10,12 +10,12 @@
 #define XMLZOO_GOALTYPE        "type"
 #define XMLZOO_AREA_GOAL       "area"
 #define XMLZOO_CAGE_GOAL       "cage"   /* EnclosuresGoal */
-#define XMLZOO_COUNT_GOAL      "count"  /* EntropyGoal */
-#define XMLZOO_ONCE_GOAL       "once"
+#define XMLZOO_POPULATION_GOAL "population"  /* EntropyGoal */
+#define XMLZOO_REPEAT_GOAL     "repeat"
+#define XMLZOO_CACHED_GOAL     "cached"
 #define XMLZOO_AND_GOAL        "and"
 #define XMLZOO_OR_GOAL         "or"
 #define XMLZOO_NOT_GOAL        "not"
-#define XMLZOO_REPEAT_GOAL     "repeat"
 #define XMLZOO_TRUE_GOAL       "true"
 #define XMLZOO_FALSE_GOAL      "false"
 #define XMLZOO_TIME_GOAL       "time"
@@ -42,11 +42,12 @@
 #define XMLZOO_HEXTYPE_GPARAM  "hextype"
 #define XMLZOO_MASK_GPARAM     "mask"
 #define XMLZOO_LAZY_GPARAM     "lazy"
+#define XMLZOO_CACHED_GPARAM   "cached"
 #define XMLZOO_TOOLNAME_GPARAM "name"
 #define XMLZOO_RESERVE_GPARAM  "reserve"
 #define XMLZOO_STATE_GPARAM    "state"
-#define XMLZOO_TEXT_GPARAM     "text"
 #define XMLZOO_DURATION_GPARAM "duration"
+#define XMLZOO_TEXT_GPARAM     "text"
 
 /* methods */
 Goal* newGoalFromXmlNode (xmlNode *node, Game *game);

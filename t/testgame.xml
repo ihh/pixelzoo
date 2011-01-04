@@ -1,5 +1,45 @@
 <xml>
 <game>
+
+<goal type="and">
+  <lazy/>
+  <goal type="cached">
+    <goal type="population">
+      <type>1</type>
+      <type>2</type>
+      <count><min>20</min></count>
+    </goal>
+  </goal>
+  <goal type="cached">
+    <reps>3</reps>
+    <goal type="print">
+      <text>You have reached your population target. I will say this three times.</text>
+    </goal>
+  </goal>
+  <goal type="cached">
+    <goal type="repeat">
+      <reps>5</reps>
+      <goal type="print">
+	<text>(pauses for effect)</text>
+      </goal>
+    </goal>
+  </goal>
+  <goal type="cached">
+    <goal type="and">
+      <lazy/>
+      <cached/>
+      <goal type="print"><text>The portal is opening...</text></goal>
+      <goal type="print"><text>...wait for it...</text></goal>
+      <goal type="print"><text>...right about NOW!</text></goal>
+    </goal>
+  </goal>
+  <goal type="cached">
+    <goal type="setexit">
+      <state>PortalCounting</state>
+    </goal>
+  </goal>
+</goal>
+
 <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
 <tool>
 <name>mytool</name>

@@ -32,6 +32,7 @@ unsigned long long hexToUnsignedLongLong (const char *);
 #define NODEINTVAL(NODE) decToSignedLongLong ((const char*) getNodeContent(NODE))
 #define NODEFLOATVAL(NODE) atof ((const char*) getNodeContent(NODE))
 #define NODEHEXVAL(NODE) hexToUnsignedLongLong ((const char*) getNodeContent(NODE))
+#define MATCHENUM(ENUM_VAR,ENUM_STRING,SYMBOL) { if (strcmp ((ENUM_STRING), #SYMBOL) == 0) (ENUM_VAR) = SYMBOL; }
 
 /* prototypes for private builder methods */
 xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
