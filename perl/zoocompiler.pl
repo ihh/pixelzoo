@@ -7,8 +7,9 @@ use XML::Writer;
 # parse options
 my $man = 0;
 my $help = 0;
+my $debug = 0;
 
-GetOptions('help|?' => \$help, man => \$man) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, debug => \$debug) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -77,12 +78,13 @@ while (@zg) {
 		    my ($locid, $x, $y) = ($1, $2, $3);
 		    die "Duplicate loc" if defined $loc{$locid};
 		    $loc{$locid} = [$x,$y];
+		    warn "loc=$locid x=$x y=$y" if $debug;
 		} elsif (/^if ([A-Za-z_\d\.\s]+)\s?(=|\!=|>|>=|<|<=)\s?([^\s\(]+)\s?(.*)$/) {
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
 		    # TODO: parse $ignore
 		    # TODO: populate @test
-#		    warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
+		    warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore" if $debug;
 		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^\(]+)(.*)$/) {
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
@@ -99,17 +101,20 @@ while (@zg) {
 		    } else {
 			($rhsLoc, $rhsVar) = getLocVar ($rhs, "*", undef);
 			if (!defined ($loc{$rhsLoc})) {
-			    ($rhsLoc, $rhsVar) = (undef, undef);
+			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
 			    $offset = $rhs;   # have to turn this type into an index later
 			}
+		    }
+		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
+			die "If one side of a 'do' expression involves the whole state, then both sides must.\nOffending line:\n$_\n";
 		    }
 		    # TODO: parse $fail
 		    # TODO: populate @op
 		    $rhsLoc = "" unless defined $rhsLoc;
 		    $rhsVar = "" unless defined $rhsVar;
-#		    warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar offset=$offset fail=$fail";
+		    warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar offset=$offset fail=$fail" if $debug;
 		} elsif (/\S/) {
-		    warn "Skipping line: $_\n";
+		    die "Syntax error: $_\n";
 		}
 	    }
 	    $rate{$type}->[$nRule] = [$rate, $overload];
@@ -117,10 +122,10 @@ while (@zg) {
 	    $op{$type}->[$nRule] = \@op;
 	    ++$nRule;
 	} elsif (/\S/) {
-	    warn "Skipping line: $_\n";
+	    die "Syntax error: $_\n";
 	}
     } elsif (/\S/) {
-	warn "Skipping line: $_\n";
+	die "Syntax error: $_\n";
     }
 }
 
