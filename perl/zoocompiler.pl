@@ -21,9 +21,9 @@ my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
 my %pvbits;   # $pvbits{$type}->{$var}
 my %pvoffset;   # $pvoffset{$type}->{$var}
 my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
-my %rate;  # $rate{$type}->[$ruleIndex] = [$rate,$overloadRate]
-my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$var,$opcode,$rhs,$ignore,$overloadIgnore]
-my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$offset,$fail,$overloadFail]
+my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = { "rate" => $rate, "overload" => $overload, ... }
+my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
+my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$offset,\%otherTags]
 
 # parse input file
 my ($zgfilename) = @ARGV;
@@ -68,13 +68,11 @@ while (@zg) {
 	    $bri{$type} = parseColor($1);
 	} elsif (/^\{$/) {
 	    # rule block
-	    my ($rate, $overload, %loc, %loctype, @test, @op);
+	    my (%tag, %loc, %loctype, @test, @op);
 	    while (@zg) {
 		$_ = shift @zg;
 		last if /^\}$/;
-		if (/^rate (\S+)$/) { $rate = $1 }
-		elsif (/^overload (\S+)$/) { $overload = $1 }
-		elsif (/^loc ([A-Za-z_][A-Za-z_\d]*)\s?\(\s?([\+\-\d]+)\s?[\s,]\s?([\+\-\d]+)\s?\)$/) {
+		if (/^loc ([A-Za-z_][A-Za-z_\d]*)\s?\(\s?([\+\-\d]+)\s?[\s,]\s?([\+\-\d]+)\s?\)$/) {
 		    my ($locid, $x, $y) = ($1, $2, $3);
 		    die "Duplicate loc" if defined $loc{$locid};
 		    $loc{$locid} = [$x,$y];
@@ -82,9 +80,20 @@ while (@zg) {
 		} elsif (/^if ([A-Za-z_\d\.\s]+)\s?(=|\!=|>|>=|<|<=)\s?([^\s\(]+)\s?(.*)$/) {
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
-		    # TODO: parse $ignore
-		    # TODO: populate @test
-		    warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore" if $debug;
+		    if ($var eq "type") {
+			$loctype{$loc} = $rhs;
+		    }
+
+		    if (defined($var) && $var ne "type" && $var ne "*" && !defined($loctype{$loc})) {
+			die "Can't access $loc.$var because type of $loc is not bound\n";
+		    }
+
+		    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, parseTags($ignore)];
+
+		    if ($debug) {
+			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
+		    }
+
 		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^\(]+)(.*)$/) {
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
@@ -100,27 +109,50 @@ while (@zg) {
 			$offset = $rhs;
 		    } else {
 			($rhsLoc, $rhsVar) = getLocVar ($rhs, "*", undef);
-			if (!defined ($loc{$rhsLoc})) {
+			if (!defined ($loc{$rhsLoc})) {   # is this an actual location ID? if not, it must be a literal type
 			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
-			    $offset = $rhs;   # have to turn this type into an index later
+			    $offset = $rhs;   # have to turn this literal type into an index later
 			}
 		    }
+
 		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
 			die "If one side of a 'do' expression involves the whole state, then both sides must.\nOffending line:\n$_\n";
 		    }
-		    # TODO: parse $fail
-		    # TODO: populate @op
-		    $rhsLoc = "" unless defined $rhsLoc;
-		    $rhsVar = "" unless defined $rhsVar;
-		    warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar offset=$offset fail=$fail" if $debug;
+
+		    if (defined($lhsVar) && $lhsVar eq "type") {
+			$loctype{$lhsLoc} = (defined($rhsLoc) && $rhsVar eq "type") ? $loctype{$rhsLoc} : undef;
+		    }
+
+		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*" && !defined($loctype{$lhsLoc})) {
+			die "Can't access $lhsLoc.$lhsVar because type of $lhsLoc is not bound\n";
+		    }
+
+		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*" && !defined($loctype{$rhsLoc})) {
+			die "Can't access $rhsLoc.$rhsVar because type of $rhsLoc is not bound\n";
+		    }
+
+		    push @{$op{$type}->[$nRule]}, [@{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar, defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar, $offset, parseTags($fail)];
+
+		    if ($debug) {
+			$rhsLoc = "" unless defined $rhsLoc;
+			$rhsVar = "" unless defined $rhsVar;
+			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar offset=$offset fail=$fail";
+		    }
+
+		} elsif (/\(.*\)/) {
+		    parseTags ($_, \%tag);
+
 		} elsif (/\S/) {
 		    die "Syntax error: $_\n";
 		}
 	    }
-	    $rate{$type}->[$nRule] = [$rate, $overload];
+
+	    $ruleTags{$type}->[$nRule] = \%tag;
 	    $test{$type}->[$nRule] = \@test;
 	    $op{$type}->[$nRule] = \@op;
+
 	    ++$nRule;
+
 	} elsif (/\S/) {
 	    die "Syntax error: $_\n";
 	}
@@ -130,7 +162,19 @@ while (@zg) {
 }
 
 # TODO: generate XML
+
 exit;
+
+sub parseTags {
+    my ($line, $tagRef) = @_;
+    $tagRef = {} unless defined $tagRef;
+    while ($line =~ /\(\s?(\S+)\s([^\)]+|\"[^\"]+\")\s?\)/g) {
+	my ($tag, $val) = ($1, $2);
+	die "Duplicate tag $tag\n" if exists $tagRef->{$tag};
+	$tagRef->{$tag} = $val;
+    }
+    return $tagRef;
+}
 
 sub parseColor {
     my ($colexpr) = @_;

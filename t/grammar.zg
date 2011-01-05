@@ -4,8 +4,8 @@ sat = 45;
 bri = 128 + dir * 10;
 
 {
-  rate .1;
-  overload .01;
+  (rate .1);
+  (overload .01);
   loc X (0,0);
   loc Y (+1,0);
   if X.type = drifter (ignore .3) (overload .1);
