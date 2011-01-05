@@ -94,6 +94,10 @@ void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state) {
 	board->syncWrite[i] = 1;
 }
 
+void dummyWriteBoardState (Board* board, int x, int y, State state) {
+  return;
+}
+
 PaletteIndex readBoardColor (Board* board, int x, int y) {
 	Particle *p;
 	State s;
@@ -130,15 +134,20 @@ void addParticleToBoard (Particle* p, Board* board) {
 		/* accumulate rates */
 		p->totalRate += rule->rate;
 		p->totalOverloadRate += rule->overloadRate;
+		/* writeOp flag is true by default, unless RuleOperation's dest is a TempOffset */
+		for (n = 0; n < NumRuleOperations; ++n)
+		  rule->writeOp[n] = (rule->op[n].dest.x != TempOffset && rule->op[n].dest.y != TempOffset);
 		/* check for recurrent writes to the same cell */
 		for (n = 1; n < NumRuleOperations; ++n)
 			for (m = n; m > 0; --m) {
 				if (rule->op[n].src.x == rule->op[n-m].dest.x
-					&& rule->op[n].src.y == rule->op[n-m].dest.y)
-					rule->cumulativeOpSrcIndex[n] = m;
+				    && rule->op[n].src.y == rule->op[n-m].dest.y)
+				  rule->cumulativeOpSrcIndex[n] = m;
 				if (rule->op[n].dest.x == rule->op[n-m].dest.x
-					&& rule->op[n].dest.y == rule->op[n-m].dest.y)
-					rule->cumulativeOpDestIndex[n] = m;
+				    && rule->op[n].dest.y == rule->op[n-m].dest.y) {
+				  rule->cumulativeOpDestIndex[n] = m;
+				  rule->writeOp[n-m] = 0;
+				}
 			}
 	}
 	p->asyncFiringRate = p->synchronous ? 0. : MIN (p->totalRate, 1.);
@@ -296,7 +305,7 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
 		mDest = rule->cumulativeOpDestIndex[k];
 		oldSrcState = mSrc ? intermediateState[k - mSrc] : getRuleOperationOldSrcState(op,board,x,y);
 		oldDestState = mDest ? intermediateState[k - mDest] : getRuleOperationOldDestState(op,board,x,y);
-		intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, write);
+		intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, rule->writeOp[k] ? write : (BoardWriteFunction) dummyWriteBoardState);
 	}
 	return 1;
 }

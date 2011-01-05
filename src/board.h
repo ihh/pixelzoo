@@ -69,6 +69,10 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state);
  */
 void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state);
 
+/* Dummy Board accessor
+ */
+void dummyWriteBoardState (Board* board, int x, int y, State state);
+
 /* Function pointer for board write.
  */
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
