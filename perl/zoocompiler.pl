@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
 
+use strict;
 use Getopt::Long;
 use Pod::Usage;
-use XML::Writer;
+use XML::Twig;
 
 # parse options
 my $man = 0;
@@ -16,6 +17,7 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 pod2usage(2) unless @ARGV == 1;
 
 # data structures
+my @type;
 my %typeindex;  # $typeindex{$type}
 my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
 my %pvbits;   # $pvbits{$type}->{$var}
@@ -41,13 +43,13 @@ grep (s/\s+/ /, @zg);  # multiple whitespace
 # loop through file
 my ($type, $nRule);
 local $_;
-my $types = 0;
 while (@zg) {
     $_ = shift @zg;
     if (/^type (\S+) (.*)$/) {
 	my $varstr;
 	($type, $varstr) = ($1, $2);
-	$typeindex{$type} = $types++;
+	$typeindex{$type} = @type;
+	push @type, $type;
 	$nRule = 0;
 	my $offset = 0;
 	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*)\s?\(\s?(\d+)\s?\)/g) {
@@ -55,9 +57,9 @@ while (@zg) {
 	    die "You cannot use 'type' as a var name for $type" if $varname eq "type";
 	    push @{$pvar{$type}}, $varname;
 	    $pvbits{$type}->{$varname} = $varbits;
-	    $pvoffset{$type} = $offset;
+	    $pvoffset{$type}->{$varname} = $offset;
 	    $offset += $varbits;
-	    die "More than 64 bits in type $type" if $offset > 64;
+	    die "More than 48 bits of vars for type $type" if $offset > 48;
 	}
     } elsif (defined $type) {
 	if (/^hue\s?=\s?(.*?)$/) {
@@ -161,9 +163,67 @@ while (@zg) {
     }
 }
 
-# TODO: generate XML
+# generate XML
+my @gram;
+for my $type (@type) {
+    my @particle = ("name" => $type,
+		    "type" => $typeindex{$type}
+	);
+    # colors
+    my $colBase = 0;
+    my @maskshiftmul;
+    for my $cvm (@{$hue{$type}}) {
+	$colBase += $cvm->[0] << 16;
+	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
+    }
+    for my $cvm (@{$sat{$type}}) {
+	$colBase += $cvm->[0] << 8;
+	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
+    }
+    for my $cvm (@{$bri{$type}}) {
+	$colBase += $cvm->[0];
+	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
+    }
+    if (@maskshiftmul == 0) {
+	@maskshiftmul = [0, 0, 0];
+    }
+    my $doneConst = 0;
+    for (my $n = 0; $n < @maskshiftmul; ++$n) {
+	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
+	next if @maskshiftmul > 0 && $mask==0 && $shift==0 && $mul==0;
+	my %colorRule = ("hexmask" => hexv($mask),
+			 "rshift" => $shift,
+			 "hexmul" => hexv($mul));
+	if (!$doneConst) { $colorRule{"hexinc"} = hexv($colBase); $doneConst = 1 }
+	push @particle, "color" => \%colorRule;
+    }
+    push @gram, "particle" => \@particle;
+}
+
+my $elt = newElt( "grammar" => \@gram );
+my $twig = XML::Twig->new(pretty_print => 'indented');
+$twig->set_root($elt);
+
+$twig->print;
 
 exit;
+
+sub getMask {
+    my ($type, $var) = @_;
+    return 0 unless defined($type) && defined($var);
+    die "Type '$type' unknown" unless defined $pvbits{$type};
+    die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    my $mask = ((1 << ($pvbits{$type}->{$var} + 1)) - 1) << $pvoffset{$type}->{$var};
+    return $mask;
+}
+
+sub getShift {
+    my ($type, $var) = @_;
+    return 0 unless defined($type) && defined($var);
+    die "Type '$type' unknown" unless defined $pvbits{$type};
+    die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    return $pvoffset{$type}->{$var};
+}
 
 sub parseTags {
     my ($line, $tagRef) = @_;
@@ -194,7 +254,8 @@ sub parseColor {
 	    push @varmul, [$term, 1];
 	}
     }
-    return [[$const, @varmul==0 ? (undef,undef) : @{shift @varmul}], map ([0,@$_], @varmul)];
+    my @constvarmul = ([$const, @varmul==0 ? (undef,undef) : @{shift @varmul}], map ([0,@$_], @varmul));
+    return \@constvarmul;
 }
 
 sub getLocVar {
@@ -211,6 +272,43 @@ sub getLocVar {
 	die "In '$expr': no location identifier '$loc' has been bound\n";
     }
     return ($loc, $var);
+}
+
+sub hexv {
+    my ($val) = @_;
+    my $hex = sprintf ("%x", $val);
+    return sprintf ("%x", $val);
+}
+
+sub newElt
+{
+    my $gi   = shift;
+    my $data = shift;
+
+    my $t = XML::Twig::Elt->new($gi);
+
+    if (ref($data) eq "HASH")
+    {
+        while (my ($k,$v) = each(%$data))
+        {
+            newElt($k, $v)->paste(last_child => $t);
+        }
+    }
+    elsif (ref($data) eq "ARRAY")
+    {
+	my @data = @$data;
+	while (@data) {
+	    my $k = shift @data;
+	    my $v = shift @data;
+            newElt($k, $v)->paste(last_child => $t);
+	}
+    }
+    else
+    {
+        $t->set_text($data);
+    }
+
+    $t;
 }
 
 __END__
