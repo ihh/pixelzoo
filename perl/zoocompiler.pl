@@ -27,6 +27,11 @@ my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = { "rate" => $rate, "overload" 
 my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
 my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$offset,\%otherTags]
 
+# empty type
+my $emptyType = "empty";
+push @type, $emptyType;
+$typeindex{$emptyType} = 0;
+
 # parse input file
 my ($zgfilename) = @ARGV;
 local *ZG;
@@ -48,6 +53,7 @@ while (@zg) {
     if (/^type (\S+) (.*)$/) {
 	my $varstr;
 	($type, $varstr) = ($1, $2);
+	die "Type '$type' is already defined" if exists $typeindex{$type};
 	$typeindex{$type} = @type;
 	push @type, $type;
 	$nRule = 0;
@@ -81,6 +87,9 @@ while (@zg) {
 		    warn "loc=$locid x=$x y=$y" if $debug;
 		} elsif (/^if ([A-Za-z_\d\.\s]+)\s?(=|\!=|>|>=|<|<=)\s?([^\s\(]+)\s?(.*)$/) {
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
+# commented out because it's unnecessary
+#		    $op = "==" if $op eq "=";
+
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
 		    if ($var eq "type") {
 			$loctype{$loc} = $rhs;
@@ -101,15 +110,15 @@ while (@zg) {
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
 		    my ($rhsLoc, $rhsVar);
 		    my $offset = 0;
-		    if ($rhs =~ /(.*)\+\s?(\d+)/) {
+		    if ($rhs =~ /(.*)\+\s?(\d+)/) {   # something + numeric constant
 			$offset = $2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
-		    } elsif ($rhs =~ /(.*)\-\s?(\d+)/) {
+		    } elsif ($rhs =~ /(.*)\-\s?(\d+)/) {   # something - numeric constant
 			$offset = -$2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
-		    } elsif ($rhs =~ /\s?\d+\s?/) {
+		    } elsif ($rhs =~ /\s?\d+\s?/) {   # positive numeric constant
 			$offset = $rhs;
-		    } else {
+		    } else {    # might be a location ID, might be a literal type
 			($rhsLoc, $rhsVar) = getLocVar ($rhs, "*", undef);
 			if (!defined ($loc{$rhsLoc})) {   # is this an actual location ID? if not, it must be a literal type
 			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
@@ -121,8 +130,8 @@ while (@zg) {
 			die "If one side of a 'do' expression involves the whole state, then both sides must.\nOffending line:\n$_\n";
 		    }
 
-		    if (defined($lhsVar) && $lhsVar eq "type") {
-			$loctype{$lhsLoc} = (defined($rhsLoc) && $rhsVar eq "type") ? $loctype{$rhsLoc} : undef;
+		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
+			$loctype{$lhsLoc} = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : undef;
 		    }
 
 		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*" && !defined($loctype{$lhsLoc})) {
@@ -133,7 +142,9 @@ while (@zg) {
 			die "Can't access $rhsLoc.$rhsVar because type of $rhsLoc is not bound\n";
 		    }
 
-		    push @{$op{$type}->[$nRule]}, [@{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar, defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar, $offset, parseTags($fail)];
+		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
+						   @{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar,
+						   $offset, parseTags($fail)];
 
 		    if ($debug) {
 			$rhsLoc = "" unless defined $rhsLoc;
@@ -150,9 +161,6 @@ while (@zg) {
 	    }
 
 	    $ruleTags{$type}->[$nRule] = \%tag;
-	    $test{$type}->[$nRule] = \@test;
-	    $op{$type}->[$nRule] = \@op;
-
 	    ++$nRule;
 
 	} elsif (/\S/) {
@@ -165,38 +173,101 @@ while (@zg) {
 
 # generate XML
 my @gram;
-for my $type (@type) {
+for my $typeindex (1 .. @type - 1) {   # skip the empty type
+    my $type = $type[$typeindex];
     my @particle = ("name" => $type,
 		    "type" => $typeindex{$type}
 	);
-    # colors
+
+    # color rules
     my $colBase = 0;
     my @maskshiftmul;
+
     for my $cvm (@{$hue{$type}}) {
 	$colBase += $cvm->[0] << 16;
 	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
     }
+
     for my $cvm (@{$sat{$type}}) {
 	$colBase += $cvm->[0] << 8;
 	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
     }
+
     for my $cvm (@{$bri{$type}}) {
 	$colBase += $cvm->[0];
 	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
     }
+
     if (@maskshiftmul == 0) {
 	@maskshiftmul = [0, 0, 0];
     }
+
     my $doneConst = 0;
     for (my $n = 0; $n < @maskshiftmul; ++$n) {
 	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
-	next if @maskshiftmul > 0 && $mask==0 && $shift==0 && $mul==0;
-	my %colorRule = ("hexmask" => hexv($mask),
+	next if @maskshiftmul > 0 && $mask eq "0" && $shift==0 && $mul==0;
+	my %colorRule = ("hexmask" => $mask,
 			 "rshift" => $shift,
 			 "hexmul" => hexv($mul));
 	if (!$doneConst) { $colorRule{"hexinc"} = hexv($colBase); $doneConst = 1 }
 	push @particle, "color" => \%colorRule;
     }
+
+    # production rules
+    for (my $nRule = 0; $nRule < @{$ruleTags{$type}}; ++$nRule) {
+	my @rule = %{$ruleTags{$type}->[$nRule]};
+
+	# tests
+	for my $test (@{$test{$type}->[$nRule]}) {
+	    my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
+
+	    # resolve any dangling literal typenames
+	    if ($tvar eq "type") {
+		$trhs = getType($trhs);
+	    }
+
+	    my %t = ('@op' => $top,
+		     length("$tx$ty") ? ("loc" => { "x" => $tx, "y" => $ty }) : (),
+		     "mask" => getMask($ttype,$tvar),
+		     "hexval" => hexv($trhs << getShift($ttype,$tvar)),
+		     %$other);
+
+	    push @rule, "test" => \%t;
+	}
+
+	# operations
+	for my $op (@{$op{$type}->[$nRule]}) {
+	    my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $offset, $other) = @$op;
+
+	    # resolve any dangling literal typenames
+	    my $srcMask = getMask($stype,$svar);
+	    if ($dvar eq "type" || $dvar eq "*") {
+		$srcMask = 0;
+		$offset = getType($offset);
+		if ($dvar eq "*") {
+		    $offset = $offset << 48;
+		}
+	    }
+
+	    my %x = (defined($sx) && length("$sx$sy") ? ("src" => { "x" => $sx, "y" => $sy }) : (),
+		     defined($dx) && length("$dx$dy") ? ("dest" => { "x" => $dx, "y" => $dy }) : (),
+		     "srcmask" => $srcMask,
+		     "rshift" => getShift($stype,$svar),
+		     "hexinc" => hexv($offset),
+		     "lshift" => getShift($dtype,$dvar),
+		     "destmask" => getMask($dtype,$dvar),
+		     %$other);
+
+	    push @rule, "exec" => \%x;
+	}
+
+	# save rule
+	if (@rule) {
+	    push @particle, "rule" => \@rule;
+	}
+    }
+
+    # .....aaaaand, save the particle.
     push @gram, "particle" => \@particle;
 }
 
@@ -208,19 +279,34 @@ $twig->print;
 
 exit;
 
+sub getType {
+    my ($type) = @_;
+    if ($type =~ /^\-?\d+$/) {
+	return $type;
+    }
+    die "Type '$type' unknown" unless defined $typeindex{$type};
+    return $typeindex{$type};
+}
+
 sub getMask {
     my ($type, $var) = @_;
-    return 0 unless defined($type) && defined($var);
-    die "Type '$type' unknown" unless defined $pvbits{$type};
+    return 0 unless defined($var);
+    return "ffffffffffffffff" if $var eq "*";
+    return "ffff000000000000" if $var eq "type";
+    die "Undefined type" unless defined($type);
+    die "Type '$type' unknown" unless defined $typeindex{$type};
     die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
     my $mask = ((1 << ($pvbits{$type}->{$var} + 1)) - 1) << $pvoffset{$type}->{$var};
-    return $mask;
+    return hexv($mask);
 }
 
 sub getShift {
     my ($type, $var) = @_;
-    return 0 unless defined($type) && defined($var);
-    die "Type '$type' unknown" unless defined $pvbits{$type};
+    return 0 unless defined($var);
+    return 48 if $var eq "type";
+    return 0 if $var eq "*";
+    die "Undefined type" unless defined($type);
+    die "Type '$type' unknown" unless defined $typeindex{$type};
     die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
     return $pvoffset{$type}->{$var};
 }
@@ -287,24 +373,24 @@ sub newElt
 
     my $t = XML::Twig::Elt->new($gi);
 
-    if (ref($data) eq "HASH")
-    {
-        while (my ($k,$v) = each(%$data))
-        {
-            newElt($k, $v)->paste(last_child => $t);
-        }
+    my @child;
+    if (ref($data) eq "HASH") {
+	@child = %$data;
+    } elsif (ref($data) eq "ARRAY") {
+	@child = @$data;
     }
-    elsif (ref($data) eq "ARRAY")
-    {
-	my @data = @$data;
-	while (@data) {
-	    my $k = shift @data;
-	    my $v = shift @data;
-            newElt($k, $v)->paste(last_child => $t);
+
+    if (@child) {
+	while (@child) {
+	    my $k = shift @child;
+	    my $v = shift @child;
+	    if ($k =~ s/^\@//) {
+		$t->set_att ($k => $v);
+	    } else {
+		newElt($k, $v)->paste(last_child => $t);
+	    }
 	}
-    }
-    else
-    {
+    } else {
         $t->set_text($data);
     }
 

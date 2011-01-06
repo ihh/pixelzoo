@@ -22,5 +22,5 @@ bri = 128 + dir * 10;
   if Y.type = empty;
   do Y = X;
   do Y.dir = 3;  // note Y now has type "drifter", so we can access its "dir" property
-  do X = empty;  // sugar for "let X.type = empty" and then zero X's vars
+  do X.type = empty;
 }
