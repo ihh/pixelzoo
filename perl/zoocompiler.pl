@@ -25,7 +25,7 @@ my %pvoffset;   # $pvoffset{$type}->{$var}
 my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
 my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = { "rate" => $rate, "overload" => $overload, ... }
 my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
-my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$offset,\%otherTags]
+my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
 
 # empty type
 my $emptyType = "empty";
@@ -69,18 +69,27 @@ while (@zg) {
 	}
     } elsif (defined $type) {
 	if (/^hue\s?=\s?(.*?)$/) {
+	    # hue
 	    $hue{$type} = parseColor($1);
+
 	} elsif (/^sat\s?=\s?(.*?)$/) {
+	    # saturation
 	    $sat{$type} = parseColor($1);
+
 	} elsif (/^bri\s?=\s?(.*?)$/) {
+	    # brightness
 	    $bri{$type} = parseColor($1);
+
 	} elsif (/^\{$/) {
+
 	    # rule block
 	    my (%tag, %loc, %loctype, @test, @op);
 	    while (@zg) {
 		$_ = shift @zg;
 		last if /^\}$/;
+
 		if (/^loc ([A-Za-z_][A-Za-z_\d]*)\s?\(\s?([\+\-\d]+)\s?[\s,]\s?([\+\-\d]+)\s?\)$/) {
+		    # test
 		    my ($locid, $x, $y) = ($1, $2, $3);
 		    die "Duplicate loc" if defined $loc{$locid};
 		    $loc{$locid} = [$x,$y];
@@ -106,24 +115,32 @@ while (@zg) {
 		    }
 
 		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^\(]+)(.*)$/) {
+		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
-		    my ($rhsLoc, $rhsVar);
+		    my ($rhsLoc, $rhsVar, $accumFlag);
 		    my $offset = 0;
 		    if ($rhs =~ /(.*)\+\s?(\d+)/) {   # something + numeric constant
 			$offset = $2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
+			$accumFlag = 1;
+
 		    } elsif ($rhs =~ /(.*)\-\s?(\d+)/) {   # something - numeric constant
 			$offset = -$2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
+			$accumFlag = 1;
+
 		    } elsif ($rhs =~ /\s?\d+\s?/) {   # positive numeric constant
 			$offset = $rhs;
+			$accumFlag = 0;
+
 		    } else {    # might be a location ID, might be a literal type
 			($rhsLoc, $rhsVar) = getLocVar ($rhs, "*", undef);
 			if (!defined ($loc{$rhsLoc})) {   # is this an actual location ID? if not, it must be a literal type
 			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
 			    $offset = $rhs;   # have to turn this literal type into an index later
 			}
+			$accumFlag = 0;
 		    }
 
 		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
@@ -144,29 +161,35 @@ while (@zg) {
 
 		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
 						   @{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar,
-						   $offset, parseTags($fail)];
+						   $accumFlag, $offset, parseTags($fail)];
 
 		    if ($debug) {
 			$rhsLoc = "" unless defined $rhsLoc;
 			$rhsVar = "" unless defined $rhsVar;
-			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar offset=$offset fail=$fail";
+			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
 		    }
 
 		} elsif (/\(.*\)/) {
+		    # misc tags (rate, overload, ...)
 		    parseTags ($_, \%tag);
 
 		} elsif (/\S/) {
+		    # unrecognized line within rule block
 		    die "Syntax error: $_\n";
 		}
 	    }
 
+	    # end of rule block
 	    $ruleTags{$type}->[$nRule] = \%tag;
 	    ++$nRule;
 
 	} elsif (/\S/) {
+	    # unrecognized line
 	    die "Syntax error: $_\n";
+
 	}
     } elsif (/\S/) {
+	# unrecognized line & no type defined
 	die "Syntax error: $_\n";
     }
 }
@@ -206,11 +229,11 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
     for (my $n = 0; $n < @maskshiftmul; ++$n) {
 	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
 	next if @maskshiftmul > 0 && $mask eq "0" && $shift==0 && $mul==0;
-	my %colorRule = ("hexmask" => $mask,
+	my @colorRule = ("hexmask" => $mask,
 			 "rshift" => $shift,
 			 "hexmul" => hexv($mul));
-	if (!$doneConst) { $colorRule{"hexinc"} = hexv($colBase); $doneConst = 1 }
-	push @particle, "color" => \%colorRule;
+	if (!$doneConst) { push @colorRule, ("hexinc" => hexv($colBase)); $doneConst = 1 }
+	push @particle, "color" => \@colorRule;
     }
 
     # production rules
@@ -226,39 +249,41 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 		$trhs = getType($trhs);
 	    }
 
-	    my %t = ('@op' => $top,
-		     length("$tx$ty") ? ("loc" => { "x" => $tx, "y" => $ty }) : (),
+	    # build the test hash
+	    my @t = (sortHash($other),
+		     '@op' => $top,
+		     length("$tx$ty") ? ("loc" => [ "x" => $tx, "y" => $ty ]) : (),
 		     "mask" => getMask($ttype,$tvar),
-		     "hexval" => hexv($trhs << getShift($ttype,$tvar)),
-		     %$other);
+		     "hexval" => hexv($trhs << getShift($ttype,$tvar)));
 
-	    push @rule, "test" => \%t;
+	    # store
+	    push @rule, "test" => \@t;
 	}
 
 	# operations
 	for my $op (@{$op{$type}->[$nRule]}) {
-	    my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $offset, $other) = @$op;
+	    my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
 
 	    # resolve any dangling literal typenames
-	    my $srcMask = getMask($stype,$svar);
 	    if ($dvar eq "type" || $dvar eq "*") {
-		$srcMask = 0;
 		$offset = getType($offset);
 		if ($dvar eq "*") {
 		    $offset = $offset << 48;
 		}
 	    }
 
-	    my %x = (defined($sx) && length("$sx$sy") ? ("src" => { "x" => $sx, "y" => $sy }) : (),
-		     defined($dx) && length("$dx$dy") ? ("dest" => { "x" => $dx, "y" => $dy }) : (),
-		     "srcmask" => $srcMask,
-		     "rshift" => getShift($stype,$svar),
-		     "hexinc" => hexv($offset),
-		     "lshift" => getShift($dtype,$dvar),
+	    # build the exec hash
+	    my @x = (sortHash($other),
+		     defined($sx) && length("$sx$sy") ? ("src" => [ "x" => $sx, "y" => $sy ]) : (),
+		     "srcmask" => ($accumFlag ? getMask($stype,$svar) : 0),
+		     $accumFlag ? ("rshift" => getShift($stype,$svar)) : (),
+		     $offset != 0 ? ("hexinc" => hexv($offset)) : (),
+		     ($offset != 0 || $accumFlag) ? ("lshift" => getShift($dtype,$dvar)) : (),
 		     "destmask" => getMask($dtype,$dvar),
-		     %$other);
+		     defined($dx) && length("$dx$dy") ? ("dest" => [ "x" => $dx, "y" => $dy ]) : ());
 
-	    push @rule, "exec" => \%x;
+	    # store
+	    push @rule, "exec" => \@x;
 	}
 
 	# save rule
@@ -366,8 +391,7 @@ sub hexv {
     return sprintf ("%x", $val);
 }
 
-sub newElt
-{
+sub newElt {
     my $gi   = shift;
     my $data = shift;
 
@@ -375,7 +399,7 @@ sub newElt
 
     my @child;
     if (ref($data) eq "HASH") {
-	@child = %$data;
+	@child = sortHash ($data);
     } elsif (ref($data) eq "ARRAY") {
 	@child = @$data;
     }
@@ -394,7 +418,12 @@ sub newElt
         $t->set_text($data);
     }
 
-    $t;
+    return $t;
+}
+
+sub sortHash {
+    my ($hashRef) = @_;
+    return map (($_ => $hashRef->{$_}), sort keys %$hashRef);
 }
 
 __END__
