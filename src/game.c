@@ -95,6 +95,20 @@ void updateGameState (Game *game) {
     (void) testGoalMet (game->goal, game->board);
 }
 
+int numberOfToolsVisible (Game *game) {
+  Stack *toolStack;
+  StringMapNode *toolNode;
+  int nTools;
+  nTools = 0;
+  toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
+  while ((toolNode = StackPop(toolStack)) != NULL) {
+    Tool *tool = toolNode->value;
+    if (!tool->hidden)
+      ++nTools;
+  }
+  return nTools;
+}
+
 ToolCharger* newToolCharger() {
   ToolCharger* charger;
   charger = SafeMalloc (sizeof (ToolCharger));
@@ -127,8 +141,9 @@ State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, St
   ToolCharger *charger;
   charger = (ToolCharger*) watcher->context;
   if (StateType(state) == charger->overwriteType) {
+    printf ("%s tool %s\n", charger->tool->hidden ? "Unlocked" : "Recharged", charger->tool->name);
     charger->tool->reserve = charger->tool->maxReserve;
-    printf ("Recharged tool %s\n", charger->tool->name);
+    charger->tool->hidden = 0;
   }
   unregisterCellWatcher (board, watcher);
   return state;

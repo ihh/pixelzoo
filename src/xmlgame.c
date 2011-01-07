@@ -131,6 +131,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
   tool->reserve = OPTCHILDFLOAT(toolNode,RESERVE,1.);
   tool->rechargeRate = OPTCHILDFLOAT(toolNode,RECHARGE,0.);
   tool->maxReserve = OPTCHILDFLOAT(toolNode,MAXRESERVE,tool->reserve);
+  tool->hidden = CHILD(toolNode,HIDE) != NULL;
   return tool;
 }
 

@@ -11,6 +11,7 @@
 #define XMLZOO_COUNT      "count"
 #define XMLZOO_EXIT       "exit"
 #define XMLZOO_TOOL       "tool"
+#define XMLZOO_HIDE       "hide"
 #define XMLZOO_DECSTATE   "state"
 #define XMLZOO_HEXSTATE   "hexstate"
 #define XMLZOO_BRUSH      "brush"

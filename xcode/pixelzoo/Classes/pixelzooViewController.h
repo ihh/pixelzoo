@@ -42,7 +42,13 @@
 - (void)triggerRedraw;
 - (void)callGameLoop;
 
+// The following methods relate to the layout of the UI
+// Some of them are called by View's drawRect method
 - (CGFloat)cellSize;
+- (CGRect)boardRect;
+- (CGRect)toolboxRect;
+- (CGRect)toolRect:(int)nTool;
+- (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction;
 
 @end
 

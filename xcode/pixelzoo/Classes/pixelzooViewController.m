@@ -110,7 +110,7 @@
 }
 
 
-// cellSize method - calculates the size of a cell. Called by View's drawRect method
+// cellSize method - calculates the size of a cell.
 - (CGFloat) cellSize {
 	CGFloat width = self.view.frame.size.width;
 	CGFloat height = self.view.frame.size.height;
@@ -119,6 +119,41 @@
 	CGFloat cs = (int) (dim / game->board->size);
 	
 	return cs;
+}
+
+// boardRect method - returns the drawing rectangle of the board
+- (CGRect) boardRect {
+	CGFloat cs = [self cellSize];
+	return CGRectMake(0, 0, cs * game->board->size, cs * game->board->size);
+}
+
+// toolboxRect method - returns the drawing rectangle of entire toolbox
+- (CGRect) toolboxRect {
+	CGFloat width = self.view.frame.size.width;
+	
+	CGFloat cs = [self cellSize];
+	CGFloat tx = cs * game->board->size; 
+	CGFloat tw = width - tx;
+	CGFloat th = tw;
+
+	return CGRectMake(tx, 0, tw, th * numberOfToolsVisible(game));
+}
+
+// toolRect method - returns the drawing rectangle of tool with given index
+- (CGRect) toolRect:(int)nTool {
+	return [self toolPartialRect:nTool startingAt:0 endingAt:1];
+}
+
+// toolRect method - returns the drawing sub-rectangle of tool, suitable for showing reserve level
+- (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction {
+	CGFloat width = self.view.frame.size.width;
+	
+	CGFloat cs = [self cellSize];
+	CGFloat tx = cs * game->board->size; 
+	CGFloat tw = width - tx;
+	CGFloat th = tw;
+	
+	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);	
 }
 
 /* Event handlers */
@@ -134,11 +169,32 @@
 	
     lastPoint = [touch locationInView:self.view];
 
-	CGFloat cellSize = [self cellSize];
-	game->toolPos.x = lastPoint.x / cellSize;
-	game->toolPos.y = lastPoint.y / cellSize;
+	CGRect boardRect = [self boardRect];
+	CGRect toolboxRect = [self toolboxRect];
 
-	game->toolActive = 1;
+	if (CGRectContainsPoint(boardRect, lastPoint)) {
+		CGFloat cellSize = [self cellSize];
+		game->toolPos.x = lastPoint.x / cellSize;
+		game->toolPos.y = lastPoint.y / cellSize;
+		
+		game->toolActive = 1;
+	} else if (CGRectContainsPoint (toolboxRect, lastPoint)) {
+		int nTool = 0;
+		Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
+		StringMapNode *toolNode;
+		while ((toolNode = StackPop(toolStack)) != NULL) {
+			Tool *tool = toolNode->value;
+			if (!tool->hidden) {
+				CGRect toolRect = [self toolRect:nTool];
+				if (CGRectContainsPoint(toolRect, lastPoint)) {
+					game->selectedTool = tool;
+					break;
+				}
+				++nTool;
+			}
+		}
+		deleteStack (toolStack);
+	}
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {

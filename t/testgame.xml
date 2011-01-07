@@ -41,13 +41,23 @@
 </goal>
 
 <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
+
 <tool>
-<name>mytool</name>
+<name>tool1</name>
 <size>8</size>
 <hexstate>1000000000000</hexstate>
 <reserve>100</reserve>
 <recharge>100</recharge>
 </tool>
+
+<tool>
+<name>tool2</name>
+<size>4</size>
+<hexstate>2000000000000</hexstate>
+<reserve>50</reserve>
+<recharge>100</recharge>
+</tool>
+
 <entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>
 <exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>
 <board><size>128</size>

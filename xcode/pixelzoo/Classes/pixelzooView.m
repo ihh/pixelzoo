@@ -36,33 +36,62 @@
 	// get controller info
 	Game *game = [controller game];
 	CGFloat cellSize = [controller cellSize];
+	CGRect boardRect = [controller boardRect];
 	
 	// Get the graphics context and clear it
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextClearRect(ctx, rect);
 
-	// draw cells in specified area
-	int x, y;
-// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
-	//	UIColor **boardColor = [controller boardColor];
-	
-	for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
-		for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
-			// Get cell color
-			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
-			
-// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
-//			UIColor *cellColor = boardColor[cellColorIndex];
-//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
+	// redraw board
+	if (CGRectIntersectsRect (boardRect, rect)) {
+		// draw cells in specified area
+		int x, y;
+	// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
+		//	UIColor **boardColor = [controller boardColor];
+		
+		for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
+			for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
+				// Get cell color
+				PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
+				
+	// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
+	//			UIColor *cellColor = boardColor[cellColorIndex];
+	//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
 
-			// Look up RGB dynamically - doesn't seem to hurt performance much even though it's in inner draw loop
-			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-			CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
+				// Look up RGB dynamically - doesn't seem to hurt performance much even though it's in inner draw loop
+				RGB *rgb = &game->board->palette.rgb[cellColorIndex];
+				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
 
-			// Fill rectangle
-			CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
+				// Fill rectangle
+				CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
+			}
 		}
 	}
+
+	// redraw tools
+	int nTool = 0;
+	Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
+	StringMapNode *toolNode;
+	while ((toolNode = StackPop(toolStack)) != NULL) {
+		Tool *tool = toolNode->value;
+		if (!tool->hidden) {
+			CGRect toolRect = [controller toolRect:nTool];
+			CGRect toolPartialRect = [controller toolPartialRect:nTool startingAt:0 endingAt:(tool->reserve / tool->maxReserve)];
+			if (CGRectIntersectsRect(toolRect, rect)) {
+				State toolState = tool->defaultBrushState;
+				PaletteIndex toolColorIndex = getParticleColor (game->board->byType[StateType(toolState)], toolState);
+				RGB *rgb = &game->board->palette.rgb[toolColorIndex];
+				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
+				CGContextFillRect(ctx, toolPartialRect);
+				if (tool == game->selectedTool) {
+					CGContextSetRGBStrokeColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, 1);
+					CGContextStrokeRect(ctx, toolRect);
+				}
+			}
+			++nTool;
+		}
+	}
+	deleteStack (toolStack);
 }
 
 - (void)dealloc {

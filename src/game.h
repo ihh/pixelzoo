@@ -87,6 +87,7 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
 void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
 void updateGameState (Game *game);  /* tests win/lose conditions */
+int numberOfToolsVisible (Game *game);
 
 /* Types of CellWatcher: ExitPortal, ToolCharger and WriteProtect */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
