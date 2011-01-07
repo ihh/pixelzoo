@@ -147,11 +147,12 @@
 // toolRect method - returns the drawing sub-rectangle of tool, suitable for showing reserve level
 - (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction {
 	CGFloat width = self.view.frame.size.width;
+	CGFloat height = self.view.frame.size.height;
 	
 	CGFloat cs = [self cellSize];
 	CGFloat tx = cs * game->board->size; 
 	CGFloat tw = width - tx;
-	CGFloat th = tw;
+	CGFloat th = MIN (tw, height / numberOfToolsVisible(game));
 	
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);	
 }
