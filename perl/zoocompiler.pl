@@ -10,7 +10,9 @@ my $man = 0;
 my $help = 0;
 my $debug = 0;
 
-GetOptions('help|?' => \$help, man => \$man, debug => \$debug) or pod2usage(2);
+my $cpp = "gcc -x c -E";
+
+GetOptions('help|?' => \$help, man => \$man, debug => \$debug, 'preprocessor|cpp' => \$cpp) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -22,8 +24,9 @@ my %typeindex;  # $typeindex{$type}
 my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
 my %pvbits;   # $pvbits{$type}->{$var}
 my %pvoffset;   # $pvoffset{$type}->{$var}
+my %ptags;     # $ptags{$type} = [ ... ]
 my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
-my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = { "rate" => $rate, "overload" => $overload, ... }
+my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
 my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
 my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
 
@@ -35,13 +38,13 @@ $typeindex{$emptyType} = 0;
 # parse input file
 my ($zgfilename) = @ARGV;
 local *ZG;
-open ZG, "<$zgfilename" or die "Couldn't open $zgfilename: $!";
+open ZG, "$cpp $zgfilename |" or die "Couldn't open $zgfilename: $!";
 my @zg = <ZG>;
 close ZG;
 
 # strip off irrelevant crud
-grep (s/\/\/.*$//, @zg);  # C++-style comments
-grep (s/;\s*$//, @zg);   # semicolons at ends of lines
+grep (s/(\/\/|#).*$//, @zg);  # C++-style comments, preprocessor directives
+grep (s/[;\s]+\s*$//, @zg);   # semicolons at ends of lines
 grep (s/^\s*(.*?)\s*$/$1/, @zg);  # whitespace at beginning/end of line
 grep (s/\s+/ /, @zg);  # multiple whitespace
 
@@ -67,6 +70,8 @@ while (@zg) {
 	    $offset += $varbits;
 	    die "More than 48 bits of vars for type $type" if $offset > 48;
 	}
+	$ptags{$type} = [];
+
     } elsif (defined $type) {
 	if (/^hue\s?=\s?(.*?)$/) {
 	    # hue
@@ -83,7 +88,7 @@ while (@zg) {
 	} elsif (/^\{$/) {
 
 	    # rule block
-	    my (%tag, %loc, %loctype, @test, @op);
+	    my (@tag, %loc, %loctype, @test, @op);
 	    while (@zg) {
 		$_ = shift @zg;
 		last if /^\}$/;
@@ -96,7 +101,7 @@ while (@zg) {
 		    warn "loc=$locid x=$x y=$y" if $debug;
 		} elsif (/^if ([A-Za-z_\d\.\s]+)\s?(=|\!=|>|>=|<|<=)\s?([^\s\(]+)\s?(.*)$/) {
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
-# commented out because it's unnecessary
+# commented out because it's unnecessary: xmlboard parser should catch this
 #		    $op = "==" if $op eq "=";
 
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
@@ -114,7 +119,7 @@ while (@zg) {
 			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
 		    }
 
-		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^\(]+)(.*)$/) {
+		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^<]+)(.*)$/) {
 		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
@@ -169,9 +174,9 @@ while (@zg) {
 			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
 		    }
 
-		} elsif (/\(.*\)/) {
+		} elsif (/^<.*>/) {
 		    # misc tags (rate, overload, ...)
-		    parseTags ($_, \%tag);
+		    parseTags ($_, \@tag);
 
 		} elsif (/\S/) {
 		    # unrecognized line within rule block
@@ -180,8 +185,11 @@ while (@zg) {
 	    }
 
 	    # end of rule block
-	    $ruleTags{$type}->[$nRule] = \%tag;
+	    $ruleTags{$type}->[$nRule] = \@tag;
 	    ++$nRule;
+
+	} elsif (/^<.*>/) {
+	    parseTags ($_, $ptags{$type});
 
 	} elsif (/\S/) {
 	    # unrecognized line
@@ -199,7 +207,8 @@ my @gram;
 for my $typeindex (1 .. @type - 1) {   # skip the empty type
     my $type = $type[$typeindex];
     my @particle = ("name" => $type,
-		    "type" => $typeindex{$type}
+		    "type" => $typeindex{$type},
+		    @{$ptags{$type}}
 	);
 
     # color rules
@@ -238,7 +247,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 
     # production rules
     for (my $nRule = 0; $nRule < @{$ruleTags{$type}}; ++$nRule) {
-	my @rule = %{$ruleTags{$type}->[$nRule]};
+	my @rule = @{$ruleTags{$type}->[$nRule]};
 
 	# tests
 	for my $test (@{$test{$type}->[$nRule]}) {
@@ -250,7 +259,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 	    }
 
 	    # build the test hash
-	    my @t = (sortHash($other),
+	    my @t = (@$other,
 		     '@op' => $top,
 		     length("$tx$ty") ? ("loc" => [ "x" => $tx, "y" => $ty ]) : (),
 		     "mask" => getMask($ttype,$tvar),
@@ -273,7 +282,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 	    }
 
 	    # build the exec hash
-	    my @x = (sortHash($other),
+	    my @x = (@$other,
 		     defined($sx) && length("$sx$sy") ? ("src" => [ "x" => $sx, "y" => $sy ]) : (),
 		     "srcmask" => ($accumFlag ? getMask($stype,$svar) : 0),
 		     $accumFlag ? ("rshift" => getShift($stype,$svar)) : (),
@@ -338,11 +347,15 @@ sub getShift {
 
 sub parseTags {
     my ($line, $tagRef) = @_;
-    $tagRef = {} unless defined $tagRef;
-    while ($line =~ /\(\s?(\S+)\s([^\)]+|\"[^\"]+\")\s?\)/g) {
+    $tagRef = [] unless defined $tagRef;
+    my %tagHash = @$tagRef;
+    while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
 	my ($tag, $val) = ($1, $2);
-	die "Duplicate tag $tag\n" if exists $tagRef->{$tag};
-	$tagRef->{$tag} = $val;
+	die "Duplicate tag $tag\n" if exists $tagHash{$tag};
+	if ($val =~ /^=(.*)/) {
+	    $val = eval($1);
+	}
+	push @$tagRef, ($tag => $val);
     }
     return $tagRef;
 }
@@ -436,8 +449,9 @@ zoocompiler.pl - compile PixelZoo .zg files to XML grammars
 zoocompiler.pl [options] <.zg file>
 
  Options:
-  -help            brief help message
-  -man             full documentation
+  -help               brief help message
+  -man                full documentation
+  -preprocessor,-cpp  preprocessor to use
 
 =head1 OPTIONS
 
@@ -450,6 +464,12 @@ Prints a brief help message and exits.
 =item B<-man>
 
 Prints the manual page and exits.
+
+=item B<-preprocessor>
+
+Specify the preprocessor to use, plus options.
+
+Default is "gcc -x c -E".
 
 =back
 
