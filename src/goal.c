@@ -354,6 +354,7 @@ int testGoalMet (Goal* goal, Board *board) {
   case ChargeToolPseudoGoal:
     tool = (Tool*) goal->context;
     tool->reserve = MAX (tool->reserve + goal->dblData[0], tool->maxReserve);
+    tool->hidden = 0;
     return 1;
 
   case SetPortalStatePseudoGoal:

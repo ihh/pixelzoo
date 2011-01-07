@@ -40,7 +40,7 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 		CheckGameStateGoal,          /* ((Game*)context)->gameState == intData[0] */
 
 /* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
-		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], returns true */
+		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], un-hides the Tool, returns true */
 		SetPortalStatePseudoGoal,    /* sets ((ExitPortal*)context)->portalState = intData[0], returns true */
 		SetGameStatePseudoGoal,      /* sets ((Game*)context)->gameState = intData[0], returns true */
 		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true */
