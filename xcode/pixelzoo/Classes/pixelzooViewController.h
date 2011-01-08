@@ -21,6 +21,7 @@
 #define GAME_CONSOLE_FONT_SIZE 10
 #define GAME_CONSOLE_FONT_SPACING 1
 #define GAME_CONSOLE_FONT "Helvetica"
+#define GAME_CONSOLE_FONT_FADE 0.9
 
 // Game data
 @interface pixelzooViewController : UIViewController {

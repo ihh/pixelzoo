@@ -94,11 +94,14 @@
 	deleteStack (toolStack);
 
 	// redraw console
-	int cy = boardRect.size.height;
-	for (int cl = 0; cl < ConsoleLines && cy < [self frame].size.height; ++cl) {
+	CGFloat cy = [self frame].size.height - 1;
+	CGFloat fade = 1;
+	for (int cl = ConsoleLines - 1; cl >= 0; --cl) {
 		int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
 		if (game->consoleText[ci]) {
 			CGFloat ch = (CGFloat) game->consoleSize[ci] * GAME_CONSOLE_FONT_SIZE;
+			if (cy - ch < boardRect.size.height)
+				break;
 			CGContextSelectFont (ctx,
 								 GAME_CONSOLE_FONT,
 								 ch,
@@ -107,12 +110,16 @@
 			CGContextSetTextDrawingMode (ctx, kCGTextFillStroke);
 			
 			RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
-			CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-			CGContextSetRGBStrokeColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-//			myTextTransform =  CGAffineTransformMakeRotation  (MyRadians (45));
-//			CGContextSetTextMatrix (ctx, myTextTransform); // 9
+			CGContextSetRGBFillColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
+			CGContextSetRGBStrokeColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
+			// need to flip it upside down, ho hum
+			CGAffineTransform transform = CGAffineTransformMake (1., 0., 0., -1., 0., 0.);
+			CGContextSetTextMatrix (ctx, transform);
+			// print
 			CGContextShowTextAtPoint (ctx, 0, cy, game->consoleText[ci], strlen(game->consoleText[ci]));			
-			cy += ch;
+			// next line
+			fade *= GAME_CONSOLE_FONT_FADE;
+			cy -= ch;
 		}
 	}
 	

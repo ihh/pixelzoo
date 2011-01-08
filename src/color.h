@@ -30,7 +30,7 @@ typedef unsigned long HSB24;
 #define HSB24Mask             0xffffff
 #define HSB24Size             0x1000000
 
-#define HSB24White 0x00ffffff
+#define HSB24White 0x000000ff
 
 /* Floating-point (H,S,B) tuple
     0 <= H < 1
@@ -63,7 +63,7 @@ void ConvertRealHsbToRgb (double H, double S, double B, RGB* rgb);
 #define PaletteSize             0x1000
 
 #define PaletteBlack            0
-#define PaletteWhite            0x0fff
+#define PaletteWhite            0x007
 
 /* palette data structures & types */
 

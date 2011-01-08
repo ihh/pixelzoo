@@ -13,7 +13,8 @@
   <goal type="cached">
     <reps>3</reps>
     <goal type="print">
-      <text>You have reached your population target. I will say this three times.</text>
+      <text>You have reached your population target.
+I will say this three times.</text>
     </goal>
   </goal>
   <goal type="cached">

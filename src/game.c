@@ -165,10 +165,23 @@ State writeProtectIntercept (CellWatcher *watcher, Board *board, int x, int y, S
 }
 
 void printToGameConsole (Game *game, char *text, PaletteIndex color, double size) {
-  game->consoleLastLineIndex = (game->consoleLastLineIndex + 1) % ConsoleLines;
-  if (game->consoleText[game->consoleLastLineIndex])
-    StringDelete (game->consoleText[game->consoleLastLineIndex]);
-  game->consoleText[game->consoleLastLineIndex] = (char*) StringCopy (text);
-  game->consoleColor[game->consoleLastLineIndex] = color;
-  game->consoleSize[game->consoleLastLineIndex] = size;
+  char *copy, *ptr, *start, newLine, atEnd;
+  copy = (char*) StringCopy (text);
+  ptr = start = copy;
+  do {
+    newLine = (*ptr == '\n');
+    atEnd = (*ptr == '\0');
+    if (atEnd || newLine) {
+      *ptr = '\0';
+      game->consoleLastLineIndex = (game->consoleLastLineIndex + 1) % ConsoleLines;
+      if (game->consoleText[game->consoleLastLineIndex])
+	StringDelete (game->consoleText[game->consoleLastLineIndex]);
+      game->consoleText[game->consoleLastLineIndex] = (char*) StringCopy (start);
+      game->consoleColor[game->consoleLastLineIndex] = color;
+      game->consoleSize[game->consoleLastLineIndex] = size;
+      start = ptr + 1;
+    }
+    ++ptr;
+  } while (!atEnd);
+  StringDelete (copy);
 }
