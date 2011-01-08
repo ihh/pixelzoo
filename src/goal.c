@@ -179,11 +179,13 @@ Goal *newUseToolPseudoGoal (void *tool, double duration) {
 Goal *newPrintMessagePseudoGoal (const char* message) {
   Goal *g;
   g = newGoal (PrintMessagePseudoGoal, 0, 0);
-  g->context = (void*) message;
+  g->context = (void*) StringCopy ((char*) message);
   return g;
 }
 
 void deleteGoal (Goal* goal) {
+  if (goal->goalType == PrintMessagePseudoGoal)
+    SafeFree ((char*) goal->context);
   SafeFreeOrNull (goal->intData);
   SafeFreeOrNull (goal->dblData);
   if (goal->tree) deleteRBTree (goal->tree);

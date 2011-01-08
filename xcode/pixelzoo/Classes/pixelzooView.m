@@ -111,11 +111,10 @@
 								 ch,
 								 kCGEncodingMacRoman);
 			CGContextSetCharacterSpacing (ctx, GAME_CONSOLE_FONT_SPACING);
-			CGContextSetTextDrawingMode (ctx, kCGTextFillStroke);
+			CGContextSetTextDrawingMode (ctx, kCGTextFill);
 			
 			RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
 			CGContextSetRGBFillColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
-			CGContextSetRGBStrokeColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
 			// print
 			CGContextShowTextAtPoint (ctx, 0, cy, game->consoleText[ci], strlen(game->consoleText[ci]));			
 			// next line
