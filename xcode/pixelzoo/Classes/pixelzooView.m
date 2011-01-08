@@ -96,7 +96,7 @@
 	// redraw console
 	CGFloat cy = [self frame].size.height - 1;
 	CGFloat fade = 1;
-	for (int cl = ConsoleLines - 1; cl >= 0; --cl) {
+	for (int cl = ConsoleLines; cl > 0; --cl) {
 		int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
 		if (game->consoleText[ci]) {
 			CGFloat ch = (CGFloat) game->consoleSize[ci] * GAME_CONSOLE_FONT_SIZE;
