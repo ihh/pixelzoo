@@ -139,8 +139,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     MATCHENUM (enumState, enumText, GameWon);
     MATCHENUM (enumState, enumText, GameLost);
     Assert (enumState >= 0, "Attempt to find unknown game state");
-    goal = newCheckGameStateGoal ((void*) game,
-				  enumState);
+    goal = newCheckGameStateGoal (enumState);
 
   } else if (ATTRMATCHES (goalTypeAttr, CHARGE_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
@@ -163,8 +162,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     MATCHENUM (enumState, enumText, GameWon);
     MATCHENUM (enumState, enumText, GameLost);
     Assert (enumState >= 0, "Attempt to set unknown game state");
-    goal = newSetGameStatePseudoGoal ((void*) game,
-				      enumState);
+    goal = newSetGameStatePseudoGoal (enumState);
 
   } else if (ATTRMATCHES (goalTypeAttr, USETOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;

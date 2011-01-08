@@ -103,7 +103,7 @@ void updateGameState (Game *game) {
 
   /* delegate game logic to Goal */
   if (game->gameState == GameOn && game->goal != NULL)
-    (void) testGoalMet (game->goal, game->board);
+    (void) testGoalMet (game->goal, (void*) game);
 }
 
 int numberOfToolsVisible (Game *game) {

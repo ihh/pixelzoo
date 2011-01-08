@@ -17,6 +17,11 @@
 #define REDRAWS_PER_SECOND 60   /* frame rate */
 #define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND
 
+// visuals
+#define GAME_CONSOLE_FONT_SIZE 10
+#define GAME_CONSOLE_FONT_SPACING 1
+#define GAME_CONSOLE_FONT "Helvetica"
+
 // Game data
 @interface pixelzooViewController : UIViewController {
 	// PixelZoo game

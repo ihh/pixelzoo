@@ -37,12 +37,12 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 
 		CheckToolGoal,               /* dblData[0] <= ((Tool*)context)->reserve <= dblData[1] */
 		CheckPortalGoal,             /* ((ExitPortal*)context)->portalState == intData[0] && intData[1] <= ((ExitPortal*)context)->soFar <= intData[2] */
-		CheckGameStateGoal,          /* ((Game*)context)->gameState == intData[0] */
+		CheckGameStateGoal,          /* game->gameState == intData[0] */
 
 /* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
 		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], un-hides the Tool, returns true */
 		SetPortalStatePseudoGoal,    /* sets ((ExitPortal*)context)->portalState = intData[0], returns true */
-		SetGameStatePseudoGoal,      /* sets ((Game*)context)->gameState = intData[0], returns true */
+		SetGameStatePseudoGoal,      /* sets game->gameState = intData[0], returns true */
 		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true */
 		PrintMessagePseudoGoal       /* prints (char*) context, returns true */
 		};
@@ -53,12 +53,12 @@ typedef struct Goal {
   struct Goal *l, *r, *parent;  /* subgoals & parent */
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
-  unsigned long *intData;  /* integer goal params */
+  StateOffset *intData;  /* integer goal params */
   void *context;  /* misc extra context */
 } Goal;
 
 /* accessors */
-int testGoalMet (Goal* goal, Board *board);
+int testGoalMet (Goal* goal, void *game);
 XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */
@@ -84,11 +84,11 @@ Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell);
 
 Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve);
 Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCount);
-Goal *newCheckGameStateGoal (void *game, int gameState);
+Goal *newCheckGameStateGoal (int gameState);
 
 Goal *newChargeToolPseudoGoal (void *tool, double reserveDelta);
 Goal *newSetPortalStatePseudoGoal (void *portal, int portalState);
-Goal *newSetGameStatePseudoGoal (void *game, int gameState);
+Goal *newSetGameStatePseudoGoal (int gameState);
 Goal *newUseToolPseudoGoal (void *tool, double duration);
 Goal *newPrintMessagePseudoGoal (const char* message);
 

@@ -62,6 +62,9 @@ void ConvertRealHsbToRgb (double H, double S, double B, RGB* rgb);
 #define PaletteMask             0x0fff
 #define PaletteSize             0x1000
 
+#define PaletteBlack            0
+#define PaletteWhite            0x0fff
+
 /* palette data structures & types */
 
 typedef struct Palette {

@@ -138,11 +138,10 @@ Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCo
   return g;
 }
 
-Goal *newCheckGameStateGoal (void *game, int gameState) {
+Goal *newCheckGameStateGoal (int gameState) {
   Goal *g;
   g = newGoal (CheckGameStateGoal, 0, 1);
   g->intData[0] = gameState;
-  g->context = game;
   return g;
 }
 
@@ -162,11 +161,10 @@ Goal *newSetPortalStatePseudoGoal (void *portal, int portalState) {
   return g;
 }
 
-Goal *newSetGameStatePseudoGoal (void *game, int gameState) {
+Goal *newSetGameStatePseudoGoal (int gameState) {
   Goal *g;
   g = newGoal (SetGameStatePseudoGoal, 0, 1);
   g->intData[0] = gameState;
-  g->context = game;
   return g;
 }
 
@@ -283,7 +281,9 @@ XYSet* getGoalArea (Goal* goal) {
        : NULL);
 }
 
-int testGoalMet (Goal* goal, Board *board) {
+int testGoalMet (Goal* goal, void *voidGame) {
+  Game *game;
+  Board *board;
   int lGoalMet, rGoalMet, soFar, areaPoints, randPointIndex, x, y;
   Tool *tool;
   XYSet *area;
@@ -291,10 +291,12 @@ int testGoalMet (Goal* goal, Board *board) {
   XYCoord *pos;
 
   Assert (goal != NULL, "testGoalMet: null goal");
+  game = (Game*) voidGame;
+  board = game->board;
 
   switch (goal->goalType) {
   case AreaGoal:
-    return goal->l ? testGoalMet(goal->l,board) : 1;
+    return goal->l ? testGoalMet(goal->l,game) : 1;
 
   case EnclosuresGoal:
     return testEnclosuresGoal (goal, board);
@@ -303,35 +305,35 @@ int testGoalMet (Goal* goal, Board *board) {
   case CachedGoal:
     if (goal->intData[1] >= goal->intData[0])
       return 1;
-    lGoalMet = testGoalMet(goal->l,board);
+    lGoalMet = testGoalMet(goal->l,game);
     if (lGoalMet)
       ++goal->intData[1];
     return lGoalMet;
 
   case AndGoal:
-    lGoalMet = testGoalMet(goal->l,board);
-    rGoalMet = testGoalMet(goal->r,board);
+    lGoalMet = testGoalMet(goal->l,game);
+    rGoalMet = testGoalMet(goal->r,game);
     return lGoalMet && rGoalMet;
 
   case OrGoal:
-    lGoalMet = testGoalMet(goal->l,board);
-    rGoalMet = testGoalMet(goal->r,board);
+    lGoalMet = testGoalMet(goal->l,game);
+    rGoalMet = testGoalMet(goal->r,game);
     return lGoalMet || rGoalMet;
 
   case LazyAndGoal:
-    return testGoalMet(goal->l,board) ? testGoalMet(goal->r,board) : 0;
+    return testGoalMet(goal->l,game) ? testGoalMet(goal->r,game) : 0;
 
   case LazyOrGoal:
-    return testGoalMet(goal->l,board) ? 1 : testGoalMet(goal->r,board);
+    return testGoalMet(goal->l,game) ? 1 : testGoalMet(goal->r,game);
 
   case NotGoal:
-    return !testGoalMet(goal->l,board);
+    return !testGoalMet(goal->l,game);
 
   case EntropyGoal:
     return testEntropyGoal (goal, board);
 
   case RepeatGoal:
-    if (testGoalMet(goal->l,board))
+    if (testGoalMet(goal->l,game))
       ++goal->intData[1];
     else
       goal->intData[1] = 0;
@@ -349,7 +351,7 @@ int testGoalMet (Goal* goal, Board *board) {
     return ((ExitPortal*) goal->context)->portalState == goal->intData[0] && goal->intData[1] <= soFar && (goal->intData[2] <= 0 || soFar <= goal->intData[2]);
 
   case CheckGameStateGoal:
-    return ((Game*) goal->context)->gameState == goal->intData[0];
+    return game->gameState == goal->intData[0];
 
   case ChargeToolPseudoGoal:
     tool = (Tool*) goal->context;
@@ -362,7 +364,7 @@ int testGoalMet (Goal* goal, Board *board) {
     return 1;
 
   case SetGameStatePseudoGoal:
-    ((Game*) goal->context)->gameState = goal->intData[0];
+    game->gameState = goal->intData[0];
     return 1;
 
   case UseToolPseudoGoal:
@@ -386,6 +388,7 @@ int testGoalMet (Goal* goal, Board *board) {
     return 1;
 
   case PrintMessagePseudoGoal:
+    printToGameConsole (game, (char*) goal->context, PaletteWhite, 1.);
     printf ("%s\n", (char*) goal->context);
     return 1;
 
@@ -440,7 +443,8 @@ int testEnclosuresGoal (Goal* goal, Board *board) {
 
 int testEntropyGoal (Goal* goal, Board *board) {
   XYSet *parentArea;
-  int x, y, population, minPopulation, maxPopulation;
+  int x, y, population;
+  StateOffset minPopulation, maxPopulation;
   double prob, entropy, minEntropy, maxEntropy;
   StateSet *allowedTypes;
   StateMap *stateCount;
@@ -455,6 +459,7 @@ int testEntropyGoal (Goal* goal, Board *board) {
   allowedTypes = (StateSet*) goal->tree;
   /* count state types */
   stateCount = newStateMap(IntCopy,IntDelete,IntPrint);
+  population = 0;
   parentArea = getGoalArea (goal);
   for (x = 0; x < board->size; ++x)
     for (y = 0; y < board->size; ++y) {

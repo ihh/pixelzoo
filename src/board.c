@@ -32,7 +32,7 @@ Board* newBoard (int size) {
 }
 
 void deleteBoard (Board* board) {
-	unsigned long t;
+	State t;
 	SafeFree(board->overloadThreshold);
 	deleteQuadTree (board->syncUpdateQuad);
 	deleteQuadTree (board->syncQuad);

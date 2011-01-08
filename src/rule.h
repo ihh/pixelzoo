@@ -18,6 +18,7 @@
    but this convention is not strictly enforced or required.
  */
 typedef unsigned long long int State;
+typedef signed long long int StateOffset;
 #define StateMask    0xffffffffffffffff
 #define MaxState     0xffffffffffffffff
 #define BitsPerState 64
