@@ -93,6 +93,10 @@
 	}
 	deleteStack (toolStack);
 
+	// need to flip all text upside down, ho hum
+	CGAffineTransform transform = CGAffineTransformMake (1., 0., 0., -1., 0., 0.);
+	CGContextSetTextMatrix (ctx, transform);
+
 	// redraw console
 	CGFloat cy = [self frame].size.height - 1;
 	CGFloat fade = 1;
@@ -112,9 +116,6 @@
 			RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
 			CGContextSetRGBFillColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
 			CGContextSetRGBStrokeColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
-			// need to flip it upside down, ho hum
-			CGAffineTransform transform = CGAffineTransformMake (1., 0., 0., -1., 0., 0.);
-			CGContextSetTextMatrix (ctx, transform);
 			// print
 			CGContextShowTextAtPoint (ctx, 0, cy, game->consoleText[ci], strlen(game->consoleText[ci]));			
 			// next line
@@ -122,7 +123,26 @@
 			cy -= ch;
 		}
 	}
-	
+
+	// redraw speech balloons
+	CGContextClipToRect (ctx, boardRect);
+	for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end; ++ptr) {
+		Balloon *b = (Balloon*) *ptr;
+		CGFloat cw = b->size + b->z;
+		CGContextSelectFont (ctx,
+							 GAME_CONSOLE_FONT,
+							 (CGFloat) b->size * GAME_CONSOLE_FONT_SIZE,
+							 kCGEncodingMacRoman);
+		CGContextSetCharacterSpacing (ctx, (CGFloat) b->z);
+		CGContextSetTextDrawingMode (ctx, kCGTextFill);
+		
+		RGB *rgb = &game->board->palette.rgb[b->color];
+		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) b->opacity);
+
+		// print
+		int len = strlen(b->text);
+		CGContextShowTextAtPoint (ctx, (cellSize * (double) b->x) - (double) len * cw / 2, (cellSize * (double) b->y) - b->size / 2, b->text, len);
+	}
 }
 
 - (void)dealloc {

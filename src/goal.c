@@ -17,7 +17,7 @@ Goal* newGoal (enum GoalType type, int dblDataSize, int intDataSize) {
   g->l = g->r = g->parent = NULL;
   g->tree = NULL;
   g->dblData = dblDataSize ? SafeMalloc(dblDataSize*sizeof(double)) : NULL;
-  g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(unsigned long)) : NULL;
+  g->intData = intDataSize ? SafeMalloc(intDataSize*sizeof(Int64)) : NULL;
   g->context = NULL;
   return g;
 }
@@ -444,7 +444,7 @@ int testEnclosuresGoal (Goal* goal, Board *board) {
 int testEntropyGoal (Goal* goal, Board *board) {
   XYSet *parentArea;
   int x, y, population;
-  StateOffset minPopulation, maxPopulation;
+  Int64 minPopulation, maxPopulation;
   double prob, entropy, minEntropy, maxEntropy;
   StateSet *allowedTypes;
   StateMap *stateCount;

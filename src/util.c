@@ -67,28 +67,54 @@ void NullPrintFunction(void * junk) { ; }
 void AbortDestroyFunction(void* junk) { Abort ("Unimplemented destroy function called"); }
 void* AbortCopyFunction(void* junk) { Abort ("Unimplemented copy function called"); return NULL; }
 
-/* Int* functions */
-void* IntNew(int a) {
-  int *ptr;
-  ptr = (int*) SafeMalloc (sizeof (int));
+/* Int functions */
+void* IntNew(Int64 a) {
+  Int64 *ptr;
+  ptr = (Int64*) SafeMalloc (sizeof (Int64));
   *ptr = a;
   return (void*) ptr;
 }
 
 void* IntCopy(void* a) {
-  return IntNew (*(int*)a);
+  return IntNew (*(Int64*)a);
 }
 
 void IntDelete(void* a) {
-  SafeFree((int*)a);
+  SafeFree((Int64*)a);
 }
 
 int IntCompare(void* a, void* b) {
-  if( *(int*)a > *(int*)b) return(1);
-  if( *(int*)a < *(int*)b) return(-1);
-  return(0);
+  if( *(Int64*)a > *(Int64*)b) return 1;
+  if( *(Int64*)a < *(Int64*)b) return -1;
+  return 0;
 }
 
 void IntPrint(void* a) {
-  printf("%i",*(int*)a);
+  printf("%lli",*(Int64*)a);
+}
+
+/* Double functions */
+void* DoubleNew(double a) {
+  double *ptr;
+  ptr = (double*) SafeMalloc (sizeof (double));
+  *ptr = a;
+  return (void*) ptr;
+}
+
+void* DoubleCopy(void* a) {
+  return DoubleNew (*(double*)a);
+}
+
+void DoubleDelete(void* a) {
+  SafeFree((double*)a);
+}
+
+int DoubleCompare(void* a, void* b) {
+  if( *(double*)a > *(double*)b) return(1);
+  if( *(double*)a < *(double*)b) return(-1);
+  return(0);
+}
+
+void DoublePrint(void* a) {
+  printf("%g",*(double*)a);
 }

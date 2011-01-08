@@ -1,7 +1,7 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
-#include "stringmap.h"
+#include "balloon.h"
 
 /* State: 64-bit cell state.
 
@@ -18,10 +18,11 @@
    but this convention is not strictly enforced or required.
  */
 typedef unsigned long long int State;
-typedef signed long long int StateOffset;
 #define StateMask    0xffffffffffffffff
 #define MaxState     0xffffffffffffffff
 #define BitsPerState 64
+
+typedef signed long long int StateOffset;
 
 /* Type: 16-bit cell type */
 typedef unsigned short int Type;
@@ -100,6 +101,7 @@ typedef struct StochasticRule {
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
   double rate, overloadRate;
+  Balloon *balloon;
   /* the following indices are important if write operations are being buffered for a synchronous update, and if "src" or "dest" uses TempOffset */
   unsigned char cumulativeOpSrcIndex[NumRuleOperations];  /* if cumulativeOpSrcIndex[n]=m and m>0, then rule #n uses as its "src" the "dest" value of rule #m-n */
   unsigned char cumulativeOpDestIndex[NumRuleOperations];  /* if cumulativeOpDestIndex[n]=m and m>0, then rule #n uses as its unmasked "dest" the "dest" value of rule #m-n */

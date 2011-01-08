@@ -44,6 +44,12 @@
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
 #define XMLZOO_INIT        "init"
+#define XMLZOO_BALLOON     "balloon"
+#define XMLZOO_TEXT        "text"
+#define XMLZOO_TTL         "ttl"
+#define XMLZOO_RISE        "rise"
+#define XMLZOO_ZOOM        "zoom"
+#define XMLZOO_FADE        "fade"
 
 /* methods */
 Board* newBoardFromXmlDocument (xmlDoc *doc);

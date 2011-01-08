@@ -35,6 +35,7 @@
 		28BDF9E512CBE53800173B45 /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D312CBE53800173B45 /* xymap.c */; };
 		28BDF9ED12CBE65400173B45 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28BDF9EC12CBE65400173B45 /* libxml2.dylib */; };
 		28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28BDFA4712CBEEB400173B45 /* testgame.xml */; };
+		28C4E4F812D8549B006680C1 /* balloon.c in Sources */ = {isa = PBXBuildFile; fileRef = 28C4E4F612D8549B006680C1 /* balloon.c */; };
 		28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28D740DC12CF221200D402B8 /* xmlgoal.c */; };
 		28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */; };
 /* End PBXBuildFile section */
@@ -89,6 +90,8 @@
 		28BDF9D412CBE53800173B45 /* xymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xymap.h; path = ../../src/xymap.h; sourceTree = SOURCE_ROOT; };
 		28BDF9EC12CBE65400173B45 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		28BDFA4712CBEEB400173B45 /* testgame.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = testgame.xml; path = ../../t/testgame.xml; sourceTree = SOURCE_ROOT; };
+		28C4E4F612D8549B006680C1 /* balloon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = balloon.c; path = ../../src/balloon.c; sourceTree = SOURCE_ROOT; };
+		28C4E4F712D8549B006680C1 /* balloon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = balloon.h; path = ../../src/balloon.h; sourceTree = SOURCE_ROOT; };
 		28D740DC12CF221200D402B8 /* xmlgoal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgoal.c; path = ../../src/xmlgoal.c; sourceTree = SOURCE_ROOT; };
 		28D740DD12CF221200D402B8 /* xmlgoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgoal.h; path = ../../src/xmlgoal.h; sourceTree = SOURCE_ROOT; };
 		28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooViewController.h; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 		28BDF9A312CBE51100173B45 /* PixelZoo sources */ = {
 			isa = PBXGroup;
 			children = (
+				28C4E4F612D8549B006680C1 /* balloon.c */,
+				28C4E4F712D8549B006680C1 /* balloon.h */,
 				28BDF9B212CBE53800173B45 /* board.c */,
 				28BDF9B312CBE53800173B45 /* board.h */,
 				28BDF9B412CBE53800173B45 /* color.c */,
@@ -302,6 +307,7 @@
 				2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */,
 				280F1C9A12CF1A4A00C8FA38 /* goal.c in Sources */,
 				28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */,
+				28C4E4F812D8549B006680C1 /* balloon.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

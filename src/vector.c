@@ -51,6 +51,14 @@ void VectorPushBack (Vector* vec, void* value) {
   *(vec->end++) = value;
 }
 
+void* VectorPop (Vector* vec) {
+  void *val;
+  Assert (VectorSize(vec) > 0, "Popped empty vector");
+  val = VectorBack (vec);
+  --vec->end;
+  return val;
+}
+
 void VectorPrint (Vector* vec) {
   void** ptr;
   for (ptr = vec->begin; ptr != vec->end; ++ptr)

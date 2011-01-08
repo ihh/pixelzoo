@@ -3,6 +3,7 @@
 #include <string.h>
 #include "xmlboard.h"
 #include "xmlutil.h"
+#include "game.h"
 
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (xmlNode* node);
@@ -99,12 +100,14 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
-void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
+void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
+  xmlNode *node, *balloonNode, *locNode;
   int nCond, nOp;
-  rule->rate = OPTCHILDFLOAT(node,RATE,1.);
-  rule->overloadRate = OPTCHILDFLOAT(node,OVERLOAD,rule->rate);
+  HSB24 color;
+  rule->rate = OPTCHILDFLOAT(ruleNode,RATE,1.);
+  rule->overloadRate = OPTCHILDFLOAT(ruleNode,OVERLOAD,rule->rate);
   nCond = nOp = 0;
-  for (node = node->children; node; node = node->next)
+  for (node = ruleNode->children; node; node = node->next)
     if (MATCHES(node,TEST)) {
       Assert (nCond < NumRuleConditions, "initRuleFromXmlNode: too many rule conditions");
       initConditionFromXmlNode (&rule->cond[nCond++], node);
@@ -112,6 +115,21 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node) {
       Assert (nOp < NumRuleOperations, "initRuleFromXmlNode: too many rule operations");
       initOperationFromXmlNode (&rule->op[nOp++], node);
     }
+  balloonNode = CHILD (ruleNode, BALLOON);
+  if (balloonNode) {
+    locNode = CHILD (balloonNode, LOC);
+    color = OPTCHILDINT (balloonNode, COLOR, HSB24White);
+    rule->balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
+				     locNode ? OPTCHILDINT(locNode,X,0) : 0,
+				     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
+				     ConvertHsb24ToPaletteIndex (color),
+				     OPTCHILDFLOAT (balloonNode, SIZE, 1.),
+				     OPTCHILDFLOAT (balloonNode, TTL, DefaultBalloonTTL),
+				     OPTCHILDFLOAT (balloonNode, RISE, DefaultBalloonRise),
+				     OPTCHILDFLOAT (balloonNode, ZOOM, DefaultBalloonZoom),
+				     OPTCHILDFLOAT (balloonNode, FADE, DefaultBalloonFade),
+				     OPTCHILDFLOAT (balloonNode, RATE, 1.));
+  }
 }
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {

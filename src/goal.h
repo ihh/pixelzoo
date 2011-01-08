@@ -53,7 +53,7 @@ typedef struct Goal {
   struct Goal *l, *r, *parent;  /* subgoals & parent */
   RBTree *tree;  /* red-black tree goal params */
   double *dblData;  /* floating-point goal params */
-  StateOffset *intData;  /* integer goal params */
+  Int64 *intData;  /* integer goal params */
   void *context;  /* misc extra context */
 } Goal;
 

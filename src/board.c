@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include "board.h"
 #include "notify.h"
 
@@ -25,14 +26,16 @@ Board* newBoard (int size) {
 		board->overloadThreshold[x] = 1.;
 	board->updatesPerCell = 0.;
 	board->syncUpdates = 0;
-	
+	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
+
 	initializePalette (&board->palette);
-	
+
 	return board;
 }
 
 void deleteBoard (Board* board) {
 	State t;
+	deleteVector (board->balloon);
 	SafeFree(board->overloadThreshold);
 	deleteQuadTree (board->syncUpdateQuad);
 	deleteQuadTree (board->syncQuad);
@@ -307,6 +310,9 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
 		oldDestState = mDest ? intermediateState[k - mDest] : getRuleOperationOldDestState(op,board,x,y);
 		intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, rule->writeOp[k] ? write : (BoardWriteFunction) dummyWriteBoardState);
 	}
+	if (rule->balloon)
+	  if (randomDouble() < rule->balloon->prob)
+	    addBalloon (board, rule->balloon, x, y);
 	return 1;
 }
 
@@ -390,4 +396,21 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 		*actualUpdates_ret = actualUpdates;
 	if (elapsedTimeInSeconds_ret)
 		*elapsedTimeInSeconds_ret = elapsedClockTime;
+}
+
+void updateBalloons (Board *board, double duration) {
+  void **ptr, **write;
+  Balloon *b;
+  for (write = ptr = board->balloon->begin; ptr != board->balloon->end; ++ptr) {
+    b = (Balloon*) *ptr;
+    if ((b->timeToLive -= duration) > 0) {
+      *(write++) = b;
+      b->z += b->zInc * duration;
+      b->size *= pow (b->sizeMul, duration);
+      b->opacity *= pow (b->opacityMul, duration);
+    } else
+      deleteBalloon (b);
+  }
+  board->balloon->end = write;
+  qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (Balloon*), BalloonCompare);
 }

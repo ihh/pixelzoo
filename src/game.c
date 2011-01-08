@@ -9,23 +9,30 @@ Game* newGame() {
   int n;
 
   game = SafeMalloc (sizeof (Game));
+
   game->board = NULL;
-  game->gameState = GameOn;
+
   game->updatesPerSecond = DefaultUpdatesPerSecond;
   game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
   game->lastGoalTestTime = 0;
+
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
   game->selectedTool = NULL;
   game->toolActive = 0;
+
   game->theEntrance.total = game->theEntrance.soFar = 0;
   game->theEntrance.pos.x = game->theEntrance.pos.y = 0;
   game->theEntrance.state = EmptyState;
   game->theEntrance.rate = 1.;
+
   game->theExit.portalState = PortalWaiting;
   game->theExit.type = EmptyType;
   game->theExit.soFar = 0;
   game->theExit.watcher = newCellWatcher (exitPortalIntercept, (void*) game, NullDestroyFunction);
+
+  game->gameState = GameOn;
   game->goal = NULL;
+
   game->charger = newList (AbortCopyFunction, deleteToolCharger, NullPrintFunction);
   game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) NULL, NullDestroyFunction);
 
@@ -58,7 +65,8 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
   if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
     useTools (game, actualUpdatesPerCell);
   makeEntrances (game);
-  updateGameState (game);
+  testGameGoal (game);
+  updateBalloons (game->board, actualUpdatesPerCell / game->updatesPerSecond);
 
   if (actualUpdatesPerCell_ret)
     *actualUpdatesPerCell_ret = actualUpdatesPerCell;
@@ -92,7 +100,7 @@ void makeEntrances (Game *game) {
   }
 }
 
-void updateGameState (Game *game) {
+void testGameGoal (Game *game) {
   double elapsedBoardTime;
 
   /* check the clock - time for a goal test? */

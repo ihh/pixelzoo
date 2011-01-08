@@ -15,6 +15,7 @@ Game* newGameFromXmlFile (const char* filename) {
   xmlDoc* doc;
   Game* game = NULL;
   doc = xmlReadFile (filename, NULL, 0);
+  Assert (doc != NULL, "XML file not found");
   if (doc)
     game = newGameFromXmlDocument (doc);
   return game;
@@ -24,8 +25,8 @@ Game* newGameFromXmlString (const char* string) {
   xmlDoc* doc;
   Game* game = NULL;
   doc = xmlReadMemory (string, strlen(string), "noname.xml", NULL, 0);
-  if (doc)
-    game = newGameFromXmlDocument (doc);
+  Assert (doc != NULL, "XML string not parsed");
+  game = newGameFromXmlDocument (doc);
   return game;
 }
 

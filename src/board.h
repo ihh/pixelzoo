@@ -5,6 +5,7 @@
 #include "particle.h"
 #include "quadtree.h"
 #include "util.h"
+#include "vector.h"
 
 typedef struct CellWatcher CellWatcher;
 
@@ -21,6 +22,7 @@ typedef struct Board {
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
   double updatesPerCellAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
   int syncUpdates;  /* number of board synchronizations */
+  Vector *balloon;  /* container & owner of Balloon's */
 } Board;
 
 /* public methods */
@@ -28,6 +30,9 @@ Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 PaletteIndex readBoardColor (Board* board, int x, int y);
+
+void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */
+#define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y)); }
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)

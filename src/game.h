@@ -56,21 +56,18 @@ typedef struct Game {
   int toolActive;
 
   /* Game logic */
+  /* game state */
   enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
 		   GameWon = 1,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
 		   GameLost = 2,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
 		   GamePaused = 3,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
 		   GameQuit = 4      /* game over, no way out of this state */
   } gameState;
+
+  /* main Goal */
   Goal *goal;    /* results of testing this Goal are discarded; use PseudoGoal's to drive game state */
 
-  /* console */
-  char *consoleText[ConsoleLines];
-  PaletteIndex consoleColor[ConsoleLines];
-  double consoleSize[ConsoleLines];
-  int consoleLastLineIndex;
-
-  /* entrance */
+  /* entrance portal */
   EntrancePortal theEntrance;
 
   /* exit portal */
@@ -81,6 +78,13 @@ typedef struct Game {
 
   /* dummy CellWatcher for write protects */
   CellWatcher *writeProtectWatcher;
+
+  /* text output */
+  /* console */
+  char *consoleText[ConsoleLines];
+  PaletteIndex consoleColor[ConsoleLines];
+  double consoleSize[ConsoleLines];
+  int consoleLastLineIndex;
 
 } Game;
 
@@ -97,8 +101,11 @@ void printToGameConsole (Game *game, char *text, PaletteIndex color, double size
 /* helpers */
 void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
-void updateGameState (Game *game);  /* tests win/lose conditions */
+void testGameGoal (Game *game);
+
 int numberOfToolsVisible (Game *game);
+
+/* Balloons */
 
 /* Types of CellWatcher: ExitPortal, ToolCharger and WriteProtect */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
@@ -116,19 +123,5 @@ void deleteToolCharger (void* charger);
 
 typedef Game* ExitPortalContext;
 typedef ToolCharger* ToolChargerContext;
-
-/*
-  Game threads (all on timers):
-  Judge thread: test win/lose conditions, end game or sleep
-  Evolve thread: if not paused, use current selected tool (if active), recharge inactive tools, evolve board, recalculate overload, sleep
-  Redraw thread: redraw board, sleep
-
-  UI events:
-  Key press (or toolbar touch): select current tool
-  Mouse down (or board touch): set current tool active flag
-  Mouse move (or board touch): set current tool x, y
-  Mouse up (or board touch release): clear tool active flag
-*/
-
 
 #endif /* GAME_INCLUDED */

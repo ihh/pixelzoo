@@ -23,11 +23,15 @@ void* VectorGet (Vector* vec, size_t n);
 void VectorSet (Vector* vec, size_t n, void* value);  /* uses DestroyFunction to delete previous value, if non-NULL */
 void VectorReserve (Vector* vec, size_t n);
 void VectorPushBack (Vector* vec, void* value);
+void* VectorPop (Vector* vec);   /* caller assumes responsibility for deleting val */
 void VectorPrint (Vector* vec);  /* debug */
 
 #define VectorSize(VEC) ((size_t) ((VEC)->end - (VEC)->begin))
 #define VectorCapacity(VEC) ((size_t) ((VEC)->endAlloc - (VEC)->begin))
 #define VectorInBounds(VEC,N) ((N) >= 0 && (N) < VectorSize(VEC))
+
+#define VectorFront(VEC) (*(VEC)->begin)
+#define VectorBack(VEC) (*((VEC)->end - 1))
 
 /* void versions of copy, print & delete */
 void* VectorDeepCopyVoid(void*);

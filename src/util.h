@@ -18,17 +18,24 @@ void NullPrintFunction(void*);  /* does nothing */
 void AbortDestroyFunction(void*);
 void* AbortCopyFunction(void*);
 
-/* container functions for ints */
-
-/* Functions for ints
+/* Container functions for int's.
    (It's tempting to think that rather than allocating space, one could just use the (void*) pointer to store the int value;
    however, this risks platform-specific errors/warnings due to differences in bytesize/signedness between void* and int)
 */
-void* IntNew(int a);
+typedef signed long long int Int64;
+
+void* IntNew(Int64 a);
 void* IntCopy(void* a);
 void IntDelete(void* a);
 int IntCompare(void* a, void* b);
 void IntPrint(void* a);
+
+/* Container functions for double's. */
+void* DoubleNew(double a);
+void* DoubleCopy(void* a);
+void DoubleDelete(void* a);
+int DoubleCompare(void* a, void* b);
+void DoublePrint(void* a);
 
 /* randomDouble() returns a uniformly-distributed real number between 0 and 1 */
 double randomDouble();
