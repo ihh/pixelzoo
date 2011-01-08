@@ -112,7 +112,7 @@
 //			myTextTransform =  CGAffineTransformMakeRotation  (MyRadians (45));
 //			CGContextSetTextMatrix (ctx, myTextTransform); // 9
 			CGContextShowTextAtPoint (ctx, 0, cy, game->consoleText[ci], strlen(game->consoleText[ci]));			
-			
+			cy += ch;
 		}
 	}
 	
