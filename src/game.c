@@ -6,6 +6,8 @@
 
 Game* newGame() {
   Game *game;
+  int n;
+
   game = SafeMalloc (sizeof (Game));
   game->board = NULL;
   game->gameState = GameOn;
@@ -26,10 +28,19 @@ Game* newGame() {
   game->goal = NULL;
   game->charger = newList (AbortCopyFunction, deleteToolCharger, NullPrintFunction);
   game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) NULL, NullDestroyFunction);
+
+  for (n = 0; n < ConsoleLines; ++n)
+    game->consoleText[n] = NULL;
+  game->consoleLastLineIndex = ConsoleLines - 1;
+
   return game;
 }
 
 void deleteGame (Game *game) {
+  int n;
+  for (n = 0; n < ConsoleLines; ++n)
+    if (game->consoleText[n])
+      StringDelete (game->consoleText[n]);
   deleteStringMap (game->toolByName);
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
@@ -151,4 +162,13 @@ State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, St
 
 State writeProtectIntercept (CellWatcher *watcher, Board *board, int x, int y, State state) {
   return readBoardStateUnguarded(board,x,y);
+}
+
+void printToGameConsole (Game *game, char *text, PaletteIndex color, double size) {
+  game->consoleLastLineIndex = (game->consoleLastLineIndex + 1) % ConsoleLines;
+  if (game->consoleText[game->consoleLastLineIndex])
+    StringDelete (game->consoleText[game->consoleLastLineIndex]);
+  game->consoleText[game->consoleLastLineIndex] = (char*) StringCopy (text);
+  game->consoleColor[game->consoleLastLineIndex] = color;
+  game->consoleSize[game->consoleLastLineIndex] = size;
 }

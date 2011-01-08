@@ -12,6 +12,9 @@
 #define DefaultUpdatesPerSecond   100
 #define DefaultGoalTestsPerSecond 1
 
+/* console */
+#define ConsoleLines 100
+
 /* power-up */
 typedef struct ToolCharger ToolCharger;
 
@@ -40,12 +43,6 @@ typedef struct ExitPortal {
 typedef struct Game {
   /* board */
   Board *board;
-  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
-		   GameWon = 1,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
-		   GameLost = 2,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
-		   GamePaused = 3,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
-		   GameQuit = 4      /* game over, no way out of this state */
-  } gameState;
 
   /* timing */
   double updatesPerSecond;     /* rate at which to run the Board. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
@@ -59,7 +56,19 @@ typedef struct Game {
   int toolActive;
 
   /* Game logic */
+  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
+		   GameWon = 1,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
+		   GameLost = 2,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
+		   GamePaused = 3,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
+		   GameQuit = 4      /* game over, no way out of this state */
+  } gameState;
   Goal *goal;    /* results of testing this Goal are discarded; use PseudoGoal's to drive game state */
+
+  /* console */
+  char *consoleText[ConsoleLines];
+  PaletteIndex consoleColor[ConsoleLines];
+  double consoleSize[ConsoleLines];
+  int consoleLastLineIndex;
 
   /* entrance */
   EntrancePortal theEntrance;
@@ -82,6 +91,8 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
 
 #define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn || (GAME_PTR)->gameState == GameWon || (GAME_PTR)->gameState == GameLost)
 #define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }
+
+void printToGameConsole (Game *game, char *text, PaletteIndex color, double size);   /* copies text */
 
 /* helpers */
 void makeEntrances (Game *game);
