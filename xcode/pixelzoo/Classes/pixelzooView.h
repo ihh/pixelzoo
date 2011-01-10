@@ -15,6 +15,9 @@
 
 @interface pixelzooView : UIView {
 	pixelzooViewController *controller;
+	unsigned char *bitmapData; 
+	int bytesPerRow;
+	CGContextRef bitmapContext;
 	int redraws;
 }
 

@@ -20,7 +20,8 @@
 
 		redraws = 0;
     }
-    return self;
+	bitmapData = NULL;
+	return self;
 }
 
 /*
@@ -35,8 +36,26 @@
 	
 	// get controller info
 	Game *game = [controller game];
+	int boardSize = game->board->size;
 	CGFloat cellSize = [controller cellSize];
 	CGRect boardRect = [controller boardRect];
+
+	// create the bitmap context
+	if (bitmapData == NULL) {
+		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+		bytesPerRow = 4 * boardSize * sizeof(unsigned char);
+		bitmapData = malloc (bytesPerRow * boardSize);
+		bitmapContext = CGBitmapContextCreate(bitmapData,
+											  boardSize,
+											  boardSize,
+											  8,  // bits per component
+											  bytesPerRow,
+											  colorSpace,
+											  kCGImageAlphaNoneSkipLast);
+		
+		CFRelease(colorSpace);
+		Assert (bitmapData != NULL, "Couldn't alloc bitmapData");
+	}
 	
 	// Get the graphics context and clear it
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -44,28 +63,20 @@
 
 	// redraw board
 	if (CGRectIntersectsRect (boardRect, rect)) {
-		// draw cells in specified area
-		int x, y;
-	// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
-		//	UIColor **boardColor = [controller boardColor];
-		
-		for (x = (int) rect.origin.x / cellSize; x * cellSize < (rect.origin.x + rect.size.width); ++x) {
-			for (y = (int) rect.origin.y / cellSize; y * cellSize < (rect.origin.y + rect.size.height); ++y) {
-				// Get cell color
+		unsigned char *bitmapWritePtr = bitmapData;
+		for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically 
+			for (int x = 0; x < boardSize; ++x) {
 				PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
-				
-	// Commented-out code uses palette CGColorRef's but doesn't work (maybe because they're initialized in Controller?)
-	//			UIColor *cellColor = boardColor[cellColorIndex];
-	//			CGContextSetFillColorWithColor (ctx, cellColor.CGColor);
-
-				// Look up RGB dynamically - doesn't seem to hurt performance much even though it's in inner draw loop
 				RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-				CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-
-				// Fill rectangle
-				CGContextFillRect(ctx, CGRectMake(x * cellSize, y * cellSize, cellSize, cellSize));
+				*(bitmapWritePtr++) = rgb->r;
+				*(bitmapWritePtr++) = rgb->g;
+				*(bitmapWritePtr++) = rgb->b;
+				++bitmapWritePtr;
 			}
 		}
+		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
+		CGContextDrawImage (ctx, boardRect, image);
+		CFRelease (image);
 	}
 
 	// redraw tools
@@ -145,7 +156,11 @@
 }
 
 - (void)dealloc {
-    [super dealloc];
+	if (bitmapData) {
+		free (bitmapData);
+		CFRelease (bitmapContext);
+	}
+	[super dealloc];
 }
 
 

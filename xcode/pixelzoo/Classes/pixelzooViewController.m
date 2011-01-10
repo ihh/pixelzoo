@@ -13,11 +13,6 @@
 
 @synthesize game;
 
-// accessor for palette array (not sure how to synthesize an accessor for a C-style array of known size)
--(UIColor**) boardColor {
-	return boardColor;
-}
-
 /*
  // The designated initializer. Override to perform setup that is required before the view is loaded.
  - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -56,18 +51,6 @@
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
 
-	// create color palette
-	// this doesn't really seem to work... hmm
-	int c;
-	RGB *rgb =game->board->palette.rgb;
-	for (c = 0; c < PaletteMax; ++c) {
-		CGFloat r = (CGFloat) rgb->r / RGB_max;
-		CGFloat g = (CGFloat) rgb->g / RGB_max;
-		CGFloat b = (CGFloat) rgb->b / RGB_max;
-		boardColor[c] = [UIColor colorWithRed:r green:g blue:b alpha:1];
-	}
-	
-	
 	// tell view about its controller (hacky, this)
 	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 

@@ -32,9 +32,6 @@
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 
-	// palette
-	UIColor *boardColor[PaletteMax];
-
 	// touch tracking
 	CGPoint lastPoint;
 	BOOL mouseSwiped;	
@@ -42,7 +39,6 @@
 }
 
 @property(readonly) Game *game;
-@property(readonly) UIColor **boardColor;
 
 - (void)startTimers;
 - (void)triggerRedraw;
