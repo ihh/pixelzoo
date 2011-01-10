@@ -1,6 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "xmlutil.h"
+#include "util.h"
 
 /* char* to unsigned long long conversions */
 long long decToSignedLongLong( const char *ca ) {
@@ -51,8 +52,14 @@ xmlChar* getNodeContent (xmlNode* node) {
 }
 
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
-  if (!node)
+  if (node == NULL) {
     fprintf (stderr, "Missing tag: %s\n", tag);
+    Abort("XML parse error");
+  }
+  if (node->children == NULL) {
+    fprintf (stderr, "Missing children for tag: %s\n", tag);
+    Abort("XML parse error");
+  }
   return node->children->content;
 }
 

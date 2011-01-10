@@ -10,8 +10,10 @@ bri = 128 + dir * 10;
   <overload =0.1*0.1>;
   loc X (0,0);
   loc Y (+1,0);
+  temp Z;
   if X.type = drifter <ignore .3> <overload .1>;
   TESTY;
+  do Z = Y;
   do Y = X <fail .3> <overload .4>;
   do Y.dir = X.dir + 1;  // note Y now has type "drifter", so we can access its "dir" property
   do X = empty;  // sugar for "let X.type = empty" and then zero X's vars

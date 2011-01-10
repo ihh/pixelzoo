@@ -15,6 +15,7 @@
 		280F1C9A12CF1A4A00C8FA38 /* goal.c in Sources */ = {isa = PBXBuildFile; fileRef = 280F1C9812CF1A4A00C8FA38 /* goal.c */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */; };
+		28A4EDE112DBC2FF006EB5EC /* simple.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28A4EDE012DBC2FF006EB5EC /* simple.xml */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28BDF9D512CBE53800173B45 /* board.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B212CBE53800173B45 /* board.c */; };
 		28BDF9D612CBE53800173B45 /* color.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9B412CBE53800173B45 /* color.c */; };
@@ -52,6 +53,7 @@
 		280F1C9912CF1A4A00C8FA38 /* goal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = goal.h; path = ../../src/goal.h; sourceTree = SOURCE_ROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = pixelzooViewController.xib; sourceTree = "<group>"; };
+		28A4EDE012DBC2FF006EB5EC /* simple.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = simple.xml; path = ../../t/simple.xml; sourceTree = SOURCE_ROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28BDF9B212CBE53800173B45 /* board.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = board.c; path = ../../src/board.c; sourceTree = SOURCE_ROOT; };
 		28BDF9B312CBE53800173B45 /* board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = board.h; path = ../../src/board.h; sourceTree = SOURCE_ROOT; };
@@ -211,6 +213,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				28A4EDE012DBC2FF006EB5EC /* simple.xml */,
 				28BDFA4712CBEEB400173B45 /* testgame.xml */,
 				2899E5210DE3E06400AC0155 /* pixelzooViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -281,6 +284,7 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */,
 				28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */,
+				28A4EDE112DBC2FF006EB5EC /* simple.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

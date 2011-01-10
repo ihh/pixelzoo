@@ -12,7 +12,8 @@
 #include "xmlgame.h"
 
 // PixelZoo game constants
-#define GAME_XML_FILENAME "testgame"
+// #define GAME_XML_FILENAME "testgame"
+#define GAME_XML_FILENAME "simple"
 #define MAX_PROPORTION_TIME_EVOLVING  .9
 #define REDRAWS_PER_SECOND 30   /* frame rate */
 #define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND    /* for some reason, increasing this slows updates down; maybe need a separate thread? */

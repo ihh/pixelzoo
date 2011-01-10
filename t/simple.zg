@@ -1,0 +1,26 @@
+#define RandomStep(DX,DY,RATE,OVERLOAD)		\
+  {						\
+    <rate RATE>;				\
+    <overload OVERLOAD>;			\
+    loc orig(0,0);				\
+    loc next(DX,DY);				\
+    temp swap;					\
+    if next.type = empty;			\
+    do swap = next;				\
+    do next = orig;				\
+    do orig = swap;				\
+  }						\
+
+#define RandomWalk(RATE,OVERLOAD)		\
+  RandomStep(+1,0,RATE,OVERLOAD);		\
+  RandomStep(-1,0,RATE,OVERLOAD);		\
+  RandomStep(0,+1,RATE,OVERLOAD);		\
+  RandomStep(0,-1,RATE,OVERLOAD);		\
+
+
+type drifter;
+RandomWalk(1,1)
+
+init (64,64) drifter;
+
+tool cement (type drifter);

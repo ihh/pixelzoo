@@ -18,7 +18,7 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 pod2usage(2) unless @ARGV == 1;
 
-# data structures
+# game data structures
 my @type;
 my %typeindex;  # $typeindex{$type}
 my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
@@ -29,11 +29,20 @@ my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,
 my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
 my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
 my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
+my @tool;  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, \@overwriteType]
+my @init;  # $init[$n] = [$x, $y, $type]
 
 # empty type
 my $emptyType = "empty";
 push @type, $emptyType;
 $typeindex{$emptyType} = 0;
+
+# other game data
+my $boardRate = 240;
+my $boardSize = 128;
+my %entrancePort = ("x" => 0, "y" => 0, "count" => 0, "rate" => 1);
+my %exitPort = ("loc" => { "x" => 0, "y" => 0 }, "count" => 0);
+my ($entranceType, $exitType) = ($emptyType, $emptyType);
 
 # parse input file
 my ($zgfilename) = @ARGV;
@@ -43,17 +52,48 @@ my @zg = <ZG>;
 close ZG;
 
 # strip off irrelevant crud
-grep (s/(\/\/|#).*$//, @zg);  # C++-style comments, preprocessor directives
-grep (s/[;\s]+\s*$//, @zg);   # semicolons at ends of lines
-grep (s/^\s*(.*?)\s*$/$1/, @zg);  # whitespace at beginning/end of line
-grep (s/\s+/ /, @zg);  # multiple whitespace
+grep (s/(\/\/|#).*$//, @zg);  # trim C++-style comments, preprocessor directives
+@zg = map ( (split(/;/,$_)), @zg );   # split lines on semicolons
+grep (s/^\s*(.*?)\s*$/$1/, @zg);  # trim whitespace at beginning/end of line
+grep (s/\s+/ /, @zg);  # squash multiple whitespace
 
 # loop through file
 my ($type, $nRule);
 local $_;
 while (@zg) {
     $_ = shift @zg;
-    if (/^type (\S+) (.*)$/) {
+
+    if (/^size (\d+)/) {
+	$boardSize = $1;
+
+    } elsif (/^init ?\( ?(\d+) ?, ?(\d+) ?\) (\S+)/) {
+	push @init, [$1, $2, $3];
+
+    } elsif (/^tool (\S+)/) {
+	my $name = $1;
+	my ($size, $type, $reserve, $recharge) = (1, $emptyType, 100, 100);
+	my @overwrite;
+	if (/\( ?size (\S+) ?\)/) { $size = $1 }
+	if (/\( ?type (\S+) ?\)/) { $type = $1 }
+	if (/\( ?reserve (\S+) ?\)/) { $reserve = $1 }
+	if (/\( ?recharge (\S+) ?\)/) { $recharge = $1 }
+	while (/\( ?overwrite (\S+) ?\)/g) { push @overwrite, $1 }
+
+	push @tool, [$name, $size, $type, $reserve, $recharge, \@overwrite];
+
+    } elsif (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
+	$entrancePort{'x'} = $1;
+	$entrancePort{'y'} = $2;
+	if (/\( ?type (\S+) ?\)/) { $entranceType = $1 }
+	if (/\( ?(count|rate) (\S+) ?\)/) { $entrancePort{$1} = $2 }
+
+    } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
+	$exitPort{'loc'}->{'x'} = $1;
+	$exitPort{'loc'}->{'y'} = $2;
+	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
+	if (/\( ?(count) (\S+) ?\)/) { $exitPort{$1} = $2 }
+
+    } elsif (/^type (\S+)(.*)$/) {
 	my $varstr;
 	($type, $varstr) = ($1, $2);
 	die "Type '$type' is already defined" if exists $typeindex{$type};
@@ -61,7 +101,7 @@ while (@zg) {
 	push @type, $type;
 	$nRule = 0;
 	my $offset = 0;
-	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*)\s?\(\s?(\d+)\s?\)/g) {
+	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*) ?\( ?(\d+) ?\)/g) {
 	    my ($varname, $varbits) = ($1, $2);
 	    die "You cannot use 'type' as a var name for $type" if $varname eq "type";
 	    push @{$pvar{$type}}, $varname;
@@ -73,33 +113,50 @@ while (@zg) {
 	$ptags{$type} = [];
 
     } elsif (defined $type) {
-	if (/^hue\s?=\s?(.*?)$/) {
+	if (/^hue ?= ?(.*?)$/) {
 	    # hue
 	    $hue{$type} = parseColor($1);
 
-	} elsif (/^sat\s?=\s?(.*?)$/) {
+	} elsif (/^sat ?= ?(.*?)$/) {
 	    # saturation
 	    $sat{$type} = parseColor($1);
 
-	} elsif (/^bri\s?=\s?(.*?)$/) {
+	} elsif (/^bri ?= ?(.*?)$/) {
 	    # brightness
 	    $bri{$type} = parseColor($1);
 
-	} elsif (/^\{$/) {
+	} elsif (/^\{/) {
+	    s/\{ ?//;
+	    unshift @zg, $_;
 
 	    # rule block
 	    my (@tag, %loc, %loctype, @test, @op);
+	    my $temps = 0;
 	    while (@zg) {
 		$_ = shift @zg;
-		last if /^\}$/;
 
-		if (/^loc ([A-Za-z_][A-Za-z_\d]*)\s?\(\s?([\+\-\d]+)\s?[\s,]\s?([\+\-\d]+)\s?\)$/) {
-		    # test
+		if (/^\}/) {
+		    s/\} ?//;
+		    unshift @zg, $_;
+		    last;
+		}
+
+		if (/^loc ([A-Za-z_][A-Za-z_\d]*) ?\( ?([\+\-\d]+) ?[ ,] ?([\+\-\d]+) ?\)$/) {
+		    # loc
 		    my ($locid, $x, $y) = ($1, $2, $3);
 		    die "Duplicate loc" if defined $loc{$locid};
 		    $loc{$locid} = [$x,$y];
 		    warn "loc=$locid x=$x y=$y" if $debug;
-		} elsif (/^if ([A-Za-z_\d\.\s]+)\s?(=|\!=|>|>=|<|<=)\s?([^\s\(]+)\s?(.*)$/) {
+
+		} elsif (/^temp ([A-Za-z_][A-Za-z_\d]*)$/) {
+		    # temp
+		    my ($locid) = ($1);
+		    die "Duplicate loc" if defined $loc{$locid};
+		    $loc{$locid} = [-128,$temps++];
+		    warn "temp=$locid" if $debug;
+
+		} elsif (/^if ([A-Za-z_\d\. ]+) ?(=|\!=|>|>=|<|<=) ?([^ \(]+) ?(.*)$/) {
+		    # test
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
 # commented out because it's unnecessary: xmlboard parser should catch this
 #		    $op = "==" if $op eq "=";
@@ -119,23 +176,23 @@ while (@zg) {
 			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
 		    }
 
-		} elsif (/^do ([A-Za-z_\d\.\s]+)\s?=\s?([^<]+)(.*)$/) {
+		} elsif (/^do ([A-Za-z_\d\. ]+) ?= ?([^<]+)(.*)$/) {
 		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
 		    my ($rhsLoc, $rhsVar, $accumFlag);
 		    my $offset = 0;
-		    if ($rhs =~ /(.*)\+\s?(\d+)/) {   # something + numeric constant
+		    if ($rhs =~ /(.*)\+ ?(\d+)/) {   # something + numeric constant
 			$offset = $2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
 			$accumFlag = 1;
 
-		    } elsif ($rhs =~ /(.*)\-\s?(\d+)/) {   # something - numeric constant
+		    } elsif ($rhs =~ /(.*)\- ?(\d+)/) {   # something - numeric constant
 			$offset = -$2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
 			$accumFlag = 1;
 
-		    } elsif ($rhs =~ /\s?\d+\s?/) {   # positive numeric constant
+		    } elsif ($rhs =~ / ?\d+ ?/) {   # positive numeric constant
 			$offset = $rhs;
 			$accumFlag = 0;
 
@@ -144,8 +201,10 @@ while (@zg) {
 			if (!defined ($loc{$rhsLoc})) {   # is this an actual location ID? if not, it must be a literal type
 			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
 			    $offset = $rhs;   # have to turn this literal type into an index later
+			    $accumFlag = 0;
+			} else {
+			    $accumFlag = 1;
 			}
-			$accumFlag = 0;
 		    }
 
 		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
@@ -180,7 +239,7 @@ while (@zg) {
 
 		} elsif (/\S/) {
 		    # unrecognized line within rule block
-		    die "Syntax error: $_\n";
+		    die "Syntax error in rule block (type $type): '$_'\n";
 		}
 	    }
 
@@ -193,12 +252,12 @@ while (@zg) {
 
 	} elsif (/\S/) {
 	    # unrecognized line
-	    die "Syntax error: $_\n";
+	    die "Syntax error in file (type $type): '$_'\n";
 
 	}
     } elsif (/\S/) {
 	# unrecognized line & no type defined
-	die "Syntax error: $_\n";
+	die "Syntax error in file (no type defined): '$_'\n";
     }
 }
 
@@ -232,6 +291,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 
     if (@maskshiftmul == 0) {
 	@maskshiftmul = [0, 0, 0];
+	$colBase = 255 if $colBase == 0;
     }
 
     my $doneConst = 0;
@@ -305,13 +365,51 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
     push @gram, "particle" => \@particle;
 }
 
-my $elt = newElt( "grammar" => \@gram );
+my @toolxml;
+for my $tool (@tool) {
+    my ($name, $size, $type, $reserve, $recharge, $overwriteType) = @$tool;
+    push @toolxml, ("tool" => ["name" => $name,
+			       "size" => $size,
+			       "hexstate" => getTypeAsHexState($type),
+			       "reserve" => $reserve,
+			       "recharge" => $recharge,
+			       map (("overwrite" => getTypeAsHexState($_)), @$overwriteType)]);
+}
+
+$entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
+$exitPort{"type"} = getType($exitType);
+
+my @game = ("goal" => ['@type' => "and",
+		       "lazy" => "",
+		       "cached" => "",
+# more goals here...
+		       "goal" => ['@type' => "setexit",
+				  "state" => "PortalCounting"]],
+	    @toolxml,
+	    "rate" => $boardRate,
+	    "entrance" => \%entrancePort,
+	    "exit" => \%exitPort,
+	    "board" => ["size" => $boardSize,
+			"grammar" => \@gram,
+			@init > 0
+			? map (("init" => ["x" => $$_[0],
+					   "y" => $$_[1],
+					   "type" => getType($$_[2])]),
+			       @init)
+			: ()]);
+
+my $elt = newElt("xml" => ["game" => \@game]);
 my $twig = XML::Twig->new(pretty_print => 'indented');
 $twig->set_root($elt);
 
 $twig->print;
 
 exit;
+
+sub getTypeAsHexState {
+    my ($type) = @_;
+    return hexv(getType($type)).("0"x12);
+}
 
 sub getType {
     my ($type) = @_;
