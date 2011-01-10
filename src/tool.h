@@ -35,7 +35,7 @@ Tool* newTool (char *name, int size);  /* copies name */
 void deleteTool (void *tool);
 void printTool (void *tool);
 
-void useTool (Tool *tool, Board *board, int x, int y, double duration);
+void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yEnd, double duration);
 void rechargeTool (Tool *tool, double duration);
 
 #endif /* TOOL_INCLUDED */

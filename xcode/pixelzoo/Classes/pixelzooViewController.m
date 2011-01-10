@@ -151,33 +151,40 @@
         return;
     }
 	
-    lastPoint = [touch locationInView:self.view];
+    CGPoint currentPoint = [touch locationInView:self.view];
 
 	CGRect boardRect = [self boardRect];
 	CGRect toolboxRect = [self toolboxRect];
 
-	if (CGRectContainsPoint(boardRect, lastPoint)) {
+	if (CGRectContainsPoint(boardRect, currentPoint)) {
 		CGFloat cellSize = [self cellSize];
-		game->toolPos.x = lastPoint.x / cellSize;
-		game->toolPos.y = lastPoint.y / cellSize;
+		game->toolPos.x = currentPoint.x / cellSize;
+		game->toolPos.y = currentPoint.y / cellSize;
+
+		if (!game->toolActive)
+			game->lastToolPos = game->toolPos;
 		
 		game->toolActive = 1;
-	} else if (CGRectContainsPoint (toolboxRect, lastPoint)) {
-		int nTool = 0;
-		Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
-		StringMapNode *toolNode;
-		while ((toolNode = StackPop(toolStack)) != NULL) {
-			Tool *tool = toolNode->value;
-			if (!tool->hidden) {
-				CGRect toolRect = [self toolRect:nTool];
-				if (CGRectContainsPoint(toolRect, lastPoint)) {
-					game->selectedTool = tool;
-					break;
+
+	} else {
+		game->toolActive = 0;
+		if (CGRectContainsPoint (toolboxRect, currentPoint)) {
+			int nTool = 0;
+			Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
+			StringMapNode *toolNode;
+			while ((toolNode = StackPop(toolStack)) != NULL) {
+				Tool *tool = toolNode->value;
+				if (!tool->hidden) {
+					CGRect toolRect = [self toolRect:nTool];
+					if (CGRectContainsPoint(toolRect, currentPoint)) {
+						game->selectedTool = tool;
+						break;
+					}
+					++nTool;
 				}
-				++nTool;
 			}
+			deleteStack (toolStack);
 		}
-		deleteStack (toolStack);
 	}
 }
 
@@ -185,11 +192,11 @@
     mouseSwiped = YES;
     
     UITouch *touch = [touches anyObject];   
-    lastPoint = [touch locationInView:self.view];
+    CGPoint currentPoint = [touch locationInView:self.view];
 	
 	CGFloat cellSize = [self cellSize];
-	game->toolPos.x = lastPoint.x / cellSize;
-	game->toolPos.y = lastPoint.y / cellSize;
+	game->toolPos.x = currentPoint.x / cellSize;
+	game->toolPos.y = currentPoint.y / cellSize;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

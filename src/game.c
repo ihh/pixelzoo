@@ -93,9 +93,10 @@ void useTools (Game *game, double duration) {
   enumResult = RBTreeEnumerate (game->toolByName, NULL, NULL);	  
   while ((node = (RBNode*) StackPop (enumResult))) {
     tool = (Tool*) node->value;
-    if (tool == game->selectedTool && game->toolActive)
-      useTool (tool, game->board, game->toolPos.x, game->toolPos.y, duration);
-    else
+    if (tool == game->selectedTool && game->toolActive) {
+      useTool (tool, game->board, game->toolPos.x, game->toolPos.y, game->lastToolPos.x, game->lastToolPos.y, duration);
+      game->lastToolPos = game->toolPos;
+    } else
       rechargeTool (tool, duration);
   }
   deleteStack (enumResult);

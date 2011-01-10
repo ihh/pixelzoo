@@ -15,7 +15,7 @@
 #define GAME_XML_FILENAME "testgame"
 #define MAX_PROPORTION_TIME_EVOLVING  .9
 #define REDRAWS_PER_SECOND 30   /* frame rate */
-#define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND
+#define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND    /* for some reason, increasing this slows updates down; maybe need a separate thread? */
 
 // visuals
 #define GAME_CONSOLE_FONT_SIZE 10
@@ -33,7 +33,6 @@
 	NSTimer *evolveTimer;
 
 	// touch tracking
-	CGPoint lastPoint;
 	BOOL mouseSwiped;	
 	int mouseMoved;
 }

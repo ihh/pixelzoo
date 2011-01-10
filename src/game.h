@@ -56,7 +56,7 @@ typedef struct Game {
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
   Tool *selectedTool;
-  XYCoord toolPos;
+  XYCoord toolPos, lastToolPos;
   int toolActive;
 
   /* Game logic */

@@ -45,20 +45,26 @@ void deleteTool (void *voidTool) {
   SafeFree (tool);
 }
 
-void useTool (Tool *tool, Board *board, int x, int y, double duration) {
+void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yEnd, double duration) {
   int particles, xOffset, yOffset, xPaint, yPaint;
   State maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
+  double linePos, linePosDelta, xDelta, yDelta;
   particles = (int) (.5 + tool->sprayRate * duration);
+  linePos = 0.;
+  linePosDelta = 1. / (double) particles;
+  xDelta = xEnd - xStart;
+  yDelta = yEnd - yStart;
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
     sampleQuadLeaf (tool->brushIntensity, &xOffset, &yOffset);
     newState = tool->defaultBrushState;
     if (tool->brushState)
-      if ((xyNode = XYMapFind(tool->brushState,x,y,xyTmp)))
+      if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))
 	newState = *(State*)xyNode->value;
-    xPaint = x + xOffset - tool->brushCenter.x;
-    yPaint = y + yOffset - tool->brushCenter.y;
+    xPaint = xStart + xOffset - tool->brushCenter.x + (int) (.5 + linePos * xDelta);
+    yPaint = yStart + yOffset - tool->brushCenter.y + (int) (.5 + linePos * yDelta);
+    linePos += linePosDelta;
     if (onBoard (board, xPaint, yPaint)) {
       if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
 	maskedOldState = readBoardStateUnguarded(board,xPaint,yPaint) & tool->overwriteMask;
