@@ -414,3 +414,15 @@ void updateBalloons (Board *board, double duration) {
   board->balloon->end = write;
   qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (Balloon*), BalloonCompare);
 }
+
+void boardSetOverloadThreshold (Board *board, double firingRate) {
+  int level;
+  double scaleFactor;
+  Assert (firingRate > 0., "Zero firing rate");
+  firingRate = MIN (1., firingRate);
+  scaleFactor = pow (1. / firingRate, 1. / (double) board->syncQuad->K);
+  for (level = 0; level <= board->syncQuad->K; ++level) {
+    board->overloadThreshold[level] = MIN (1., firingRate);
+    firingRate *= scaleFactor;
+  }
+}

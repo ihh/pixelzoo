@@ -57,7 +57,7 @@
 	// reset touch tracking vars
 	mouseMoved = 0;
 	
-	// start triggerRedraw & callGameLoop threads
+	// start triggerRedraw & callGameLoop timers
 	[self startTimers];
 }
 
@@ -80,8 +80,8 @@
 	double actualUpdatesPerCell, elapsedTime;
 	int cellUpdates;
 	gameLoop (game, targetUpdatesPerCell, MAX_PROPORTION_TIME_EVOLVING, &actualUpdatesPerCell, &cellUpdates, &elapsedTime);
-	if (actualUpdatesPerCell < targetUpdatesPerCell)
-		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d target:%g actual:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell);
+	if (boardTopOverloadThreshold(game->board) < 1.)
+		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d targetUpdatesPerCell:%g actualUpdatesPerCell:%g firingRate:%g overloadThreshold:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell,boardFiringRate(game->board),boardTopOverloadThreshold(game->board));
 }
 
 

@@ -11,6 +11,8 @@
 /* default rates */
 #define DefaultUpdatesPerSecond   100
 #define DefaultGoalTestsPerSecond 1
+#define DefaultOverloadCreep      1.1
+#define DefaultMinOverload        .001
 
 /* console */
 #define ConsoleLines 100
@@ -47,7 +49,9 @@ typedef struct Game {
   /* timing */
   double updatesPerSecond;     /* rate at which to run the Board. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
   double goalTestsPerSecond;   /* rate at which to test Goal */
-  double lastGoalTestTime;     /* time is "Board time", i.e. measured in updates/cell/second */
+  double lastGoalTestTime;     /* measured in "Board time", i.e. updates/cell/second */
+  double boardMinOverload;     /* minimum value of board overload threshold */
+  double boardOverloadCreep;   /* factor by which board overload threshold is multiplied every update that the board is NOT overloaded */
 
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */

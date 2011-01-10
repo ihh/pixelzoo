@@ -342,6 +342,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pixelzoo_Prefix.pch;
+				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = "pixelzoo-Info.plist";
 				PRODUCT_NAME = pixelzoo;
 				VALIDATE_PRODUCT = YES;

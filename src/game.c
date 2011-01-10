@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "game.h"
 #include "notify.h"
@@ -14,6 +15,8 @@ Game* newGame() {
 
   game->updatesPerSecond = DefaultUpdatesPerSecond;
   game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
+  game->boardOverloadCreep = DefaultOverloadCreep;
+  game->boardMinOverload = DefaultMinOverload;
   game->lastGoalTestTime = 0;
 
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
@@ -58,7 +61,7 @@ void deleteGame (Game *game) {
 }
 
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell_ret, int *actualUpdates, double *evolveTime) {
-  double maxUpdateTimeInSeconds, actualUpdatesPerCell;
+  double maxUpdateTimeInSeconds, actualUpdatesPerCell, currentOverloadThreshold, newOverloadThreshold, overloadScaleFactor;
   maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetUpdatesPerCell / game->updatesPerSecond;
 
   evolveBoard (game->board, targetUpdatesPerCell, maxUpdateTimeInSeconds, &actualUpdatesPerCell, actualUpdates, evolveTime);
@@ -70,6 +73,17 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
 
   if (actualUpdatesPerCell_ret)
     *actualUpdatesPerCell_ret = actualUpdatesPerCell;
+
+  /* update overload threshold */
+  currentOverloadThreshold = boardTopOverloadThreshold(game->board);
+  overloadScaleFactor = pow (game->boardOverloadCreep, targetUpdatesPerCell);
+  if (actualUpdatesPerCell < targetUpdatesPerCell) {
+    newOverloadThreshold = boardFiringRate(game->board) / overloadScaleFactor;
+    boardSetOverloadThreshold (game->board, MAX (game->boardMinOverload, newOverloadThreshold));
+  } else if (currentOverloadThreshold < 1.) {
+    newOverloadThreshold = currentOverloadThreshold * overloadScaleFactor;
+    boardSetOverloadThreshold (game->board, MIN (1., newOverloadThreshold));
+  }
 }
 
 void useTools (Game *game, double duration) {

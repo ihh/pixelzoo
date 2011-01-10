@@ -49,7 +49,7 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
 #define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->asyncQuad) / boardCells(BOARD_PTR))
 #define boardSyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->syncQuad) / boardCells(BOARD_PTR))
 #define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) \
-  ((getQuadRate((BOARD_PTR)->syncQuad,X,Y,LEVEL) + getQuadRate((BOARD_PTR)->asyncQuad,X,Y,LEVEL)) / (double) quadCells((BOARD_PTR)->syncQuad,LEVEL))
+  ((getQuadRate((BOARD_PTR)->syncQuad,X,Y,LEVEL) + getQuadRate((BOARD_PTR)->asyncQuad,X,Y,LEVEL)) / (double) cellsPerQuadNode((BOARD_PTR)->syncQuad,LEVEL))
 #define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
 
 /* evolveBoard
@@ -81,6 +81,10 @@ void dummyWriteBoardState (Board* board, int x, int y, State state);
 /* Function pointer for board write.
  */
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
+
+/* method to set overload thresholds */
+void boardSetOverloadThreshold (Board *board, double firingRate);   /* uses an heuristic formula to scale overload thresholds according to quad level */
+#define boardTopOverloadThreshold(BOARD_PTR) ((BOARD_PTR)->overloadThreshold[0])
 
 /* Other helper methods */
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
