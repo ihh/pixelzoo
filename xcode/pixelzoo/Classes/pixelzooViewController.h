@@ -18,7 +18,12 @@
 #define REDRAWS_PER_SECOND 30   /* frame rate */
 #define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND    /* for some reason, increasing this slows updates down; maybe need a separate thread? */
 
-// visuals
+// dimensions
+#define CONSOLE_HEIGHT  128
+#define TOOLBAR_WIDTH   64
+#define PIXELS_PER_CELL 4
+
+// text
 #define GAME_CONSOLE_FONT_SIZE 10
 #define GAME_CONSOLE_FONT_SPACING 1
 #define GAME_CONSOLE_FONT "Helvetica"
@@ -28,17 +33,15 @@
 @interface pixelzooViewController : UIViewController {
 	// PixelZoo game
 	Game *game;
-
+	CGPoint viewOrigin, maxViewOrigin;
+	
 	// timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
-
-	// touch tracking
-	BOOL mouseSwiped;	
-	int mouseMoved;
 }
 
 @property(readonly) Game *game;
+@property(readonly) CGPoint viewOrigin;
 
 - (void)startTimers;
 - (void)triggerRedraw;
@@ -47,8 +50,11 @@
 // The following methods relate to the layout of the UI
 // Some of them are called by View's drawRect method
 - (CGFloat)cellSize;
+- (CGPoint)viewOrigin;
 - (CGRect)boardRect;
+- (CGRect)bigBoardRect;
 - (CGRect)toolboxRect;
+- (CGRect)consoleRect;
 - (CGRect)toolRect:(int)nTool;
 - (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction;
 

@@ -39,7 +39,9 @@
 	int boardSize = game->board->size;
 	CGFloat cellSize = [controller cellSize];
 	CGRect boardRect = [controller boardRect];
-
+	CGRect bigBoardRect = [controller bigBoardRect];
+	CGRect consoleRect = [controller consoleRect];
+	
 	// create the bitmap context
 	if (bitmapData == NULL) {
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -63,6 +65,10 @@
 
 	// redraw board
 	if (CGRectIntersectsRect (boardRect, rect)) {
+
+		CGContextSaveGState (ctx);
+		CGContextClipToRect (ctx, boardRect);
+
 		unsigned char *bitmapWritePtr = bitmapData;
 		for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically 
 			for (int x = 0; x < boardSize; ++x) {
@@ -75,14 +81,16 @@
 			}
 		}
 		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
-		CGContextDrawImage (ctx, boardRect, image);
+		CGContextDrawImage (ctx, bigBoardRect, image);
 		CGImageRelease (image);
 		
 		// draw border
 		CGContextSetRGBStrokeColor (ctx, 1, 1, 1, .5);
 		CGContextStrokeRect(ctx, boardRect);
-	}
 
+		CGContextRestoreGState (ctx);
+	}
+	
 	// redraw tools
 	int nTool = 0;
 	Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
@@ -116,6 +124,8 @@
 	NSString *fontName = [[NSString alloc] initWithUTF8String:GAME_CONSOLE_FONT];
 	
 	// redraw console
+	CGContextSaveGState (ctx);
+	CGContextClipToRect (ctx, consoleRect);
 	CGFloat cy = [self frame].size.height - 1;
 	CGFloat fade = 1;
 	for (int cl = ConsoleLines; cl > 0; --cl) {
@@ -147,8 +157,10 @@
 			cy -= ch;
 		}
 	}
+	CGContextRestoreGState (ctx);
 
 	// redraw speech balloons
+	CGContextSaveGState (ctx);
 	CGContextClipToRect (ctx, boardRect);
 	for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end; ++ptr) {
 		Balloon *b = (Balloon*) *ptr;
@@ -188,6 +200,7 @@
 		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) b->opacity);
 		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], b->text, len);
 	}
+	CGContextRestoreGState (ctx);
 
 	// release font name
 	[fontName release];

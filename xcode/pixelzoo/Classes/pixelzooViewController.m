@@ -12,6 +12,7 @@
 @implementation pixelzooViewController
 
 @synthesize game;
+@synthesize viewOrigin;
 
 /*
  // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -52,11 +53,22 @@
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
 
-	// tell view about its controller (hacky, this)
+	// set viewOrigin and maxViewOrigin
+	viewOrigin.x = viewOrigin.y = 0;
+	CGFloat cs = [self cellSize];
+	CGFloat boardSize = cs * self->game->board->size;
+	CGRect boardRect = [self boardRect];
+	maxViewOrigin.x = MAX (0, boardSize - boardRect.size.width);
+	maxViewOrigin.y = MAX (0, boardSize - boardRect.size.height);
+	
+	// tell view about its controller (hacky, this; suspect there'd be a less object-model-violating way if I understood nibs/etc better)
 	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 
-	// reset touch tracking vars
-	mouseMoved = 0;
+	// attach pan recognizers
+	UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
+    recognizer.minimumNumberOfTouches = 2;
+    [self.view addGestureRecognizer:recognizer];
+	[recognizer release];
 	
 	// start triggerRedraw & callGameLoop timers
 	[self startTimers];
@@ -94,33 +106,32 @@
 }
 
 
-// cellSize method - calculates the size of a cell.
+// cellSize method - returns the size of a cell.
 - (CGFloat) cellSize {
-	CGFloat width = self.view.frame.size.width;
-	CGFloat height = self.view.frame.size.height;
-	
-	CGFloat dim = MIN(width,height);
-	CGFloat cs = (int) (dim / game->board->size);
-	
-	return cs;
+	return PIXELS_PER_CELL;
 }
 
-// boardRect method - returns the drawing rectangle of the board
+// boardRect method - returns the clipping rectangle of the board
 - (CGRect) boardRect {
-	CGFloat cs = [self cellSize];
-	return CGRectMake(0, 0, cs * game->board->size, cs * game->board->size);
+	CGFloat boardWidth = self.view.frame.size.width - TOOLBAR_WIDTH;
+	CGFloat boardHeight = self.view.frame.size.height - CONSOLE_HEIGHT;
+	return CGRectMake(0, 0, boardWidth, boardHeight);
 }
 
-// toolboxRect method - returns the drawing rectangle of entire toolbox
-- (CGRect) toolboxRect {
-	CGFloat width = self.view.frame.size.width;
-	
-	CGFloat cs = [self cellSize];
-	CGFloat tx = cs * game->board->size; 
-	CGFloat tw = width - tx;
-	CGFloat th = tw;
+// bigBoardRect method - returns the rectangle that the full board would occupy
+- (CGRect) bigBoardRect {
+	CGFloat boardSize = self->game->board->size * [self cellSize];
+	return CGRectMake(-viewOrigin.x, -viewOrigin.y, boardSize, boardSize);
+}
 
-	return CGRectMake(tx, 0, tw, th * numberOfToolsVisible(game));
+// toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
+- (CGRect) toolboxRect {
+	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * numberOfToolsVisible(game));
+}
+
+// consoleRect method - returns the drawing/clipping rectangle of text console
+- (CGRect) consoleRect {
+	return CGRectMake(0, self.view.frame.size.height - CONSOLE_HEIGHT, self.view.frame.size.width - TOOLBAR_WIDTH, CONSOLE_HEIGHT);
 }
 
 // toolRect method - returns the drawing rectangle of tool with given index
@@ -133,9 +144,8 @@
 	CGFloat width = self.view.frame.size.width;
 	CGFloat height = self.view.frame.size.height;
 	
-	CGFloat cs = [self cellSize];
-	CGFloat tx = cs * game->board->size; 
-	CGFloat tw = width - tx;
+	CGFloat tw = TOOLBAR_WIDTH;
+	CGFloat tx = width - tw; 
 	CGFloat th = MIN (tw, height / numberOfToolsVisible(game));
 	
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);	
@@ -144,77 +154,83 @@
 /* Event handlers */
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    mouseSwiped = NO;
-    UITouch *touch = [touches anyObject];
-    
-    if ([touch tapCount] == 2) {
-//        double-tap
-        return;
-    }
-	
-    CGPoint currentPoint = [touch locationInView:self.view];
-
-	CGRect boardRect = [self boardRect];
-	CGRect toolboxRect = [self toolboxRect];
-
-	if (CGRectContainsPoint(boardRect, currentPoint)) {
-		CGFloat cellSize = [self cellSize];
-		game->toolPos.x = currentPoint.x / cellSize;
-		game->toolPos.y = currentPoint.y / cellSize;
-
-		if (!game->toolActive)
-			game->lastToolPos = game->toolPos;
+	// single-touch
+	if ([touches count] == 1) {
+		UITouch *touch = [touches anyObject];
 		
-		game->toolActive = 1;
+		CGPoint currentPoint = [touch locationInView:self.view];
 
-	} else {
-		game->toolActive = 0;
-		if (CGRectContainsPoint (toolboxRect, currentPoint)) {
-			int nTool = 0;
-			Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
-			StringMapNode *toolNode;
-			while ((toolNode = StackPop(toolStack)) != NULL) {
-				Tool *tool = toolNode->value;
-				if (!tool->hidden) {
-					CGRect toolRect = [self toolRect:nTool];
-					if (CGRectContainsPoint(toolRect, currentPoint)) {
-						game->selectedTool = tool;
-						break;
+		CGRect boardRect = [self boardRect];
+		CGRect toolboxRect = [self toolboxRect];
+
+		if (CGRectContainsPoint(boardRect, currentPoint)) {
+			CGFloat cellSize = [self cellSize];
+			game->toolPos.x = (currentPoint.x + viewOrigin.x) / cellSize;
+			game->toolPos.y = (currentPoint.y + viewOrigin.y) / cellSize;
+
+			if (!game->toolActive)
+				game->lastToolPos = game->toolPos;
+			
+			game->toolActive = 1;
+
+		} else {
+			game->toolActive = 0;
+			if (CGRectContainsPoint (toolboxRect, currentPoint)) {
+				int nTool = 0;
+				Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
+				StringMapNode *toolNode;
+				while ((toolNode = StackPop(toolStack)) != NULL) {
+					Tool *tool = toolNode->value;
+					if (!tool->hidden) {
+						CGRect toolRect = [self toolRect:nTool];
+						if (CGRectContainsPoint(toolRect, currentPoint)) {
+							game->selectedTool = tool;
+							break;
+						}
+						++nTool;
 					}
-					++nTool;
 				}
+				deleteStack (toolStack);
 			}
-			deleteStack (toolStack);
 		}
 	}
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    mouseSwiped = YES;
-    
-    UITouch *touch = [touches anyObject];   
-    CGPoint currentPoint = [touch locationInView:self.view];
-	
-	CGFloat cellSize = [self cellSize];
-	game->toolPos.x = currentPoint.x / cellSize;
-	game->toolPos.y = currentPoint.y / cellSize;
+
+	// single-touch
+	if ([touches count] == 1) {
+		UITouch *touch = [touches anyObject];   
+		CGPoint currentPoint = [touch locationInView:self.view];
+		
+		CGFloat cellSize = [self cellSize];
+		game->toolPos.x = (currentPoint.x + viewOrigin.x) / cellSize;
+		game->toolPos.y = (currentPoint.y + viewOrigin.y) / cellSize;
+	}
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    UITouch *touch = [touches anyObject];
-    
-    if ([touch tapCount] == 2) {
-//        drawImage.image = nil;
-        return;
-    }
-    
-    if(!mouseSwiped) {
-		/* tapped in place */
-	}
 	game->toolActive = 0;
-
 }
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[self touchesEnded:touches withEvent:event];
+}
+
+
+// pan
+- (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
+	
+	CGPoint trans = [recognizer translationInView:self.view];
+
+	viewOrigin.x = MAX (0, MIN (viewOrigin.x - trans.x, maxViewOrigin.x));
+	viewOrigin.y = MAX (0, MIN (viewOrigin.y - trans.y, maxViewOrigin.y));
+	
+	trans.x = trans.y = 0;
+	[recognizer setTranslation:trans inView:self.view];
+}
+
 
 /* release, dealloc */
 
