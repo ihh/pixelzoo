@@ -46,11 +46,12 @@ Game* newGameFromXmlRoot (xmlNode *root) {
 
   game->updatesPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultUpdatesPerSecond);
 
+  selectedTool = NULL;
   for (node = gameNode->children; node; node = node->next)
-    if (MATCHES(node,TOOL)) {
-      selectedTool = tool = newToolFromXmlNode (node);
-      (void) StringMapInsert (game->toolByName, tool->name, tool);
-    }
+  if (MATCHES(node,TOOL)) {
+    selectedTool = tool = newToolFromXmlNode (node);
+	(void) StringMapInsert (game->toolByName, tool->name, tool);
+  }
 
   for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,CHARGER))

@@ -261,9 +261,8 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 
 void syncBoard (Board* board) {
 	int x, y, size, i;
-	State *cell, *sync;
+	State *sync;
 	unsigned char *syncWrite;
-	cell = board->cell;
 	sync = board->sync;
 	syncWrite = board->syncWrite;
 	size = board->size;

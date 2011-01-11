@@ -19,8 +19,8 @@
 		NSLog(@"initWithFrame");
 
 		redraws = 0;
+		bitmapData = NULL;
     }
-	bitmapData = NULL;
 	return self;
 }
 
@@ -76,6 +76,7 @@
 		}
 		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
 		CGContextDrawImage (ctx, boardRect, image);
+		CGImageRelease (image);
 		
 		// draw border
 		CGContextSetRGBStrokeColor (ctx, 1, 1, 1, .5);

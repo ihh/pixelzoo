@@ -65,7 +65,6 @@ void sampleQuadLeaf(QuadTree* quad, int* x_ret, int* y_ret) {
   for (lev = 0; lev < quad->K; ++lev) {
     prob = randomDouble() * quad->quadRate[node];
     whichChild = 0;
-    childNode = -1;
     while (1) {
       childNode = quadChildIndex(node, lev, whichChild);
       prob -= quad->quadRate[childNode];

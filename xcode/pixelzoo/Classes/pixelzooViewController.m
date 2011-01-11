@@ -44,6 +44,7 @@
 		// initialize the game  
 		NSString *gameXMLString = [[NSString alloc] initWithData:gameXMLData encoding:NSUTF8StringEncoding];
 		game = newGameFromXmlString([gameXMLString UTF8String]);
+		[gameXMLString release];
 	} else {
 		NSLog(@"Couldn't find game XML file");
 	}
