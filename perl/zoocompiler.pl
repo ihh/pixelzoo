@@ -84,7 +84,7 @@ while (@zg) {
     } elsif (/^init ?\( ?(\d+) ?, ?(\d+) ?\) (\S+)/) {
 	push @init, [$1, $2, $3];
 
-    } elsif (/^tool (\S+|"[^"]*")/) {
+    } elsif (/^tool ("[^"]*"|\S+)/) {
 	my $name = $1;
 	$name =~ s/^"(.*)"$/$1/;
 	my ($size, $type, $reserve, $recharge) = (1, $emptyType, 100, 100);
@@ -262,7 +262,7 @@ while (@zg) {
 			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
 		    }
 
-		} elsif (/^text (\S+|"[^"+]")/) {
+		} elsif (/^text ("[^"+]"|\S+)/) {
 		    my $text = $1;
 		    $text =~ s/^"(.*)"$/$1/;
 		    my %balloon = ("text" => $text);

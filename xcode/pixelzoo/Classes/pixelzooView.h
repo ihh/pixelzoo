@@ -23,4 +23,8 @@
 
 @property(readwrite,assign) pixelzooViewController *controller;
 
+// helpers
+- (CGSize) measureText:(char*)text withFont:(UIFont*)font withSpacing:(CGFloat)charSpacing;
+- (void) renderTool:(int)nTool withContext:(CGContextRef)ctx withColor:(RGB*)rgb withReserve:(CGFloat)reserve withName:(char*)name asSelected:(BOOL)selectFlag;
+
 @end

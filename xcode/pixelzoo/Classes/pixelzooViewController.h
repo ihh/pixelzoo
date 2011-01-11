@@ -24,10 +24,23 @@
 #define PIXELS_PER_CELL 4
 
 // text
-#define GAME_CONSOLE_FONT_SIZE 10
-#define GAME_CONSOLE_FONT_SPACING 1
-#define GAME_CONSOLE_FONT "Helvetica"
-#define GAME_CONSOLE_FONT_FADE 0.9
+#define GAME_FONT "Helvetica"
+#define CONSOLE_FONT_SIZE 10
+#define CONSOLE_FONT_SPACING 1
+#define CONSOLE_FONT_FADE 0.9
+#define BALLOON_FONT_SIZE 10
+#define BALLOON_BACKGROUND_OPACITY .5
+#define TOOL_FONT_SIZE 9
+#define TOOL_FONT_SPACING 0
+#define TOOL_NAME_OPACITY .5
+#define EXAMINE_FONT_SIZE 20
+#define EXAMINE_FONT_SPACING 0
+#define EXAMINE_BACKGROUND_OPACITY .9
+#define EXAMINE_TEXT_DISPLACEMENT 32
+
+// other visuals
+#define BOARD_BORDER_OPACITY .5
+#define EXAMINE_TOOL_NAME "Examine"
 
 // Game data
 @interface pixelzooViewController : UIViewController {
@@ -38,10 +51,17 @@
 	// timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
+	
+	// UI
+	int panning;
+	int examining;
+	XYCoord examCoord;
 }
 
 @property(readonly) Game *game;
 @property(readonly) CGPoint viewOrigin;
+@property(readonly) int examining;
+@property(readonly) XYCoord examCoord;
 
 - (void)startTimers;
 - (void)triggerRedraw;
