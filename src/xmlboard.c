@@ -118,7 +118,7 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
   balloonNode = CHILD (ruleNode, BALLOON);
   if (balloonNode) {
     locNode = CHILD (balloonNode, LOC);
-    color = OPTCHILDINT (balloonNode, COLOR, HSB24White);
+    color = OPTCHILDINT (balloonNode, COLOR, OPTCHILDHEX (balloonNode, HEXCOLOR, HSB24White));
     rule->balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
 				     locNode ? OPTCHILDINT(locNode,X,0) : 0,
 				     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
@@ -149,7 +149,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
   cond->overloadIgnoreProb = OPTCHILDFLOAT(node,OVERLOAD,cond->ignoreProb);
 
-  rshift = OPTCHILDINT(node,RSHIFT,TypeShift);
+  rshift = OPTCHILDINT(node,RSHIFT,0);
   if (rshift) {
     cond->mask = cond->mask << rshift;
     cond->rhs = cond->rhs << rshift;
@@ -160,12 +160,13 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   if (opcode) {
     if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = TestEQ;
     else if (strcmp(opcode,"!=")==0) cond->opcode = TestNEQ;
-    else if (strcmp(opcode,">")==0) cond->opcode = TestGT;
-    else if (strcmp(opcode,"<")==0) cond->opcode = TestLT;
-    else if (strcmp(opcode,">=")==0) cond->opcode = TestGEQ;
-    else if (strcmp(opcode,"<=")==0) cond->opcode = TestLEQ;
+    else if (strcmp(opcode,">")==0 || strcmp(opcode,"&gt;")==0) cond->opcode = TestGT;
+    else if (strcmp(opcode,"<")==0 || strcmp(opcode,"&lt;")==0) cond->opcode = TestLT;
+    else if (strcmp(opcode,">=")==0 || strcmp(opcode,"&gt;=")==0) cond->opcode = TestGEQ;
+    else if (strcmp(opcode,"<=")==0 || strcmp(opcode,"&lt;=")==0) cond->opcode = TestLEQ;
     else if (strcmp(opcode,"1")==0) cond->opcode = TestTRUE;
     else if (strcmp(opcode,"0")==0) cond->opcode = TestFALSE;
+    else Abort ("Unrecognized opcode");
   }
 }
 

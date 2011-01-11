@@ -21,8 +21,8 @@ typedef struct Balloon {
 
 /* methods */
 Balloon *newProtoBalloon (char *text, int xOffset, int yOffset, PaletteIndex color, double size, double timeToLive, double zInc, double sizeMul, double opacityMul, double prob);  /* copies text */
-Balloon *newPlacedBalloon (Balloon *proto, int x, int y);
+Balloon *newPlacedBalloon (Balloon *proto, int x, int y, double z);
 void deleteBalloon (void *balloon);
-int BalloonCompare (const void *b1, const void *b2);
+int BalloonCompare (const void *b1, const void *b2);   /* cast b1 and b2 to (Balloon**) */
 
 #endif /* BALLOON_INCLUDED */

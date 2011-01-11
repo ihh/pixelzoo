@@ -9,10 +9,11 @@ use XML::Twig;
 my $man = 0;
 my $help = 0;
 my $debug = 0;
+my $ppfile;
 
 my $cpp = "gcc -x c -E";
 
-GetOptions('help|?' => \$help, man => \$man, debug => \$debug, 'preprocessor|cpp' => \$cpp) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, debug => \$debug, 'preprocessor|cpp=s' => \$cpp, 'savepp=s' => \$ppfile) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -51,6 +52,14 @@ open ZG, "$cpp $zgfilename |" or die "Couldn't open $zgfilename: $!";
 my @zg = <ZG>;
 close ZG;
 
+# savepp
+if (defined $ppfile) {
+    local *PP;
+    open PP, ">$ppfile" or die "Couldn't open $ppfile: $!";
+    print PP @zg;
+    close PP or die "Couldn't close $ppfile: $!";
+}
+
 # strip off irrelevant crud
 grep (s/(\/\/|#).*$//, @zg);  # trim C++-style comments, preprocessor directives
 @zg = map ( (split(/;/,$_)), @zg );   # split lines on semicolons
@@ -62,15 +71,22 @@ my ($type, $nRule);
 local $_;
 while (@zg) {
     $_ = shift @zg;
+    die unless defined;
+    warn "Read line '$_'" if $debug;
 
-    if (/^size (\d+)/) {
+    if (/^warn (.*)$/) {
+	# compiler warning
+	warn "$1\n";
+
+    } elsif (/^size (\d+)/) {
 	$boardSize = $1;
 
     } elsif (/^init ?\( ?(\d+) ?, ?(\d+) ?\) (\S+)/) {
 	push @init, [$1, $2, $3];
 
-    } elsif (/^tool (\S+)/) {
+    } elsif (/^tool (\S+|"[^"]*")/) {
 	my $name = $1;
+	$name =~ s/^"(.*)"$/$1/;
 	my ($size, $type, $reserve, $recharge) = (1, $emptyType, 100, 100);
 	my @overwrite;
 	if (/\( ?size (\S+) ?\)/) { $size = $1 }
@@ -113,19 +129,26 @@ while (@zg) {
 	$ptags{$type} = [];
 
     } elsif (defined $type) {
-	if (/^hue ?= ?(.*?)$/) {
+
+	if (/^(type|size|init|tool|entrance|exit)\b/) {
+	    # end of type block
+	    unshift @zg, $_;
+	    last;
+
+	} elsif (/^hue ?= ?(.*)$/) {
 	    # hue
 	    $hue{$type} = parseColor($1);
 
-	} elsif (/^sat ?= ?(.*?)$/) {
+	} elsif (/^sat ?= ?(.*)$/) {
 	    # saturation
 	    $sat{$type} = parseColor($1);
 
-	} elsif (/^bri ?= ?(.*?)$/) {
+	} elsif (/^bri ?= ?(.*)$/) {
 	    # brightness
 	    $bri{$type} = parseColor($1);
 
 	} elsif (/^\{/) {
+	    # start rule block
 	    s/\{ ?//;
 	    unshift @zg, $_;
 
@@ -134,8 +157,11 @@ while (@zg) {
 	    my $temps = 0;
 	    while (@zg) {
 		$_ = shift @zg;
+		die unless defined;
+		warn "Read line '$_'" if $debug;
 
 		if (/^\}/) {
+		    # end rule block
 		    s/\} ?//;
 		    unshift @zg, $_;
 		    last;
@@ -146,6 +172,9 @@ while (@zg) {
 		    my ($locid, $x, $y) = ($1, $2, $3);
 		    die "Duplicate loc" if defined $loc{$locid};
 		    $loc{$locid} = [$x,$y];
+		    if ($x == 0 && $y == 0) {
+			$loctype{$locid} = $type;
+		    }
 		    warn "loc=$locid x=$x y=$y" if $debug;
 
 		} elsif (/^temp ([A-Za-z_][A-Za-z_\d]*)$/) {
@@ -212,7 +241,7 @@ while (@zg) {
 		    }
 
 		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
-			$loctype{$lhsLoc} = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : undef;
+			$loctype{$lhsLoc} = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
 		    }
 
 		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*" && !defined($loctype{$lhsLoc})) {
@@ -233,9 +262,28 @@ while (@zg) {
 			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
 		    }
 
+		} elsif (/^text (\S+|"[^"+]")/) {
+		    my $text = $1;
+		    $text =~ s/^"(.*)"$/$1/;
+		    my %balloon = ("text" => $text);
+		    if (/\((\d+) ?, ?(\d+)\)/) { $balloon{"loc"} = ["x" => $1, "y" => $2] }
+		    parseTags ($_, \%balloon);
+		    if (exists $balloon{"hue"}) {
+			$balloon{"hexcolor"} = hexv(0xffff | ($balloon{"hue"} << 16));
+			delete $balloon{"hue"};
+		    }
+		    push @tag, "balloon" => \%balloon;
+
 		} elsif (/^<.*>/) {
 		    # misc tags (rate, overload, ...)
 		    parseTags ($_, \@tag);
+
+		} elsif (/^warn (.*)$/) {
+		    # compiler warning
+		    warn "$1\n";
+
+		} elsif (/warn/) {
+		    die $_;
 
 		} elsif (/\S/) {
 		    # unrecognized line within rule block
@@ -446,30 +494,38 @@ sub getShift {
 sub parseTags {
     my ($line, $tagRef) = @_;
     $tagRef = [] unless defined $tagRef;
-    my %tagHash = @$tagRef;
+    my $isArray = ref($tagRef) eq "ARRAY";
+    my %tagHash = $isArray ? @$tagRef : %$tagRef;
     while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
 	my ($tag, $val) = ($1, $2);
 	die "Duplicate tag $tag\n" if exists $tagHash{$tag};
 	if ($val =~ /^=(.*)/) {
 	    $val = eval($1);
 	}
-	push @$tagRef, ($tag => $val);
+	if ($isArray) {
+	    push @$tagRef, ($tag => $val);
+	} else {
+	    $tagRef->{$tag} = $val;
+	}
     }
     return $tagRef;
 }
 
 sub parseColor {
     my ($colexpr) = @_;
-    my @term = split /\s*\+\s*/, $colexpr;
+    $colexpr =~ s/\- ?(\S+) ?\* ?(\d+)/+ $1 * -$2/g;
+    $colexpr =~ s/\- ?(\d+) ?\* ?(\S+)/+ -$1 * $2/g;
+    my @term = split (/ ?\+ ?/, $colexpr);
+    warn "Parsing color terms: ", join(" + ", map("($_)", @term)) if $debug;
     my $const = 0;
     my @varmul;
     for my $term (@term) {
-	if ($term =~ /^\-?\s*\d+$/) {
+	if ($term =~ /^\-? ?\d+$/) {
 	    $const += $term;
-	} elsif ($term =~ /^(\S+)\s?\*\s?(\-?\d+)$/) {
+	} elsif ($term =~ /^(\S+) ?\* ?(\-?\d+)$/) {
 	    my ($var, $mul) = ($1, $2);
 	    push @varmul, [$var, $mul];
-	} elsif ($term =~ /^(\-?\d+)\s?\*\s?(\S+)$/) {
+	} elsif ($term =~ /^(\-?\d+) ?\* ?(\S+)$/) {
 	    my ($mul, $var) = ($1, $2);
 	    push @varmul, [$var, $mul];
 	} else {
@@ -550,6 +606,7 @@ zoocompiler.pl [options] <.zg file>
   -help               brief help message
   -man                full documentation
   -preprocessor,-cpp  preprocessor to use
+  -savepp             file to save after preprocessing
 
 =head1 OPTIONS
 
@@ -568,6 +625,10 @@ Prints the manual page and exits.
 Specify the preprocessor to use, plus options.
 
 Default is "gcc -x c -E".
+
+=item B<-savepp>
+
+Specify a filename to save the intermediate file generated by running the input through the preprocessor.
 
 =back
 

@@ -18,10 +18,10 @@ Balloon *newProtoBalloon (char *text, int x, int y, PaletteIndex color, double s
   return b;
 }
 
-Balloon *newPlacedBalloon (Balloon *proto, int x, int y) {
+Balloon *newPlacedBalloon (Balloon *proto, int x, int y, double z) {
   Balloon *b;
   b = newProtoBalloon (proto->text, proto->x + x, proto->y + y, proto->color, proto->size, proto->timeToLive, proto->zInc, proto->sizeMul, proto->opacityMul, proto->prob);
-  b->z = 0;
+  b->z = z;
   b->opacity = 1;
   return b;
 }
@@ -35,9 +35,9 @@ void deleteBalloon (void *vb) {
 
 int BalloonCompare (const void *vb1, const void *vb2) {
   Balloon *b1, *b2;
-  b1 = (Balloon*) vb1;
-  b2 = (Balloon*) vb2;
-  if (b1->z > b2->z) return 1;
+  b1 = *(Balloon**) vb1;
+  b2 = *(Balloon**) vb2;
+  if (b1->z > b2->z) return +1;
   if (b1->z < b2->z) return -1;
   return 0;
 }

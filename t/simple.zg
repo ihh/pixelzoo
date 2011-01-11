@@ -1,26 +1,75 @@
-#define RandomStep(DX,DY,RATE,OVERLOAD)		\
+#define RandomStep(DX,DY,STEP,OSTEP,DIE,ODIE)	\
   {						\
-    <rate RATE>;				\
-    <overload OVERLOAD>;			\
+    <rate STEP>;				\
+    <overload OSTEP>;				\
     loc orig(0,0);				\
     loc next(DX,DY);				\
     temp swap;					\
     if next.type = empty;			\
     do swap = next;				\
-    do next = orig;				\
+    do next = orig <fail DIE> <overload ODIE>;	\
     do orig = swap;				\
   }						\
 
-#define RandomWalk(RATE,OVERLOAD)		\
-  RandomStep(+1,0,RATE,OVERLOAD);		\
-  RandomStep(-1,0,RATE,OVERLOAD);		\
-  RandomStep(0,+1,RATE,OVERLOAD);		\
-  RandomStep(0,-1,RATE,OVERLOAD);		\
+#define MooreWalk(STEP,OSTEP,DIE,ODIE)		\
+  RandomStep(+1,0,STEP,OSTEP,DIE,ODIE);		\
+  RandomStep(-1,0,STEP,OSTEP,DIE,ODIE);		\
+  RandomStep(0,+1,STEP,OSTEP,DIE,ODIE);		\
+  RandomStep(0,-1,STEP,OSTEP,DIE,ODIE);		\
+
+#define BishopWalk(STEP,OSTEP,DIE,ODIE)		\
+  RandomStep(+1,+1,STEP,OSTEP,DIE,ODIE);	\
+  RandomStep(-1,+1,STEP,OSTEP,DIE,ODIE);	\
+  RandomStep(+1,-1,STEP,OSTEP,DIE,ODIE);	\
+  RandomStep(-1,-1,STEP,OSTEP,DIE,ODIE);	\
+
+#define NeumannWalk(STEP,OSTEP,DIE,ODIE)	\
+  MooreWalk(STEP,OSTEP,DIE,ODIE);		\
+  BishopWalk(STEP,OSTEP,DIE,ODIE);		\
+
+#define CementSetDir(DX,DY,DRYRATE,WETRATE)	\
+  {						\
+    <rate DRYRATE>;				\
+    loc orig(0,0);				\
+    loc next(DX,DY);				\
+    temp swap;					\
+    if next.type = wall <ignore =WETRATE/DRYRATE>;	\
+    do orig = wall;				\
+  }						\
+
+#define CementSet(DRYRATE,WETRATE)	\
+  CementSetDir(+1,0,DRYRATE,WETRATE);	\
+  CementSetDir(-1,0,DRYRATE,WETRATE);	\
+  CementSetDir(0,+1,DRYRATE,WETRATE);	\
+  CementSetDir(0,-1,DRYRATE,WETRATE);	\
+  CementSetDir(+1,+1,DRYRATE,WETRATE);	\
+  CementSetDir(-1,+1,DRYRATE,WETRATE);	\
+  CementSetDir(+1,-1,DRYRATE,WETRATE);	\
+  CementSetDir(-1,-1,DRYRATE,WETRATE);	\
+
+type cement;
+NeumannWalk(.1,.1,.01,.1);
+CementSet(.15,.001);
+
+type wall decay(4);
+bri = 255 - decay*8;
+{
+  <rate .0002>;
+  loc orig(0,0);
+  if orig.decay < 15;
+  do orig.decay = orig.decay + 1;
+  text "decay" <rate .01> <hue 32>;
+}
+
+{
+  <rate .01>;
+  loc orig(0,0);
+  if orig.decay = 15;
+  do orig = empty;
+}
 
 
-type drifter;
-RandomWalk(1,1)
 
-init (64,64) drifter;
+init (64,64) cement;
 
-tool cement (type drifter);
+tool "Cement spray" (type cement) (reserve 1000) (size 4);

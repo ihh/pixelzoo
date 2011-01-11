@@ -32,7 +32,7 @@ void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibili
 PaletteIndex readBoardColor (Board* board, int x, int y);
 
 void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */
-#define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y)); }
+#define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y, (1. - (((BOARD_PTR)->updatesPerCell) - (double) (int) ((BOARD_PTR)->updatesPerCell))))); }
 
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)

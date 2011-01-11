@@ -53,7 +53,7 @@
 											  colorSpace,
 											  kCGImageAlphaNoneSkipLast);
 		
-		CFRelease(colorSpace);
+		CGColorSpaceRelease(colorSpace);
 		Assert (bitmapData != NULL, "Couldn't alloc bitmapData");
 	}
 	
@@ -76,7 +76,6 @@
 		}
 		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
 		CGContextDrawImage (ctx, boardRect, image);
-		CFRelease (image);
 	}
 
 	// redraw tools
@@ -108,13 +107,23 @@
 	CGAffineTransform transform = CGAffineTransformMake (1., 0., 0., -1., 0., 0.);
 	CGContextSetTextMatrix (ctx, transform);
 
+	// get font name
+	NSString *fontName = [[NSString alloc] initWithUTF8String:GAME_CONSOLE_FONT];
+	
 	// redraw console
 	CGFloat cy = [self frame].size.height - 1;
 	CGFloat fade = 1;
 	for (int cl = ConsoleLines; cl > 0; --cl) {
 		int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
 		if (game->consoleText[ci]) {
-			CGFloat ch = (CGFloat) game->consoleSize[ci] * GAME_CONSOLE_FONT_SIZE;
+			// measure text
+			CGFloat charsize = game->consoleSize[ci] * GAME_CONSOLE_FONT_SIZE;
+			UIFont *font = [UIFont fontWithName:fontName size:charsize];
+			NSString *str = [[NSString alloc] initWithUTF8String:game->consoleText[ci]];
+			CGSize textSize = [str sizeWithFont:font];
+			[str release];
+			
+			CGFloat ch = textSize.height;
 			if (cy - ch < boardRect.size.height)
 				break;
 			CGContextSelectFont (ctx,
@@ -127,7 +136,7 @@
 			RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
 			CGContextSetRGBFillColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
 			// print
-			CGContextShowTextAtPoint (ctx, 0, cy, game->consoleText[ci], strlen(game->consoleText[ci]));			
+			CGContextShowTextAtPoint (ctx, 0, cy + [font descender], game->consoleText[ci], strlen(game->consoleText[ci]));			
 			// next line
 			fade *= GAME_CONSOLE_FONT_FADE;
 			cy -= ch;
@@ -138,21 +147,45 @@
 	CGContextClipToRect (ctx, boardRect);
 	for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end; ++ptr) {
 		Balloon *b = (Balloon*) *ptr;
-		CGFloat cw = b->size + b->z;
+		int len = strlen(b->text);
+		RGB *rgb = &game->board->palette.rgb[b->color];
+
+		// compute font size
+		CGFloat
+			charsize = b->size * GAME_CONSOLE_FONT_SIZE,
+			charspacing = b->z;
+
+		// measure text
+		UIFont *font = [UIFont fontWithName:fontName size:charsize];
+		NSString *str = [[NSString alloc] initWithUTF8String:b->text];
+		CGSize textSize = [str sizeWithFont:font];
+		[str release];
+		
+		// calculate coords to center text on point
+		CGFloat
+			textwidth = textSize.width + (len-1) * charspacing,
+			xpos = (cellSize * (CGFloat) b->x) - textwidth / 2,
+			ypos = (cellSize * (CGFloat) b->y) - textSize.height / 2;
+		
+		// print balloon
+		CGContextSetRGBFillColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, (CGFloat) b->opacity / 2);
+		CGContextFillRect(ctx, CGRectMake(xpos, ypos - textSize.height, textwidth, textSize.height));
+
+		// print text
 		CGContextSelectFont (ctx,
 							 GAME_CONSOLE_FONT,
-							 (CGFloat) b->size * GAME_CONSOLE_FONT_SIZE,
+							 charsize,
 							 kCGEncodingMacRoman);
-		CGContextSetCharacterSpacing (ctx, (CGFloat) b->z);
-		CGContextSetTextDrawingMode (ctx, kCGTextFill);
-		
-		RGB *rgb = &game->board->palette.rgb[b->color];
-		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) b->opacity);
 
-		// print
-		int len = strlen(b->text);
-		CGContextShowTextAtPoint (ctx, (cellSize * (double) b->x) - (double) len * cw / 2, (cellSize * (double) b->y) - b->size / 2, b->text, len);
+		CGContextSetCharacterSpacing (ctx, charspacing);
+		CGContextSetTextDrawingMode (ctx, kCGTextFill);
+
+		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) b->opacity);
+		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], b->text, len);
 	}
+
+	// release font name
+	[fontName release];
 }
 
 - (void)dealloc {

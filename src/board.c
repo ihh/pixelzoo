@@ -412,7 +412,7 @@ void updateBalloons (Board *board, double duration) {
       deleteBalloon (b);
   }
   board->balloon->end = write;
-  qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (Balloon*), BalloonCompare);
+  qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (void*), BalloonCompare);
 }
 
 void boardSetOverloadThreshold (Board *board, double firingRate) {

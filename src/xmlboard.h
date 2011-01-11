@@ -41,6 +41,7 @@
 #define XMLZOO_RSHIFT      "rshift"
 #define XMLZOO_FAIL        "fail"
 #define XMLZOO_COLOR       "color"
+#define XMLZOO_HEXCOLOR    "hexcolor"
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
 #define XMLZOO_INIT        "init"
