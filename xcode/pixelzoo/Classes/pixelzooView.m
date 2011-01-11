@@ -76,6 +76,10 @@
 		}
 		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
 		CGContextDrawImage (ctx, boardRect, image);
+		
+		// draw border
+		CGContextSetRGBStrokeColor (ctx, 1, 1, 1, .5);
+		CGContextStrokeRect(ctx, boardRect);
 	}
 
 	// redraw tools
