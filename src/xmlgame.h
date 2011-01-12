@@ -25,7 +25,6 @@
 #define XMLZOO_RECHARGE   "recharge"
 #define XMLZOO_MAXRESERVE "maxreserve"
 #define XMLZOO_TRIGGER    "trigger"
-#define XMLZOO_TIME       "time"
 
 /* methods */
 Game* newGameFromXmlDocument (xmlDoc *doc);
