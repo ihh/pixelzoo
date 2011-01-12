@@ -68,8 +68,35 @@ bri = 255 - decay*8;
   do orig = empty;
 }
 
+#define AcidBurnDir(DX,DY,RATE)			\
+  {						\
+    <rate RATE>;				\
+    loc orig(0,0);				\
+    loc next(DX,DY);				\
+    temp swap;					\
+    if next.type != empty;			\
+    do next = empty;				\
+    do orig = empty;				\
+  }						\
+
+#define AcidBurn(RATE)		\
+  AcidBurnDir(+1,0,RATE);	\
+  AcidBurnDir(-1,0,RATE);	\
+  AcidBurnDir(0,+1,RATE);	\
+  AcidBurnDir(0,-1,RATE);	\
+  AcidBurnDir(+1,+1,RATE);	\
+  AcidBurnDir(-1,+1,RATE);	\
+  AcidBurnDir(+1,-1,RATE);	\
+  AcidBurnDir(-1,-1,RATE);	\
+
+type acid;
+bri = 128;
+NeumannWalk(.1,.1,.01,.1);
+AcidBurn(.15);
+
 
 
 init (64,64) cement;
 
 tool "Cement spray" (type cement) (reserve 1000) (size 4);
+tool "Acid spray" (type acid) (reserve 1000) (size 4);

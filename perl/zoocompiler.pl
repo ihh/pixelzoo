@@ -345,7 +345,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
     my $doneConst = 0;
     for (my $n = 0; $n < @maskshiftmul; ++$n) {
 	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
-	next if @maskshiftmul > 0 && $mask eq "0" && $shift==0 && $mul==0;
+	next if $n < $#maskshiftmul && $mask eq "0" && $shift==0 && $mul==0;
 	my @colorRule = ("hexmask" => $mask,
 			 "rshift" => $shift,
 			 "hexmul" => hexv($mul));
