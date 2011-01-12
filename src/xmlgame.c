@@ -6,8 +6,8 @@
 #include "xmlutil.h"
 
 /* prototypes for private builder methods */
-Tool* newToolFromXmlNode (xmlNode* node);
-GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode* node);
+Tool* newToolFromXmlNode (xmlNode *node);
+GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *node);
 
 /* method defs */
 
@@ -137,9 +137,13 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
   return tool;
 }
 
-GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode* triggerNode) {
+GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *triggerNode) {
   GoalTrigger *trigger;
+  xmlNode *node;
   trigger = newGoalTrigger (game, newGoalFromXmlNode (CHILD(triggerNode,GOAL_GPARAM), game));
   trigger->overwriteType = OPTCHILDINT(triggerNode,DECTYPE,CHILDHEX(triggerNode,HEXTYPE));
+  for (node = triggerNode->children; node; node = node->next)
+    if (MATCHES(node,LOC))
+      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), trigger->watcher);
   return trigger;
 }
