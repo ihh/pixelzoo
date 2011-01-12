@@ -5,6 +5,9 @@
 #include "notify.h"
 #include "tool.h"
 
+/* buffer size for log messages */
+#define LOG_BUFFER_SIZE 256
+
 Game* newGame() {
   Game *game;
   int n;
@@ -31,13 +34,13 @@ Game* newGame() {
   game->theExit.portalState = PortalWaiting;
   game->theExit.type = EmptyType;
   game->theExit.soFar = 0;
-  game->theExit.watcher = newCellWatcher (exitPortalIntercept, (void*) game, NullDestroyFunction);
+  game->theExit.watcher = newCellWatcher (exitPortalIntercept, (void*) game, NULL, NullDestroyFunction);
 
   game->gameState = GameOn;
   game->goal = NULL;
 
-  game->charger = newList (AbortCopyFunction, deleteToolCharger, NullPrintFunction);
-  game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) NULL, NullDestroyFunction);
+  game->trigger = newList (AbortCopyFunction, deleteGoalTrigger, NullPrintFunction);
+  game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) game, NULL, NullDestroyFunction);
 
   for (n = 0; n < ConsoleLines; ++n)
     game->consoleText[n] = NULL;
@@ -54,7 +57,7 @@ void deleteGame (Game *game) {
   deleteStringMap (game->toolByName);
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
-  deleteList (game->charger);
+  deleteList (game->trigger);
   if (game->goal)
     deleteGoal (game->goal);
   SafeFree (game);
@@ -143,42 +146,44 @@ int numberOfToolsVisible (Game *game) {
   return nTools;
 }
 
-ToolCharger* newToolCharger() {
-  ToolCharger* charger;
-  charger = SafeMalloc (sizeof (ToolCharger));
-  charger->overwriteType = EmptyType;
-  charger->tool = NULL;
-  charger->watcher = newCellWatcher (toolChargerIntercept, (void*) charger, NullDestroyFunction);
-  return charger;
+GoalTrigger* newGoalTrigger (Game *game, Goal *goal) {
+  GoalTrigger* trigger;
+  trigger = SafeMalloc (sizeof (GoalTrigger));
+  trigger->overwriteType = EmptyType;
+  trigger->goal = goal;
+  trigger->watcher = newCellWatcher (goalTriggerIntercept, (void*) game, (void*) trigger, NullDestroyFunction);
+  return trigger;
 }
 
-void deleteToolCharger (void* voidCharger) {
-  ToolCharger* charger;
-  charger = (ToolCharger*) voidCharger;
-  deleteCellWatcher (charger->watcher);
-  SafeFree (charger);
+void deleteGoalTrigger (void* voidTrigger) {
+  GoalTrigger* trigger;
+  trigger = (GoalTrigger*) voidTrigger;
+  deleteCellWatcher (trigger->watcher);
+  SafeFree (trigger);
 }
 
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state) {
   Game *game;
-  game = (Game*) watcher->context;
+  char exitPortalLogBuf[LOG_BUFFER_SIZE];
+  game = (Game*) watcher->game;
   if (game->gameState == GameOn && game->theExit.portalState == PortalCounting) {
     if (StateType(state) == game->theExit.type) {
       ++game->theExit.soFar;
-      printf ("Evacuated %d %s%s\n", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s" : "");
+      sprintf (exitPortalLogBuf, "%d %s%s reached the exit!", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s have" : " has");
+      printToGameConsole (game, exitPortalLogBuf, PaletteWhite, 1.);
+      printf ("%s\n", exitPortalLogBuf);
     }
   }
   return readBoardStateUnguarded(board,x,y);
 }
 
-State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state) {
-  ToolCharger *charger;
-  charger = (ToolCharger*) watcher->context;
-  if (StateType(state) == charger->overwriteType) {
-    printf ("%s tool %s\n", charger->tool->hidden ? "Unlocked" : "Recharged", charger->tool->name);
-    charger->tool->reserve = charger->tool->maxReserve;
-    charger->tool->hidden = 0;
-  }
+State goalTriggerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state) {
+  GoalTrigger *trigger;
+  Game *game;
+  game = (Game*) watcher->game;
+  trigger = (GoalTrigger*) watcher->context;
+  if (StateType(state) == trigger->overwriteType)
+    (void) testGoalMet (trigger->goal, game);
   unregisterCellWatcher (board, watcher);
   return state;
 }

@@ -7,7 +7,7 @@
 
 /* prototypes for private builder methods */
 Tool* newToolFromXmlNode (xmlNode* node);
-ToolCharger* newToolChargerFromXmlNode (Game *game, xmlNode* node);
+GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode* node);
 
 /* method defs */
 
@@ -54,8 +54,8 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   }
 
   for (node = gameNode->children; node; node = node->next)
-    if (MATCHES(node,CHARGER))
-      (void) ListInsertBefore (game->charger, NULL, newToolChargerFromXmlNode (game, node));
+    if (MATCHES(node,TRIGGER))
+      (void) ListInsertBefore (game->trigger, NULL, newGoalTriggerFromXmlNode (game, node));
 
   Assert (RBTreeSize(game->toolByName) > 0 && selectedTool != NULL, "You need some tools!");
   game->selectedTool = selectedTool;
@@ -137,15 +137,9 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
   return tool;
 }
 
-ToolCharger* newToolChargerFromXmlNode (Game *game, xmlNode* chargerNode) {
-  StringMapNode *toolNode;
-  ToolCharger *charger;
-  char *toolName;
-  charger = newToolCharger();
-  charger->overwriteType = OPTCHILDINT(chargerNode,DECTYPE,CHILDHEX(chargerNode,HEXTYPE));
-  toolName = (char*) CHILDSTRING(chargerNode,NAME);
-  toolNode = StringMapFind (game->toolByName, toolName);
-  Assert (toolNode != NULL, "Couldn't find tool");
-  charger->tool = (Tool*) toolNode->value;
-  return charger;
+GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode* triggerNode) {
+  GoalTrigger *trigger;
+  trigger = newGoalTrigger (game, newGoalFromXmlNode (CHILD(triggerNode,GOAL_GPARAM), game));
+  trigger->overwriteType = OPTCHILDINT(triggerNode,DECTYPE,CHILDHEX(triggerNode,HEXTYPE));
+  return trigger;
 }

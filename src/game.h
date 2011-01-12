@@ -18,7 +18,7 @@
 #define ConsoleLines 100
 
 /* power-up */
-typedef struct ToolCharger ToolCharger;
+typedef struct GoalTrigger GoalTrigger;
 
 /* entrance portal */
 typedef struct EntrancePortal {
@@ -77,8 +77,8 @@ typedef struct Game {
   /* exit portal */
   ExitPortal theExit;
 
-  /* power-ups */
-  List *charger;  /* all ToolCharger's */
+  /* power-ups, etc. */
+  List *trigger;  /* all GoalTrigger's */
 
   /* dummy CellWatcher for write protects */
   CellWatcher *writeProtectWatcher;
@@ -111,21 +111,21 @@ int numberOfToolsVisible (Game *game);
 
 /* Balloons */
 
-/* Types of CellWatcher: ExitPortal, ToolCharger and WriteProtect */
+/* Types of CellWatcher: ExitPortal, GoalTrigger and WriteProtect */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
-State toolChargerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
 State writeProtectIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
+State goalTriggerIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);
 
-struct ToolCharger {
+struct GoalTrigger {
   CellWatcher *watcher;
-  Type overwriteType;  /* cell must be overwritten with this Type to get Tool bonus */
-  Tool *tool;
+  State overwriteType;
+  Goal *goal;
 };
 
-ToolCharger* newToolCharger();
-void deleteToolCharger (void* charger);
+GoalTrigger* newGoalTrigger (Game *game, Goal *goal);
+void deleteGoalTrigger (void* trigger);
 
 typedef Game* ExitPortalContext;
-typedef ToolCharger* ToolChargerContext;
+typedef GoalTrigger* GoalTriggerContext;
 
 #endif /* GAME_INCLUDED */

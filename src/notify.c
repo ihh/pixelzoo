@@ -1,9 +1,10 @@
 #include "notify.h"
 
-CellWatcher* newCellWatcher (WriteInterceptFunction intercept, void *context, DestroyFunction contextDestroy) {
+CellWatcher* newCellWatcher (WriteInterceptFunction intercept, void *game, void *context, DestroyFunction contextDestroy) {
   CellWatcher* watcher;
   watcher = SafeMalloc (sizeof (CellWatcher));
   watcher->intercept = intercept;
+  watcher->game = game;
   watcher->context = context;
   watcher->contextDestroy = contextDestroy;
   return watcher;

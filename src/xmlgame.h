@@ -24,7 +24,7 @@
 #define XMLZOO_RESERVE    "reserve"
 #define XMLZOO_RECHARGE   "recharge"
 #define XMLZOO_MAXRESERVE "maxreserve"
-#define XMLZOO_CHARGER    "charger"
+#define XMLZOO_TRIGGER    "trigger"
 #define XMLZOO_TIME       "time"
 
 /* methods */
