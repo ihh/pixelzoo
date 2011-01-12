@@ -6,7 +6,7 @@
 Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   Goal *goal, *subGoal[2];
   const char *goalTypeAttr, *enumText;
-  xmlNode *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode;
+  xmlNode *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
   XYSet *area;
   StateSet *wallSet, *typeSet;
   int n, lazy, cached, enumState;
@@ -111,6 +111,9 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->updatesPerSecond,
 			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->updatesPerSecond);
 
+  } else if (ATTRMATCHES (goalTypeAttr, ENTERED_GOAL)) {
+    goal = newEntrancesDoneGoal();
+
   } else if (ATTRMATCHES (goalTypeAttr, TESTTOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
     reserveNode = CHILD (goalNode, RESERVE_GPARAM);
@@ -171,6 +174,10 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   } else if (ATTRMATCHES (goalTypeAttr, PRINT_GOAL)) {
     goal = newPrintMessagePseudoGoal ((const char*) CHILDSTRING (goalNode, TEXT_GPARAM));
 
+  } else if (ATTRMATCHES (goalTypeAttr, BALLOON_GOAL)) {
+    balloonNode = CHILD (goalNode, BALLOON);
+    goal = newPlaceBalloonPseudoGoal (balloonNode ? newBalloonFromXmlNode (balloonNode) : NULL);
+
   } else if (ATTRMATCHES (goalTypeAttr, TRUE_GOAL)) {
     goal = newTrueGoal();
 
@@ -180,6 +187,9 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   } else {
     Abort ("Unknown goal type");
   }
+
+  if (goal)
+    setSubgoalParents (goal);
 
   return goal;
 }

@@ -63,6 +63,11 @@ void deleteGame (Game *game) {
   SafeFree (game);
 }
 
+void gameStart (Game *game) {
+  makeEntrances (game);
+  testGameGoal (game, 1);
+}
+
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell_ret, int *actualUpdates, double *evolveTime) {
   double maxUpdateTimeInSeconds, actualUpdatesPerCell, currentOverloadThreshold, newOverloadThreshold, overloadScaleFactor;
   maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetUpdatesPerCell / game->updatesPerSecond;
@@ -71,7 +76,7 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
   if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
     useTools (game, actualUpdatesPerCell);
   makeEntrances (game);
-  testGameGoal (game);
+  testGameGoal (game, 0);
   updateBalloons (game->board, actualUpdatesPerCell / game->updatesPerSecond);
 
   if (actualUpdatesPerCell_ret)
@@ -110,7 +115,7 @@ void makeEntrances (Game *game) {
   if (game->theEntrance.soFar < game->theEntrance.total) {
     entrancePeriod = 1. / game->theEntrance.rate;
     nextEntranceTime = (double) game->theEntrance.soFar * entrancePeriod;
-    if (game->board->updatesPerCell > nextEntranceTime
+    if (game->board->updatesPerCell >= nextEntranceTime
 	&& readBoardState(game->board,game->theEntrance.pos.x,game->theEntrance.pos.y) != game->theEntrance.state) {
       writeBoardState (game->board,game->theEntrance.pos.x,game->theEntrance.pos.y,game->theEntrance.state);
       ++game->theEntrance.soFar;
@@ -118,12 +123,12 @@ void makeEntrances (Game *game) {
   }
 }
 
-void testGameGoal (Game *game) {
+void testGameGoal (Game *game, int forceTest) {
   double elapsedBoardTime;
 
   /* check the clock - time for a goal test? */
   elapsedBoardTime = game->board->updatesPerCell - game->lastGoalTestTime;
-  if (elapsedBoardTime < game->updatesPerSecond / game->goalTestsPerSecond)
+  if (!forceTest && elapsedBoardTime < game->updatesPerSecond / game->goalTestsPerSecond)
     return;
   game->lastGoalTestTime = game->board->updatesPerCell;
 

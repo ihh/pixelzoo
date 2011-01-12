@@ -101,9 +101,8 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
 }
 
 void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
-  xmlNode *node, *balloonNode, *locNode;
+  xmlNode *node, *balloonNode;
   int nCond, nOp;
-  HSB24 color;
   rule->rate = OPTCHILDFLOAT(ruleNode,RATE,1.);
   rule->overloadRate = OPTCHILDFLOAT(ruleNode,OVERLOAD,rule->rate);
   nCond = nOp = 0;
@@ -116,20 +115,29 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
       initOperationFromXmlNode (&rule->op[nOp++], node);
     }
   balloonNode = CHILD (ruleNode, BALLOON);
-  if (balloonNode) {
-    locNode = CHILD (balloonNode, LOC);
-    color = OPTCHILDINT (balloonNode, COLOR, OPTCHILDHEX (balloonNode, HEXCOLOR, HSB24White));
-    rule->balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
-				     locNode ? OPTCHILDINT(locNode,X,0) : 0,
-				     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
-				     ConvertHsb24ToPaletteIndex (color),
-				     OPTCHILDFLOAT (balloonNode, SIZE, 1.),
-				     OPTCHILDFLOAT (balloonNode, TTL, DefaultBalloonTTL),
-				     OPTCHILDFLOAT (balloonNode, RISE, DefaultBalloonRise),
-				     OPTCHILDFLOAT (balloonNode, ZOOM, DefaultBalloonZoom),
-				     OPTCHILDFLOAT (balloonNode, FADE, DefaultBalloonFade),
-				     OPTCHILDFLOAT (balloonNode, RATE, 1.));
-  }
+  if (balloonNode)
+    rule->balloon = newBalloonFromXmlNode (balloonNode);
+}
+
+Balloon* newBalloonFromXmlNode (xmlNode* balloonNode) {
+  xmlNode *locNode;
+  HSB24 color;
+  Balloon *balloon;
+  locNode = CHILD (balloonNode, LOC);
+  color = OPTCHILDINT (balloonNode, COLOR, OPTCHILDHEX (balloonNode, HEXCOLOR, HSB24White));
+  balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
+			     locNode ? OPTCHILDINT(locNode,X,0) : 0,
+			     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
+			     ConvertHsb24ToPaletteIndex (color),
+			     OPTCHILDFLOAT (balloonNode, SIZE, 1.),
+			     OPTCHILDFLOAT (balloonNode, TTL, DefaultBalloonTTL),
+			     OPTCHILDFLOAT (balloonNode, RISE, DefaultBalloonRise),
+			     OPTCHILDFLOAT (balloonNode, ZOOM, DefaultBalloonZoom),
+			     OPTCHILDFLOAT (balloonNode, FADE, DefaultBalloonFade),
+			     OPTCHILDFLOAT (balloonNode, RATE, 1.));
+  if (CHILD (balloonNode, PERSIST) != NULL)
+    balloon->reset = balloon;
+  return balloon;
 }
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {

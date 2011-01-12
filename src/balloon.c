@@ -13,8 +13,10 @@ Balloon *newProtoBalloon (char *text, int x, int y, PaletteIndex color, double s
   b->zInc = zInc;
   b->size = size;
   b->sizeMul = sizeMul;
+  b->opacity = 1;
   b->opacityMul = opacityMul;
   b->prob = prob;
+  b->reset = NULL;
   return b;
 }
 
@@ -22,8 +24,20 @@ Balloon *newPlacedBalloon (Balloon *proto, int x, int y, double z) {
   Balloon *b;
   b = newProtoBalloon (proto->text, proto->x + x, proto->y + y, proto->color, proto->size, proto->timeToLive, proto->zInc, proto->sizeMul, proto->opacityMul, proto->prob);
   b->z = z;
-  b->opacity = 1;
+  b->opacity = proto->opacity;
+  b->reset = proto->reset;
   return b;
+}
+
+int resetBalloon (Balloon *b) {
+  if (b->reset) {
+    b->timeToLive = b->reset->timeToLive;
+    b->size = b->reset->size;
+    b->z = b->reset->z;
+    b->opacity = b->reset->opacity;
+    return 1;
+  }
+  return 0;
 }
 
 void deleteBalloon (void *vb) {

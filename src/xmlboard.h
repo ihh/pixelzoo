@@ -51,11 +51,15 @@
 #define XMLZOO_RISE        "rise"
 #define XMLZOO_ZOOM        "zoom"
 #define XMLZOO_FADE        "fade"
+#define XMLZOO_PERSIST     "persist"
 
 /* methods */
 Board* newBoardFromXmlDocument (xmlDoc *doc);
 Board* newBoardFromXmlRoot (xmlNode *root);
 Board* newBoardFromXmlFile (const char* filename);
 Board* newBoardFromXmlString (const char* string);
+
+/* helpers */
+Balloon* newBalloonFromXmlNode (xmlNode* node);
 
 #endif /* XMLBOARD_INCLUDED */

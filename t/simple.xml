@@ -3,6 +3,18 @@
     <goal type="and">
       <lazy></lazy>
       <cached></cached>
+	<goal type="area">
+	<pos><x>20</x><y>20</y></pos>
+		<goal type="balloon">
+			<balloon>
+              <hexcolor>20ffff</hexcolor>
+              <text>ENTRANCE</text>
+				<persist/>
+			</balloon>
+		</goal>
+	</goal>
+	<goal type="repeat"><reps>5</reps><goal type="true"/></goal>
+	<goal type="area"><pos><x>20</x><y>20</y></pos><goal type="balloon"/></goal>
       <goal type="setexit">
         <state>PortalCounting</state>
       </goal>

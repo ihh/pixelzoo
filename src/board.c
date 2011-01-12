@@ -407,7 +407,9 @@ void updateBalloons (Board *board, double duration) {
       b->z += b->zInc * duration;
       b->size *= pow (b->sizeMul, duration);
       b->opacity *= pow (b->opacityMul, duration);
-    } else
+    } else if (resetBalloon (b))
+      *(write++) = b;
+    else
       deleteBalloon (b);
   }
   board->balloon->end = write;

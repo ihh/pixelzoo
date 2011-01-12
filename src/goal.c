@@ -119,6 +119,10 @@ Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell) {
   return g;
 }
 
+Goal *newEntrancesDoneGoal() {
+  return newGoal (EntrancesDoneGoal, 0, 0);
+}
+
 Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve) {
   Goal *g;
   g = newGoal (CheckToolGoal, 2, 0);
@@ -183,9 +187,23 @@ Goal *newPrintMessagePseudoGoal (const char* message) {
   return g;
 }
 
+Goal *newPlaceBalloonPseudoGoal (Balloon *balloon) {
+  Goal *g;
+  g = newGoal (PlaceBalloonPseudoGoal, 0, 0);
+  g->context = (void*) balloon;
+  return g;
+}
+
+void setSubgoalParents (Goal *goal) {
+  if (goal->l)
+    goal->l->parent = goal;
+  if (goal->r)
+    goal->r->parent = goal;
+}
+
 void deleteGoal (Goal* goal) {
   if (goal->goalType == PrintMessagePseudoGoal)
-    SafeFree ((char*) goal->context);
+    SafeFree ((char*) goal->context);   /* handle the one case where context needs to be freed */
   SafeFreeOrNull (goal->intData);
   SafeFreeOrNull (goal->dblData);
   if (goal->tree) deleteRBTree (goal->tree);
@@ -290,7 +308,10 @@ int testGoalMet (Goal* goal, void *voidGame) {
   Tool *tool;
   XYSet *area;
   XYSetNode *areaNode;
-  XYCoord *pos;
+  XYCoord *pos, tempCoord;
+  void **ptr, **write;
+  Balloon *b;
+  Stack *enumResult;
 
   Assert (goal != NULL, "testGoalMet: null goal");
   game = (Game*) voidGame;
@@ -344,6 +365,9 @@ int testGoalMet (Goal* goal, void *voidGame) {
   case BoardTimeGoal:
     return goal->dblData[0] <= board->updatesPerCell && (goal->dblData[1] <= 0. || board->updatesPerCell <= goal->dblData[1]);
 
+  case EntrancesDoneGoal:
+    return game->theEntrance.soFar >= game->theEntrance.total;
+
   case CheckToolGoal:
     tool = (Tool*) goal->context;
     return goal->dblData[0] <= tool->reserve && tool->reserve <= goal->dblData[1];
@@ -392,6 +416,32 @@ int testGoalMet (Goal* goal, void *voidGame) {
   case PrintMessagePseudoGoal:
     printToGameConsole (game, (char*) goal->context, PaletteWhite, 1.);
     printf ("%s\n", (char*) goal->context);
+    return 1;
+
+  case PlaceBalloonPseudoGoal:
+    area = getGoalArea (goal);
+    if (area) {
+      if (goal->context != NULL) {
+	/* place Balloon's in parent area */
+	b = (Balloon*) goal->context;
+	enumResult = RBTreeEnumerate (area, NULL, NULL);	  
+	while ((areaNode = (XYSetNode*) StackPop (enumResult))) {
+	  pos = (XYCoord*) areaNode->key;
+	  addBalloon (board, b, pos->x, pos->y);
+	}
+
+      } else {
+	/* delete all Balloon's in parent area */
+	for (write = ptr = board->balloon->begin; ptr != board->balloon->end; ++ptr) {
+	  b = (Balloon*) *ptr;
+	  if (XYMapFind (area, b->x, b->y, tempCoord) == NULL)
+	    *(write++) = b;
+	  else
+	    deleteBalloon (b);
+	}
+	board->balloon->end = write;
+      }
+    }
     return 1;
 
   case TrueGoal:

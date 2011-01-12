@@ -89,6 +89,9 @@
 
 	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
     evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
+
+	// start the Game
+	gameStart (game);
 }
 
 /* Board updates */

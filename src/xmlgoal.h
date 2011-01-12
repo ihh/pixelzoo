@@ -19,6 +19,7 @@
 #define XMLZOO_TRUE_GOAL       "true"
 #define XMLZOO_FALSE_GOAL      "false"
 #define XMLZOO_TIME_GOAL       "time"
+#define XMLZOO_ENTERED_GOAL    "entered"
 #define XMLZOO_TESTTOOL_GOAL   "tool"
 #define XMLZOO_TESTEXIT_GOAL   "exit"
 #define XMLZOO_TESTGAME_GOAL   "game"
@@ -27,6 +28,7 @@
 #define XMLZOO_SETGAME_GOAL    "setgame"
 #define XMLZOO_USETOOL_GOAL    "use"
 #define XMLZOO_PRINT_GOAL      "print"
+#define XMLZOO_BALLOON_GOAL    "balloon"
 
 #define XMLZOO_REPS_GPARAM     "reps"
 #define XMLZOO_GOAL_GPARAM     "goal"

@@ -38,13 +38,15 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 		CheckToolGoal,               /* dblData[0] <= ((Tool*)context)->reserve <= dblData[1] */
 		CheckPortalGoal,             /* ((ExitPortal*)context)->portalState == intData[0] && intData[1] <= ((ExitPortal*)context)->soFar <= intData[2] */
 		CheckGameStateGoal,          /* game->gameState == intData[0] */
+		EntrancesDoneGoal,           /* game->theEntrance.soFar >= game->theEntrance.total */
 
-/* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
+		/* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
 		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], un-hides the Tool, returns true */
 		SetPortalStatePseudoGoal,    /* sets ((ExitPortal*)context)->portalState = intData[0], returns true */
 		SetGameStatePseudoGoal,      /* sets game->gameState = intData[0], returns true */
 		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true */
-		PrintMessagePseudoGoal       /* prints (char*) context, returns true */
+		PrintMessagePseudoGoal,      /* prints (char*) context, returns true */
+		PlaceBalloonPseudoGoal       /* places (Balloon*) context at all points in parent area; if context==NULL, removes Balloon's at those locations */
 		};
 
 /* Goal */
@@ -58,29 +60,30 @@ typedef struct Goal {
 } Goal;
 
 /* accessors */
-int testGoalMet (Goal* goal, void *game);
-XYSet* getGoalArea (Goal* goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
+int testGoalMet (Goal *goal, void *game);
+XYSet* getGoalArea (Goal *goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */
-/* All parameters become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
-Goal* newTrueGoal();
-Goal* newFalseGoal();
-Goal* newAreaGoal (XYSet* area, Goal *subGoal);
-Goal* newEnclosuresGoal (State wallMask,
-			 StateSet* wallSet,
+/* All parameters (except where noted) become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
+Goal *newTrueGoal();
+Goal *newFalseGoal();
+Goal *newAreaGoal (XYSet *area, Goal *subGoal);
+Goal *newEnclosuresGoal (State wallMask,
+			 StateSet *wallSet,
 			 unsigned long minNumEnclosures,
 			 unsigned long maxNumEnclosures,
 			 unsigned long minEnclosureArea,
 			 unsigned long maxEnclosureArea,
 			 unsigned char allowDiagonalConnections,
-			 Goal* subGoal);
-Goal* newCachedGoal (Goal* l, int reps);
-Goal* newAndGoal (Goal* l, Goal* r, int lazy);
-Goal* newOrGoal (Goal* l, Goal* r, int lazy);
-Goal* newNotGoal (Goal* g);
-Goal* newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
-Goal* newRepeatGoal (Goal* subGoal, unsigned long minReps);
+			 Goal *subGoal);
+Goal *newCachedGoal (Goal *l, int reps);
+Goal *newAndGoal (Goal *l, Goal *r, int lazy);
+Goal *newOrGoal (Goal *l, Goal *r, int lazy);
+Goal *newNotGoal (Goal *g);
+Goal *newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
+Goal *newRepeatGoal (Goal *subGoal, unsigned long minReps);
 Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell);
+Goal *newEntrancesDoneGoal();
 
 Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve);
 Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCount);
@@ -90,12 +93,15 @@ Goal *newChargeToolPseudoGoal (void *tool, double reserveDelta);
 Goal *newSetPortalStatePseudoGoal (void *portal, int portalState);
 Goal *newSetGameStatePseudoGoal (int gameState);
 Goal *newUseToolPseudoGoal (void *tool, double duration);
-Goal *newPrintMessagePseudoGoal (const char* message);
+Goal *newPrintMessagePseudoGoal (const char* message);  /* copies message */
+Goal *newPlaceBalloonPseudoGoal (Balloon *balloon);
+
+void setSubgoalParents (Goal *goal);   /* init helper */
 
 /* destructor */
-void deleteGoal (Goal* goal);
+void deleteGoal (Goal *goal);
 
 /* helpers */
-List* getEnclosures (Board* board, XYSet* area, State wallMask, StateSet* wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteList to dealloc */
+List* getEnclosures (Board *board, XYSet *area, State wallMask, StateSet *wallSet, unsigned int minEnclosureArea, unsigned int maxEnclosureArea, unsigned char allowDiagonalConnections);  /* returns a List of XYList's; caller must call deleteList to dealloc */
 
 #endif /* GOAL_INCLUDED */

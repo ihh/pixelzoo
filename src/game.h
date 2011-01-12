@@ -30,10 +30,10 @@ typedef struct EntrancePortal {
 
 /* exit portal */
 typedef struct ExitPortal {
-  enum PortalState { PortalWaiting = 0,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
-		     PortalCounting = 1,   /* the endgame: exit portal is "open" and counting incoming Particle's */
-		     PortalUnlocked = 2,   /* the "win" outcome: exit portal count reached */
-		     PortalDestroyed = 3   /* the "fail" outcome: aliveGoal not met */
+  enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
+		     PortalCounting,   /* the endgame: exit portal is "open" and counting incoming Particle's */
+		     PortalUnlocked,   /* the "win" outcome: exit portal count reached */
+		     PortalDestroyed   /* the "fail" outcome: aliveGoal not met */
   } portalState;
 
   Type type;
@@ -61,11 +61,11 @@ typedef struct Game {
 
   /* Game logic */
   /* game state */
-  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
-		   GameWon = 1,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
-		   GameLost = 2,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
-		   GamePaused = 3,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
-		   GameQuit = 4      /* game over, no way out of this state */
+  enum GameState { GameOn,       /* board is evolving, player can use tools */
+		   GameWon,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
+		   GameLost,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
+		   GamePaused,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
+		   GameQuit      /* game over, no way out of this state */
   } gameState;
 
   /* main Goal */
@@ -95,6 +95,7 @@ typedef struct Game {
 /* Game methods */
 Game* newGame();
 void deleteGame (Game *game);
+void gameStart (Game *game);
 void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
 
 #define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn || (GAME_PTR)->gameState == GameWon || (GAME_PTR)->gameState == GameLost)
@@ -105,7 +106,7 @@ void printToGameConsole (Game *game, char *text, PaletteIndex color, double size
 /* helpers */
 void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
-void testGameGoal (Game *game);
+void testGameGoal (Game *game, int forceTest);   /* game->goal will only be tested every (1/goalTestsPerSecond) secs, unless forceTest is true */
 
 int numberOfToolsVisible (Game *game);
 
