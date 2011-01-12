@@ -41,6 +41,7 @@
 	CGRect boardRect = [controller boardRect];
 	CGRect bigBoardRect = [controller bigBoardRect];
 	CGRect consoleRect = [controller consoleRect];
+	CGRect consoleBoardRect = [controller consoleBoardRect];
 	
 	// create the bitmap context if necessary
 	if (bitmapData == NULL) {
@@ -71,32 +72,31 @@
 	NSString *fontName = [[NSString alloc] initWithUTF8String:GAME_FONT];
 	
 	// redraw board
-	if (CGRectIntersectsRect (boardRect, rect)) {
+	CGContextSaveGState (ctx);
+	CGContextClipToRect (ctx, boardRect);
 
-		CGContextSaveGState (ctx);
-		CGContextClipToRect (ctx, boardRect);
-
-		unsigned char *bitmapWritePtr = bitmapData;
-		for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically 
-			for (int x = 0; x < boardSize; ++x) {
-				PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
-				RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-				*(bitmapWritePtr++) = rgb->r;
-				*(bitmapWritePtr++) = rgb->g;
-				*(bitmapWritePtr++) = rgb->b;
-				++bitmapWritePtr;
-			}
+	// create board image
+	unsigned char *bitmapWritePtr = bitmapData;
+	for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically 
+		for (int x = 0; x < boardSize; ++x) {
+			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
+			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
+			*(bitmapWritePtr++) = rgb->r;
+			*(bitmapWritePtr++) = rgb->g;
+			*(bitmapWritePtr++) = rgb->b;
+			++bitmapWritePtr;
 		}
-		CGImageRef image = CGBitmapContextCreateImage(bitmapContext);
-		CGContextDrawImage (ctx, bigBoardRect, image);
-		CGImageRelease (image);
-		
-		// draw border
-		CGContextSetRGBStrokeColor (ctx, 1, 1, 1, BOARD_BORDER_OPACITY);
-		CGContextStrokeRect(ctx, boardRect);
-
-		CGContextRestoreGState (ctx);
 	}
+
+	// draw board image
+	CGImageRef boardImage = CGBitmapContextCreateImage(bitmapContext);
+	CGContextDrawImage (ctx, bigBoardRect, boardImage);
+	
+	// draw border
+	CGContextSetRGBStrokeColor (ctx, 1, 1, 1, BOARD_BORDER_OPACITY);
+	CGContextStrokeRect(ctx, boardRect);
+
+	CGContextRestoreGState (ctx);
 	
 	// redraw tools
 	int nTool = 0;
@@ -117,31 +117,35 @@
 	// redraw console
 	CGContextSaveGState (ctx);
 	CGContextClipToRect (ctx, consoleRect);
-	CGFloat cy = [self frame].size.height - 1;
-	CGFloat fade = 1;
-	for (int cl = ConsoleLines; cl > 0 && cy >= boardRect.size.height; --cl) {
-		int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
-		if (game->consoleText[ci]) {
-			// measure text
-			CGFloat charsize = game->consoleSize[ci] * CONSOLE_FONT_SIZE;
-			UIFont *font = [UIFont fontWithName:fontName size:charsize];
-			CGSize textSize = [self measureText:game->consoleText[ci] withFont:font withSpacing:CONSOLE_FONT_SPACING];
-			
-			CGFloat ch = textSize.height;
-			CGContextSelectFont (ctx,
-								 GAME_FONT,
-								 ch,
-								 kCGEncodingMacRoman);
-			CGContextSetCharacterSpacing (ctx, CONSOLE_FONT_SPACING);
-			CGContextSetTextDrawingMode (ctx, kCGTextFill);
-			
-			RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
-			CGContextSetRGBFillColor (ctx, fade * (CGFloat)rgb->r/255, fade * (CGFloat)rgb->g/255, fade * (CGFloat)rgb->b/255, 1);
-			// print
-			CGContextShowTextAtPoint (ctx, 0, cy + [font descender], game->consoleText[ci], strlen(game->consoleText[ci]));			
-			// next line
-			fade *= CONSOLE_FONT_FADE;
-			cy -= ch;
+	if ([controller examining]) {
+		CGContextDrawImage (ctx, consoleBoardRect, boardImage);
+	} else {
+		CGFloat cy = [self frame].size.height - 1;
+		CGFloat fade = 1;
+		for (int cl = ConsoleLines; cl > 0 && cy >= boardRect.size.height; --cl) {
+			int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
+			if (game->consoleText[ci]) {
+				// measure text
+				CGFloat charsize = game->consoleSize[ci] * CONSOLE_FONT_SIZE;
+				UIFont *font = [UIFont fontWithName:fontName size:charsize];
+				CGSize textSize = [self measureText:game->consoleText[ci] withFont:font withSpacing:CONSOLE_FONT_SPACING];
+				
+				CGFloat ch = textSize.height;
+				CGContextSelectFont (ctx,
+									 GAME_FONT,
+									 ch,
+									 kCGEncodingMacRoman);
+				CGContextSetCharacterSpacing (ctx, CONSOLE_FONT_SPACING);
+				CGContextSetTextDrawingMode (ctx, kCGTextFill);
+				
+				RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
+				[self setFill:rgb withContext:ctx withFactor:fade withOpacity:1 asInverse:0];
+				// print
+				CGContextShowTextAtPoint (ctx, 0, cy + [font descender], game->consoleText[ci], strlen(game->consoleText[ci]));			
+				// next line
+				fade *= CONSOLE_FONT_FADE;
+				cy -= ch;
+			}
 		}
 	}
 	CGContextRestoreGState (ctx);
@@ -170,7 +174,7 @@
 			ypos = (cellSize * (CGFloat) b->y) + textSize.height / 2 - viewOrigin.y;
 		
 		// print balloon
-		CGContextSetRGBFillColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, (CGFloat) b->opacity * BALLOON_BACKGROUND_OPACITY);
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:(b->opacity * BALLOON_BACKGROUND_OPACITY) asInverse:1];
 		CGContextFillRect(ctx, CGRectMake(xpos, ypos - textSize.height, textSize.width, textSize.height));
 
 		// print text
@@ -182,54 +186,95 @@
 		CGContextSetCharacterSpacing (ctx, charspacing);
 		CGContextSetTextDrawingMode (ctx, kCGTextFill);
 
-		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) b->opacity);
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:b->opacity asInverse:0];
 		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], b->text, len);
 	}
 	CGContextRestoreGState (ctx);
 
-	// draw name of currently touched pixel, if "examine" tool is being used
+	// redraw name of currently touched pixel, if "examine" tool is being used
 	if ([controller examining]) {
 		XYCoord pos = [controller examCoord];
 		State examState = readBoardState (game->board, pos.x, pos.y);
 		Particle *particle = game->board->byType[StateType(examState)];
-		if (particle) {
-			PaletteIndex examColorIndex = getParticleColor (particle, examState);
-			RGB *rgb = &game->board->palette.rgb[examColorIndex];
-			UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
-			CGSize textSize = [self measureText:particle->name withFont:font withSpacing:EXAMINE_FONT_SPACING];
-			CGContextSelectFont (ctx,
-								 GAME_FONT,
-								 EXAMINE_FONT_SIZE,
-								 kCGEncodingMacRoman);
-			
-			CGContextSetCharacterSpacing (ctx, EXAMINE_FONT_SPACING);
-			CGContextSetTextDrawingMode (ctx, kCGTextFill);
+		PaletteIndex examColorIndex = particle ? getParticleColor (particle, examState) : PaletteWhite;
+		RGB *rgb = &game->board->palette.rgb[examColorIndex];
+		UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
+		char *text = particle ? particle->name : EXAMINE_EMPTY_TEXT;
+		CGSize textSize = [self measureText:text withFont:font withSpacing:EXAMINE_FONT_SPACING];
+		CGContextSelectFont (ctx,
+							 GAME_FONT,
+							 EXAMINE_FONT_SIZE,
+							 kCGEncodingMacRoman);
+		
+		CGContextSetCharacterSpacing (ctx, EXAMINE_FONT_SPACING);
+		CGContextSetTextDrawingMode (ctx, kCGTextFill);
 
-			CGPoint viewOrigin = [controller viewOrigin];
-			CGFloat
-				xmid = (cellSize * (CGFloat) pos.x) - textSize.width / 2 - viewOrigin.x,
-				ymid = (cellSize * (CGFloat) pos.y) + textSize.height / 2 - viewOrigin.y;
+		CGPoint viewOrigin = [controller viewOrigin];
+		CGFloat
+			xcell = (cellSize * (.5 + (CGFloat) pos.x)) - viewOrigin.x,
+			ycell = (cellSize * (.5 + (CGFloat) pos.y)) - viewOrigin.y,
+			xmid = xcell - textSize.width / 2,
+			ymid = ycell + textSize.height / 2;
 
-			CGFloat xpos, ypos;
-			xpos = MAX (boardRect.origin.x, xmid);
-			if (ymid - EXAMINE_TEXT_DISPLACEMENT - textSize.height - 1 < boardRect.origin.y) {
-				ypos = ymid + EXAMINE_TEXT_DISPLACEMENT;
+		CGFloat xpos, ypos, xanchor, yanchor, xlabel, ylabel;
+		if (ymid - EXAMINE_TEXT_DISPLACEMENT - textSize.height - EXAMINE_LABEL_BORDER < boardRect.origin.y) {
+			ypos = ymid;
+			ylabel = yanchor = ycell;
+			if (xmid - textSize.width/2 - EXAMINE_TEXT_DISPLACEMENT - EXAMINE_LABEL_BORDER < boardRect.origin.x) {
+				xpos = xmid + textSize.width/2 + EXAMINE_TEXT_DISPLACEMENT;
+				xlabel = xpos - EXAMINE_LABEL_BORDER;
+				xanchor = xcell + EXAMINE_CIRCLE_RADIUS;
 			} else {
-				ypos = ymid - EXAMINE_TEXT_DISPLACEMENT;
+				xpos = xmid - textSize.width/2 - EXAMINE_TEXT_DISPLACEMENT;
+				xlabel = xpos + textSize.width + EXAMINE_LABEL_BORDER;
+				xanchor = xcell - EXAMINE_CIRCLE_RADIUS;
 			}
 
-			CGContextSetRGBFillColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, (CGFloat) EXAMINE_BACKGROUND_OPACITY);
-			CGContextFillRect(ctx, CGRectMake(xpos, ypos - textSize.height, textSize.width, textSize.height));
-
-			CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) 1.);
-			CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], particle->name, strlen(particle->name));
-
-			CGContextSetRGBStrokeColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, (CGFloat) EXAMINE_BACKGROUND_OPACITY);
-			CGContextStrokeRect(ctx, CGRectMake(xpos - 1, ypos - textSize.height - 1, textSize.width + 2, textSize.height + 2));
+		} else {
+			xpos = MAX (boardRect.origin.x + EXAMINE_LABEL_BORDER, xmid);
+			ypos = ymid - EXAMINE_TEXT_DISPLACEMENT;
+			xlabel = xpos + textSize.width / 2;
+			ylabel = ypos + EXAMINE_LABEL_BORDER;
+			xanchor = xcell;
+			yanchor = ycell - EXAMINE_CIRCLE_RADIUS;
 		}
+
+		// main board label
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:EXAMINE_BACKGROUND_OPACITY asInverse:1];
+		CGContextFillRect(ctx, CGRectMake(xpos, ypos - textSize.height, textSize.width, textSize.height));
+
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:1 asInverse:0];
+		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], text, strlen(text));
+
+		[self setStroke:rgb withContext:ctx withFactor:1 withOpacity:EXAMINE_BACKGROUND_OPACITY asInverse:0];
+		CGContextStrokeRect(ctx, CGRectMake(xpos - EXAMINE_LABEL_BORDER, ypos - textSize.height - EXAMINE_LABEL_BORDER, textSize.width + 2*EXAMINE_LABEL_BORDER, textSize.height + 2*EXAMINE_LABEL_BORDER));
+
+		// circle and connecting line
+		CGContextBeginPath (ctx);
+		CGContextMoveToPoint (ctx, xanchor, yanchor);
+		CGContextAddLineToPoint (ctx, xlabel, ylabel);
+		CGContextStrokePath (ctx);
+
+		CGContextStrokeEllipseInRect (ctx, CGRectMake(xcell-EXAMINE_CIRCLE_RADIUS,ycell-EXAMINE_CIRCLE_RADIUS,2*EXAMINE_CIRCLE_RADIUS,2*EXAMINE_CIRCLE_RADIUS));
+
+		// console label
+		CGPoint cmid = [controller consoleCentroid];
+		CGFloat
+			clx = cmid.x - textSize.width/2,
+			cly = cmid.y + textSize.height/2;
+		
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:EXAMINE_BACKGROUND_OPACITY asInverse:1];
+		CGContextFillRect(ctx, CGRectMake(clx, cly - textSize.height, textSize.width, textSize.height));
+		
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:1 asInverse:0];
+		CGContextShowTextAtPoint (ctx, clx, cly + [font descender], text, strlen(text));
+		
+		[self setStroke:rgb withContext:ctx withFactor:1 withOpacity:EXAMINE_BACKGROUND_OPACITY asInverse:0];
+		CGContextStrokeRect(ctx, CGRectMake(clx - EXAMINE_LABEL_BORDER, cly - textSize.height - EXAMINE_LABEL_BORDER, textSize.width + 2*EXAMINE_LABEL_BORDER, textSize.height + 2*EXAMINE_LABEL_BORDER));
 	}
 	
-	// release font name
+	// release
+	CGImageRelease (boardImage);
 	[fontName release];
 }
 
@@ -256,26 +301,17 @@
 
 	CGRect toolRect = [controller toolRect:nTool];
 	CGRect toolPartialRect = [controller toolPartialRect:nTool startingAt:0 endingAt:reserve];
-	if (rgb != NULL)
-		CGContextSetRGBFillColor (ctx, (CGFloat)rgb->r/255, (CGFloat)rgb->g/255, (CGFloat)rgb->b/255, 1);
-	else
-		CGContextSetRGBFillColor (ctx, 0, 0, 0, 1);
+	[self setFill:rgb withContext:ctx withFactor:1 withOpacity:1 asInverse:0];
 	CGContextFillRect(ctx, toolPartialRect);
 	CGSize textSize = [self measureText:name withFont:font withSpacing:TOOL_FONT_SPACING];
 	CGFloat
 	toolx = toolRect.origin.x + toolRect.size.width/2 - textSize.width/2,
 	tooly = toolRect.origin.y + toolRect.size.height/2 + textSize.height/2 + [font descender];
 	CGContextShowTextAtPoint (ctx, toolx, tooly, name, strlen(name));			
-	if (rgb)
-		CGContextSetRGBFillColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, TOOL_NAME_OPACITY);
-	else
-		CGContextSetRGBFillColor (ctx, 1, 1, 1, TOOL_NAME_OPACITY);
+	[self setFill:rgb withContext:ctx withFactor:1 withOpacity:TOOL_NAME_OPACITY asInverse:1];
 	CGContextShowTextAtPoint (ctx, toolx, tooly, name, strlen(name));			
 	if (selectFlag) {
-		if (rgb)
-			CGContextSetRGBStrokeColor (ctx, 1.-(CGFloat)rgb->r/255, 1.-(CGFloat)rgb->g/255, 1.-(CGFloat)rgb->b/255, TOOL_NAME_OPACITY);
-		else
-			CGContextSetRGBStrokeColor (ctx, 1, 1, 1, TOOL_NAME_OPACITY);
+		[self setStroke:rgb withContext:ctx withFactor:1 withOpacity:TOOL_NAME_OPACITY asInverse:1];
 		CGContextStrokeRect(ctx, toolRect);
 	}
 }
@@ -287,5 +323,34 @@
 	[str release];
 	return textSize;
 }
+
+- (void) setStroke:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+	if (inverseFlag) {
+		if (rgb)
+			CGContextSetRGBStrokeColor (ctx, 1.-fade*(CGFloat)rgb->r/255, 1.-fade*(CGFloat)rgb->g/255, 1.-fade*(CGFloat)rgb->b/255, opacity);
+		else
+			CGContextSetRGBStrokeColor (ctx, 1, 1, 1, opacity);
+	} else {
+		if (rgb)
+			CGContextSetRGBStrokeColor (ctx, fade*(CGFloat)rgb->r/255, fade*(CGFloat)rgb->g/255, fade*(CGFloat)rgb->b/255, opacity);
+		else
+			CGContextSetRGBStrokeColor (ctx, 0, 0, 0, opacity);
+	}
+}
+
+- (void) setFill:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+	if (inverseFlag) {
+		if (rgb)
+			CGContextSetRGBFillColor (ctx, 1.-fade*(CGFloat)rgb->r/255, 1.-fade*(CGFloat)rgb->g/255, 1.-fade*(CGFloat)rgb->b/255, opacity);
+		else
+			CGContextSetRGBFillColor (ctx, 1, 1, 1, opacity);
+	} else {
+		if (rgb)
+			CGContextSetRGBFillColor (ctx, fade*(CGFloat)rgb->r/255, fade*(CGFloat)rgb->g/255, fade*(CGFloat)rgb->b/255, opacity);
+		else
+			CGContextSetRGBFillColor (ctx, 0, 0, 0, opacity);
+	}
+}
+
 
 @end

@@ -22,6 +22,7 @@
 #define CONSOLE_HEIGHT  128
 #define TOOLBAR_WIDTH   64
 #define PIXELS_PER_CELL 4
+#define MAGNIFIED_PIXELS_PER_CELL 32
 
 // text
 #define GAME_FONT "Helvetica"
@@ -36,11 +37,14 @@
 #define EXAMINE_FONT_SIZE 20
 #define EXAMINE_FONT_SPACING 0
 #define EXAMINE_BACKGROUND_OPACITY .9
-#define EXAMINE_TEXT_DISPLACEMENT 32
+#define EXAMINE_TEXT_DISPLACEMENT 64
+#define EXAMINE_LABEL_BORDER 1
 
 // other visuals
 #define BOARD_BORDER_OPACITY .5
 #define EXAMINE_TOOL_NAME "Examine"
+#define EXAMINE_EMPTY_TEXT "nothing"
+#define EXAMINE_CIRCLE_RADIUS 20
 
 // Game data
 @interface pixelzooViewController : UIViewController {
@@ -70,11 +74,14 @@
 // The following methods relate to the layout of the UI
 // Some of them are called by View's drawRect method
 - (CGFloat)cellSize;
+- (CGFloat)bigCellSize;
 - (CGPoint)viewOrigin;
 - (CGRect)boardRect;
 - (CGRect)bigBoardRect;
 - (CGRect)toolboxRect;
 - (CGRect)consoleRect;
+- (CGPoint)consoleCentroid;
+- (CGRect)consoleBoardRect;
 - (CGRect)toolRect:(int)nTool;
 - (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction;
 

@@ -116,6 +116,11 @@
 	return PIXELS_PER_CELL;
 }
 
+// bigCellSize method - returns the size of a cell in the magnified console window.
+- (CGFloat) bigCellSize {
+	return MAGNIFIED_PIXELS_PER_CELL;
+}
+
 // boardRect method - returns the clipping rectangle of the board
 - (CGRect) boardRect {
 	CGFloat boardWidth = self.view.frame.size.width - TOOLBAR_WIDTH;
@@ -127,6 +132,25 @@
 - (CGRect) bigBoardRect {
 	CGFloat boardSize = self->game->board->size * [self cellSize];
 	return CGRectMake(-viewOrigin.x, -viewOrigin.y, boardSize, boardSize);
+}
+
+// consoleCentroid method - returns the center point of the console
+- (CGPoint)consoleCentroid {
+	CGRect cr = [self consoleRect];
+	return CGPointMake (cr.origin.x + cr.size.width / 2,
+						cr.origin.y + cr.size.height / 2);
+}
+
+// consoleBoardRect method - returns the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
+- (CGRect) consoleBoardRect {
+	CGFloat bigCellSize = [self bigCellSize];
+	CGFloat consoleBoardSize = self->game->board->size * bigCellSize;
+	CGPoint cmid = [self consoleCentroid];
+	// want origin + bigCellSize*examCoord = consoleCentroid
+	return CGRectMake (cmid.x - bigCellSize * (.5 + (double) examCoord.x),
+					   cmid.y - bigCellSize * (.5 + (double) examCoord.y),
+					   consoleBoardSize,
+					   consoleBoardSize);
 }
 
 // toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
@@ -224,17 +248,21 @@
 		UITouch *touch = [touches anyObject];   
 		CGPoint currentPoint = [touch locationInView:self.view];
 		
-		CGFloat cellSize = [self cellSize];
-		int x = (currentPoint.x + viewOrigin.x) / cellSize;
-		int y = (currentPoint.y + viewOrigin.y) / cellSize;
+		CGRect boardRect = [self boardRect];
 
-		if (game->selectedTool == NULL) {
-			examCoord.x = x;
-			examCoord.y = y;
-			
-		} else {
-			game->toolPos.x = x;
-			game->toolPos.y = y;
+		if (CGRectContainsPoint(boardRect, currentPoint)) {
+			CGFloat cellSize = [self cellSize];
+			int x = (currentPoint.x + viewOrigin.x) / cellSize;
+			int y = (currentPoint.y + viewOrigin.y) / cellSize;
+
+			if (game->selectedTool == NULL) {
+				examCoord.x = x;
+				examCoord.y = y;
+				
+			} else {
+				game->toolPos.x = x;
+				game->toolPos.y = y;
+			}
 		}
 	}
 }
