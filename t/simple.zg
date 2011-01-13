@@ -94,9 +94,55 @@ bri = 128;
 NeumannWalk(.1,.1,.01,.1);
 AcidBurn(.15);
 
+#define DirectedStep(DX,DY,DIR,STEP,OSTEP,DIE,ODIE)	\
+  {							\
+    <rate STEP>;					\
+    <overload OSTEP>;					\
+    loc orig(0,0);					\
+    loc next(DX,DY);					\
+    temp swap;						\
+    if orig.dir = DIR;					\
+    if next.type = empty;				\
+    do swap = next;					\
+    do next = orig <fail DIE> <overload ODIE>;		\
+    do orig = swap;					\
+  }							\
 
+#define DirectedTurn(DX,DY,DIR,DIRINC,RATE,SPONTANEOUS)	\
+  {							\
+    <rate RATE>;					\
+    loc orig(0,0);					\
+    loc next(DX,DY);					\
+    if orig.dir = DIR;					\
+    if next.type != empty <ignore =SPONTANEOUS/RATE>;	\
+    do orig.dir = orig.dir + DIRINC;			\
+  }							\
+
+#define DirectedTurns(DX,DY,DIR,TURN,REVERSE,SPONTANEOUS)		\
+  DirectedTurn(DX,DY,DIR,+1,TURN,SPONTANEOUS);				\
+  DirectedTurn(DX,DY,DIR,-1,TURN,SPONTANEOUS);				\
+  DirectedTurn(DX,DY,DIR,+2,REVERSE,SPONTANEOUS);			\
+
+// dir: 0=north, 1=east, 2=south, 3=west
+#define MooreDirectedWalk(STEP,OSTEP,DIE,ODIE,TURN,REVERSE,SPONTANEOUS)	\
+  DirectedStep(0,-1,0,STEP,OSTEP,DIE,ODIE);				\
+  DirectedStep(+1,0,1,STEP,OSTEP,DIE,ODIE);				\
+  DirectedStep(0,+1,2,STEP,OSTEP,DIE,ODIE);				\
+  DirectedStep(-1,0,3,STEP,OSTEP,DIE,ODIE);				\
+  DirectedTurns(0,-1,0,TURN,REVERSE,SPONTANEOUS);			\
+  DirectedTurns(+1,0,1,TURN,REVERSE,SPONTANEOUS);			\
+  DirectedTurns(0,+1,2,TURN,REVERSE,SPONTANEOUS);			\
+  DirectedTurns(-1,0,3,TURN,REVERSE,SPONTANEOUS);			\
+  
+#define NomadSpeed .01
+type nomad dir(2);
+hue = 32;
+sat = 255;
+bri = 255;
+MooreDirectedWalk(NomadSpeed,NomadSpeed,=NomadSpeed/20,=NomadSpeed/5,=NomadSpeed/5,=NomadSpeed/20,=NomadSpeed/100);
 
 init (64,64) cement;
 
 tool "Cement spray" (type cement) (reserve 1000) (size 4);
 tool "Acid spray" (type acid) (reserve 1000) (size 4);
+tool "Nomad spray" (type nomad) (reserve 1000) (size 4);

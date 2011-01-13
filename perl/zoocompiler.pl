@@ -211,12 +211,12 @@ while (@zg) {
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
 		    my ($rhsLoc, $rhsVar, $accumFlag);
 		    my $offset = 0;
-		    if ($rhs =~ /(.*)\+ ?(\d+)/) {   # something + numeric constant
+		    if ($rhs =~ /([^\+]*)\+ ?([\+\-]?\d+)/) {   # something + numeric constant
 			$offset = $2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
 			$accumFlag = 1;
 
-		    } elsif ($rhs =~ /(.*)\- ?(\d+)/) {   # something - numeric constant
+		    } elsif ($rhs =~ /([^\-]*)\- ?([\+\-]?\d+)/) {   # something - numeric constant
 			$offset = -$2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
 			$accumFlag = 1;
@@ -476,7 +476,7 @@ sub getMask {
     die "Undefined type" unless defined($type);
     die "Type '$type' unknown" unless defined $typeindex{$type};
     die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
-    my $mask = ((1 << ($pvbits{$type}->{$var} + 1)) - 1) << $pvoffset{$type}->{$var};
+    my $mask = ((1 << $pvbits{$type}->{$var}) - 1) << $pvoffset{$type}->{$var};
     return hexv($mask);
 }
 
@@ -499,8 +499,11 @@ sub parseTags {
     while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
 	my ($tag, $val) = ($1, $2);
 	die "Duplicate tag $tag\n" if exists $tagHash{$tag};
-	if ($val =~ /^=(.*)/) {
-	    $val = eval($1);
+	while ($val =~ /(.*)=+(.*)/) {
+	    my ($left, $expr) = ($1, $2);
+	    $val = eval($expr);
+	    warn "In tag $tag: expression $expr evaluates to $val" if $debug;
+	    $expr = $left . $val;
 	}
 	if ($isArray) {
 	    push @$tagRef, ($tag => $val);

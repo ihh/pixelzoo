@@ -94,6 +94,13 @@
 	gameStart (game);
 }
 
+-(void)stopTimers
+{
+	[redrawTimer invalidate];
+	[evolveTimer invalidate];
+}
+
+
 /* Board updates */
 - (void)callGameLoop
 {   
@@ -319,6 +326,7 @@
 
 
 - (void)dealloc {
+	[self stopTimers];
     [super dealloc];
 }
 

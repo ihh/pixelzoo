@@ -68,6 +68,7 @@
 @property(readonly) XYCoord examCoord;
 
 - (void)startTimers;
+- (void)stopTimers;
 - (void)triggerRedraw;
 - (void)callGameLoop;
 

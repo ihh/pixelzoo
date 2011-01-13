@@ -200,6 +200,11 @@
 		RGB *rgb = &game->board->palette.rgb[examColorIndex];
 		UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
 		char *text = particle ? particle->name : EXAMINE_EMPTY_TEXT;
+
+		char debugText[512];
+		sprintf (debugText, "%s %llx", text, examState);
+		text = debugText;
+		
 		CGSize textSize = [self measureText:text withFont:font withSpacing:EXAMINE_FONT_SPACING];
 		CGContextSelectFont (ctx,
 							 GAME_FONT,
