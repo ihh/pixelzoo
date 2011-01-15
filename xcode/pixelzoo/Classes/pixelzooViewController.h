@@ -26,7 +26,7 @@
 
 // text
 #define GAME_FONT "Helvetica"
-#define CONSOLE_FONT_SIZE 10
+#define CONSOLE_FONT_SIZE 5
 #define CONSOLE_FONT_SPACING 1
 #define CONSOLE_FONT_FADE 0.9
 #define BALLOON_FONT_SIZE 10
