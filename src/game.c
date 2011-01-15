@@ -113,10 +113,10 @@ void useTools (Game *game, double duration) {
 void makeEntrances (Game *game) {
   double entrancePeriod, nextEntranceTime;
   if (game->theEntrance.soFar < game->theEntrance.total) {
-    entrancePeriod = 1. / game->theEntrance.rate;
+    entrancePeriod = game->updatesPerSecond / game->theEntrance.rate;
     nextEntranceTime = (double) game->theEntrance.soFar * entrancePeriod;
     if (game->board->updatesPerCell >= nextEntranceTime
-	&& readBoardState(game->board,game->theEntrance.pos.x,game->theEntrance.pos.y) != game->theEntrance.state) {
+	&& readBoardState(game->board,game->theEntrance.pos.x,game->theEntrance.pos.y) == EmptyState) {
       writeBoardState (game->board,game->theEntrance.pos.x,game->theEntrance.pos.y,game->theEntrance.state);
       ++game->theEntrance.soFar;
     }

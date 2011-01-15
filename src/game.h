@@ -25,7 +25,7 @@ typedef struct EntrancePortal {
   XYCoord pos;
   State state;
   int total, soFar;  /* number of entryState's to place at entrancePos */
-  double rate;
+  double rate;  /* measured in entrances per second */
 } EntrancePortal;
 
 /* exit portal */

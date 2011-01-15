@@ -3,8 +3,108 @@
     <goal type="and">
       <lazy></lazy>
       <cached></cached>
+      <goal type="area">
+        <pos>
+          <x>10</x>
+          <y>10</y>
+        </pos>
+        <goal type="balloon">
+          <balloon>
+            <text>ENTRANCE</text>
+            <persist></persist>
+          </balloon>
+        </goal>
+      </goal>
+      <goal type="area">
+        <pos>
+          <x>30</x>
+          <y>30</y>
+        </pos>
+        <goal type="balloon">
+          <balloon>
+            <text>EXIT (closed)</text>
+            <persist></persist>
+          </balloon>
+        </goal>
+      </goal>
+      <goal type="print">
+        <text>Welcome to level 1!
+Guide 3 entering_nomads from the entrance to the exit.
+The exit will open when all 3 entering_nomads have entered.</text>
+      </goal>
+      <goal type="entered"/>
+      <goal type="area">
+        <pos>
+          <x>10</x>
+          <y>10</y>
+        </pos>
+        <goal type="balloon"/>
+      </goal>
+      <goal type="print">
+        <text>All entering_nomads have now entered.</text>
+      </goal>
       <goal type="setexit">
         <state>PortalCounting</state>
+      </goal>
+      <goal type="area">
+        <pos>
+          <x>30</x>
+          <y>30</y>
+        </pos>
+        <goal type="balloon"/>
+      </goal>
+      <goal type="area">
+        <pos>
+          <x>30</x>
+          <y>30</y>
+        </pos>
+        <goal type="balloon">
+          <balloon>
+            <text>EXIT (open)</text>
+            <persist></persist>
+          </balloon>
+        </goal>
+      </goal>
+      <goal type="print">
+        <text>The exit is now open.
+Guide 3 entering_nomads to the exit.</text>
+      </goal>
+      <goal type="exit">
+        <state>PortalCounting</state>
+        <count>
+          <min>1</min>
+        </count>
+      </goal>
+      <goal type="area">
+        <pos>
+          <x>30</x>
+          <y>30</y>
+        </pos>
+        <goal type="balloon"/>
+      </goal>
+      <goal type="area">
+        <pos>
+          <x>30</x>
+          <y>30</y>
+        </pos>
+        <goal type="balloon">
+          <balloon>
+            <text>UNLOCKED!</text>
+            <persist></persist>
+          </balloon>
+        </goal>
+      </goal>
+      <goal type="print">
+        <text>Exit unlocked! You could try the next level, if there was one.</text>
+      </goal>
+      <goal type="setexit">
+        <state>PortalUnlocked</state>
+      </goal>
+      <goal type="print">
+        <text>YOU WIN! Congratulations.</text>
+      </goal>
+      <goal type="setgame">
+        <state>GameWon</state>
       </goal>
     </goal>
     <tool>
@@ -30,19 +130,19 @@
     </tool>
     <rate>240</rate>
     <entrance>
-      <count>0</count>
-      <hexstate>0000000000000</hexstate>
-      <rate>1</rate>
-      <x>0</x>
-      <y>0</y>
+      <count>3</count>
+      <hexstate>5000000000000</hexstate>
+      <rate>.3</rate>
+      <x>10</x>
+      <y>10</y>
     </entrance>
     <exit>
-      <count>0</count>
+      <count>1</count>
       <loc>
-        <x>0</x>
-        <y>0</y>
+        <x>30</x>
+        <y>30</y>
       </loc>
-      <type>0</type>
+      <type>4</type>
     </exit>
     <board>
       <size>128</size>
@@ -2091,6 +2191,38 @@
               </src>
               <srcmask>3</srcmask>
               <rshift>0</rshift>
+              <hexinc>2</hexinc>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>entering_nomad</name>
+          <type>5</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>ff</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>4</hexinc>
+              <lshift>48</lshift>
+              <destmask>ffff000000000000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
               <hexinc>2</hexinc>
               <lshift>0</lshift>
               <destmask>3</destmask>

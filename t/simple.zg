@@ -143,6 +143,16 @@ MooreDirectedWalk(NomadSpeed,NomadSpeed,=NomadSpeed/20,=NomadSpeed/5,=NomadSpeed
 
 init (64,64) cement;
 
+entrance (10,10) (type entering_nomad) (count 3) (rate .3);
+type entering_nomad
+{
+  loc orig(0,0);
+  do orig.type = nomad;
+  do orig.dir = 2;
+}
+
+exit (30,30) (type nomad) (count 1);
+
 tool "Cement spray" (type cement) (reserve 1000) (size 4);
 tool "Acid spray" (type acid) (reserve 1000) (size 4);
 tool "Nomad spray" (type nomad) (reserve 1000) (size 4);

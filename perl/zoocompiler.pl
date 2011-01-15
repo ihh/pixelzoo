@@ -101,7 +101,7 @@ while (@zg) {
 	$entrancePort{'x'} = $1;
 	$entrancePort{'y'} = $2;
 	if (/\( ?type (\S+) ?\)/) { $entranceType = $1 }
-	if (/\( ?(count|rate) (\S+) ?\)/) { $entrancePort{$1} = $2 }
+	while (/\( ?(count|rate) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
 
     } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 	$exitPort{'loc'}->{'x'} = $1;
@@ -430,9 +430,108 @@ $exitPort{"type"} = getType($exitType);
 my @game = ("goal" => ['@type' => "and",
 		       "lazy" => "",
 		       "cached" => "",
-# more goals here...
+
+# place entrance and exit balloons
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "ENTRANCE",
+							   "persist" => '']]],
+
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'loc'},
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "EXIT (closed)",
+							   "persist" => '']]],
+
+# print hello message
+		       "goal" => ['@type' => "print",
+				  "text" => "Welcome to level 1!\n" .
+				  "Guide " . $entrancePort{'count'} . " ${entranceType}s from the entrance to the exit.\n" .
+				  "The exit will open when all " . $entrancePort{'count'} . " ${entranceType}s have entered."],
+
+
+# wait for all guests to enter
+		       "goal" => ['@type' => "entered"],
+
+# delete entrance balloon
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "balloon"]],
+
+# print status message
+		       "goal" => ['@type' => "print",
+				  "text" => "All ${entranceType}s have now entered."],
+
+
+# more goals here... (e.g., require the player to meet the minimum population level)
+
+
+# open the guest exit (currently the only exit)
 		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalCounting"]],
+				  "state" => "PortalCounting"],
+
+# delete exit balloon
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'loc'},
+				  "goal" => ['@type' => "balloon"]],
+
+# place "EXIT (open)" balloon at exit
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'loc'},
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "EXIT (open)",
+							   "persist" => '']]],
+
+# print status message
+		       "goal" => ['@type' => "print",
+				  "text" => "The exit is now open.\n" .
+				  "Guide " . $entrancePort{'count'} . " ${entranceType}s to the exit."],
+
+
+# more goals here (e.g. fend off challenges during the guest evacuation)
+
+
+# wait for player to reach the guest exit count
+		       "goal" => ['@type' => "exit",
+				  "state" => "PortalCounting",
+				  "count" => ["min" => $exitPort{"count"}]],
+
+# delete exit balloon
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'loc'},
+				  "goal" => ['@type' => "balloon"]],
+
+# place "UNLOCKED" balloon at exit
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'loc'},
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "UNLOCKED!",
+							   "persist" => '']]],
+
+# print "UNLOCKED" message
+		       "goal" => ['@type' => "print",
+				  "text" => "Exit unlocked! You could try the next level, if there was one."],
+
+# "unlock" the guest exit achievment
+		       "goal" => ['@type' => "setexit",
+				  "state" => "PortalUnlocked"],
+
+
+# more goals here... (e.g., steal the owner's HQ exit)
+
+
+# print win message
+		       "goal" => ['@type' => "print",
+				  "text" => "YOU WIN! Congratulations."],
+
+# set the game state to WIN!!!
+		       "goal" => ['@type' => "setgame",
+				  "state" => "GameWon"],
+
+# that's all, folks
+
+],
 	    @toolxml,
 	    "rate" => $boardRate,
 	    "entrance" => \%entrancePort,
