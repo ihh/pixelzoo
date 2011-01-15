@@ -94,7 +94,11 @@
 	
 	// draw border
 	CGContextSetRGBStrokeColor (ctx, 1, 1, 1, BOARD_BORDER_OPACITY);
-	CGContextStrokeRect(ctx, boardRect);
+	CGRect border = boardRect;
+	CGFloat maxDim = boardSize * cellSize;
+	border.size.width = MIN (maxDim, border.size.width);
+	border.size.height = MIN (maxDim, border.size.height);
+	CGContextStrokeRect(ctx, border);
 
 	CGContextRestoreGState (ctx);
 	

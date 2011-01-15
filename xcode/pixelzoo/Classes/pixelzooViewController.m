@@ -15,6 +15,7 @@
 @synthesize viewOrigin;
 @synthesize examCoord;
 @synthesize examining;
+@synthesize cellSize;
 
 /*
  // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -39,6 +40,9 @@
     [super viewDidLoad];
 	NSLog(@"viewDidLoad");
 	
+	// init cellSize
+	cellSize = PIXELS_PER_CELL;
+	
 	// Load the game XML
 	NSString *gameFilePath = [[NSBundle mainBundle] pathForResource:@GAME_XML_FILENAME ofType:@"xml"];  
 //	NSLog(@"gameFilePath=%@",gameFilePath);
@@ -55,31 +59,29 @@
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
 
-	// set viewOrigin and maxViewOrigin
+	// set viewOrigin
 	viewOrigin.x = viewOrigin.y = 0;
-	CGFloat cs = [self cellSize];
-	CGFloat boardSize = cs * self->game->board->size;
-	CGRect boardRect = [self boardRect];
-	maxViewOrigin.x = MAX (0, boardSize - boardRect.size.width);
-	maxViewOrigin.y = MAX (0, boardSize - boardRect.size.height);
 	
 	// tell view about its controller (hacky, this; suspect there'd be a less object-model-violating way if I understood nibs/etc better)
 	[(pixelzooView*) [self view] setController:self];   // HACK HACK HACK
 
 	// attach pan recognizer
-	UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
-    recognizer.minimumNumberOfTouches = 2;
-    [self.view addGestureRecognizer:recognizer];
-	[recognizer release];
+	UIPanGestureRecognizer *panner = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
+    panner.minimumNumberOfTouches = 2;
+    [self.view addGestureRecognizer:panner];
+	[panner release];
 
-	panning = 0;
-	examining = 0;
+	// attach pinch recognizer
+	UIPinchGestureRecognizer *zoomer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handleZoomFrom:)];
+    [self.view addGestureRecognizer:zoomer];
+	[zoomer release];
+
+	// clear gesture flags
+	panning = examining = zooming = 0;
 	
 	// start triggerRedraw & callGameLoop timers
 	[self startTimers];
 }
-
-
 
 /* Timers: board updates & rendering */
 -(void)startTimers
@@ -121,17 +123,12 @@
 }
 
 
-// cellSize method - returns the size of a cell.
-- (CGFloat) cellSize {
-	return PIXELS_PER_CELL;
-}
-
-// bigCellSize method - returns the size of a cell in the magnified console window.
-- (CGFloat) bigCellSize {
+// maxCellSize method - returns the size of a cell in the magnified console window.
+- (CGFloat) maxCellSize {
 	return MAGNIFIED_PIXELS_PER_CELL;
 }
 
-// boardRect method - returns the clipping rectangle of the board
+// boardRect metmaxCellSizehod - returns the clipping rectangle of the board
 - (CGRect) boardRect {
 	CGFloat boardWidth = self.view.frame.size.width - TOOLBAR_WIDTH;
 	CGFloat boardHeight = self.view.frame.size.height - CONSOLE_HEIGHT;
@@ -153,12 +150,12 @@
 
 // consoleBoardRect method - returns the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
 - (CGRect) consoleBoardRect {
-	CGFloat bigCellSize = [self bigCellSize];
-	CGFloat consoleBoardSize = self->game->board->size * bigCellSize;
+	CGFloat maxCellSize = [self maxCellSize];
+	CGFloat consoleBoardSize = self->game->board->size * maxCellSize;
 	CGPoint cmid = [self consoleCentroid];
-	// want origin + bigCellSize*examCoord = consoleCentroid
-	return CGRectMake (cmid.x - bigCellSize * (.5 + (double) examCoord.x),
-					   cmid.y - bigCellSize * (.5 + (double) examCoord.y),
+	// want origin + maxCellSize*examCoord = consoleCentroid
+	return CGRectMake (cmid.x - maxCellSize * (.5 + (double) examCoord.x),
+					   cmid.y - maxCellSize * (.5 + (double) examCoord.y),
 					   consoleBoardSize,
 					   consoleBoardSize);
 }
@@ -194,7 +191,7 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
 	// single-touch
-	if ([touches count] == 1 && !panning) {
+	if ([touches count] == 1 && !panning && !zooming) {
 		UITouch *touch = [touches anyObject];
 		
 		CGPoint currentPoint = [touch locationInView:self.view];
@@ -203,7 +200,6 @@
 		CGRect toolboxRect = [self toolboxRect];
 
 		if (CGRectContainsPoint(boardRect, currentPoint)) {
-			CGFloat cellSize = [self cellSize];
 			int x = (currentPoint.x + viewOrigin.x) / cellSize;
 			int y = (currentPoint.y + viewOrigin.y) / cellSize;
 			
@@ -254,16 +250,15 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
 	// single-touch
-	if ([touches count] == 1 && !panning) {
+	if ([touches count] == 1 && !panning && !zooming) {
 		UITouch *touch = [touches anyObject];   
 		CGPoint currentPoint = [touch locationInView:self.view];
 		
 		CGRect boardRect = [self boardRect];
 
 		if (CGRectContainsPoint(boardRect, currentPoint)) {
-			CGFloat cellSize = [self cellSize];
-			int x = (currentPoint.x + viewOrigin.x) / cellSize;
-			int y = (currentPoint.y + viewOrigin.y) / cellSize;
+			int x = (currentPoint.x + viewOrigin.x) / (double) cellSize;
+			int y = (currentPoint.y + viewOrigin.y) / (double) cellSize;
 
 			if (game->selectedTool == NULL) {
 				examCoord.x = x;
@@ -280,8 +275,7 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
 	game->toolActive = 0;
-	examining = 0;
-	panning = 0;
+	examining = panning = zooming = 0;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -295,8 +289,9 @@
 	if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
 		CGPoint trans = [recognizer translationInView:self.view];
 
-		viewOrigin.x = MAX (0, MIN (viewOrigin.x - trans.x, maxViewOrigin.x));
-		viewOrigin.y = MAX (0, MIN (viewOrigin.y - trans.y, maxViewOrigin.y));
+		CGPoint mvo = [self maxViewOrigin];
+		viewOrigin.x = MAX (0, MIN (viewOrigin.x - trans.x, mvo.x));
+		viewOrigin.y = MAX (0, MIN (viewOrigin.y - trans.y, mvo.y));
 		
 		trans.x = trans.y = 0;
 		[recognizer setTranslation:trans inView:self.view];
@@ -308,6 +303,54 @@
 	}
 
 }
+
+// zoom
+- (void)handleZoomFrom:(UIPinchGestureRecognizer *)recognizer {
+	
+	if (recognizer.state == UIGestureRecognizerStateBegan) {
+		cellSizeAtStartOfZoom = cellSize;
+		viewOriginAtStartOfZoom = viewOrigin;
+	}
+		
+	if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
+		CGFloat scale = MAX (0, [recognizer scale]);
+		
+		CGFloat mincs = [self minCellSize];
+		CGFloat maxcs = [self maxCellSize];
+		cellSize = MAX (mincs, MIN (maxcs, cellSizeAtStartOfZoom * scale));
+		
+		CGPoint mvo = [self maxViewOrigin];
+		viewOrigin.x = MAX (0, MIN (viewOriginAtStartOfZoom.x * scale, mvo.x));
+		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfZoom.y * scale, mvo.y));
+		
+		zooming = 1;
+		game->toolActive = 0;
+	} else {
+		zooming = 0;
+	}
+	
+}
+
+- (CGFloat) minCellSize {
+	CGRect boardRect = [self boardRect];
+	CGFloat maxDim = MAX (boardRect.size.width, boardRect.size.height);
+	double minSize = maxDim / (CGFloat) self->game->board->size;
+//	int minIntSize = ceil((double) minSize);
+//	int minIntSize = (int) minSize;
+	return MAX (1, minSize);
+}
+
+- (CGPoint) maxViewOrigin {
+	CGPoint mvo;
+	CGFloat cs = [self cellSize];
+	CGFloat boardSize = cs * self->game->board->size;
+	CGRect boardRect = [self boardRect];
+	mvo.x = MAX (0, boardSize - boardRect.size.width);
+	mvo.y = MAX (0, boardSize - boardRect.size.height);
+	return mvo;
+}	
+
+
 
 
 /* release, dealloc */

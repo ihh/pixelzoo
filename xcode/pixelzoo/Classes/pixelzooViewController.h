@@ -50,22 +50,25 @@
 @interface pixelzooViewController : UIViewController {
 	// PixelZoo game
 	Game *game;
-	CGPoint viewOrigin, maxViewOrigin;
+	CGPoint viewOrigin;
+	CGFloat cellSize;  // pixels per cell
 	
 	// timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 	
 	// UI
-	int panning;
-	int examining;
+	int panning, zooming, examining;
 	XYCoord examCoord;
+	CGFloat cellSizeAtStartOfZoom;  // used when zooming
+	CGPoint viewOriginAtStartOfZoom;  // used when zooming
 }
 
 @property(readonly) Game *game;
 @property(readonly) CGPoint viewOrigin;
 @property(readonly) int examining;
 @property(readonly) XYCoord examCoord;
+@property(readonly) CGFloat cellSize;
 
 - (void)startTimers;
 - (void)stopTimers;
@@ -75,8 +78,9 @@
 // The following methods relate to the layout of the UI
 // Some of them are called by View's drawRect method
 - (CGFloat)cellSize;
-- (CGFloat)bigCellSize;
-- (CGPoint)viewOrigin;
+- (CGFloat)maxCellSize;
+- (CGFloat)minCellSize;
+- (CGPoint)maxViewOrigin;
 - (CGRect)boardRect;
 - (CGRect)bigBoardRect;
 - (CGRect)toolboxRect;
