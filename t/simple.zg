@@ -223,7 +223,7 @@ AcidBurn(AcidBurnRate);
 #define NomadStrafe  (NomadSpeed/3)
 
 type NomadType dir(2);
-hue = 32;
+hue = 30 + dir * 2;
 sat = 255;
 bri = 255;
 MooreDirectedWalk(NomadType,NomadStep,NomadStep,NomadDie,NomadChoke,NomadTurn,NomadReverse,NomadTumble);

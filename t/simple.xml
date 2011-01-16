@@ -2019,10 +2019,15 @@ Guide 5 guests to the exit.</text>
           <name>nomad</name>
           <type>4</type>
           <color>
+            <hexmask>3</hexmask>
+            <rshift>0</rshift>
+            <hexmul>20000</hexmul>
+            <hexinc>1effff</hexinc>
+          </color>
+          <color>
             <hexmask>0</hexmask>
             <rshift>0</rshift>
             <hexmul>0</hexmul>
-            <hexinc>20ffff</hexinc>
           </color>
           <rule>
             <rate>0.01</rate>
