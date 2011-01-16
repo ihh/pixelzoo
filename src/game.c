@@ -23,6 +23,7 @@ Game* newGame() {
   game->lastGoalTestTime = 0;
 
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
+  game->toolOrder = newList (AbortCopyFunction, NullDestroyFunction, printTool);
   game->selectedTool = NULL;
   game->toolActive = 0;
 
@@ -50,12 +51,18 @@ void deleteGame (Game *game) {
     if (game->consoleText[n])
       StringDelete (game->consoleText[n]);
   deleteStringMap (game->toolByName);
+  deleteList (game->toolOrder);
   deleteCellWatcher (game->theExit.watcher);
   deleteCellWatcher (game->writeProtectWatcher);
   deleteList (game->trigger);
   if (game->goal)
     deleteGoal (game->goal);
   SafeFree (game);
+}
+
+void addToolToGame (Game *game, Tool *tool) {
+  (void) StringMapInsert (game->toolByName, tool->name, tool);
+  (void) ListInsertBefore (game->toolOrder, NULL, tool);
 }
 
 void gameStart (Game *game) {
@@ -118,12 +125,10 @@ void testGameGoal (Game *game, int forceTest) {
 }
 
 int numberOfToolsVisible (Game *game) {
-  Stack *toolStack;
-  StringMapNode *toolNode;
+  ListNode *toolNode;
   int nTools;
   nTools = 0;
-  toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
-  while ((toolNode = StackPop(toolStack)) != NULL) {
+  for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
     Tool *tool = toolNode->value;
     if (!tool->hidden)
       ++nTools;

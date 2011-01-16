@@ -47,6 +47,7 @@ typedef struct Game {
 
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
+  List *toolOrder;           /* this does not own Tool's, just specifies what order they should be displayed in */
   Tool *selectedTool;
   XYCoord toolPos, lastToolPos;
   int toolActive;
@@ -98,7 +99,8 @@ void testGameGoal (Game *game, int forceTest);   /* game->goal will only be test
 
 int numberOfToolsVisible (Game *game);
 
-/* Balloons */
+/* builders */
+void addToolToGame (Game *game, Tool *tool);
 
 /* Types of CellWatcher: ExitPortal, GoalTrigger and WriteProtect */
 State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, State state);

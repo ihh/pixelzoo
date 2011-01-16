@@ -247,10 +247,8 @@
 					game->selectedTool = NULL;
 				} else {
 					// Game tools
-					Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
-					StringMapNode *toolNode;
 					int foundTool = 0;
-					while ((toolNode = StackPop(toolStack)) != NULL) {
+					for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
 						Tool *tool = toolNode->value;
 						if (!tool->hidden) {
 							CGRect toolRect = [self toolRect:(nTool++)];
@@ -261,7 +259,6 @@
 							}
 						}
 					}
-					deleteStack (toolStack);
 					if (!foundTool) {
 						// reset level
 						if (touch.tapCount == 3) {

@@ -90,7 +90,7 @@ The exit will open when all 30 guests have entered.</text>
               </intensity>
             </brush>
             <spray>1</spray>
-            <hexstate>5000000000000</hexstate>
+            <hexstate>b000000000000</hexstate>
             <reserve>30</reserve>
             <recharge>0</recharge>
           </tool>
@@ -193,11 +193,43 @@ Guide 5 guests to the exit.</text>
       <reserve>1000</reserve>
       <recharge>100</recharge>
     </tool>
+    <tool>
+      <name>North sign</name>
+      <size>1</size>
+      <spray>100</spray>
+      <hexstate>7000000000000</hexstate>
+      <reserve>1</reserve>
+      <recharge>100</recharge>
+    </tool>
+    <tool>
+      <name>East sign</name>
+      <size>1</size>
+      <spray>100</spray>
+      <hexstate>8000000000000</hexstate>
+      <reserve>1</reserve>
+      <recharge>100</recharge>
+    </tool>
+    <tool>
+      <name>South sign</name>
+      <size>1</size>
+      <spray>100</spray>
+      <hexstate>9000000000000</hexstate>
+      <reserve>1</reserve>
+      <recharge>100</recharge>
+    </tool>
+    <tool>
+      <name>West sign</name>
+      <size>1</size>
+      <spray>100</spray>
+      <hexstate>a000000000000</hexstate>
+      <reserve>1</reserve>
+      <recharge>100</recharge>
+    </tool>
     <rate>240</rate>
     <entrance>
       <count>30</count>
       <height>1</height>
-      <hexstate>5000000000000</hexstate>
+      <hexstate>b000000000000</hexstate>
       <rate>1</rate>
       <width>10</width>
       <x>20</x>
@@ -3816,30 +3848,3797 @@ Guide 5 guests to the exit.</text>
           </rule>
         </particle>
         <particle>
-          <name>entering_nomad</name>
+          <name>signpost</name>
           <type>5</type>
+          <color>
+            <hexmask>3fc</hexmask>
+            <rshift>2</rshift>
+            <hexmul>100</hexmul>
+            <hexinc>6000c0</hexinc>
+          </color>
           <color>
             <hexmask>0</hexmask>
             <rshift>0</rshift>
             <hexmul>0</hexmul>
-            <hexinc>ff</hexinc>
           </color>
           <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>-5</x>
+                <y>-5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
             <exec>
-              <srcmask>0</srcmask>
-              <hexinc>4</hexinc>
-              <lshift>48</lshift>
-              <destmask>ffff000000000000</destmask>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>-5</x>
+                <y>-5</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>-5</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>-5</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>-5</x>
+                <y>5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>-5</x>
+                <y>5</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
               <dest>
                 <x>0</x>
+                <y>-5</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>5</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>5</x>
+                <y>-5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>5</x>
+                <y>-5</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>5</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>5</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.06</rate>
+            <test op="=">
+              <pos>
+                <x>5</x>
+                <y>5</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>5</x>
+                <y>5</y>
+              </dest>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>signpost_builder</name>
+          <type>6</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>60ff20</hexinc>
+          </color>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fc</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fc</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>20</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fc</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>100</hexval>
+            </test>
+            <test op="&lt;=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>300</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fc</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>400</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fc</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
                 <y>0</y>
               </dest>
             </exec>
             <exec>
               <srcmask>0</srcmask>
-              <hexinc>2</hexinc>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
               <lshift>0</lshift>
-              <destmask>3</destmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fd</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fd</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>20</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fd</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>100</hexval>
+            </test>
+            <test op="&lt;=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>300</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fd</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>400</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fd</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fe</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fe</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>20</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fe</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>100</hexval>
+            </test>
+            <test op="&lt;=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>300</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fe</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>400</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003fe</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003ff</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
+              <hexinc>1</hexinc>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003ff</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>20</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003ff</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>100</hexval>
+            </test>
+            <test op="&lt;=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>300</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003ff</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>30</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>400</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000003ff</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>40</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>200</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>f0</srcmask>
+              <rshift>4</rshift>
+              <hexinc>1</hexinc>
+              <lshift>4</lshift>
+              <destmask>f0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff0000000003ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>5000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f0</mask>
+              <hexval>50</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.2</rate>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f00</mask>
+              <hexval>500</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -3848,8 +7647,118 @@ Guide 5 guests to the exit.</text>
           </rule>
         </particle>
         <particle>
+          <name>north_signpost_builder</name>
+          <type>7</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>60ff80</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff00000000000f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>6000000000000</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>east_signpost_builder</name>
+          <type>8</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>60ff80</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff00000000000f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>6000000000001</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>south_signpost_builder</name>
+          <type>9</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>60ff80</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff00000000000f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>6000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>west_signpost_builder</name>
+          <type>10</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>60ff80</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff00000000000f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>6000000000003</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>entering_nomad</name>
+          <type>11</type>
+          <color>
+            <hexmask>0</hexmask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>ff</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff000000000003</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>4000000000002</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
           <name>border</name>
-          <type>6</type>
+          <type>12</type>
           <color>
             <hexmask>0</hexmask>
             <rshift>0</rshift>
@@ -4406,2697 +8315,2697 @@ Guide 5 guests to the exit.</text>
       <init>
         <x>10</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>11</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>12</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>13</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>14</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>15</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>16</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>17</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>18</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>19</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>20</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>21</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>22</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>23</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>24</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>25</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>26</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>27</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>28</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>29</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>30</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>31</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>32</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>33</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>34</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>35</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>36</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>37</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>38</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>39</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>40</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>1</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>2</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>3</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>4</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>5</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>6</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>7</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>8</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>9</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>10</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>11</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>12</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>13</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>14</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>15</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>16</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>17</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>18</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>19</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>20</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>21</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>22</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>23</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>24</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>25</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>26</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>27</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>28</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>29</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>30</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>31</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>32</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>33</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>34</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>35</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>36</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>37</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>38</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>39</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>40</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>41</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>42</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>43</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>44</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>45</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>46</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>47</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>48</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>49</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>50</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>51</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>52</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>53</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>54</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>55</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>56</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>57</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>58</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>59</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>60</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>61</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>62</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>63</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>64</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>65</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>66</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>67</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>68</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>69</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>70</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>71</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>72</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>73</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>74</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>75</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>76</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>77</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>78</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>79</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>80</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>81</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>82</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>83</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>84</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>85</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>86</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>87</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>88</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>89</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>90</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>91</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>92</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>93</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>94</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>95</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>96</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>97</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>98</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>99</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>100</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>101</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>102</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>103</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>104</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>105</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>106</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>107</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>108</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>109</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>110</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>111</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>112</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>113</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>114</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>115</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>116</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>117</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>118</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>119</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>120</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>121</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>122</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>123</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>124</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>125</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>126</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>0</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>1</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>2</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>3</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>4</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>5</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>6</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>7</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>8</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>9</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>10</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>11</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>12</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>13</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>14</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>15</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>16</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>17</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>18</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>19</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>20</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>21</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>22</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>23</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>24</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>25</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>26</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>27</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>28</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>29</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>30</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>31</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>32</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>33</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>34</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>35</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>36</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>37</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>38</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>39</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>40</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>41</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>42</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>43</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>44</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>45</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>46</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>47</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>48</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>49</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>50</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>51</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>52</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>53</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>54</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>55</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>56</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>57</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>58</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>59</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>60</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>61</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>62</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>63</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>64</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>65</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>66</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>67</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>68</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>69</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>70</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>71</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>72</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>73</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>74</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>75</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>76</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>77</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>78</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>79</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>80</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>81</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>82</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>83</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>84</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>85</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>86</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>87</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>88</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>89</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>90</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>91</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>92</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>93</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>94</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>95</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>96</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>97</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>98</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>99</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>100</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>101</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>102</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>103</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>104</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>105</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>106</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>107</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>108</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>109</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>110</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>111</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>112</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>113</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>114</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>115</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>116</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>117</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>118</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>119</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>120</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>121</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>122</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>123</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>124</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>125</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>126</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>127</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>1</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>2</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>3</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>4</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>5</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>6</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>7</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>8</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>9</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>10</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>11</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>12</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>13</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>14</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>15</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>16</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>17</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>18</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>19</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>20</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>21</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>22</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>23</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>24</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>25</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>26</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>27</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>28</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>29</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>30</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>31</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>32</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>33</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>34</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>35</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>36</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>37</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>38</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>39</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>41</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>42</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>43</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>44</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>45</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>46</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>47</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>48</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>49</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>50</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>51</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>52</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>53</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>54</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>55</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>56</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>57</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>58</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>59</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>60</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>61</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>62</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>63</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>64</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>65</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>66</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>67</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>68</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>69</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>70</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>71</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>72</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>73</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>74</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>75</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>76</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>77</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>78</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>79</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>80</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>81</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>82</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>83</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>84</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>85</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>86</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>87</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>88</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>89</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>90</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>91</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>92</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>93</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>94</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>95</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>96</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>97</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>98</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>99</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>100</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>101</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>102</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>103</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>104</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>105</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>106</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>107</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>108</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>109</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>110</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>111</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>112</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>113</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>114</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>115</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>116</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>117</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>118</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>119</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>120</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>121</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>122</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>123</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>124</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>125</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>0</x>
         <y>126</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>1</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>2</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>3</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>4</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>5</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>6</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>7</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>8</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>9</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>10</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>11</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>12</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>13</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>14</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>15</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>16</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>17</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>18</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>19</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>20</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>21</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>22</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>23</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>24</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>25</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>26</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>27</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>28</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>29</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>30</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>31</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>32</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>33</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>34</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>35</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>36</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>37</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>38</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>39</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>40</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>41</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>42</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>43</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>44</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>45</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>46</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>47</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>48</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>49</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>50</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>51</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>52</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>53</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>54</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>55</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>56</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>57</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>58</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>59</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>60</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>61</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>62</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>63</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>64</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>65</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>66</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>67</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>68</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>69</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>70</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>71</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>72</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>73</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>74</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>75</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>76</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>77</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>78</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>79</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>80</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>81</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>82</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>83</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>84</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>85</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>86</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>87</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>88</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>89</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>90</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>91</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>92</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>93</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>94</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>95</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>96</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>97</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>98</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>99</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>100</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>101</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>102</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>103</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>104</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>105</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>106</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>107</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>108</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>109</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>110</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>111</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>112</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>113</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>114</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>115</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>116</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>117</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>118</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>119</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>120</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>121</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>122</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>123</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>124</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>125</y>
-        <type>6</type>
+        <type>12</type>
       </init>
       <init>
         <x>127</x>
         <y>126</y>
-        <type>6</type>
+        <type>12</type>
       </init>
     </board>
   </game>

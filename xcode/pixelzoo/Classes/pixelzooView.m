@@ -105,9 +105,7 @@
 	// redraw tools
 	int nTool = 0;
 	[self renderTool:(nTool++) withContext:ctx withColor:NULL withReserve:1 withName:EXAMINE_TOOL_NAME asSelected:(game->selectedTool == NULL)];
-	Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
-	StringMapNode *toolNode;
-	while ((toolNode = StackPop(toolStack)) != NULL) {
+	for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
 		Tool *tool = toolNode->value;
 		if (!tool->hidden) {
 			State toolState = tool->defaultBrushState;
@@ -116,7 +114,6 @@
 			[self renderTool:(nTool++) withContext:ctx withColor:rgb withReserve:(tool->reserve / tool->maxReserve) withName:tool->name asSelected:(tool == game->selectedTool)];
 		}
 	}
-	deleteStack (toolStack);
 	[self renderTool:(nTool++) withContext:ctx withColor:NULL withReserve:1 withName:RESET_TOOL_NAME asSelected:0];
 
 	// redraw console

@@ -48,7 +48,7 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   for (node = gameNode->children; node; node = node->next)
   if (MATCHES(node,TOOL)) {
     selectedTool = tool = newToolFromXmlNode (node);
-	(void) StringMapInsert (game->toolByName, tool->name, tool);
+    addToolToGame (game, tool);
   }
 
   for (node = gameNode->children; node; node = node->next)

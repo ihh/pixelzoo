@@ -221,7 +221,7 @@ while (@zg) {
 		    $loc{$locid} = [-128,$temps++];
 		    warn "temp=$locid" if $debug;
 
-		} elsif (/^if ([A-Za-z_\d\. ]+) ?(=|\!=|>|>=|<|<=) ?([^ \(]+) ?(.*)$/) {
+		} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
 		    # test
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
 # commented out because it's unnecessary: xmlboard parser should catch this
@@ -423,6 +423,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 	}
 
 	# operations
+	my %assign;
 	for my $op (@{$op{$type}->[$nRule]}) {
 	    my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
 
@@ -432,6 +433,33 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 		if ($dvar eq "*") {
 		    $offset = $offset << 48;
 		}
+	    }
+
+	    # consolidate repeated writes of a constant to the same location
+	    if (!$accumFlag) {
+		if (exists $assign{"$dx $dy"}) {
+		    my $ruleRef = $rule[$assign{"$dx $dy"}];
+		    my %prevExec = @$ruleRef;
+		    my $prevDestmask = $prevExec{"destmask"};
+		    my $thisDestmask = getMask($dtype,$dvar);
+		    if (defined($prevDestmask) && defined($thisDestmask)) {
+			if ((decv($thisDestmask) & decv($prevDestmask)) == 0) {
+			    my $prevLeftShift = $prevExec{"lshift"};
+			    $prevLeftShift = 0 unless defined $prevLeftShift;
+			    my $prevOffset = (exists($prevExec{"hexinc"}) ? decv($prevExec{"hexinc"}) : 0) << $prevLeftShift;
+			    my $thisLeftShift = getShift($dtype,$dvar);
+			    $prevExec{"hexinc"} = hexv ($prevOffset | ($offset << $thisLeftShift));
+			    $prevExec{"lshift"} = 0;
+			    $prevExec{"destmask"} = hexv (decv($prevDestmask) | decv($thisDestmask));
+			    @$ruleRef = %prevExec;
+			    warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
+			    next;
+			} else {
+			    warn "Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap\n";
+			}
+		    }
+		}
+		$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec". very hacky
 	    }
 
 	    # build the exec hash
@@ -445,7 +473,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 		     defined($dx) && length("$dx$dy") ? ("dest" => [ "x" => $dx, "y" => $dy ]) : ());
 
 	    # store
-	    push @rule, "exec" => \@x;
+	    push @rule, "exec" => \@x;  # %assign requires that the second element is the arrayref containing the rule op... yuck
 	}
 
 	# save rule
@@ -746,6 +774,15 @@ sub hexv {
     my ($val) = @_;
     my $hex = sprintf ("%x", $val);
     return sprintf ("%x", $val);
+}
+
+sub decv {
+    my ($val) = @_;
+    if (length($val) > 8) {
+	# this is pretty disgusting, should really be using pack/unpack or Bit::Vector
+	return hex(substr($val,length($val)-8,8)) | (hex(substr($val,0,length($val)-8)) << 32);
+    }
+    return hex ($val);
 }
 
 sub newElt {
