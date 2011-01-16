@@ -314,12 +314,16 @@
 	CGFloat
 	toolx = toolRect.origin.x + toolRect.size.width/2 - textSize.width/2,
 	tooly = toolRect.origin.y + toolRect.size.height/2 + textSize.height/2 + [font descender];
-	CGContextShowTextAtPoint (ctx, toolx, tooly, name, strlen(name));			
 	[self setFill:rgb withContext:ctx withFactor:1 withOpacity:TOOL_NAME_OPACITY asInverse:1];
 	CGContextShowTextAtPoint (ctx, toolx, tooly, name, strlen(name));			
 	if (selectFlag) {
 		[self setStroke:rgb withContext:ctx withFactor:1 withOpacity:TOOL_NAME_OPACITY asInverse:1];
-		CGContextStrokeRect(ctx, toolRect);
+		int pulse = redraws % MAX_TOOL_SELECT_STROKE;
+		toolRect.origin.x += pulse/2;
+		toolRect.origin.y += pulse/2;
+		toolRect.size.width -= pulse;
+		toolRect.size.height -= pulse;
+		CGContextStrokeRectWithWidth(ctx, toolRect, pulse);
 	}
 }
 
@@ -331,31 +335,38 @@
 	return textSize;
 }
 
+- (CGFloat) myInverse:(CGFloat)x {
+	if (x > .4 & x < .6) return x < .5 ? 1 : 0; 
+	return 1-x;
+}
+
 - (void) setStroke:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+	CGFloat r = 0, g = 0, b = 0;
+	if (rgb) {
+		r = fade*(CGFloat)rgb->r/255;
+		g = fade*(CGFloat)rgb->g/255;
+		b = fade*(CGFloat)rgb->b/255;
+	}
+	CGFloat invr = [self myInverse:r], invg = [self myInverse:g], invb = [self myInverse:b];
 	if (inverseFlag) {
-		if (rgb)
-			CGContextSetRGBStrokeColor (ctx, 1.-fade*(CGFloat)rgb->r/255, 1.-fade*(CGFloat)rgb->g/255, 1.-fade*(CGFloat)rgb->b/255, opacity);
-		else
-			CGContextSetRGBStrokeColor (ctx, 1, 1, 1, opacity);
+		CGContextSetRGBStrokeColor (ctx, invr, invg, invb, opacity);
 	} else {
-		if (rgb)
-			CGContextSetRGBStrokeColor (ctx, fade*(CGFloat)rgb->r/255, fade*(CGFloat)rgb->g/255, fade*(CGFloat)rgb->b/255, opacity);
-		else
-			CGContextSetRGBStrokeColor (ctx, 0, 0, 0, opacity);
+		CGContextSetRGBStrokeColor (ctx, r, g, b, opacity);
 	}
 }
 
 - (void) setFill:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+	CGFloat r = 0, g = 0, b = 0;
+	if (rgb) {
+		r = fade*(CGFloat)rgb->r/255;
+		g = fade*(CGFloat)rgb->g/255;
+		b = fade*(CGFloat)rgb->b/255;
+	}
+	CGFloat invr = [self myInverse:r], invg = [self myInverse:g], invb = [self myInverse:b];
 	if (inverseFlag) {
-		if (rgb)
-			CGContextSetRGBFillColor (ctx, 1.-fade*(CGFloat)rgb->r/255, 1.-fade*(CGFloat)rgb->g/255, 1.-fade*(CGFloat)rgb->b/255, opacity);
-		else
-			CGContextSetRGBFillColor (ctx, 1, 1, 1, opacity);
+		CGContextSetRGBFillColor (ctx, invr, invg, invb, opacity);
 	} else {
-		if (rgb)
-			CGContextSetRGBFillColor (ctx, fade*(CGFloat)rgb->r/255, fade*(CGFloat)rgb->g/255, fade*(CGFloat)rgb->b/255, opacity);
-		else
-			CGContextSetRGBFillColor (ctx, 0, 0, 0, opacity);
+		CGContextSetRGBFillColor (ctx, r, g, b, opacity);
 	}
 }
 
