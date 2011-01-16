@@ -35,17 +35,10 @@
  }
  */
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	NSLog(@"viewDidLoad");
-	
-	// init cellSize
-	cellSize = PIXELS_PER_CELL;
-	
+- (void)loadGame {
 	// Load the game XML
 	NSString *gameFilePath = [[NSBundle mainBundle] pathForResource:@GAME_XML_FILENAME ofType:@"xml"];  
-//	NSLog(@"gameFilePath=%@",gameFilePath);
+	//	NSLog(@"gameFilePath=%@",gameFilePath);
 	NSData *gameXMLData = [NSData dataWithContentsOfFile:gameFilePath];  
 	if (gameXMLData) {  
 		// initialize the game  
@@ -55,10 +48,34 @@
 	} else {
 		NSLog(@"Couldn't find game XML file");
 	}
-
+	
 	if (game == NULL)
 		NSLog(@"Couldn't get Game");
+	
+}
 
+-(void)deleteGame {
+	if (game)
+		deleteGame(game);
+	game = NULL;
+}
+
+-(void)reloadGame {
+	[self deleteGame];
+	[self loadGame];
+}
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	NSLog(@"viewDidLoad");
+	
+	// load game
+	[self loadGame];
+	
+	// init cellSize
+	cellSize = INITIAL_PIXELS_PER_CELL;
+	
 	// set viewOrigin
 	viewOrigin.x = viewOrigin.y = 0;
 	
@@ -123,12 +140,7 @@
 }
 
 
-// maxCellSize method - returns the size of a cell in the magnified console window.
-- (CGFloat) maxCellSize {
-	return MAGNIFIED_PIXELS_PER_CELL;
-}
-
-// boardRect metmaxCellSizehod - returns the clipping rectangle of the board
+// boardRect method - returns the clipping rectangle of the board
 - (CGRect) boardRect {
 	CGFloat boardWidth = self.view.frame.size.width - TOOLBAR_WIDTH;
 	CGFloat boardHeight = self.view.frame.size.height - CONSOLE_HEIGHT;
@@ -150,19 +162,24 @@
 
 // consoleBoardRect method - returns the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
 - (CGRect) consoleBoardRect {
-	CGFloat maxCellSize = [self maxCellSize];
-	CGFloat consoleBoardSize = self->game->board->size * maxCellSize;
+	CGFloat magCellSize = [self magCellSize];
+	CGFloat consoleBoardSize = self->game->board->size * magCellSize;
 	CGPoint cmid = [self consoleCentroid];
-	// want origin + maxCellSize*examCoord = consoleCentroid
-	return CGRectMake (cmid.x - maxCellSize * (.5 + (double) examCoord.x),
-					   cmid.y - maxCellSize * (.5 + (double) examCoord.y),
+	// want origin + magCellSize*examCoord = consoleCentroid
+	return CGRectMake (cmid.x - magCellSize * (.5 + (double) examCoord.x),
+					   cmid.y - magCellSize * (.5 + (double) examCoord.y),
 					   consoleBoardSize,
 					   consoleBoardSize);
 }
 
+// magCellSize method - returns the size of a cell in the magnified console window.
+- (CGFloat) magCellSize {
+	return MAGNIFIED_PIXELS_PER_CELL;
+}
+
 // toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
 - (CGRect) toolboxRect {
-	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (numberOfToolsVisible(game) + 1));
+	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (numberOfToolsVisible(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 }
 
 // consoleRect method - returns the drawing/clipping rectangle of text console
@@ -182,7 +199,7 @@
 	
 	CGFloat tw = TOOLBAR_WIDTH;
 	CGFloat tx = width - tw; 
-	CGFloat th = MIN (tw, height / (numberOfToolsVisible(game) + 1));
+	CGFloat th = MIN (tw, height / (numberOfToolsVisible(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 	
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);	
 }
@@ -220,27 +237,42 @@
 				game->toolActive = 1;
 			}
 			
-		} else {
+		} else if (CGRectContainsPoint(toolboxRect, currentPoint)) {
 			game->toolActive = 0;
 			if (CGRectContainsPoint (toolboxRect, currentPoint)) {
 				int nTool = 0;
 				CGRect moveToolRect = [self toolRect:(nTool++)];
+				// examine
 				if (CGRectContainsPoint(moveToolRect, currentPoint)) {
 					game->selectedTool = NULL;
 				} else {
+					// Game tools
 					Stack *toolStack = RBTreeEnumerate (game->toolByName, NULL, NULL);
 					StringMapNode *toolNode;
+					int foundTool = 0;
 					while ((toolNode = StackPop(toolStack)) != NULL) {
 						Tool *tool = toolNode->value;
 						if (!tool->hidden) {
 							CGRect toolRect = [self toolRect:(nTool++)];
 							if (CGRectContainsPoint(toolRect, currentPoint)) {
 								game->selectedTool = tool;
+								foundTool = 1;
 								break;
 							}
 						}
 					}
 					deleteStack (toolStack);
+					if (!foundTool) {
+						// reset level
+						if (touch.tapCount == 3) {
+							printToGameConsole(game, "Resetting level", PaletteWhite, 1);
+							[self stopTimers];
+							[self reloadGame];
+							[self startTimers];
+						} else {
+							printToGameConsole(game, "Tap three times to restart", PaletteWhite, 1);
+						}
+					}
 				}
 			}
 		}
@@ -333,11 +365,17 @@
 
 - (CGFloat) minCellSize {
 	CGRect boardRect = [self boardRect];
-	CGFloat maxDim = MAX (boardRect.size.width, boardRect.size.height);
-	double minSize = maxDim / (CGFloat) self->game->board->size;
+	CGFloat minDim = MIN (boardRect.size.width, boardRect.size.height);
+	double minSize = minDim / (CGFloat) self->game->board->size;
+//	CGFloat maxDim = MAX (boardRect.size.width, boardRect.size.height);
+//	double minSize = maxDim / (CGFloat) self->game->board->size;
 //	int minIntSize = ceil((double) minSize);
 //	int minIntSize = (int) minSize;
-	return MAX (1, minSize);
+	return MAX (MIN_PIXELS_PER_CELL, minSize);
+}
+
+- (CGFloat) maxCellSize {
+	return MAX_PIXELS_PER_CELL;
 }
 
 - (CGPoint) maxViewOrigin {
@@ -370,6 +408,7 @@
 
 - (void)dealloc {
 	[self stopTimers];
+	[self deleteGame];
     [super dealloc];
 }
 

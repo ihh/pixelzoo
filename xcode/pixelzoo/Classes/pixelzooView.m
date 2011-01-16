@@ -117,6 +117,7 @@
 		}
 	}
 	deleteStack (toolStack);
+	[self renderTool:(nTool++) withContext:ctx withColor:NULL withReserve:1 withName:RESET_TOOL_NAME asSelected:0];
 
 	// redraw console
 	CGContextSaveGState (ctx);
@@ -164,7 +165,7 @@
 
 		// compute font size
 		CGFloat
-			charsize = b->size * BALLOON_FONT_SIZE,
+		charsize = b->size * BALLOON_FONT_SIZE * cellSize / INITIAL_PIXELS_PER_CELL,
 			charspacing = b->z;
 
 		// measure text
