@@ -212,15 +212,15 @@ AcidBurn(AcidBurnRate);
   StrafeDir(-1,0,3,0,+1,(RATE/8));			\
 
 #define NomadType    nomad
-#define NomadSpeed   .04
-#define NomadStep    (NomadSpeed/4)
-#define NomadDie     (NomadSpeed/20)
-#define NomadChoke   (NomadSpeed/5)
-#define NomadTurn    (NomadSpeed/3)
-#define NomadReverse (NomadSpeed/6)
-#define NomadTumble  (NomadSpeed/20)
-#define NomadFlock   (NomadSpeed)
-#define NomadStrafe  (NomadSpeed/3)
+#define NomadSpeed   .06
+#define NomadStep    (NomadSpeed/3)
+#define NomadDie     (NomadSpeed/60)
+#define NomadChoke   (NomadSpeed/15)
+#define NomadTurn    (NomadSpeed/9)
+#define NomadReverse (NomadSpeed/18)
+#define NomadTumble  (NomadSpeed/60)
+#define NomadFlock   (NomadSpeed/3)
+#define NomadStrafe  (NomadSpeed/9)
 
 type NomadType dir(2);
 hue = 30 + dir * 2;
