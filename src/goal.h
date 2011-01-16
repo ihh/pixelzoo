@@ -2,6 +2,7 @@
 #define GOAL_INCLUDED
 
 #include "board.h"
+#include "balloon.h"
 #include "tool.h"
 #include "xymap.h"
 #include "statemap.h"
@@ -34,6 +35,7 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 
 		TrueGoal,        /* always met */
 		FalseGoal,       /* never met */
+		MaybeGoal,       /* met with probability dblData[0] */
 
 		CheckToolGoal,               /* dblData[0] <= ((Tool*)context)->reserve <= dblData[1] */
 		CheckPortalGoal,             /* ((ExitPortal*)context)->portalState == intData[0] && intData[1] <= ((ExitPortal*)context)->soFar <= intData[2] */
@@ -60,12 +62,14 @@ typedef struct Goal {
 
 /* accessors */
 int testGoalMet (Goal *goal, void *game);
+int testGoalAtPos (Goal *goal, void *game, int x, int y);
 XYSet* getGoalArea (Goal *goal);  /* returns parent area; NULL means the whole board. If non-NULL, caller must call deleteXYSet() to dealloc */
 
 /* Constructors */
 /* All parameters (except where noted) become the responsibility of ("owned" by) the Goal & will be deleted by Goal's destructor */
 Goal *newTrueGoal();
 Goal *newFalseGoal();
+Goal *newMaybeGoal (double prob);
 Goal *newAreaGoal (XYSet *area, Goal *subGoal);
 Goal *newEnclosuresGoal (State wallMask,
 			 StateSet *wallSet,

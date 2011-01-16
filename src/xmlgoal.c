@@ -4,6 +4,10 @@
 #include "xmlutil.h"
 #include "xmlgame.h"
 
+/* private builder method prototypes */
+Balloon* newBalloonFromXmlNode (xmlNode* node);
+
+/* method defs */
 Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   Goal *goal, *subGoal[2];
   const char *goalTypeAttr, *enumText;
@@ -72,6 +76,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
       if (MATCHES (node, GOAL_GPARAM)) {
 	if (n == 2) {
 	  subGoal[0] = newAndGoal (subGoal[0], subGoal[1], lazy);
+	  setSubgoalParents (subGoal[0]);   /* we must do this here since setSubgoalParents is not recursive, so these subgoals we've shunted down a level will otherwise not get a call */
 	  --n;
 	}
 	subGoal[n] = newGoalFromXmlNode (node, game);
@@ -90,6 +95,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
       if (MATCHES (node, GOAL_GPARAM)) {
 	if (n == 2) {
 	  subGoal[0] = newOrGoal (subGoal[0], subGoal[1], lazy);
+	  setSubgoalParents (subGoal[0]);   /* we must do this here since setSubgoalParents is not recursive, so these subgoals we've shunted down a level will otherwise not get a call */
 	  --n;
 	}
 	subGoal[n] = newGoalFromXmlNode (node, game);
@@ -173,7 +179,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     goal = newPrintMessagePseudoGoal ((const char*) CHILDSTRING (goalNode, TEXT_GPARAM));
 
   } else if (ATTRMATCHES (goalTypeAttr, BALLOON_GOAL)) {
-    balloonNode = CHILD (goalNode, BALLOON);
+    balloonNode = CHILD (goalNode, BALLOON_GPARAM);
     goal = newPlaceBalloonPseudoGoal (balloonNode ? newBalloonFromXmlNode (balloonNode) : NULL);
 
   } else if (ATTRMATCHES (goalTypeAttr, TRUE_GOAL)) {
@@ -181,6 +187,9 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 
   } else if (ATTRMATCHES (goalTypeAttr, FALSE_GOAL)) {
     goal = newFalseGoal();
+
+  } else if (ATTRMATCHES (goalTypeAttr, MAYBE_GOAL)) {
+    goal = newMaybeGoal (CHILDFLOAT (goalNode, PROB_GPARAM));
 
   } else {
     Abort ("Unknown goal type");
@@ -190,4 +199,25 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     setSubgoalParents (goal);
 
   return goal;
+}
+
+Balloon* newBalloonFromXmlNode (xmlNode* balloonNode) {
+  xmlNode *locNode;
+  HSB24 color;
+  Balloon *balloon;
+  locNode = CHILD (balloonNode, POS);
+  color = OPTCHILDINT (balloonNode, COLOR, OPTCHILDHEX (balloonNode, HEXCOLOR, HSB24White));
+  balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
+			     locNode ? OPTCHILDINT(locNode,X,0) : 0,
+			     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
+			     ConvertHsb24ToPaletteIndex (color),
+			     OPTCHILDFLOAT (balloonNode, SIZE, 1.),
+			     OPTCHILDFLOAT (balloonNode, TTL, DefaultBalloonTTL),
+			     OPTCHILDFLOAT (balloonNode, RISE, DefaultBalloonRise),
+			     OPTCHILDFLOAT (balloonNode, ZOOM, DefaultBalloonZoom),
+			     OPTCHILDFLOAT (balloonNode, FADE, DefaultBalloonFade),
+			     OPTCHILDFLOAT (balloonNode, RATE, 1.));
+  if (CHILD (balloonNode, PERSIST) != NULL)
+    balloon->reset = balloon;
+  return balloon;
 }

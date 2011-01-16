@@ -30,6 +30,13 @@ Goal* newFalseGoal() {
   return newGoal (FalseGoal, 0, 0);
 }
 
+Goal *newMaybeGoal (double prob) {
+  Goal *g;
+  g = newGoal (MaybeGoal, 1, 0);
+  g->dblData[0] = prob;
+  return g;
+}
+
 Goal* newAreaGoal (XYSet* area, Goal *subGoal) {
   Goal* g;
   g = newGoal (AreaGoal, 0, 0);
@@ -311,6 +318,21 @@ XYSet* getGoalArea (Goal* goal) {
        : NULL);
 }
 
+int testGoalAtPos (Goal *goal, void *game, int x, int y) {
+  XYSet *pointSet;
+  Goal *tempAreaGoal, *oldParent;
+  int val;
+  pointSet = newXYSet();
+  (void) XYSetInsert (pointSet, x, y);
+  tempAreaGoal = newAreaGoal (pointSet, NULL);
+  oldParent = goal->parent;
+  goal->parent = tempAreaGoal;
+  val = testGoalMet (goal, game);
+  goal->parent = oldParent;  /* can probably just set it to NULL, but what the heck */
+  deleteGoal (tempAreaGoal);  /* this also deletes pointSet */
+  return val;
+}
+
 int testGoalMet (Goal* goal, void *voidGame) {
   Game *game;
   Board *board;
@@ -450,6 +472,9 @@ int testGoalMet (Goal* goal, void *voidGame) {
       }
     }
     return 1;
+
+  case MaybeGoal:
+    return randomDouble() < goal->dblData[0];
 
   case TrueGoal:
     return 1;

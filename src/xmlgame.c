@@ -40,7 +40,7 @@ Game* newGameFromXmlRoot (xmlNode *root) {
   gameNode = CHILD(root,GAME);
  
   game = newGame();
-  game->board = newBoardFromXmlRoot (gameNode);
+  game->board = newBoardFromXmlRoot ((void*)game, gameNode);
 
   game->updatesPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultUpdatesPerSecond);
 
@@ -63,7 +63,7 @@ Game* newGameFromXmlRoot (xmlNode *root) {
 
   exitNode = CHILD(gameNode,EXIT);
   for (node = exitNode->children; node; node = node->next)
-    if (MATCHES(node,LOC))
+    if (MATCHES(node,POS))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
   game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(exitNode,HEXTYPE));
 
@@ -90,13 +90,13 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
 	for (y = 0; y < size; ++y)
 	  updateQuadTree (tool->brushIntensity, x, y, 0.);
       for (node = intensityNode->children; node; node = node->next)
-	if (MATCHES(node,LOC))
+	if (MATCHES(node,POS))
 	  updateQuadTree (tool->brushIntensity, CHILDINT(node,X), CHILDINT(node,Y), OPTCHILDINT(node,RATE,1.));
     }
     if ((patternNode = CHILD(brushNode,PATTERN))) {
       tool->brushState = newXYMap (copyState, deleteState, printState);
       for (node = patternNode->children; node; node = node->next)
-	if (MATCHES(node,LOC))
+	if (MATCHES(node,POS))
 	  (void) XYMapInsert (tool->brushState, CHILDINT(node,X), CHILDINT(node,Y), newState(OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE))));
     }
   }
@@ -133,7 +133,7 @@ GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *triggerNode) {
   trigger = newGoalTrigger (game, newGoalFromXmlNode (CHILD(triggerNode,GOAL_GPARAM), game));
   trigger->overwriteType = OPTCHILDINT(triggerNode,DECTYPE,CHILDHEX(triggerNode,HEXTYPE));
   for (node = triggerNode->children; node; node = node->next)
-    if (MATCHES(node,LOC))
+    if (MATCHES(node,POS))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), trigger->watcher);
   return trigger;
 }

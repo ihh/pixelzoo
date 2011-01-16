@@ -22,7 +22,7 @@
 #define XMLZOO_RATE        "rate"
 #define XMLZOO_OVERLOAD    "overload"
 #define XMLZOO_TEST        "test"
-#define XMLZOO_LOC         "loc"
+#define XMLZOO_POS         "pos"
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
 #define XMLZOO_MASK        "mask"
@@ -45,21 +45,12 @@
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
 #define XMLZOO_INIT        "init"
-#define XMLZOO_BALLOON     "balloon"
-#define XMLZOO_TEXT        "text"
-#define XMLZOO_TTL         "ttl"
-#define XMLZOO_RISE        "rise"
-#define XMLZOO_ZOOM        "zoom"
-#define XMLZOO_FADE        "fade"
-#define XMLZOO_PERSIST     "persist"
+#define XMLZOO_GOAL        "goal"
 
 /* methods */
-Board* newBoardFromXmlDocument (xmlDoc *doc);
-Board* newBoardFromXmlRoot (xmlNode *root);
-Board* newBoardFromXmlFile (const char* filename);
-Board* newBoardFromXmlString (const char* string);
-
-/* helpers */
-Balloon* newBalloonFromXmlNode (xmlNode* node);
+Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
+Board* newBoardFromXmlRoot (void *game, xmlNode *root);
+Board* newBoardFromXmlFile (void *game, const char* filename);
+Board* newBoardFromXmlString (void *game, const char* string);
 
 #endif /* XMLBOARD_INCLUDED */

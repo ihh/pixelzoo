@@ -6,7 +6,6 @@
 #include "game.h"
 
 /* XML node names */
-#define XMLZOO_GOAL            "goal"
 #define XMLZOO_GOALTYPE        "type"
 #define XMLZOO_AREA_GOAL       "area"
 #define XMLZOO_CAGE_GOAL       "cage"   /* EnclosuresGoal */
@@ -18,6 +17,7 @@
 #define XMLZOO_NOT_GOAL        "not"
 #define XMLZOO_TRUE_GOAL       "true"
 #define XMLZOO_FALSE_GOAL      "false"
+#define XMLZOO_MAYBE_GOAL      "maybe"
 #define XMLZOO_TIME_GOAL       "time"
 #define XMLZOO_TESTTOOL_GOAL   "tool"
 #define XMLZOO_TESTEXIT_GOAL   "exit"
@@ -30,7 +30,7 @@
 #define XMLZOO_BALLOON_GOAL    "balloon"
 
 #define XMLZOO_REPS_GPARAM     "reps"
-#define XMLZOO_GOAL_GPARAM     "goal"
+#define XMLZOO_PROB_GPARAM     "prob"
 #define XMLZOO_POS_GPARAM      "pos"
 #define XMLZOO_WALL_GPARAM     "wall"
 #define XMLZOO_COUNT_GPARAM    "count"
@@ -49,7 +49,16 @@
 #define XMLZOO_RESERVE_GPARAM  "reserve"
 #define XMLZOO_STATE_GPARAM    "state"
 #define XMLZOO_DURATION_GPARAM "duration"
+#define XMLZOO_BALLOON_GPARAM  "balloon"
 #define XMLZOO_TEXT_GPARAM     "text"
+#define XMLZOO_GOAL_GPARAM     "goal"
+
+#define XMLZOO_TEXT        "text"
+#define XMLZOO_TTL         "ttl"
+#define XMLZOO_RISE        "rise"
+#define XMLZOO_ZOOM        "zoom"
+#define XMLZOO_FADE        "fade"
+#define XMLZOO_PERSIST     "persist"
 
 /* methods */
 Goal* newGoalFromXmlNode (xmlNode *node, Game *game);

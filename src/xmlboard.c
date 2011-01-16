@@ -3,33 +3,37 @@
 #include <string.h>
 #include "xmlboard.h"
 #include "xmlutil.h"
+#include "xmlgoal.h"
 #include "game.h"
 
 /* prototypes for private builder methods */
-Particle* newParticleFromXmlNode (xmlNode* node);
+Particle* newParticleFromXmlNode (void *game, xmlNode* node);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
-void initRuleFromXmlNode (StochasticRule* rule, xmlNode* node);
+void initRuleFromXmlNode (void *game, StochasticRule* rule, xmlNode* node);
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
 
 /* method defs */
-Board* newBoardFromXmlDocument (xmlDoc *doc) {
-  return newBoardFromXmlRoot (xmlDocGetRootElement (doc));
+Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
+  return newBoardFromXmlRoot (game, xmlDocGetRootElement (doc));
 }
 
-Board* newBoardFromXmlRoot (xmlNode *root) {
+Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   Board *board;
   xmlNode *boardNode, *grammar, *node;
   int x, y;
   State state;
 
   boardNode = CHILD(root,BOARD);
+  Assert (boardNode != NULL, "XML board tag not found");
+
   board = newBoard (CHILDINT(boardNode,SIZE));
+  board->game = game;
 
   grammar = CHILD(boardNode,GRAMMAR);
   for (node = grammar->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
-      addParticleToBoard (newParticleFromXmlNode(node), board);
+      addParticleToBoard (newParticleFromXmlNode(game,node), board);
 
   for (node = boardNode->children; node; node = node->next)
     if (MATCHES(node,INIT)) {
@@ -42,26 +46,26 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   return board;
 }
 
-Board* newBoardFromXmlFile (const char* filename) {
+Board* newBoardFromXmlFile (void *game, const char* filename) {
   xmlDoc* doc;
   Board* board = NULL;
   doc = xmlReadFile (filename, NULL, 0);
   if (doc)
-    board = newBoardFromXmlDocument (doc);
+    board = newBoardFromXmlDocument (game, doc);
   return board;
 }
 
-Board* newBoardFromXmlString (const char* string) {
+Board* newBoardFromXmlString (void *game, const char* string) {
   xmlDoc* doc;
   Board* board = NULL;
   doc = xmlReadMemory (string, strlen(string), "noname.xml", NULL, 0);
   if (doc)
-    board = newBoardFromXmlDocument (doc);
+    board = newBoardFromXmlDocument (game, doc);
   return board;
 }
 
 
-Particle* newParticleFromXmlNode (xmlNode* node) {
+Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
   int nRules, nColorRules, n;
   xmlNode *curNode;
@@ -82,7 +86,7 @@ Particle* newParticleFromXmlNode (xmlNode* node) {
   n = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
-      initRuleFromXmlNode (&p->rule[n++], curNode);
+      initRuleFromXmlNode (game, &p->rule[n++], curNode);
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
   nColorRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
@@ -100,8 +104,8 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
-void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
-  xmlNode *node, *balloonNode;
+void initRuleFromXmlNode (void *game, StochasticRule* rule, xmlNode* ruleNode) {
+  xmlNode *node, *goalNode;
   int nCond, nOp;
   rule->rate = OPTCHILDFLOAT(ruleNode,RATE,1.);
   rule->overloadRate = OPTCHILDFLOAT(ruleNode,OVERLOAD,rule->rate);
@@ -114,30 +118,9 @@ void initRuleFromXmlNode (StochasticRule* rule, xmlNode* ruleNode) {
       Assert (nOp < NumRuleOperations, "initRuleFromXmlNode: too many rule operations");
       initOperationFromXmlNode (&rule->op[nOp++], node);
     }
-  balloonNode = CHILD (ruleNode, BALLOON);
-  if (balloonNode)
-    rule->balloon = newBalloonFromXmlNode (balloonNode);
-}
-
-Balloon* newBalloonFromXmlNode (xmlNode* balloonNode) {
-  xmlNode *locNode;
-  HSB24 color;
-  Balloon *balloon;
-  locNode = CHILD (balloonNode, LOC);
-  color = OPTCHILDINT (balloonNode, COLOR, OPTCHILDHEX (balloonNode, HEXCOLOR, HSB24White));
-  balloon = newProtoBalloon ((char*) CHILDSTRING (balloonNode, TEXT),
-			     locNode ? OPTCHILDINT(locNode,X,0) : 0,
-			     locNode ? OPTCHILDINT(locNode,Y,0) : 0,
-			     ConvertHsb24ToPaletteIndex (color),
-			     OPTCHILDFLOAT (balloonNode, SIZE, 1.),
-			     OPTCHILDFLOAT (balloonNode, TTL, DefaultBalloonTTL),
-			     OPTCHILDFLOAT (balloonNode, RISE, DefaultBalloonRise),
-			     OPTCHILDFLOAT (balloonNode, ZOOM, DefaultBalloonZoom),
-			     OPTCHILDFLOAT (balloonNode, FADE, DefaultBalloonFade),
-			     OPTCHILDFLOAT (balloonNode, RATE, 1.));
-  if (CHILD (balloonNode, PERSIST) != NULL)
-    balloon->reset = balloon;
-  return balloon;
+  goalNode = CHILD (ruleNode, GOAL);
+  if (goalNode)
+    rule->trigger = newGoalFromXmlNode (goalNode, game);
 }
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
@@ -145,7 +128,7 @@ void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
   const char* opcode;
   int rshift;
 
-  loc = CHILD(node,LOC);
+  loc = CHILD(node,POS);
   if (loc) {
     cond->loc.x = OPTCHILDINT(loc,X,0);
     cond->loc.y = OPTCHILDINT(loc,Y,0);

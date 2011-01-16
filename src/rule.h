@@ -1,8 +1,6 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
-#include "balloon.h"
-
 /* State: 64-bit cell state.
 
    The 16 most significant bits of the state form the Type.
@@ -101,7 +99,7 @@ typedef struct StochasticRule {
   RuleCondition cond[NumRuleConditions];
   RuleOperation op[NumRuleOperations];
   double rate, overloadRate;
-  Balloon *balloon;
+  void *trigger;  /* pointer to a Goal. If non-NULL, will be evaluated; if true, will be deleted */
   /* the following indices are important if write operations are being buffered for a synchronous update, and if "src" or "dest" uses TempOffset */
   unsigned char cumulativeOpSrcIndex[NumRuleOperations];  /* if cumulativeOpSrcIndex[n]=m and m>0, then rule #n uses as its "src" the "dest" value of rule #m-n */
   unsigned char cumulativeOpDestIndex[NumRuleOperations];  /* if cumulativeOpDestIndex[n]=m and m>0, then rule #n uses as its unmasked "dest" the "dest" value of rule #m-n */

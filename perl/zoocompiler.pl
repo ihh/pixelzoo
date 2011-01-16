@@ -42,7 +42,7 @@ $typeindex{$emptyType} = 0;
 my $boardRate = 240;
 my $boardSize = 128;
 my %entrancePort = ("x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1);
-my %exitPort = ("loc" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6);
+my %exitPort = ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6);
 my ($entranceType, $exitType) = ($emptyType, $emptyType);
 my @gameXML;
 
@@ -140,8 +140,8 @@ while (@zg) {
 	while (/\( ?(count|rate|width|height) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
 
     } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
-	$exitPort{'loc'}->{'x'} = $1;
-	$exitPort{'loc'}->{'y'} = $2;
+	$exitPort{'pos'}->{'x'} = $1;
+	$exitPort{'pos'}->{'y'} = $2;
 	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
 	while (/\( ?(count|radius) (\S+) ?\)/g) { $exitPort{$1} = $2 }
 
@@ -303,13 +303,19 @@ while (@zg) {
 		    my $text = $1;
 		    $text =~ s/^"(.*)"$/$1/;
 		    my %balloon = ("text" => $text);
-		    if (/\((\d+) ?, ?(\d+)\)/) { $balloon{"loc"} = ["x" => $1, "y" => $2] }
+		    if (/\((\d+) ?, ?(\d+)\)/) { $balloon{"pos"} = ["x" => $1, "y" => $2] }
 		    parseTags ($_, \%balloon);
 		    if (exists $balloon{"hue"}) {
 			$balloon{"hexcolor"} = hexv(0xffff | ($balloon{"hue"} << 16));
 			delete $balloon{"hue"};
 		    }
-		    push @tag, "balloon" => \%balloon;
+		    push @tag, "goal" => ['@type' => "and",  # "and"ing result with 0 means this goal will persist
+					  "lazy" => "",
+					  "goal" => ['@type' => "maybe",
+						     "prob" => $balloon{"rate"}],
+					  "goal" => ['@type' => "balloon",
+						     "balloon" => \%balloon],
+					  "goal" => ['@type' => "false"]];
 
 		} elsif (/^<.*>/) {
 		    # misc tags (rate, overload, ...)
@@ -408,7 +414,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 	    # build the test hash
 	    my @t = (@$other,
 		     '@op' => $top,
-		     length("$tx$ty") ? ("loc" => [ "x" => $tx, "y" => $ty ]) : (),
+		     length("$tx$ty") ? ("pos" => [ "x" => $tx, "y" => $ty ]) : (),
 		     "mask" => getMask($ttype,$tvar),
 		     "hexval" => hexv($trhs << getShift($ttype,$tvar)));
 
@@ -469,8 +475,8 @@ $exitPort{"type"} = getType($exitType);
 
 my (@exitLoc, @exitColor);
 my $exitRadius = $exitPort{"radius"};
-my $exitx = $exitPort{'loc'}->{"x"};
-my $exity = $exitPort{'loc'}->{"y"};
+my $exitx = $exitPort{'pos'}->{"x"};
+my $exity = $exitPort{'pos'}->{"y"};
 for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
     for (my $y = -$exitRadius; $y <= $exitRadius; ++$y) {
 	my $r = sqrt($x*$x+$y*$y);
@@ -481,7 +487,7 @@ for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
 	    }
 	    my $ex = $exitx + $x;
 	    my $ey = $exity + $y;
-	    push @exitLoc, "loc" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
+	    push @exitLoc, "pos" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
 	    push @exitColor, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
 	}
     }
@@ -492,7 +498,7 @@ my $entranceWidth = $entrancePort{"width"};
 my $entranceHeight = $entrancePort{"height"};
 for (my $w = 0; $w < $entranceWidth; ++$w) {
     for (my $h = 0; $h < $entranceHeight; ++$h) {
-	push @entranceLoc, "loc" => ["x" => $w, "y" => $h];
+	push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
     }
 }
 
@@ -509,7 +515,7 @@ my @game = (@gameXML,
 							   "persist" => '']]],
 
 		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'loc'},
+				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon",
 					     "balloon" => ["text" => "EXIT (closed)",
 							   "persist" => '']]],
@@ -553,12 +559,12 @@ my @game = (@gameXML,
 
 # delete exit balloon
 		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'loc'},
+				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon"]],
 
 # place "EXIT (open)" balloon at exit
 		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'loc'},
+				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon",
 					     "balloon" => ["text" => "EXIT (open)",
 							   "persist" => '']]],
@@ -579,12 +585,12 @@ my @game = (@gameXML,
 
 # delete exit balloon
 		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'loc'},
+				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon"]],
 
 # place "UNLOCKED" balloon at exit
 		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'loc'},
+				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon",
 					     "balloon" => ["text" => "UNLOCKED!"]]],
 

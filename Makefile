@@ -23,20 +23,20 @@ XMLFILES  := $(subst .zg,.xml,$(ZGFILES))
 
 all: lib targets xml
 
+clean:
+	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
+
+test: targets
+	bin/sdlgame t/testgame.xml
+
+oldtest: all
+	test/testrb.sh && bin/sdltest
+
 targets: $(XFILES)
 
 xml: $(XMLFILES)
 
 lib: $(OFILES)
-
-clean:
-	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
-
-test: all
-	bin/sdlgame t/testgame.xml
-
-oldtest: all
-	test/testrb.sh && bin/sdltest
 
 bin/%:  test/%.c $(OFILES)
 	@test -e bin || mkdir bin

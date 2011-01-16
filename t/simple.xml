@@ -47,46 +47,46 @@ The exit will open when all 30 guests have entered.</text>
                 <y>0</y>
               </center>
               <intensity>
-                <loc>
+                <pos>
                   <x>0</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>1</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>2</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>3</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>4</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>5</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>6</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>7</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>8</x>
                   <y>0</y>
-                </loc>
-                <loc>
+                </pos>
+                <pos>
                   <x>9</x>
                   <y>0</y>
-                </loc>
+                </pos>
               </intensity>
             </brush>
             <spray>1</spray>
@@ -206,443 +206,443 @@ Guide 5 guests to the exit.</text>
     <exit>
       <count>5</count>
       <radius>6</radius>
-      <loc>
-        <x>30</x>
-        <y>60</y>
-      </loc>
       <type>4</type>
-      <loc>
+      <pos>
+        <x>30</x>
+        <y>60</y>
+      </pos>
+      <pos>
         <x>25</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>25</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>26</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>27</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>28</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>29</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>30</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>31</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>32</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>55</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>33</x>
         <y>65</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>56</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>63</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>34</x>
         <y>64</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>57</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>58</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>59</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>60</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>61</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>62</y>
-      </loc>
-      <loc>
+      </pos>
+      <pos>
         <x>35</x>
         <y>63</y>
-      </loc>
+      </pos>
     </exit>
     <board>
       <size>128</size>
@@ -660,10 +660,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -716,10 +716,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -772,10 +772,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -828,10 +828,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -884,10 +884,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -940,10 +940,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -996,10 +996,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1052,10 +1052,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.05</rate>
             <overload>0.05</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1108,10 +1108,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1130,10 +1130,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1152,10 +1152,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1174,10 +1174,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1196,10 +1196,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1218,10 +1218,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1240,10 +1240,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1262,10 +1262,10 @@ Guide 5 guests to the exit.</text>
             <rate>1.2</rate>
             <test op="=">
               <ignore>1.2</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>2000000000000</hexval>
             </test>
@@ -1292,16 +1292,25 @@ Guide 5 guests to the exit.</text>
           </color>
           <rule>
             <rate>.0002</rate>
-            <balloon>
-              <hexcolor>20ffff</hexcolor>
-              <rate>.01</rate>
-              <text>decay</text>
-            </balloon>
+            <goal type="and">
+              <lazy></lazy>
+              <goal type="maybe">
+                <prob>.01</prob>
+              </goal>
+              <goal type="balloon">
+                <balloon>
+                  <hexcolor>20ffff</hexcolor>
+                  <rate>.01</rate>
+                  <text>decay</text>
+                </balloon>
+              </goal>
+              <goal type="false"/>
+            </goal>
             <test op="&lt;">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>f</mask>
               <hexval>f</hexval>
             </test>
@@ -1324,10 +1333,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>.01</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>f</mask>
               <hexval>f</hexval>
             </test>
@@ -1354,10 +1363,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1410,10 +1419,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1466,10 +1475,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1522,10 +1531,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1578,10 +1587,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1634,10 +1643,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1690,10 +1699,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1746,10 +1755,10 @@ Guide 5 guests to the exit.</text>
             <rate>0.25</rate>
             <overload>0.25</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1801,10 +1810,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.25</rate>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1828,10 +1837,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.25</rate>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1855,10 +1864,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.25</rate>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1882,10 +1891,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.25</rate>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -1894,87 +1903,6 @@ Guide 5 guests to the exit.</text>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.25</rate>
-            <test op="!=">
-              <loc>
-                <x>+1</x>
-                <y>+1</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>+1</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.25</rate>
-            <test op="!=">
-              <loc>
-                <x>-1</x>
-                <y>+1</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-1</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.25</rate>
-            <test op="!=">
-              <loc>
-                <x>+1</x>
-                <y>-1</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>+1</x>
                 <y>-1</y>
               </dest>
             </exec>
@@ -1990,10 +1918,91 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.25</rate>
             <test op="!=">
-              <loc>
+              <pos>
+                <x>+1</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.25</rate>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.25</rate>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.25</rate>
+            <test op="!=">
+              <pos>
                 <x>-1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -2033,18 +2042,18 @@ Guide 5 guests to the exit.</text>
             <rate>0.02</rate>
             <overload>0.02</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -2097,18 +2106,18 @@ Guide 5 guests to the exit.</text>
             <rate>0.02</rate>
             <overload>0.02</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -2161,18 +2170,18 @@ Guide 5 guests to the exit.</text>
             <rate>0.02</rate>
             <overload>0.02</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -2225,18 +2234,18 @@ Guide 5 guests to the exit.</text>
             <rate>0.02</rate>
             <overload>0.02</overload>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -2288,28 +2297,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2332,28 +2341,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2376,28 +2385,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00333333333333333</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2420,28 +2429,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2464,28 +2473,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2508,28 +2517,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00333333333333333</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2552,28 +2561,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2596,28 +2605,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2640,28 +2649,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00333333333333333</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2684,28 +2693,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2728,28 +2737,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00666666666666667</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2772,28 +2781,28 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00333333333333333</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
               <ignore>0.00333333333333333</ignore>
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2816,10 +2825,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2841,10 +2850,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -2866,66 +2875,16 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
             <exec>
               <src>
                 <x>-1</x>
-                <y>+1</y>
-              </src>
-              <srcmask>3</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>3</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.02</rate>
-            <test op="=">
-              <loc>
-                <x>0</x>
-                <y>-1</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>4000000000000</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>3</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>3</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.02</rate>
-            <test op="=">
-              <loc>
-                <x>0</x>
-                <y>+1</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>4000000000000</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
                 <y>+1</y>
               </src>
               <srcmask>3</srcmask>
@@ -2941,16 +2900,16 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
-                <x>+1</x>
+              <pos>
+                <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
             <exec>
               <src>
-                <x>+1</x>
+                <x>0</x>
                 <y>-1</y>
               </src>
               <srcmask>3</srcmask>
@@ -2966,41 +2925,16 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
-                <x>+1</x>
-                <y>0</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>4000000000000</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>3</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>3</destmask>
-              <dest>
+              <pos>
                 <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.02</rate>
-            <test op="=">
-              <loc>
-                <x>+1</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
             <exec>
               <src>
-                <x>+1</x>
+                <x>0</x>
                 <y>+1</y>
               </src>
               <srcmask>3</srcmask>
@@ -3016,10 +2950,85 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
+                <x>+1</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>-1</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.02</rate>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.02</rate>
+            <test op="=">
+              <pos>
+                <x>+1</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>+1</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.02</rate>
+            <test op="=">
+              <pos>
                 <x>-2</x>
                 <y>-2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3041,10 +3050,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-2</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3066,10 +3075,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-2</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3091,10 +3100,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-2</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3116,66 +3125,16 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-2</x>
                 <y>+2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
             <exec>
               <src>
                 <x>-2</x>
-                <y>+2</y>
-              </src>
-              <srcmask>3</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>3</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.02</rate>
-            <test op="=">
-              <loc>
-                <x>-1</x>
-                <y>-2</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>4000000000000</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>-1</x>
-                <y>-2</y>
-              </src>
-              <srcmask>3</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>3</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.02</rate>
-            <test op="=">
-              <loc>
-                <x>-1</x>
-                <y>+2</y>
-              </loc>
-              <mask>ffff000000000000</mask>
-              <hexval>4000000000000</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>-1</x>
                 <y>+2</y>
               </src>
               <srcmask>3</srcmask>
@@ -3191,10 +3150,60 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
+                <x>-1</x>
+                <y>-2</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>-2</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.02</rate>
+            <test op="=">
+              <pos>
+                <x>-1</x>
+                <y>+2</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>4000000000000</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>+2</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>3</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.02</rate>
+            <test op="=">
+              <pos>
                 <x>0</x>
                 <y>-2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3216,10 +3225,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3241,10 +3250,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>-2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3266,10 +3275,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>+2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3291,10 +3300,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+2</x>
                 <y>-2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3316,10 +3325,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+2</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3341,10 +3350,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+2</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3366,10 +3375,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+2</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3391,10 +3400,10 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.02</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+2</x>
                 <y>+2</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>4000000000000</hexval>
             </test>
@@ -3416,26 +3425,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3465,26 +3474,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3514,26 +3523,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3563,26 +3572,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>1</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3612,26 +3621,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3661,26 +3670,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>2</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>+1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3710,26 +3719,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>-1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
@@ -3759,26 +3768,26 @@ Guide 5 guests to the exit.</text>
           <rule>
             <rate>0.00666666666666667</rate>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>3</mask>
               <hexval>3</hexval>
             </test>
             <test op="!=">
-              <loc>
+              <pos>
                 <x>-1</x>
                 <y>0</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>
             <test op="=">
-              <loc>
+              <pos>
                 <x>0</x>
                 <y>+1</y>
-              </loc>
+              </pos>
               <mask>ffff000000000000</mask>
               <hexval>0</hexval>
             </test>

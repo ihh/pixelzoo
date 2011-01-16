@@ -23,6 +23,7 @@ typedef struct Board {
   double updatesPerCellAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
+  void *game;  /* passed to rule-triggered Goal's */
 } Board;
 
 /* public methods */
@@ -92,11 +93,11 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 #define getRuleOperationOldSrcState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->src.x,Y+(OP_PTR)->src.y)
 #define getRuleOperationOldDestState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->dest.x,Y+(OP_PTR)->dest.y)
 
-int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write);
+int attemptRule (Particle *ruleOwner, StochasticRule *rule, Board *board, int x, int y, int overloaded, BoardWriteFunction write);
 int boardOverloaded (Board* board, int x, int y);
 
-void evolveBoardCell (Board* board, int x, int y);
-void evolveBoardCellSync (Board* board, int x, int y);
+void evolveBoardCell (Board *board, int x, int y);
+void evolveBoardCellSync (Board *board, int x, int y);
 
 void freezeBoard (Board* board);
 void syncBoard (Board* board);

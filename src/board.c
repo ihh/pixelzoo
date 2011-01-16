@@ -5,6 +5,7 @@
 #include <math.h>
 #include "board.h"
 #include "notify.h"
+#include "goal.h"
 
 Board* newBoard (int size) {
 	Board *board;
@@ -27,6 +28,7 @@ Board* newBoard (int size) {
 	board->updatesPerCell = 0.;
 	board->syncUpdates = 0;
 	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
+	board->game = NULL;
 
 	initializePalette (&board->palette);
 
@@ -211,7 +213,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 		for (n = 0; n < p->nRules; ++n) {
 			rule = &p->rule[n];
 			if ((rand -= (overloaded ? rule->overloadRate : rule->rate)) <= 0) {
-				(void) attemptRule (p, rule, board, x, y, overloaded, writeBoardStateUnguarded);
+			  (void) attemptRule (p, rule, board, x, y, overloaded, writeBoardStateUnguarded);
 				return;
 			}
 		}
@@ -309,9 +311,11 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
 		oldDestState = mDest ? intermediateState[k - mDest] : getRuleOperationOldDestState(op,board,x,y);
 		intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, rule->writeOp[k] ? write : (BoardWriteFunction) dummyWriteBoardState);
 	}
-	if (rule->balloon)
-	  if (randomDouble() < rule->balloon->prob)
-	    addBalloon (board, rule->balloon, x, y);
+	if (rule->trigger)
+		if (testGoalAtPos ((Goal*) rule->trigger, board->game, x, y)) {
+			deleteGoal (rule->trigger);
+			rule->trigger = NULL;
+		}
 	return 1;
 }
 

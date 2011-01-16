@@ -133,6 +133,7 @@ SDLGame* newSDLGame( char *filename )
   //
 
   sdlGame->game = newGameFromXmlFile(filename);
+  sdlGame->game->selectedTool = sdlGame->game->toolByName->root->left->value;
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )

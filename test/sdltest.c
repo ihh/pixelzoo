@@ -114,7 +114,8 @@ void init( void )
     // Initialize...
     //
 
-    board = newBoardFromXmlString("<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
+    board = newBoardFromXmlString(NULL,
+				  "<xml><board><size>" QUOTEME(BOARD_SIZE) "</size>"
 				  "<grammar>"
 				  "<particle>"
 				  "<sync/><shuffle/>"
