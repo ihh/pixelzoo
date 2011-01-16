@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "particle.h"
 
 Particle* newParticle (const char* name, int nRules) {
@@ -34,7 +35,8 @@ PaletteIndex getParticleColor (Particle* particle, State state) {
   int n;
   HSB24 hsb;
   hsb = 0;
-  for (n = 0; n < NumColorRules; ++n)
+  for (n = 0; n < NumColorRules; ++n) {
     hsb = hsb + evalColorRule (&particle->colorRule[n], state);
+  }
   return ConvertHsb24ToPaletteIndex(hsb);
 }

@@ -24,7 +24,7 @@ XMLFILES  := $(subst .zg,.xml,$(ZGFILES))
 all: lib targets xml
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
+	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES) t/poly.h
 
 test: targets
 	bin/sdlgame t/testgame.xml
@@ -34,9 +34,14 @@ oldtest: all
 
 targets: $(XFILES)
 
-xml: $(XMLFILES)
+xml: poly $(XMLFILES)
 
 lib: $(OFILES)
+
+poly: t/poly.h
+
+t/poly.h: perl/makepoly.pl
+	perl/makepoly.pl >$@
 
 bin/%:  test/%.c $(OFILES)
 	@test -e bin || mkdir bin

@@ -135,6 +135,6 @@ typedef struct ColorRule {
 
 /* ColorRule evaluation is simple enough to take place in a macro */
 #define evalColorRule(colorRulePtr,state) \
-  ((HSB24) (((((state) >> (colorRulePtr)->rightShift) & (colorRulePtr)->mask) * (colorRulePtr)->multiplier) + (colorRulePtr)->offset))
+  ((HSB24) (((((state) & (colorRulePtr)->mask) >> (colorRulePtr)->rightShift) * (colorRulePtr)->multiplier) + (colorRulePtr)->offset))
 
 #endif /* COLOR_INCLUDED */

@@ -6,7 +6,7 @@
 #include "util.h"
 
 /* number of ColorRule's per Particle */
-#define NumColorRules 3
+#define NumColorRules 4
 
 /*
   A Particle consists of:

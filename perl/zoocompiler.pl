@@ -390,8 +390,8 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
     my $doneConst = 0;
     for (my $n = 0; $n < @maskshiftmul; ++$n) {
 	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
-	next if $n < $#maskshiftmul && $mask eq "0" && $shift==0 && $mul==0;
-	my @colorRule = ("hexmask" => $mask,
+	next if $doneConst && $mask eq "0" && $shift==0 && $mul==0;
+	my @colorRule = ("mask" => $mask,
 			 "rshift" => $shift,
 			 "hexmul" => hexv($mul));
 	if (!$doneConst) { push @colorRule, ("hexinc" => hexv($colBase)); $doneConst = 1 }
@@ -403,12 +403,37 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 	my @rule = @{$ruleTags{$type}->[$nRule]};
 
 	# tests
+	my %compare;
 	for my $test (@{$test{$type}->[$nRule]}) {
 	    my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
 
 	    # resolve any dangling literal typenames
 	    if ($tvar eq "type") {
 		$trhs = getType($trhs);
+	    }
+
+	    # consolidate repeated comparisons of a constant with the same location
+	    if ($top eq "=" || $top eq "==") {
+		if (exists $compare{"$tx $ty"}) {
+		    my $ruleRef = $rule[$compare{"$tx $ty"}];
+		    my %prevTest = @$ruleRef;
+		    my $prevMask = $prevTest{"mask"};
+		    my $thisMask = getMask($ttype,$tvar);
+		    if (defined($prevMask) && defined($thisMask)) {
+			if ((decv($thisMask) & decv($prevMask)) == 0) {
+			    my $prevRhs = exists($prevTest{"hexval"}) ? decv($prevTest{"hexval"}) : 0;
+			    my $thisRhs = $trhs << getShift($ttype,$tvar);
+			    $prevTest{"hexval"} = hexv ($prevRhs | $thisRhs);
+			    $prevTest{"mask"} = hexv (decv($prevMask) | decv($thisMask));
+			    @$ruleRef = %prevTest;
+			    warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
+			    next;
+			} else {
+			    warn "Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap\n";
+			}
+		    }
+		}
+		$compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
 	    }
 
 	    # build the test hash
@@ -459,7 +484,7 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 			}
 		    }
 		}
-		$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec". very hacky
+		$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
 	    }
 
 	    # build the exec hash
@@ -495,7 +520,7 @@ for my $tool (@tool) {
 			       "hexstate" => getTypeAsHexState($type),
 			       "reserve" => $reserve,
 			       "recharge" => $recharge,
-			       map (("overwrite" => getTypeAsHexState($_)), @$overwriteType)]);
+			       @$overwriteType ? ("overwrite" => [map (("state" => getTypeAsHexState($_)), @$overwriteType)]) : ()]);
 }
 
 $entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
@@ -733,6 +758,7 @@ sub parseColor {
     my ($colexpr) = @_;
     $colexpr =~ s/\- ?(\S+) ?\* ?(\d+)/+ $1 * -$2/g;
     $colexpr =~ s/\- ?(\d+) ?\* ?(\S+)/+ -$1 * $2/g;
+    $colexpr =~ s/\- ?([^\d]\S*)/+ -1 * $1/g;
     my @term = split (/ ?\+ ?/, $colexpr);
     warn "Parsing color terms: ", join(" + ", map("($_)", @term)) if $debug;
     my $const = 0;

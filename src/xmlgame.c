@@ -116,7 +116,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
 	  (void) StateSetInsert (tool->overwriteStates, NODEINTVAL(node));
 	else if (MATCHES(node,HEXSTATE))
 	  (void) StateSetInsert (tool->overwriteStates, NODEHEXVAL(node));
-      tool->overwriteMask = OPTCHILDHEX(node,MASK,TypeMask);
+      tool->overwriteMask = OPTCHILDHEX(overwriteNode,MASK,TypeMask);
     }
   }
   tool->sprayRate = OPTCHILDFLOAT(toolNode,SPRAY,1.);

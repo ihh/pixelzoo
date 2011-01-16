@@ -332,7 +332,7 @@ Reorient(NomadType,SignpostSize,self.dir,SignpostRate);
   SignpostStop((RATE/5));			\
 
 #define SignpostBuildRate 1
-type signpost_builder dir(4) col(4) row(4);
+type signpost_builder dir(2) col(3) row(3);
 hue = SignpostHue;
 sat = 255;
 bri = 32;
@@ -353,6 +353,69 @@ OrientedSignpostBuilder(north_signpost_builder,0);
 OrientedSignpostBuilder(east_signpost_builder,1);
 OrientedSignpostBuilder(south_signpost_builder,2);
 OrientedSignpostBuilder(west_signpost_builder,3);
+
+#include "poly.h"
+
+#define PolymerRate .1
+#define PolymerHue 160
+type polymer lflag(4) rflag(4) ldir(4) rdir(4);
+hue = PolymerHue + ldir - rdir;
+sat = 255 - 64*rflag - 64*lflag;
+bri = 255;
+PolymerStep(polymer,poly_extender,PolymerRate);
+
+type poly_len20;
+hue = PolymerHue;
+sat = 255;
+bri = 255;
+{
+  loc orig(0,0);
+  do orig.type = poly_initiator;
+  do orig.len = 20;
+}
+
+type poly_initiator len(8);
+hue = PolymerHue;
+sat = 255;
+bri = 128;
+{
+  loc orig(0,0);
+  loc next(1,0);
+  if next.type = empty;
+  do next.type = poly_extender;
+  do next.len = orig.len;
+  do orig.type = polymer;
+  do orig.lflag = 0;
+  do orig.rflag = 1;
+  do orig.rdir = 2;
+}
+
+type poly_extender len(8);
+hue = PolymerHue;
+sat = 255;
+bri = 128;
+{
+  loc orig(0,0);
+  loc next(1,0);
+  if orig.len > 0;
+  if next.type = empty;
+  do next.type = poly_extender;
+  do next.len = orig.len - 1;
+  do orig.type = polymer;
+  do orig.lflag = 1;
+  do orig.rflag = 1;
+  do orig.ldir = 6;
+  do orig.rdir = 2;
+}
+
+{
+  loc orig(0,0);
+  if orig.len = 0;
+  do orig.type = polymer;
+  do orig.lflag = 1;
+  do orig.rflag = 0;
+  do orig.ldir = 6;
+}
 
 type entering_nomad
 {
@@ -382,11 +445,13 @@ eval { map (("init (@{[$boardSize-1]},$_) border"), 1..$boardSize-2) }
 // xml { map (("init" => ["hexval" => "7ff", "y" => $_, "x" => 0]), 0..$boardSize-1) }
 // xml { map (("init" => ["hexval" => "7ff", "y" => $_, "x" => $boardSize-1]), 0..$boardSize-1) }
 
-tool "Cement spray" (type cement) (reserve 1000) (size 2) (spray 100);
-tool "Acid spray" (type acid) (reserve 1000) (size 4);
-tool "Nomad spray" (type nomad) (reserve 1000) (size 4);
+tool "Cement spray" (type cement) (reserve 1000) (size 2) (spray 100) (overwrite empty);
+tool "Acid spray" (type acid) (reserve 1000) (size 4) (overwrite empty);
+tool "Nomad spray" (type nomad) (reserve 1000) (size 4) (overwrite empty);
 
-tool "North sign" (type north_signpost_builder) (reserve 1) (size 1) (spray 100);
-tool "East sign" (type east_signpost_builder) (reserve 1) (size 1) (spray 100);
-tool "South sign" (type south_signpost_builder) (reserve 1) (size 1) (spray 100);
-tool "West sign" (type west_signpost_builder) (reserve 1) (size 1) (spray 100);
+tool "North sign" (type north_signpost_builder) (reserve 1) (size 1) (spray 100) (overwrite empty);
+tool "East sign" (type east_signpost_builder) (reserve 1) (size 1) (spray 100) (overwrite empty);
+tool "South sign" (type south_signpost_builder) (reserve 1) (size 1) (spray 100) (overwrite empty);
+tool "West sign" (type west_signpost_builder) (reserve 1) (size 1) (spray 100) (overwrite empty);
+
+tool "Polymer" (type poly_len20) (reserve 1) (size 1) (spray 100) (overwrite empty);
