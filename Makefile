@@ -18,12 +18,19 @@ TARGETS := test_red_black_tree sdltest sdlgame
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
-all: $(XFILES)
+ZGFILES   := $(wildcard t/*.zg)
+XMLFILES  := $(subst .zg,.xml,$(ZGFILES))
+
+all: lib targets xml
+
+targets: $(XFILES)
+
+xml: $(XMLFILES)
 
 lib: $(OFILES)
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM
+	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
 
 test: all
 	bin/sdlgame t/testgame.xml
@@ -36,6 +43,11 @@ bin/%:  test/%.c $(OFILES)
 	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ test/$*.c $(OFILES)
 
 .SUFFIXES :
+
+.SECONDARY:
+
+%.xml: %.zg
+	perl/zoocompiler.pl $< >$@
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj

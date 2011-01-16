@@ -2,6 +2,7 @@
 #include "xmlgoal.h"
 #include "xmlboard.h"
 #include "xmlutil.h"
+#include "xmlgame.h"
 
 Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
   Goal *goal, *subGoal[2];
@@ -111,9 +112,6 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->updatesPerSecond,
 			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->updatesPerSecond);
 
-  } else if (ATTRMATCHES (goalTypeAttr, ENTERED_GOAL)) {
-    goal = newEntrancesDoneGoal();
-
   } else if (ATTRMATCHES (goalTypeAttr, TESTTOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
     reserveNode = CHILD (goalNode, RESERVE_GPARAM);
@@ -167,8 +165,8 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     Assert (enumState >= 0, "Attempt to set unknown game state");
     goal = newSetGameStatePseudoGoal (enumState);
 
-  } else if (ATTRMATCHES (goalTypeAttr, USETOOL_GOAL)) {
-    tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
+  } else if (ATTRMATCHES (goalTypeAttr, SPRAY_GOAL)) {
+    tool = newToolFromXmlNode (CHILD (goalNode, TOOL_GPARAM));
     goal = newUseToolPseudoGoal (tool, OPTCHILDFLOAT (goalNode, DURATION_GPARAM, game->updatesPerSecond / game->goalTestsPerSecond));
 
   } else if (ATTRMATCHES (goalTypeAttr, PRINT_GOAL)) {

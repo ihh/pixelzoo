@@ -7,9 +7,8 @@
 /* XML node names */
 #define XMLZOO_GAME       "game"
 #define XMLZOO_PROTECT    "protect"
-#define XMLZOO_ENTRANCE   "entrance"
-#define XMLZOO_COUNT      "count"
 #define XMLZOO_EXIT       "exit"
+#define XMLZOO_COUNT      "count"
 #define XMLZOO_TOOL       "tool"
 #define XMLZOO_HIDE       "hide"
 #define XMLZOO_DECSTATE   "state"
@@ -31,5 +30,7 @@ Game* newGameFromXmlDocument (xmlDoc *doc);
 Game* newGameFromXmlRoot (xmlNode *root);
 Game* newGameFromXmlFile (const char* filename);
 Game* newGameFromXmlString (const char* string);
+
+Tool* newToolFromXmlNode (xmlNode *node);
 
 #endif /* XMLGAME_INCLUDED */

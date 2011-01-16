@@ -26,11 +26,6 @@ Game* newGame() {
   game->selectedTool = NULL;
   game->toolActive = 0;
 
-  game->theEntrance.total = game->theEntrance.soFar = 0;
-  game->theEntrance.pos.x = game->theEntrance.pos.y = 0;
-  game->theEntrance.state = EmptyState;
-  game->theEntrance.rate = 1.;
-
   game->theExit.portalState = PortalWaiting;
   game->theExit.type = EmptyType;
   game->theExit.soFar = 0;
@@ -64,7 +59,6 @@ void deleteGame (Game *game) {
 }
 
 void gameStart (Game *game) {
-  makeEntrances (game);
   testGameGoal (game, 1);
 }
 
@@ -75,7 +69,6 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
   evolveBoard (game->board, targetUpdatesPerCell, maxUpdateTimeInSeconds, &actualUpdatesPerCell, actualUpdates, evolveTime);
   if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
     useTools (game, actualUpdatesPerCell);
-  makeEntrances (game);
   testGameGoal (game, 0);
   updateBalloons (game->board, actualUpdatesPerCell / game->updatesPerSecond);
 
@@ -108,19 +101,6 @@ void useTools (Game *game, double duration) {
       rechargeTool (tool, duration);
   }
   deleteStack (enumResult);
-}
-
-void makeEntrances (Game *game) {
-  double entrancePeriod, nextEntranceTime;
-  if (game->theEntrance.soFar < game->theEntrance.total) {
-    entrancePeriod = game->updatesPerSecond / game->theEntrance.rate;
-    nextEntranceTime = (double) game->theEntrance.soFar * entrancePeriod;
-    if (game->board->updatesPerCell >= nextEntranceTime
-	&& readBoardState(game->board,game->theEntrance.pos.x,game->theEntrance.pos.y) == EmptyState) {
-      writeBoardState (game->board,game->theEntrance.pos.x,game->theEntrance.pos.y,game->theEntrance.state);
-      ++game->theEntrance.soFar;
-    }
-  }
 }
 
 void testGameGoal (Game *game, int forceTest) {

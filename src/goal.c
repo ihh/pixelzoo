@@ -119,10 +119,6 @@ Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell) {
   return g;
 }
 
-Goal *newEntrancesDoneGoal() {
-  return newGoal (EntrancesDoneGoal, 0, 0);
-}
-
 Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve) {
   Goal *g;
   g = newGoal (CheckToolGoal, 2, 0);
@@ -202,13 +198,27 @@ void setSubgoalParents (Goal *goal) {
 }
 
 void deleteGoal (Goal* goal) {
-  if (goal->goalType == PrintMessagePseudoGoal)
-    SafeFree ((char*) goal->context);   /* handle the one case where context needs to be freed */
+   /* free goal-specific context */
+  switch (goal->goalType) {
+
+  case PrintMessagePseudoGoal:
+    SafeFree ((char*) goal->context);
+    break;
+
+  case UseToolPseudoGoal:
+    deleteTool ((Tool*) goal->context);
+    break;
+
+  default:
+    break;
+  }
+
   SafeFreeOrNull (goal->intData);
   SafeFreeOrNull (goal->dblData);
   if (goal->tree) deleteRBTree (goal->tree);
   if (goal->l) deleteGoal (goal->l);
   if (goal->r) deleteGoal (goal->r);
+
   SafeFree (goal);
 }
 
@@ -365,9 +375,6 @@ int testGoalMet (Goal* goal, void *voidGame) {
   case BoardTimeGoal:
     return goal->dblData[0] <= board->updatesPerCell && (goal->dblData[1] <= 0. || board->updatesPerCell <= goal->dblData[1]);
 
-  case EntrancesDoneGoal:
-    return game->theEntrance.soFar >= game->theEntrance.total;
-
   case CheckToolGoal:
     tool = (Tool*) goal->context;
     return goal->dblData[0] <= tool->reserve && tool->reserve <= goal->dblData[1];
@@ -411,7 +418,7 @@ int testGoalMet (Goal* goal, void *voidGame) {
       y = randomInt (board->size);
     }
     useTool ((Tool*) goal->context, board, x, y, x, y, goal->dblData[0]);
-    return 1;
+    return ((Tool*) goal->context)->reserve <= 0;
 
   case PrintMessagePseudoGoal:
     printToGameConsole (game, (char*) goal->context, PaletteWhite, 1.);

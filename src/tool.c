@@ -47,7 +47,7 @@ void deleteTool (void *voidTool) {
 
 void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yEnd, double duration) {
   int particles, xOffset, yOffset, xPaint, yPaint;
-  State maskedOldState, newState;
+  State oldState, maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
   double linePos, linePosDelta, xDelta, yDelta;
@@ -67,10 +67,12 @@ void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yE
     linePos += linePosDelta;
     if (onBoard (board, xPaint, yPaint)) {
       if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
-	maskedOldState = readBoardStateUnguarded(board,xPaint,yPaint) & tool->overwriteMask;
+	oldState = readBoardStateUnguarded(board,xPaint,yPaint);
+	maskedOldState = oldState & tool->overwriteMask;
 	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
 	  writeBoardStateUnguarded (board, xPaint, yPaint, newState);
-	  tool->reserve = MAX (tool->reserve - 1, 0.);
+	  if (oldState != newState)
+	    tool->reserve = MAX (tool->reserve - 1, 0.);
 	}
       }
     }

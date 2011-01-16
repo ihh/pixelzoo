@@ -41,9 +41,10 @@ $typeindex{$emptyType} = 0;
 # other game data
 my $boardRate = 240;
 my $boardSize = 128;
-my %entrancePort = ("x" => 0, "y" => 0, "count" => 0, "rate" => 1);
-my %exitPort = ("loc" => { "x" => 0, "y" => 0 }, "count" => 0);
+my %entrancePort = ("x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1);
+my %exitPort = ("loc" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6);
 my ($entranceType, $exitType) = ($emptyType, $emptyType);
+my @gameXML;
 
 # parse input file
 my ($zgfilename) = @ARGV;
@@ -78,6 +79,40 @@ while (@zg) {
 	# compiler warning
 	warn "$1\n";
 
+    } elsif (/^eval ?\{(.*)\}$/) {
+	# one-line eval block
+	my $expr = $1;
+	warn "Evaluating $expr" if $debug;
+	unshift @zg, eval($expr);
+
+    } elsif (/^eval ?\{(.*)$/) {
+	# multi-line eval block
+	my $expr = $1;
+	while (@zg) {
+	    $_ = shift @zg;
+	    last if /^\}$/;
+	    $expr .= $_;
+	}
+	warn "Evaluating $expr" if $debug;
+	unshift @zg, eval($expr);
+
+    } elsif (/^xml ?\{(.*)\}$/) {
+	# one-line XML block
+	my $expr = $1;
+	warn "Evaluating $expr" if $debug;
+	push @gameXML, eval($expr);
+
+    } elsif (/^eval ?\{(.*)$/) {
+	# multi-line XML block
+	my $expr = $1;
+	while (@zg) {
+	    $_ = shift @zg;
+	    last if /^\}$/;
+	    $expr .= $_;
+	}
+	warn "Evaluating $expr" if $debug;
+	push @gameXML, eval($expr);
+
     } elsif (/^size (\d+)/) {
 	$boardSize = $1;
 
@@ -102,13 +137,13 @@ while (@zg) {
 	$entrancePort{'x'} = $1;
 	$entrancePort{'y'} = $2;
 	if (/\( ?type (\S+) ?\)/) { $entranceType = $1 }
-	while (/\( ?(count|rate) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
+	while (/\( ?(count|rate|width|height) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
 
     } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 	$exitPort{'loc'}->{'x'} = $1;
 	$exitPort{'loc'}->{'y'} = $2;
 	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
-	if (/\( ?(count) (\S+) ?\)/) { $exitPort{$1} = $2 }
+	while (/\( ?(count|radius) (\S+) ?\)/g) { $exitPort{$1} = $2 }
 
     } elsif (/^type (\S+)(.*)$/) {
 	my $varstr;
@@ -128,6 +163,7 @@ while (@zg) {
 	    die "More than 48 bits of vars for type $type" if $offset > 48;
 	}
 	$ptags{$type} = [];
+	$ruleTags{$type} = [];
 
     } elsif (defined $type) {
 
@@ -314,6 +350,8 @@ while (@zg) {
 my @gram;
 for my $typeindex (1 .. @type - 1) {   # skip the empty type
     my $type = $type[$typeindex];
+    warn "Generating XML for type '$type'" if $debug;
+
     my @particle = ("name" => $type,
 		    "type" => $typeindex{$type},
 		    @{$ptags{$type}}
@@ -429,7 +467,37 @@ for my $tool (@tool) {
 $entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
 $exitPort{"type"} = getType($exitType);
 
-my @game = ("goal" => ['@type' => "and",
+my (@exitLoc, @exitColor);
+my $exitRadius = $exitPort{"radius"};
+my $exitx = $exitPort{'loc'}->{"x"};
+my $exity = $exitPort{'loc'}->{"y"};
+for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
+    for (my $y = -$exitRadius; $y <= $exitRadius; ++$y) {
+	my $r = sqrt($x*$x+$y*$y);
+	if ($r < $exitRadius) {
+	    my $col = 0x007;  # white
+	    if ($r < $exitRadius/3 || $r > $exitRadius*2/3) {
+		$col = 0x03f;  # red
+	    }
+	    my $ex = $exitx + $x;
+	    my $ey = $exity + $y;
+	    push @exitLoc, "loc" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
+	    push @exitColor, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
+	}
+    }
+}
+
+my @entranceLoc;
+my $entranceWidth = $entrancePort{"width"};
+my $entranceHeight = $entrancePort{"height"};
+for (my $w = 0; $w < $entranceWidth; ++$w) {
+    for (my $h = 0; $h < $entranceHeight; ++$h) {
+	push @entranceLoc, "loc" => ["x" => $w, "y" => $h];
+    }
+}
+
+my @game = (@gameXML,
+	    "goal" => ['@type' => "and",
 		       "lazy" => "",
 		       "cached" => "",
 
@@ -449,12 +517,22 @@ my @game = ("goal" => ['@type' => "and",
 # print hello message
 		       "goal" => ['@type' => "print",
 				  "text" => "Welcome to level 1!\n" .
-				  "Guide " . $entrancePort{'count'} . " ${entranceType}s from the entrance to the exit.\n" .
-				  "The exit will open when all " . $entrancePort{'count'} . " ${entranceType}s have entered."],
+				  "Guide " . $exitPort{'count'} . " guests from the entrance to the exit.\n" .
+				  "The exit will open when all " . $entrancePort{'count'} . " guests have entered."],
 
 
-# wait for all guests to enter
-		       "goal" => ['@type' => "entered"],
+# introduce the guests
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "spray",
+					     "tool" => ["name" => "entrance",
+							"size" => minPowerOfTwo (max ($entranceWidth, $entranceHeight)),
+							"brush" => ["center" => ["x" => int($entranceWidth/2), "y" => int($entranceHeight/2)],
+								    "intensity" => \@entranceLoc],
+							"spray" => 1,
+							"hexstate" => getTypeAsHexState($entranceType),
+							"reserve" => $entrancePort{'count'},
+							"recharge" => 0]]],
 
 # delete entrance balloon
 		       "goal" => ['@type' => "area",
@@ -463,7 +541,7 @@ my @game = ("goal" => ['@type' => "and",
 
 # print status message
 		       "goal" => ['@type' => "print",
-				  "text" => "All ${entranceType}s have now entered."],
+				  "text" => "All guests have now entered."],
 
 
 # more goals here... (e.g., require the player to meet the minimum population level)
@@ -488,7 +566,7 @@ my @game = ("goal" => ['@type' => "and",
 # print status message
 		       "goal" => ['@type' => "print",
 				  "text" => "The exit is now open.\n" .
-				  "Guide " . $entrancePort{'count'} . " ${entranceType}s to the exit."],
+				  "Guide " . $exitPort{'count'} . " guests to the exit."],
 
 
 # more goals here (e.g. fend off challenges during the guest evacuation)
@@ -508,8 +586,7 @@ my @game = ("goal" => ['@type' => "and",
 		       "goal" => ['@type' => "area",
 				  "pos" => $exitPort{'loc'},
 				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "UNLOCKED!",
-							   "persist" => '']]],
+					     "balloon" => ["text" => "UNLOCKED!"]]],
 
 # print "UNLOCKED" message
 		       "goal" => ['@type' => "print",
@@ -537,9 +614,10 @@ my @game = ("goal" => ['@type' => "and",
 	    @toolxml,
 	    "rate" => $boardRate,
 	    "entrance" => \%entrancePort,
-	    "exit" => \%exitPort,
+	    "exit" => [%exitPort, @exitLoc],
 	    "board" => ["size" => $boardSize,
 			"grammar" => \@gram,
+			@exitColor,
 			@init > 0
 			? map (("init" => ["x" => $$_[0],
 					   "y" => $$_[1],
@@ -600,11 +678,13 @@ sub parseTags {
     while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
 	my ($tag, $val) = ($1, $2);
 	die "Duplicate tag $tag\n" if exists $tagHash{$tag};
-	while ($val =~ /(.*)=+(.*)/) {
-	    my ($left, $expr) = ($1, $2);
+	# evaluate parenthesized expressions
+	while ($val =~ /(.*)\(([^\)]*)\)(.*)/) {
+	    my ($left, $expr, $right) = ($1, $2, $3);
+	    warn "Evaluating $expr" if $debug;
 	    $val = eval($expr);
 	    warn "In tag $tag: expression $expr evaluates to $val" if $debug;
-	    $expr = $left . $val;
+	    $expr = $left . $val . $right;
 	}
 	if ($isArray) {
 	    push @$tagRef, ($tag => $val);
@@ -695,6 +775,25 @@ sub newElt {
 sub sortHash {
     my ($hashRef) = @_;
     return map (($_ => $hashRef->{$_}), sort keys %$hashRef);
+}
+
+sub min {
+    my ($min, @x) = @_;
+    for my $x (@x) { $min = $x if $x < $min }
+    return $min;
+}
+
+sub max {
+    my ($max, @x) = @_;
+    for my $x (@x) { $max = $x if $x > $max }
+    return $max;
+}
+
+sub minPowerOfTwo {
+    my ($x) = @_;
+    my $p = 1;
+    while ($p < $x) { $p *= 2 }
+    return $p;
 }
 
 __END__

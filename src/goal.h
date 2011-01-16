@@ -38,13 +38,12 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 		CheckToolGoal,               /* dblData[0] <= ((Tool*)context)->reserve <= dblData[1] */
 		CheckPortalGoal,             /* ((ExitPortal*)context)->portalState == intData[0] && intData[1] <= ((ExitPortal*)context)->soFar <= intData[2] */
 		CheckGameStateGoal,          /* game->gameState == intData[0] */
-		EntrancesDoneGoal,           /* game->theEntrance.soFar >= game->theEntrance.total */
 
 		/* "pseudo-goals" are dummy goals that always evaluate true, with side effects */
 		ChargeToolPseudoGoal,        /* sets ((Tool*)context)->reserve += dblData[0], un-hides the Tool, returns true */
 		SetPortalStatePseudoGoal,    /* sets ((ExitPortal*)context)->portalState = intData[0], returns true */
 		SetGameStatePseudoGoal,      /* sets game->gameState = intData[0], returns true */
-		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true */
+		UseToolPseudoGoal,           /* calls useTool((Tool*)context,board,x,y,dblData[0]), where (x,y) is randomly sampled from parent area; returns true if Tool's reserve exhausted */
 		PrintMessagePseudoGoal,      /* prints (char*) context, returns true */
 		PlaceBalloonPseudoGoal       /* places (Balloon*) context at all points in parent area; if context==NULL, removes Balloon's at those locations */
 		};
@@ -83,7 +82,6 @@ Goal *newNotGoal (Goal *g);
 Goal *newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
 Goal *newRepeatGoal (Goal *subGoal, unsigned long minReps);
 Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell);
-Goal *newEntrancesDoneGoal();
 
 Goal *newCheckToolGoal (void *tool, double minReserve, double maxReserve);
 Goal *newCheckPortalGoal (void *portal, int portalState, int minCount, int maxCount);

@@ -20,14 +20,6 @@
 /* power-up */
 typedef struct GoalTrigger GoalTrigger;
 
-/* entrance portal */
-typedef struct EntrancePortal {
-  XYCoord pos;
-  State state;
-  int total, soFar;  /* number of entryState's to place at entrancePos */
-  double rate;  /* measured in entrances per second */
-} EntrancePortal;
-
 /* exit portal */
 typedef struct ExitPortal {
   enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
@@ -71,9 +63,6 @@ typedef struct Game {
   /* main Goal */
   Goal *goal;    /* results of testing this Goal are discarded; use PseudoGoal's to drive game state */
 
-  /* entrance portal */
-  EntrancePortal theEntrance;
-
   /* exit portal */
   ExitPortal theExit;
 
@@ -104,7 +93,6 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
 void printToGameConsole (Game *game, char *text, PaletteIndex color, double size);   /* copies text */
 
 /* helpers */
-void makeEntrances (Game *game);
 void useTools (Game *game, double duration);  /* duration is measured in board time, i.e. updates per cell */
 void testGameGoal (Game *game, int forceTest);   /* game->goal will only be tested every (1/goalTestsPerSecond) secs, unless forceTest is true */
 

@@ -6,11 +6,9 @@
 #include "xmlutil.h"
 
 /* prototypes for private builder methods */
-Tool* newToolFromXmlNode (xmlNode *node);
 GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *node);
 
 /* method defs */
-
 Game* newGameFromXmlFile (const char* filename) {
   xmlDoc* doc;
   Game* game = NULL;
@@ -36,7 +34,7 @@ Game* newGameFromXmlDocument (xmlDoc *doc) {
 
 Game* newGameFromXmlRoot (xmlNode *root) {
   Game *game;
-  xmlNode *gameNode, *entranceNode, *exitNode, *goalNode, *node;
+  xmlNode *gameNode, *exitNode, *goalNode, *node;
   Tool *tool, *selectedTool;
 
   gameNode = CHILD(root,GAME);
@@ -58,24 +56,16 @@ Game* newGameFromXmlRoot (xmlNode *root) {
       (void) ListInsertBefore (game->trigger, NULL, newGoalTriggerFromXmlNode (game, node));
 
   Assert (RBTreeSize(game->toolByName) > 0 && selectedTool != NULL, "You need some tools!");
-  game->selectedTool = selectedTool;
 
   for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,PROTECT))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->writeProtectWatcher);
 
-  entranceNode = CHILD(gameNode,ENTRANCE);
-  game->theEntrance.pos.x = CHILDINT(entranceNode,X);
-  game->theEntrance.pos.y = CHILDINT(entranceNode,Y);
-  game->theEntrance.state = OPTCHILDINT(entranceNode,DECSTATE,CHILDHEX(entranceNode,HEXSTATE));
-  game->theEntrance.total = CHILDINT(entranceNode,COUNT);
-  game->theEntrance.rate = OPTCHILDFLOAT(entranceNode,RATE,1.);
-
   exitNode = CHILD(gameNode,EXIT);
   for (node = exitNode->children; node; node = node->next)
     if (MATCHES(node,LOC))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
-  game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(entranceNode,HEXTYPE));
+  game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(exitNode,HEXTYPE));
 
   goalNode = CHILD (gameNode, GOAL);
   if (goalNode)
