@@ -30,7 +30,7 @@ my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,
 my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
 my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
 my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
-my @tool;  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, \@overwriteType]
+my @tool;  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
 my @init;  # $init[$n] = [$x, $y, $type]
 
 # empty type
@@ -87,15 +87,16 @@ while (@zg) {
     } elsif (/^tool ("[^"]*"|\S+)/) {
 	my $name = $1;
 	$name =~ s/^"(.*)"$/$1/;
-	my ($size, $type, $reserve, $recharge) = (1, $emptyType, 100, 100);
+	my ($size, $type, $reserve, $recharge, $spray) = (1, $emptyType, 100, 100, 1);
 	my @overwrite;
 	if (/\( ?size (\S+) ?\)/) { $size = $1 }
 	if (/\( ?type (\S+) ?\)/) { $type = $1 }
 	if (/\( ?reserve (\S+) ?\)/) { $reserve = $1 }
 	if (/\( ?recharge (\S+) ?\)/) { $recharge = $1 }
+	if (/\( ?spray (\S+) ?\)/) { $spray = $1 }
 	while (/\( ?overwrite (\S+) ?\)/g) { push @overwrite, $1 }
 
-	push @tool, [$name, $size, $type, $reserve, $recharge, \@overwrite];
+	push @tool, [$name, $size, $type, $reserve, $recharge, $spray, \@overwrite];
 
     } elsif (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 	$entrancePort{'x'} = $1;
@@ -415,9 +416,10 @@ for my $typeindex (1 .. @type - 1) {   # skip the empty type
 
 my @toolxml;
 for my $tool (@tool) {
-    my ($name, $size, $type, $reserve, $recharge, $overwriteType) = @$tool;
+    my ($name, $size, $type, $reserve, $recharge, $spray, $overwriteType) = @$tool;
     push @toolxml, ("tool" => ["name" => $name,
 			       "size" => $size,
+			       "spray" => $spray,
 			       "hexstate" => getTypeAsHexState($type),
 			       "reserve" => $reserve,
 			       "recharge" => $recharge,

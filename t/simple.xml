@@ -110,6 +110,7 @@ Guide 3 entering_nomads to the exit.</text>
     <tool>
       <name>Cement spray</name>
       <size>4</size>
+      <spray>100</spray>
       <hexstate>1000000000000</hexstate>
       <reserve>1000</reserve>
       <recharge>100</recharge>
@@ -117,6 +118,7 @@ Guide 3 entering_nomads to the exit.</text>
     <tool>
       <name>Acid spray</name>
       <size>4</size>
+      <spray>1</spray>
       <hexstate>3000000000000</hexstate>
       <reserve>1000</reserve>
       <recharge>100</recharge>
@@ -124,6 +126,7 @@ Guide 3 entering_nomads to the exit.</text>
     <tool>
       <name>Nomad spray</name>
       <size>4</size>
+      <spray>1</spray>
       <hexstate>4000000000000</hexstate>
       <reserve>1000</reserve>
       <recharge>100</recharge>
