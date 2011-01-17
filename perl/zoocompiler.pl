@@ -750,6 +750,7 @@ my @game = (@gameXML,
 			       @init)
 			: ()]);
 
+warn "Writing XML\n" if $verbose;
 my $elt = newElt("xml" => ["game" => \@game]);
 my $twig = XML::Twig->new(pretty_print => 'indented');
 $twig->set_root($elt);
