@@ -742,20 +742,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -772,13 +758,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -798,20 +780,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -828,13 +796,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -854,20 +818,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -884,13 +834,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -910,20 +856,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -940,13 +872,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -966,20 +894,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -996,13 +910,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1022,20 +932,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -1052,13 +948,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1078,20 +970,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -1108,13 +986,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1134,20 +1008,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.1</fail>
               <overload>1</overload>
               <src>
@@ -1164,13 +1024,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1445,20 +1301,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1475,13 +1317,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1501,20 +1339,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1531,13 +1355,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1557,20 +1377,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1587,13 +1393,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1613,20 +1415,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1643,13 +1431,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1669,20 +1453,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1699,13 +1469,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1725,20 +1491,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1755,13 +1507,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1781,20 +1529,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1811,13 +1545,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -1837,20 +1567,6 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
               <fail>0.2</fail>
               <overload>2</overload>
               <src>
@@ -1867,13 +1583,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -2127,22 +1839,8 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <fail>0.00025</fail>
-              <overload>0.001</overload>
+              <fail>0.0166666666666666</fail>
+              <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
                 <y>0</y>
@@ -2157,13 +1855,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -2191,22 +1885,8 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <fail>0.00025</fail>
-              <overload>0.001</overload>
+              <fail>0.0166666666666666</fail>
+              <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
                 <y>0</y>
@@ -2221,13 +1901,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -2255,22 +1931,8 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <fail>0.00025</fail>
-              <overload>0.001</overload>
+              <fail>0.0166666666666666</fail>
+              <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
                 <y>0</y>
@@ -2285,13 +1947,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>
@@ -2319,22 +1977,8 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <fail>0.00025</fail>
-              <overload>0.001</overload>
+              <fail>0.0166666666666666</fail>
+              <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
                 <y>0</y>
@@ -2349,13 +1993,9 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
+              <fail>0</fail>
+              <overload>0</overload>
+              <srcmask>0</srcmask>
               <destmask>ffffffffffffffff</destmask>
               <dest>
                 <x>0</x>

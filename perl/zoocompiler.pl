@@ -275,6 +275,7 @@ while (@zg) {
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
 		    my ($rhsLoc, $rhsVar, $accumFlag);
 		    my $offset = 0;
+		    $rhs =~ s/ $//;
 		    if ($rhs =~ /([^\+]*)\+ ?([\+\-]?\d+)/) {   # something + numeric constant
 			$offset = $2;
 			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
@@ -769,7 +770,7 @@ sub getType {
     if ($type =~ /^\-?\d+$/) {
 	return $type;
     }
-    die "Type '$type' unknown" unless defined $typeindex{$type};
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
     return $typeindex{$type};
 }
 
@@ -778,9 +779,9 @@ sub getMask {
     return 0 unless defined($var);
     return "ffffffffffffffff" if $var eq "*";
     return hexv($typemask{$type}) . "000000000000" if $var eq "type";
-    die "Undefined type" unless defined($type);
-    die "Type '$type' unknown" unless defined $typeindex{$type};
-    die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    croak "Undefined type" unless defined($type);
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
     my $mask = ((1 << $pvbits{$type}->{$var}) - 1) << $pvoffset{$type}->{$var};
     return hexv($mask);
 }
@@ -790,9 +791,9 @@ sub getShift {
     return 0 unless defined($var);
     return 48 if $var eq "type";
     return 0 if $var eq "*";
-    die "Undefined type" unless defined($type);
-    die "Type '$type' unknown" unless defined $typeindex{$type};
-    die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    croak "Undefined type" unless defined($type);
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
     return $pvoffset{$type}->{$var};
 }
 
@@ -803,7 +804,7 @@ sub parseTags {
     my %tagHash = $isArray ? @$tagRef : %$tagRef;
     while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
 	my ($tag, $val) = ($1, $2);
-	die "Duplicate tag $tag\n" if exists $tagHash{$tag};
+	croak "Duplicate tag $tag\n" if exists $tagHash{$tag};
 	# evaluate parenthesized expressions
 	while ($val =~ /(.*)\(([^\)]*)\)(.*)/) {
 	    my ($left, $expr, $right) = ($1, $2, $3);
@@ -854,11 +855,11 @@ sub getLocVar {
     if ($expr =~ /(.+)\.(.+)/) {
 	($loc, $var) = ($1, $2);
     } else {
-	die "In '$expr': no default var in that context" unless defined $defaultVar;
+	croak "In '$expr': no default var in that context" unless defined $defaultVar;
 	($loc, $var) = ($expr, $defaultVar);
     }
     if (defined($loc) && defined($locRef) && !defined($locRef->{$loc})) {
-	die "In '$expr': no location identifier '$loc' has been bound\n";
+	croak "In '$expr': no location identifier '$loc' has been bound\n";
     }
     return ($loc, $var);
 }

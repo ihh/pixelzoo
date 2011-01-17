@@ -27,7 +27,7 @@
 #define CementDrySetRate (CementWetSetRate/100)
 
 type cement;
-NeumannWalk(CementSpeed,CementSpeed,CementDrainRate,CementChoke);
+NeumannWalk(CementSpeed,CementSpeed,,CementDrainRate,CementChoke,0,0,);
 CementSet(CementWetSetRate,CementDrySetRate);
 
 type wall decay(4);
@@ -75,15 +75,16 @@ bri = 255 - decay*8;
 
 type acid;
 bri = 128;
-NeumannWalk(AcidStep,AcidStep,AcidDrainRate,AcidOverload);
+NeumannWalk(AcidStep,AcidStep,,AcidDrainRate,AcidOverload,0,0,);
 AcidBurn(AcidBurnRate);
 
 
 #define NomadType    nomad
 #define NomadSpeed   .06
 #define NomadStep    (NomadSpeed/3)
-#define NomadDie     (NomadSpeed/60)
-#define NomadChoke   (NomadSpeed/15)
+#define NomadBreed   0
+#define NomadDie     (NomadSpeed/180)
+#define NomadChoke   (NomadSpeed/45)
 #define NomadTurn    (NomadSpeed/9)
 #define NomadReverse (NomadSpeed/18)
 #define NomadTumble  (NomadSpeed/60)
@@ -94,9 +95,9 @@ type NomadType dir(2);
 hue = 30 + dir * 2;
 sat = 255;
 bri = 255;
-MooreDirectedWalk(NomadType,NomadStep,NomadStep,NomadDie,NomadChoke,NomadTurn,NomadReverse,NomadTumble);
-Flock2(NomadType,NomadFlock);
-Strafe(NomadStrafe);
+MooreDirectedWalk(NomadType,NomadStep,NomadStep,,NomadDie,NomadChoke,NomadBreed,0,,,NomadTurn,NomadReverse,NomadTumble,);
+MooreFlock2(NomadType,NomadFlock,);
+MooreStrafe(NomadStrafe,);
 
 #define ReorientTarget(TYPE,DX,DY,DIR,RATE)	\
   {						\

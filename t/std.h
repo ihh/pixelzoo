@@ -1,47 +1,47 @@
-#define RandomStep(DX,DY,STEP,OSTEP,DIE,ODIE)			\
-  {								\
-    <rate STEP>;						\
-    <overload OSTEP>;						\
-    loc orig(0,0);						\
-    loc next(DX,DY);						\
-    temp swap;							\
-    if next.type = empty;					\
-    do swap = next;						\
-    do next = orig <fail (DIE/STEP)> <overload (ODIE/OSTEP)>;	\
-    do orig = swap;						\
-  }								\
+#define RandomStep(DX,DY,STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)	\
+  {									\
+    <rate STEP>;							\
+    <overload OSTEP>;							\
+    loc orig(0,0);							\
+    loc next(DX,DY);							\
+    if next.type = empty;						\
+    TEST;								\
+    do next = orig <fail (DIE/STEP)> <overload (ODIE/OSTEP)>;		\
+    do orig = empty <fail (BREED/STEP)> <overload (OBREED/OSTEP)>;	\
+    EXEC;								\
+  }									\
 
-#define MooreWalk(STEP,OSTEP,DIE,ODIE)		\
-  RandomStep(+1,0,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));		\
-  RandomStep(-1,0,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));		\
-  RandomStep(0,+1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));		\
-  RandomStep(0,-1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));		\
+#define MooreWalk(STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)	\
+  RandomStep(+1,0,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC); \
+  RandomStep(-1,0,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);		\
+  RandomStep(0,+1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);		\
+  RandomStep(0,-1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);		\
 
-#define BishopWalk(STEP,OSTEP,DIE,ODIE)		\
-  RandomStep(+1,+1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));	\
-  RandomStep(-1,+1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));	\
-  RandomStep(+1,-1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));	\
-  RandomStep(-1,-1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));	\
+#define BishopWalk(STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)	\
+  RandomStep(+1,+1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);	\
+  RandomStep(-1,+1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);	\
+  RandomStep(+1,-1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);	\
+  RandomStep(-1,-1,(STEP/4),(OSTEP/4),TEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),EXEC);	\
 
-#define NeumannWalk(STEP,OSTEP,DIE,ODIE)	\
-  MooreWalk((STEP/2),(OSTEP/2),(DIE/2),(ODIE/2));		\
-  BishopWalk((STEP/2),(OSTEP/2),(DIE/2),(ODIE/2));		\
+#define NeumannWalk(STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)		\
+  MooreWalk((STEP/2),(OSTEP/2),TEST,(DIE/2),(ODIE/2),(BREED/2),(OBREED/2),EXEC); \
+  BishopWalk((STEP/2),(OSTEP/2),TEST,(DIE/2),(ODIE/2),(BREED/2),(OBREED/2),EXEC); \
 
-#define DirectedStep(DX,DY,DIR,STEP,OSTEP,DIE,ODIE)	\
-  {							\
-    <rate STEP>;					\
-    <overload OSTEP>;					\
-    loc orig(0,0);					\
-    loc next(DX,DY);					\
-    temp swap;						\
-    if orig.dir = DIR;					\
-    if next.type = empty;				\
-    do swap = next;					\
-    do next = orig <fail DIE> <overload ODIE>;		\
-    do orig = swap;					\
-  }							\
+#define MooreDirectedStep(DX,DY,DIR,STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC) \
+  {									\
+    <rate STEP>;							\
+    <overload OSTEP>;							\
+    loc orig(0,0);							\
+    loc next(DX,DY);							\
+    if orig.dir = DIR;							\
+    if next.type = empty;						\
+    TEST;								\
+    do next = orig <fail (DIE/STEP)> <overload (ODIE/OSTEP)>;		\
+    do orig = empty <fail (BREED/STEP)> <overload (OBREED/OSTEP)>;	\
+    EXEC;								\
+  }									\
 
-#define DirectedTurn(TYPE,DX,DY,DIR,DIRINC,RATE,SPONTANEOUS)	\
+#define MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,DIRINC,RATE,SPONTANEOUS,EXEC)	\
   {								\
     <rate RATE>;						\
     loc orig(0,0);						\
@@ -49,88 +49,93 @@
     if orig.dir = DIR;						\
     if next.type != empty <ignore (SPONTANEOUS/RATE)>;		\
     if next.type != TYPE <ignore (SPONTANEOUS/RATE)>;		\
+    TEST;							\
     do orig.dir = orig.dir + DIRINC;				\
+    EXEC;							\
   }								\
 
-#define DirectedTurns(TYPE,DX,DY,DIR,TURN,REVERSE,SPONTANEOUS)		\
-  DirectedTurn(TYPE,DX,DY,DIR,+1,(TURN/2),(SPONTANEOUS/3));		\
-  DirectedTurn(TYPE,DX,DY,DIR,-1,(TURN/2),(SPONTANEOUS/3));		\
-  DirectedTurn(TYPE,DX,DY,DIR,+2,REVERSE,(SPONTANEOUS/3));		\
-
+#define MooreDirectedTurns(TYPE,DX,DY,DIR,TEST,TURN,REVERSE,SPONTANEOUS,EXEC) \
+  MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,+1,(TURN/2),(SPONTANEOUS/3),EXEC);	\
+  MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,-1,(TURN/2),(SPONTANEOUS/3),EXEC);	\
+  MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,+2,REVERSE,(SPONTANEOUS/3),EXEC);	\
+									\
 // dir: 0=north, 1=east, 2=south, 3=west
 // Moore topology random walk with direction
-#define MooreDirectedWalk(TYPE,STEP,OSTEP,DIE,ODIE,TURN,REVERSE,SPONTANEOUS) \
-  DirectedStep(0,-1,0,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));				\
-  DirectedStep(+1,0,1,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));				\
-  DirectedStep(0,+1,2,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));				\
-  DirectedStep(-1,0,3,(STEP/4),(OSTEP/4),(DIE/4),(ODIE/4));				\
-  DirectedTurns(TYPE,0,-1,0,(TURN/4),(REVERSE/4),(SPONTANEOUS/4));			\
-  DirectedTurns(TYPE,+1,0,1,(TURN/4),(REVERSE/4),(SPONTANEOUS/4));			\
-  DirectedTurns(TYPE,0,+1,2,(TURN/4),(REVERSE/4),(SPONTANEOUS/4));			\
-  DirectedTurns(TYPE,-1,0,3,(TURN/4),(REVERSE/4),(SPONTANEOUS/4));			\
-
+#define MooreDirectedWalk(TYPE,STEP,OSTEP,STEPTEST,DIE,ODIE,BREED,OBREED,STEPEXEC,TURNTEST,TURN,REVERSE,SPONTANEOUS,TURNEXEC) \
+  MooreDirectedStep(0,-1,0,(STEP/4),(OSTEP/4),STEPTEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),STEPEXEC); \
+  MooreDirectedStep(+1,0,1,(STEP/4),(OSTEP/4),STEPTEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),STEPEXEC); \
+  MooreDirectedStep(0,+1,2,(STEP/4),(OSTEP/4),STEPTEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),STEPEXEC); \
+  MooreDirectedStep(-1,0,3,(STEP/4),(OSTEP/4),STEPTEST,(DIE/4),(ODIE/4),(BREED/4),(OBREED/4),STEPEXEC); \
+  MooreDirectedTurns(TYPE,0,-1,0,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
+  MooreDirectedTurns(TYPE,+1,0,1,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
+  MooreDirectedTurns(TYPE,0,+1,2,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
+  MooreDirectedTurns(TYPE,-1,0,3,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
+									\
 // flock
-#define FlockDir(TYPE,X,Y,RATE)				\
+#define MooreFlockDir(TYPE,X,Y,RATE,CODE)			\
   {							\
-  <rate RATE>;						\
-  loc orig(0,0);					\
-  loc nbr(X,Y);						\
-  if nbr.type = TYPE;					\
-  do orig.dir = nbr.dir;				\
+    <rate RATE>;						\
+    loc orig(0,0);					\
+    loc nbr(X,Y);						\
+    if nbr.type = TYPE;					\
+    do orig.dir = nbr.dir;				\
+    CODE;							\
   }							\
 
-#define Flock1(TYPE,RATE)					\
-  FlockDir(TYPE,-1,-1,(RATE/8));				\
-  FlockDir(TYPE,-1,0,(RATE/8));					\
-  FlockDir(TYPE,-1,+1,(RATE/8));				\
-  FlockDir(TYPE,0,-1,(RATE/8));					\
-  FlockDir(TYPE,0,+1,(RATE/8));					\
-  FlockDir(TYPE,+1,-1,(RATE/8));				\
-  FlockDir(TYPE,+1,0,(RATE/8));					\
-  FlockDir(TYPE,+1,+1,(RATE/8));				\
+#define MooreFlock1(TYPE,RATE,CODE)					\
+  MooreFlockDir(TYPE,-1,-1,(RATE/8),CODE);				\
+  MooreFlockDir(TYPE,-1,0,(RATE/8),CODE);					\
+  MooreFlockDir(TYPE,-1,+1,(RATE/8),CODE);				\
+  MooreFlockDir(TYPE,0,-1,(RATE/8),CODE);					\
+  MooreFlockDir(TYPE,0,+1,(RATE/8),CODE);					\
+  MooreFlockDir(TYPE,+1,-1,(RATE/8),CODE);				\
+  MooreFlockDir(TYPE,+1,0,(RATE/8),CODE);					\
+  MooreFlockDir(TYPE,+1,+1,(RATE/8),CODE);				\
 
-#define Flock2(TYPE,RATE)					\
-  Flock1(TYPE,(RATE/3));					\
-  FlockDir(TYPE,-2,-2,(RATE/24));				\
-  FlockDir(TYPE,-2,-1,(RATE/24));				\
-  FlockDir(TYPE,-2,0,(RATE/24));				\
-  FlockDir(TYPE,-2,+1,(RATE/24));				\
-  FlockDir(TYPE,-2,+2,(RATE/24));				\
-  FlockDir(TYPE,-1,-2,(RATE/24));				\
-  FlockDir(TYPE,-1,+2,(RATE/24));				\
-  FlockDir(TYPE,0,-2,(RATE/24));				\
-  FlockDir(TYPE,0,+2,(RATE/24));				\
-  FlockDir(TYPE,+1,-2,(RATE/24));				\
-  FlockDir(TYPE,+1,+2,(RATE/24));				\
-  FlockDir(TYPE,+2,-2,(RATE/24));				\
-  FlockDir(TYPE,+2,-1,(RATE/24));				\
-  FlockDir(TYPE,+2,0,(RATE/24));				\
-  FlockDir(TYPE,+2,+1,(RATE/24));				\
-  FlockDir(TYPE,+2,+2,(RATE/24));				\
+#define MooreFlock2(TYPE,RATE,CODE)			\
+  MooreFlock1(TYPE,(RATE/3),CODE);			\
+  MooreFlockDir(TYPE,-2,-2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-2,-1,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-2,0,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-2,+1,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-2,+2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-1,-2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,-1,+2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,0,-2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,0,+2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+1,-2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+1,+2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+2,-2,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+2,-1,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+2,0,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+2,+1,(RATE/24),CODE);		\
+  MooreFlockDir(TYPE,+2,+2,(RATE/24),CODE);		\
+						\
 
 // "strafe" (sidestep)
-#define StrafeDir(DX,DY,DIR,STRAFEX,STRAFEY,RATE)	\
+#define MooreStrafeDir(DX,DY,DIR,STRAFEX,STRAFEY,RATE,CODE)	\
   {							\
-  <rate RATE>;						\
-  loc orig(0,0);					\
-  loc next(DX,DY);					\
-  loc strafe(STRAFEX,STRAFEY);				\
-  if orig.dir = DIR;					\
-  if next.type != empty;				\
-  if strafe.type = empty;				\
-  do strafe = orig;					\
-  do orig = empty;					\
+    <rate RATE>;					\
+    loc orig(0,0);					\
+    loc next(DX,DY);					\
+    loc strafe(STRAFEX,STRAFEY);			\
+    if orig.dir = DIR;					\
+    if next.type != empty;				\
+    if strafe.type = empty;				\
+    do strafe = orig;					\
+    do orig = empty;					\
+    CODE;						\
   }							\
 
-#define Strafe(RATE)					\
-  StrafeDir(0,-1,0,+1,0,(RATE/8));			\
-  StrafeDir(0,-1,0,-1,0,(RATE/8));			\
-  StrafeDir(+1,0,1,0,+1,(RATE/8));			\
-  StrafeDir(+1,0,1,0,-1,(RATE/8));			\
-  StrafeDir(0,+1,2,-1,0,(RATE/8));			\
-  StrafeDir(0,+1,2,+1,0,(RATE/8));			\
-  StrafeDir(-1,0,3,0,-1,(RATE/8));			\
-  StrafeDir(-1,0,3,0,+1,(RATE/8));			\
+#define MooreStrafe(RATE,CODE)				\
+  MooreStrafeDir(0,-1,0,+1,0,(RATE/8),CODE);			\
+  MooreStrafeDir(0,-1,0,-1,0,(RATE/8),CODE);			\
+  MooreStrafeDir(+1,0,1,0,+1,(RATE/8),CODE);			\
+  MooreStrafeDir(+1,0,1,0,-1,(RATE/8),CODE);			\
+  MooreStrafeDir(0,+1,2,-1,0,(RATE/8),CODE);			\
+  MooreStrafeDir(0,+1,2,+1,0,(RATE/8),CODE);			\
+  MooreStrafeDir(-1,0,3,0,-1,(RATE/8),CODE);			\
+  MooreStrafeDir(-1,0,3,0,+1,(RATE/8),CODE);			\
 
 #define BuildDirStep(DX,DY,DIR,COORD,LIMIT,INC,DIRFLAG,REVFLAG,RATE)	\
   {									\
