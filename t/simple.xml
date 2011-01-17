@@ -1850,7 +1850,7 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <fail>0.0166666666666666</fail>
+              <fail>0.0001</fail>
               <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
@@ -1896,7 +1896,7 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <fail>0.0166666666666666</fail>
+              <fail>0.0001</fail>
               <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
@@ -1942,7 +1942,7 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <fail>0.0166666666666666</fail>
+              <fail>0.0001</fail>
               <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>
@@ -1988,7 +1988,7 @@ Guide 5 guests to the exit.</text>
               <hexval>0</hexval>
             </test>
             <exec>
-              <fail>0.0166666666666666</fail>
+              <fail>0.0001</fail>
               <overload>0.0666666666666666</overload>
               <src>
                 <x>0</x>

@@ -83,7 +83,8 @@ AcidBurn(AcidBurnRate);
 #define NomadSpeed   .06
 #define NomadStep    (NomadSpeed/3)
 #define NomadBreed   0
-#define NomadDie     (NomadSpeed/180)
+#define NomadDie     (NomadStep/10000)
+// #define NomadDie     0
 #define NomadChoke   (NomadSpeed/45)
 #define NomadTurn    (NomadSpeed/9)
 #define NomadReverse (NomadSpeed/18)
