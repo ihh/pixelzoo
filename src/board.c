@@ -188,13 +188,10 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 		return oldDestState;
 	x += op->dest.x;
 	y += op->dest.y;
-	if (onBoard(board,x,y)) {  /* only check once */
-		newState = (oldDestState & (StateMask ^ op->destMask))
-		  | (((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) << op->leftShift) & op->destMask);
-		(*write) (board, x, y, newState);
-		return newState;
-	}
-	return oldDestState;
+	newState = (oldDestState & (StateMask ^ op->destMask))
+	  | (((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) << op->leftShift) & op->destMask);
+	(*write) (board, x, y, newState);
+	return newState;
 }
 
 void evolveBoardCell (Board* board, int x, int y) {

@@ -36,7 +36,8 @@
 #define TOOL_FONT_SIZE 9
 #define TOOL_FONT_SPACING 0
 #define TOOL_NAME_OPACITY .9
-#define MAX_TOOL_SELECT_STROKE 10
+#define MAX_TOOL_SELECT_STROKE 4
+#define TOOL_SELECT_PULSE_RATE .1
 #define EXAMINE_FONT_SIZE 20
 #define EXAMINE_FONT_SPACING 0
 #define EXAMINE_BACKGROUND_OPACITY .9
@@ -71,6 +72,7 @@
 	XYCoord examCoord;
 	CGFloat cellSizeAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfZoom;  // used when zooming
+	CGPoint viewOriginAtStartOfPan;  // used when panning
 }
 
 @property(readonly) Game *game;

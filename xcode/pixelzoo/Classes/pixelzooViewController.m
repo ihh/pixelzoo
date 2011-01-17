@@ -315,16 +315,17 @@
 // pan
 - (void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
 	
+	if (recognizer.state == UIGestureRecognizerStateBegan) {
+		viewOriginAtStartOfPan = viewOrigin;
+	}
+	
 	if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
 		CGPoint trans = [recognizer translationInView:self.view];
 
 		CGPoint mvo = [self maxViewOrigin];
-		viewOrigin.x = MAX (0, MIN (viewOrigin.x - trans.x, mvo.x));
-		viewOrigin.y = MAX (0, MIN (viewOrigin.y - trans.y, mvo.y));
+		viewOrigin.x = MAX (0, MIN (viewOriginAtStartOfPan.x - trans.x, mvo.x));
+		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfPan.y - trans.y, mvo.y));
 		
-		trans.x = trans.y = 0;
-		[recognizer setTranslation:trans inView:self.view];
-
 		panning = 1;
 		game->toolActive = 0;
 	} else {

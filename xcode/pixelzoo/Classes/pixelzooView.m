@@ -318,7 +318,7 @@
 	CGContextShowTextAtPoint (ctx, toolx, tooly, name, strlen(name));			
 	if (selectFlag) {
 		[self setStroke:rgb withContext:ctx withFactor:1 withOpacity:TOOL_NAME_OPACITY asInverse:1];
-		int pulse = redraws % MAX_TOOL_SELECT_STROKE;
+		int pulse = ((int) (TOOL_SELECT_PULSE_RATE * redraws)) % MAX_TOOL_SELECT_STROKE;
 		toolRect.origin.x += pulse/2;
 		toolRect.origin.y += pulse/2;
 		toolRect.size.width -= pulse;

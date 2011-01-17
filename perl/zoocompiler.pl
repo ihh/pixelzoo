@@ -82,8 +82,9 @@ while (@zg) {
     } elsif (/^eval ?\{(.*)\}$/) {
 	# one-line eval block
 	my $expr = $1;
-	warn "Evaluating $expr" if $debug;
-	unshift @zg, eval($expr);
+	my @val = eval($expr);
+	warn "Expression $expr evaluated to @val" if $debug;
+	unshift @zg, @val;
 
     } elsif (/^eval ?\{(.*)$/) {
 	# multi-line eval block
@@ -93,14 +94,16 @@ while (@zg) {
 	    last if /^\}$/;
 	    $expr .= $_;
 	}
-	warn "Evaluating $expr" if $debug;
-	unshift @zg, eval($expr);
+	my @val = eval($expr);
+	warn "Expression $expr evaluated to @val" if $debug;
+	unshift @zg, @val;
 
     } elsif (/^xml ?\{(.*)\}$/) {
 	# one-line XML block
 	my $expr = $1;
-	warn "Evaluating $expr" if $debug;
-	push @gameXML, eval($expr);
+	my @val = eval($expr);
+	warn "Expression $expr evaluated to @val" if $debug;
+	push @gameXML, @val;
 
     } elsif (/^eval ?\{(.*)$/) {
 	# multi-line XML block
@@ -111,7 +114,9 @@ while (@zg) {
 	    $expr .= $_;
 	}
 	warn "Evaluating $expr" if $debug;
-	push @gameXML, eval($expr);
+	my @val = eval($expr);
+	warn "Expression $expr evaluated to @val" if $debug;
+	push @gameXML, @val;
 
     } elsif (/^size (\d+)/) {
 	$boardSize = $1;
@@ -741,9 +746,9 @@ sub parseTags {
 	while ($val =~ /(.*)\(([^\)]*)\)(.*)/) {
 	    my ($left, $expr, $right) = ($1, $2, $3);
 	    warn "Evaluating $expr" if $debug;
-	    $val = eval($expr);
-	    warn "In tag $tag: expression $expr evaluates to $val" if $debug;
-	    $expr = $left . $val . $right;
+	    my @val = eval($expr);
+	    warn "In tag $tag: expression $expr evaluated to @val" if $debug;
+	    $val = "$left@val$right";
 	}
 	if ($isArray) {
 	    push @$tagRef, ($tag => $val);

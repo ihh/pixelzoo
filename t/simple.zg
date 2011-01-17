@@ -32,7 +32,6 @@
     <rate DRYRATE>;					\
     loc orig(0,0);					\
     loc next(DX,DY);					\
-    temp swap;						\
     if next.type = wall <ignore (WETRATE/DRYRATE)>;	\
     do orig = wall;					\
   }							\
@@ -79,7 +78,6 @@ bri = 255 - decay*8;
     <rate RATE>;				\
     loc orig(0,0);				\
     loc next(DX,DY);				\
-    temp swap;					\
     if next.type != empty;			\
     do next = empty;				\
     do orig = empty;				\
@@ -251,108 +249,107 @@ Strafe(NomadStrafe);
 
 #define SignpostRate (NomadSpeed)
 #define SignpostSize 5
+#define SignpostMaxCoord 4
+#define SignpostMidCoord 2
 #define SignpostHue 96
-#define SignpostArrowSat 255
+#define SignpostArrowSat 127
 #define SignpostBackgroundSat 0
-#define SignpostBrightness 192
-type signpost dir(2) sat(8);
+#define SignpostBrightness 64
+type signpost dir(4) sat(8);
 hue = SignpostHue;
-sat = sat;
-bri = SignpostBrightness;
+sat = 2 * sat;
+bri = SignpostBrightness + sat;
 Reorient(NomadType,SignpostSize,self.dir,SignpostRate);
 
-#define SignpostBuildCol0DirCond(FX,FY,DIR,RX,RY,RATE,CONDITION,SAT)	\
+#define BuildDirStep(DX,DY,DIR,COORD,LIMIT,INC,DIRFLAG,REVFLAG,RATE)	\
   {									\
-    <rate RATE>;							\
+    <rate (RATE/3)>;							\
     loc orig(0,0);							\
-    loc forward(FX,FY);							\
-    loc right(RX,RY);							\
+    loc nbr(DX,DY);							\
     if orig.dir = DIR;							\
-    if orig.col = 0;							\
-    if orig.row < SignpostSize;						\
-    if forward.type = empty;						\
-    if right.type = empty;						\
-    CONDITION;								\
-    do forward = orig;							\
-    do forward.col = 1;							\
-    do right = orig;							\
-    do right.row = orig.row + 1;					\
-    do orig.type = signpost;						\
-    do orig.dir = DIR;							\
-    do orig.sat = SAT;							\
+    if orig.DIRFLAG != 0;						\
+    if orig.COORD != LIMIT;						\
+    if nbr.type = empty;						\
+    do nbr = orig;							\
+    do nbr.COORD = nbr.COORD + INC;					\
+  }									\
+  {									\
+    <rate (RATE/3)>;							\
+    loc orig(0,0);							\
+    loc nbr(DX,DY);							\
+    if orig.dir = DIR;							\
+    if nbr.type != empty;						\
+    do orig.DIRFLAG = 0;						\
+  }									\
+  {									\
+    <rate (RATE/3)>;							\
+    loc orig(0,0);							\
+    if orig.COORD = LIMIT;						\
+    do orig.DIRFLAG = 0;						\
   }									\
 
-#define SignpostBuildDirCond(FX,FY,DIR,RATE,CONDITION,SAT)	\
-  {								\
-    <rate RATE>;						\
-    loc orig(0,0);						\
-    loc forward(FX,FY);						\
-    if orig.dir = DIR;						\
-    if orig.col < SignpostSize;					\
-    if forward.type = empty;					\
-    CONDITION;							\
-    do forward = orig;						\
-    do forward.col = orig.col + 1;				\
-    do orig.type = signpost;					\
-    do orig.dir = DIR;						\
-    do orig.sat = SAT;						\
-  }								\
+#define BuildDir(DX,DY,NEG_DX,NEG_DY,DIR,MAXCOL,MAXROW,RATE)		\
+  BuildDirStep(DX,DY,DIR,row,0,-1,buildForward,buildBackward,(RATE/4));		\
+  BuildDirStep(NEG_DY,DX,DIR,col,MAXCOL,+1,buildRight,buildLeft,(RATE/4)); \
+  BuildDirStep(NEG_DX,NEG_DY,DIR,row,MAXROW,+1,buildBackward,buildForward,(RATE/4)); \
+  BuildDirStep(DY,NEG_DX,DIR,col,0,-1,buildLeft,buildRight,(RATE/4));	\
 
-#define SignpostBuildDir(FX,FY,DIR,RX,RY,RATE)				\
-  SignpostBuildCol0DirCond(FX,FY,DIR,RX,RY,(RATE/10),if orig.row = 2,SignpostArrowSat);	\
-  SignpostBuildCol0DirCond(FX,FY,DIR,RX,RY,(RATE/10),if orig.row != 2,SignpostBackgroundSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 1;if orig.row = 2,SignpostArrowSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 1;if orig.row != 2,SignpostBackgroundSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 2,SignpostArrowSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 3;if orig.row >= 1;if orig.row <= 3,SignpostArrowSat);	\
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 3;if orig.row = 0,SignpostBackgroundSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 3;if orig.row = 4,SignpostBackgroundSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 4;if orig.row = 2,SignpostArrowSat); \
-  SignpostBuildDirCond(FX,FY,DIR,(RATE/10),if orig.col = 4;if orig.row != 2,SignpostBackgroundSat); \
+#define Build(MAXCOL,MAXROW,RATE)			\
+  BuildDir(0,-1,0,+1,0,MAXCOL,MAXROW,(RATE/4));		\
+  BuildDir(+1,0,-1,0,1,MAXCOL,MAXROW,(RATE/4));		\
+  BuildDir(0,+1,0,-1,2,MAXCOL,MAXROW,(RATE/4));		\
+  BuildDir(-1,0,+1,0,3,MAXCOL,MAXROW,(RATE/4));		\
 
-#define SignpostStop(RATE)			\
+#define EndBuild(TEST,EXEC,RATE)		\
   {						\
-    <rate (RATE/2)>;				\
+    <rate RATE>;				\
     loc orig(0,0);				\
-    if orig.col >= SignpostSize;		\
-    do orig = empty;				\
+    temp builder;				\
+    if orig.buildForward = 0;			\
+    if orig.buildBackward = 0;			\
+    if orig.buildRight = 0;			\
+    if orig.buildLeft = 0;			\
+    TEST;					\
+    do builder = orig;				\
+    EXEC;					\
   }						\
-{						\
-  <rate (RATE/2)>;				\
-  loc orig(0,0);				\
-  if orig.row >= SignpostSize;			\
-  do orig = empty;				\
-}						\
 
-#define SignpostBuild(RATE)			\
-  SignpostBuildDir(0,-1,0,+1,0,(RATE/5));	\
-  SignpostBuildDir(+1,0,1,0,+1,(RATE/5));	\
-  SignpostBuildDir(0,+1,2,-1,0,(RATE/5));	\
-  SignpostBuildDir(-1,0,3,0,-1,(RATE/5));	\
-  SignpostStop((RATE/5));			\
 
 #define SignpostBuildRate 1
-type signpost_builder dir(2) col(3) row(3);
+type signpost_builder dir(4) row(4) col(4) buildForward(4) buildBackward(4) buildLeft(4) buildRight(4);
 hue = SignpostHue;
 sat = 255;
 bri = 32;
-SignpostBuild(SignpostBuildRate);
+Build (SignpostMaxCoord, SignpostMaxCoord, (SignpostBuildRate*.3));
+EndBuild (if orig.row = 2, do orig.type = signpost; do orig.sat = SignpostArrowSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.col = 2, do orig.type = signpost; do orig.sat = SignpostArrowSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.row = 1; if orig.col >= 1; if orig.col <= 3, do orig.type = signpost; do orig.sat = SignpostArrowSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.row > 2; if orig.col != 2, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.row < 2; if orig.col = 0, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.row < 2; if orig.col = 4, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
+EndBuild (if orig.row = 0; if orig.col != 2, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
 
-#define OrientedSignpostBuilder(NAME,DIR)\
-type NAME;\
-hue = SignpostHue;\
-sat = 255;\
-bri = 128;\
-{\
-  loc orig(0,0);\
-  do orig.type = signpost_builder;\
-  do orig.dir = DIR;\
-}\
+#define OrientedSignpostBuilder(NAME,DIR,BRI)	\
+  type NAME;					\
+  hue = SignpostHue;				\
+  sat = 255;					\
+  bri = BRI;					\
+  {						\
+    loc orig(0,0);				\
+    do orig.type = signpost_builder;		\
+    do orig.col = SignpostMidCoord;		\
+    do orig.row = SignpostMidCoord;		\
+    do orig.dir = DIR;				\
+    do orig.buildForward = 1;			\
+    do orig.buildBackward = 1;			\
+    do orig.buildRight = 1;			\
+    do orig.buildLeft = 1;			\
+  }						\
 
-OrientedSignpostBuilder(north_signpost_builder,0);
-OrientedSignpostBuilder(east_signpost_builder,1);
-OrientedSignpostBuilder(south_signpost_builder,2);
-OrientedSignpostBuilder(west_signpost_builder,3);
+OrientedSignpostBuilder(north_signpost_builder,0,128);
+OrientedSignpostBuilder(east_signpost_builder,1,96);
+OrientedSignpostBuilder(south_signpost_builder,2,128);
+OrientedSignpostBuilder(west_signpost_builder,3,96);
 
 #include "poly.h"
 
