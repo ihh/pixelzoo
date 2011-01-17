@@ -52,7 +52,7 @@ bin/%:  test/%.c $(OFILES)
 .SECONDARY:
 
 %.xml: %.zg perl/zoocompiler.pl
-	perl/zoocompiler.pl $< >$@
+	perl/zoocompiler.pl -v $< >$@
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj

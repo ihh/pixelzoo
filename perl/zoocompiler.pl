@@ -10,15 +10,18 @@ use Carp;
 my $man = 0;
 my $help = 0;
 my $debug = 0;
+my $verbose = 0;
 my $ppfile;
 
 my $cpp = "gcc -x c -E";
 
-GetOptions('help|?' => \$help, man => \$man, debug => \$debug, 'preprocessor|cpp=s' => \$cpp, 'savepp=s' => \$ppfile) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'preprocessor|cpp=s' => \$cpp, 'savepp=s' => \$ppfile) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 pod2usage(2) unless @ARGV == 1;
+
+$verbose = 1 if $debug;
 
 # game data structures
 my @type;
@@ -177,11 +180,11 @@ while (@zg) {
 	    if ($intype) {
 		$pvoffset{$type}->{$varname} = $typeoffset + 48;
 		$typeoffset += $varbits;
-		die "More than 48 bits for type $type" if $typeoffset >= 16;
+		die "More than 15 bits of type-encoded vars for type $type" if $typeoffset > 15;
 	    } else {
 		$pvoffset{$type}->{$varname} = $offset;
 		$offset += $varbits;
-		die "More than 48 bits of vars for type $type" if $offset >= 48;
+		die "More than 48 bits of vars for type $type" if $offset > 48;
 	    }
 	}
 	$typesize{$type} = 1 << $typeoffset;
@@ -384,11 +387,12 @@ for my $type (@type) {
     $typeindex{$type} = $idx;
     $idx += $typesize{$type};
 }
+die "Too many types - maybe implement optimized packing?" if $idx > 0x10000;
 
 # generate XML
 my @gram;
 for my $type (@type) {
-    warn "Generating XML for base type '$type'" if $debug;
+    warn "Generating XML for base type '$type'\n" if $verbose;
 
     my $baseindex = $typeindex{$type};
     for my $typeindex ($baseindex .. $baseindex + $typesize{$type} - 1) {
@@ -942,6 +946,8 @@ zoocompiler.pl [options] <.zg file>
   -man                full documentation
   -preprocessor,-cpp  preprocessor to use
   -savepp             file to save after preprocessing
+  -verbose            report progress
+  -debug              more info than you want
 
 =head1 OPTIONS
 
