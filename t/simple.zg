@@ -355,7 +355,7 @@ OrientedSignpostBuilder(west_signpost_builder,3,96);
 
 #define PolymerRate .1
 #define PolymerHue 160
-type polymer lflag(4) rflag(4) ldir(4) rdir(4);
+type polymer lflag!(1) rflag!(1) ldir!(3) rdir!(3);
 hue = PolymerHue + ldir - rdir;
 sat = 255 - 64*rflag - 64*lflag;
 bri = 255;

@@ -4,6 +4,7 @@ use strict;
 use Getopt::Long;
 use Pod::Usage;
 use XML::Twig;
+use Carp;
 
 # parse options
 my $man = 0;
@@ -22,6 +23,8 @@ pod2usage(2) unless @ARGV == 1;
 # game data structures
 my @type;
 my %typeindex;  # $typeindex{$type}
+my %typesize;  # number of actual Particle's represented by this "type"
+my %typemask;  # mask for recognizing this type
 my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
 my %pvbits;   # $pvbits{$type}->{$var}
 my %pvoffset;   # $pvoffset{$type}->{$var}
@@ -36,7 +39,14 @@ my @init;  # $init[$n] = [$x, $y, $type]
 # empty type
 my $emptyType = "empty";
 push @type, $emptyType;
-$typeindex{$emptyType} = 0;
+$typesize{$emptyType} = 1;
+$typemask{$emptyType} = 0xffff;
+$pvar{$emptyType} = [qw(hue saturation value)];
+$pvbits{$emptyType} = { 'hue' => 6, 'saturation' => 3, 'value' => 3 };
+$pvoffset{$emptyType} = { 'hue' => 6, 'saturation' => 3, 'value' => 0 };
+$ptags{$emptyType} = [];
+$hue{$emptyType} = $sat{$emptyType} = $bri{$emptyType} = [];
+$ruleTags{$emptyType} = $test{$emptyType} = $op{$emptyType} = [];
 
 # other game data
 my $boardRate = 240;
@@ -150,23 +160,32 @@ while (@zg) {
 	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
 	while (/\( ?(count|radius) (\S+) ?\)/g) { $exitPort{$1} = $2 }
 
-    } elsif (/^type (\S+)(.*)$/) {
+    } elsif (/^type ("[^"]*"|\S+)(.*)$/) {
 	my $varstr;
 	($type, $varstr) = ($1, $2);
-	die "Type '$type' is already defined" if exists $typeindex{$type};
-	$typeindex{$type} = @type;
+	$type =~ s/^"(.*)"$/$1/;
+	die "Type '$type' is already defined" if exists $typemask{$type};
 	push @type, $type;
 	$nRule = 0;
-	my $offset = 0;
-	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*) ?\( ?(\d+) ?\)/g) {
+	my ($offset, $typeoffset) = (0, 0);  # offset of next var in varbits & typebits
+	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*\!?) ?\( ?(\d+) ?\)/g) {
 	    my ($varname, $varbits) = ($1, $2);
+	    my $intype = $varname =~ s/\!$//;
 	    die "You cannot use 'type' as a var name for $type" if $varname eq "type";
 	    push @{$pvar{$type}}, $varname;
 	    $pvbits{$type}->{$varname} = $varbits;
-	    $pvoffset{$type}->{$varname} = $offset;
-	    $offset += $varbits;
-	    die "More than 48 bits of vars for type $type" if $offset > 48;
+	    if ($intype) {
+		$pvoffset{$type}->{$varname} = $typeoffset + 48;
+		$typeoffset += $varbits;
+		die "More than 48 bits for type $type" if $typeoffset >= 16;
+	    } else {
+		$pvoffset{$type}->{$varname} = $offset;
+		$offset += $varbits;
+		die "More than 48 bits of vars for type $type" if $offset >= 48;
+	    }
 	}
+	$typesize{$type} = 1 << $typeoffset;
+	$typemask{$type} = ((1 << (16 - $typeoffset)) - 1) << $typeoffset;
 	$ptags{$type} = [];
 	$ruleTags{$type} = [];
 
@@ -229,8 +248,8 @@ while (@zg) {
 		} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
 		    # test
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
-# commented out because it's unnecessary: xmlboard parser should catch this
-#		    $op = "==" if $op eq "=";
+# xmlboard.c parser doesn't distinguish between "=" and "==", but Perl's eval does, so...
+		    $op = "==" if $op eq "=";
 
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
 		    if ($var eq "type") {
@@ -357,163 +376,201 @@ while (@zg) {
     }
 }
 
+# assign type indices (TODO: optimize packing)
+my $idx = 0;
+for my $type (@type) {
+    my $typeEncodedVarMask = 0xffff ^ $typemask{$type};
+    while ($idx & $typeEncodedVarMask) { ++$idx }
+    $typeindex{$type} = $idx;
+    $idx += $typesize{$type};
+}
+
 # generate XML
 my @gram;
-for my $typeindex (1 .. @type - 1) {   # skip the empty type
-    my $type = $type[$typeindex];
-    warn "Generating XML for type '$type'" if $debug;
+for my $type (@type) {
+    warn "Generating XML for base type '$type'" if $debug;
 
-    my @particle = ("name" => $type,
-		    "type" => $typeindex{$type},
-		    @{$ptags{$type}}
-	);
+    my $baseindex = $typeindex{$type};
+    for my $typeindex ($baseindex .. $baseindex + $typesize{$type} - 1) {
 
-    # color rules
-    my $colBase = 0;
-    my @maskshiftmul;
-
-    for my $cvm (@{$hue{$type}}) {
-	$colBase += $cvm->[0] << 16;
-	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
-    }
-
-    for my $cvm (@{$sat{$type}}) {
-	$colBase += $cvm->[0] << 8;
-	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
-    }
-
-    for my $cvm (@{$bri{$type}}) {
-	$colBase += $cvm->[0];
-	push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
-    }
-
-    if (@maskshiftmul == 0) {
-	@maskshiftmul = [0, 0, 0];
-	$colBase = 255 if $colBase == 0;
-    }
-
-    my $doneConst = 0;
-    for (my $n = 0; $n < @maskshiftmul; ++$n) {
-	my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
-	next if $doneConst && $mask eq "0" && $shift==0 && $mul==0;
-	my @colorRule = ("mask" => $mask,
-			 "rshift" => $shift,
-			 "hexmul" => hexv($mul));
-	if (!$doneConst) { push @colorRule, ("hexinc" => hexv($colBase)); $doneConst = 1 }
-	push @particle, "color" => \@colorRule;
-    }
-
-    # production rules
-    for (my $nRule = 0; $nRule < @{$ruleTags{$type}}; ++$nRule) {
-	my @rule = @{$ruleTags{$type}->[$nRule]};
-
-	# tests
-	my %compare;
-	for my $test (@{$test{$type}->[$nRule]}) {
-	    my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
-
-	    # resolve any dangling literal typenames
-	    if ($tvar eq "type") {
-		$trhs = getType($trhs);
+	my $state = $typeindex << 48;
+	my $name = $type;
+	for my $var (@{$pvar{$type}}) {
+	    my $shift = getShift($type,$var);
+	    if ($shift >= 48) {
+		my $val = ($state & decv(getMask($type,$var))) >> $shift;
+		$name .= " $var:$val";
 	    }
+	}
 
-	    # consolidate repeated comparisons of a constant with the same location
-	    if ($top eq "=" || $top eq "==") {
-		if (exists $compare{"$tx $ty"}) {
-		    my $ruleRef = $rule[$compare{"$tx $ty"}];
-		    my %prevTest = @$ruleRef;
-		    my $prevMask = $prevTest{"mask"};
-		    my $thisMask = getMask($ttype,$tvar);
-		    if (defined($prevMask) && defined($thisMask)) {
-			if ((decv($thisMask) & decv($prevMask)) == 0) {
-			    my $prevRhs = exists($prevTest{"hexval"}) ? decv($prevTest{"hexval"}) : 0;
-			    my $thisRhs = $trhs << getShift($ttype,$tvar);
-			    $prevTest{"hexval"} = hexv ($prevRhs | $thisRhs);
-			    $prevTest{"mask"} = hexv (decv($prevMask) | decv($thisMask));
-			    @$ruleRef = %prevTest;
-			    warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
-			    next;
-			} else {
-			    warn "Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap\n";
-			}
+	my @particle = ("name" => $name,
+			"type" => $typeindex,
+			@{$ptags{$type}}
+	    );
+
+	# color rules
+	my $colBase = 0;
+	my @maskshiftmul;
+
+	for my $cvm (@{$hue{$type}}) {
+	    $colBase += $cvm->[0] << 16;
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
+	}
+
+	for my $cvm (@{$sat{$type}}) {
+	    $colBase += $cvm->[0] << 8;
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
+	}
+
+	for my $cvm (@{$bri{$type}}) {
+	    $colBase += $cvm->[0];
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
+	}
+
+	if (@maskshiftmul == 0) {
+	    @maskshiftmul = [0, 0, 0];
+	    $colBase = 255 if $colBase == 0;
+	}
+
+	my $doneConst = 0;
+	for (my $n = 0; $n < @maskshiftmul; ++$n) {
+	    my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
+	    next if $doneConst && $mask eq "0" && $shift==0 && $mul==0;
+	    my @colorRule = ("mask" => $mask,
+			     "rshift" => $shift,
+			     "hexmul" => hexv($mul));
+	    if (!$doneConst) { push @colorRule, ("hexinc" => hexv($colBase)); $doneConst = 1 }
+	    push @particle, "color" => \@colorRule;
+	}
+
+	# production rules
+      RULE:
+	for (my $nRule = 0; $nRule < @{$ruleTags{$type}}; ++$nRule) {
+	    my @rule = @{$ruleTags{$type}->[$nRule]};
+
+	    # tests
+	    my %compare;
+	  TEST:
+	    for my $test (@{$test{$type}->[$nRule]}) {
+		my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
+
+		# intercept tests of type-encoded vars
+		if ($tx == 0 && $ty == 0 && getShift($ttype,$tvar) >= 48) {
+		    my $tlhs = (($state & decv(getMask($ttype,$tvar))) >> getShift($ttype,$tvar));
+		    my $expr = "$tlhs $top $trhs";
+		    warn "Evaluating test ($tvar $top $trhs) for var-encoded type ($name), test expression is ($expr)" if $debug;
+		    if (eval ($expr)) {
+			warn "Test passed; skipping to next test" if $debug;
+			next TEST;
+		    } else {
+			warn "Test failed; skipping to next rule" if $debug;
+			next RULE;
 		    }
 		}
-		$compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
-	    }
 
-	    # build the test hash
-	    my @t = (@$other,
-		     '@op' => $top,
-		     length("$tx$ty") ? ("pos" => [ "x" => $tx, "y" => $ty ]) : (),
-		     "mask" => getMask($ttype,$tvar),
-		     "hexval" => hexv($trhs << getShift($ttype,$tvar)));
-
-	    # store
-	    push @rule, "test" => \@t;
-	}
-
-	# operations
-	my %assign;
-	for my $op (@{$op{$type}->[$nRule]}) {
-	    my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
-
-	    # resolve any dangling literal typenames
-	    if ($dvar eq "type" || $dvar eq "*") {
-		$offset = getType($offset);
-		if ($dvar eq "*") {
-		    $offset = $offset << 48;
+		# resolve any dangling literal typenames
+		if ($tvar eq "type") {
+		    $trhs = getType($trhs);
 		}
-	    }
 
-	    # consolidate repeated writes of a constant to the same location
-	    if (!$accumFlag) {
-		if (exists $assign{"$dx $dy"}) {
-		    my $ruleRef = $rule[$assign{"$dx $dy"}];
-		    my %prevExec = @$ruleRef;
-		    my $prevDestmask = $prevExec{"destmask"};
-		    my $thisDestmask = getMask($dtype,$dvar);
-		    if (defined($prevDestmask) && defined($thisDestmask)) {
-			if ((decv($thisDestmask) & decv($prevDestmask)) == 0) {
-			    my $prevLeftShift = $prevExec{"lshift"};
-			    $prevLeftShift = 0 unless defined $prevLeftShift;
-			    my $prevOffset = (exists($prevExec{"hexinc"}) ? decv($prevExec{"hexinc"}) : 0) << $prevLeftShift;
-			    my $thisLeftShift = getShift($dtype,$dvar);
-			    $prevExec{"hexinc"} = hexv ($prevOffset | ($offset << $thisLeftShift));
-			    $prevExec{"lshift"} = 0;
-			    $prevExec{"destmask"} = hexv (decv($prevDestmask) | decv($thisDestmask));
-			    @$ruleRef = %prevExec;
-			    warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
-			    next;
-			} else {
-			    warn "Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap\n";
+		# consolidate repeated tests of different fields at the same location
+		if ($top eq "=" || $top eq "==") {
+		    if (exists $compare{"$tx $ty"}) {
+			my $ruleRef = $rule[$compare{"$tx $ty"}];
+			my %prevTest = @$ruleRef;
+			my $prevMask = $prevTest{"mask"};
+			my $thisMask = getMask($ttype,$tvar);
+			if (defined($prevMask) && defined($thisMask)) {
+			    if ((decv($thisMask) & decv($prevMask)) == 0) {
+				my $prevRhs = exists($prevTest{"hexval"}) ? decv($prevTest{"hexval"}) : 0;
+				my $thisRhs = $trhs << getShift($ttype,$tvar);
+				$prevTest{"hexval"} = hexv ($prevRhs | $thisRhs);
+				$prevTest{"mask"} = hexv (decv($prevMask) | decv($thisMask));
+				@$ruleRef = %prevTest;
+				warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
+				next;
+			    } else {
+				warn "Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap\n";
+			    }
 			}
 		    }
+		    $compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
 		}
-		$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
+
+		# build the test hash
+		my @t = (@$other,
+			 '@op' => $top,
+			 length("$tx$ty") ? ("pos" => [ "x" => $tx, "y" => $ty ]) : (),
+			 "mask" => getMask($ttype,$tvar),
+			 "hexval" => hexv($trhs << getShift($ttype,$tvar)));
+
+		# store
+		push @rule, "test" => \@t;
 	    }
 
-	    # build the exec hash
-	    my @x = (@$other,
-		     defined($sx) && length("$sx$sy") ? ("src" => [ "x" => $sx, "y" => $sy ]) : (),
-		     "srcmask" => ($accumFlag ? getMask($stype,$svar) : 0),
-		     $accumFlag ? ("rshift" => getShift($stype,$svar)) : (),
-		     $offset != 0 ? ("hexinc" => hexv($offset)) : (),
-		     ($offset != 0 || $accumFlag) ? ("lshift" => getShift($dtype,$dvar)) : (),
-		     "destmask" => getMask($dtype,$dvar),
-		     defined($dx) && length("$dx$dy") ? ("dest" => [ "x" => $dx, "y" => $dy ]) : ());
+	    # operations
+	    my %assign;
+	    for my $op (@{$op{$type}->[$nRule]}) {
+		my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
 
-	    # store
-	    push @rule, "exec" => \@x;  # %assign requires that the second element is the arrayref containing the rule op... yuck
+		# resolve any dangling literal typenames
+		if ($dvar eq "type" || $dvar eq "*") {
+		    $offset = getType($offset);
+		    if ($dvar eq "*") {
+			$offset = $offset << 48;
+		    }
+		}
+
+		# consolidate repeated writes of a constant to the same location
+		if (!$accumFlag) {
+		    if (exists $assign{"$dx $dy"}) {
+			my $ruleRef = $rule[$assign{"$dx $dy"}];
+			my %prevExec = @$ruleRef;
+			my $prevDestmask = $prevExec{"destmask"};
+			my $thisDestmask = getMask($dtype,$dvar);
+			if (defined($prevDestmask) && defined($thisDestmask)) {
+			    if ((decv($thisDestmask) & decv($prevDestmask)) == 0) {
+				my $prevLeftShift = $prevExec{"lshift"};
+				$prevLeftShift = 0 unless defined $prevLeftShift;
+				my $prevOffset = (exists($prevExec{"hexinc"}) ? decv($prevExec{"hexinc"}) : 0) << $prevLeftShift;
+				my $thisLeftShift = getShift($dtype,$dvar);
+				$prevExec{"hexinc"} = hexv ($prevOffset | ($offset << $thisLeftShift));
+				$prevExec{"lshift"} = 0;
+				$prevExec{"destmask"} = hexv (decv($prevDestmask) | decv($thisDestmask));
+				@$ruleRef = %prevExec;
+				warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
+				next;
+			    } else {
+				warn "Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap\n";
+			    }
+			}
+		    }
+		    $assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
+		}
+
+		# build the exec hash
+		my @x = (@$other,
+			 defined($sx) && length("$sx$sy") ? ("src" => [ "x" => $sx, "y" => $sy ]) : (),
+			 "srcmask" => ($accumFlag ? getMask($stype,$svar) : 0),
+			 $accumFlag ? ("rshift" => getShift($stype,$svar)) : (),
+			 $offset != 0 ? ("hexinc" => hexv($offset)) : (),
+			 ($offset != 0 || $accumFlag) ? ("lshift" => getShift($dtype,$dvar)) : (),
+			 "destmask" => getMask($dtype,$dvar),
+			 defined($dx) && length("$dx$dy") ? ("dest" => [ "x" => $dx, "y" => $dy ]) : ());
+
+		# store
+		push @rule, "exec" => \@x;  # %assign requires that the second element is the arrayref containing the rule op... yuck
+	    }
+
+	    # save rule
+	    if (@rule) {
+		push @particle, "rule" => \@rule;
+	    }
 	}
 
-	# save rule
-	if (@rule) {
-	    push @particle, "rule" => \@rule;
-	}
+	# .....aaaaand, save the particle.
+	push @gram, "particle" => \@particle;
     }
-
-    # .....aaaaand, save the particle.
-    push @gram, "particle" => \@particle;
 }
 
 my @toolxml;
@@ -715,7 +772,7 @@ sub getMask {
     my ($type, $var) = @_;
     return 0 unless defined($var);
     return "ffffffffffffffff" if $var eq "*";
-    return "ffff000000000000" if $var eq "type";
+    return hexv($typemask{$type}) . "000000000000" if $var eq "type";
     die "Undefined type" unless defined($type);
     die "Type '$type' unknown" unless defined $typeindex{$type};
     die "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
@@ -803,8 +860,9 @@ sub getLocVar {
 
 sub hexv {
     my ($val) = @_;
+    croak "Undefined value" unless defined $val;
     my $hex = sprintf ("%x", $val);
-    return sprintf ("%x", $val);
+    return $hex;
 }
 
 sub decv {
