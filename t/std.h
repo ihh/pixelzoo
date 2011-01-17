@@ -1,3 +1,60 @@
+#define SelfAction(RATE,CODE)	\
+  {				\
+    <rate RATE>;		\
+    loc self(0,0);		\
+    CODE;			\
+  }				\
+
+#define SelfTransform(RATE,TYPE,TEST,EXEC)	\
+  SelfAction(RATE,TEST;do self = TYPE;EXEC;)
+
+#define AdjacentCell(DX,DY,TYPE,RATE,CODE)	\
+  {						\
+    <rate RATE>;				\
+    loc src(0,0);				\
+    loc tgt(DX,DY);				\
+    if tgt.type = TYPE;				\
+    CODE;					\
+  }						\
+
+#define MooreAdjacent(TYPE,RATE,CODE)		\
+  AdjacentCell(+1,0,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(-1,0,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(0,+1,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(0,-1,TYPE,(RATE/4),CODE);	\
+
+#define BishopAdjacent(TYPE,RATE,CODE)		\
+  AdjacentCell(+1,+1,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(-1,-1,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(-1,+1,TYPE,(RATE/4),CODE);	\
+  AdjacentCell(+1,-1,TYPE,(RATE/4),CODE);	\
+
+#define NeumannAdjacent(TYPE,RATE,CODE)		\
+  MooreAdjacent(TYPE,(RATE/2),CODE);		\
+  BishopAdjacent(TYPE,(RATE/2),CODE);		\
+
+#define MoorePair(TARGET,RATE,NEWSOURCE,NEWTARGET,TEST,EXEC)		\
+  MooreAdjacent(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
+
+#define NeumannPair(TARGET,RATE,NEWSOURCE,NEWTARGET,TEST,EXEC)		\
+  NeumannAdjacent(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
+
+#define RedHue    0
+#define YellowHue 42
+#define GreenHue  84
+#define CyanHue   126
+#define BlueHue   168
+#define PinkHue   210
+
+#define Bright    bri = 255; sat = 255;
+
+#define BrightRed    hue = RedHue; Bright;
+#define BrightYellow hue = YellowHue; Bright;
+#define BrightGreen  hue = GreenHue; Bright;
+#define BrightCyan   hue = CyanHue; Bright;
+#define BrightBlue   hue = BlueHue; Bright;
+#define BrightPink   hue = PinkHue; Bright;
+
 #define RandomStep(DX,DY,STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)	\
   {									\
     <rate STEP>;							\

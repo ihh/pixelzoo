@@ -268,3 +268,20 @@ tool "South sign" (type south_signpost_builder) (reserve 1) (size 1) (spray 100)
 tool "West sign" (type west_signpost_builder) (reserve 1) (size 1) (spray 100) (overwrite empty);
 
 tool "Polymer" (type poly_len20) (reserve 1) (size 1) (spray 100) (overwrite empty);
+
+#define MaxPlantHeight 7
+#define PlantGrowRate .0001
+#define PlantDieRate (PlantGrowRate/2)
+#define NomadEatPlantRate (2*NomadSpeed)
+type plant height(3);
+hue = GreenHue - height;
+bri = 255 - height * 16;
+sat = 255;
+NeumannPair(empty,PlantGrowRate,src,src,if src.height < MaxPlantHeight,do tgt.height = tgt.height + 1);
+NeumannPair(nomad,NomadEatPlantRate,tgt,empty,,);
+SelfTransform((PlantDieRate/8),empty,,);
+SelfTransform((PlantDieRate/4),empty,if self.height > 3,);
+SelfTransform((PlantDieRate/2),empty,if self.height > 5,);
+SelfTransform((PlantDieRate/8),empty,if self.height = MaxPlantHeight,);
+
+tool "Seed" (type plant) (reserve 1) (size 1) (spray 100) (overwrite empty);
