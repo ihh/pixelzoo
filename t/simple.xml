@@ -6376,7 +6376,7 @@ Guide 5 guests to the exit.</text>
             <hexmul>ffffffffffffc000</hexmul>
           </color>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>7010</hexval>
               <pos>
@@ -6443,7 +6443,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>7010</hexval>
               <pos>
@@ -6512,7 +6512,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -6579,7 +6579,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -6646,7 +6646,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -6715,7 +6715,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -6784,7 +6784,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>5010</hexval>
               <pos>
@@ -6851,7 +6851,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>5010</hexval>
               <pos>
@@ -6920,7 +6920,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -6989,7 +6989,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -7058,7 +7058,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -7127,7 +7127,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -7196,7 +7196,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -7265,7 +7265,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -7334,7 +7334,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -7403,7 +7403,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -7472,7 +7472,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1010</hexval>
               <pos>
@@ -7541,7 +7541,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1010</hexval>
               <pos>
@@ -7608,7 +7608,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -7677,7 +7677,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -7746,7 +7746,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -7813,7 +7813,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -7880,7 +7880,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>3010</hexval>
               <pos>
@@ -7949,7 +7949,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>3010</hexval>
               <pos>
@@ -8016,7 +8016,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>701</hexval>
               <pos>
@@ -8083,7 +8083,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>701</hexval>
               <pos>
@@ -8152,7 +8152,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -8219,7 +8219,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -8286,7 +8286,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -8355,7 +8355,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -8424,7 +8424,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>501</hexval>
               <pos>
@@ -8491,7 +8491,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>501</hexval>
               <pos>
@@ -8560,7 +8560,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -8629,7 +8629,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -8698,7 +8698,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -8767,7 +8767,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -8836,7 +8836,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -8905,7 +8905,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -8974,7 +8974,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -9043,7 +9043,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -9112,7 +9112,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>101</hexval>
               <pos>
@@ -9181,7 +9181,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>101</hexval>
               <pos>
@@ -9248,7 +9248,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -9317,7 +9317,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -9386,7 +9386,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -9453,7 +9453,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -9520,7 +9520,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>301</hexval>
               <pos>
@@ -9589,7 +9589,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00138888888888889</rate>
+            <rate>0.0138888888888889</rate>
             <test op="=">
               <hexval>301</hexval>
               <pos>
@@ -9656,7 +9656,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6711</hexval>
               <pos>
@@ -9743,7 +9743,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5711</hexval>
               <pos>
@@ -9828,7 +9828,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>711</hexval>
               <pos>
@@ -9915,7 +9915,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4711</hexval>
               <pos>
@@ -10002,7 +10002,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1711</hexval>
               <pos>
@@ -10089,7 +10089,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2711</hexval>
               <pos>
@@ -10176,7 +10176,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7611</hexval>
               <pos>
@@ -10263,7 +10263,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5611</hexval>
               <pos>
@@ -10350,7 +10350,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>611</hexval>
               <pos>
@@ -10435,7 +10435,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4611</hexval>
               <pos>
@@ -10522,7 +10522,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1611</hexval>
               <pos>
@@ -10609,7 +10609,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2611</hexval>
               <pos>
@@ -10696,7 +10696,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2611</hexval>
               <pos>
@@ -10783,7 +10783,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3611</hexval>
               <pos>
@@ -10870,7 +10870,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7511</hexval>
               <pos>
@@ -10955,7 +10955,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6511</hexval>
               <pos>
@@ -11042,7 +11042,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>511</hexval>
               <pos>
@@ -11127,7 +11127,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4511</hexval>
               <pos>
@@ -11212,7 +11212,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2511</hexval>
               <pos>
@@ -11299,7 +11299,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3511</hexval>
               <pos>
@@ -11386,7 +11386,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7011</hexval>
               <pos>
@@ -11473,7 +11473,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6011</hexval>
               <pos>
@@ -11558,7 +11558,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5011</hexval>
               <pos>
@@ -11643,7 +11643,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4011</hexval>
               <pos>
@@ -11730,7 +11730,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4011</hexval>
               <pos>
@@ -11817,7 +11817,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1011</hexval>
               <pos>
@@ -11904,7 +11904,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2011</hexval>
               <pos>
@@ -11989,7 +11989,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3011</hexval>
               <pos>
@@ -12074,7 +12074,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7411</hexval>
               <pos>
@@ -12161,7 +12161,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6411</hexval>
               <pos>
@@ -12248,7 +12248,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5411</hexval>
               <pos>
@@ -12333,7 +12333,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>411</hexval>
               <pos>
@@ -12420,7 +12420,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>411</hexval>
               <pos>
@@ -12507,7 +12507,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1411</hexval>
               <pos>
@@ -12594,7 +12594,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2411</hexval>
               <pos>
@@ -12681,7 +12681,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3411</hexval>
               <pos>
@@ -12766,7 +12766,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7111</hexval>
               <pos>
@@ -12853,7 +12853,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6111</hexval>
               <pos>
@@ -12940,7 +12940,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>111</hexval>
               <pos>
@@ -13027,7 +13027,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4111</hexval>
               <pos>
@@ -13114,7 +13114,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2111</hexval>
               <pos>
@@ -13201,7 +13201,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3111</hexval>
               <pos>
@@ -13286,7 +13286,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>7211</hexval>
               <pos>
@@ -13373,7 +13373,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6211</hexval>
               <pos>
@@ -13460,7 +13460,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6211</hexval>
               <pos>
@@ -13547,7 +13547,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5211</hexval>
               <pos>
@@ -13634,7 +13634,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>211</hexval>
               <pos>
@@ -13719,7 +13719,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4211</hexval>
               <pos>
@@ -13806,7 +13806,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1211</hexval>
               <pos>
@@ -13893,7 +13893,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>3211</hexval>
               <pos>
@@ -13980,7 +13980,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>6311</hexval>
               <pos>
@@ -14067,7 +14067,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>5311</hexval>
               <pos>
@@ -14154,7 +14154,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>311</hexval>
               <pos>
@@ -14239,7 +14239,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>4311</hexval>
               <pos>
@@ -14324,7 +14324,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>1311</hexval>
               <pos>
@@ -14409,7 +14409,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.000595238095238095</rate>
+            <rate>0.00595238095238095</rate>
             <test op="=">
               <hexval>2311</hexval>
               <pos>
@@ -14496,7 +14496,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -14531,7 +14531,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -14566,7 +14566,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1</hexval>
               <pos>
@@ -14601,7 +14601,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -14636,7 +14636,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -14671,7 +14671,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>10</hexval>
               <pos>
@@ -14706,7 +14706,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>101</hexval>
               <pos>
@@ -14741,7 +14741,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>101</hexval>
               <pos>
@@ -14776,7 +14776,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>101</hexval>
               <pos>
@@ -14811,7 +14811,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1010</hexval>
               <pos>
@@ -14846,7 +14846,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1010</hexval>
               <pos>
@@ -14881,7 +14881,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>1010</hexval>
               <pos>
@@ -14916,7 +14916,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -14951,7 +14951,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -14986,7 +14986,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>201</hexval>
               <pos>
@@ -15021,7 +15021,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -15056,7 +15056,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -15091,7 +15091,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>2010</hexval>
               <pos>
@@ -15126,7 +15126,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>301</hexval>
               <pos>
@@ -15161,7 +15161,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>301</hexval>
               <pos>
@@ -15196,7 +15196,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>301</hexval>
               <pos>
@@ -15231,7 +15231,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>3010</hexval>
               <pos>
@@ -15266,7 +15266,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>3010</hexval>
               <pos>
@@ -15301,7 +15301,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>3010</hexval>
               <pos>
@@ -15336,7 +15336,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -15371,7 +15371,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -15406,7 +15406,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>401</hexval>
               <pos>
@@ -15441,7 +15441,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -15476,7 +15476,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -15511,7 +15511,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>4010</hexval>
               <pos>
@@ -15546,7 +15546,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>501</hexval>
               <pos>
@@ -15581,7 +15581,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>501</hexval>
               <pos>
@@ -15616,7 +15616,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>501</hexval>
               <pos>
@@ -15651,7 +15651,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>5010</hexval>
               <pos>
@@ -15686,7 +15686,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>5010</hexval>
               <pos>
@@ -15721,7 +15721,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>5010</hexval>
               <pos>
@@ -15756,7 +15756,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -15791,7 +15791,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -15826,7 +15826,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>601</hexval>
               <pos>
@@ -15861,7 +15861,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -15896,7 +15896,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -15931,7 +15931,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>6010</hexval>
               <pos>
@@ -15966,7 +15966,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>701</hexval>
               <pos>
@@ -16001,7 +16001,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>701</hexval>
               <pos>
@@ -16036,7 +16036,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>701</hexval>
               <pos>
@@ -16071,7 +16071,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>7010</hexval>
               <pos>
@@ -16106,7 +16106,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>7010</hexval>
               <pos>
@@ -16141,7 +16141,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>6.94444444444443e-05</rate>
+            <rate>0.000694444444444443</rate>
             <test op="=">
               <hexval>7010</hexval>
               <pos>
@@ -16176,7 +16176,7 @@ Guide 5 guests to the exit.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00333333333333333</rate>
+            <rate>0.0333333333333333</rate>
             <test op="=">
               <hexval>0</hexval>
               <pos>
