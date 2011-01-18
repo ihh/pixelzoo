@@ -190,7 +190,8 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 	y += op->dest.y;
 	newState = (oldDestState & (StateMask ^ op->destMask))
 	  | (((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) << op->leftShift) & op->destMask);
-	(*write) (board, x, y, newState);
+	if (onBoard (board, x, y))
+	  (*write) (board, x, y, newState);
 	return newState;
 }
 
