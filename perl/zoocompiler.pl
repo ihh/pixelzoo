@@ -59,6 +59,9 @@ my %exitPort = ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6);
 my ($entranceType, $exitType) = ($emptyType, $emptyType);
 my @gameXML;
 
+# compiler data
+my %compiler_warnings;
+
 # parse input file
 my ($zgfilename) = @ARGV;
 local *ZG;
@@ -217,7 +220,7 @@ while (@zg) {
 	    unshift @zg, $_;
 
 	    # rule block
-	    my (@tag, %loc, %loctype, @test, @op);
+	    my (@tag, %loc, %loctype, %locdubious, @test, @op);
 	    my $temps = 0;
 	    while (@zg) {
 		$_ = shift @zg;
@@ -238,6 +241,7 @@ while (@zg) {
 		    $loc{$locid} = [$x,$y];
 		    if ($x == 0 && $y == 0) {
 			$loctype{$locid} = $type;
+			$locdubious{$locid} = undef;
 		    }
 		    warn "loc=$locid x=$x y=$y" if $debug;
 
@@ -255,15 +259,18 @@ while (@zg) {
 		    $op = "==" if $op eq "=";
 
 		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
+		    my $ignoreTags = parseTags($ignore);
+
 		    if ($var eq "type") {
 			$loctype{$loc} = $rhs;
+			$locdubious{$loc} = firstNonzeroTag ($ignoreTags, "ignore", "overload");
 		    }
 
-		    if (defined($var) && $var ne "type" && $var ne "*" && !defined($loctype{$loc})) {
-			die "Can't access $loc.$var because type of $loc is not bound\n";
+		    if (defined($var) && $var ne "type" && $var ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $loc, $var);
 		    }
 
-		    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, parseTags($ignore)];
+		    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, $ignoreTags];
 
 		    if ($debug) {
 			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
@@ -273,6 +280,7 @@ while (@zg) {
 		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
 		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
+		    my $failTags = parseTags($fail);
 		    my ($rhsLoc, $rhsVar, $accumFlag);
 		    my $offset = 0;
 		    $rhs =~ s/ $//;
@@ -307,19 +315,20 @@ while (@zg) {
 
 		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
 			$loctype{$lhsLoc} = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
+			$locdubious{$lhsLoc} = firstNonzeroTag ($failTags, "fail", "overload");
 		    }
 
-		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*" && !defined($loctype{$lhsLoc})) {
-			die "Can't access $lhsLoc.$lhsVar because type of $lhsLoc is not bound\n";
+		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $lhsLoc, $lhsVar);
 		    }
 
-		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*" && !defined($loctype{$rhsLoc})) {
-			die "Can't access $rhsLoc.$rhsVar because type of $rhsLoc is not bound\n";
+		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $rhsLoc, $rhsVar);
 		    }
 
 		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
 						   @{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar,
-						   $accumFlag, $offset, parseTags($fail)];
+						   $accumFlag, $offset, $failTags];
 
 		    if ($debug) {
 			$rhsLoc = "" unless defined $rhsLoc;
@@ -421,20 +430,22 @@ for my $type (@type) {
 	    $colBase += $cvm->[0] << 16;
 	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
 	}
+	# default hue = 0
 
 	for my $cvm (@{$sat{$type}}) {
 	    $colBase += $cvm->[0] << 8;
 	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
 	}
+	$colBase += 0x8000 unless @{$sat{$type}};  # default saturation = 128
 
 	for my $cvm (@{$bri{$type}}) {
 	    $colBase += $cvm->[0];
 	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
 	}
+	$colBase += 0xff unless @{$bri{$type}};  # default brightness = 255
 
 	if (@maskshiftmul == 0) {
-	    @maskshiftmul = [0, 0, 0];
-	    $colBase = 255 if $colBase == 0;
+	    @maskshiftmul = [0, 0, 0];   # add a dummy entry to ensure $colBase gets a look in
 	}
 
 	my $doneConst = 0;
@@ -495,11 +506,14 @@ for my $type (@type) {
 				warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
 				next;
 			    } else {
-				warn "Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap\n";
+				compiler_warn ("Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap");
 			    }
 			}
 		    }
-		    $compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
+
+		    unless (defined (firstNonzeroTag ($other, "ignore", "overload"))) {
+			$compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
+		    }
 		}
 
 		# build the test hash
@@ -546,11 +560,14 @@ for my $type (@type) {
 				warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
 				next;
 			    } else {
-				warn "Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap\n";
+				compiler_warn ("Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap");
 			    }
 			}
 		    }
-		    $assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
+
+		    unless (defined (firstNonzeroTag ($other, "fail", "overload"))) {
+			$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
+		    }
 		}
 
 		# build the exec hash
@@ -759,6 +776,32 @@ $twig->set_root($elt);
 $twig->print;
 
 exit;
+
+sub compiler_warn {
+    my $warning = join ("", @_);
+    my $nw = ++$compiler_warnings{$warning};
+    if ($nw == 1) { warn "$warning\n" }
+    elsif ($nw == 2) { warn "(suppressing further warnings of the form \"", substr($warning,0,20), "...\")\n" }
+}
+
+sub assertLocTypeBound {
+    my ($loctype, $locdubious, $loc, $var) = @_;
+    if (!defined($loctype->{$loc})) {
+	die "Can't access $loc.$var because type of $loc is not bound\n";
+    }
+    if (defined $locdubious->{$loc}) {
+	compiler_warn ("Accessing $loc.$var: type of $loc may be dubious due to previous $locdubious->{$loc} clause");
+    }
+}
+
+sub firstNonzeroTag {
+    my ($arrayRef, @tag) = @_;
+    my %hash = @$arrayRef;
+    for my $tag (@tag) {
+	return $tag if exists($hash{$tag}) && $hash{$tag} > 0;
+    }
+    return undef;
+}
 
 sub getTypeAsHexState {
     my ($type) = @_;
