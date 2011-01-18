@@ -118,18 +118,37 @@ MooreStrafe(NomadStrafe,);
     loc self(0,0);				\
     loc target(DX,DY);				\
     if target.type = TYPE;			\
-    do target.dir = DIR;				\
+    do target.DIR = self.DIR;				\
   }						\
 
+
+#define TransportTarget(TYPE,OLDX,OLDY,NEWX,NEWY,DIR,DIRVAL,RATE)	\
+  {						\
+    <rate RATE>;				\
+    loc self(0,0);				\
+    loc target(OLDX,OLDY);			\
+    loc newTarget(NEWX,NEWY);			\
+    if self.DIR = DIRVAL;				\
+    if target.type = TYPE;			\
+    if newTarget.type = empty;			\
+    do newTarget = target;				\
+    do target = empty;				\
+  }						\
+
+
 #define Reorient(TYPE,DISTANCE,DIR,RATE)			\
-  ReorientTarget(TYPE,-DISTANCE,-DISTANCE,DIR,(RATE/8));	\
-  ReorientTarget(TYPE,-DISTANCE,0,DIR,(RATE/8));		\
-  ReorientTarget(TYPE,-DISTANCE,DISTANCE,DIR,(RATE/8));	\
-  ReorientTarget(TYPE,0,-DISTANCE,DIR,(RATE/8));		\
-  ReorientTarget(TYPE,0,DISTANCE,DIR,(RATE/8));			\
-  ReorientTarget(TYPE,DISTANCE,-DISTANCE,DIR,(RATE/8));	\
-  ReorientTarget(TYPE,DISTANCE,0,DIR,(RATE/8));			\
-  ReorientTarget(TYPE,DISTANCE,DISTANCE,DIR,(RATE/8));		\
+  ReorientTarget(TYPE,-DISTANCE,-DISTANCE,DIR,(RATE/9));	\
+  ReorientTarget(TYPE,-DISTANCE,0,DIR,(RATE/9));		\
+  ReorientTarget(TYPE,-DISTANCE,DISTANCE,DIR,(RATE/9));	\
+  ReorientTarget(TYPE,0,-DISTANCE,DIR,(RATE/9));		\
+  ReorientTarget(TYPE,0,DISTANCE,DIR,(RATE/9));			\
+  ReorientTarget(TYPE,DISTANCE,-DISTANCE,DIR,(RATE/9));	\
+  ReorientTarget(TYPE,DISTANCE,0,DIR,(RATE/9));			\
+  ReorientTarget(TYPE,DISTANCE,DISTANCE,DIR,(RATE/9));		\
+  TransportTarget(TYPE, 0,+1, 0,       -DISTANCE,DIR,0,(RATE/9/4));	\
+  TransportTarget(TYPE,-1, 0,+DISTANCE, 0,       DIR,1,(RATE/9/4));		\
+  TransportTarget(TYPE, 0,-1, 0,       +DISTANCE,DIR,2,(RATE/9/4));	\
+  TransportTarget(TYPE,+1, 0,-DISTANCE, 0,       DIR,3,(RATE/9/4));	\
 
 #define SignpostRate (NomadSpeed)
 #define SignpostSize 5
@@ -143,7 +162,7 @@ type signpost dir(4) sat(8);
 hue = SignpostHue;
 sat = 2 * sat;
 bri = SignpostBrightness + sat;
-Reorient(NomadType,SignpostSize,self.dir,SignpostRate);
+Reorient(NomadType,SignpostSize,dir,SignpostRate);
 
 
 #define SignpostBuildRate 1
@@ -290,8 +309,8 @@ type plant height(3);
 hue = GreenHue - height;
 bri = 255 - height * 16;
 sat = 255;
-NeumannPair(empty,PlantGrowRate,src,src,if src.height < MaxPlantHeight,do tgt.height = tgt.height + 1);
-NeumannPair(nomad,NomadEatPlantRate,tgt,empty,,);
+NeumannPair(empty,PlantGrowRate,if src.height < MaxPlantHeight,src,src,do tgt.height = tgt.height + 1);
+NeumannPair(nomad,NomadEatPlantRate,,tgt,empty,);
 SelfTransform((PlantDieRate/8),empty,,);
 SelfTransform((PlantDieRate/4),empty,if self.height > 3,);
 SelfTransform((PlantDieRate/2),empty,if self.height > 5,);

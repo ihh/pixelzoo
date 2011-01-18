@@ -1,44 +1,4 @@
-#define SelfAction(RATE,CODE)	\
-  {				\
-    <rate RATE>;		\
-    loc self(0,0);		\
-    CODE;			\
-  }				\
-
-#define SelfTransform(RATE,TYPE,TEST,EXEC)	\
-  SelfAction(RATE,TEST;do self = TYPE;EXEC;)
-
-#define AdjacentCell(DX,DY,TYPE,RATE,CODE)	\
-  {						\
-    <rate RATE>;				\
-    loc src(0,0);				\
-    loc tgt(DX,DY);				\
-    if tgt.type = TYPE;				\
-    CODE;					\
-  }						\
-
-#define MooreAdjacent(TYPE,RATE,CODE)		\
-  AdjacentCell(+1,0,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(-1,0,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(0,+1,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(0,-1,TYPE,(RATE/4),CODE);	\
-
-#define BishopAdjacent(TYPE,RATE,CODE)		\
-  AdjacentCell(+1,+1,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(-1,-1,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(-1,+1,TYPE,(RATE/4),CODE);	\
-  AdjacentCell(+1,-1,TYPE,(RATE/4),CODE);	\
-
-#define NeumannAdjacent(TYPE,RATE,CODE)		\
-  MooreAdjacent(TYPE,(RATE/2),CODE);		\
-  BishopAdjacent(TYPE,(RATE/2),CODE);		\
-
-#define MoorePair(TARGET,RATE,NEWSOURCE,NEWTARGET,TEST,EXEC)		\
-  MooreAdjacent(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
-
-#define NeumannPair(TARGET,RATE,NEWSOURCE,NEWTARGET,TEST,EXEC)		\
-  NeumannAdjacent(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
-
+// colors
 #define RedHue    0
 #define YellowHue 42
 #define GreenHue  84
@@ -55,6 +15,73 @@
 #define BrightBlue   hue = BlueHue; Bright;
 #define BrightPink   hue = PinkHue; Bright;
 
+// rules involving self only
+#define SelfAction(RATE,CODE)	\
+  {				\
+    <rate RATE>;		\
+    loc self(0,0);		\
+    CODE;			\
+  }				\
+
+#define SelfTransform(RATE,TYPE,TEST,EXEC)	\
+  SelfAction(RATE,TEST;do self = TYPE;EXEC;)
+
+// lhs-pair rules involving a target
+#define TargetRule(DX,DY,RATE,CODE)		\
+  {						\
+    <rate RATE>;				\
+    loc src(0,0);				\
+    loc tgt(DX,DY);				\
+    CODE;					\
+  }						\
+
+// topologies
+#define MooreRule(RATE,CODE)	\
+  TargetRule(+1,0,(RATE/4),CODE);	\
+  TargetRule(-1,0,(RATE/4),CODE);	\
+  TargetRule(0,+1,(RATE/4),CODE);	\
+  TargetRule(0,-1,(RATE/4),CODE);	\
+
+#define BishopRule(RATE,CODE)	\
+  TargetRule(+1,+1,(RATE/4),CODE);	\
+  TargetRule(-1,-1,(RATE/4),CODE);	\
+  TargetRule(-1,+1,(RATE/4),CODE);	\
+  TargetRule(+1,-1,(RATE/4),CODE);	\
+
+#define NeumannRule(RATE,CODE)		\
+  MooreRule((RATE/2),CODE);		\
+  BishopRule((RATE/2),CODE);		\
+
+
+// lhs-pair rules of the form A B ... -> ...
+#define BindTarget(DX,DY,TYPE,RATE,CODE)	\
+  TargetRule(DX,DY,RATE,if tgt.type = TYPE;CODE;)
+
+// topologies
+#define MooreBind(TYPE,RATE,CODE)	\
+  BindTarget(+1,0,TYPE,(RATE/4),CODE);	\
+  BindTarget(-1,0,TYPE,(RATE/4),CODE);	\
+  BindTarget(0,+1,TYPE,(RATE/4),CODE);	\
+  BindTarget(0,-1,TYPE,(RATE/4),CODE);	\
+
+#define BishopBind(TYPE,RATE,CODE)	\
+  BindTarget(+1,+1,TYPE,(RATE/4),CODE);	\
+  BindTarget(-1,-1,TYPE,(RATE/4),CODE);	\
+  BindTarget(-1,+1,TYPE,(RATE/4),CODE);	\
+  BindTarget(+1,-1,TYPE,(RATE/4),CODE);	\
+
+#define NeumannBind(TYPE,RATE,CODE)		\
+  MooreBind(TYPE,(RATE/2),CODE);		\
+  BishopBind(TYPE,(RATE/2),CODE);		\
+
+// pair rules of the form A B (TEST) -> C D (EXEC)
+#define MoorePair(TARGET,RATE,TEST,NEWSOURCE,NEWTARGET,EXEC)		\
+  MooreBind(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
+
+#define NeumannPair(TARGET,RATE,TEST,NEWSOURCE,NEWTARGET,EXEC)		\
+  NeumannBind(TARGET,RATE,TEST;do src = NEWSOURCE;do tgt = NEWTARGET;EXEC;)
+
+// Brownian motion random walks
 #define RandomStep(DX,DY,STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC)	\
   {									\
     <rate STEP>;							\
@@ -84,6 +111,8 @@
   MooreWalk((STEP/2),(OSTEP/2),TEST,(DIE/2),(ODIE/2),(BREED/2),(OBREED/2),EXEC); \
   BishopWalk((STEP/2),(OSTEP/2),TEST,(DIE/2),(ODIE/2),(BREED/2),(OBREED/2),EXEC); \
 
+
+// random walks with correlated direction
 #define MooreDirectedStep(DX,DY,DIR,STEP,OSTEP,TEST,DIE,ODIE,BREED,OBREED,EXEC) \
   {									\
     <rate STEP>;							\
@@ -116,6 +145,7 @@
   MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,-1,(TURN/2),(SPONTANEOUS/3),EXEC);	\
   MooreDirectedTurn(TYPE,DX,DY,DIR,TEST,+2,REVERSE,(SPONTANEOUS/3),EXEC);	\
 									\
+
 // dir: 0=north, 1=east, 2=south, 3=west
 // Moore topology random walk with direction
 #define MooreDirectedWalk(TYPE,STEP,OSTEP,STEPTEST,DIE,ODIE,BREED,OBREED,STEPEXEC,TURNTEST,TURN,REVERSE,SPONTANEOUS,TURNEXEC) \
@@ -128,7 +158,8 @@
   MooreDirectedTurns(TYPE,0,+1,2,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
   MooreDirectedTurns(TYPE,-1,0,3,TURNTEST,(TURN/4),(REVERSE/4),(SPONTANEOUS/4),TURNEXEC); \
 									\
-// flock
+
+// flocking
 #define MooreFlockDir(TYPE,X,Y,RATE,CODE)			\
   {							\
     <rate RATE>;						\
@@ -139,6 +170,7 @@
     CODE;							\
   }							\
 
+// flocking w/neighbors only (neighborhood size 1)
 #define MooreFlock1(TYPE,RATE,CODE)					\
   MooreFlockDir(TYPE,-1,-1,(RATE/8),CODE);				\
   MooreFlockDir(TYPE,-1,0,(RATE/8),CODE);					\
@@ -149,6 +181,7 @@
   MooreFlockDir(TYPE,+1,0,(RATE/8),CODE);					\
   MooreFlockDir(TYPE,+1,+1,(RATE/8),CODE);				\
 
+// flocking w/neighbors and next-nearest only (neighborhood size 2)
 #define MooreFlock2(TYPE,RATE,CODE)			\
   MooreFlock1(TYPE,(RATE/3),CODE);			\
   MooreFlockDir(TYPE,-2,-2,(RATE/24),CODE);		\
@@ -169,7 +202,7 @@
   MooreFlockDir(TYPE,+2,+2,(RATE/24),CODE);		\
 						\
 
-// "strafe" (sidestep)
+// "strafing" (sidestepping obstacles)
 #define MooreStrafeDir(DX,DY,DIR,STRAFEX,STRAFEY,RATE,CODE)	\
   {							\
     <rate RATE>;					\
@@ -194,6 +227,8 @@
   MooreStrafeDir(-1,0,3,0,-1,(RATE/8),CODE);			\
   MooreStrafeDir(-1,0,3,0,+1,(RATE/8),CODE);			\
 
+
+// building
 #define BuildDirStep(DX,DY,DIR,COORD,LIMIT,INC,DIRFLAG,REVFLAG,RATE)	\
   {									\
     <rate (RATE/3)>;							\
@@ -227,12 +262,14 @@
   BuildDirStep(NEG_DX,NEG_DY,DIR,row,MAXROW,+1,buildBackward,buildForward,(RATE/4)); \
   BuildDirStep(DY,NEG_DX,DIR,col,0,-1,buildLeft,buildRight,(RATE/4));	\
 
+// build a square
 #define Build(MAXCOL,MAXROW,RATE)			\
   BuildDir(0,-1,0,+1,0,MAXCOL,MAXROW,(RATE/4));		\
   BuildDir(+1,0,-1,0,1,MAXCOL,MAXROW,(RATE/4));		\
   BuildDir(0,+1,0,-1,2,MAXCOL,MAXROW,(RATE/4));		\
   BuildDir(-1,0,+1,0,3,MAXCOL,MAXROW,(RATE/4));		\
 
+// do something else after building
 #define EndBuild(TEST,EXEC,RATE)		\
   {						\
     <rate RATE>;				\
