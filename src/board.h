@@ -3,7 +3,7 @@
 
 #include "rule.h"
 #include "particle.h"
-#include "quadtree.h"
+#include "bintree.h"
 #include "util.h"
 #include "vector.h"
 
@@ -15,9 +15,9 @@ typedef struct Board {
   State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */
   unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y)] is true if sync[boardIndex(size,x,y)] should be written to cell[boardIndex(size,x,y)] at next board sync */
   CellWatcher **watcher;  /* notify[boardIndex(size,x,y)] is pointer to CellWatcher object that intercepts & potentially modifies writes to cell (x,y) */
-  QuadTree *asyncQuad, *syncQuad, *syncUpdateQuad;  /* asyncQuad = stochastic update rates AND queue, syncQuad = sync update rates, syncUpdateQuad = sync update queue */
+  BinTree *asyncBin, *syncBin, *syncUpdateBin;  /* asyncBin = stochastic update rates AND queue, syncBin = sync update rates, syncUpdateBin = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
-  double* overloadThreshold;  /* overload rules will be used at (x,y) if boardLocalFiringRate(board,x,y,lev) > overloadThreshold[lev] for any value of lev */
+  double overloadThreshold;  /* overload rules will be used at (x,y) if boardFiringRate(board) > overloadThreshold */
   Palette palette;  /* cell color scheme used by this Board */
   double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
   double updatesPerCellAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
@@ -47,10 +47,8 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
 
 /* board firing rate = mean rate at which rules are firing. ranges from 0 (empty) to 1 (full) */
 #define boardFiringRate(BOARD_PTR) (boardAsyncFiringRate(BOARD_PTR) + boardSyncFiringRate(BOARD_PTR))
-#define boardAsyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->asyncQuad) / boardCells(BOARD_PTR))
-#define boardSyncFiringRate(BOARD_PTR) (topQuadRate((BOARD_PTR)->syncQuad) / boardCells(BOARD_PTR))
-#define boardLocalFiringRate(BOARD_PTR,X,Y,LEVEL) \
-  ((getQuadRate((BOARD_PTR)->syncQuad,X,Y,LEVEL) + getQuadRate((BOARD_PTR)->asyncQuad,X,Y,LEVEL)) / (double) cellsPerQuadNode((BOARD_PTR)->syncQuad,LEVEL))
+#define boardAsyncFiringRate(BOARD_PTR) (topBinRate((BOARD_PTR)->asyncBin) / boardCells(BOARD_PTR))
+#define boardSyncFiringRate(BOARD_PTR) (topBinRate((BOARD_PTR)->syncBin) / boardCells(BOARD_PTR))
 #define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
 
 /* evolveBoard
@@ -68,6 +66,8 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
    The "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
 */
 #define boardIndex(SIZE,X,Y) ((X) + (SIZE) * (Y))
+#define boardIndexToX(SIZE,IDX) ((IDX) % (SIZE))
+#define boardIndexToY(SIZE,IDX) ((int) ((IDX) / (SIZE)))
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[boardIndex((BOARD_PTR)->size,X,Y)]
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);
 
@@ -83,10 +83,6 @@ void dummyWriteBoardState (Board* board, int x, int y, State state);
  */
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
 
-/* method to set overload thresholds */
-void boardSetOverloadThreshold (Board *board, double firingRate);   /* uses an heuristic formula to scale overload thresholds according to quad level */
-#define boardTopOverloadThreshold(BOARD_PTR) ((BOARD_PTR)->overloadThreshold[0])
-
 /* Other helper methods */
 int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
 State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State oldSrcState, State oldDestState, int overloaded, BoardWriteFunction write);  /* returns the newly-written State */
@@ -94,7 +90,7 @@ State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State ol
 #define getRuleOperationOldDestState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->dest.x,Y+(OP_PTR)->dest.y)
 
 int attemptRule (Particle *ruleOwner, StochasticRule *rule, Board *board, int x, int y, int overloaded, BoardWriteFunction writeUnguarded);
-int boardOverloaded (Board* board, int x, int y);
+#define boardOverloaded(BOARD_PTR) (boardFiringRate(BOARD_PTR) >= (BOARD_PTR)->overloadThreshold)
 
 void evolveBoardCell (Board *board, int x, int y);
 void evolveBoardCellSync (Board *board, int x, int y);

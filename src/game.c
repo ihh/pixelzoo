@@ -83,14 +83,14 @@ void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTime
     *actualUpdatesPerCell_ret = actualUpdatesPerCell;
 
   /* update overload threshold */
-  currentOverloadThreshold = boardTopOverloadThreshold(game->board);
+  currentOverloadThreshold = game->board->overloadThreshold;
   overloadScaleFactor = pow (game->boardOverloadCreep, targetUpdatesPerCell);
   if (actualUpdatesPerCell < targetUpdatesPerCell) {
     newOverloadThreshold = boardFiringRate(game->board) / overloadScaleFactor;
-    boardSetOverloadThreshold (game->board, MAX (game->boardMinOverload, newOverloadThreshold));
+    game->board->overloadThreshold = MAX (game->boardMinOverload, newOverloadThreshold);
   } else if (currentOverloadThreshold < 1.) {
     newOverloadThreshold = currentOverloadThreshold * overloadScaleFactor;
-    boardSetOverloadThreshold (game->board, MIN (1., newOverloadThreshold));
+    game->board->overloadThreshold = MIN (1., newOverloadThreshold);
   }
 }
 

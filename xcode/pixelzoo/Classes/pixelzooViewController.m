@@ -127,8 +127,8 @@
 	double actualUpdatesPerCell, elapsedTime;
 	int cellUpdates;
 	gameLoop (game, targetUpdatesPerCell, MAX_PROPORTION_TIME_EVOLVING, &actualUpdatesPerCell, &cellUpdates, &elapsedTime);
-	if (boardTopOverloadThreshold(game->board) < 1.)
-		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d targetUpdatesPerCell:%g actualUpdatesPerCell:%g firingRate:%g overloadThreshold:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell,boardFiringRate(game->board),boardTopOverloadThreshold(game->board));
+	if (game->board->overloadThreshold < 1.)
+		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d targetUpdatesPerCell:%g actualUpdatesPerCell:%g firingRate:%g overloadThreshold:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell,boardFiringRate(game->board),game->board->overloadThreshold);
 }
 
 

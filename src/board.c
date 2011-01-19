@@ -9,7 +9,6 @@
 
 Board* newBoard (int size) {
 	Board *board;
-	int x;
 	board = SafeMalloc (sizeof (Board));
 	board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
 	board->size = size;
@@ -17,14 +16,12 @@ Board* newBoard (int size) {
 	board->sync = SafeCalloc (size * size, sizeof(State));
 	board->watcher = SafeCalloc (size * size, sizeof(CellWatcher*));
 	board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
-	board->syncQuad = newQuadTree (size);
-	board->asyncQuad = newQuadTree (size);
-	board->syncUpdateQuad = newQuadTree (size);
+	board->syncBin = newBinTree (size * size);
+	board->asyncBin = newBinTree (size * size);
+	board->syncUpdateBin = newBinTree (size * size);
 	board->syncParticles = 0;
 	board->lastSyncParticles = 0.;
-	board->overloadThreshold = SafeMalloc ((board->syncQuad->K + 1) * sizeof(double));
-	for (x = 0; x <= board->syncQuad->K; ++x)
-		board->overloadThreshold[x] = 1.;
+	board->overloadThreshold = 1.;
 	board->updatesPerCell = 0.;
 	board->syncUpdates = 0;
 	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
@@ -38,10 +35,9 @@ Board* newBoard (int size) {
 void deleteBoard (Board* board) {
 	State t;
 	deleteVector (board->balloon);
-	SafeFree(board->overloadThreshold);
-	deleteQuadTree (board->syncUpdateQuad);
-	deleteQuadTree (board->syncQuad);
-	deleteQuadTree (board->asyncQuad);
+	deleteBinTree (board->syncUpdateBin);
+	deleteBinTree (board->syncBin);
+	deleteBinTree (board->asyncBin);
 	SafeFree(board->cell);
 	SafeFree(board->sync);
 	SafeFree(board->syncWrite);
@@ -73,15 +69,15 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
 		if (pOld->synchronous)
 			--board->syncParticles;
 	}
-	/* update cell array & quad trees */
+	/* update cell array & bin trees */
 	if (p == NULL) {
 		if (t != EmptyType)  /* handle the EmptyType specially: allow it to keep its color state */
 			state = EmptyState;
-		updateQuadTree (board->asyncQuad, x, y, 0.);
-		updateQuadTree (board->syncQuad, x, y, 0.);
+		updateBinTree (board->asyncBin, i, 0.);
+		updateBinTree (board->syncBin, i, 0.);
 	} else {
-		updateQuadTree (board->asyncQuad, x, y, p->asyncFiringRate);
-		updateQuadTree (board->syncQuad, x, y, p->syncFiringRate);
+		updateBinTree (board->asyncBin, i, p->asyncFiringRate);
+		updateBinTree (board->syncBin, i, p->syncFiringRate);
 		/* update new count */
 		++p->count;
 		if (p->synchronous)
@@ -205,7 +201,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 		/*
 		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
 		 */
-		overloaded = boardOverloaded (board, x, y);
+		overloaded = boardOverloaded(board);
 		/* sample a rule at random */
 		rand = randomDouble() * (overloaded ? p->totalOverloadRate : p->totalRate);
 		for (n = 0; n < p->nRules; ++n) {
@@ -226,7 +222,7 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-		overloaded = boardOverloaded (board, x, y);
+		overloaded = boardOverloaded(board);
 		/* attempt each rule in random sequence, stopping when one succeeds */
 		ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
 		for (n = 0; n < p->nRules; ++n)
@@ -277,18 +273,10 @@ void syncBoard (Board* board) {
 				}
 			}
 	/* freeze the update queue */
-	copyQuadTree (board->syncQuad, board->syncUpdateQuad);
+	copyBinTree (board->syncBin, board->syncUpdateBin);
 	board->lastSyncParticles = board->syncParticles;
 	board->updatesPerCellAfterLastBoardSync = board->updatesPerCell;
 	board->syncUpdates++;
-}
-
-int boardOverloaded (Board* board, int x, int y) {
-	int n;
-	for (n = 0; n <= board->syncQuad->K; ++n)
-		if (boardLocalFiringRate(board,x,y,n) > board->overloadThreshold[n])
-			return 1;
-	return 0;
 }
 
 int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
@@ -318,9 +306,9 @@ int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x,
 }
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {
-	int actualUpdates, x, y;
-	double startingBoardTime, targetBoardTime, elapsedClockTime, asyncEventRate, timeToTarget, timeToNextBoardSync, pendingSyncEventsToService, timeToNextSyncEvent, timeToNextAsyncEvent;
-	clock_t start, now;
+  int actualUpdates, boardIdx, x, y;
+  double startingBoardTime, targetBoardTime, elapsedClockTime, asyncEventRate, timeToTarget, timeToNextBoardSync, pendingSyncEventsToService, timeToNextSyncEvent, timeToNextAsyncEvent;
+  clock_t start, now;
 	
 	/* start the clocks */
 	start = clock();
@@ -348,7 +336,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 		/* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
 		while (1) {
 			timeToNextBoardSync = board->updatesPerCellAfterLastBoardSync + 1. - board->updatesPerCell;
-			pendingSyncEventsToService = topQuadRate (board->syncUpdateQuad);
+			pendingSyncEventsToService = topBinRate (board->syncUpdateBin);
 			if (pendingSyncEventsToService <= 0 && timeToNextBoardSync <= 0)
 				syncBoard (board);
 			else
@@ -358,7 +346,7 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 		/* calculate the time to the next sync event & the next async event */
 		timeToNextSyncEvent = pendingSyncEventsToService > 0 ? (MAX(timeToNextBoardSync,0.) / pendingSyncEventsToService) : (2*timeToTarget);
 		
-		asyncEventRate = topQuadRate (board->asyncQuad);
+		asyncEventRate = topBinRate (board->asyncBin);
 		timeToNextAsyncEvent = asyncEventRate > 0 ? (randomExp() / asyncEventRate) : (2*timeToTarget);
 		
 		/* decide: sync or async? */
@@ -367,8 +355,11 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 			board->updatesPerCell += timeToNextSyncEvent;
 			
 			/* sync: randomly process a pending synchronized cell update */
-			sampleQuadLeaf (board->syncUpdateQuad, &x, &y);
-			updateQuadTree (board->syncUpdateQuad, x, y, 0.);
+			sampleBinLeaf (board->syncUpdateBin, &boardIdx);
+			updateBinTree (board->syncUpdateBin, boardIdx, 0.);
+
+			x = boardIndexToX (board->size, boardIdx);
+			y = boardIndexToY (board->size, boardIdx);
 			
 			evolveBoardCellSync (board, x, y);
 			++actualUpdates;
@@ -378,7 +369,10 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 			board->updatesPerCell += timeToNextAsyncEvent;
 			
 			/* async: evolve a random cell */
-			sampleQuadLeaf (board->asyncQuad, &x, &y);
+			sampleBinLeaf (board->asyncBin, &boardIdx);
+
+			x = boardIndexToX (board->size, boardIdx);
+			y = boardIndexToY (board->size, boardIdx);
 			
 			evolveBoardCell (board, x, y);
 			++actualUpdates;
@@ -416,16 +410,4 @@ void updateBalloons (Board *board, double duration) {
   }
   board->balloon->end = write;
   qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (void*), BalloonCompare);
-}
-
-void boardSetOverloadThreshold (Board *board, double firingRate) {
-  int level;
-  double scaleFactor;
-  Assert (firingRate > 0., "Zero firing rate");
-  firingRate = MIN (1., firingRate);
-  scaleFactor = pow (1. / firingRate, 1. / (double) board->syncQuad->K);
-  for (level = 0; level <= board->syncQuad->K; ++level) {
-    board->overloadThreshold[level] = MIN (1., firingRate);
-    firingRate *= scaleFactor;
-  }
 }
