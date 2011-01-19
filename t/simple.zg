@@ -9,7 +9,6 @@
     if next.type = wall;				\
     do orig = next;					\
     do orig.decay = 0;					\
-    do orig.hue = HUE <fail SETRATE>;			\
   }							\
   {							\
     <rate SETRATE>;					\
