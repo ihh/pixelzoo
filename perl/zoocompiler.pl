@@ -267,7 +267,7 @@ while (@zg) {
 		    }
 
 		    if (defined($var) && $var ne "type" && $var ne "*") {
-			assertLocTypeBound (\%loctype, \%locdubious, $loc, $var);
+			assertLocTypeBound (\%loctype, \%locdubious, $loc, $var, "In type $type, rule \%d: ", $nRule);
 		    }
 
 		    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, $ignoreTags];
@@ -314,16 +314,17 @@ while (@zg) {
 		    }
 
 		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
-			$loctype{$lhsLoc} = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
+			my $rhsType = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
+			$loctype{$lhsLoc} = $rhsType;
 			$locdubious{$lhsLoc} = firstNonzeroTag ($failTags, "fail", "overload");
 		    }
 
 		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*") {
-			assertLocTypeBound (\%loctype, \%locdubious, $lhsLoc, $lhsVar);
+			assertLocTypeBound (\%loctype, \%locdubious, $lhsLoc, $lhsVar, "In type $type, rule \%d: ", $nRule);
 		    }
 
 		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*") {
-			assertLocTypeBound (\%loctype, \%locdubious, $rhsLoc, $rhsVar);
+			assertLocTypeBound (\%loctype, \%locdubious, $rhsLoc, $rhsVar, "In type $type, rule \%d: ", $nRule);
 		    }
 
 		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
@@ -506,7 +507,7 @@ for my $type (@type) {
 				warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
 				next;
 			    } else {
-				compiler_warn ("Couldn't consolidate repeated tests of ($tx,$ty) in $type rule ", @rule+0, ", as masks $prevMask and $thisMask overlap");
+				compiler_warn ("Couldn't consolidate repeated tests of ($tx,$ty) in type $type, rule \%d, as masks $prevMask and $thisMask overlap", $nRule);
 			    }
 			}
 		    }
@@ -528,9 +529,19 @@ for my $type (@type) {
 	    }
 
 	    # operations
-	    my %assign;
+	    my (%assign, %locvarsunset);
 	    for my $op (@{$op{$type}->[$nRule]}) {
 		my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
+
+		# flag potentially uninitialized vars
+		my $locid = "($dx,$dy)";
+		if ($dvar eq "type") {
+		    $locvarsunset{$locid} = { map (($_ => 1), @{$pvar{$offset}}) };
+		} elsif ($dvar eq "*") {
+		    $locvarsunset{$locid} = {};
+		} else {
+		    delete $locvarsunset{$locid}->{$dvar};
+		}
 
 		# resolve any dangling literal typenames
 		if ($dvar eq "type" || $dvar eq "*") {
@@ -560,7 +571,7 @@ for my $type (@type) {
 				warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
 				next;
 			    } else {
-				compiler_warn ("Couldn't consolidate repeated writes to ($dx,$dy) in $type rule ", @rule+0, ", as masks $prevDestmask and $thisDestmask overlap");
+				compiler_warn ("Couldn't consolidate repeated writes to ($dx,$dy) in type $type, rule \%d, as masks $prevDestmask and $thisDestmask overlap", $nRule);
 			    }
 			}
 		    }
@@ -582,6 +593,12 @@ for my $type (@type) {
 
 		# store
 		push @rule, "exec" => \@x;  # %assign requires that the second element is the arrayref containing the rule op... yuck
+	    }
+
+	    # check for unset vars
+	    if (grep (%$_, values %locvarsunset)) {
+		compiler_warn ("Type $type, rule \%d: the following location(s) had their type set, but var(s) left uninitialized: "
+			       . join(" ", map(%{$locvarsunset{$_}} ? ("$_\[@{[keys %{$locvarsunset{$_}}]}\]") : (), keys %locvarsunset)), $nRule);
 	    }
 
 	    # save rule
@@ -778,19 +795,20 @@ $twig->print;
 exit;
 
 sub compiler_warn {
-    my $warning = join ("", @_);
-    my $nw = ++$compiler_warnings{$warning};
+    my ($fmt, @args) = @_;
+    my $warning = sprintf ($fmt, @args);
+    my $nw = ++$compiler_warnings{$fmt};
     if ($nw == 1) { warn "$warning\n" }
-    elsif ($nw == 2) { warn "(suppressing further warnings of the form \"", substr($warning,0,20), "...\")\n" }
+    elsif ($nw == 2) { warn "(suppressing further warnings of the form \"", substr($fmt,0,20), "...\")\n" }
 }
 
 sub assertLocTypeBound {
-    my ($loctype, $locdubious, $loc, $var) = @_;
+    my ($loctype, $locdubious, $loc, $var, $fmt, @args) = @_;
     if (!defined($loctype->{$loc})) {
-	die "Can't access $loc.$var because type of $loc is not bound\n";
+	die sprintf($fmt,@args) . "Can't access $loc.$var because type of $loc is not bound\n";
     }
     if (defined $locdubious->{$loc}) {
-	compiler_warn ("Accessing $loc.$var: type of $loc may be dubious due to previous $locdubious->{$loc} clause");
+	compiler_warn ("${fmt}Accessing $loc.$var: type of $loc may be dubious due to previous $locdubious->{$loc} clause", @args);
     }
 }
 

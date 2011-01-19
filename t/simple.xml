@@ -1070,34 +1070,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1125,34 +1118,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1180,34 +1166,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1235,34 +1214,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1290,34 +1262,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1345,34 +1310,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1400,34 +1358,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1455,34 +1406,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>0</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
               <hexinc>2000000000000</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1510,38 +1454,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1569,38 +1502,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1628,38 +1550,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1687,38 +1598,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1746,38 +1646,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1805,38 +1694,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1864,38 +1742,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1923,38 +1790,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>2a</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>200000000002a</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>2a</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -1982,38 +1838,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2041,38 +1886,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2100,38 +1934,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2159,38 +1982,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2218,38 +2030,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2277,38 +2078,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2336,38 +2126,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
           <rule>
@@ -2395,38 +2174,27 @@ Guide 5 guests to the exit.</text>
               </dest>
             </exec>
             <exec>
-              <fail>119.99</fail>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
+              <destmask>fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
+              <srcmask>0</srcmask>
+              <hexinc>54</hexinc>
+              <lshift>0</lshift>
             </exec>
           </rule>
           <rule>
             <rate>8.33333333333332e-05</rate>
             <exec>
+              <destmask>ffff000000000fff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
               <srcmask>0</srcmask>
-              <hexinc>2000000000000</hexinc>
+              <hexinc>2000000000054</hexinc>
               <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <srcmask>0</srcmask>
-              <hexinc>54</hexinc>
-              <lshift>3</lshift>
-              <destmask>7f8</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
             </exec>
           </rule>
         </particle>
@@ -2434,14 +2202,14 @@ Guide 5 guests to the exit.</text>
           <name>wall</name>
           <type>2</type>
           <color>
-            <mask>7f8</mask>
-            <rshift>3</rshift>
+            <mask>ff</mask>
+            <rshift>0</rshift>
             <hexmul>10000</hexmul>
             <hexinc>20ff</hexinc>
           </color>
           <color>
-            <mask>7800</mask>
-            <rshift>11</rshift>
+            <mask>f00</mask>
+            <rshift>8</rshift>
             <hexmul>fffffffffffffff8</hexmul>
           </color>
           <rule>
@@ -2465,19 +2233,19 @@ Guide 5 guests to the exit.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>7800</mask>
-              <hexval>7800</hexval>
+              <mask>f00</mask>
+              <hexval>f00</hexval>
             </test>
             <exec>
               <src>
                 <x>0</x>
                 <y>0</y>
               </src>
-              <srcmask>7800</srcmask>
-              <rshift>11</rshift>
+              <srcmask>f00</srcmask>
+              <rshift>8</rshift>
               <hexinc>1</hexinc>
-              <lshift>11</lshift>
-              <destmask>7800</destmask>
+              <lshift>8</lshift>
+              <destmask>f00</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -2491,8 +2259,8 @@ Guide 5 guests to the exit.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>7800</mask>
-              <hexval>7800</hexval>
+              <mask>f00</mask>
+              <hexval>f00</hexval>
             </test>
             <exec>
               <srcmask>0</srcmask>

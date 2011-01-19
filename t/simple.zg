@@ -8,12 +8,14 @@
     loc next(DX,DY);					\
     if next.type = wall;				\
     do orig = next;					\
-    do orig.hue = HUE <fail ((1-SETRATE)/STICKRATE)>;	\
+    do orig.decay = 0;					\
+    do orig.hue = HUE <fail SETRATE>;			\
   }							\
   {							\
     <rate SETRATE>;					\
     loc orig(0,0);					\
-    do orig = wall;					\
+    do orig.type = wall;				\
+    do orig.decay = 0;					\
     do orig.hue = HUE;					\
   }							\
 
@@ -39,7 +41,7 @@ CementSet((CementStickRate/3),(CementSetRate/3),RedHue);
 CementSet((CementStickRate/3),(CementSetRate/3),YellowHue);
 CementSet((CementStickRate/3),(CementSetRate/3),GreenHue);
 
-type wall saturation(3) hue(8) decay(4);
+type wall hue(8) decay(4);
 hue = hue;
 bri = 255 - decay*8;
 sat = 32;
