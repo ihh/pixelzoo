@@ -26,6 +26,13 @@ CPPHEADERS  := $(subst .zgh,.h,$(ZGHEADERS))
 
 POLYHEADER := t/poly.h
 
+ifneq (,$(findstring debug,$(MAKECMDGOALS)))
+# 'debug' was specified:
+DEBUG := -debug
+else
+DEBUG :=
+endif
+
 all: lib targets xml
 
 clean:
@@ -57,7 +64,7 @@ bin/%:  test/%.c $(OFILES)
 .SECONDARY:
 
 %.xml: %.zg perl/zoocompiler.pl $(CPPHEADERS)
-	perl/zoocompiler.pl -v -savepp $*.pp -INC $(dir $*) $< >$@
+	perl/zoocompiler.pl -v -savepp $*.pp -INC $(dir $*) $(DEBUG) $< >$@
 
 %.h: %.zgh
 	perl/convert-proc-to-define.pl $< >$@
