@@ -10,7 +10,7 @@
         </pos>
         <goal type="balloon">
           <balloon>
-            <text>ENTRANCE</text>
+            <text>ZOO ENTRANCE</text>
             <persist></persist>
           </balloon>
         </goal>
@@ -22,15 +22,18 @@
         </pos>
         <goal type="balloon">
           <balloon>
-            <text>EXIT (closed)</text>
+            <text>GIFT SHOP</text>
             <persist></persist>
           </balloon>
         </goal>
       </goal>
       <goal type="print">
         <text>Welcome to level 1!
-Guide 5 guests from the entrance to the exit.
-The exit will open when all 30 guests have entered.</text>
+Guide guests safely to the Gift Shop.
+</text>
+      </goal>
+      <goal type="setexit">
+        <state>PortalCounting</state>
       </goal>
       <goal type="area">
         <pos>
@@ -104,33 +107,8 @@ The exit will open when all 30 guests have entered.</text>
         <goal type="balloon"/>
       </goal>
       <goal type="print">
-        <text>All guests have now entered.</text>
-      </goal>
-      <goal type="setexit">
-        <state>PortalCounting</state>
-      </goal>
-      <goal type="area">
-        <pos>
-          <x>30</x>
-          <y>60</y>
-        </pos>
-        <goal type="balloon"/>
-      </goal>
-      <goal type="area">
-        <pos>
-          <x>30</x>
-          <y>60</y>
-        </pos>
-        <goal type="balloon">
-          <balloon>
-            <text>EXIT (open)</text>
-            <persist></persist>
-          </balloon>
-        </goal>
-      </goal>
-      <goal type="print">
-        <text>The exit is now open.
-Guide 5 guests to the exit.</text>
+        <text>The zoo is now closed to further guests.
+Guide all remaining guests to the gift shop.</text>
       </goal>
       <goal type="exit">
         <state>PortalCounting</state>

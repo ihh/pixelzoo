@@ -1,32 +1,34 @@
 #include "std.h"
 #include "poly.h"
 
-#define CementSetDir(DX,DY,STICKRATE,SETRATE,HUE)	\
-  {							\
-    <rate STICKRATE>;					\
-    loc orig(0,0);					\
-    loc next(DX,DY);					\
-    if next.type = wall;				\
-    do orig = next;					\
-    do orig.decay = 0;					\
-  }							\
-  {							\
-    <rate SETRATE>;					\
-    loc orig(0,0);					\
-    do orig.type = wall;				\
-    do orig.decay = 0;					\
-    do orig.hue = HUE;					\
-  }							\
+#proc CementSetDir(DX,DY,STICKRATE,SETRATE,HUE)	
+  {							
+    <rate STICKRATE>;					
+    loc orig(0,0);					
+    loc next(DX,DY);					
+    if next.type = wall;				
+    do orig = next;					
+    do orig.decay = 0;					
+  }							
+  {							
+    <rate SETRATE>;					
+    loc orig(0,0);					
+    do orig.type = wall;				
+    do orig.decay = 0;					
+    do orig.hue = HUE;					
+  }							
+#endproc
 
-#define CementSet(STICKRATE,SETRATE,HUE)		\
-  CementSetDir(+1,0,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(-1,0,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(0,+1,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(0,-1,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(+1,+1,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(-1,+1,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(+1,-1,(STICKRATE/4),(SETRATE/4),HUE);	\
-  CementSetDir(-1,-1,(STICKRATE/4),(SETRATE/4),HUE);	\
+#proc CementSet(STICKRATE,SETRATE,HUE)		
+  CementSetDir(+1,0,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(-1,0,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(0,+1,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(0,-1,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(+1,+1,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(-1,+1,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(+1,-1,(STICKRATE/4),(SETRATE/4),HUE);	
+  CementSetDir(-1,-1,(STICKRATE/4),(SETRATE/4),HUE);	
+#endproc
 
 #define CementSpeed .1
 #define CementDrainRate  (CementSpeed/10)
@@ -59,25 +61,27 @@ sat = 32;
   do orig = empty;
 }
 
-#define AcidBurnDir(DX,DY,RATE)			\
-  {						\
-    <rate RATE>;				\
-    loc orig(0,0);				\
-    loc next(DX,DY);				\
-    if next.type != empty;			\
-    do next = empty;				\
-    do orig = empty;				\
-  }						\
+#proc AcidBurnDir(DX,DY,RATE)			
+  {						
+    <rate RATE>;				
+    loc orig(0,0);				
+    loc next(DX,DY);				
+    if next.type != empty;			
+    do next = empty;				
+    do orig = empty;				
+  }						
+#endproc
 
-#define AcidBurn(RATE)		\
-  AcidBurnDir(+1,0,(RATE/8));	\
-  AcidBurnDir(-1,0,(RATE/8));	\
-  AcidBurnDir(0,+1,(RATE/8));	\
-  AcidBurnDir(0,-1,(RATE/8));	\
-  AcidBurnDir(+1,+1,(RATE/8));	\
-  AcidBurnDir(-1,+1,(RATE/8));	\
-  AcidBurnDir(+1,-1,(RATE/8));	\
-  AcidBurnDir(-1,-1,(RATE/8));	\
+#proc AcidBurn(RATE)		
+  AcidBurnDir(+1,0,(RATE/8));	
+  AcidBurnDir(-1,0,(RATE/8));	
+  AcidBurnDir(0,+1,(RATE/8));	
+  AcidBurnDir(0,-1,(RATE/8));	
+  AcidBurnDir(+1,+1,(RATE/8));	
+  AcidBurnDir(-1,+1,(RATE/8));	
+  AcidBurnDir(+1,-1,(RATE/8));	
+  AcidBurnDir(-1,-1,(RATE/8));	
+#endproc
 
 #define AcidSpeed .5
 #define AcidStep      (AcidSpeed/2)
@@ -113,43 +117,46 @@ MooreDirectedWalk(NomadType,NomadStep,NomadStep,,NomadDie,NomadChoke,NomadBreed,
 MooreFlock2(NomadType,NomadFlock,);
 MooreStrafe(NomadStrafe,);
 
-#define ReorientTarget(TYPE,DX,DY,DIR,RATE)	\
-  {						\
-    <rate RATE>;				\
-    loc self(0,0);				\
-    loc target(DX,DY);				\
-    if target.type = TYPE;			\
-    do target.DIR = self.DIR;				\
-  }						\
+#proc ReorientTarget(TYPE,DX,DY,DIR,RATE)	
+  {						
+    <rate RATE>;				
+    loc self(0,0);				
+    loc target(DX,DY);				
+    if target.type = TYPE;			
+    do target.DIR = self.DIR;				
+  }						
+#endproc
 
 
-#define TransportTarget(TYPE,OLDX,OLDY,NEWX,NEWY,DIR,DIRVAL,RATE)	\
-  {						\
-    <rate RATE>;				\
-    loc self(0,0);				\
-    loc target(OLDX,OLDY);			\
-    loc newTarget(NEWX,NEWY);			\
-    if self.DIR = DIRVAL;				\
-    if target.type = TYPE;			\
-    if newTarget.type = empty;			\
-    do newTarget = target;				\
-    do target = empty;				\
-  }						\
+#proc TransportTarget(TYPE,OLDX,OLDY,NEWX,NEWY,DIR,DIRVAL,RATE)	
+  {						
+    <rate RATE>;				
+    loc self(0,0);				
+    loc target(OLDX,OLDY);			
+    loc newTarget(NEWX,NEWY);			
+    if self.DIR = DIRVAL;				
+    if target.type = TYPE;			
+    if newTarget.type = empty;			
+    do newTarget = target;				
+    do target = empty;				
+  }						
+#endproc
 
 
-#define Reorient(TYPE,DISTANCE,DIR,RATE)			\
-  ReorientTarget(TYPE,-DISTANCE,-DISTANCE,DIR,(RATE/9));	\
-  ReorientTarget(TYPE,-DISTANCE,0,DIR,(RATE/9));		\
-  ReorientTarget(TYPE,-DISTANCE,DISTANCE,DIR,(RATE/9));	\
-  ReorientTarget(TYPE,0,-DISTANCE,DIR,(RATE/9));		\
-  ReorientTarget(TYPE,0,DISTANCE,DIR,(RATE/9));			\
-  ReorientTarget(TYPE,DISTANCE,-DISTANCE,DIR,(RATE/9));	\
-  ReorientTarget(TYPE,DISTANCE,0,DIR,(RATE/9));			\
-  ReorientTarget(TYPE,DISTANCE,DISTANCE,DIR,(RATE/9));		\
-  TransportTarget(TYPE, 0,+1, 0,       -DISTANCE,DIR,0,(RATE/9/4));	\
-  TransportTarget(TYPE,-1, 0,+DISTANCE, 0,       DIR,1,(RATE/9/4));		\
-  TransportTarget(TYPE, 0,-1, 0,       +DISTANCE,DIR,2,(RATE/9/4));	\
-  TransportTarget(TYPE,+1, 0,-DISTANCE, 0,       DIR,3,(RATE/9/4));	\
+#proc Reorient(TYPE,DISTANCE,DIR,RATE)			
+  ReorientTarget(TYPE,-DISTANCE,-DISTANCE,DIR,(RATE/9));	
+  ReorientTarget(TYPE,-DISTANCE,0,DIR,(RATE/9));		
+  ReorientTarget(TYPE,-DISTANCE,DISTANCE,DIR,(RATE/9));	
+  ReorientTarget(TYPE,0,-DISTANCE,DIR,(RATE/9));		
+  ReorientTarget(TYPE,0,DISTANCE,DIR,(RATE/9));			
+  ReorientTarget(TYPE,DISTANCE,-DISTANCE,DIR,(RATE/9));	
+  ReorientTarget(TYPE,DISTANCE,0,DIR,(RATE/9));			
+  ReorientTarget(TYPE,DISTANCE,DISTANCE,DIR,(RATE/9));		
+  TransportTarget(TYPE, 0,+1, 0,       -DISTANCE,DIR,0,(RATE/9/4));	
+  TransportTarget(TYPE,-1, 0,+DISTANCE, 0,       DIR,1,(RATE/9/4));		
+  TransportTarget(TYPE, 0,-1, 0,       +DISTANCE,DIR,2,(RATE/9/4));	
+  TransportTarget(TYPE,+1, 0,-DISTANCE, 0,       DIR,3,(RATE/9/4));	
+#endproc
 
 #define SignpostRate (NomadSpeed)
 #define SignpostSize 5
@@ -180,22 +187,23 @@ EndBuild (if orig.row < 2; if orig.col = 0, do orig.type = signpost; do orig.sat
 EndBuild (if orig.row < 2; if orig.col = 4, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
 EndBuild (if orig.row = 0; if orig.col != 2, do orig.type = signpost; do orig.sat = SignpostBackgroundSat; do orig.dir = builder.dir, (SignpostBuildRate*.1));
 
-#define OrientedSignpostBuilder(NAME,DIR,BRI)	\
-  type NAME;					\
-  hue = SignpostHue;				\
-  sat = 255;					\
-  bri = BRI;					\
-  {						\
-    loc orig(0,0);				\
-    do orig.type = signpost_builder;		\
-    do orig.col = SignpostMidCoord;		\
-    do orig.row = SignpostMidCoord;		\
-    do orig.dir = DIR;				\
-    do orig.buildForward = 1;			\
-    do orig.buildBackward = 1;			\
-    do orig.buildRight = 1;			\
-    do orig.buildLeft = 1;			\
-  }						\
+#proc OrientedSignpostBuilder(NAME,DIR,BRI)	
+  type NAME;					
+  hue = SignpostHue;				
+  sat = 255;					
+  bri = BRI;					
+  {						
+    loc orig(0,0);				
+    do orig.type = signpost_builder;		
+    do orig.col = SignpostMidCoord;		
+    do orig.row = SignpostMidCoord;		
+    do orig.dir = DIR;				
+    do orig.buildForward = 1;			
+    do orig.buildBackward = 1;			
+    do orig.buildRight = 1;			
+    do orig.buildLeft = 1;			
+  }						
+#endproc
 
 OrientedSignpostBuilder(north_signpost_builder,0,128);
 OrientedSignpostBuilder(east_signpost_builder,1,96);

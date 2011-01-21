@@ -5,21 +5,26 @@ use Getopt::Long;
 use Pod::Usage;
 use XML::Twig;
 use Carp;
+use FindBin qw($Bin); 
 
 # parse options
 my $man = 0;
 my $help = 0;
 my $debug = 0;
 my $verbose = 0;
-my $ppfile;
+my ($cpp, $INC_PATH, $ppfile);
 
-my $cpp = "gcc -x c -E";
-
-GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'preprocessor|cpp=s' => \$cpp, 'savepp=s' => \$ppfile) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'preprocessor|cpp=s' => \$cpp, 'savepp=s' => \$ppfile, 'INC=s' => \$INC_PATH) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 pod2usage(2) unless @ARGV == 1;
+
+unless (defined $cpp) {
+    $cpp = "$Bin/convert-proc-to-define.pl | gcc -x c -E";
+    $cpp .= " -I$INC_PATH" if defined $INC_PATH;
+    $cpp .= " -";
+}
 
 $verbose = 1 if $debug;
 
@@ -65,7 +70,7 @@ my %compiler_warnings;
 # parse input file
 my ($zgfilename) = @ARGV;
 local *ZG;
-open ZG, "$cpp $zgfilename |" or die "Couldn't open $zgfilename: $!";
+open ZG, "cat $zgfilename | $cpp |" or die "Couldn't open $zgfilename: $!";
 my @zg = <ZG>;
 close ZG;
 
@@ -665,20 +670,23 @@ my @game = (@gameXML,
 		       "goal" => ['@type' => "area",
 				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
 				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "ENTRANCE",
+					     "balloon" => ["text" => "ZOO ENTRANCE",
 							   "persist" => '']]],
 
 		       "goal" => ['@type' => "area",
 				  "pos" => $exitPort{'pos'},
 				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "EXIT (closed)",
+					     "balloon" => ["text" => "GIFT SHOP",
 							   "persist" => '']]],
 
 # print hello message
 		       "goal" => ['@type' => "print",
 				  "text" => "Welcome to level 1!\n" .
-				  "Guide " . $exitPort{'count'} . " guests from the entrance to the exit.\n" .
-				  "The exit will open when all " . $entrancePort{'count'} . " guests have entered."],
+				  "Guide guests safely to the Gift Shop.\n"],
+
+# open the guest exit (currently the only exit)
+		       "goal" => ['@type' => "setexit",
+				  "state" => "PortalCounting"],
 
 
 # introduce the guests
@@ -701,36 +709,21 @@ my @game = (@gameXML,
 
 # print status message
 		       "goal" => ['@type' => "print",
-				  "text" => "All guests have now entered."],
+				  "text" => "The zoo is now closed to further guests.\nGuide all remaining guests to the gift shop."],
 
 
-# more goals here... (e.g., require the player to meet the minimum population level)
+# more goals here... e.g.,
+# generic:
+#    require the player to maintain the min/max bounds on population levels (guests, animals, expensive particles e.g. fire)
 
-
-# open the guest exit (currently the only exit)
-		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalCounting"],
-
-# delete exit balloon
-		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'pos'},
-				  "goal" => ['@type' => "balloon"]],
-
-# place "EXIT (open)" balloon at exit
-		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'pos'},
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "EXIT (open)",
-							   "persist" => '']]],
-
-# print status message
-		       "goal" => ['@type' => "print",
-				  "text" => "The exit is now open.\n" .
-				  "Guide " . $exitPort{'count'} . " guests to the exit."],
-
-
-# more goals here (e.g. fend off challenges during the guest evacuation)
-
+# specific:
+#  fend off attacks to the guests, or by animals on other animals
+#  grow food for the guests
+#  hurry the guests along with stimulant
+#  put out fires
+#  protect the guests from avalanches, lasers, poison gas
+#  place signposts
+#  build cages, place animals in cages
 
 # wait for player to reach the guest exit count
 		       "goal" => ['@type' => "exit",
@@ -1027,8 +1020,10 @@ Prints the manual page and exits.
 =item B<-preprocessor>
 
 Specify the preprocessor to use, plus options.
+The preprocessor should read from standard input.
 
-Default is "gcc -x c -E".
+Default is "perl/convert-define-to-proc.pl | gcc -x c -E -I${INC_PATH} -"
+where ${INC_PATH} can be set using the -INC option to zoocompiler.
 
 =item B<-savepp>
 

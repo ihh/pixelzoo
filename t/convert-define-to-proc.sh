@@ -1,0 +1,1 @@
+perl -ne 'chomp;if(/\\\s*$/){while(/^(.*)\\\s*$/){$_=$1;s/^#define/#proc/;print"$_\n";while(<>){chomp;if(s/^(.*)\\\s*$/$1/){print"$_\n"}else{print"$_\n"if length;print"#endproc\n\n";last}}}}else{print"$_\n"}'

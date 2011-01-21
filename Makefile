@@ -21,10 +21,15 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 ZGFILES   := $(wildcard t/*.zg)
 XMLFILES  := $(subst .zg,.xml,$(ZGFILES))
 
+ZGHEADERS   := $(wildcard t/*.zgh)
+CPPHEADERS  := $(subst .zgh,.h,$(ZGHEADERS))
+
+POLYHEADER := t/poly.h
+
 all: lib targets xml
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES) t/poly.h
+	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES) $(CPPHEADERS) $(POLYHEADER)
 
 test: targets
 	bin/sdlgame t/testgame.xml
@@ -38,9 +43,9 @@ xml: poly $(XMLFILES)
 
 lib: $(OFILES)
 
-poly: t/poly.h
+poly: $(POLYHEADER)
 
-t/poly.h: perl/makepoly.pl
+$(POLYHEADER): perl/makepoly.pl
 	perl/makepoly.pl >$@
 
 bin/%:  test/%.c $(OFILES)
@@ -51,8 +56,11 @@ bin/%:  test/%.c $(OFILES)
 
 .SECONDARY:
 
-%.xml: %.zg perl/zoocompiler.pl
-	perl/zoocompiler.pl -v -savepp $*.pp $< >$@
+%.xml: %.zg perl/zoocompiler.pl $(CPPHEADERS)
+	perl/zoocompiler.pl -v -savepp $*.pp -INC $(dir $*) $< >$@
+
+%.h: %.zgh
+	perl/convert-proc-to-define.pl $< >$@
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
