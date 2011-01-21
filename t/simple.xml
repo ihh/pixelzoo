@@ -148,6 +148,17 @@ Guide all remaining guests to the gift shop.</text>
       </goal>
     </goal>
     <tool>
+      <name>Cage</name>
+      <size>1</size>
+      <spray>100</spray>
+      <hexstate>c000000000000</hexstate>
+      <reserve>1</reserve>
+      <recharge>100</recharge>
+      <overwrite>
+        <state>0000000000000</state>
+      </overwrite>
+    </tool>
+    <tool>
       <name>Cement spray</name>
       <size>2</size>
       <spray>100</spray>
@@ -4878,7 +4889,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f</mask>
+              <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -4886,7 +4897,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f000</mask>
+              <mask>100</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -4894,7 +4905,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
+              <mask>1c</mask>
               <hexval>0</hexval>
             </test>
             <test op="==">
@@ -4924,11 +4935,11 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>-1</y>
               </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
               <hexinc>ffffffffffffffff</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
               <dest>
                 <x>0</x>
                 <y>-1</y>
@@ -4942,7 +4953,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f</mask>
+              <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -4955,7 +4966,7 @@ Guide all remaining guests to the gift shop.</text>
             </test>
             <exec>
               <srcmask>0</srcmask>
-              <destmask>f000</destmask>
+              <destmask>100</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -4969,12 +4980,12 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
+              <mask>1c</mask>
               <hexval>0</hexval>
             </test>
             <exec>
               <srcmask>0</srcmask>
-              <destmask>f000</destmask>
+              <destmask>100</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -4988,7 +4999,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f</mask>
+              <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -4996,7 +5007,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f000000</mask>
+              <mask>800</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -5004,8 +5015,8 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
+              <mask>e0</mask>
+              <hexval>80</hexval>
             </test>
             <test op="==">
               <pos>
@@ -5034,11 +5045,11 @@ Guide all remaining guests to the gift shop.</text>
                 <x>+1</x>
                 <y>0</y>
               </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
               <hexinc>1</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
               <dest>
                 <x>+1</x>
                 <y>0</y>
@@ -5052,7 +5063,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f</mask>
+              <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -5065,7 +5076,7 @@ Guide all remaining guests to the gift shop.</text>
             </test>
             <exec>
               <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
+              <destmask>800</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -5079,12 +5090,12 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
+              <mask>e0</mask>
+              <hexval>80</hexval>
             </test>
             <exec>
               <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
+              <destmask>800</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
@@ -5098,7 +5109,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f</mask>
+              <mask>3</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -5106,7 +5117,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0000</mask>
+              <mask>200</mask>
               <hexval>0</hexval>
             </test>
             <test op="!=">
@@ -5114,1646 +5125,1646 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>1</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>1</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>1</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>1</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>1</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>1</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>2</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>-1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>-1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>-1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>-1</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>1</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>0</x>
-                <y>-1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>-1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>400</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f000000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>+1</x>
-                <y>0</y>
-              </src>
-              <srcmask>f0</srcmask>
-              <rshift>4</rshift>
-              <hexinc>1</hexinc>
-              <lshift>4</lshift>
-              <destmask>f0</destmask>
-              <dest>
-                <x>+1</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>+1</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f0</mask>
-              <hexval>40</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f0000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00000</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>+1</y>
-              </src>
-              <srcmask>f00</srcmask>
-              <rshift>8</rshift>
-              <hexinc>ffffffffffffffff</hexinc>
-              <lshift>8</lshift>
-              <destmask>f00</destmask>
-              <dest>
-                <x>0</x>
-                <y>+1</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f</mask>
-              <hexval>3</hexval>
-            </test>
-            <test op="!=">
-              <pos>
-                <x>0</x>
-                <y>+1</y>
-              </pos>
-              <mask>ffff000000000000</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.00625</rate>
-            <test op="==">
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>f00</mask>
-              <hexval>0</hexval>
-            </test>
-            <exec>
-              <srcmask>0</srcmask>
-              <destmask>f00000</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.1</rate>
-            <test op="==">
-              <hexval>20</hexval>
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>ffff0f0</mask>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <destmask>ffff000000000ff0</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-              <srcmask>0</srcmask>
-              <hexinc>50000000007f0</hexinc>
-              <lshift>0</lshift>
-            </exec>
-            <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>f</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>f</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.1</rate>
-            <test op="==">
-              <hexval>200</hexval>
-              <pos>
-                <x>0</x>
-                <y>0</y>
-              </pos>
-              <mask>fffff00</mask>
-            </test>
-            <exec>
-              <src>
-                <x>0</x>
-                <y>0</y>
-              </src>
-              <srcmask>ffffffffffffffff</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>ffffffffffffffff</destmask>
-              <dest>
-                <x>-128</x>
-                <y>0</y>
-              </dest>
-            </exec>
-            <exec>
-              <destmask>ffff000000000ff0</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-              <srcmask>0</srcmask>
-              <hexinc>50000000007f0</hexinc>
-              <lshift>0</lshift>
-            </exec>
-            <exec>
-              <src>
-                <x>-128</x>
-                <y>0</y>
-              </src>
-              <srcmask>f</srcmask>
-              <rshift>0</rshift>
-              <lshift>0</lshift>
-              <destmask>f</destmask>
-              <dest>
-                <x>0</x>
-                <y>0</y>
-              </dest>
-            </exec>
-          </rule>
-          <rule>
-            <rate>0.1</rate>
-            <test op="==">
+              <mask>1c</mask>
               <hexval>10</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>1</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>ffff0f0</mask>
+              <mask>3</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>400</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>100</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>800</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>1</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>200</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>1</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>400</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>-1</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>1</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>100</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>800</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>1</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>200</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>-1</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>1</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>400</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>2</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>100</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>100</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>800</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>-1</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>1</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>800</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>200</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>1c</srcmask>
+              <rshift>2</rshift>
+              <hexinc>1</hexinc>
+              <lshift>2</lshift>
+              <destmask>1c</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1c</mask>
+              <hexval>10</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>200</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>400</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>e0</srcmask>
+              <rshift>5</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>5</lshift>
+              <destmask>e0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>3</mask>
+              <hexval>3</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00625</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>e0</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>400</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.1</rate>
+            <test op="==">
+              <hexval>8</hexval>
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f1c</mask>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff000000000ff0</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000007f0</hexinc>
+              <lshift>0</lshift>
+            </exec>
+            <exec>
+              <src>
+                <x>-128</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.1</rate>
+            <test op="==">
+              <hexval>40</hexval>
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fe0</mask>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <destmask>ffff000000000ff0</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>50000000007f0</hexinc>
+              <lshift>0</lshift>
+            </exec>
+            <exec>
+              <src>
+                <x>-128</x>
+                <y>0</y>
+              </src>
+              <srcmask>3</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>f</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.1</rate>
+            <test op="==">
+              <hexval>4</hexval>
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f1c</mask>
             </test>
             <test op=">=">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>100</hexval>
+              <mask>e0</mask>
+              <hexval>20</hexval>
             </test>
             <test op="&lt;=">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>300</hexval>
+              <mask>e0</mask>
+              <hexval>60</hexval>
             </test>
             <exec>
               <src>
@@ -6784,7 +6795,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>-128</x>
                 <y>0</y>
               </src>
-              <srcmask>f</srcmask>
+              <srcmask>3</srcmask>
               <rshift>0</rshift>
               <lshift>0</lshift>
               <destmask>f</destmask>
@@ -6802,23 +6813,23 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>ffff000</mask>
+              <mask>f00</mask>
             </test>
             <test op=">">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
-              <hexval>20</hexval>
+              <mask>1c</mask>
+              <hexval>8</hexval>
             </test>
             <test op="!=">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>200</hexval>
+              <mask>e0</mask>
+              <hexval>40</hexval>
             </test>
             <exec>
               <src>
@@ -6849,7 +6860,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>-128</x>
                 <y>0</y>
               </src>
-              <srcmask>f</srcmask>
+              <srcmask>3</srcmask>
               <rshift>0</rshift>
               <lshift>0</lshift>
               <destmask>f</destmask>
@@ -6867,15 +6878,15 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>fffff00</mask>
+              <mask>fe0</mask>
             </test>
             <test op="&lt;">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
-              <hexval>20</hexval>
+              <mask>1c</mask>
+              <hexval>8</hexval>
             </test>
             <exec>
               <src>
@@ -6906,7 +6917,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>-128</x>
                 <y>0</y>
               </src>
-              <srcmask>f</srcmask>
+              <srcmask>3</srcmask>
               <rshift>0</rshift>
               <lshift>0</lshift>
               <destmask>f</destmask>
@@ -6919,20 +6930,20 @@ Guide all remaining guests to the gift shop.</text>
           <rule>
             <rate>0.1</rate>
             <test op="==">
-              <hexval>400</hexval>
+              <hexval>80</hexval>
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>fffff00</mask>
+              <mask>fe0</mask>
             </test>
             <test op="&lt;">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f0</mask>
-              <hexval>20</hexval>
+              <mask>1c</mask>
+              <hexval>8</hexval>
             </test>
             <exec>
               <src>
@@ -6963,7 +6974,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>-128</x>
                 <y>0</y>
               </src>
-              <srcmask>f</srcmask>
+              <srcmask>3</srcmask>
               <rshift>0</rshift>
               <lshift>0</lshift>
               <destmask>f</destmask>
@@ -6981,15 +6992,15 @@ Guide all remaining guests to the gift shop.</text>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>ffff0f0</mask>
+              <mask>f1c</mask>
             </test>
             <test op="!=">
               <pos>
                 <x>0</x>
                 <y>0</y>
               </pos>
-              <mask>f00</mask>
-              <hexval>200</hexval>
+              <mask>e0</mask>
+              <hexval>40</hexval>
             </test>
             <exec>
               <src>
@@ -7020,7 +7031,7 @@ Guide all remaining guests to the gift shop.</text>
                 <x>-128</x>
                 <y>0</y>
               </src>
-              <srcmask>f</srcmask>
+              <srcmask>3</srcmask>
               <rshift>0</rshift>
               <lshift>0</lshift>
               <destmask>f</destmask>
@@ -7042,13 +7053,13 @@ Guide all remaining guests to the gift shop.</text>
           </color>
           <rule>
             <exec>
-              <destmask>ffff00000fffffff</destmask>
+              <destmask>ffff000000000fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
               <srcmask>0</srcmask>
-              <hexinc>6000001111220</hexinc>
+              <hexinc>6000000000f48</hexinc>
               <lshift>0</lshift>
             </exec>
           </rule>
@@ -7064,13 +7075,13 @@ Guide all remaining guests to the gift shop.</text>
           </color>
           <rule>
             <exec>
-              <destmask>ffff00000fffffff</destmask>
+              <destmask>ffff000000000fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
               <srcmask>0</srcmask>
-              <hexinc>6000001111221</hexinc>
+              <hexinc>6000000000f49</hexinc>
               <lshift>0</lshift>
             </exec>
           </rule>
@@ -7086,13 +7097,13 @@ Guide all remaining guests to the gift shop.</text>
           </color>
           <rule>
             <exec>
-              <destmask>ffff00000fffffff</destmask>
+              <destmask>ffff000000000fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
               <srcmask>0</srcmask>
-              <hexinc>6000001111222</hexinc>
+              <hexinc>6000000000f4a</hexinc>
               <lshift>0</lshift>
             </exec>
           </rule>
@@ -7108,13 +7119,865 @@ Guide all remaining guests to the gift shop.</text>
           </color>
           <rule>
             <exec>
-              <destmask>ffff00000fffffff</destmask>
+              <destmask>ffff000000000fff</destmask>
               <dest>
                 <x>0</x>
                 <y>0</y>
               </dest>
               <srcmask>0</srcmask>
-              <hexinc>6000001111223</hexinc>
+              <hexinc>6000000000f4b</hexinc>
+              <lshift>0</lshift>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>cage</name>
+          <type>11</type>
+          <color>
+            <mask>0</mask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>a8c0ff</hexinc>
+          </color>
+          <rule>
+            <rate>0.0125</rate>
+            <test op=">">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1000</mask>
+              <hexval>1000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>-1</y>
+              </src>
+              <srcmask>3f</srcmask>
+              <rshift>0</rshift>
+              <hexinc>1</hexinc>
+              <lshift>0</lshift>
+              <destmask>3f</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <fail>0.06</fail>
+              <src>
+                <x>0</x>
+                <y>-1</y>
+              </src>
+              <srcmask>fc0</srcmask>
+              <rshift>6</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>6</lshift>
+              <destmask>fc0</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>1000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>2000</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1000</mask>
+              <hexval>1000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>1000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>2000</destmask>
+              <dest>
+                <x>0</x>
+                <y>-1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>1000</mask>
+              <hexval>1000</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>-1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>1000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.0125</rate>
+            <test op=">">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>2000</mask>
+              <hexval>2000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>3f</srcmask>
+              <rshift>0</rshift>
+              <hexinc>1</hexinc>
+              <lshift>0</lshift>
+              <destmask>3f</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <fail>0.06</fail>
+              <src>
+                <x>0</x>
+                <y>+1</y>
+              </src>
+              <srcmask>fc0</srcmask>
+              <rshift>6</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>6</lshift>
+              <destmask>fc0</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>2000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>1000</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>2000</mask>
+              <hexval>2000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>2000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>1000</destmask>
+              <dest>
+                <x>0</x>
+                <y>+1</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>2000</mask>
+              <hexval>2000</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>0</x>
+                <y>+1</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>2000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.0125</rate>
+            <test op=">">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>8000</mask>
+              <hexval>8000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>3f</srcmask>
+              <rshift>0</rshift>
+              <hexinc>1</hexinc>
+              <lshift>0</lshift>
+              <destmask>3f</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <fail>0.06</fail>
+              <src>
+                <x>-1</x>
+                <y>0</y>
+              </src>
+              <srcmask>fc0</srcmask>
+              <rshift>6</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>6</lshift>
+              <destmask>fc0</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>8000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>4000</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>8000</mask>
+              <hexval>8000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>8000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>4000</destmask>
+              <dest>
+                <x>-1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>8000</mask>
+              <hexval>8000</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>-1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>8000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.0125</rate>
+            <test op=">">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>4000</mask>
+              <hexval>4000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>3f</srcmask>
+              <rshift>0</rshift>
+              <hexinc>1</hexinc>
+              <lshift>0</lshift>
+              <destmask>3f</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <fail>0.06</fail>
+              <src>
+                <x>+1</x>
+                <y>0</y>
+              </src>
+              <srcmask>fc0</srcmask>
+              <rshift>6</rshift>
+              <hexinc>ffffffffffffffff</hexinc>
+              <lshift>6</lshift>
+              <destmask>fc0</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>4000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>8000</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>4000</mask>
+              <hexval>4000</hexval>
+            </test>
+            <test op="==">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>4000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>8000</destmask>
+              <dest>
+                <x>+1</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.00833333333333333</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>4000</mask>
+              <hexval>4000</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="!=">
+              <pos>
+                <x>+1</x>
+                <y>0</y>
+              </pos>
+              <mask>ffff000000000000</mask>
+              <hexval>b000000000000</hexval>
+            </test>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>4000</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.025</rate>
+            <test op="==">
+              <hexval>0</hexval>
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f000</mask>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>2000000000000</hexinc>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>a8</hexinc>
+              <lshift>0</lshift>
+              <destmask>ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.025</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op="&lt;">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>2000000000000</hexinc>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <hexinc>a8</hexinc>
+              <lshift>0</lshift>
+              <destmask>ff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.01</rate>
+            <test op="==">
+              <hexval>0</hexval>
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>f000</mask>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+          <rule>
+            <rate>0.01</rate>
+            <test op="==">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>0</hexval>
+            </test>
+            <test op=">=">
+              <pos>
+                <x>0</x>
+                <y>0</y>
+              </pos>
+              <mask>fc0</mask>
+              <hexval>80</hexval>
+            </test>
+            <exec>
+              <src>
+                <x>0</x>
+                <y>0</y>
+              </src>
+              <srcmask>ffffffffffffffff</srcmask>
+              <rshift>0</rshift>
+              <lshift>0</lshift>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>-128</x>
+                <y>0</y>
+              </dest>
+            </exec>
+            <exec>
+              <srcmask>0</srcmask>
+              <destmask>ffffffffffffffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+            </exec>
+          </rule>
+        </particle>
+        <particle>
+          <name>cage_size20</name>
+          <type>12</type>
+          <color>
+            <mask>0</mask>
+            <rshift>0</rshift>
+            <hexmul>0</hexmul>
+            <hexinc>a880ff</hexinc>
+          </color>
+          <rule>
+            <exec>
+              <destmask>ffff00000000ffff</destmask>
+              <dest>
+                <x>0</x>
+                <y>0</y>
+              </dest>
+              <srcmask>0</srcmask>
+              <hexinc>b00000000f500</hexinc>
               <lshift>0</lshift>
             </exec>
           </rule>

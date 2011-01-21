@@ -160,6 +160,7 @@ MooreStrafe(NomadStrafe,);
 
 #define SignpostRate (NomadSpeed)
 #define SignpostSize 5
+#define SignpostSizeBits 3
 #define SignpostMaxCoord 4
 #define SignpostMidCoord 2
 #define SignpostHue 96
@@ -174,7 +175,7 @@ Reorient(NomadType,SignpostSize,dir,SignpostRate);
 
 
 #define SignpostBuildRate 1
-type signpost_builder dir(4) row(4) col(4) buildForward(4) buildBackward(4) buildLeft(4) buildRight(4);
+type signpost_builder BuilderVars(SignpostSizeBits,SignpostSizeBits);
 hue = SignpostHue;
 sat = 255;
 bri = 32;
@@ -209,6 +210,29 @@ OrientedSignpostBuilder(north_signpost_builder,0,128);
 OrientedSignpostBuilder(east_signpost_builder,1,96);
 OrientedSignpostBuilder(south_signpost_builder,2,128);
 OrientedSignpostBuilder(west_signpost_builder,3,96);
+
+#define CageMaxSize 63
+#define CageSizeBits 6
+#define CageGrowRate .1
+#define CageKnobRate .06
+#define CageStopRate .1
+#define CageWallThickness 2
+type cage GrowerVars(CageSizeBits);
+hue = BlueHue;
+sat = 192;
+bri = 255;
+Grow(cage,CageGrowRate,CageKnobRate);
+EndGrow (if orig.rOut < CageWallThickness, do orig = wall;do orig.hue = BlueHue,(CageStopRate/2));
+EndGrow (if orig.rOut >= CageWallThickness, do orig = empty,(CageStopRate/5));
+
+type cage_size20;
+hue = BlueHue;
+{
+  loc orig(0,0);
+  InitGrower(orig,cage,20,1,1,1,1);
+}
+
+tool "Cage" (type cage_size20) (reserve 1) (size 1) (spray 100) (overwrite empty);
 
 #define PolymerRate .1
 #define PolymerHue 160
@@ -341,3 +365,4 @@ SelfTransform((PlantDieRate/2),empty,if self.height > 5,);
 SelfTransform((PlantDieRate/8),empty,if self.height = MaxPlantHeight,);
 
 tool "Seed" (type plant) (reserve 1) (size 1) (spray 100) (overwrite empty);
+
