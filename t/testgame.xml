@@ -71,10 +71,10 @@
 	  <rate>.03</rate>
 
 	  <rule type="random"><prob>.05</prob>
-	    <pass><rule type="random"><prob>.6</prob>
+	    <pass><rule type="random"><prob>.55</prob>
 		<pass><rule type="modify"><rshift>64</rshift>
 		</rule></pass>
-		<fail><rule type="modify"><src></src><dest><x>1</x></dest>
+		<fail><rule type="modify"><rshift>64</rshift><hexinc>2000000000000</hexinc><dest><x>1</x></dest>
 		</rule></fail>
 	    </rule></pass>
 	    <fail><rule type="random">   <!-- x or y -->
@@ -82,6 +82,7 @@
 
 		    <pass><rule type="switch">
 			<pos><x>1</x></pos>
+			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule type="modify">
 			    <rshift>64</rshift>
 			    <next><rule type="modify">
@@ -95,6 +96,7 @@
 
 		    <fail><rule type="switch">
 			<pos><x>-1</x></pos>
+			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule type="modify">
 			    <rshift>64</rshift>
 			    <next><rule type="modify">
@@ -111,6 +113,7 @@
 
 		    <pass><rule type="switch">
 			<pos><y>1</y></pos>
+			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule type="modify">
 			    <rshift>64</rshift>
 			    <next><rule type="modify">
@@ -124,6 +127,7 @@
 
 		    <fail><rule type="switch">
 			<pos><y>-1</y></pos>
+			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule type="modify">
 			    <rshift>64</rshift>
 			    <next><rule type="modify">
@@ -141,7 +145,81 @@
 	</particle>
 
 	<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
-	  <rate>.0009</rate>
+	  <rate>.03</rate>
+
+	  <rule type="random"><prob>.05</prob>
+	    <pass><rule type="random"><prob>.55</prob>
+		<pass><rule type="modify"><rshift>64</rshift>
+		</rule></pass>
+		<fail><rule type="modify"><rshift>64</rshift><hexinc>1000000000000</hexinc><dest><x>1</x></dest>
+		</rule></fail>
+	    </rule></pass>
+	    <fail><rule type="random">   <!-- x or y -->
+		<pass><rule type="random">   <!-- right(+1) or left(-1) -->
+
+		    <pass><rule type="switch">
+			<pos><x>1</x></pos>
+			<mask>ffff000000000000</mask>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></pass>
+
+		    <fail><rule type="switch">
+			<pos><x>-1</x></pos>
+			<mask>ffff000000000000</mask>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></fail>
+
+		</rule></pass>
+		<fail><rule type="random">   <!-- down(+1) or up(-1) -->
+
+		    <pass><rule type="switch">
+			<pos><y>1</y></pos>
+			<mask>ffff000000000000</mask>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></pass>
+
+		    <fail><rule type="switch">
+			<pos><y>-1</y></pos>
+			<mask>ffff000000000000</mask>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><y>-1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></fail>
+
+		</rule></fail>
+	    </rule></fail>
+	  </rule>
+
 	</particle>
 
       </grammar><init><x>64</x><y>64</y><type>1</type></init></board>

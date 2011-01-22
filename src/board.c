@@ -193,7 +193,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       lookup = &rule->param.lookup;
       xSrc = x + lookup->loc.x;
       ySrc = y + lookup->loc.y;
-      state = readBoardState(board,x,y) & lookup->mask;
+      state = readBoardState(board,xSrc,ySrc) & lookup->mask;
       node = StateMapFind (lookup->matchRule, state);
       rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
       break;
