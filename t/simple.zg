@@ -213,9 +213,9 @@ OrientedSignpostBuilder(west_signpost_builder,3,96);
 
 #define CageMaxSize 63
 #define CageSizeBits 6
-#define CageGrowRate 1
+#define CageStopRate .5
+#define CageGrowRate .5
 #define CageKnobRate .06
-#define CageStopRate .1
 #define CageWallThickness 2
 type cage GrowerVars(CageSizeBits);
 hue = BlueHue;
@@ -223,7 +223,7 @@ sat = 192;
 bri = 255;
 Grow(cage,CageGrowRate,CageKnobRate);
 EndGrow (if orig.rOut < CageWallThickness, do orig = wall;do orig.hue = BlueHue,(CageStopRate/2));
-EndGrow (if orig.rOut >= CageWallThickness, do orig = empty,(CageStopRate/5));
+EndGrow (if orig.rOut >= CageWallThickness, do orig = empty,(CageStopRate/2));
 
 type cage_size20;
 hue = BlueHue;
