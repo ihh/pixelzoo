@@ -29,7 +29,7 @@ typedef struct Particle {
 } Particle;
 
 /* constructor/destructor */
-Particle* newParticle (const char* name, int nRules);
+Particle* newParticle (const char* name);
 void deleteParticle (Particle* particle);
 
 /* color */

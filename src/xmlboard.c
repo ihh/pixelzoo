@@ -9,9 +9,9 @@
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (void *game, xmlNode* node);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
-void initRuleFromXmlNode (void *game, StochasticRule* rule, xmlNode* node);
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
 void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
+StochasticRule* newRuleFromXmlNode (void *game, xmlNode* node);
 
 /* method defs */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
@@ -67,26 +67,20 @@ Board* newBoardFromXmlString (void *game, const char* string) {
 
 Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
-  int nRules, nColorRules, n;
+  int nColorRules;
   xmlNode *curNode;
   nRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,RULE))
       ++nRules;
-  p = newParticle ((const char*) CHILDSTRING(node,NAME), nRules);
+  p = newParticle ((const char*) CHILDSTRING(node,NAME));
   if (CHILD(node,SYNC)) {
     p->synchronous = 1;
-    if (CHILD(node,SHUFFLE))
-      p->shuffle = 1;
-    p->failures = OPTCHILDINT(node,FAILS,nRules);
-    p->successes = OPTCHILDINT(node,SUCCEEDS,1);
     p->syncPeriod = OPTCHILDINT(node,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
     p->syncPhase = OPTCHILDINT(node,PHASE,0);
   }
-  n = 0;
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,RULE))
-      initRuleFromXmlNode (game, &p->rule[n++], curNode);
+  p->rule = newRuleFromXmlNode (game, CHILD(node,RULE));
+  p->rate = OPTCHILDFLOAT(node,RATE,1.);
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
   nColorRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
@@ -104,23 +98,38 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
-void initRuleFromXmlNode (void *game, StochasticRule* rule, xmlNode* ruleNode) {
-  xmlNode *node, *goalNode;
-  int nCond, nOp;
-  rule->rate = OPTCHILDFLOAT(ruleNode,RATE,1.);
-  rule->overloadRate = OPTCHILDFLOAT(ruleNode,OVERLOAD,rule->rate);
-  nCond = nOp = 0;
-  for (node = ruleNode->children; node; node = node->next)
-    if (MATCHES(node,TEST)) {
-      Assert (nCond < NumRuleConditions, "initRuleFromXmlNode: too many rule conditions");
-      initConditionFromXmlNode (&rule->cond[nCond++], node);
-    } else if (MATCHES(node,EXEC)) {
-      Assert (nOp < NumRuleOperations, "initRuleFromXmlNode: too many rule operations");
-      initOperationFromXmlNode (&rule->op[nOp++], node);
-    }
-  goalNode = CHILD (ruleNode, GOAL);
-  if (goalNode)
-    rule->trigger = newGoalFromXmlNode (goalNode, game);
+StochasticRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
+  StochasticRule* rule;
+  const char *ruleTypeAttr;
+  rule = NULL;
+  Assert (ruleNode != NULL, "newRuleFromXmlNode: null rule node");
+  ruleTypeAttr = ATTR(ruleNode,RULETYPE);
+  if (ATTRMATCHES (ruleTypeAttr, LOOKUP)) {
+    rule = newLookupRule();
+    /* more to go here */
+
+  } else if (ATTRMATCHES (ruleTypeAttr, MODIFY)) {
+    rule = newModifyRule();
+    /* more to go here */
+
+  } else if (ATTRMATCHES (ruleTypeAttr, RANDOM)) {
+    rule = newRandomRule();
+    /* more to go here */
+
+  } else if (ATTRMATCHES (ruleTypeAttr, OVERLOAD)) {
+    rule = newOverloadRule();
+    /* more to go here */
+
+  } else if (ATTRMATCHES (ruleTypeAttr, GOAL)) {
+    rule = newGoalRule();
+    /* more to go here */
+    /*    rule->trigger = newGoalFromXmlNode (goalNode, game);  */
+
+  } else {
+    Abort ("Unknown rule type");
+  }
+
+  return rule;
 }
 
 void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {

@@ -17,6 +17,7 @@
 #define XMLZOO_NAME        "name"
 #define XMLZOO_RULE        "rule"
 #define XMLZOO_RATE        "rate"
+#define XMLZOO_RULETYPE    "type"
 #define XMLZOO_LOOKUP      "lookup"
 #define XMLZOO_MODIFY      "modify"
 #define XMLZOO_RANDOM      "random"

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "particle.h"
 
-Particle* newParticle (const char* name, int nRules) {
+Particle* newParticle (const char* name) {
   Particle* p;
   int c;
   p = SafeMalloc (sizeof (Particle));
