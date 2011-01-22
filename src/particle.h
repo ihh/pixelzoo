@@ -21,12 +21,9 @@ typedef struct Particle {
   char* name;
   ColorRule colorRule[NumColorRules];  /* results of ColorRule applications are summed */
   int synchronous, syncPeriod, syncPhase;  /* if synchronous=1, rules will be updated synchronously vs randomly, whenever (board->syncUpdates % syncPeriod == syncPhase) */
-  int shuffle;                             /* (synchronous only) if shuffle=1, rules will be attempted in random order */
-  int failures, successes;                 /* (synchronous only) at most #failures rule failures & at most #successes successes will be tolerated before stopping */
   /* rules */
-  int nRules;  /* number of rules */
   StochasticRule* rule;
-  double totalRate, totalOverloadRate, asyncFiringRate, syncFiringRate;
+  double rate, asyncFiringRate, syncFiringRate;  /* if async then (asyncFiringRate, syncFiringRate) = (rate, 0)  else (asyncFiringRate, syncFiringRate) = (0, rate) */
   /* meta-info */
   int count;  /* number on the board */
 } Particle;

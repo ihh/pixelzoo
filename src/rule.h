@@ -55,55 +55,64 @@ typedef struct LocalOffset {
 
 #define TempOffset -128
 
-/*
-  RuleCondition parameterizes the following conditional test:
-   (randomDouble() < ignoreProb)  ||  (cell[loc] & mask  <opcode>  rhs)
-*/
-typedef struct RuleCondition {
-  LocalOffset loc;
-  State mask, rhs;
-  enum ConditionalOpcode { TestEQ, TestNEQ, TestGT, TestLT, TestGEQ, TestLEQ, TestTRUE, TestFALSE } opcode;
-  double ignoreProb, overloadIgnoreProb;  /* when board (or local region) is overloaded, overloadIgnoreProb will be used instead of ignoreProb */
-} RuleCondition;
+/* RuleFunction is one of the following functions (returning an int):
 
-/*
-  RuleOperation parameterizes the following operation:
-  if (randomDouble() >= failProb)
-    cell[dest] = (cell[dest] & (StateMask ^ destMask)) | (((((cell[src] & srcMask) >> rightShift) + offset) << leftShift) & destMask);
+  (Lookup)
+  matchRule[val]  or defaultRule, if no matchRule defined,
+  where val = ((cell[orig+src] & srcMask) >> rightShift)
+
+  (Modify)
+  cell[orig+dest] = (cell[orig+dest] & (StateMask ^ destMask)) | (((writeVal) << leftShift) & destMask);
+  then nextRule
+
+  (Random)
+  randRule[distrib.sample()]
+
+  (Overload)
+  if board is overloaded, slowRule; else fastRule
 */
-typedef struct RuleOperation {
+typedef struct ParticleRule ParticleRule;
+
+enum RuleType { LookupRule, ModifyRule, RandomRule, OverloadRule };
+
+typedef struct LookupRuleParams {
+  LocalOffset loc;
+  unsigned char shift;
+  State mask;
+  RBTree *matchRule;
+  ParticleRule *defaultRule;
+} LookupRule;
+
+typedef struct ModifyRuleParams {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
-  State offset, srcMask, destMask;
-  double failProb, overloadFailProb;  /* when board (or local region) is overloaded, overloadFailProb will be used instead of failProb */
-} RuleOperation;
+  State srcMask, destMask, offset;
+  ParticleRule *nextRule;
+} LookupRule;
 
-/*
-  A StochasticRule (associated with a given Particle) consists of:
-   a fixed number of RuleCondition's,
-   a fixed number of RuleOperation's,
-   a firing rate (corresponding to the relative rate that this rule will be selected out of all rules applying to this Type)
-   an overloaded firing rate (the firing rate that will be used when the board is too full)
- */
+typedef struct RandomRuleParams {
+  int nRules;
+  BinDist *distrib;
+  ParticleRule **rule;
+} LocalOffsetRules;
 
-/* first define the size of the condition & operation blocks
-   These sizes were chosen with reference to the following models:
-   (async, NumRuleConditions=6, NumRuleOperations=6)   RNA duplex diffusion with four connected neighbors per basepair unit
-   (sync,  NumRuleConditions=8, NumRuleOperations=1)   Conway's Life
- */
-#define NumRuleConditions 8  /* minimum for Conway's Life */
-#define NumRuleOperations 6  /* minimum for RNA diffusion model */
+typedef struct OverloadRuleParams {
+  ParticleRule *slowRule, *fastRule;
+} LocalOffsetRules;
+  
+typedef union RuleParams {
+  LookupRuleParams lookup;
+  ModifyRuleParams modify;
+  RandomRuleParams random;
+  OverloadRuleParams overload;
+} RuleParams;
 
-/* now the rule struct itself */
-typedef struct StochasticRule {
-  RuleCondition cond[NumRuleConditions];
-  RuleOperation op[NumRuleOperations];
-  double rate, overloadRate;
-  void *trigger;  /* pointer to a Goal. If non-NULL, will be evaluated; if true, will be deleted */
-  /* the following indices are important if write operations are being buffered for a synchronous update, and if "src" or "dest" uses TempOffset */
-  unsigned char cumulativeOpSrcIndex[NumRuleOperations];  /* if cumulativeOpSrcIndex[n]=m and m>0, then rule #n uses as its "src" the "dest" value of rule #m-n */
-  unsigned char cumulativeOpDestIndex[NumRuleOperations];  /* if cumulativeOpDestIndex[n]=m and m>0, then rule #n uses as its unmasked "dest" the "dest" value of rule #m-n */
-  unsigned char writeOp[NumRuleOperations];  /* if writeOp[n]=0, then result of RuleOperation #n need not be written to the board (either because it's a temporary variable, or because it's rewritten by a later rule) */
-} StochasticRule;
+struct ParticleRule {
+  enum RuleType type;
+  RuleParams param;
+};
+
+void deleteParticleRule (ParticleRule *rule);
+
 
 #endif /* RULE_INCLUDED */

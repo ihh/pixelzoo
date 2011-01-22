@@ -157,101 +157,23 @@ void addParticleToBoard (Particle* p, Board* board) {
 		p->syncPeriod = MAX ((int) (1./p->totalRate), 1);  /* guess a sensible default for period */
 }
 
-int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded) {
-	State lhs, rhs;
-	if (randomDouble() < (overloaded ? cond->overloadIgnoreProb : cond->ignoreProb))
-		return 1;
-	x += cond->loc.x;
-	y += cond->loc.y;
-	lhs = readBoardState(board,x,y) & cond->mask;
-	rhs = cond->rhs;
-	switch (cond->opcode) {
-		case TestEQ: return lhs == rhs;
-		case TestNEQ: return lhs != rhs;
-		case TestGT: return lhs > rhs;
-		case TestLT: return lhs < rhs;
-		case TestGEQ: return lhs >= rhs;
-		case TestLEQ: return lhs <= rhs;
-		case TestTRUE: return 1;
-		case TestFALSE: default: break;
-	}
-	return 0;
-}
-
-State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State oldSrcState, State oldDestState, int overloaded, BoardWriteFunction write) {
-	State newState;
-	if (randomDouble() < (overloaded ? op->overloadFailProb : op->failProb))
-		return oldDestState;
-	x += op->dest.x;
-	y += op->dest.y;
-	newState = (oldDestState & (StateMask ^ op->destMask))
-	  | (((((oldSrcState & op->srcMask) >> op->rightShift) + op->offset) << op->leftShift) & op->destMask);
-	if (onBoard (board, x, y))
-	  (*write) (board, x, y, newState);
-	return newState;
-}
-
 void evolveBoardCell (Board* board, int x, int y) {
 	Particle* p;
-	int n, overloaded;
-	double rand;
-	StochasticRule* rule;
 	p = readBoardParticle (board, x, y);
 	if (p) {
 		/*
 		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
 		 */
-		overloaded = boardOverloaded(board);
-		/* sample a rule at random */
-		rand = randomDouble() * (overloaded ? p->totalOverloadRate : p->totalRate);
-		for (n = 0; n < p->nRules; ++n) {
-			rule = &p->rule[n];
-			if ((rand -= (overloaded ? rule->overloadRate : rule->rate)) <= 0) {
-			  (void) attemptRule (p, rule, board, x, y, overloaded, writeBoardStateUnguarded);
-				return;
-			}
-		}
+		(void) attemptRule (p, p->rule, board, x, y, writeBoardStateUnguarded);
 	}
 }
 
 void evolveBoardCellSync (Board* board, int x, int y) {
 	Particle* p;
-	int n, wins, fails, swap, overloaded, *ruleOrder;
-	double rand, remainingRate, ruleRate;
-	StochasticRule* rule;
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-		overloaded = boardOverloaded(board);
-		/* attempt each rule in random sequence, stopping when one succeeds */
-		ruleOrder = SafeMalloc (p->nRules * sizeof(int));  /* weighted Fisher-Yates shuffle */
-		for (n = 0; n < p->nRules; ++n)
-			ruleOrder[n] = n;
-		remainingRate = (overloaded ? p->totalOverloadRate : p->totalRate);
-		for (n = wins = fails = 0; n < p->nRules && wins < p->successes && fails < p->failures; ++n) {
-			if (p->shuffle) {
-				rand = randomDouble() * remainingRate;
-				for (swap = n; 1; ++swap) {
-					rule = &p->rule[ruleOrder[swap]];
-					ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-					rand -= ruleRate;
-					if (rand < 0. || swap == p->nRules - 1)
-						break;
-				}
-				ruleOrder[swap] = ruleOrder[n];
-				remainingRate -= ruleRate;
-			} else {
-				rule = &p->rule[n];
-				ruleRate = (overloaded ? rule->overloadRate : rule->rate);
-				if (randomDouble() > ruleRate)
-					continue;
-			}
-			if (attemptRule (p, rule, board, x, y, overloaded, writeSyncBoardStateUnguarded))
-				++wins;
-			else
-				++fails;
-		}
-		SafeFree (ruleOrder);
+		(void) attemptRule (p, p->rule, board, x, y, writeSyncBoardStateUnguarded);
 	}
 }
 
@@ -279,30 +201,81 @@ void syncBoard (Board* board) {
 	board->syncUpdates++;
 }
 
-int attemptRule (Particle* ruleOwner, StochasticRule* rule, Board* board, int x, int y, int overloaded, BoardWriteFunction write) {
-	int k, mSrc, mDest;
-	RuleCondition *cond;
-	RuleOperation *op;
-	State intermediateState[NumRuleOperations], oldSrcState, oldDestState;
-	for (k = 0; k < NumRuleConditions; ++k) {
-		cond = &rule->cond[k];
-		if (!testRuleCondition (cond, board, x, y, overloaded))
-			return 0;
+int testRuleCondition (RuleType type, TestRule *cond, Board* board, int x, int y) {
+  State lhs, rhs;
+	x += cond->loc.x;
+	y += cond->loc.y;
+	lhs = readBoardState(board,x,y) & cond->mask;
+	rhs = cond->rhs;
+	switch (opcode) {
+		case RuleEQ: return lhs == rhs;
+		case RuleNEQ: return lhs != rhs;
+		case RuleGT: return lhs > rhs;
+		case RuleLT: return lhs < rhs;
+		case RuleGEQ: return lhs >= rhs;
+		case RuleLEQ: return lhs <= rhs;
+		case RuleTRUE: return 1;
+		case RuleFALSE: default: break;
 	}
-	for (k = 0; k < NumRuleOperations; ++k) {
-		op = &rule->op[k];
-		mSrc = rule->cumulativeOpSrcIndex[k];
-		mDest = rule->cumulativeOpDestIndex[k];
-		oldSrcState = mSrc ? intermediateState[k - mSrc] : getRuleOperationOldSrcState(op,board,x,y);
-		oldDestState = mDest ? intermediateState[k - mDest] : getRuleOperationOldDestState(op,board,x,y);
-		intermediateState[k] = execRuleOperation (op, board, x, y, oldSrcState, oldDestState, overloaded, rule->writeOp[k] ? write : (BoardWriteFunction) dummyWriteBoardState);
+	return 0;
+}
+
+int attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardWriteFunction write) {
+  int xSrc, ySrc, xDest, yDest, nRule;
+  State oldSrcState, oldDestState, state;
+  RBNode *node;
+  LookupRuleParams *lookup;
+  ModifyRuleParams *modify;
+  RandomRuleParams *random;
+  OverloadRuleParams *overload;
+
+  while (rule != NULL) {
+    switch (rule->type) {
+    case LookupRule:
+      lookup = &rule->param.lookup;
+      xSrc = x + lookup->loc.x;
+      ySrc = y + lookup->loc.y;
+      state = readBoardState(board,x,y) & lookup->mask;
+      node = RBTreeFind (lookup->matchRule, state);
+      rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
+      break;
+
+    case ModifyRule:
+      modify = &rule->param.modify;
+      xSrc = x + modify->src.x;
+      ySrc = y + modify->src.y;
+      if (onBoard (board xSrc, ySrc)) {
+	xDest = x + modify->dest.x;
+	yDest = y + modify->dest.y;
+	if (onBoard (board, xDest, yDest)) {
+	  oldSrcState = readBoardState (board, xSrc, ySrc);
+	  oldDestState = readBoardState (board, xDest, yDest);
+	  state = (oldDestState & (StateMask ^ modify->destMask))
+	    | (((((oldSrcState & modify->srcMask) >> modify->rightShift) + modify->offset) << modify->leftShift) & modify->destMask);
+	  (*write) (board, xDest, yDest, state);
 	}
-	if (rule->trigger)
-		if (testGoalAtPos ((Goal*) rule->trigger, board->game, x, y)) {
-			deleteGoal (rule->trigger);
-			rule->trigger = NULL;
-		}
-	return 1;
+      }
+      rule = modify->nextRule;
+      break;
+
+    case RandomRule:
+      random = &rule->param.random;
+      sampleBinLeaf (random->distrib, &nRule);
+      rule = nRule < random->nRules ? random->rule[nRule] : (ParticleRule*) NULL;
+      break;
+
+    case OverloadRule:
+      overload = &rule->param.overload;
+      rule = boardOverloaded(board) ? overload->slowRule : overload->fastRule;
+      break;
+
+    default:
+      Abort ("Unknown rule type");
+      break;
+    }
+  }
+  Abort ("Unreachable");
+  return -1;
 }
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {

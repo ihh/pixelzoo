@@ -84,12 +84,7 @@ void dummyWriteBoardState (Board* board, int x, int y, State state);
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
 
 /* Other helper methods */
-int testRuleCondition (RuleCondition* cond, Board* board, int x, int y, int overloaded);
-State execRuleOperation (RuleOperation* op, Board* board, int x, int y, State oldSrcState, State oldDestState, int overloaded, BoardWriteFunction write);  /* returns the newly-written State */
-#define getRuleOperationOldSrcState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->src.x,Y+(OP_PTR)->src.y)
-#define getRuleOperationOldDestState(OP_PTR,BOARD_PTR,X,Y) readBoardState(BOARD_PTR,X+(OP_PTR)->dest.x,Y+(OP_PTR)->dest.y)
-
-int attemptRule (Particle *ruleOwner, StochasticRule *rule, Board *board, int x, int y, int overloaded, BoardWriteFunction writeUnguarded);
+int attemptRule (Particle *ruleOwner, ParticleRule *rule, Board *board, int x, int y, BoardWriteFunction writeUnguarded);
 #define boardOverloaded(BOARD_PTR) (boardFiringRate(BOARD_PTR) >= (BOARD_PTR)->overloadThreshold)
 
 void evolveBoardCell (Board *board, int x, int y);
