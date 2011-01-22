@@ -10,6 +10,7 @@
 Particle* newParticleFromXmlNode (void *game, xmlNode* node);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode* node);
+ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent);
 
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game);
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game);
@@ -95,6 +96,14 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
+ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent) {
+  ParticleRule* rule;
+  rule = NULL;
+  if (parent)
+    rule = newRuleFromXmlNode (game, CHILD (parent, RULE));
+  return rule;
+}
+
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
   ParticleRule* rule;
   const char *ruleTypeAttr;
@@ -107,7 +116,8 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
 
   if (ruleNode != NULL) {
     ruleTypeAttr = ATTR(ruleNode,RULETYPE);
-    if (ATTRMATCHES (ruleTypeAttr, LOOKUP)) {
+    Assert (ruleTypeAttr != NULL, "Missing " XMLPREFIX(RULETYPE) " attribute in rule");
+    if (ATTRMATCHES (ruleTypeAttr, SWITCH)) {
       rule = newLookupRule();
       lookup = &rule->param.lookup;
       initLookupRuleFromXmlNode (lookup, ruleNode, game);
@@ -121,14 +131,14 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
       rule = newRandomRule();
       random = &rule->param.random;
       random->prob = OPTCHILDFLOAT (ruleNode, PROB, 0.5);
-      random->passRule = newRuleFromXmlNode (game, CHILD (ruleNode, PASS));
-      random->failRule = newRuleFromXmlNode (game, CHILD (ruleNode, FAIL));
+      random->passRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, PASS));
+      random->failRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAIL));
 
     } else if (ATTRMATCHES (ruleTypeAttr, OVERLOAD)) {
       rule = newOverloadRule();
       overload = &rule->param.overload;
-      overload->slowRule = newRuleFromXmlNode (game, CHILD (ruleNode, SLOW));
-      overload->fastRule = newRuleFromXmlNode (game, CHILD (ruleNode, FAST));
+      overload->slowRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, SLOW));
+      overload->fastRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAST));
 
     } else if (ATTRMATCHES (ruleTypeAttr, GOAL)) {
       rule = newGoalRule();
@@ -143,7 +153,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
 }
 
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game) {
-  xmlNode *loc, *curNode, *defaultNode;
+  xmlNode *loc, *curNode;
   State state;
   ParticleRule *rule;
 
@@ -160,19 +170,16 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,CASE)) {
       state = OPTCHILDINT(curNode,DECSTATE,OPTCHILDHEX(curNode,HEXSTATE,0));
-      rule = newRuleFromXmlNode (game, CHILD(curNode,RULE));
+      rule = newRuleFromXmlParentNode (game, curNode);
       Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
       (void) StateMapInsert (lookup->matchRule, state, rule);
     }
 
-  lookup->defaultRule = NULL;
-  defaultNode = CHILD (curNode, DEFAULT);
-  if (defaultNode)
-    lookup->defaultRule = newRuleFromXmlNode (game, CHILD (defaultNode, RULE));
+  lookup->defaultRule = newRuleFromXmlParentNode (game, CHILD (node, DEFAULT));
 }
 
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game) {
-  xmlNode *src, *dest, *nextNode;
+  xmlNode *src, *dest;
   State defaultSrcMask;
 
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
@@ -196,8 +203,5 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game)
   } else
     op->dest = op->src;
 
-  op->nextRule = NULL;
-  nextNode = CHILD (node, NEXT);
-  if (nextNode)
-    op->nextRule = newRuleFromXmlNode (game, CHILD (nextNode, RULE));
+  op->nextRule = newRuleFromXmlParentNode (game, CHILD (node, NEXT));
 }

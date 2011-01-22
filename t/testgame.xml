@@ -1,90 +1,149 @@
 <xml>
-<game>
+  <game>
 
-<goal type="and">
-  <lazy/>
-  <goal type="cached">
-    <goal type="population">
-      <type>1</type>
-      <type>2</type>
-      <count><min>20</min></count>
-    </goal>
-  </goal>
-  <goal type="cached">
-    <reps>3</reps>
-    <goal type="print">
-      <text>You have reached your population target.
-I will say this three times.</text>
-    </goal>
-  </goal>
-  <goal type="cached">
-    <goal type="repeat">
-      <reps>5</reps>
-      <goal type="print">
-	<text>(pauses for effect)</text>
-      </goal>
-    </goal>
-  </goal>
-  <goal type="cached">
     <goal type="and">
       <lazy/>
-      <cached/>
-      <goal type="print"><text>The portal is opening...</text></goal>
-      <goal type="print"><text>...wait for it...</text></goal>
-      <goal type="print"><text>...right about NOW!</text></goal>
+      <goal type="cached">
+	<goal type="population">
+	  <type>1</type>
+	  <type>2</type>
+	  <count><min>20</min></count>
+	</goal>
+      </goal>
+      <goal type="cached">
+	<reps>3</reps>
+	<goal type="print">
+	  <text>You have reached your population target.
+	    I will say this three times.</text>
+	</goal>
+      </goal>
+      <goal type="cached">
+	<goal type="repeat">
+	  <reps>5</reps>
+	  <goal type="print">
+	    <text>(pauses for effect)</text>
+	  </goal>
+	</goal>
+      </goal>
+      <goal type="cached">
+	<goal type="and">
+	  <lazy/>
+	  <cached/>
+	  <goal type="print"><text>The portal is opening...</text></goal>
+	  <goal type="print"><text>...wait for it...</text></goal>
+	  <goal type="print"><text>...right about NOW!</text></goal>
+	</goal>
+      </goal>
+      <goal type="cached">
+	<goal type="setexit">
+	  <state>PortalCounting</state>
+	</goal>
+      </goal>
     </goal>
-  </goal>
-  <goal type="cached">
-    <goal type="setexit">
-      <state>PortalCounting</state>
-    </goal>
-  </goal>
-</goal>
 
-<rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
+    <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
 
-<tool>
-<name>tool1</name>
-<size>8</size>
-<hexstate>1000000000000</hexstate>
-<reserve>100</reserve>
-<recharge>100</recharge>
-</tool>
+    <tool>
+      <name>tool1</name>
+      <size>8</size>
+      <hexstate>1000000000000</hexstate>
+      <reserve>100</reserve>
+      <recharge>100</recharge>
+    </tool>
 
-<tool>
-<name>tool2</name>
-<size>4</size>
-<hexstate>2000000000000</hexstate>
-<reserve>50</reserve>
-<recharge>100</recharge>
-</tool>
+    <tool>
+      <name>tool2</name>
+      <size>4</size>
+      <hexstate>2000000000000</hexstate>
+      <reserve>50</reserve>
+      <recharge>100</recharge>
+    </tool>
 
-<entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>
-<exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>
-<board><size>128</size>
+    <entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>
+    <exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>
+    <board><size>128</size>
 
-<grammar>
+      <grammar>
 
-<particle>
-<sync/><shuffle/>
-<name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>80ffff</hexinc></color>
-<rule><balloon><rate>.01</rate><text>new stepper</text></balloon><rate>.0009</rate><test><pos><x>1</x></pos><val>0</val></test><exec><dest><x>1</x></dest><rshift>64</rshift><hexinc>2000000000000</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><x>1</x></pos><val>0</val><ignore>.05</ignore></test><exec><rshift>64</rshift></exec><exec><src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask></exec><exec><dest><x>1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><x>-1</x></pos><val>0</val><ignore>.05</ignore></test><exec><rshift>64</rshift></exec><exec><src><x>-1</x></src><dest></dest><hexinc>109</hexinc><srcmask>ff9</srcmask></exec><exec><dest><x>-1</x></dest><rshift>64</rshift><hexinc>1000000000002</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><y>1</y></pos><val>0</val><ignore>.05</ignore></test><exec><rshift>64</rshift></exec><exec><src><y>1</y></src><dest></dest><hexinc>409</hexinc><srcmask>ff9</srcmask></exec><exec><dest><y>1</y></dest><rshift>64</rshift><hexinc>1000000000003</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><y>-1</y></pos><val>0</val><ignore>.05</ignore></test><exec><rshift>64</rshift></exec><exec><src><y>-1</y></src><dest></dest><hexinc>89</hexinc><srcmask>ff9</srcmask></exec><exec><dest><y>-1</y></dest><rshift>64</rshift><hexinc>1000000000004</hexinc></exec></rule>
-<rule><balloon><rate>.01</rate><text>choked drifter</text></balloon><rate>0</rate><overload> .001 <!-- .0039 = .03 * (.01+4*.03) --> </overload><exec><rshift>64</rshift></exec></rule>
-</particle>
+	<particle>
+	  <sync/><shuffle/>
+	  <name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>80ffff</hexinc></color>
+	  <rate>.03</rate>
 
-<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
-<rule><balloon><rate>.01</rate><text>new drifter</text></balloon><rate>.0009</rate><test><pos><x>1</x></pos><val>0</val></test><exec><dest><x>1</x></dest><srcmask>0</srcmask><hexinc>1000000000000</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><x>1</x></pos><val>0</val><ignore>.05</ignore></test><exec><srcmask>0</srcmask></exec><exec><dest><x>1</x></dest><srcmask>0</srcmask><hexinc>2000000000001</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><x>-1</x></pos><val>0</val><ignore>.05</ignore></test><exec><srcmask>0</srcmask></exec><exec><dest><x>-1</x></dest><srcmask>0</srcmask><hexinc>2000000000002</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><y>1</y></pos><val>0</val><ignore>.05</ignore></test><exec><srcmask>0</srcmask></exec><exec><dest><y>1</y></dest><srcmask>0</srcmask><hexinc>2000000000003</hexinc></exec></rule>
-<rule><rate>.03</rate><test><pos><y>-1</y></pos><val>0</val><ignore>.05</ignore></test><exec><srcmask>0</srcmask></exec><exec><dest><y>-1</y></dest><srcmask>0</srcmask><hexinc>2000000000004</hexinc></exec></rule>
-<rule><balloon><rate>.01</rate><text>choked stepper</text></balloon><rate>0</rate><overload>1</overload><exec><rshift>64</rshift></exec></rule>
-</particle>
+	  <rule type="random"><prob>.05</prob>
+	    <pass><rule type="random"><prob>.6</prob>
+		<pass><rule type="modify"><rshift>64</rshift>
+		</rule></pass>
+		<fail><rule type="modify"><src></src><dest><x>1</x></dest>
+		</rule></fail>
+	    </rule></pass>
+	    <fail><rule type="random">   <!-- x or y -->
+		<pass><rule type="random">   <!-- right(+1) or left(-1) -->
 
-</grammar><init><x>64</x><y>64</y><type>1</type></init></board>
-</game>
+		    <pass><rule type="switch">
+			<pos><x>1</x></pos>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></pass>
+
+		    <fail><rule type="switch">
+			<pos><x>-1</x></pos>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></fail>
+
+		</rule></pass>
+		<fail><rule type="random">   <!-- down(+1) or up(-1) -->
+
+		    <pass><rule type="switch">
+			<pos><y>1</y></pos>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></pass>
+
+		    <fail><rule type="switch">
+			<pos><y>-1</y></pos>
+			<case><state>0</state><rule type="modify">
+			    <rshift>64</rshift>
+			    <next><rule type="modify">
+				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<next><rule type="modify">
+				    <dest><y>-1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				</rule></next>
+			    </rule></next>
+			</rule></case>
+		    </rule></fail>
+
+		</rule></fail>
+	    </rule></fail>
+	  </rule>
+	</particle>
+
+	<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
+	  <rate>.0009</rate>
+	</particle>
+
+      </grammar><init><x>64</x><y>64</y><type>1</type></init></board>
+  </game>
 </xml>
