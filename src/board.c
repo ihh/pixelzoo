@@ -164,7 +164,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 		/*
 		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
 		 */
-		(void) attemptRule (p, p->rule, board, x, y, writeBoardStateUnguarded);
+		attemptRule (p, p->rule, board, x, y, writeBoardStateUnguarded);
 	}
 }
 
@@ -173,7 +173,7 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-		(void) attemptRule (p, p->rule, board, x, y, writeSyncBoardStateUnguarded);
+		attemptRule (p, p->rule, board, x, y, writeSyncBoardStateUnguarded);
 	}
 }
 
@@ -201,33 +201,14 @@ void syncBoard (Board* board) {
 	board->syncUpdates++;
 }
 
-int testRuleCondition (RuleType type, TestRule *cond, Board* board, int x, int y) {
-  State lhs, rhs;
-	x += cond->loc.x;
-	y += cond->loc.y;
-	lhs = readBoardState(board,x,y) & cond->mask;
-	rhs = cond->rhs;
-	switch (opcode) {
-		case RuleEQ: return lhs == rhs;
-		case RuleNEQ: return lhs != rhs;
-		case RuleGT: return lhs > rhs;
-		case RuleLT: return lhs < rhs;
-		case RuleGEQ: return lhs >= rhs;
-		case RuleLEQ: return lhs <= rhs;
-		case RuleTRUE: return 1;
-		case RuleFALSE: default: break;
-	}
-	return 0;
-}
-
-int attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardWriteFunction write) {
-  int xSrc, ySrc, xDest, yDest, nRule;
+void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardWriteFunction write) {
+  int xSrc, ySrc, xDest, yDest;
   State oldSrcState, oldDestState, state;
-  RBNode *node;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
   RandomRuleParams *random;
   OverloadRuleParams *overload;
+  Goal *goal;
 
   while (rule != NULL) {
     switch (rule->type) {
@@ -260,8 +241,7 @@ int attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, i
 
     case RandomRule:
       random = &rule->param.random;
-      sampleBinLeaf (random->distrib, &nRule);
-      rule = nRule < random->nRules ? random->rule[nRule] : (ParticleRule*) NULL;
+      rule = randomDouble() < random->prob ? random->passRule : random->failRule;
       break;
 
     case OverloadRule:
@@ -269,13 +249,21 @@ int attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, i
       rule = boardOverloaded(board) ? overload->slowRule : overload->fastRule;
       break;
 
+    case GoalRule:
+      goal = rule->param.goal;
+      if (goal)
+	if (testGoalAtPos (goal, board->game, x, y)) {
+	  deleteGoal (goal);
+	  rule->param.goal = NULL;
+	}
+      rule = NULL;
+      break;
+
     default:
       Abort ("Unknown rule type");
       break;
     }
   }
-  Abort ("Unreachable");
-  return -1;
 }
 
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {

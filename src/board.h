@@ -84,7 +84,7 @@ void dummyWriteBoardState (Board* board, int x, int y, State state);
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
 
 /* Other helper methods */
-int attemptRule (Particle *ruleOwner, ParticleRule *rule, Board *board, int x, int y, BoardWriteFunction writeUnguarded);
+void attemptRule (Particle *ruleOwner, ParticleRule *rule, Board *board, int x, int y, BoardWriteFunction writeUnguarded);
 #define boardOverloaded(BOARD_PTR) (boardFiringRate(BOARD_PTR) >= (BOARD_PTR)->overloadThreshold)
 
 void evolveBoardCell (Board *board, int x, int y);

@@ -2,7 +2,7 @@
 #define STATE_MAP_INCLUDED
 
 #include "rbtree.h"
-#include "rule.h"
+#include "state.h"
 
 /* State new/delete/compare/print functions */
 State* newState(State s);

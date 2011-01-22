@@ -18,15 +18,15 @@ Particle* newParticle (const char* name, int nRules) {
   }
   p->colorRule[0].offset = HSB24White;  /* this ensures that the default ColorRule's generate a white particle */
   p->synchronous = p->shuffle = p->syncPeriod = p->syncPhase = 0;
-  p->nRules = p->failures = p->successes = nRules;
-  p->rule = SafeCalloc (nRules, sizeof(StochasticRule));
-  p->totalRate = p->totalOverloadRate = p->asyncFiringRate = p->syncFiringRate = 0.;
+  p->rule = NULL;
+  p->rate = p->asyncFiringRate = p->syncFiringRate = 0.;
   p->count = 0;
   return p;
 }
 
 void deleteParticle (Particle* p) {
-  SafeFree(p->rule);
+  if (p->rule)
+    deleteParticleRule (p->rule);
   SafeFree(p->name);
   SafeFree(p);
 }
