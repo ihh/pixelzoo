@@ -213,7 +213,7 @@ OrientedSignpostBuilder(west_signpost_builder,3,96);
 
 #define CageMaxSize 63
 #define CageSizeBits 6
-#define CageGrowRate .1
+#define CageGrowRate 1
 #define CageKnobRate .06
 #define CageStopRate .1
 #define CageWallThickness 2

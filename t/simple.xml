@@ -7140,7 +7140,7 @@ Guide all remaining guests to the gift shop.</text>
             <hexinc>a8c0ff</hexinc>
           </color>
           <rule>
-            <rate>0.0125</rate>
+            <rate>0.125</rate>
             <test op=">">
               <pos>
                 <x>0</x>
@@ -7228,7 +7228,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7263,7 +7263,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7298,7 +7298,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.0125</rate>
+            <rate>0.125</rate>
             <test op=">">
               <pos>
                 <x>0</x>
@@ -7386,7 +7386,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7421,7 +7421,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7456,7 +7456,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.0125</rate>
+            <rate>0.125</rate>
             <test op=">">
               <pos>
                 <x>0</x>
@@ -7544,7 +7544,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7579,7 +7579,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7614,7 +7614,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.0125</rate>
+            <rate>0.125</rate>
             <test op=">">
               <pos>
                 <x>0</x>
@@ -7702,7 +7702,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
@@ -7737,7 +7737,7 @@ Guide all remaining guests to the gift shop.</text>
             </exec>
           </rule>
           <rule>
-            <rate>0.00833333333333333</rate>
+            <rate>0.0833333333333333</rate>
             <test op="==">
               <pos>
                 <x>0</x>
