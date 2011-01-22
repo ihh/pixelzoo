@@ -119,42 +119,18 @@ PaletteIndex readBoardColor (Board* board, int x, int y) {
 
 Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
 	Particle* p;
-	p = newParticle (name, nRules);
+	p = newParticle (name);
 	p->type = type;
 	board->byType[type] = p;
 	return p;
 }
 
 void addParticleToBoard (Particle* p, Board* board) {
-	int r, n, m;
-	StochasticRule *rule;
 	board->byType[p->type] = p;
-	p->totalRate = p->totalOverloadRate = 0.;
-	for (r = 0; r < p->nRules; ++r) {
-		rule = &p->rule[r];
-		/* accumulate rates */
-		p->totalRate += rule->rate;
-		p->totalOverloadRate += rule->overloadRate;
-		/* writeOp flag is true by default, unless RuleOperation's dest is a TempOffset */
-		for (n = 0; n < NumRuleOperations; ++n)
-		  rule->writeOp[n] = (rule->op[n].dest.x != TempOffset && rule->op[n].dest.y != TempOffset);
-		/* check for recurrent writes to the same cell */
-		for (n = 1; n < NumRuleOperations; ++n)
-			for (m = n; m > 0; --m) {
-				if (rule->op[n].src.x == rule->op[n-m].dest.x
-				    && rule->op[n].src.y == rule->op[n-m].dest.y)
-				  rule->cumulativeOpSrcIndex[n] = m;
-				if (rule->op[n].dest.x == rule->op[n-m].dest.x
-				    && rule->op[n].dest.y == rule->op[n-m].dest.y) {
-				  rule->cumulativeOpDestIndex[n] = m;
-				  rule->writeOp[n-m] = 0;
-				}
-			}
-	}
-	p->asyncFiringRate = p->synchronous ? 0. : MIN (p->totalRate, 1.);
+	p->asyncFiringRate = p->synchronous ? 0. : MIN (p->rate, 1.);
 	p->syncFiringRate = p->synchronous ? 1. : 0.;
 	if (p->synchronous && p->syncPeriod == 0)
-		p->syncPeriod = MAX ((int) (1./p->totalRate), 1);  /* guess a sensible default for period */
+		p->syncPeriod = MAX ((int) (1./p->rate), 1);  /* guess a sensible default for period */
 }
 
 void evolveBoardCell (Board* board, int x, int y) {
@@ -209,6 +185,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   RandomRuleParams *random;
   OverloadRuleParams *overload;
   Goal *goal;
+  StateMapNode *node;
 
   while (rule != NULL) {
     switch (rule->type) {
@@ -217,7 +194,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       xSrc = x + lookup->loc.x;
       ySrc = y + lookup->loc.y;
       state = readBoardState(board,x,y) & lookup->mask;
-      node = RBTreeFind (lookup->matchRule, state);
+      node = StateMapFind (lookup->matchRule, state);
       rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
       break;
 
@@ -225,7 +202,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       modify = &rule->param.modify;
       xSrc = x + modify->src.x;
       ySrc = y + modify->src.y;
-      if (onBoard (board xSrc, ySrc)) {
+      if (onBoard (board, xSrc, ySrc)) {
 	xDest = x + modify->dest.x;
 	yDest = y + modify->dest.y;
 	if (onBoard (board, xDest, yDest)) {
@@ -250,7 +227,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       break;
 
     case GoalRule:
-      goal = rule->param.goal;
+      goal = (Goal*) rule->param.goal;
       if (goal)
 	if (testGoalAtPos (goal, board->game, x, y)) {
 	  deleteGoal (goal);

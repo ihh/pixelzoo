@@ -9,9 +9,10 @@
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (void *game, xmlNode* node);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
-void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node);
-void initOperationFromXmlNode (RuleOperation* op, xmlNode* node);
-StochasticRule* newRuleFromXmlNode (void *game, xmlNode* node);
+ParticleRule* newRuleFromXmlNode (void *game, xmlNode* node);
+
+void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game);
+void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game);
 
 /* method defs */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
@@ -69,10 +70,6 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
   int nColorRules;
   xmlNode *curNode;
-  nRules = 0;
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,RULE))
-      ++nRules;
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
   if (CHILD(node,SYNC)) {
     p->synchronous = 1;
@@ -98,87 +95,89 @@ void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
 
-StochasticRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
-  StochasticRule* rule;
+ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
+  ParticleRule* rule;
   const char *ruleTypeAttr;
+  LookupRuleParams *lookup;
+  ModifyRuleParams *modify;
+  RandomRuleParams *random;
+  OverloadRuleParams *overload;
+
   rule = NULL;
-  Assert (ruleNode != NULL, "newRuleFromXmlNode: null rule node");
-  ruleTypeAttr = ATTR(ruleNode,RULETYPE);
-  if (ATTRMATCHES (ruleTypeAttr, LOOKUP)) {
-    rule = newLookupRule();
-    /* more to go here */
 
-  } else if (ATTRMATCHES (ruleTypeAttr, MODIFY)) {
-    rule = newModifyRule();
-    /* more to go here */
+  if (ruleNode != NULL) {
+    ruleTypeAttr = ATTR(ruleNode,RULETYPE);
+    if (ATTRMATCHES (ruleTypeAttr, LOOKUP)) {
+      rule = newLookupRule();
+      lookup = &rule->param.lookup;
+      initLookupRuleFromXmlNode (lookup, ruleNode, game);
 
-  } else if (ATTRMATCHES (ruleTypeAttr, RANDOM)) {
-    rule = newRandomRule();
-    /* more to go here */
+    } else if (ATTRMATCHES (ruleTypeAttr, MODIFY)) {
+      rule = newModifyRule();
+      modify = &rule->param.modify;
+      initModifyRuleFromXmlNode (modify, ruleNode, game);
 
-  } else if (ATTRMATCHES (ruleTypeAttr, OVERLOAD)) {
-    rule = newOverloadRule();
-    /* more to go here */
+    } else if (ATTRMATCHES (ruleTypeAttr, RANDOM)) {
+      rule = newRandomRule();
+      random = &rule->param.random;
+      random->prob = OPTCHILDFLOAT (ruleNode, PROB, 0.5);
+      random->passRule = newRuleFromXmlNode (game, CHILD (ruleNode, PASS));
+      random->failRule = newRuleFromXmlNode (game, CHILD (ruleNode, FAIL));
 
-  } else if (ATTRMATCHES (ruleTypeAttr, GOAL)) {
-    rule = newGoalRule();
-    /* more to go here */
-    /*    rule->trigger = newGoalFromXmlNode (goalNode, game);  */
+    } else if (ATTRMATCHES (ruleTypeAttr, OVERLOAD)) {
+      rule = newOverloadRule();
+      overload = &rule->param.overload;
+      overload->slowRule = newRuleFromXmlNode (game, CHILD (ruleNode, SLOW));
+      overload->fastRule = newRuleFromXmlNode (game, CHILD (ruleNode, FAST));
 
-  } else {
-    Abort ("Unknown rule type");
+    } else if (ATTRMATCHES (ruleTypeAttr, GOAL)) {
+      rule = newGoalRule();
+      rule->param.goal = newGoalFromXmlNode (CHILD (ruleNode, GOAL), game);
+
+    } else {
+      Abort ("Unknown rule type");
+    }
   }
 
   return rule;
 }
 
-void initConditionFromXmlNode (RuleCondition* cond, xmlNode* node) {
-  xmlNode* loc;
-  const char* opcode;
-  int rshift;
+void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game) {
+  xmlNode *loc, *curNode, *defaultNode;
+  State state;
+  ParticleRule *rule;
 
   loc = CHILD(node,POS);
   if (loc) {
-    cond->loc.x = OPTCHILDINT(loc,X,0);
-    cond->loc.y = OPTCHILDINT(loc,Y,0);
+    lookup->loc.x = OPTCHILDINT(loc,X,0);
+    lookup->loc.y = OPTCHILDINT(loc,Y,0);
   } else
-    cond->loc.x = cond->loc.y = 0;
+    lookup->loc.x = lookup->loc.y = 0;
 
-  cond->mask = OPTCHILDHEX(node,MASK,StateMask);
-  cond->rhs = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,0));
-  cond->ignoreProb = OPTCHILDFLOAT(node,IGNORE,0.);
-  cond->overloadIgnoreProb = OPTCHILDFLOAT(node,OVERLOAD,cond->ignoreProb);
+  lookup->mask = OPTCHILDHEX(node,MASK,StateMask);
+  lookup->shift = OPTCHILDINT(node,RSHIFT,0);
 
-  rshift = OPTCHILDINT(node,RSHIFT,0);
-  if (rshift) {
-    cond->mask = cond->mask << rshift;
-    cond->rhs = cond->rhs << rshift;
-  }
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,CASE)) {
+      state = OPTCHILDINT(curNode,DECSTATE,OPTCHILDHEX(curNode,HEXSTATE,0));
+      rule = newRuleFromXmlNode (game, CHILD(curNode,RULE));
+      Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
+      (void) StateMapInsert (lookup->matchRule, state, rule);
+    }
 
-  cond->opcode = TestEQ;
-  opcode = ATTR(node,OP);
-  if (opcode) {
-    if (strcmp(opcode,"=")==0 || strcmp(opcode,"==")==0) cond->opcode = TestEQ;
-    else if (strcmp(opcode,"!=")==0) cond->opcode = TestNEQ;
-    else if (strcmp(opcode,">")==0 || strcmp(opcode,"&gt;")==0) cond->opcode = TestGT;
-    else if (strcmp(opcode,"<")==0 || strcmp(opcode,"&lt;")==0) cond->opcode = TestLT;
-    else if (strcmp(opcode,">=")==0 || strcmp(opcode,"&gt;=")==0) cond->opcode = TestGEQ;
-    else if (strcmp(opcode,"<=")==0 || strcmp(opcode,"&lt;=")==0) cond->opcode = TestLEQ;
-    else if (strcmp(opcode,"1")==0) cond->opcode = TestTRUE;
-    else if (strcmp(opcode,"0")==0) cond->opcode = TestFALSE;
-    else Abort ("Unrecognized opcode");
-  }
+  lookup->defaultRule = NULL;
+  defaultNode = CHILD (curNode, DEFAULT);
+  if (defaultNode)
+    lookup->defaultRule = newRuleFromXmlNode (game, CHILD (defaultNode, RULE));
 }
 
-void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
-  xmlNode *src, *dest;
+void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game) {
+  xmlNode *src, *dest, *nextNode;
   State defaultSrcMask;
 
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
-  op->failProb = OPTCHILDFLOAT(node,FAIL,0.);
-  op->overloadFailProb = OPTCHILDFLOAT(node,OVERLOAD,op->failProb);
 
   defaultSrcMask = op->rightShift >= BitsPerState ? 0 : StateMask;
   op->srcMask = OPTCHILDHEX(node,SRCMASK,defaultSrcMask);
@@ -196,4 +195,9 @@ void initOperationFromXmlNode (RuleOperation* op, xmlNode* node) {
     op->dest.y = OPTCHILDINT(dest,Y,0);
   } else
     op->dest = op->src;
+
+  op->nextRule = NULL;
+  nextNode = CHILD (node, NEXT);
+  if (nextNode)
+    op->nextRule = newRuleFromXmlNode (game, CHILD (nextNode, RULE));
 }

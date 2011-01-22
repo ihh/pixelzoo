@@ -13,8 +13,8 @@
    a Type,
    a name (C string),
    an RGB color,
-   a variable number of StochasticRule's (all of the same Type as the Particle),
-   a total firing rate (the sum of the firing rates for all the StochasticRule's for this type).
+   a variable number of ParticleRule's (all of the same Type as the Particle),
+   a total firing rate (the sum of the firing rates for all the ParticleRule's for this type).
  */
 typedef struct Particle {
   Type type;
@@ -22,7 +22,7 @@ typedef struct Particle {
   ColorRule colorRule[NumColorRules];  /* results of ColorRule applications are summed */
   int synchronous, syncPeriod, syncPhase;  /* if synchronous=1, rules will be updated synchronously vs randomly, whenever (board->syncUpdates % syncPeriod == syncPhase) */
   /* rules */
-  StochasticRule* rule;
+  ParticleRule* rule;
   double rate, asyncFiringRate, syncFiringRate;  /* if async then (asyncFiringRate, syncFiringRate) = (rate, 0)  else (asyncFiringRate, syncFiringRate) = (0, rate) */
   /* meta-info */
   int count;  /* number on the board */

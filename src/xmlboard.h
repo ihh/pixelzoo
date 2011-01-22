@@ -23,6 +23,14 @@
 #define XMLZOO_RANDOM      "random"
 #define XMLZOO_OVERLOAD    "overload"
 #define XMLZOO_GOAL        "goal"
+#define XMLZOO_CASE        "case"
+#define XMLZOO_DEFAULT     "default"
+#define XMLZOO_NEXT        "next"
+#define XMLZOO_PROB        "prob"
+#define XMLZOO_PASS        "pass"
+#define XMLZOO_FAIL        "fail"
+#define XMLZOO_SLOW        "slow"
+#define XMLZOO_FAST        "fast"
 #define XMLZOO_POS         "pos"
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
@@ -42,6 +50,8 @@
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
 #define XMLZOO_INIT        "init"
+#define XMLZOO_DECSTATE    "state"
+#define XMLZOO_HEXSTATE    "hexstate"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);

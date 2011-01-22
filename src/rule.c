@@ -1,9 +1,12 @@
 #include "rule.h"
 #include "statemap.h"
+#include "goal.h"
 
-ParticleRule* newParticleRule (RuleType type) {
+ParticleRule* newParticleRule (enum RuleType type);
+
+ParticleRule* newParticleRule (enum RuleType type) {
   ParticleRule* rule;
-  rule = SafeCalloc (sizeof (ParticleRule));
+  rule = SafeCalloc (1, sizeof (ParticleRule));
   rule->type = type;
   return rule;
 }
@@ -67,23 +70,23 @@ void deleteParticleRule (void *voidRule) {
   case ModifyRule:
     modify = &rule->param.modify;
     if (modify->nextRule)
-      deleteRule (modify->nextRule);
+      deleteParticleRule (modify->nextRule);
     break;
 
   case RandomRule:
     random = &rule->param.random;
     if (random->passRule)
-      deleteRule (random->passRule);
+      deleteParticleRule (random->passRule);
     if (random->failRule)
-      deleteRule (random->failRule);
+      deleteParticleRule (random->failRule);
     break;
 
   case OverloadRule:
     overload = &rule->param.overload;
     if (overload->slowRule)
-      deleteRule (overload->slowRule);
+      deleteParticleRule (overload->slowRule);
     if (overload->fastRule)
-      deleteRule (overload->fastRule);
+      deleteParticleRule (overload->fastRule);
     break;
 
   case GoalRule:

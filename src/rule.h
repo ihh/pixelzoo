@@ -43,30 +43,30 @@ typedef struct LookupRuleParams {
   State mask;
   StateMap *matchRule;
   ParticleRule *defaultRule;
-} LookupRule;
+} LookupRuleParams;
 
 typedef struct ModifyRuleParams {
   LocalOffset src, dest;
   unsigned char rightShift, leftShift;
   State srcMask, destMask, offset;
   ParticleRule *nextRule;
-} LookupRule;
+} ModifyRuleParams;
 
 typedef struct RandomRuleParams {
   double prob;
   ParticleRule *passRule, *failRule;
-} LocalOffsetRules;
+} RandomRuleParams;
 
 typedef struct OverloadRuleParams {
   ParticleRule *slowRule, *fastRule;
-} LocalOffsetRules;
-  
+} OverloadRuleParams;
+
 typedef union RuleParams {
   LookupRuleParams lookup;
   ModifyRuleParams modify;
   RandomRuleParams random;
   OverloadRuleParams overload;
-  Goal *goal;
+  void *goal;
 } RuleParams;
 
 struct ParticleRule {
