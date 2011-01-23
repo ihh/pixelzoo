@@ -779,7 +779,7 @@ my @game = (@gameXML,
 			: ()]);
 
 warn "Writing XML\n" if $verbose;
-my $elt = newElt("xml" => ["game" => \@game]);
+my $elt = newElement("xml" => ["game" => \@game]);
 my $twig = XML::Twig->new(pretty_print => 'indented');
 $twig->set_root($elt);
 
@@ -934,7 +934,7 @@ sub decv {
     return hex ($val);
 }
 
-sub newElt {
+sub newElement {
     my $gi   = shift;
     my $data = shift;
 
@@ -948,13 +948,14 @@ sub newElt {
     }
 
     if (@child) {
+	@child = map (ref($_) eq "CODE" ? &$_() : $_, @child);
 	while (@child) {
 	    my $k = shift @child;
 	    my $v = shift @child;
 	    if ($k =~ s/^\@//) {
 		$t->set_att ($k => $v);
 	    } else {
-		newElt($k, $v)->paste(last_child => $t);
+		newElement($k, $v)->paste(last_child => $t);
 	    }
 	}
     } else {
