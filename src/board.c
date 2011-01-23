@@ -157,7 +157,11 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-	  attemptRule (p, p->rule, board, x, y, readSyncBoardStateUnguardedFunction, writeSyncBoardStateUnguarded);
+	  /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction" if Particle's modify operations are to be cumulative
+	     (useful e.g. for accumulator rules, c.f. Conway's Life; however, Conway's Life is simultaneous,
+	     so modifies *can't* be cumulative - they must be instantaneous/atomic)
+	   */
+	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguarded);
 	}
 }
 
