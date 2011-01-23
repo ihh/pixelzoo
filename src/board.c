@@ -49,6 +49,14 @@ void deleteBoard (Board* board) {
 	SafeFree(board);
 }
 
+State readBoardStateUnguardedFunction (Board* board, int x, int y) {
+  return readBoardStateUnguarded(board,x,y);
+}
+
+State readSyncBoardStateUnguardedFunction (Board* board, int x, int y) {
+  return readSyncBoardStateUnguarded(board,x,y);
+}
+
 void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
 	int i;
 	Type t;
@@ -140,7 +148,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 		/*
 		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
 		 */
-		attemptRule (p, p->rule, board, x, y, writeBoardStateUnguarded);
+	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguarded);
 	}
 }
 
@@ -149,7 +157,7 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-		attemptRule (p, p->rule, board, x, y, writeSyncBoardStateUnguarded);
+	  attemptRule (p, p->rule, board, x, y, readSyncBoardStateUnguardedFunction, writeSyncBoardStateUnguarded);
 	}
 }
 
@@ -177,7 +185,7 @@ void syncBoard (Board* board) {
 	board->syncUpdates++;
 }
 
-void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardWriteFunction write) {
+void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
   int xSrc, ySrc, xDest, yDest;
   State oldSrcState, oldDestState, state;
   LookupRuleParams *lookup;
@@ -191,11 +199,14 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     switch (rule->type) {
     case LookupRule:
       lookup = &rule->param.lookup;
+      rule = lookup->defaultRule;
       xSrc = x + lookup->loc.x;
       ySrc = y + lookup->loc.y;
-      state = readBoardState(board,xSrc,ySrc) & lookup->mask;
-      node = StateMapFind (lookup->matchRule, state);
-      rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
+      if (onBoard (board, xSrc, ySrc)) {
+	state = (*read) (board,xSrc,ySrc) & lookup->mask;
+	node = StateMapFind (lookup->matchRule, state);
+	rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
+      }
       break;
 
     case ModifyRule:
@@ -206,8 +217,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	xDest = x + modify->dest.x;
 	yDest = y + modify->dest.y;
 	if (onBoard (board, xDest, yDest)) {
-	  oldSrcState = readBoardState (board, xSrc, ySrc);
-	  oldDestState = readBoardState (board, xDest, yDest);
+	  oldSrcState = (*read) (board, xSrc, ySrc);
+	  oldDestState = (*read) (board, xDest, yDest);
 	  state = (oldDestState & (StateMask ^ modify->destMask))
 	    | (((((oldSrcState & modify->srcMask) >> modify->rightShift) + modify->offset) << modify->leftShift) & modify->destMask);
 	  (*write) (board, xDest, yDest, state);

@@ -62,29 +62,50 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 
 /* Private helper methods & macros */
 
-/* Board accessors.
-   The "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
-*/
+/* private board index conversion macros */
 #define boardIndex(SIZE,X,Y) ((X) + (SIZE) * (Y))
 #define boardIndexToX(SIZE,IDX) ((IDX) % (SIZE))
 #define boardIndexToY(SIZE,IDX) ((int) ((IDX) / (SIZE)))
+
+/* private board read macros */
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[boardIndex((BOARD_PTR)->size,X,Y)]
+#define readSyncBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->sync[boardIndex((BOARD_PTR)->size,X,Y)]
+
+/* Board read accessors.
+   These "unguarded" methods do not check for off-board co-ordinates. Use readBoardState macro instead.
+*/
+
+/* Board write accessor for asynchronous updates.
+ */
+State readBoardStateUnguardedFunction (Board* board, int x, int y);
+
+/* Board write accessor for synchronous updates.
+ */
+State readSyncBoardStateUnguardedFunction (Board* board, int x, int y);
+
+/* Board write accessors.
+   These "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
+*/
+
+/* Board write accessor for asynchronous updates.
+ */
 void writeBoardStateUnguarded (Board* board, int x, int y, State state);
 
-/* Board accessor for synchronous updates.
+/* Board write accessor for synchronous updates.
  */
 void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state);
 
-/* Dummy Board accessor
+/* Dummy Board write accessor
  */
 void dummyWriteBoardState (Board* board, int x, int y, State state);
 
-/* Function pointer for board write.
+/* Function pointers for board read & write.
  */
+typedef State (*BoardReadFunction) (Board*, int, int);
 typedef void (*BoardWriteFunction) (Board*, int, int, State);
 
 /* Other helper methods */
-void attemptRule (Particle *ruleOwner, ParticleRule *rule, Board *board, int x, int y, BoardWriteFunction writeUnguarded);
+void attemptRule (Particle *ruleOwner, ParticleRule *rule, Board *board, int x, int y, BoardReadFunction readUnguarded, BoardWriteFunction writeUnguarded);
 #define boardOverloaded(BOARD_PTR) (boardFiringRate(BOARD_PTR) >= (BOARD_PTR)->overloadThreshold)
 
 void evolveBoardCell (Board *board, int x, int y);
