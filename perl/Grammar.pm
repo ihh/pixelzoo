@@ -37,7 +37,10 @@ my $self = {
 	     'entrancePort' => ["x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
 	     'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
 	     'entranceType' => $emptyType, 'exitType' => $emptyType,
-	     'gameXML' => [] };
+	     'gameXML' => [],
+	     'compiler_warnings' => {},
+
+ };
 
 bless $self, $class;
 
@@ -47,13 +50,21 @@ return $self;
 
 
 
-# compiler data
-my %compiler_warnings;
 
 
 
+# example proto-XML (before transformation)
+my $blah = "
+ huffman => [ .3, { ... },
+              .5, { ... },
+              .2, { loc => { name => newLoc, x => 0, y => +1, type = whateverType,
+                    rule => { switch => { loc => newLoc, var => whateverVar,
+                               case => { val => 0, modify => { loc => newLoc, var => whateverVar, inc => 1 } },
+                               default => { ... }
 
+";
 
+# the following parse/generate lines can be reimagined as transformations on a proto-XML tree
 
 # entrance, exit
 
@@ -128,6 +139,10 @@ if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 
 # here is where we transform a node in the rule tree from locs/names into coords/types
 # the first parts of the "transformation" are actually just about defining names for locs, and binding (recognizing) types at those locs
+
+
+# TODO: automatically declare 'o' at (0,0), 'w' at (-1,0), 'nw' at (-1,-1), etc.
+
 
 # bind loc (implement as switch)
 
