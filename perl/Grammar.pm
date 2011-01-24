@@ -1,0 +1,929 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Getopt::Long;
+use Pod::Usage;
+use XML::Twig;
+use Carp;
+use FindBin qw($Bin); 
+
+
+
+# game data structures
+sub new_grammar {
+my $emptyType = "empty";
+my $self = { 
+	     'empty' => $emptyType,
+	     'type' => [ $emptyType ],
+	     'typesize' => { $emptyType => 1 },  # number of actual Particle's represented by each type
+	     'typemask' => { $emptyType => 0xffff },  # mask for recognizing each type
+	     'pvar' => { $emptyType => [qw(hue saturation value)] },    # $pvar{$type} = [$var1,$var2,$var3,...]
+	     'pvbits' => { $emptyType => { 'hue' => 6, 'saturation' => 3, 'value' => 3 } },   # $pvbits{$type}->{$var}
+	     'pvoffset' => {},   # $pvoffset{$type}->{$var}
+	     'ptags' => { $emptyType => [] },     # $ptags{$type} = [ ... ]
+	     'hue' => [ $emptyType => [] ], 'sat' => [ $emptyType => [] ], 'bri' => [ $emptyType => [] ],   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
+	     'ruleTags' => { $emptyType => [] },  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
+	     'test' => { $emptyType => [] },  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
+	     'op' => { $emptyType => [] },  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
+
+	     'typeindex' => {},  # $typeindex{$type}
+
+	     'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
+	     'init' => [],  # $init[$n] = [$x, $y, $type]
+
+# other game data
+	     'boardRate' => 240,
+	     'boardSize' => 128,
+	     'entrancePort' => ["x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
+	     'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
+	     'entranceType' => $emptyType, 'exitType' => $emptyType,
+	     'gameXML' => [] };
+
+bless $self, $class;
+
+
+return $self;
+}
+
+
+
+# compiler data
+my %compiler_warnings;
+
+
+
+
+
+
+# entrance, exit
+
+
+if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
+	$entrancePort{'x'} = $1;
+	$entrancePort{'y'} = $2;
+	if (/\( ?type (\S+) ?\)/) { $entranceType = $1 }
+	while (/\( ?(count|rate|width|height) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
+
+
+    } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
+	$exitPort{'pos'}->{'x'} = $1;
+	$exitPort{'pos'}->{'y'} = $2;
+	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
+	while (/\( ?(count|radius) (\S+) ?\)/g) { $exitPort{$1} = $2 }
+
+}
+
+
+
+
+# new type declaration w/ vars
+
+
+    if (/^type ("[^"]*"|\S+)(.*)$/) {
+	my $varstr;
+	($type, $varstr) = ($1, $2);
+	$type =~ s/^"(.*)"$/$1/;
+	die "Type '$type' is already defined" if exists $typemask{$type};
+	push @type, $type;
+	$nRule = 0;
+	my ($offset, $typeoffset) = (0, 0);  # offset of next var in varbits & typebits
+	while ($varstr =~ /([A-Za-z_][A-Za-z_\d]*\!?) ?\( ?(\d+) ?\)/g) {
+	    my ($varname, $varbits) = ($1, $2);
+	    my $intype = $varname =~ s/\!$//;
+	    die "You cannot use 'type' as a var name for $type" if $varname eq "type";
+	    push @{$pvar{$type}}, $varname;
+	    $pvbits{$type}->{$varname} = $varbits;
+	    if ($intype) {
+		$pvoffset{$type}->{$varname} = $typeoffset + 48;
+		$typeoffset += $varbits;
+		die "More than 15 bits of type-encoded vars for type $type" if $typeoffset > 15;
+	    } else {
+		$pvoffset{$type}->{$varname} = $offset;
+		$offset += $varbits;
+		die "More than 48 bits of vars for type $type" if $offset > 48;
+	    }
+	}
+	$typesize{$type} = 1 << $typeoffset;
+	$typemask{$type} = ((1 << (16 - $typeoffset)) - 1) << $typeoffset;
+	$ptags{$type} = [];
+	$ruleTags{$type} = [];
+
+
+
+# color rules
+	} elsif (/^hue ?= ?(.*)$/) {
+	    # hue
+	    $hue{$type} = parseColor($1);
+
+	} elsif (/^sat ?= ?(.*)$/) {
+	    # saturation
+	    $sat{$type} = parseColor($1);
+
+	} elsif (/^bri ?= ?(.*)$/) {
+	    # brightness
+	    $bri{$type} = parseColor($1);
+}
+
+
+
+# here is where we transform a node in the rule tree from locs/names into coords/types
+# the first parts of the "transformation" are actually just about defining names for locs, and binding (recognizing) types at those locs
+
+# bind loc (implement as switch)
+
+	    # rule block
+	    my (@tag, %loc, %loctype, %locdubious, @test, @op);
+
+
+		if (/^loc ([A-Za-z_][A-Za-z_\d]*) ?\( ?([\+\-\d]+) ?[ ,] ?([\+\-\d]+) ?\)$/) {
+		    # loc
+		    my ($locid, $x, $y) = ($1, $2, $3);
+		    die "Duplicate loc" if defined $loc{$locid};
+		    $loc{$locid} = [$x,$y];
+		    if ($x == 0 && $y == 0) {
+			$loctype{$locid} = $type;
+			$locdubious{$locid} = undef;
+		    }
+		    warn "loc=$locid x=$x y=$y" if $debug;
+
+
+
+# switch (first part)
+		} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
+		    # test
+		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
+# xmlboard.c parser doesn't distinguish between "=" and "==", but Perl's eval does, so...
+		    $op = "==" if $op eq "=";
+
+		    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
+		    my $ignoreTags = parseTags($ignore);
+
+		    if ($var eq "type") {
+			$loctype{$loc} = $rhs;
+			$locdubious{$loc} = firstNonzeroTag ($ignoreTags, "ignore", "overload");
+		    }
+
+		    if (defined($var) && $var ne "type" && $var ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $loc, $var, "In type $type, rule \%d: ", $nRule);
+		    }
+
+		    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, $ignoreTags];
+
+		    if ($debug) {
+			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
+		    }
+
+
+
+
+# modify (first part)
+		} elsif (/^do ([A-Za-z_\d\. ]+) ?= ?([^<]+)(.*)$/) {
+		    # exec
+		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
+		    my ($lhsLoc, $lhsVar) = getLocVar ($lhs, "*", \%loc);
+		    my $failTags = parseTags($fail);
+		    my ($rhsLoc, $rhsVar, $accumFlag);
+		    my $offset = 0;
+		    $rhs =~ s/ $//;
+		    if ($rhs =~ /([^\+]*)\+ ?([\+\-]?\d+)/) {   # something + numeric constant
+			$offset = $2;
+			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
+			$accumFlag = 1;
+
+		    } elsif ($rhs =~ /([^\-]*)\- ?([\+\-]?\d+)/) {   # something - numeric constant
+			$offset = -$2;
+			($rhsLoc, $rhsVar) = getLocVar ($1, undef, \%loc);
+			$accumFlag = 1;
+
+		    } elsif ($rhs =~ / ?\d+ ?/) {   # positive numeric constant
+			$offset = $rhs;
+			$accumFlag = 0;
+
+		    } else {    # might be a location ID, might be a literal type
+			($rhsLoc, $rhsVar) = getLocVar ($rhs, "*", undef);
+			if (!defined ($loc{$rhsLoc})) {   # is this an actual location ID? if not, it must be a literal type
+			    ($rhsLoc, $rhsVar) = (undef, $lhsVar);   # set rhsVar=lhsVar to avoid errors when lhsVar="*"
+			    $offset = $rhs;   # have to turn this literal type into an index later
+			    $accumFlag = 0;
+			} else {
+			    $accumFlag = 1;
+			}
+		    }
+
+
+		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
+			die "If one side of a 'do' expression involves the whole state, then both sides must.\nOffending line:\n$_\n";
+		    }
+
+
+		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
+			my $rhsType = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
+			$loctype{$lhsLoc} = $rhsType;
+			$locdubious{$lhsLoc} = firstNonzeroTag ($failTags, "fail", "overload");
+		    }
+
+
+		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $lhsLoc, $lhsVar, "In type $type, rule \%d: ", $nRule);
+		    }
+
+
+		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*") {
+			assertLocTypeBound (\%loctype, \%locdubious, $rhsLoc, $rhsVar, "In type $type, rule \%d: ", $nRule);
+		    }
+
+
+		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
+						   @{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar,
+						   $accumFlag, $offset, $failTags];
+
+
+		    if ($debug) {
+			$rhsLoc = "" unless defined $rhsLoc;
+			$rhsVar = "" unless defined $rhsVar;
+			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
+		    }
+
+
+		} elsif (/^text ("[^"+]"|\S+)/) {
+		    my $text = $1;
+		    $text =~ s/^"(.*)"$/$1/;
+		    my %balloon = ("text" => $text);
+		    if (/\((\d+) ?, ?(\d+)\)/) { $balloon{"pos"} = ["x" => $1, "y" => $2] }
+		    parseTags ($_, \%balloon);
+		    if (exists $balloon{"hue"}) {
+			$balloon{"hexcolor"} = hexv(0xffff | ($balloon{"hue"} << 16));
+			delete $balloon{"hue"};
+		    }
+		    push @tag, "goal" => ['@type' => "and",  # "and"ing result with 0 means this goal will persist
+					  "lazy" => "",
+					  "goal" => ['@type' => "maybe",
+						     "prob" => $balloon{"rate"}],
+					  "goal" => ['@type' => "balloon",
+						     "balloon" => \%balloon],
+					  "goal" => ['@type' => "false"]];
+
+		} elsif (/^<.*>/) {
+		    # misc tags (rate, overload, ...)
+		    parseTags ($_, \@tag);
+
+		} elsif (/^warn (.*)$/) {
+		    # compiler warning
+		    warn "$1\n";
+
+		} elsif (/warn/) {
+		    die $_;
+
+		} elsif (/\S/) {
+		    # unrecognized line within rule block
+		    die "Syntax error in rule block (type $type): '$_'\n";
+		}
+	    }
+
+
+	    # end of rule block
+	    $ruleTags{$type}->[$nRule] = \@tag;
+	    ++$nRule;
+
+
+
+	} elsif (/^<.*>/) {
+	    parseTags ($_, $ptags{$type});
+
+
+
+	} elsif (/\S/) {
+	    # unrecognized line
+	    die "Syntax error in file (type $type): '$_'\n";
+
+
+	}
+    } elsif (/\S/) {
+	# unrecognized line & no type defined
+	die "Syntax error in file (no type defined): '$_'\n";
+    }
+}
+
+
+
+
+# here is where we finalize the type names
+
+# assign type indices (TODO: optimize packing)
+my $idx = 0;
+for my $type (@type) {
+    my $typeEncodedVarMask = 0xffff ^ $typemask{$type};
+    while ($idx & $typeEncodedVarMask) { ++$idx }
+    $typeindex{$type} = $idx;
+    $idx += $typesize{$type};
+}
+die "Too many types - maybe implement optimized packing?" if $idx > 0x10000;
+
+
+
+# here are the second parts of the transformations, where we convert locs/names into coords/types
+
+my @gram;
+for my $type (@type) {
+    warn "Generating XML for base type '$type'\n" if $verbose;
+
+
+
+# loop over all types in a type block, encoding the vars into the name for quick debug in client
+    my $baseindex = $typeindex{$type};
+    for my $typeindex ($baseindex .. $baseindex + $typesize{$type} - 1) {
+
+	my $state = $typeindex << 48;
+	my $name = $type;
+	for my $var (@{$pvar{$type}}) {
+	    my $shift = getShift($type,$var);
+	    if ($shift >= 48) {
+		my $val = ($state & decv(getMask($type,$var))) >> $shift;
+		$name .= " $var:$val";
+	    }
+	}
+
+	my @particle = ("name" => $name,
+			"type" => $typeindex,
+			@{$ptags{$type}}
+	    );
+
+
+# color rules
+	my $colBase = 0;
+	my @maskshiftmul;
+
+	for my $cvm (@{$hue{$type}}) {
+	    $colBase += $cvm->[0] << 16;
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 16) : 0];
+	}
+	# default hue = 0
+
+	for my $cvm (@{$sat{$type}}) {
+	    $colBase += $cvm->[0] << 8;
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? ($cvm->[2] << 8) : 0];
+	}
+	$colBase += 0x8000 unless @{$sat{$type}};  # default saturation = 128
+
+	for my $cvm (@{$bri{$type}}) {
+	    $colBase += $cvm->[0];
+	    push @maskshiftmul, [getMask($type,$cvm->[1]), getShift($type,$cvm->[1]), defined($cvm->[2]) ? $cvm->[2] : 0];
+	}
+	$colBase += 0xff unless @{$bri{$type}};  # default brightness = 255
+
+	if (@maskshiftmul == 0) {
+	    @maskshiftmul = [0, 0, 0];   # add a dummy entry to ensure $colBase gets a look in
+	}
+
+	my $doneConst = 0;
+	for (my $n = 0; $n < @maskshiftmul; ++$n) {
+	    my ($mask, $shift, $mul) = @{$maskshiftmul[$n]};
+	    next if $doneConst && $mask eq "0" && $shift==0 && $mul==0;
+	    my @colorRule = ("mask" => $mask,
+			     "rshift" => $shift,
+			     "hexmul" => hexv($mul));
+	    if (!$doneConst) { push @colorRule, ("hexinc" => hexv($colBase)); $doneConst = 1 }
+	    push @particle, "color" => \@colorRule;
+	}
+
+
+
+
+# old loop over tests (refactor into part 2 of switch)
+	    my %compare;
+	  TEST:
+	    for my $test (@{$test{$type}->[$nRule]}) {
+		my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
+
+		# intercept tests of type-encoded vars
+		if ($tx == 0 && $ty == 0 && getShift($ttype,$tvar) >= 48) {
+		    my $tlhs = (($state & decv(getMask($ttype,$tvar))) >> getShift($ttype,$tvar));
+		    my $expr = "$tlhs $top $trhs";
+		    warn "Evaluating test ($tvar $top $trhs) for var-encoded type ($name), test expression is ($expr)" if $debug;
+		    if (eval ($expr)) {
+			warn "Test passed; skipping to next test" if $debug;
+			next TEST;
+		    } else {
+			warn "Test failed; skipping to next rule" if $debug;
+			next RULE;
+		    }
+		}
+
+		# resolve any dangling literal typenames
+		if ($tvar eq "type") {
+		    $trhs = getType($trhs);
+		}
+
+		# consolidate repeated tests of different fields at the same location
+		if ($top eq "=" || $top eq "==") {
+		    if (exists $compare{"$tx $ty"}) {
+			my $ruleRef = $rule[$compare{"$tx $ty"}];
+			my %prevTest = @$ruleRef;
+			my $prevMask = $prevTest{"mask"};
+			my $thisMask = getMask($ttype,$tvar);
+			if (defined($prevMask) && defined($thisMask)) {
+			    if ((decv($thisMask) & decv($prevMask)) == 0) {
+				my $prevRhs = exists($prevTest{"hexval"}) ? decv($prevTest{"hexval"}) : 0;
+				my $thisRhs = $trhs << getShift($ttype,$tvar);
+				$prevTest{"hexval"} = hexv ($prevRhs | $thisRhs);
+				$prevTest{"mask"} = hexv (decv($prevMask) | decv($thisMask));
+				@$ruleRef = %prevTest;
+				warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
+				next;
+			    } else {
+				compiler_warn ("Couldn't consolidate repeated tests of ($tx,$ty) in type $type, rule \%d, as masks $prevMask and $thisMask overlap", $nRule);
+			    }
+			}
+		    }
+
+		    unless (defined (firstNonzeroTag ($other, "ignore", "overload"))) {
+			$compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
+		    }
+		}
+
+		# build the test hash
+		my @t = (@$other,
+			 '@op' => $top,
+			 length("$tx$ty") ? ("pos" => [ "x" => $tx, "y" => $ty ]) : (),
+			 "mask" => getMask($ttype,$tvar),
+			 "hexval" => hexv($trhs << getShift($ttype,$tvar)));
+
+		# store
+		push @rule, "test" => \@t;
+	    }
+
+
+
+# old loop over operations (refactor into part 2 of modify)
+	    my (%assign, %locvarsunset);
+	    for my $op (@{$op{$type}->[$nRule]}) {
+		my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
+
+		# flag potentially uninitialized vars
+		my $locid = "($dx,$dy)";
+		if ($dvar eq "type") {
+		    $locvarsunset{$locid} = { map (($_ => 1), @{$pvar{$offset}}) };
+		} elsif ($dvar eq "*") {
+		    $locvarsunset{$locid} = {};
+		} else {
+		    delete $locvarsunset{$locid}->{$dvar};
+		}
+
+		# resolve any dangling literal typenames
+		if ($dvar eq "type" || $dvar eq "*") {
+		    $offset = getType($offset);
+		    if ($dvar eq "*") {
+			$offset = $offset << 48;
+		    }
+		}
+
+		# consolidate repeated writes of a constant to the same location
+		if (!$accumFlag) {
+		    if (exists $assign{"$dx $dy"}) {
+			my $ruleRef = $rule[$assign{"$dx $dy"}];
+			my %prevExec = @$ruleRef;
+			my $prevDestmask = $prevExec{"destmask"};
+			my $thisDestmask = getMask($dtype,$dvar);
+			if (defined($prevDestmask) && defined($thisDestmask)) {
+			    if ((decv($thisDestmask) & decv($prevDestmask)) == 0) {
+				my $prevLeftShift = $prevExec{"lshift"};
+				$prevLeftShift = 0 unless defined $prevLeftShift;
+				my $prevOffset = (exists($prevExec{"hexinc"}) ? decv($prevExec{"hexinc"}) : 0) << $prevLeftShift;
+				my $thisLeftShift = getShift($dtype,$dvar);
+				$prevExec{"hexinc"} = hexv ($prevOffset | ($offset << $thisLeftShift));
+				$prevExec{"lshift"} = 0;
+				$prevExec{"destmask"} = hexv (decv($prevDestmask) | decv($thisDestmask));
+				@$ruleRef = %prevExec;
+				warn "Consolidated rule operation: prevDestmask=$prevDestmask prevLeftShift=$prevLeftShift prevOffset=$prevOffset thisDestmask=$thisDestmask thisLeftShift=$thisLeftShift thisOffset=$offset ", map(" $_=>$prevExec{$_}",keys %prevExec) if $debug;
+				next;
+			    } else {
+				compiler_warn ("Couldn't consolidate repeated writes to ($dx,$dy) in type $type, rule \%d, as masks $prevDestmask and $thisDestmask overlap", $nRule);
+			    }
+			}
+		    }
+
+		    unless (defined (firstNonzeroTag ($other, "fail", "overload"))) {
+			$assign{"$dx $dy"} = @rule + 1;   # this should pick out the "exec" child. very hacky
+		    }
+		}
+
+		# build the exec hash
+		my @x = (@$other,
+			 defined($sx) && length("$sx$sy") ? ("src" => [ "x" => $sx, "y" => $sy ]) : (),
+			 "srcmask" => ($accumFlag ? getMask($stype,$svar) : 0),
+			 $accumFlag ? ("rshift" => getShift($stype,$svar)) : (),
+			 $offset != 0 ? ("hexinc" => hexv($offset)) : (),
+			 ($offset != 0 || $accumFlag) ? ("lshift" => getShift($dtype,$dvar)) : (),
+			 "destmask" => getMask($dtype,$dvar),
+			 defined($dx) && length("$dx$dy") ? ("dest" => [ "x" => $dx, "y" => $dy ]) : ());
+
+		# store
+		push @rule, "exec" => \@x;  # %assign requires that the second element is the arrayref containing the rule op... yuck
+	    }
+
+	    # check for unset vars
+	    if (grep (%$_, values %locvarsunset)) {
+		compiler_warn ("Type $type, rule \%d: the following location(s) had their type set, but var(s) left uninitialized: "
+			       . join(" ", map(%{$locvarsunset{$_}} ? ("$_\[@{[keys %{$locvarsunset{$_}}]}\]") : (), keys %locvarsunset)), $nRule);
+	    }
+
+
+
+
+    } # end loop over type-encoded vars
+
+# .....aaaaand, save the particle.
+push @gram, "particle" => \@particle;
+}
+
+
+
+# tools
+
+my @toolxml;
+for my $tool (@tool) {
+    my ($name, $size, $type, $reserve, $recharge, $spray, $overwriteType) = @$tool;
+    push @toolxml, ("tool" => ["name" => $name,
+			       "size" => $size,
+			       "spray" => $spray,
+			       "hexstate" => getTypeAsHexState($type),
+			       "reserve" => $reserve,
+			       "recharge" => $recharge,
+			       @$overwriteType ? ("overwrite" => [map (("state" => getTypeAsHexState($_)), @$overwriteType)]) : ()]);
+}
+
+$entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
+$exitPort{"type"} = getType($exitType);
+
+
+# exit
+
+my (@exitLoc, @exitColor);
+my $exitRadius = $exitPort{"radius"};
+my $exitx = $exitPort{'pos'}->{"x"};
+my $exity = $exitPort{'pos'}->{"y"};
+for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
+    for (my $y = -$exitRadius; $y <= $exitRadius; ++$y) {
+	my $r = sqrt($x*$x+$y*$y);
+	if ($r < $exitRadius) {
+	    my $col = 0x007;  # white
+	    if ($r < $exitRadius/3 || $r > $exitRadius*2/3) {
+		$col = 0x03f;  # red
+	    }
+	    my $ex = $exitx + $x;
+	    my $ey = $exity + $y;
+	    push @exitLoc, "pos" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
+	    push @exitColor, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
+	}
+    }
+}
+
+
+# entrance
+
+my @entranceLoc;
+my $entranceWidth = $entrancePort{"width"};
+my $entranceHeight = $entrancePort{"height"};
+for (my $w = 0; $w < $entranceWidth; ++$w) {
+    for (my $h = 0; $h < $entranceHeight; ++$h) {
+	push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
+    }
+}
+
+
+
+# top-level proto-XML
+
+my @game = (@gameXML,
+	    "goal" => ['@type' => "and",
+		       "lazy" => "",
+		       "cached" => "",
+
+# place entrance and exit balloons
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "ZOO ENTRANCE",
+							   "persist" => '']]],
+
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'pos'},
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "GIFT SHOP",
+							   "persist" => '']]],
+
+# print hello message
+		       "goal" => ['@type' => "print",
+				  "text" => "Welcome to level 1!\n" .
+				  "Guide guests safely to the Gift Shop.\n"],
+
+# open the guest exit (currently the only exit)
+		       "goal" => ['@type' => "setexit",
+				  "state" => "PortalCounting"],
+
+
+# introduce the guests
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "spray",
+					     "tool" => ["name" => "entrance",
+							"size" => minPowerOfTwo (max ($entranceWidth, $entranceHeight)),
+							"brush" => ["center" => ["x" => int($entranceWidth/2), "y" => int($entranceHeight/2)],
+								    "intensity" => \@entranceLoc],
+							"spray" => 1,
+							"hexstate" => getTypeAsHexState($entranceType),
+							"reserve" => $entrancePort{'count'},
+							"recharge" => 0]]],
+
+# delete entrance balloon
+		       "goal" => ['@type' => "area",
+				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "goal" => ['@type' => "balloon"]],
+
+# print status message
+		       "goal" => ['@type' => "print",
+				  "text" => "The zoo is now closed to further guests.\nGuide all remaining guests to the gift shop."],
+
+
+# more goals here... e.g.,
+# generic:
+#    require the player to maintain the min/max bounds on population levels (guests, animals, expensive particles e.g. fire)
+
+# specific:
+#  fend off attacks to the guests, or by animals on other animals
+#  grow food for the guests
+#  hurry the guests along with stimulant
+#  put out fires
+#  protect the guests from avalanches, lasers, poison gas
+#  place signposts
+#  build cages, place animals in cages
+
+# wait for player to reach the guest exit count
+		       "goal" => ['@type' => "exit",
+				  "state" => "PortalCounting",
+				  "count" => ["min" => $exitPort{"count"}]],
+
+# delete exit balloon
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'pos'},
+				  "goal" => ['@type' => "balloon"]],
+
+# place "UNLOCKED" balloon at exit
+		       "goal" => ['@type' => "area",
+				  "pos" => $exitPort{'pos'},
+				  "goal" => ['@type' => "balloon",
+					     "balloon" => ["text" => "UNLOCKED!"]]],
+
+# print "UNLOCKED" message
+		       "goal" => ['@type' => "print",
+				  "text" => "Exit unlocked! You could try the next level, if there was one."],
+
+# "unlock" the guest exit achievment
+		       "goal" => ['@type' => "setexit",
+				  "state" => "PortalUnlocked"],
+
+
+# more goals here... (e.g., steal the owner's HQ exit)
+
+
+# print win message
+		       "goal" => ['@type' => "print",
+				  "text" => "YOU WIN! Congratulations."],
+
+# set the game state to WIN!!!
+		       "goal" => ['@type' => "setgame",
+				  "state" => "GameWon"],
+
+# that's all, folks
+
+],
+	    @toolxml,
+	    "rate" => $boardRate,
+	    "entrance" => \%entrancePort,
+	    "exit" => [%exitPort, @exitLoc],
+	    "board" => ["size" => $boardSize,
+			"grammar" => \@gram,
+			@exitColor,
+			@init > 0
+			? map (("init" => ["x" => $$_[0],
+					   "y" => $$_[1],
+					   "type" => getType($$_[2])]),
+			       @init)
+			: ()]);
+
+
+
+
+
+# code to actually generate & print real XML from proto-XML
+
+warn "Writing XML\n" if $verbose;
+my $elt = newElement("xml" => ["game" => \@game]);
+my $twig = XML::Twig->new(pretty_print => 'indented');
+$twig->set_root($elt);
+
+$twig->print;
+
+exit;
+
+sub compiler_warn {
+    my ($fmt, @args) = @_;
+    my $warning = sprintf ($fmt, @args);
+    my $nw = ++$compiler_warnings{$fmt};
+    if ($nw == 1) { warn "$warning\n" }
+    elsif ($nw == 2) { warn "(suppressing further warnings of the form \"", substr($fmt,0,20), "...\")\n" }
+}
+
+sub assertLocTypeBound {
+    my ($loctype, $locdubious, $loc, $var, $fmt, @args) = @_;
+    if (!defined($loctype->{$loc})) {
+	die sprintf($fmt,@args) . "Can't access $loc.$var because type of $loc is not bound\n";
+    }
+    if (defined $locdubious->{$loc}) {
+	compiler_warn ("${fmt}Accessing $loc.$var: type of $loc may be dubious due to previous $locdubious->{$loc} clause", @args);
+    }
+}
+
+sub firstNonzeroTag {
+    my ($arrayRef, @tag) = @_;
+    my %hash = @$arrayRef;
+    for my $tag (@tag) {
+	return $tag if exists($hash{$tag}) && $hash{$tag} > 0;
+    }
+    return undef;
+}
+
+sub getTypeAsHexState {
+    my ($type) = @_;
+    return hexv(getType($type)).("0"x12);
+}
+
+sub getType {
+    my ($type) = @_;
+    if ($type =~ /^\-?\d+$/) {
+	return $type;
+    }
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
+    return $typeindex{$type};
+}
+
+sub getMask {
+    my ($type, $var) = @_;
+    return 0 unless defined($var);
+    return "ffffffffffffffff" if $var eq "*";
+    return hexv($typemask{$type}) . "000000000000" if $var eq "type";
+    croak "Undefined type" unless defined($type);
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    my $mask = ((1 << $pvbits{$type}->{$var}) - 1) << $pvoffset{$type}->{$var};
+    return hexv($mask);
+}
+
+sub getShift {
+    my ($type, $var) = @_;
+    return 0 unless defined($var);
+    return 48 if $var eq "type";
+    return 0 if $var eq "*";
+    croak "Undefined type" unless defined($type);
+    croak "Type '$type' unknown" unless defined $typeindex{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
+    return $pvoffset{$type}->{$var};
+}
+
+sub parseTags {
+    my ($line, $tagRef) = @_;
+    $tagRef = [] unless defined $tagRef;
+    my $isArray = ref($tagRef) eq "ARRAY";
+    my %tagHash = $isArray ? @$tagRef : %$tagRef;
+    while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
+	my ($tag, $val) = ($1, $2);
+	croak "Duplicate tag $tag\n" if exists $tagHash{$tag};
+	# evaluate parenthesized expressions
+	while ($val =~ /(.*)\(([^\)]*)\)(.*)/) {
+	    my ($left, $expr, $right) = ($1, $2, $3);
+	    warn "Evaluating $expr" if $debug;
+	    my @val = eval($expr);
+	    warn "In tag $tag: expression $expr evaluated to @val" if $debug;
+	    $val = "$left@val$right";
+	}
+	if ($isArray) {
+	    push @$tagRef, ($tag => $val);
+	} else {
+	    $tagRef->{$tag} = $val;
+	}
+    }
+    return $tagRef;
+}
+
+sub parseColor {
+    my ($colexpr) = @_;
+    $colexpr =~ s/\- ?(\S+) ?\* ?(\d+)/+ $1 * -$2/g;
+    $colexpr =~ s/\- ?(\d+) ?\* ?(\S+)/+ -$1 * $2/g;
+    $colexpr =~ s/\- ?([^\d]\S*)/+ -1 * $1/g;
+    my @term = split (/ ?\+ ?/, $colexpr);
+    warn "Parsing color terms: ", join(" + ", map("($_)", @term)) if $debug;
+    my $const = 0;
+    my @varmul;
+    for my $term (@term) {
+	if ($term =~ /^\-? ?\d+$/) {
+	    $const += $term;
+	} elsif ($term =~ /^(\S+) ?\* ?(\-?\d+)$/) {
+	    my ($var, $mul) = ($1, $2);
+	    push @varmul, [$var, $mul];
+	} elsif ($term =~ /^(\-?\d+) ?\* ?(\S+)$/) {
+	    my ($mul, $var) = ($1, $2);
+	    push @varmul, [$var, $mul];
+	} else {
+	    push @varmul, [$term, 1];
+	}
+    }
+    my @constvarmul = ([$const, @varmul==0 ? (undef,undef) : @{shift @varmul}], map ([0,@$_], @varmul));
+    return \@constvarmul;
+}
+
+sub getLocVar {
+    my ($expr, $defaultVar, $locRef) = @_;
+    $expr =~ s/\s//g;
+    my ($loc, $var);
+    if ($expr =~ /(.+)\.(.+)/) {
+	($loc, $var) = ($1, $2);
+    } else {
+	croak "In '$expr': no default var in that context" unless defined $defaultVar;
+	($loc, $var) = ($expr, $defaultVar);
+    }
+    if (defined($loc) && defined($locRef) && !defined($locRef->{$loc})) {
+	croak "In '$expr': no location identifier '$loc' has been bound\n";
+    }
+    return ($loc, $var);
+}
+
+sub hexv {
+    my ($val) = @_;
+    croak "Undefined value" unless defined $val;
+    my $hex = sprintf ("%x", $val);
+    return $hex;
+}
+
+sub decv {
+    my ($val) = @_;
+    if (length($val) > 8) {
+	# this is pretty disgusting, should really be using pack/unpack or Bit::Vector
+	return hex(substr($val,length($val)-8,8)) | (hex(substr($val,0,length($val)-8)) << 32);
+    }
+    return hex ($val);
+}
+
+sub newElement {
+    my $gi   = shift;
+    my $data = shift;
+
+    my $t = XML::Twig::Elt->new($gi);
+
+    my @child;
+    if (ref($data) eq "HASH") {
+	@child = sortHash ($data);
+    } elsif (ref($data) eq "ARRAY") {
+	@child = @$data;
+    }
+
+    if (@child) {
+	@child = map (ref($_) eq "CODE" ? &$_() : $_, @child);
+	while (@child) {
+	    my $k = shift @child;
+	    my $v = shift @child;
+	    if ($k =~ s/^\@//) {
+		$t->set_att ($k => $v);
+	    } else {
+		newElement($k, $v)->paste(last_child => $t);
+	    }
+	}
+    } else {
+        $t->set_text($data);
+    }
+
+    return $t;
+}
+
+sub sortHash {
+    my ($hashRef) = @_;
+    return map (($_ => $hashRef->{$_}), sort keys %$hashRef);
+}
+
+sub min {
+    my ($min, @x) = @_;
+    for my $x (@x) { $min = $x if $x < $min }
+    return $min;
+}
+
+sub max {
+    my ($max, @x) = @_;
+    for my $x (@x) { $max = $x if $x > $max }
+    return $max;
+}
+
+sub minPowerOfTwo {
+    my ($x) = @_;
+    my $p = 1;
+    while ($p < $x) { $p *= 2 }
+    return $p;
+}
