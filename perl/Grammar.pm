@@ -65,8 +65,9 @@ my $blah = "
 ";
 
 # the following parse/generate lines can be reimagined as transformations on a proto-XML tree
+# the two parts in each case need to be stitched together
 
-# entrance, exit
+# entrance, exit (part 1)
 
 
 if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
@@ -163,7 +164,7 @@ if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 
 
 
-# switch (first part)
+# switch (part 1)
 		} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
 		    # test
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
@@ -191,7 +192,7 @@ if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 
 
 
-# modify (first part)
+# modify (part 1)
 		} elsif (/^do ([A-Za-z_\d\. ]+) ?= ?([^<]+)(.*)$/) {
 		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
@@ -567,11 +568,14 @@ for my $tool (@tool) {
 			       @$overwriteType ? ("overwrite" => [map (("state" => getTypeAsHexState($_)), @$overwriteType)]) : ()]);
 }
 
+
+# entrance (part 2)
+
 $entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
 $exitPort{"type"} = getType($exitType);
 
 
-# exit
+# exit (part 2)
 
 my (@exitLoc, @exitColor);
 my $exitRadius = $exitPort{"radius"};
