@@ -28,142 +28,63 @@ unless (defined $cpp) {
 
 $verbose = 1 if $debug;
 
-# game data structures
-my @type;
-my %typeindex;  # $typeindex{$type}
-my %typesize;  # number of actual Particle's represented by this "type"
-my %typemask;  # mask for recognizing this type
-my %pvar;    # $pvar{$type} = [$var1,$var2,$var3,...]
-my %pvbits;   # $pvbits{$type}->{$var}
-my %pvoffset;   # $pvoffset{$type}->{$var}
-my %ptags;     # $ptags{$type} = [ ... ]
-my (%hue, %sat, %bri);   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
-my %ruleTags;  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
-my %test;  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
-my %op;  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
-my @tool;  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
-my @init;  # $init[$n] = [$x, $y, $type]
 
-# empty type
+
+# game data structures
+sub new_grammar {
 my $emptyType = "empty";
-push @type, $emptyType;
-$typesize{$emptyType} = 1;
-$typemask{$emptyType} = 0xffff;
-$pvar{$emptyType} = [qw(hue saturation value)];
-$pvbits{$emptyType} = { 'hue' => 6, 'saturation' => 3, 'value' => 3 };
-$pvoffset{$emptyType} = { 'hue' => 6, 'saturation' => 3, 'value' => 0 };
-$ptags{$emptyType} = [];
-$hue{$emptyType} = $sat{$emptyType} = $bri{$emptyType} = [];
-$ruleTags{$emptyType} = $test{$emptyType} = $op{$emptyType} = [];
+my $self = { 
+	     'empty' => $emptyType,
+	     'type' => [ $emptyType ],
+	     'typesize' => { $emptyType => 1 },  # number of actual Particle's represented by each type
+	     'typemask' => { $emptyType => 0xffff },  # mask for recognizing each type
+	     'pvar' => { $emptyType => [qw(hue saturation value)] },    # $pvar{$type} = [$var1,$var2,$var3,...]
+	     'pvbits' => { $emptyType => { 'hue' => 6, 'saturation' => 3, 'value' => 3 } },   # $pvbits{$type}->{$var}
+	     'pvoffset' => {},   # $pvoffset{$type}->{$var}
+	     'ptags' => { $emptyType => [] },     # $ptags{$type} = [ ... ]
+	     'hue' => [ $emptyType => [] ], 'sat' => [ $emptyType => [] ], 'bri' => [ $emptyType => [] ],   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
+	     'ruleTags' => { $emptyType => [] },  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
+	     'test' => { $emptyType => [] },  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
+	     'op' => { $emptyType => [] },  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
+
+	     'typeindex' => {},  # $typeindex{$type}
+
+	     'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
+	     'init' => [],  # $init[$n] = [$x, $y, $type]
 
 # other game data
-my $boardRate = 240;
-my $boardSize = 128;
-my %entrancePort = ("x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1);
-my %exitPort = ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6);
-my ($entranceType, $exitType) = ($emptyType, $emptyType);
-my @gameXML;
+	     'boardRate' => 240,
+	     'boardSize' => 128,
+	     'entrancePort' => ["x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
+	     'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
+	     'entranceType' => $emptyType, 'exitType' => $emptyType,
+	     'gameXML' => [] };
+
+bless $self, $class;
+
+
+return $self;
+}
+
+
 
 # compiler data
 my %compiler_warnings;
 
-# parse input file
-my ($zgfilename) = @ARGV;
-local *ZG;
-open ZG, "cat $zgfilename | $cpp |" or die "Couldn't open $zgfilename: $!";
-my @zg = <ZG>;
-close ZG;
 
-# savepp
-if (defined $ppfile) {
-    local *PP;
-    open PP, ">$ppfile" or die "Couldn't open $ppfile: $!";
-    print PP @zg;
-    close PP or die "Couldn't close $ppfile: $!";
-}
 
-# strip off irrelevant crud
-grep (s/(\/\/|#).*$//, @zg);  # trim C++-style comments, preprocessor directives
-@zg = map ( (split(/;/,$_)), @zg );   # split lines on semicolons
-grep (s/^\s*(.*?)\s*$/$1/, @zg);  # trim whitespace at beginning/end of line
-grep (s/\s+/ /, @zg);  # squash multiple whitespace
 
-# loop through file
-my ($type, $nRule);
-local $_;
-while (@zg) {
-    $_ = shift @zg;
-    die unless defined;
-    warn "Read line '$_'" if $debug;
 
-    if (/^warn (.*)$/) {
-	# compiler warning
-	warn "$1\n";
 
-    } elsif (/^eval ?\{(.*)\}$/) {
-	# one-line eval block
-	my $expr = $1;
-	my @val = eval($expr);
-	warn "Expression $expr evaluated to @val" if $debug;
-	unshift @zg, @val;
+# entrance, exit
 
-    } elsif (/^eval ?\{(.*)$/) {
-	# multi-line eval block
-	my $expr = $1;
-	while (@zg) {
-	    $_ = shift @zg;
-	    last if /^\}$/;
-	    $expr .= $_;
-	}
-	my @val = eval($expr);
-	warn "Expression $expr evaluated to @val" if $debug;
-	unshift @zg, @val;
 
-    } elsif (/^xml ?\{(.*)\}$/) {
-	# one-line XML block
-	my $expr = $1;
-	my @val = eval($expr);
-	warn "Expression $expr evaluated to @val" if $debug;
-	push @gameXML, @val;
-
-    } elsif (/^eval ?\{(.*)$/) {
-	# multi-line XML block
-	my $expr = $1;
-	while (@zg) {
-	    $_ = shift @zg;
-	    last if /^\}$/;
-	    $expr .= $_;
-	}
-	warn "Evaluating $expr" if $debug;
-	my @val = eval($expr);
-	warn "Expression $expr evaluated to @val" if $debug;
-	push @gameXML, @val;
-
-    } elsif (/^size (\d+)/) {
-	$boardSize = $1;
-
-    } elsif (/^init ?\( ?(\d+) ?, ?(\d+) ?\) (\S+)/) {
-	push @init, [$1, $2, $3];
-
-    } elsif (/^tool ("[^"]*"|\S+)/) {
-	my $name = $1;
-	$name =~ s/^"(.*)"$/$1/;
-	my ($size, $type, $reserve, $recharge, $spray) = (1, $emptyType, 100, 100, 1);
-	my @overwrite;
-	if (/\( ?size (\S+) ?\)/) { $size = $1 }
-	if (/\( ?type (\S+) ?\)/) { $type = $1 }
-	if (/\( ?reserve (\S+) ?\)/) { $reserve = $1 }
-	if (/\( ?recharge (\S+) ?\)/) { $recharge = $1 }
-	if (/\( ?spray (\S+) ?\)/) { $spray = $1 }
-	while (/\( ?overwrite (\S+) ?\)/g) { push @overwrite, $1 }
-
-	push @tool, [$name, $size, $type, $reserve, $recharge, $spray, \@overwrite];
-
-    } elsif (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
+if (/^entrance ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 	$entrancePort{'x'} = $1;
 	$entrancePort{'y'} = $2;
 	if (/\( ?type (\S+) ?\)/) { $entranceType = $1 }
 	while (/\( ?(count|rate|width|height) (\S+) ?\)/g) { $entrancePort{$1} = $2 }
+
 
     } elsif (/^exit ?\( ?(\d+) ?, ?(\d+) ?\)/) {
 	$exitPort{'pos'}->{'x'} = $1;
@@ -171,7 +92,15 @@ while (@zg) {
 	if (/\( ?type (\S+) ?\)/) { $exitType = $1 }
 	while (/\( ?(count|radius) (\S+) ?\)/g) { $exitPort{$1} = $2 }
 
-    } elsif (/^type ("[^"]*"|\S+)(.*)$/) {
+}
+
+
+
+
+# new type declaration w/ vars
+
+
+    if (/^type ("[^"]*"|\S+)(.*)$/) {
 	my $varstr;
 	($type, $varstr) = ($1, $2);
 	$type =~ s/^"(.*)"$/$1/;
@@ -200,13 +129,9 @@ while (@zg) {
 	$ptags{$type} = [];
 	$ruleTags{$type} = [];
 
-    } elsif (defined $type) {
 
-	if (/^(type|size|init|tool|entrance|exit)\b/) {
-	    # end of type block
-	    unshift @zg, $_;
-	    last;
 
+# color rules
 	} elsif (/^hue ?= ?(.*)$/) {
 	    # hue
 	    $hue{$type} = parseColor($1);
@@ -218,26 +143,18 @@ while (@zg) {
 	} elsif (/^bri ?= ?(.*)$/) {
 	    # brightness
 	    $bri{$type} = parseColor($1);
+}
 
-	} elsif (/^\{/) {
-	    # start rule block
-	    s/\{ ?//;
-	    unshift @zg, $_;
+
+
+# here is where we transform a node in the rule tree from locs/names into coords/types
+# the first parts of the "transformation" are actually just about defining names for locs, and binding (recognizing) types at those locs
+
+# bind loc (implement as switch)
 
 	    # rule block
 	    my (@tag, %loc, %loctype, %locdubious, @test, @op);
-	    my $temps = 0;
-	    while (@zg) {
-		$_ = shift @zg;
-		die unless defined;
-		warn "Read line '$_'" if $debug;
 
-		if (/^\}/) {
-		    # end rule block
-		    s/\} ?//;
-		    unshift @zg, $_;
-		    last;
-		}
 
 		if (/^loc ([A-Za-z_][A-Za-z_\d]*) ?\( ?([\+\-\d]+) ?[ ,] ?([\+\-\d]+) ?\)$/) {
 		    # loc
@@ -250,13 +167,9 @@ while (@zg) {
 		    }
 		    warn "loc=$locid x=$x y=$y" if $debug;
 
-		} elsif (/^temp ([A-Za-z_][A-Za-z_\d]*)$/) {
-		    # temp
-		    my ($locid) = ($1);
-		    die "Duplicate loc" if defined $loc{$locid};
-		    $loc{$locid} = [-128,$temps++];
-		    warn "temp=$locid" if $debug;
 
+
+# switch (first part)
 		} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
 		    # test
 		    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
@@ -281,6 +194,10 @@ while (@zg) {
 			warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
 		    }
 
+
+
+
+# modify (first part)
 		} elsif (/^do ([A-Za-z_\d\. ]+) ?= ?([^<]+)(.*)$/) {
 		    # exec
 		    my ($lhs, $rhs, $fail) = ($1, $2, $3);
@@ -314,9 +231,11 @@ while (@zg) {
 			}
 		    }
 
+
 		    if ((defined($lhsVar) && $lhsVar eq "*") xor (defined($rhsVar) && $rhsVar eq "*")) {
 			die "If one side of a 'do' expression involves the whole state, then both sides must.\nOffending line:\n$_\n";
 		    }
+
 
 		    if (defined($lhsVar) && ($lhsVar eq "type" || $lhsVar eq "*")) {
 			my $rhsType = (defined($rhsLoc) && ($rhsVar eq "type" || $rhsVar eq "*")) ? $loctype{$rhsLoc} : $offset;
@@ -324,23 +243,28 @@ while (@zg) {
 			$locdubious{$lhsLoc} = firstNonzeroTag ($failTags, "fail", "overload");
 		    }
 
+
 		    if (defined($lhsVar) && $lhsVar ne "type" && $lhsVar ne "*") {
 			assertLocTypeBound (\%loctype, \%locdubious, $lhsLoc, $lhsVar, "In type $type, rule \%d: ", $nRule);
 		    }
+
 
 		    if (defined($rhsVar) && $rhsVar ne "type" && $rhsVar ne "*") {
 			assertLocTypeBound (\%loctype, \%locdubious, $rhsLoc, $rhsVar, "In type $type, rule \%d: ", $nRule);
 		    }
 
+
 		    push @{$op{$type}->[$nRule]}, [defined($rhsLoc) ? (@{$loc{$rhsLoc}}, $loctype{$rhsLoc}) : (undef,undef,undef), $rhsVar,
 						   @{$loc{$lhsLoc}}, $loctype{$lhsLoc}, $lhsVar,
 						   $accumFlag, $offset, $failTags];
+
 
 		    if ($debug) {
 			$rhsLoc = "" unless defined $rhsLoc;
 			$rhsVar = "" unless defined $rhsVar;
 			warn "lhsLoc=$lhsLoc lhsVar=$lhsVar rhsLoc=$rhsLoc rhsVar=$rhsVar accumFlag=$accumFlag offset=$offset fail=$fail";
 		    }
+
 
 		} elsif (/^text ("[^"+]"|\S+)/) {
 		    my $text = $1;
@@ -377,16 +301,22 @@ while (@zg) {
 		}
 	    }
 
+
 	    # end of rule block
 	    $ruleTags{$type}->[$nRule] = \@tag;
 	    ++$nRule;
 
+
+
 	} elsif (/^<.*>/) {
 	    parseTags ($_, $ptags{$type});
+
+
 
 	} elsif (/\S/) {
 	    # unrecognized line
 	    die "Syntax error in file (type $type): '$_'\n";
+
 
 	}
     } elsif (/\S/) {
@@ -394,6 +324,11 @@ while (@zg) {
 	die "Syntax error in file (no type defined): '$_'\n";
     }
 }
+
+
+
+
+# here is where we finalize the type names
 
 # assign type indices (TODO: optimize packing)
 my $idx = 0;
@@ -405,11 +340,17 @@ for my $type (@type) {
 }
 die "Too many types - maybe implement optimized packing?" if $idx > 0x10000;
 
-# generate XML
+
+
+# here are the second parts of the transformations, where we convert locs/names into coords/types
+
 my @gram;
 for my $type (@type) {
     warn "Generating XML for base type '$type'\n" if $verbose;
 
+
+
+# loop over all types in a type block, encoding the vars into the name for quick debug in client
     my $baseindex = $typeindex{$type};
     for my $typeindex ($baseindex .. $baseindex + $typesize{$type} - 1) {
 
@@ -428,7 +369,8 @@ for my $type (@type) {
 			@{$ptags{$type}}
 	    );
 
-	# color rules
+
+# color rules
 	my $colBase = 0;
 	my @maskshiftmul;
 
@@ -465,12 +407,10 @@ for my $type (@type) {
 	    push @particle, "color" => \@colorRule;
 	}
 
-	# production rules
-      RULE:
-	for (my $nRule = 0; $nRule < @{$ruleTags{$type}}; ++$nRule) {
-	    my @rule = @{$ruleTags{$type}->[$nRule]};
 
-	    # tests
+
+
+# old loop over tests (refactor into part 2 of switch)
 	    my %compare;
 	  TEST:
 	    for my $test (@{$test{$type}->[$nRule]}) {
@@ -533,7 +473,9 @@ for my $type (@type) {
 		push @rule, "test" => \@t;
 	    }
 
-	    # operations
+
+
+# old loop over operations (refactor into part 2 of modify)
 	    my (%assign, %locvarsunset);
 	    for my $op (@{$op{$type}->[$nRule]}) {
 		my ($sx, $sy, $stype, $svar, $dx, $dy, $dtype, $dvar, $accumFlag, $offset, $other) = @$op;
@@ -606,16 +548,18 @@ for my $type (@type) {
 			       . join(" ", map(%{$locvarsunset{$_}} ? ("$_\[@{[keys %{$locvarsunset{$_}}]}\]") : (), keys %locvarsunset)), $nRule);
 	    }
 
-	    # save rule
-	    if (@rule) {
-		push @particle, "rule" => \@rule;
-	    }
-	}
 
-	# .....aaaaand, save the particle.
-	push @gram, "particle" => \@particle;
-    }
+
+
+    } # end loop over type-encoded vars
+
+# .....aaaaand, save the particle.
+push @gram, "particle" => \@particle;
 }
+
+
+
+# tools
 
 my @toolxml;
 for my $tool (@tool) {
@@ -631,6 +575,9 @@ for my $tool (@tool) {
 
 $entrancePort{"hexstate"} = getTypeAsHexState($entranceType);
 $exitPort{"type"} = getType($exitType);
+
+
+# exit
 
 my (@exitLoc, @exitColor);
 my $exitRadius = $exitPort{"radius"};
@@ -652,6 +599,9 @@ for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
     }
 }
 
+
+# entrance
+
 my @entranceLoc;
 my $entranceWidth = $entrancePort{"width"};
 my $entranceHeight = $entrancePort{"height"};
@@ -660,6 +610,10 @@ for (my $w = 0; $w < $entranceWidth; ++$w) {
 	push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
     }
 }
+
+
+
+# top-level proto-XML
 
 my @game = (@gameXML,
 	    "goal" => ['@type' => "and",
@@ -777,6 +731,12 @@ my @game = (@gameXML,
 					   "type" => getType($$_[2])]),
 			       @init)
 			: ()]);
+
+
+
+
+
+# code to actually generate & print real XML from proto-XML
 
 warn "Writing XML\n" if $verbose;
 my $elt = newElement("xml" => ["game" => \@game]);
