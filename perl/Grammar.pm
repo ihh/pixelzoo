@@ -71,11 +71,6 @@ sub new_grammar {
     return $self;
 }
 
-
-
-
-
-
 # example proto-XML (before transformation)
 my $blah = "
  huffman => [ .3, { ... },
@@ -108,32 +103,17 @@ sub transform_list {
     my $trans = $self->transform_hash;
 
     while (@kv_in) {
-	# fetch key
+	# fetch key, value
 	my $k = shift @kv_in;
+	my $v = shift @kv_in;
 
-	# if key is a coderef, don't fetch value, just expand key
-	if (ref($k) && ref($k) eq 'CODE') {
-	    my @k = &$k ($self);
-	    unshift @kv_in, @k;
+	if (exists ($trans->{$k})) {
+	    # if key is a transformation, apply the transformation to value
+	    push @kv_out, &($trans->{$k}) ($self, $v);
 
 	} else {
-	    # fetch value
-	    my $v = shift @kv_in;
-
-	    # if key is a transformation, apply the transformation to value
-	    if (exists ($trans->{$k})) {
-		unshift @kv_in, &($trans->{$k}) ($self, $v);
-
-		# if value is a coderef, expand it
-	    } elsif (ref($v) && ref($v) eq 'CODE') {
-		my @v = &$v ($self);
-		croak "Value coderef returned list of length != 1" unless @v == 1;
-		unshift @kv_in, $k, $v[0];
-
-		# neither key nor value represents code or transformation, so just copy value
-	    } else {
-		push @kv_out, ($k, $self->transform_value ($v));
-	    }
+	    # neither key nor value represents code or transformation, so just copy value
+	    push @kv_out, ($k, $self->transform_value ($v));
 	}
     }
 
@@ -271,7 +251,7 @@ sub initial_transform_hash {
 	# modify
 	'.modify' => sub {
 	    my ($self, $n) = @_;
-	    my ($src, $dest, $inc, $next) = map ($n->{$_}, qw(src dest inc next));
+	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
 
 	    # SOURCE
 	    # check whether src specified
@@ -322,18 +302,57 @@ sub initial_transform_hash {
 	    # get dest location
 	    my ($destx, $desty) = @{$self->scope->loc->{$destloc}};
 
-	    # transform next rule
-	    my $transformed_next;
-	    if (defined $next) {
-		$self->push_scope;
+	    # push scope
+	    $self->push_scope;
 
-		# TODO: if $destvar is "type" or "*", then ensure either $srcmask or $inc is zero
-		# TODO: if $destvar is "type" or "*", then update $self->scope->loctype->{$destloc}
-		# TODO: set $transformed_next
-		
-		$self->pop_scope;
+	    # how to convert $inc to $offset, and update %{$self->scope->loctype}, depends on $destvar, $srcmask and $srcvar
+	    my $offset;
+	    if ($destvar eq "type") {
+		if ($srcmask != 0) {
+		    if (defined $inc) { croak "Can't do arithmetic on types" }
+		    $offset = 0;
+		    if ($srcvar eq "type") {
+			$self->scope->loctype->{$destloc} = $self->scope->loctype->{$srcloc};
+		    } else {
+			carp "Warning: copying from a var to a type";
+			$self->scope->loctype->{$destloc} = undef;
+		    }
+		} else {  # $destvar eq "type", $srcmask == 0
+		    if (defined $inc) {
+			$offset = $self->getType ($inc);
+			$self->scope->loctype->{$destloc} = $inc;
+		    } else {
+			$offset = $self->getType ($self->emptyType);
+			$self->scope->loctype->{$destloc} = $self->emptyType;
+		    }
+		}
+	    } elsif ($destvar eq "*") {
+		if ($srcmask != 0) {
+		    if (defined $inc) { croak "Can't do arithmetic on type-vars tuples" }
+		    $offset = 0;
+		    if ($srcvar eq "*") {
+			$self->scope->loctype->{$destloc} = $self->scope->loctype->{$srcloc};
+		    } else {
+			carp "Warning: copying from a var to a type-vars tuple";
+			$self->scope->loctype->{$destloc} = undef;
+		    }
+		} else {  # $destvar eq "*", $srcmask == 0
+		    if (defined $inc) {
+			$offset = $self->typeAndVars ($inc);
+			$offset = $self->getType ($inc);
+			$self->scope->loctype->{$destloc} = $inc->{'type'};
+		    } else {
+			$offset = $self->getType ($self->emptyType);
+			$self->scope->loctype->{$destloc} = $self->emptyType;
+		    }
+		}
+	    } else {
+		$offset = defined($inc) ? $inc : 0;
 	    }
 
+	    # transform next rule & pop scope
+	    my @transformed_next = defined($next) ? ('next' => [ $self->transform_value ($next) ]) : ();
+	    $self->pop_scope;
 
 	    # return
 	    return ('rule' => [ '@type' => 'modify',
@@ -344,7 +363,7 @@ sub initial_transform_hash {
 				'lshift' => $destshift,
 				'destmask' => $destmask,
 				'dest' => { 'x' => $destx, 'y' => $desty },
-				defined($transformed_next) ? ('next' => $transformed_next) : () ] );
+				@transformed_next ] );
 	},
 
 
