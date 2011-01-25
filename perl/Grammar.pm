@@ -28,9 +28,6 @@ sub new_grammar {
 	'pvoffset' => {},   # $pvoffset{$type}->{$var}
 	'ptags' => { $emptyType => [] },     # $ptags{$type} = [ ... ]
 	'hue' => [ $emptyType => [] ], 'sat' => [ $emptyType => [] ], 'bri' => [ $emptyType => [] ],   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
-	'ruleTags' => { $emptyType => [] },  # $ruleTags{$type}->[$ruleIndex] = [ "rate" => $rate, "overload" => $overload, ... ]
-	'test' => { $emptyType => [] },  # $test{$type}->[$ruleIndex]->[$testIndex] = [$x,$y,$type,$var,$opcode,$rhs,\%otherTags]
-	'op' => { $emptyType => [] },  # $op{$type}->[$ruleIndex]->[$opIndex] = [$xSrc,$ySrc,$typeSrc,$varSrc,$xDest,$yDest,$typeDest,$varDest,$accumFlag,$offset,\%otherTags]
 
 	'typeindex' => {},  # $typeindex{$type}
 
@@ -89,22 +86,29 @@ sub transform_list {
     my $trans = $self->transform_hash;
 
     while (@kv_in) {
+	# fetch key
 	my $k = shift @kv_in;
+
+	# if key is a coderef, don't fetch value, just expand key
 	if (ref($k) && ref($k) eq 'CODE') {
 	    my @k = &$k ($self);
 	    unshift @kv_in, @k;
 
 	} else {
+	    # fetch value
 	    my $v = shift @kv_in;
 
+	    # if key is a transformation, apply the transformation to value
 	    if (exists ($trans->{$k})) {
 		unshift @kv_in, &($trans->{$k}) ($self, $v);
 
+		# if value is a coderef, expand it
 	    } elsif (ref($v) && ref($v) eq 'CODE') {
 		my @v = &$v ($self);
 		croak "Value coderef returned list of length != 1" unless @v == 1;
 		unshift @kv_in, $k, $v[0];
 
+		# neither key nor value represents code or transformation, so just copy value
 	    } else {
 		push @kv_out, ($k, $self->transform_value ($v));
 	    }
@@ -131,13 +135,16 @@ sub transform_value {
 
 # initial set of transformation function keywords
 sub initial_transform_hash {
+
+    # main hash
     return {
-	'.type' => sub { getType(shift) },
-	'.tstate' => sub { getTypeAsHexState(shift) },
-	'.tmask' => sub { getMask(shift,"type") },
-	'.vmask' => sub { my $tv = shift; getMask($tv->{'type'},$tv->{'var'}) },
-	'.vshift' => sub { my $tv = shift; getShift($tv->{'type'},$tv->{'var'}) },
-	# TODO: fully-qualified particle state: .state => { 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
+	'.type' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getType($n->{'type'})) },
+	'.tstate' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getTypeAsHexState($n->{'type'})) },
+	'.tmask' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getMask($n->{'type'},'type')) },
+	'.vmask' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
+	'.vshift' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
+	'.state' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->typeAndVars($n)) },
+	'.hexstate' => sub { my ($self, $n) = @_; return ($n->{'tag'}, hexv ($self->typeAndVars($n))) },
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
@@ -824,66 +831,52 @@ sub firstNonzeroTag {
     return undef;
 }
 
+# fully-qualified particle state: .state => { 'tag' => tag, 'type' => name, 'var' => { 'varname1' => val1, 'varname2' => val2, ... } }
+sub typeAndVars {
+    my ($self, $n) = @_;
+    my $type = $n->{'type'};
+    my $state = $self->getType($type) << $self->getShift($type,"type");
+    while (my ($var, $val) = each %{$n->{'var'}}) {
+	$state = $state | ($val << $self->getShift($type,$var));
+	}
+    return $state;
+};
+
 sub getTypeAsHexState {
-    my ($type) = @_;
-    return hexv(getType($type)).("0"x12);
+    my ($self, $type) = @_;
+    return hexv($self->getType($type)).("0"x12);
 }
 
 sub getType {
-    my ($type) = @_;
+    my ($self, $type) = @_;
     if ($type =~ /^\-?\d+$/) {
 	return $type;
     }
-    croak "Type '$type' unknown" unless defined $typeindex{$type};
-    return $typeindex{$type};
+    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    return $self->typeindex->{$type};
 }
 
 sub getMask {
-    my ($type, $var) = @_;
+    my ($self, $type, $var) = @_;
     return 0 unless defined($var);
     return "ffffffffffffffff" if $var eq "*";
-    return hexv($typemask{$type}) . "000000000000" if $var eq "type";
+    return hexv($self->typemask->{$type}) . "000000000000" if $var eq "type";
     croak "Undefined type" unless defined($type);
-    croak "Type '$type' unknown" unless defined $typeindex{$type};
-    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
-    my $mask = ((1 << $pvbits{$type}->{$var}) - 1) << $pvoffset{$type}->{$var};
+    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
+    my $mask = ((1 << $self->pvbits->{$type}->{$var}) - 1) << $self->pvoffset->{$type}->{$var};
     return hexv($mask);
 }
 
 sub getShift {
-    my ($type, $var) = @_;
+    my ($self, $type, $var) = @_;
     return 0 unless defined($var);
     return 48 if $var eq "type";
     return 0 if $var eq "*";
     croak "Undefined type" unless defined($type);
-    croak "Type '$type' unknown" unless defined $typeindex{$type};
-    croak "Var '$var' unknown for type '$type'" unless defined $pvbits{$type}->{$var};
-    return $pvoffset{$type}->{$var};
-}
-
-sub parseTags {
-    my ($line, $tagRef) = @_;
-    $tagRef = [] unless defined $tagRef;
-    my $isArray = ref($tagRef) eq "ARRAY";
-    my %tagHash = $isArray ? @$tagRef : %$tagRef;
-    while ($line =~ /<\s?(\S+)\s?([^>]*|\"[^\"]*\")\s?>/g) {
-	my ($tag, $val) = ($1, $2);
-	croak "Duplicate tag $tag\n" if exists $tagHash{$tag};
-	# evaluate parenthesized expressions
-	while ($val =~ /(.*)\(([^\)]*)\)(.*)/) {
-	    my ($left, $expr, $right) = ($1, $2, $3);
-	    warn "Evaluating $expr" if $debug;
-	    my @val = eval($expr);
-	    warn "In tag $tag: expression $expr evaluated to @val" if $debug;
-	    $val = "$left@val$right";
-	}
-	if ($isArray) {
-	    push @$tagRef, ($tag => $val);
-	} else {
-	    $tagRef->{$tag} = $val;
-	}
-    }
-    return $tagRef;
+    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    croak "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
+    return $self->pvoffset->{$type}->{$var};
 }
 
 sub parseColor {
