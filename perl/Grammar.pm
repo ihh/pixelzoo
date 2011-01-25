@@ -36,22 +36,31 @@ sub new_grammar {
 # other game data
 	'boardRate' => 240,
 	'boardSize' => 128,
-	'entrancePort' => ["x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
 	'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
-	'entranceType' => $emptyType, 'exitType' => $emptyType,
+	'exitType' => $emptyType,
 
 	'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
 	'init' => [],  # $init[$n] = [$x, $y, $type]
 
-	'gameXML' => [],
+	'entrancePort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
+	'entranceType' => $emptyType,
 
 # compiler stuff
 	'compiler_warnings' => {},
 	'trans' => initial_transform_hash(),
 
 	'scope' => AutoHash->new ('tag' => [],
-				  'loc' => {},
-				  'loctype' => {}),
+				  'type' => undef,
+				  'loc' => { 'o' => [0,0],
+					     'n' => [0,-1],
+					     'e' => [+1,0],
+					     's' => [0,+1],
+					     'w' => [-1,0],
+					     'nw' => [-1,-1],
+					     'sw' => [-1,+1],
+					     'ne' => [+1,-1],
+					     'se' => [+1,+1] },
+				  'loctype' => { }),
 	'scopeStack' => [],
 	
     };
@@ -78,6 +87,16 @@ my $blah = "
 
 ";
 
+# compiler scope
+sub push_scope {
+    my ($self) = @_;
+    push @{$self->scopeStack}, $self->scope->deepcopy;
+}
+
+sub pop_scope {
+    my ($self) = @_;
+    $self->scope (pop @{$self->scopeStack});
+}
 
 # the original parse/generate lines can be reimagined as transformations on a proto-XML tree
 # the two parts in each case need to be stitched together
@@ -152,7 +171,114 @@ sub initial_transform_hash {
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
 	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (.type, .tmask, etc)
-	
+
+	# begin particle
+	'.particle' => sub {
+	    my ($self, $n) = @_;
+	    my ($name, $type, $rate, $rule) = map ($n->{$_}, qw(name type rate rule));
+
+	    $self->push_scope;
+	    $self->scope->loctype->{"o"} = $self->scope->type = $type;
+	    
+	    my $transformed_rule = $self->transform_value ($rule);
+	    $self->pop_scope;
+
+	    return ('particle' => ['name' => $name,
+				   'type' => $type,
+				   'rate' => $rate,
+				   map (exists($n->{$_}) ? ($_ => $n->{$_}) : (), qw(sync period phase)),
+				   @$transformed_rule
+		    ]);
+	},
+
+	# location identifier & type switch
+	'.bind' => sub {
+	    my ($self, $n) = @_;
+	    my ($locid, $alias, $x, $y, $case, $default) = map ($n->{$_}, qw(id alias x y case default));
+
+	    my $locid_test = $locid;
+	    if (defined($self->scope->loc->{$locid})) {
+		if (defined($alias) || defined($x) || defined($y)) {
+		    croak "Duplicate location identifier $locid";
+		}
+		($x, $y) = @{$self->scope->loc->{$locid}};
+
+	    } elsif (defined $alias) {
+		croak "In $locid: can't specify (x,y) and alias at the same time" if defined($x) || defined($y);
+		($x, $y) = @{$self->scope->loc->{$alias}};
+		$locid_test = $locid;
+	    }
+
+	    if (defined($self->scope->loctype->{$locid_test})) {
+		carp "Redundant/clashing bind: location identifier $alias already bound to type ", $self->scope->loctype->{$locid_test};
+	    }
+
+	    $self->push_scope;
+	    $self->scope->loc->{$locid} = [$x, $y];
+
+	    my $typemask = 0;
+	    my %transformed_case;
+	    while (($name, $rule) = each %$case) {
+		$typemask = $typemask | $self->typemask->{$name};
+		$self->push_scope;
+		$self->scope->loctype->{$locid} = $name;
+		$transformed_case{$name} = [ $self->transform_value ($rule) ];
+		$self->pop_scope;
+	    }
+	    my $transformed_default = [ $self->transform_value ($default) ];
+
+	    $self->pop_scope;
+
+	    return ('rule' => [ '@type' => 'switch',
+				'pos' => { 'x' => $x, 'y' => $y },
+				'mask' => hexv($typemask),
+				'rshift' => $self->getShift(undef,"type"),
+				map (('case' => ['.tstate' => ['tag' => 'state', 'type' => $_], 
+						 @{$transformed_case{$_}}]),
+				     keys %$case),
+				'default' => $transformed_default ] );
+	},
+
+
+	# location var switch
+	'.test' => sub {
+	    my ($self, $n) = @_;
+	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(id var case default));
+
+	    if (!defined($self->scope->loc->{$locid})) {
+		croak "Undefined location identifier $locid";
+	    }
+
+	    my ($x, $y) = @{$self->scope->loc->{$locid}};
+
+	    if (!defined($self->scope->loctype->{$locid})) {
+		croak "Type of location $locid is not bound, so cannot access vars";
+	    }
+
+	    my $loctype = $self->scope->loctype->{$locid};
+
+	    my %transformed_case;
+	    while (($name, $rule) = each %$case) {
+		$transformed_case{$name} = [ $self->transform_value ($rule) ];
+	    }
+	    my $transformed_default = [ $self->transform_value ($default) ];
+	    
+	    return ('rule' => [ '@type' => 'switch',
+				'pos' => { 'x' => $x, 'y' => $y },
+				'mask' => $self->getMask($loctype,$varid),
+				'rshift' => $self->getShift($loctype,$varid),
+				map (('case' => ['tstate' => $_,
+						 @{$transformed_case{$_}}]),
+				     keys %$case),
+				'default' => $transformed_default ] );
+	},
+
+
+	# modify
+
+
+	# random (build a Huffman tree)
+
     };
 }
 
@@ -160,7 +286,7 @@ sub initial_transform_hash {
 # exit (part 2)
 sub make_exit {
     my ($self) = @_;
-    my (@exitLoc, @exitColor);
+    my (@exitLoc, @exitInit);
     my $exitRadius = $exitPort{"radius"};
     my $exitx = $exitPort{'pos'}->{"x"};
     my $exity = $exitPort{'pos'}->{"y"};
@@ -175,19 +301,19 @@ sub make_exit {
 		my $ex = $exitx + $x;
 		my $ey = $exity + $y;
 		push @exitLoc, "pos" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
-		push @exitColor, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
+		push @exitInit, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
 	    }
 	}
     }
-    return (\@exitLoc, \@exitColor);
+    return (\@exitLoc, \@exitInit);
 }
 
 # entrance
 sub make_entrance {
     my ($self) = @_;
     my @entranceLoc;
-    my $entranceWidth = $entrancePort{"width"};
-    my $entranceHeight = $entrancePort{"height"};
+    my $entranceWidth = $self->entrancePort->{"width"};
+    my $entranceHeight = $self->entrancePort->{"height"};
     for (my $w = 0; $w < $entranceWidth; ++$w) {
 	for (my $h = 0; $h < $entranceHeight; ++$h) {
 	    push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
@@ -197,8 +323,6 @@ sub make_entrance {
 }
 
 # new type declaration w/ vars
-
-
 sub new_type {
     my ($self, $type, @varname_varbits) = @_;
     croak "Type '$type' is already defined" if exists $self->typemask->{$type};
@@ -244,110 +368,6 @@ sub set_type_hsb {
 
 # TODO: automatically declare 'o' at (0,0), 'w' at (-1,0), 'nw' at (-1,-1), etc.
 
-
-# bind loc (implement as switch)
-
-if (/^loc ([A-Za-z_][A-Za-z_\d]*) ?\( ?([\+\-\d]+) ?[ ,] ?([\+\-\d]+) ?\)$/) {
-    # loc
-    my ($locid, $x, $y) = ($1, $2, $3);
-    croak "Duplicate loc" if defined $loc{$locid};
-    $loc{$locid} = [$x,$y];
-    if ($x == 0 && $y == 0) {
-	$loctype{$locid} = $type;
-	$locdubious{$locid} = undef;
-    }
-    warn "loc=$locid x=$x y=$y" if $debug;
-
-
-
-# switch (part 1)
-} elsif (/^if ([A-Za-z_\d\. ]+) ?(==|=|\!=|>=|>|<=|<) ?([^ \(]+) ?(.*)$/) {
-    # test
-    my ($lhs, $op, $rhs, $ignore) = ($1, $2, $3, $4);
-# xmlboard.c parser doesn't distinguish between "=" and "==", but Perl's eval does, so...
-    $op = "==" if $op eq "=";
-
-    my ($loc, $var) = getLocVar ($lhs, "type", \%loc);
-    my $ignoreTags = parseTags($ignore);
-
-    if ($var eq "type") {
-	$loctype{$loc} = $rhs;
-	$locdubious{$loc} = firstNonzeroTag ($ignoreTags, "ignore", "overload");
-    }
-
-    if (defined($var) && $var ne "type" && $var ne "*") {
-	assertLocTypeBound (\%loctype, \%locdubious, $loc, $var, "In type $type, rule \%d: ", $nRule);
-    }
-
-    push @{$test{$type}->[$nRule]}, [@{$loc{$loc}}, $loctype{$loc}, $var, $op, $rhs, $ignoreTags];
-
-    if ($debug) {
-	warn "loc=$loc var=$var op='$op' rhs=$rhs ignore=$ignore";
-    }
-
-
-# old loop over tests (refactor into part 2 of switch)
-    my %compare;
-  TEST:
-    for my $test (@{$test{$type}->[$nRule]}) {
-	my ($tx, $ty, $ttype, $tvar, $top, $trhs, $other) = @$test;
-
-	# intercept tests of type-encoded vars
-	if ($tx == 0 && $ty == 0 && getShift($ttype,$tvar) >= 48) {
-	    my $tlhs = (($state & decv(getMask($ttype,$tvar))) >> getShift($ttype,$tvar));
-	    my $expr = "$tlhs $top $trhs";
-	    warn "Evaluating test ($tvar $top $trhs) for var-encoded type ($name), test expression is ($expr)" if $debug;
-	    if (eval ($expr)) {
-		warn "Test passed; skipping to next test" if $debug;
-		next TEST;
-	    } else {
-		warn "Test failed; skipping to next rule" if $debug;
-		next RULE;
-	    }
-	}
-
-	# resolve any dangling literal typenames
-	if ($tvar eq "type") {
-	    $trhs = getType($trhs);
-	}
-
-	# consolidate repeated tests of different fields at the same location
-	if ($top eq "=" || $top eq "==") {
-	    if (exists $compare{"$tx $ty"}) {
-		my $ruleRef = $rule[$compare{"$tx $ty"}];
-		my %prevTest = @$ruleRef;
-		my $prevMask = $prevTest{"mask"};
-		my $thisMask = getMask($ttype,$tvar);
-		if (defined($prevMask) && defined($thisMask)) {
-		    if ((decv($thisMask) & decv($prevMask)) == 0) {
-			my $prevRhs = exists($prevTest{"hexval"}) ? decv($prevTest{"hexval"}) : 0;
-			my $thisRhs = $trhs << getShift($ttype,$tvar);
-			$prevTest{"hexval"} = hexv ($prevRhs | $thisRhs);
-			$prevTest{"mask"} = hexv (decv($prevMask) | decv($thisMask));
-			@$ruleRef = %prevTest;
-			warn "Consolidated rule test: prevMask=$prevMask prevRhs=$prevRhs thisMask=$thisMask thisRhs=$thisRhs ", map(" $_=>$prevTest{$_}",keys %prevTest) if $debug;
-			next;
-		    } else {
-			compiler_warn ("Couldn't consolidate repeated tests of ($tx,$ty) in type $type, rule \%d, as masks $prevMask and $thisMask overlap", $nRule);
-		    }
-		}
-	    }
-
-	    unless (defined (firstNonzeroTag ($other, "ignore", "overload"))) {
-		$compare{"$tx $ty"} = @rule + 1;   # this should pick out the "test" child. very hacky
-	    }
-	}
-
-	# build the test hash
-	my @t = (@$other,
-		 '@op' => $top,
-		 length("$tx$ty") ? ("pos" => [ "x" => $tx, "y" => $ty ]) : (),
-		 "mask" => getMask($ttype,$tvar),
-		 "hexval" => hexv($trhs << getShift($ttype,$tvar)));
-
-	# store
-	push @rule, "test" => \@t;
-    }
 
 
 
@@ -675,14 +695,13 @@ for my $tool (@tool) {
 
 # top-level proto-XML
 
-my @game = (@gameXML,
-	    "goal" => ['@type' => "and",
+my @game = ("goal" => ['@type' => "and",
 		       "lazy" => "",
 		       "cached" => "",
 
 # place entrance and exit balloons
 		       "goal" => ['@type' => "area",
-				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "pos" => $self->entrancePort->{"pos"},
 				  "goal" => ['@type' => "balloon",
 					     "balloon" => ["text" => "ZOO ENTRANCE",
 							   "persist" => '']]],
@@ -705,7 +724,7 @@ my @game = (@gameXML,
 
 # introduce the guests
 		       "goal" => ['@type' => "area",
-				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "pos" => $self->entrancePort->{"pos"},
 				  "goal" => ['@type' => "spray",
 					     "tool" => ["name" => "entrance",
 							"size" => minPowerOfTwo (max ($entranceWidth, $entranceHeight)),
@@ -713,12 +732,12 @@ my @game = (@gameXML,
 								    "intensity" => \@entranceLoc],
 							"spray" => 1,
 							"hexstate" => getTypeAsHexState($entranceType),
-							"reserve" => $entrancePort{'count'},
+							"reserve" => $self->entrancePort->{'count'},
 							"recharge" => 0]]],
 
 # delete entrance balloon
 		       "goal" => ['@type' => "area",
-				  "pos" => ["x" => $entrancePort{"x"}, "y" => $entrancePort{"y"}],
+				  "pos" => $self->entrancePort->{"pos"},
 				  "goal" => ['@type' => "balloon"]],
 
 # print status message
@@ -777,20 +796,19 @@ my @game = (@gameXML,
 
 # that's all, folks
 
-],
-	    @toolxml,
-	    "rate" => $boardRate,
-	    "entrance" => \%entrancePort,
-	    "exit" => [%exitPort, @exitLoc],
-	    "board" => ["size" => $boardSize,
-			"grammar" => \@gram,
-			@exitColor,
-			@init > 0
-			? map (("init" => ["x" => $$_[0],
-					   "y" => $$_[1],
-					   "type" => getType($$_[2])]),
-			       @init)
-			: ()]);
+	    ],
+    @toolxml,
+    "rate" => $boardRate,
+    "exit" => [%exitPort, @exitLoc],
+    "board" => ["size" => $boardSize,
+		"grammar" => \@gram,
+		@exitInit,
+		@init > 0
+		? map (("init" => ["x" => $$_[0],
+				   "y" => $$_[1],
+				   "type" => getType($$_[2])]),
+    @init)
+    : ()]);
 
 
 

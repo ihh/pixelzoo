@@ -70,7 +70,7 @@ sub new {
 
     my $autohash2 = $autohash1->deepcopy();
 
-Creates a new AutoHash object.
+Recursively copies an AutoHash object.
 
 =cut
 
