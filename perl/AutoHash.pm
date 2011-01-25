@@ -77,7 +77,7 @@ Recursively copies an AutoHash object.
 sub deepcopy {
     my ($class, @data) = @_;
     my $copy = AutoHash->new (deepcopy_list (@data));
-    bless $copy, $class;
+    bless $copy, ref($class) ? ref($class) : $class;
     return $copy;
 }
 

@@ -3,57 +3,68 @@
 package Grammar;
 
 use strict;
-use vars '@ISA';
+use vars ('@ISA', '@EXPORT', '@EXPORT_OK');
 
 use Exporter;
-use Carp;
+use Carp qw(carp croak cluck confess);
 use XML::Twig;
+use Data::Dumper;
 
 use AutoHash;
+
 @ISA = qw (Exporter AutoHash);
-@EXPORT = qw (new from_fasta seq_ids segment AUTOLOAD);
+@EXPORT = qw (newGrammar addType addTool boardSize entrancePort exitPort xml print AUTOLOAD);
 @EXPORT_OK = @EXPORT;
 
 
 # game data structures
-sub new_grammar {
+sub newGrammar {
+    my ($class) = @_;
     my $emptyType = "empty";
     my $self = { 
 
 # constants
 	'typebits' => 16,
 	'typeshift' => 48,
-	'typemask' => 0xffff000000000000,
-	'statemask' => 0xffffffffffffffff,
+	'typemask' => 'ffff000000000000',
+	'statemask' => 'ffffffffffffffff',
 	'palette' => { 'white' => 0x007,
 		       'red' => 0x03f },
 
 # type/var dictionary
 	'empty' => $emptyType,
-	'type' => [ $emptyType ],
-	'pvar' => { $emptyType => [qw(hue saturation value)] },    # $pvar{$type} = [$var1,$var2,$var3,...]
-	'pvbits' => { $emptyType => { 'hue' => 6, 'saturation' => 3, 'value' => 3 } },   # $pvbits{$type}->{$var}
-	'pvoffset' => {},   # $pvoffset{$type}->{$var}
-	'ptags' => { $emptyType => [] },     # $ptags{$type} = [ ... ]
-	'hue' => [ $emptyType => [] ], 'sat' => [ $emptyType => [] ], 'bri' => [ $emptyType => [] ],   # $hue{$type} = [[$const1,$var1,$mul1], [$const2,$var2,$mul2], ...]   etc
-
+	'type' => [ ],
+	'pvar' => { },    # $pvar{$type} = [$var1,$var2,$var3,...]
+	'pvbits' => { },   # $pvbits{$type}->{$var}
+	'pvoffset' => { },   # $pvoffset{$type}->{$var}
+	'ptags' => { },     # $ptags{$type} = [ ... ]
 	'typeindex' => {},  # $typeindex{$type}
 
 # other game data
 	'boardRate' => 240,
 	'boardSize' => 128,
-	'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
-	'exitType' => $emptyType,
 
-	'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
-	'init' => [],  # $init[$n] = [$x, $y, $type]
-
-	'entrancePort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
-	'entranceType' => $emptyType,
+# stubs for make_game to build a game
+	'entrancePort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "rate" => 1, "width" => 1, "height" => 1, "type" => $emptyType),
+	'exitPort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6, "type" => $emptyType),
+	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire default Game structure (almost certainly not advisable)
+				'goal' => [],   # allow designer to override default Goal structure (probably not advisable)
+				'tool' => [],   # to add tools, use addTool helper
+				'type' => [ '.particle' => { 'name' => $emptyType,
+							     'var' => { 'hue' => 6, 'saturation' => 3, 'brightness' => 3 },
+							     'hue' => { 'var' => 'hue' },
+							     'sat' => { 'var' => 'saturation' },
+							     'bri' => { 'var' => 'brightness' },
+							     'rate' => 0,
+							     'rule' => ['.nop'] },
+					    # to add new particle types & rules, use addType helper
+				]),
 
 # compiler stuff
+	'debug' => 0,
+	'verbose' => 0,
 	'compiler_warnings' => {},
-	'trans' => initial_transform_hash(),
+	'trans' => transform_hash(),
 
 	'scope' => AutoHash->new ('tag' => [],
 				  'type' => undef,
@@ -72,21 +83,76 @@ sub new_grammar {
     };
 
     bless $self, $class;
-
-
     return $self;
 }
 
-# example proto-XML (before transformation)
-my $blah = "
- huffman => [ .3, { ... },
-              .5, { ... },
-              .2, { loc => { name => newLoc, x => 0, y => +1, type = whateverType,
-                    rule => { switch => { loc => newLoc, var => whateverVar,
-                               case => { val => 0, modify => { loc => newLoc, var => whateverVar, inc => 1 } },
-                               default => { ... }
 
-";
+# new type helper
+sub addType {
+    my ($self, @type_proto_xml) = @_;
+    push @{$self->xml->type}, ".particle" => { @type_proto_xml };
+}
+
+# new tool helper
+sub addTool {
+    my ($self, @tool_proto_xml) = @_;
+    push @{$self->xml->tool}, "tool" => { @tool_proto_xml };
+}
+
+
+# top-level method to generate, compile & print XML
+sub print {
+    my ($self) = @_;
+
+    warn "Parsing types...\n" if $self->debug;
+    $self->parse_types;
+
+    warn "Generating proto-XML...\n" if $self->debug;
+    my $game_proto = $self->make_game;
+    my $wrapped_proto = ["xml" => ["game" => $game_proto]];
+
+    warn "Compiling proto-XML...\n" if $self->debug;
+    my $transformed_proto = $self->transform_proto ($wrapped_proto);
+
+    warn "Generating XML...\n" if $self->debug;
+    $self->print_proto_xml ($transformed_proto);
+}
+
+
+# parse_types: parse type declarations
+sub parse_types {
+    my ($self) = @_;
+    $self->parse_node ($self->xml->type);
+}
+
+# transform_proto: take proto-XML input, parse type declarations, apply transformations
+sub transform_proto {
+    my ($self, $proto) = @_;
+    return $self->transform_value ($proto);
+}
+
+sub parse_node {
+    my ($self, $node) = @_;
+    my @node;
+    if (ref($node) && ref($node) eq 'HASH') {
+	@node = %$node;
+    } elsif (ref($node) && ref($node) eq 'ARRAY') {
+	@node = @$node;
+    } elsif (ref($node)) {
+	confess "Illegal reference type: $node";
+    } else {
+	warn "Parsing $node";
+    }
+    while (@node) {
+	my $k = shift @node;
+	my $v = shift @node;
+	if ($k eq ".particle") {
+	    $self->declare_type ($v->{'name'}, defined($v->{'var'}) ? %{$v->{'var'}} : ());
+	} else {
+	    $self->parse_node ($v);
+	}
+    }
+}
 
 # compiler scope
 sub push_scope {
@@ -98,9 +164,6 @@ sub pop_scope {
     my ($self) = @_;
     $self->scope (pop @{$self->scopeStack});
 }
-
-# the original parse/generate lines can be reimagined as transformations on a proto-XML tree
-# the two parts in each case need to be stitched together
 
 # transform a list of (key,value) pairs
 sub transform_list {
@@ -115,7 +178,7 @@ sub transform_list {
 
 	if (exists ($trans->{$k})) {
 	    # if key is a transformation, apply the transformation to value
-	    push @kv_out, &($trans->{$k}) ($self, $v);
+	    push @kv_out, &{$trans->{$k}} ($self, $v);
 
 	} else {
 	    # neither key nor value represents code or transformation, so just copy value
@@ -130,19 +193,18 @@ sub transform_list {
 sub transform_value {
     my ($self, $v) = @_;
     if (ref($v) && ref($v) eq 'HASH') {
-	return $self->transform_list (%$v);
+	return { $self->transform_list (%$v) };
     } elsif (ref($v) && ref($v) eq 'ARRAY') {
-	return $self->transform_list (@$v);
+	return [ $self->transform_list (@$v) ];
     } elsif (ref($v)) {
-	croak "Illegal reference type: $v";
+	confess "Illegal reference type: $v";
     }
     # default: $v is a scalar
     return $v;
 }
 
-
-# initial set of transformation function keywords
-sub initial_transform_hash {
+# transformation functions
+sub transform_hash {
 
     # main hash
     return {
@@ -161,18 +223,21 @@ sub initial_transform_hash {
 	# begin particle
 	'.particle' => sub {
 	    my ($self, $n) = @_;
-	    my %n = @$n;
+	    my %n = ref($n) eq 'ARRAY' ? @$n : %$n;
 	    my ($type, $rate, $rule, $hue, $sat, $bri) = map ($n{$_}, qw(name rate rule));
 	    my @particle;
 
+	    warn "Transforming particle '$type'\n" if $self->debug;
+
 	    $self->push_scope;
 	    $self->scope->loctype->{"o"} = $type;
+	    $self->scope->type($type);
 
 	    my $transformed_rule = $self->transform_value ($rule);
 	    $self->pop_scope;
 
 	    push @particle, ('particle' => ['name' => $type,
-					    'type' => getType($type),
+					    'type' => $self->getType($type),
 					    'rate' => $rate,
 					    map (exists($n->{$_}) ? ($_ => $n->{$_}) : (), qw(sync period phase)),
 					    $self->parse_color ($n, $type, "hue", 1 << 16),
@@ -190,12 +255,12 @@ sub initial_transform_hash {
 	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
 
 	    if (defined($self->scope->loctype->{$locid})) {
-		carp "Redundant/clashing bind: location identifier $locid already bound to type ", $self->scope->loctype->{$locid};
+		cluck "Redundant/clashing bind: location identifier $locid already bound to type ", $self->scope->loctype->{$locid};
 	    }
 
 	    if (defined($self->scope->loc->{$locid})) {
 		if (defined($x) || defined($y)) {
-		    croak "Duplicate location identifier $locid";
+		    confess "Duplicate location identifier $locid";
 		}
 		($x, $y) = @{$self->scope->loc->{$locid}};
 	    }
@@ -204,7 +269,7 @@ sub initial_transform_hash {
 	    $self->scope->loc->{$locid} = [$x, $y];
 
 	    my %transformed_case;
-	    while (($name, $rule) = each %$case) {
+	    while (my ($name, $rule) = each %$case) {
 		$self->push_scope;
 		$self->scope->loctype->{$locid} = $name;
 		$transformed_case{$name} = [ $self->transform_value ($rule) ];
@@ -216,7 +281,7 @@ sub initial_transform_hash {
 
 	    return ('rule' => [ '@type' => 'switch',
 				'pos' => { 'x' => $x, 'y' => $y },
-				'mask' => hexv($self->typemask),
+				'mask' => $self->typemask,
 				'rshift' => $self->typeshift,
 				map (('case' => ['.tstate' => ['tag' => 'state', 'type' => $_], 
 						 @{$transformed_case{$_}}]),
@@ -231,19 +296,16 @@ sub initial_transform_hash {
 	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
 
 	    if (!defined($self->scope->loc->{$locid})) {
-		croak "Undefined location identifier $locid";
+		confess "Undefined location identifier $locid";
 	    }
 
 	    my ($x, $y) = @{$self->scope->loc->{$locid}};
 
-	    if (!defined($self->scope->loctype->{$locid})) {
-		croak "Type of location $locid is not bound, so cannot access vars";
-	    }
-
+	    $self->assertLocTypeBound ($locid, $varid);
 	    my $loctype = $self->scope->loctype->{$locid};
 
 	    my %transformed_case;
-	    while (($name, $rule) = each %$case) {
+	    while (my ($name, $rule) = each %$case) {
 		$transformed_case{$name} = [ $self->transform_value ($rule) ];
 	    }
 	    my $transformed_default = [ $self->transform_value ($default) ];
@@ -274,10 +336,11 @@ sub initial_transform_hash {
 
 		# check src location defined
 		if (!defined($self->scope->loc->{$srcloc})) {
-		    croak "Undefined location identifier $locid";
+		    confess "Undefined location identifier $srcloc";
 		}
 
 		# get source mask & shift
+		$self->assertLocTypeBound ($srcloc, $srcvar);
 		my $srctype = $self->scope->loctype->{$srcloc};
 		$srcmask = $self->getMask ($srctype, $srcvar);
 		$srcshift = $self->getShift ($srctype, $srcvar);
@@ -302,10 +365,11 @@ sub initial_transform_hash {
 
 	    # check dest location defined
 	    if (!defined($self->scope->loc->{$destloc})) {
-		croak "Undefined location identifier $locid";
+		confess "Undefined location identifier $destloc";
 	    }
 
 	    # get dest mask & shift
+	    $self->assertLocTypeBound ($destloc, $destvar);
 	    my $desttype = $self->scope->loctype->{$destloc};
 	    $destmask = $self->getMask ($desttype, $destvar);
 	    $destshift = $self->getShift ($desttype, $destvar);
@@ -320,12 +384,12 @@ sub initial_transform_hash {
 	    my $offset;
 	    if ($destvar eq "type") {
 		if ($srcmask != 0) {
-		    if (defined $inc) { croak "Can't do arithmetic on types" }
+		    if (defined $inc) { confess "Can't do arithmetic on types" }
 		    $offset = 0;
 		    if ($srcvar eq "type") {
 			$self->scope->loctype->{$destloc} = $self->scope->loctype->{$srcloc};
 		    } else {
-			carp "Warning: copying from a var to a type";
+			cluck "Warning: copying from a var to a type";
 			$self->scope->loctype->{$destloc} = undef;
 		    }
 		} else {  # $destvar eq "type", $srcmask == 0
@@ -339,12 +403,12 @@ sub initial_transform_hash {
 		}
 	    } elsif ($destvar eq "*") {
 		if ($srcmask != 0) {
-		    if (defined $inc) { croak "Can't do arithmetic on type-vars tuples" }
+		    if (defined $inc) { confess "Can't do arithmetic on type-vars tuples" }
 		    $offset = 0;
 		    if ($srcvar eq "*") {
 			$self->scope->loctype->{$destloc} = $self->scope->loctype->{$srcloc};
 		    } else {
-			carp "Warning: copying from a var to a type-vars tuple";
+			cluck "Warning: copying from a var to a type-vars tuple";
 			$self->scope->loctype->{$destloc} = undef;
 		    }
 		} else {  # $destvar eq "*", $srcmask == 0
@@ -378,6 +442,12 @@ sub initial_transform_hash {
 	},
 
 
+	# nop (no operation)
+	'.nop' => sub {
+	    return ('rule' => [ '@type' => 'modify',
+				'destmask' => 0 ]);
+	},
+
 	# random (build a Huffman tree)
 	'.huff' => sub {
 	    my ($self, $n) = @_;
@@ -389,7 +459,7 @@ sub initial_transform_hash {
 		push @node, { 'prob' => $prob, 'rule' => $self->transform_value($rule) };
 	    }
 
-	    croak "Can't build a Huffman tree with no nodes" unless @node > 0;
+	    confess "Can't build a Huffman tree with no nodes" unless @node > 0;
 
 	    while (@node > 1) {
 		@node = sort { $b->{'prob'} <=> $a->{'prob'} } @node;
@@ -440,16 +510,16 @@ sub huff_to_rule {
 # color helper
 sub parse_color {
     my ($self, $n, $type, $tag, $mul) = @_;
-    my @n = @$n;
+    my @n = ref($n) eq 'ARRAY' ? @$n : %$n;
     my @col;
     while (@n) {
 	my $k = shift @n;
 	my $v = shift @n;
 	if ($k eq $tag) {
 	    push @col, 'color' => [ exists ($v->{'var'})
-				    ? ('mask' => getMask($type,$v->{'var'}),
-							    'rshift' => getShift($type,$v->{'var'}),
-							    'hexmul' => hexv ($mul * $v->{'mul'}))
+				    ? ('mask' => $self->getMask($type,$v->{'var'}),
+				       'rshift' => $self->getShift($type,$v->{'var'}),
+				       'hexmul' => hexv ($mul * exists($v->{'mul'}) ? $v->{'mul'} : 1))
 				    : (),
 				    exists ($v->{'inc'}) ? ('inc' => $v->{'inc'}) : () ];
 	}
@@ -464,22 +534,23 @@ sub illegal_name {
 }
 
 # new type declaration w/ vars
-sub new_type {
+sub declare_type {
     my ($self, $type, @varname_varbits) = @_;
-    croak "'$type' is an illegal type name" if illegal_name($type);
-    croak "Type '$type' is already defined" if exists $self->typeindex->{$type};
+    warn "Declaring particle '$type'\n" if $self->debug;
+    confess "'$type' is an illegal type name" if illegal_name($type);
+    confess "Type '$type' is already defined" if exists $self->typeindex->{$type};
     $self->typeindex->{$type} = @{$self->type};
     push @{$self->type}, $type;
     my ($offset, $typeoffset) = (0, 0);  # offset of next var in varbits & typebits
     while (@varname_varbits) {
 	my $varname = shift @varname_varbits;
 	my $varbits = shift @varname_varbits;
-	croak "In type $type, '$varname' is an illegal var name" if illegal_name($varname);
+	confess "In type $type, '$varname' is an illegal var name" if illegal_name($varname);
 	push @{$self->pvar->{$type}}, $varname;
 	$self->pvbits->{$type}->{$varname} = $varbits;
 	$self->pvoffset->{$type}->{$varname} = $offset;
 	$offset += $varbits;
-	croak "More than ", $self->typeshift, " bits of vars for type $type" if $offset > $self->typeshift;
+	confess "More than ", $self->typeshift, " bits of vars for type $type" if $offset > $self->typeshift;
     }
 }
 
@@ -487,8 +558,8 @@ sub new_type {
 sub make_entrance_brush {
     my ($self) = @_;
     my @entranceLoc;
-    my $entranceWidth = $self->entrancePort->{"width"};
-    my $entranceHeight = $self->entrancePort->{"height"};
+    my $entranceWidth = $self->entrancePort->width;
+    my $entranceHeight = $self->entrancePort->height;
     for (my $w = 0; $w < $entranceWidth; ++$w) {
 	for (my $h = 0; $h < $entranceHeight; ++$h) {
 	    push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
@@ -503,9 +574,9 @@ sub make_entrance_brush {
 sub make_exit {
     my ($self) = @_;
     my (@exitLoc, @exitInit);
-    my $exitRadius = $exitPort{"radius"};
-    my $exitx = $exitPort{'pos'}->{"x"};
-    my $exity = $exitPort{'pos'}->{"y"};
+    my $exitRadius = $self->exitPort->radius;
+    my $exitx = $self->exitPort->pos->{"x"};
+    my $exity = $self->exitPort->pos->{"y"};
     for (my $x = -$exitRadius; $x <= $exitRadius; ++$x) {
 	for (my $y = -$exitRadius; $y <= $exitRadius; ++$y) {
 	    my $r = sqrt($x*$x+$y*$y);
@@ -526,55 +597,62 @@ sub make_exit {
 
 
 # top-level proto-XML
-
-my @game = ("goal" => ['@type' => "and",
-		       "lazy" => "",
-		       "cached" => "",
+sub make_game {
+    my ($self) = @_;
+    if (@{$self->xml->game} > 0) {
+	return $self->xml->game;
+    }
+    my ($exitLoc, $exitInit) = $self->make_exit;
+    my @game = (@{$self->xml->goal} > 0
+		? @{$self->xml->goal}   # allow designer to override default Goal structure
+		: ("goal" => ['@type' => "and",
+			      "lazy" => "",
+			      "cached" => "",
 
 # place entrance and exit balloons
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->{"pos"},
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "ENTRANCE",
-							   "persist" => '']]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->entrancePort->pos,
+					 "goal" => ['@type' => "balloon",
+						    "balloon" => ["text" => "ENTRANCE",
+								  "persist" => '']]],
 
-		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'pos'},
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "EXIT",
-							   "persist" => '']]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->exitPort->pos,
+					 "goal" => ['@type' => "balloon",
+						    "balloon" => ["text" => "EXIT",
+								  "persist" => '']]],
 
 # print hello message
-		       "goal" => ['@type' => "print",
-				  "text" => "Welcome to level 1!\n" .
-				  "Guide guests safely to the Exit.\n"],
+			      "goal" => ['@type' => "print",
+					 "text" => "Welcome to level 1!\n" .
+					 "Guide guests safely to the Exit.\n"],
 
 # open the guest exit (currently the only exit)
-		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalCounting"],
+			      "goal" => ['@type' => "setexit",
+					 "state" => "PortalCounting"],
 
 
 # introduce the guests
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->{"pos"},
-				  "goal" => ['@type' => "spray",
-					     "tool" => ["name" => "entrance",
-							"size" => minPowerOfTwo (max ($entranceWidth, $entranceHeight)),
-							"brush" => ["center" => ["x" => int($entranceWidth/2), "y" => int($entranceHeight/2)],
-								    "intensity" => $self->make_entrance_brush()],
-							"spray" => 1,
-							"hexstate" => getTypeAsHexState($entranceType),
-							"reserve" => $self->entrancePort->{'count'},
-							"recharge" => 0]]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->entrancePort->pos,
+					 "goal" => ['@type' => "spray",
+						    "tool" => ["name" => "entrance",
+							       "size" => minPowerOfTwo (max ($self->entrancePort->width, $self->entrancePort->height)),
+							       "brush" => ["center" => ["x" => int($self->entrancePort->width/2), "y" => int($self->entrancePort->height/2)],
+									   "intensity" => $self->make_entrance_brush],
+							       "spray" => 1,
+							       "hexstate" => $self->getTypeAsHexState($self->entrancePort->type),
+							       "reserve" => $self->entrancePort->count,
+							       "recharge" => 0]]],
 
 # delete entrance balloon
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->{"pos"},
-				  "goal" => ['@type' => "balloon"]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->entrancePort->{"pos"},
+					 "goal" => ['@type' => "balloon"]],
 
 # print status message
-		       "goal" => ['@type' => "print",
-				  "text" => "The zoo is now closed to further guests.\nGuide all remaining guests to the Exit."],
+			      "goal" => ['@type' => "print",
+					 "text" => "The zoo is now closed to further guests.\nGuide all remaining guests to the Exit."],
 
 
 # more goals here... e.g.,
@@ -590,66 +668,70 @@ my @game = ("goal" => ['@type' => "and",
 #  place signposts
 #  build cages, place animals in cages
 
+# Could add a stub here, e.g.  @{$self-xml->midgoal},  but seems a bit premature without concrete use case
+
 # wait for player to reach the guest exit count
-		       "goal" => ['@type' => "exit",
-				  "state" => "PortalCounting",
-				  "count" => ["min" => $exitPort{"count"}]],
+			      "goal" => ['@type' => "exit",
+					 "state" => "PortalCounting",
+					 "count" => ["min" => $self->exitPort->count]],
 
 # delete exit balloon
-		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'pos'},
-				  "goal" => ['@type' => "balloon"]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->exitPort->pos,
+					 "goal" => ['@type' => "balloon"]],
 
 # place "UNLOCKED" balloon at exit
-		       "goal" => ['@type' => "area",
-				  "pos" => $exitPort{'pos'},
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "UNLOCKED!"]]],
+			      "goal" => ['@type' => "area",
+					 "pos" => $self->exitPort->pos,
+					 "goal" => ['@type' => "balloon",
+						    "balloon" => ["text" => "UNLOCKED!"]]],
 
 # print "UNLOCKED" message
-		       "goal" => ['@type' => "print",
-				  "text" => "Exit unlocked! You could try the next level, if there was one."],
+			      "goal" => ['@type' => "print",
+					 "text" => "Exit unlocked! You could try the next level, if there was one."],
 
 # "unlock" the guest exit achievment
-		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalUnlocked"],
+			      "goal" => ['@type' => "setexit",
+					 "state" => "PortalUnlocked"],
 
 
 # more goals here... (e.g., steal the owner's HQ exit)
 
 
 # print win message
-		       "goal" => ['@type' => "print",
-				  "text" => "YOU WIN! Congratulations."],
+			      "goal" => ['@type' => "print",
+					 "text" => "YOU WIN! Congratulations."],
 
 # set the game state to WIN!!!
-		       "goal" => ['@type' => "setgame",
-				  "state" => "GameWon"],
+			      "goal" => ['@type' => "setgame",
+					 "state" => "GameWon"],
 
 # that's all, folks
+		   ]),
 
-	    ],
-    @toolxml,
-    "rate" => $boardRate,
-    "exit" => [%exitPort, @exitLoc],
-    "board" => ["size" => $boardSize,
-		"grammar" => \@gram,
-		@exitInit,
-		@init > 0
-		? map (("init" => ["x" => $$_[0],
-				   "y" => $$_[1],
-				   "type" => getType($$_[2])]),
-    @init)
-    : ()]);
+# end of default Goal structure
+		@{$self->xml->tool},
+		"rate" => $self->boardRate,
+		"exit" => [%{$self->exitPort}, @$exitLoc],
+		"board" => ["size" => $self->boardSize,
+			    "grammar" => $self->xml->type,
+			    @$exitInit]
+	);
 
-
-
+    return \@game;
+}
 
 
 # code to actually generate & print real XML from proto-XML
 
-sub print_xml {
-    my $elt = new_XML_element("xml" => ["game" => \@game]);
+sub print_proto_xml {
+    my ($self, $proto) = @_;
+
+    if ($self->debug) {
+	warn "Proto-XML passed to XML::Twig:\n", Data::Dumper->Dump($proto);
+    }
+
+    my $elt = new_XML_element(@$proto);
     my $twig = XML::Twig->new(pretty_print => 'indented');
     $twig->set_root($elt);
 
@@ -658,20 +740,19 @@ sub print_xml {
 
 
 sub compiler_warn {
-    my ($fmt, @args) = @_;
+    my ($self, $fmt, @args) = @_;
     my $warning = sprintf ($fmt, @args);
-    my $nw = ++$compiler_warnings{$fmt};
+    my $nw = ++$self->compiler_warnings->{$fmt};
     if ($nw == 1) { warn "$warning\n" }
     elsif ($nw == 2) { warn "(suppressing further warnings of the form \"", substr($fmt,0,20), "...\")\n" }
 }
 
 sub assertLocTypeBound {
-    my ($loctype, $locdubious, $loc, $var, $fmt, @args) = @_;
-    if (!defined($loctype->{$loc})) {
-	croak sprintf($fmt,@args) . "Can't access $loc.$var because type of $loc is not bound\n";
-    }
-    if (defined $locdubious->{$loc}) {
-	compiler_warn ("${fmt}Accessing $loc.$var: type of $loc may be dubious due to previous $locdubious->{$loc} clause", @args);
+    my ($self, $loc, $var) = @_;
+    if ($var ne "type" && $var ne "*") {
+	if (!defined($self->loctype->{$loc})) {
+	    confess "In switch rule for ", $self->scope->type, ": Can't access $loc.$var because type of $loc is not bound\n";
+	}
     }
 }
 
@@ -702,21 +783,22 @@ sub getTypeAsHexState {
 
 sub getType {
     my ($self, $type) = @_;
+    confess "Undefined type" unless defined $type;
     if ($type =~ /^\-?\d+$/) {
 	return $type;
     }
-    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    confess "Type '$type' unknown" unless defined $self->typeindex->{$type};
     return $self->typeindex->{$type};
 }
 
 sub getMask {
     my ($self, $type, $var) = @_;
     return 0 unless defined($var);
-    return hexv($self->statemask) if $var eq "*";
-    return hexv($self->typemask) if $var eq "type";
-    croak "Undefined type" unless defined($type);
-    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
-    croak "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
+    return $self->statemask if $var eq "*";
+    return $self->typemask if $var eq "type";
+    confess "Undefined type" unless defined($type);
+    confess "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    confess "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
     my $mask = ((1 << $self->pvbits->{$type}->{$var}) - 1) << $self->pvoffset->{$type}->{$var};
     return hexv($mask);
 }
@@ -726,9 +808,9 @@ sub getShift {
     return 0 unless defined($var);
     return $self->typeshift if $var eq "type";
     return 0 if $var eq "*";
-    croak "Undefined type" unless defined($type);
-    croak "Type '$type' unknown" unless defined $self->typeindex->{$type};
-    croak "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
+    confess "Undefined type" unless defined($type);
+    confess "Type '$type' unknown" unless defined $self->typeindex->{$type};
+    confess "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
     return $self->pvoffset->{$type}->{$var};
 }
 
@@ -740,18 +822,18 @@ sub getLocVar {
     if ($expr =~ /(.+)\.(.+)/) {
 	($loc, $var) = ($1, $2);
     } else {
-	croak "In '$expr': no default var in that context" unless defined $defaultVar;
+	confess "In '$expr': no default var in that context" unless defined $defaultVar;
 	($loc, $var) = ($expr, $defaultVar);
     }
     if (defined($loc) && defined($locRef) && !defined($locRef->{$loc})) {
-	croak "In '$expr': no location identifier '$loc' has been bound\n";
+	confess "In '$expr': no location identifier '$loc' has been bound\n";
     }
     return ($loc, $var);
 }
 
 sub hexv {
     my ($val) = @_;
-    croak "Undefined value" unless defined $val;
+    confess "Undefined value" unless defined $val;
     my $hex = sprintf ("%x", $val);
     return $hex;
 }
@@ -819,3 +901,6 @@ sub minPowerOfTwo {
     while ($p < $x) { $p *= 2 }
     return $p;
 }
+
+
+1;

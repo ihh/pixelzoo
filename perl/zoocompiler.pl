@@ -5,7 +5,11 @@ use Getopt::Long;
 use Pod::Usage;
 use XML::Twig;
 use Carp;
+
 use FindBin qw($Bin); 
+use lib $Bin;
+
+use Grammar;
 
 # parse options
 my $man = 0;
@@ -18,7 +22,7 @@ GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$de
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
-pod2usage(2) unless @ARGV == 1;
+# pod2usage(2) unless @ARGV == 1;
 
 unless (defined $cpp) {
     $cpp = "$Bin/convert-proc-to-define.pl | gcc -x c -E";
@@ -28,6 +32,12 @@ unless (defined $cpp) {
 
 $verbose = 1 if $debug;
 
+
+# test
+my $gram = Grammar->newGrammar;
+$gram->verbose($verbose);
+$gram->debug($debug);
+$gram->print;
 
 
 __END__
