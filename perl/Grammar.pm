@@ -155,16 +155,16 @@ sub initial_transform_hash {
 	# begin particle
 	'.particle' => sub {
 	    my ($self, $n) = @_;
-	    my ($name, $type, $rate, $rule) = map ($n->{$_}, qw(name type rate rule));
+	    my ($name, $rate, $rule) = map ($n->{$_}, qw(name rate rule));
 
 	    $self->push_scope;
-	    $self->scope->loctype->{"o"} = $self->scope->type = $type;
+	    $self->scope->loctype->{"o"} = $name;
 	    
 	    my $transformed_rule = $self->transform_value ($rule);
 	    $self->pop_scope;
 
 	    return ('particle' => ['name' => $name,
-				   'type' => $type,
+				   'type' => getType($name),
 				   'rate' => $rate,
 				   map (exists($n->{$_}) ? ($_ => $n->{$_}) : (), qw(sync period phase)),
 				   @$transformed_rule
@@ -368,6 +368,27 @@ sub initial_transform_hash {
 
 
 	# random (build a Huffman tree)
+	'.huff' => sub {
+	    my ($self, $n) = @_;
+	    my @n = @$n;
+	    my @node;
+	    while (@n) {
+		my $prob = shift @n;
+		my $rule = shift @n;
+		push @node, { 'prob' => $prob, 'rule' => $self->transform_value($rule) };
+	    }
+
+	    croak "Can't build a Huffman tree with no nodes" unless @node > 0;
+
+	    while (@node > 1) {
+		@node = sort { $b->{'prob'} <=> $a->{'prob'} } @node;
+		my $l = shift @node;
+		my $r = shift @node;
+		unshift @node, { 'prob' => $l->{'prob'} + $r->{'prob'}, 'rule' => undef, 'l' => $l, 'r' => $r ] };
+	    }
+
+	    return huff_to_rule ($node[0]);
+	},
 
 
 	# overload
@@ -375,6 +396,17 @@ sub initial_transform_hash {
     };
 }
 
+# helper to convert Huffman tree to random rule tree
+sub huff_to_rule {
+    my ($node) = @_;
+    if (defined ($node->{'rule'})) {
+	return ("rule" => $node->{'rule'});
+    }
+    return ('rule' => [ '@type' => 'random',
+			'prob' => $node->{'l'}->{'prob'} / ($node->{'l'}->{'prob'} + $node->{'r'}->{'prob'}),
+			'pass' => huff_to_rule ($node->{'l'}),
+			'fail' => huff_to_rule ($node->{'r'}) ] );
+}
 
 # exit (part 2)
 sub make_exit {
