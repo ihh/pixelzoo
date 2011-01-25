@@ -194,23 +194,17 @@ sub initial_transform_hash {
 	# location identifier & type switch
 	'.bind' => sub {
 	    my ($self, $n) = @_;
-	    my ($locid, $alias, $x, $y, $case, $default) = map ($n->{$_}, qw(id alias x y case default));
+	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
 
-	    my $locid_test = $locid;
+	    if (defined($self->scope->loctype->{$locid})) {
+		carp "Redundant/clashing bind: location identifier $locid already bound to type ", $self->scope->loctype->{$locid};
+	    }
+
 	    if (defined($self->scope->loc->{$locid})) {
-		if (defined($alias) || defined($x) || defined($y)) {
+		if (defined($x) || defined($y)) {
 		    croak "Duplicate location identifier $locid";
 		}
 		($x, $y) = @{$self->scope->loc->{$locid}};
-
-	    } elsif (defined $alias) {
-		croak "In $locid: can't specify (x,y) and alias at the same time" if defined($x) || defined($y);
-		($x, $y) = @{$self->scope->loc->{$alias}};
-		$locid_test = $locid;
-	    }
-
-	    if (defined($self->scope->loctype->{$locid_test})) {
-		carp "Redundant/clashing bind: location identifier $alias already bound to type ", $self->scope->loctype->{$locid_test};
 	    }
 
 	    $self->push_scope;
@@ -243,7 +237,7 @@ sub initial_transform_hash {
 	# location var switch
 	'.test' => sub {
 	    my ($self, $n) = @_;
-	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(id var case default));
+	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
 
 	    if (!defined($self->scope->loc->{$locid})) {
 		croak "Undefined location identifier $locid";
@@ -275,9 +269,89 @@ sub initial_transform_hash {
 
 
 	# modify
+	'.modify' => sub {
+	    my ($self, $n) = @_;
+	    my ($src, $dest, $inc, $next) = map ($n->{$_}, qw(src dest inc next));
+
+	    # SOURCE
+	    # check whether src specified
+	    my ($srcloc, $srcvar, $srcmask, $srcshift);
+	    if (defined $src) {
+		($srcloc, $srcvar) = map ($src->{$_}, qw(loc var));
+		$srcloc = "o" unless defined $srcloc;
+		$srcvar = "*" unless defined $srcvar;
+
+		# check src location defined
+		if (!defined($self->scope->loc->{$srcloc})) {
+		    croak "Undefined location identifier $locid";
+		}
+
+		# get source mask & shift
+		my $srctype = $self->scope->loctype->{$srcloc};
+		$srcmask = $self->getMask ($srctype, $srcvar);
+		$srcshift = $self->getShift ($srctype, $srcvar);
+
+	    } else {
+		# no src specified, so zero before inc'ing
+		$srcmask = $srcshift = 0;
+	    }
+
+	    # get src location
+	    my ($srcx, $srcy) = @{$self->scope->loc->{$srcloc}};
+
+
+	    # DESTINATION
+	    # check whether dest specified
+	    my ($destloc, $destvar, $destmask, $destshift);
+	    if (defined $dest) {
+		($destloc, $destvar) = map ($dest->{$_}, qw(loc var));
+	    }
+	    $destloc = "o" unless defined $destloc;
+	    $destvar = $srcvar unless defined $destvar;
+
+	    # check dest location defined
+	    if (!defined($self->scope->loc->{$destloc})) {
+		croak "Undefined location identifier $locid";
+	    }
+
+	    # get dest mask & shift
+	    my $desttype = $self->scope->loctype->{$destloc};
+	    $destmask = $self->getMask ($desttype, $destvar);
+	    $destshift = $self->getShift ($desttype, $destvar);
+
+	    # get dest location
+	    my ($destx, $desty) = @{$self->scope->loc->{$destloc}};
+
+	    # transform next rule
+	    my $transformed_next;
+	    if (defined $next) {
+		$self->push_scope;
+
+		# TODO: if $destvar is "type" or "*", then ensure either $srcmask or $inc is zero
+		# TODO: if $destvar is "type" or "*", then update $self->scope->loctype->{$destloc}
+		# TODO: set $transformed_next
+		
+		$self->pop_scope;
+	    }
+
+
+	    # return
+	    return ('rule' => [ '@type' => 'modify',
+				'src' => { 'x' => $srcx, 'y' => $srcy },
+				'srcmask' => $srcmask,
+				'rshift' => $srcshift,
+				'inc' => $inc,
+				'lshift' => $destshift,
+				'destmask' => $destmask,
+				'dest' => { 'x' => $destx, 'y' => $desty },
+				defined($transformed_next) ? ('next' => $transformed_next) : () ] );
+	},
 
 
 	# random (build a Huffman tree)
+
+
+	# overload
 
     };
 }
@@ -322,9 +396,17 @@ sub make_entrance {
     return \@entranceLoc;
 }
 
+
+# check if type or var name is illegal
+sub illegal_name {
+    my ($name) = @_;
+    return $name eq "type" || $name eq "*" || $name =~ /^[\.\@]/;
+}
+
 # new type declaration w/ vars
 sub new_type {
     my ($self, $type, @varname_varbits) = @_;
+    croak "'$type' is an illegal type name" if illegal_name($type);
     croak "Type '$type' is already defined" if exists $self->typemask->{$type};
     push @{$self->type}, $type;
     my ($offset, $typeoffset) = (0, 0);  # offset of next var in varbits & typebits
@@ -332,7 +414,7 @@ sub new_type {
 	my $varname = shift @varname_varbits;
 	my $varbits = shift @varname_varbits;
 	my $intype = $varname =~ s/\!$//;
-	croak "You cannot use 'type' as a var name for $type" if $varname eq "type";
+	croak "In type $type, '$varname' is an illegal var name" if illegal_name($varname);
 	push @{$pvar{$type}}, $varname;
 	$pvbits{$type}->{$varname} = $varbits;
 	if ($intype) {
