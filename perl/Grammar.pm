@@ -19,6 +19,8 @@ use AutoHash;
 sub new_grammar {
     my $emptyType = "empty";
     my $self = { 
+
+# type info
 	'empty' => $emptyType,
 	'type' => [ $emptyType ],
 	'typesize' => { $emptyType => 1 },  # number of actual Particle's represented by each type
@@ -31,15 +33,16 @@ sub new_grammar {
 
 	'typeindex' => {},  # $typeindex{$type}
 
-	'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
-	'init' => [],  # $init[$n] = [$x, $y, $type]
-
 # other game data
 	'boardRate' => 240,
 	'boardSize' => 128,
 	'entrancePort' => ["x" => 0, "y" => 0, "count" => 0, "rate" => 1, "width" => 1, "height" => 1],
 	'exitPort' => ["pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6],
 	'entranceType' => $emptyType, 'exitType' => $emptyType,
+
+	'tool' => [],  # $tool[$n] = [$name, $size, $type, $reserve, $recharge, $sprayRate, \@overwriteType]
+	'init' => [],  # $init[$n] = [$x, $y, $type]
+
 	'gameXML' => [],
 
 # compiler stuff
