@@ -117,14 +117,14 @@ Creates a new AutoHash object.
 # AUTOLOAD method
 sub AUTOLOAD {
     my ($self, @args) = @_;
-    confess "AutoHash method called on non-reference" unless ref($self);
-
     my $sub = our $AUTOLOAD;
+
+    confess "AutoHash method $sub called on non-reference" unless ref($self);
+
     $sub =~ s/.*:://;  # strip off module path
 
     # check for DESTROY
     return if $sub eq "DESTROY";
-
 
     # get or set
     return @args 
