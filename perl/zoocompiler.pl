@@ -9,7 +9,7 @@ use Carp;
 use FindBin qw($Bin); 
 use lib $Bin;
 
-use Grammar;
+use Level;
 
 # parse options
 my $man = 0;
@@ -34,7 +34,7 @@ $verbose = 1 if $debug;
 
 
 # test
-my $gram = Grammar->newGrammar;
+my $gram = Level->newLevel;
 $gram->verbose($verbose);
 $gram->debug($debug);
 $gram->print;
