@@ -18,13 +18,7 @@ TARGETS := test_red_black_tree sdltest sdlgame
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
-ZGFILES   := $(wildcard t/*.zg)
-XMLFILES  := $(subst .zg,.xml,$(ZGFILES))
-
-ZGHEADERS   := $(wildcard t/*.zgh)
-CPPHEADERS  := $(subst .zgh,.h,$(ZGHEADERS))
-
-POLYHEADER := t/poly.h
+XMLFILES := t/simple.xml
 
 ifneq (,$(findstring debug,$(MAKECMDGOALS)))
 # 'debug' was specified:
@@ -36,7 +30,7 @@ endif
 all: lib targets xml
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES) $(CPPHEADERS) $(POLYHEADER)
+	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
 
 test: targets
 	bin/sdlgame t/testgame.xml
@@ -46,14 +40,9 @@ oldtest: all
 
 targets: $(XFILES)
 
-xml: poly $(XMLFILES)
+xml: $(XMLFILES)
 
 lib: $(OFILES)
-
-poly: $(POLYHEADER)
-
-$(POLYHEADER): perl/makepoly.pl
-	perl/makepoly.pl >$@
 
 bin/%:  test/%.c $(OFILES)
 	@test -e bin || mkdir bin
@@ -63,11 +52,8 @@ bin/%:  test/%.c $(OFILES)
 
 .SECONDARY:
 
-%.xml: %.zg perl/zoocompiler.pl $(CPPHEADERS)
-	perl/zoocompiler.pl -v -savepp $*.pp -INC $(dir $*) $(DEBUG) $< >$@
-
-%.h: %.zgh
-	perl/convert-proc-to-define.pl $< >$@
+t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm
+	perl/zoocompiler.pl >$@
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
