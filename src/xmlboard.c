@@ -105,7 +105,7 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent) {
 }
 
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
-  xmlNode *ruleNode, *failNode;
+  xmlNode *ruleNode;
   ParticleRule* rule;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;

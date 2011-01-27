@@ -154,19 +154,21 @@ sub make_game {
 	return $self->xml->game;
     }
 
-    my @game = (@{$self->xml->goal} > 0
-		? @{$self->xml->goal}   # allow designer to override default Goal structure
-		: $self->make_goal,
+    my @game = ("board" => ["size" => $self->boardSize,
+			    "grammar" => $self->xml->type,
+			    $self->make_exit_init,
+			    @{$self->xml->init}],
+
+		"rate" => $self->boardRate,
 
 		@{$self->xml->tool},
 
 		$self->make_exit,
 
-		"rate" => $self->boardRate,
-		"board" => ["size" => $self->boardSize,
-			    "grammar" => $self->xml->type,
-			    $self->make_exit_init,
-			    @{$self->xml->init}]
+		@{$self->xml->goal} > 0
+		? @{$self->xml->goal}   # allow designer to override default Goal structure
+		: $self->make_goal,
+
 	);
 
     return \@game;
@@ -327,11 +329,11 @@ sub transform_hash {
 
 	    push @particle, ('particle' => ['name' => $type,
 					    'type' => $self->getType($type),
-					    'rate' => $rate,
-					    map (exists($n->{$_}) ? ($_ => $n->{$_}) : (), qw(sync period phase)),
 					    $self->parse_color ($n, $type, "hue", 1 << 16),
 					    $self->parse_color ($n, $type, "sat", 1 << 8),
 					    $self->parse_color ($n, $type, "bri", 1),
+					    map (exists($n->{$_}) ? ($_ => $n->{$_}) : (), qw(sync period phase)),
+					    'rate' => $rate,
 					    @$transformed_rule
 			     ]);
 

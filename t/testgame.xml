@@ -1,72 +1,13 @@
   <game>
-
-    <goal><and>
-      <lazy/>
-      <goal><cached>
-	<goal><population>
-	  <type>1</type>
-	  <type>2</type>
-	  <count><min>20</min></count>
-	</population></goal>
-      </cached></goal>
-      <goal><cached>
-	<reps>3</reps>
-	<goal><print>
-	  <message>You have reached your population target.
-	    I will say this three times.</message>
-	</print></goal>
-      </cached></goal>
-      <goal><cached>
-	<goal><repeat>
-	  <reps>5</reps>
-	  <goal><print>
-	    <message>(pauses for effect)</message>
-	  </print></goal>
-	</repeat></goal>
-      </cached></goal>
-      <goal><cached>
-	<goal><and>
-	  <lazy/>
-	  <cached/>
-	  <goal><print><message>The portal is opening...</message></print></goal>
-	  <goal><print><message>...wait for it...</message></print></goal>
-	  <goal><print><message>...right about NOW!</message></print></goal>
-	</and></goal>
-      </cached></goal>
-      <goal><cached>
-	<goal><setexit>
-	  <exitstate>PortalCounting</exitstate>
-	</setexit></goal>
-      </cached></goal>
-    </and></goal>
-
-    <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
-
-    <tool>
-      <name>tool1</name>
-      <size>8</size>
-      <hexstate>1000000000000</hexstate>
-      <reserve>100</reserve>
-      <recharge>100</recharge>
-    </tool>
-
-    <tool>
-      <name>tool2</name>
-      <size>4</size>
-      <hexstate>2000000000000</hexstate>
-      <reserve>50</reserve>
-      <recharge>100</recharge>
-    </tool>
-
-    <entrance><x>10</x><y>10</y><hexstate>10000</hexstate><count>10</count><rate>.001</rate></entrance>
-    <exit><loc><x>12</x><y>12</y></loc><type>1</type><count>10</count></exit>
     <board><size>128</size>
 
       <grammar>
 
 	<particle>
+	  <name>drifter</name>
+	  <type>1</type>
+	  <colrule><mask>3</mask><hexmul>80000</hexmul></colrule><colrule><mask>0</mask><hexinc>80ffff</hexinc></colrule>
 	  <sync/>
-	  <name>drifter</name><type>1</type><colrule><mask>3</mask><hexmul>80000</hexmul></colrule><colrule><mask>0</mask><hexinc>80ffff</hexinc></colrule>
 	  <rate>.03</rate>
 
 	  <rule><random><prob>.05</prob>
@@ -85,9 +26,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -99,9 +40,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -116,9 +57,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -130,9 +71,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><y>-1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -162,9 +103,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -176,9 +117,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -193,9 +134,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -207,9 +148,9 @@
 			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
 			    <next><rule><modify>
-				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
+				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				      <dest><y>-1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				      <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -222,4 +163,64 @@
 	</particle>
 	
       </grammar><init><x>64</x><y>64</y><type>1</type></init></board>
+
+    <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
+
+    <tool>
+      <name>tool1</name>
+      <size>8</size>
+      <hexstate>1000000000000</hexstate>
+      <reserve>100</reserve>
+      <recharge>100</recharge>
+    </tool>
+
+    <tool>
+      <name>tool2</name>
+      <size>4</size>
+      <hexstate>2000000000000</hexstate>
+      <reserve>50</reserve>
+      <recharge>100</recharge>
+    </tool>
+
+    <exit><type>1</type><pos><x>12</x><y>12</y></pos></exit>
+
+    <goal><and>
+      <lazy/>
+      <goal><cached>
+	<goal><population>
+	  <type>1</type>
+	  <type>2</type>
+	  <count><min>20</min></count>
+	</population></goal>
+      </cached></goal>
+      <goal><cached>
+	<reps>3</reps>
+	<goal><print>
+	  <message>You have reached your population target.
+	    I will say this three times.</message>
+	</print></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><repeat>
+	  <reps>5</reps>
+	  <goal><print>
+	    <message>(pauses for effect)</message>
+	  </print></goal>
+	</repeat></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><and>
+	  <lazy/>
+	  <cache/>
+	  <goal><print><message>The portal is opening...</message></print></goal>
+	  <goal><print><message>...wait for it...</message></print></goal>
+	  <goal><print><message>...right about NOW!</message></print></goal>
+	</and></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><setexit>
+	  <exitstate>PortalCounting</exitstate>
+	</setexit></goal>
+      </cached></goal>
+    </and></goal>
   </game>

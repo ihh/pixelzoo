@@ -93,7 +93,7 @@ sub make_goal {
     my ($exitLoc, $exitInit) = $self->make_exit;
 
     return ("goal" => ["and" => ["lazy" => "",
-				 "cached" => "",
+				 "cache" => "",
 
 # place entrance and exit balloons
 				 "goal" => ["area" => ["pos" => $self->entrancePort->pos,

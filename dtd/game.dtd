@@ -1,13 +1,11 @@
-<!DOCTYPE game [
-
-<!ELEMENT game (goal,rate,exit,board,tool+)>
+<!ELEMENT game (board,rate,tool+,exit,goal)>
 
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
 <!ELEMENT cage (wall+,goal,count?,points?)>
 <!ELEMENT population ((type|hextype)+,count?,entropy?)>
-<!ELEMENT repeat (goal,reps)>
-<!ELEMENT cached (goal,reps?)>
+<!ELEMENT repeat (reps,goal)>
+<!ELEMENT cached (reps?,goal)>
 <!ELEMENT and (lazy?,cache?,goal+)>
 <!ELEMENT or (lazy?,cache?,goal+)>
 <!ELEMENT not (goal)>
@@ -24,7 +22,7 @@
 <!ELEMENT print (message)>
 <!ELEMENT place (balloon)>
 
-<!ELEMENT pos (x,y)>
+<!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
 
@@ -41,6 +39,8 @@
 <!ELEMENT toolname (#PCDATA)>
 <!ELEMENT message (#PCDATA)>
 <!ELEMENT prob (#PCDATA)>
+<!ELEMENT lazy EMPTY>
+<!ELEMENT cache EMPTY>
 
 <!ELEMENT balloon (pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,rate?)>
 <!ELEMENT color (#PCDATA)>
@@ -53,7 +53,7 @@
 <!ELEMENT fade (#PCDATA)>
 <!ELEMENT rate (#PCDATA)>
 
-<!ELEMENT tool (size,name,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
@@ -61,7 +61,10 @@
 <!ELEMENT pattern (pixel+)>
 <!ELEMENT pixel (x,y,(state|hexstate))>
 <!ELEMENT overwrite (disallow*,(state|hexstate)*,mask?)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT hexstate (#PCDATA)>
 
+<!ELEMENT name (#PCDATA)>
 <!ELEMENT spray (#PCDATA)>
 <!ELEMENT reserve (#PCDATA)>
 <!ELEMENT recharge (#PCDATA)>
@@ -70,12 +73,14 @@
 <!ELEMENT hide EMPTY>
 
 <!ELEMENT exit ((type|hextype),pos+)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT hextype (#PCDATA)>
 
 <!ELEMENT board (size,grammar,init*)>
 <!ELEMENT grammar (particle+)>
 <!ELEMENT init (x,y,(state|hexstate|type|hextype))>
 
-<!ELEMENT particle (name,sync?,rule,rate?,(type|hextype),colrule*)>
+<!ELEMENT particle (name,(type|hextype),colrule*,sync?,rate?,rule)>
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
@@ -93,19 +98,18 @@
 <!ELEMENT case ((state|hexstate)?,rule)>
 <!ELEMENT default (rule)>
 
-<!ELEMENT modify (src?,dest?,srcmask?,rshift?,(inc|hexinc)?,lshift?,destmask?)>
+<!ELEMENT modify (src?,srcmask?,rshift?,(inc|hexinc)?,lshift?,destmask?,dest?,next?)>
 <!ELEMENT src (x?,y?)>
 <!ELEMENT dest (x?,y?)>
 <!ELEMENT srcmask (#PCDATA)>
 <!ELEMENT destmask (#PCDATA)>
 <!ELEMENT lshift (#PCDATA)>
+<!ELEMENT next (rule)>
 
-<!ELEMENT random (prob,pass?,fail?)>
+<!ELEMENT random (prob?,pass?,fail?)>
 <!ELEMENT pass (rule)>
 <!ELEMENT fail (rule)>
 
 <!ELEMENT overload (slow,fast)>
 <!ELEMENT slow (rule)>
 <!ELEMENT fast (rule)>
-
-]>
