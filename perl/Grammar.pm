@@ -21,6 +21,7 @@ use AutoHash;
 sub newGrammar {
     my ($class) = @_;
     my $emptyType = "empty";
+    my $orig = "o";
     my $self = { 
 
 # constants
@@ -32,7 +33,6 @@ sub newGrammar {
 		       'red' => 0x03f },
 
 # type/var dictionary
-	'empty' => $emptyType,
 	'type' => [ ],
 	'pvar' => { },    # $pvar{$type} = [$var1,$var2,$var3,...]
 	'pvbits' => { },   # $pvbits{$type}->{$var}
@@ -44,6 +44,13 @@ sub newGrammar {
 	'boardRate' => 240,
 	'boardSize' => 128,
 
+# XML
+	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire default Game structure (almost certainly not advisable)
+				'goal' => [],   # allow designer to override default Goal structure (probably not advisable)
+				'init' => [],   # allow designed to initialize Board
+				'tool' => [],   # to add tools, use addTool helper
+				'type' => []),
+
 # compiler stuff
 	'debug' => 0,
 	'verbose' => 0,
@@ -52,7 +59,7 @@ sub newGrammar {
 
 	'scope' => AutoHash->new ('tag' => [],
 				  'type' => undef,
-				  'loc' => { 'o' => [0,0],
+				  'loc' => { $orig => [0,0],
 					     'n' => [0,-1],
 					     'e' => [+1,0],
 					     's' => [0,+1],
@@ -63,10 +70,32 @@ sub newGrammar {
 					     'se' => [+1,+1] },
 				  'loctype' => { }),
 	'scopeStack' => [],
-	
+
+# other helpers
+	'empty' => $emptyType,
+	'origin' => $orig,
+	'dir' => AutoHash->new ('n' => AutoHash->new ( 'x' => 0,  'y' => -1 ),
+				'e' => AutoHash->new ( 'x' => +1, 'y' => 0 ),
+				's' => AutoHash->new ( 'x' => 0,  'y' => +1 ),
+				'w' => AutoHash->new ( 'x' => -1, 'y' => 0 ),
+				'nw' => AutoHash->new ( 'x' => -1, 'y' => -1 ),
+				'ne' => AutoHash->new ( 'x' => +1, 'y' => -1 ),
+				'se' => AutoHash->new ( 'x' => +1, 'y' => +1 ),
+				'sw' => AutoHash->new ( 'x' => -1, 'y' => +1 )),
+
+# end of $self
     };
 
     bless $self, $class;
+
+    $self->addType ('name' => $emptyType,
+		    'var' => { 'hue' => 6, 'saturation' => 3, 'brightness' => 3 },
+		    'hue' => { 'var' => 'hue' },
+		    'sat' => { 'var' => 'saturation' },
+		    'bri' => { 'var' => 'brightness' },
+		    'rate' => 0,
+		    'rule' => ['.nop']);
+
     return $self;
 }
 
@@ -102,11 +131,42 @@ sub print {
     $self->print_proto_xml ($transformed_proto);
 }
 
-# dummy make_game method
-# subclasses should override
+# dummy methods subclasses should override
+sub make_goal {
+    return ();
+}
+
+sub make_exit {
+    return ();
+}
+
+sub make_exit_init {
+    return ();
+}
+
+# top-level proto-XML
 sub make_game {
     my ($self) = @_;
-    return ();
+    if (@{$self->xml->game} > 0) {
+	return $self->xml->game;
+    }
+
+    my @game = (@{$self->xml->goal} > 0
+		? @{$self->xml->goal}   # allow designer to override default Goal structure
+		: $self->make_goal,
+
+		@{$self->xml->tool},
+
+		$self->make_exit,
+
+		"rate" => $self->boardRate,
+		"board" => ["size" => $self->boardSize,
+			    "grammar" => $self->xml->type,
+			    $self->make_exit_init,
+			    @{$self->xml->init}]
+	);
+
+    return \@game;
 }
 
 # parse_types: parse type declarations
@@ -147,12 +207,16 @@ sub parse_node {
 # compiler scope
 sub push_scope {
     my ($self) = @_;
-    push @{$self->scopeStack}, $self->scope->deepcopy;
+#    warn "Pushing scope" if $self->debug;
+    my $scope = $self->scope->deepcopy;
+    push @{$self->scopeStack}, $scope;
 }
 
 sub pop_scope {
     my ($self) = @_;
-    $self->scope (pop @{$self->scopeStack});
+#    warn "Popping scope" if $self->debug;
+    my $scope = pop @{$self->scopeStack};
+    $self->scope ($scope);
 }
 
 # transform a list of (key,value) pairs
@@ -220,7 +284,7 @@ sub transform_hash {
 	    warn "Transforming particle '$type'\n" if $self->debug;
 
 	    $self->push_scope;
-	    $self->scope->loctype->{"o"} = $type;
+	    $self->scope->loctype->{$self->origin} = $type;
 	    $self->scope->type($type);
 
 	    my $transformed_rule = $self->transform_value ($rule);
@@ -243,6 +307,7 @@ sub transform_hash {
 	'.bind' => sub {
 	    my ($self, $n) = @_;
 	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
+	    $case = {} unless defined $case;
 
 	    if (defined($self->scope->loctype->{$locid})) {
 		cluck "Redundant/clashing bind: location identifier $locid already bound to type ", $self->scope->loctype->{$locid};
@@ -262,10 +327,10 @@ sub transform_hash {
 	    while (my ($name, $rule) = each %$case) {
 		$self->push_scope;
 		$self->scope->loctype->{$locid} = $name;
-		$transformed_case{$name} = [ $self->transform_value ($rule) ];
+		$transformed_case{$name} = $self->transform_value ($rule);
 		$self->pop_scope;
 	    }
-	    my $transformed_default = [ $self->transform_value ($default) ];
+	    my $transformed_default = $self->transform_value ($default);
 
 	    $self->pop_scope;
 
@@ -273,10 +338,10 @@ sub transform_hash {
 				'pos' => { 'x' => $x, 'y' => $y },
 				'mask' => $self->typemask,
 				'rshift' => $self->typeshift,
-				map (('case' => ['.tstate' => ['tag' => 'state', 'type' => $_], 
+				map (('case' => ['state' => $self->getType($_),
 						 @{$transformed_case{$_}}]),
 				     keys %$case),
-				'default' => $transformed_default ] );
+				defined($default) ? ('default' => $transformed_default) : () ] );
 	},
 
 
@@ -284,6 +349,7 @@ sub transform_hash {
 	'.test' => sub {
 	    my ($self, $n) = @_;
 	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
+	    $case = {} unless defined $case;
 
 	    if (!defined($self->scope->loc->{$locid})) {
 		confess "Undefined location identifier $locid";
@@ -296,18 +362,18 @@ sub transform_hash {
 
 	    my %transformed_case;
 	    while (my ($name, $rule) = each %$case) {
-		$transformed_case{$name} = [ $self->transform_value ($rule) ];
+		$transformed_case{$name} = $self->transform_value ($rule);
 	    }
-	    my $transformed_default = [ $self->transform_value ($default) ];
+	    my $transformed_default = $self->transform_value ($default);
 	    
 	    return ('rule' => [ '@type' => 'switch',
 				'pos' => { 'x' => $x, 'y' => $y },
 				'mask' => $self->getMask($loctype,$varid),
 				'rshift' => $self->getShift($loctype,$varid),
-				map (('case' => ['tstate' => $_,
+				map (('case' => ['state' => $_,
 						 @{$transformed_case{$_}}]),
 				     keys %$case),
-				'default' => $transformed_default ] );
+				defined($default) ? ('default' => $transformed_default) : () ] );
 	},
 
 
@@ -321,7 +387,8 @@ sub transform_hash {
 	    my ($srcloc, $srcvar, $srcmask, $srcshift);
 	    if (defined $src) {
 		($srcloc, $srcvar) = map ($src->{$_}, qw(loc var));
-		$srcloc = "o" unless defined $srcloc;
+
+		$srcloc = $self->origin unless defined $srcloc;
 		$srcvar = "*" unless defined $srcvar;
 
 		# check src location defined
@@ -336,6 +403,9 @@ sub transform_hash {
 		$srcshift = $self->getShift ($srctype, $srcvar);
 
 	    } else {
+		$srcloc = $self->origin;
+		$srcvar = "*";
+
 		# no src specified, so zero before inc'ing
 		$srcmask = $srcshift = 0;
 	    }
@@ -343,14 +413,13 @@ sub transform_hash {
 	    # get src location
 	    my ($srcx, $srcy) = @{$self->scope->loc->{$srcloc}};
 
-
 	    # DESTINATION
 	    # check whether dest specified
 	    my ($destloc, $destvar, $destmask, $destshift);
 	    if (defined $dest) {
 		($destloc, $destvar) = map ($dest->{$_}, qw(loc var));
 	    }
-	    $destloc = "o" unless defined $destloc;
+	    $destloc = $self->origin unless defined $destloc;
 	    $destvar = $srcvar unless defined $destvar;
 
 	    # check dest location defined
@@ -387,12 +456,12 @@ sub transform_hash {
 			$offset = $self->getType ($inc);
 			$self->scope->loctype->{$destloc} = $inc;
 		    } else {
-			$offset = $self->getType ($self->emptyType);
-			$self->scope->loctype->{$destloc} = $self->emptyType;
+			$offset = $self->getType ($self->empty);
+			$self->scope->loctype->{$destloc} = $self->empty;
 		    }
 		}
 	    } elsif ($destvar eq "*") {
-		if ($srcmask != 0) {
+		if (decv($srcmask) != 0) {
 		    if (defined $inc) { confess "Can't do arithmetic on type-vars tuples" }
 		    $offset = 0;
 		    if ($srcvar eq "*") {
@@ -407,8 +476,8 @@ sub transform_hash {
 			$offset = $self->getType ($inc);
 			$self->scope->loctype->{$destloc} = $inc->{'type'};
 		    } else {
-			$offset = $self->getType ($self->emptyType);
-			$self->scope->loctype->{$destloc} = $self->emptyType;
+			$offset = $self->getType ($self->empty);
+			$self->scope->loctype->{$destloc} = $self->empty;
 		    }
 		}
 	    } else {
@@ -416,7 +485,7 @@ sub transform_hash {
 	    }
 
 	    # transform next rule & pop scope
-	    my @transformed_next = defined($next) ? ('next' => [ $self->transform_value ($next) ]) : ();
+	    my @transformed_next = defined($next) ? ('next' => $self->transform_value ($next)) : ();
 	    $self->pop_scope;
 
 	    # return
@@ -424,7 +493,7 @@ sub transform_hash {
 				'src' => { 'x' => $srcx, 'y' => $srcy },
 				'srcmask' => $srcmask,
 				'rshift' => $srcshift,
-				'inc' => $inc,
+				defined($inc) ? ('inc' => $inc) : (),
 				'lshift' => $destshift,
 				'destmask' => $destmask,
 				'dest' => { 'x' => $destx, 'y' => $desty },
@@ -452,7 +521,7 @@ sub transform_hash {
 	    confess "Can't build a Huffman tree with no nodes" unless @node > 0;
 
 	    while (@node > 1) {
-		@node = sort { $b->{'prob'} <=> $a->{'prob'} } @node;
+		@node = sort { $a->{'prob'} <=> $b->{'prob'} } @node;
 		my $l = shift @node;
 		my $r = shift @node;
 		unshift @node, { 'prob' => $l->{'prob'} + $r->{'prob'}, 'rule' => undef, 'l' => $l, 'r' => $r };
@@ -465,7 +534,7 @@ sub transform_hash {
 	'.load' => sub {
 	    my ($self, $n) = @_;
 	    return ('rule' => [ '@type' => 'overload',
-				map (($_ => transform_value ($n->{$_})), qw(slow fast)) ] );
+				map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] );
 	},
 
 
@@ -488,12 +557,13 @@ sub transform_hash {
 sub huff_to_rule {
     my ($node) = @_;
     if (defined ($node->{'rule'})) {
-	return ("rule" => $node->{'rule'});
+	my $rule = $node->{'rule'};
+	return ref($rule) eq 'HASH' ? %$rule : @$rule;
     }
     return ('rule' => [ '@type' => 'random',
 			'prob' => $node->{'l'}->{'prob'} / ($node->{'l'}->{'prob'} + $node->{'r'}->{'prob'}),
-			'pass' => huff_to_rule ($node->{'l'}),
-			'fail' => huff_to_rule ($node->{'r'}) ] );
+			'pass' => [ huff_to_rule ($node->{'l'}) ],
+			'fail' => [ huff_to_rule ($node->{'r'}) ] ] );
 }
 
 
@@ -571,7 +641,7 @@ sub compiler_warn {
 
 sub assertLocTypeBound {
     my ($self, $loc, $var) = @_;
-    if ($var ne "type" && $var ne "*") {
+    if (defined($var) && $var ne "type" && $var ne "*") {
 	if (!defined($self->loctype->{$loc})) {
 	    confess "In switch rule for ", $self->scope->type, ": Can't access $loc.$var because type of $loc is not bound\n";
 	}

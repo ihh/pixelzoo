@@ -55,6 +55,12 @@ bin/%:  test/%.c $(OFILES)
 t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm
 	perl/zoocompiler.pl >$@
 
+xml-verbose: perl/zoocompiler.pl perl/Grammar.pm
+	perl/zoocompiler.pl -verbose >t/simple.xml
+
+xml-debug: perl/zoocompiler.pl perl/Grammar.pm
+	perl/zoocompiler.pl -debug >t/simple.xml
+
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@

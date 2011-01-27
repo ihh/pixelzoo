@@ -37,6 +37,20 @@ $verbose = 1 if $debug;
 my $gram = Level->newLevel;
 $gram->verbose($verbose);
 $gram->debug($debug);
+
+# add some stuff
+my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .1, .1, .001);
+$gram->addType ('name' => 'cement',
+		'rate' => $cementRate,
+		'rule' => $gram->bindMoore ({$gram->empty => $gram->moveTo }));
+
+$gram->addTool ('name' => 'Cement spray',
+		'size' => 8,
+		'.tstate' => { 'tag' => 'hexstate', 'type' => 'cement' },
+		'reserve' => 100,
+		'recharge' => 100);
+
+# print
 $gram->print;
 
 

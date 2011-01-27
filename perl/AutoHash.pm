@@ -75,9 +75,9 @@ Recursively copies an AutoHash object.
 =cut
 
 sub deepcopy {
-    my ($class, @data) = @_;
-    my $copy = AutoHash->new (deepcopy_list (@data));
-    bless $copy, ref($class) ? ref($class) : $class;
+    my ($self) = @_;
+    my $copy = AutoHash->new (deepcopy_list (%$self));
+    bless $copy, ref($self);
     return $copy;
 }
 
@@ -89,6 +89,8 @@ sub deepcopy_list {
 	    push @copy, {%$v};
 	} elsif (ref($v) && ref($v) eq 'ARRAY') {
 	    push @copy, {@$v};
+	} elsif (ref($v) && ref($v) eq 'AutoHash') {
+	    push @copy, $v->deepcopy;
 	} else {
 	    # default: $v is a scalar, or a non-copiable reference
 	    push @copy, $v;
