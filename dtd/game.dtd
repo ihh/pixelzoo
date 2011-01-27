@@ -5,6 +5,24 @@
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
 <!ELEMENT cage (wall+,goal,count?,points?)>
+<!ELEMENT population ((type|hextype)+,count?,entropy?)>
+<!ELEMENT repeat (goal,reps)>
+<!ELEMENT cached (goal,reps?)>
+<!ELEMENT and (lazy?,cache?,goal+)>
+<!ELEMENT or (lazy?,cache?,goal+)>
+<!ELEMENT not (goal)>
+<!ELEMENT true EMPTY>
+<!ELEMENT false EMPTY>
+<!ELEMENT maybe (prob)>
+<!ELEMENT time (min?,max?)>
+<!ELEMENT testexit (count,exitstate)>
+<!ELEMENT testgame (count,gamestate)>
+<!ELEMENT charge (toolname,reserve?)>
+<!ELEMENT setexit (exitstate)>
+<!ELEMENT setgame (gamestate)>
+<!ELEMENT usetool (tool)>
+<!ELEMENT print (message)>
+<!ELEMENT place (balloon)>
 
 <!ELEMENT pos (x,y)>
 <!ELEMENT x (#PCDATA)>
@@ -12,11 +30,28 @@
 
 <!ELEMENT points (min?,max?)>
 <!ELEMENT count (min?,max?)>
+<!ELEMENT entropy (min?,max?)>
+
 <!ELEMENT min (#PCDATA)>
 <!ELEMENT max (#PCDATA)>
-
 <!ELEMENT wall (#PCDATA)>
+<!ELEMENT reps (#PCDATA)>
+<!ELEMENT exitstate (#PCDATA)>
+<!ELEMENT gamestate (#PCDATA)>
+<!ELEMENT toolname (#PCDATA)>
+<!ELEMENT message (#PCDATA)>
+<!ELEMENT prob (#PCDATA)>
 
+<!ELEMENT balloon (pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,rate?)>
+<!ELEMENT color (#PCDATA)>
+<!ELEMENT hexcolor (#PCDATA)>
+<!ELEMENT text (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT ttl (#PCDATA)>
+<!ELEMENT rise (#PCDATA)>
+<!ELEMENT zoom (#PCDATA)>
+<!ELEMENT fade (#PCDATA)>
+<!ELEMENT rate (#PCDATA)>
 
 
 <!ELEMENT rule (switch|modify|random|overload|goal) #REQUIRED>
