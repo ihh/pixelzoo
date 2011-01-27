@@ -128,6 +128,9 @@ sub AUTOLOAD {
     # check for DESTROY
     return if $sub eq "DESTROY";
 
+    # check we have the element
+    confess "AutoHash: attempt to access element $sub, which is not in our hash" unless exists($self->{$sub});
+
     # get or set
     return @args 
 	? ($self->{$sub} = shift(@args))

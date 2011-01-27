@@ -27,7 +27,8 @@ sub newLevel {
 	      'entrancePort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "rate" => 1, "width" => 1, "height" => 1, "type" => $emptyType),
 	      'exitPort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6, "type" => $emptyType),
 
-	      # heklpers
+	      # helpers
+	      'neighbor' => 'nbr',
 	);
     bless $self, $class;
 
@@ -199,39 +200,45 @@ sub make_goal {
 
 # addType helpers
 sub bindDirs {
-    my ($self, $dirs, $cases, $default, $loc) = @_;
-    $loc = "loc" unless defined $loc;
-    my $prob = 1 / @$dirs;
-    return ['.huff' => [map (($prob => ['.bind' => {'loc' => $loc,
-						    'x' => $self->dir->{$_}->x,
-						    'y' => $self->dir->{$_}->y,
-						    defined($cases) ? ('case' => $cases) : (),
-						    defined($default) ? ('default' => $default) : ()}]),
-			     @$dirs)]];
+    my ($self, $dirs, $totalProb, $cases, $default, $loc) = @_;
+    $loc = $self->neighbor unless defined $loc;
+    confess "Not an ARRAY" unless ref($dirs) eq 'ARRAY';
+    my $prob = $totalProb / @$dirs;
+    return map (($prob => ['.bind' => {'loc' => $loc,
+				       'x' => $self->dir->{$_}->x,
+				       'y' => $self->dir->{$_}->y,
+				       defined($cases) ? ('case' => $cases) : (),
+				       defined($default) ? ('default' => $default) : ()}]),
+		@$dirs);
 }
 
 sub bindMoore {
-    my ($self, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(n e s w)], $cases, $default, $loc);
+    my ($self, $totalProb, $cases, $default, $loc) = @_;
+    return $self->bindDirs ([qw(n e s w)], $totalProb, $cases, $default, $loc);
 }
 
 sub bindBishop {
-    my ($self, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(nw ne se sw)], $cases, $default, $loc);
+    my ($self, $totalProb, $cases, $default, $loc) = @_;
+    return $self->bindDirs ([qw(nw ne se sw)], $totalProb, $cases, $default, $loc);
 }
 
-sub bindVonNeumann {
-    my ($self, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(n ne e se s sw w nw)], $cases, $default, $loc);
+sub bindNeumann {
+    my ($self, $totalProb, $cases, $default, $loc) = @_;
+    return $self->bindDirs ([qw(n ne e se s sw w nw)], $totalProb, $cases, $default, $loc);
 }
+
+sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindDirs (1, $cases, $default, $loc)]] }
+sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
+sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
+sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
 
 sub moveTo {
     my ($self, $loc, $next) = @_;
-    $loc = "loc" unless defined $loc;
+    $loc = $self->neighbor unless defined $loc;
     return ['.modify' => { 'src' => { 'loc' => 'o' },
 			   'dest' => { 'loc' => $loc },
 			   'next' => [ '.modify' => { 'dest' => { 'loc' => 'o' },
-						      'set' => $self->empty,
+						      'set' => { 'type' => $self->empty },
 						      defined($next) ? ('next' => $next) : () } ] } ];
 }
 

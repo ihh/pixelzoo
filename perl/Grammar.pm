@@ -57,8 +57,7 @@ sub newGrammar {
 	'compiler_warnings' => {},
 	'trans' => transform_hash(),
 
-	'scope' => AutoHash->new ('tag' => [],
-				  'type' => undef,
+	'scope' => AutoHash->new ('type' => undef,
 				  'loc' => { $orig => [0,0],
 					     'n' => [0,-1],
 					     'e' => [+1,0],
@@ -117,17 +116,21 @@ sub addTool {
 sub print {
     my ($self) = @_;
 
-    warn "Parsing types...\n" if $self->debug;
+    warn "Parsing types...\n" if $self->verbose;
     $self->parse_types;
 
-    warn "Generating proto-XML...\n" if $self->debug;
+    warn "Generating proto-XML...\n" if $self->verbose;
     my $game_proto = $self->make_game;
     my $wrapped_proto = ["xml" => ["game" => $game_proto]];
 
-    warn "Compiling proto-XML...\n" if $self->debug;
+    if ($self->debug) {
+	warn "Proto-XML passed to Grammar::transform_proto:\n", Data::Dumper->Dump($wrapped_proto);
+    }
+
+    warn "Compiling proto-XML...\n" if $self->verbose;
     my $transformed_proto = $self->transform_proto ($wrapped_proto);
 
-    warn "Generating XML...\n" if $self->debug;
+    warn "Generating XML...\n" if $self->verbose;
     $self->print_proto_xml ($transformed_proto);
 }
 
@@ -219,9 +222,17 @@ sub pop_scope {
     $self->scope ($scope);
 }
 
+sub indent {
+    my ($self) = @_;
+    return " " x @{$self->scopeStack};
+}
+
 # transform a list of (key,value) pairs
 sub transform_list {
     my ($self, @kv_in) = @_;
+
+    warn "Transforming list (@kv_in)" if $self->debug;
+
     my @kv_out;
     my $trans = $self->transform_hash;
 
@@ -230,8 +241,17 @@ sub transform_list {
 	my $k = shift @kv_in;
 	my $v = shift @kv_in;
 
+	# if key is a transformation, apply the transformation to value
 	if (exists ($trans->{$k})) {
-	    # if key is a transformation, apply the transformation to value
+	    if ($self->debug) {
+		if (ref($v) && ref($v) eq 'ARRAY') {
+		    warn "Evaluating $k(@$v)";
+		} elsif (ref($v) && ref($v) eq 'HASH') {
+		    warn "Evaluating $k(", join(" ",%$v), ")";
+		} else {
+		    warn "Evaluating $k($v)";
+		}
+	    }
 	    push @kv_out, &{$trans->{$k}} ($self, $v);
 
 	} else {
@@ -246,6 +266,9 @@ sub transform_list {
 # transform a single value
 sub transform_value {
     my ($self, $v) = @_;
+
+    warn "Transforming value $v" if $self->debug;
+
     if (ref($v) && ref($v) eq 'HASH') {
 	return { $self->transform_list (%$v) };
     } elsif (ref($v) && ref($v) eq 'ARRAY') {
@@ -257,18 +280,29 @@ sub transform_value {
     return $v;
 }
 
+# transformation function helper
+sub force_hash {
+    my ($n) = @_;
+    if (ref($n) && ref($n) eq 'HASH') {
+	return $n;
+    } elsif (ref($n) && ref($n) eq 'ARRAY') {
+	return {@$n};
+    }
+    confess "Not a HASH";
+}
+
 # transformation functions
 sub transform_hash {
 
     # main hash
     return {
-	'.type' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getType($n->{'type'})) },
-	'.tstate' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getTypeAsHexState($n->{'type'})) },
-	'.tmask' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getMask($n->{'type'},'type')) },
-	'.vmask' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
-	'.vshift' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
-	'.state' => sub { my ($self, $n) = @_; return ($n->{'tag'}, $self->typeAndVars($n)) },
-	'.hexstate' => sub { my ($self, $n) = @_; return ($n->{'tag'}, hexv ($self->typeAndVars($n))) },
+	'.type' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getType($n->{'type'})) },
+	'.tstate' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getTypeAsHexState($n->{'type'})) },
+	'.tmask' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},'type')) },
+	'.vmask' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
+	'.vshift' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
+	'.state' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->typeAndVars($n)) },
+	'.hexstate' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, hexv ($self->typeAndVars($n))) },
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
@@ -277,11 +311,12 @@ sub transform_hash {
 	# begin particle
 	'.particle' => sub {
 	    my ($self, $n) = @_;
-	    my %n = ref($n) eq 'ARRAY' ? @$n : %$n;
-	    my ($type, $rate, $rule, $hue, $sat, $bri) = map ($n{$_}, qw(name rate rule));
+	    $n = force_hash ($n);
+
+	    my ($type, $rate, $rule, $hue, $sat, $bri) = map ($n->{$_}, qw(name rate rule));
 	    my @particle;
 
-	    warn "Transforming particle '$type'\n" if $self->debug;
+	    warn "Transforming particle '$type'\n" if $self->verbose;
 
 	    $self->push_scope;
 	    $self->scope->loctype->{$self->origin} = $type;
@@ -306,6 +341,8 @@ sub transform_hash {
 	# location identifier & type switch
 	'.bind' => sub {
 	    my ($self, $n) = @_;
+	    $n = force_hash($n);
+
 	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
 	    $case = {} unless defined $case;
 
@@ -346,8 +383,10 @@ sub transform_hash {
 
 
 	# location var switch
-	'.test' => sub {
+	'.switch' => sub {
 	    my ($self, $n) = @_;
+	    $n = force_hash($n);
+
 	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
 	    $case = {} unless defined $case;
 
@@ -380,7 +419,11 @@ sub transform_hash {
 	# modify
 	'.modify' => sub {
 	    my ($self, $n) = @_;
+	    $n = force_hash ($n);
+
 	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
+	    confess "In .modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
+	    $inc = $set if defined $set;
 
 	    # SOURCE
 	    # check whether src specified
@@ -473,7 +516,6 @@ sub transform_hash {
 		} else {  # $destvar eq "*", $srcmask == 0
 		    if (defined $inc) {
 			$offset = $self->typeAndVars ($inc);
-			$offset = $self->getType ($inc);
 			$self->scope->loctype->{$destloc} = $inc->{'type'};
 		    } else {
 			$offset = $self->getType ($self->empty);
@@ -493,7 +535,7 @@ sub transform_hash {
 				'src' => { 'x' => $srcx, 'y' => $srcy },
 				'srcmask' => $srcmask,
 				'rshift' => $srcshift,
-				defined($inc) ? ('inc' => $inc) : (),
+				defined($offset) ? ('hexinc' => hexv($offset)) : (),
 				'lshift' => $destshift,
 				'destmask' => $destmask,
 				'dest' => { 'x' => $destx, 'y' => $desty },
@@ -533,6 +575,7 @@ sub transform_hash {
 	# overload
 	'.load' => sub {
 	    my ($self, $n) = @_;
+	    $n = force_hash ($n);
 	    return ('rule' => [ '@type' => 'overload',
 				map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] );
 	},
@@ -541,6 +584,7 @@ sub transform_hash {
 	# text balloon
 	'.text' => sub {
 	    my ($self, $n) = @_;
+	    $n = force_hash ($n);
 	    return ("goal" => ['@type' => "and",  # "and"ing result with 0 means this goal will persist
 			       "lazy" => "",
 			       "goal" => ['@type' => "maybe",
@@ -576,12 +620,14 @@ sub parse_color {
 	my $k = shift @n;
 	my $v = shift @n;
 	if ($k eq $tag) {
+	    $v = { 'inc' => $v } unless ref($v);
+	    my ($var, $vmul, $inc) = map ($v->{$_}, qw(var mul inc));
 	    push @col, 'color' => [ exists ($v->{'var'})
-				    ? ('mask' => $self->getMask($type,$v->{'var'}),
-				       'rshift' => $self->getShift($type,$v->{'var'}),
-				       'hexmul' => hexv ($mul * exists($v->{'mul'}) ? $v->{'mul'} : 1))
-				    : (),
-				    exists ($v->{'inc'}) ? ('inc' => $v->{'inc'}) : () ];
+				    ? ('mask' => $self->getMask($type,$var),
+				       'rshift' => $self->getShift($type,$var),
+				       'hexmul' => hexv ($mul * (defined($vmul) ? $vmul : 1)))
+				    : ('mask' => 0),
+				    defined($inc) ? ('hexinc' => hexv($mul * $inc)) : () ];
 	}
     }
     return @col;
@@ -596,7 +642,7 @@ sub illegal_name {
 # new type declaration w/ vars
 sub declare_type {
     my ($self, $type, @varname_varbits) = @_;
-    warn "Declaring particle '$type'\n" if $self->debug;
+    warn "Declaring particle '$type'\n" if $self->verbose;
     confess "'$type' is an illegal type name" if illegal_name($type);
     confess "Type '$type' is already defined" if exists $self->typeindex->{$type};
     $self->typeindex->{$type} = @{$self->type};
@@ -642,7 +688,7 @@ sub compiler_warn {
 sub assertLocTypeBound {
     my ($self, $loc, $var) = @_;
     if (defined($var) && $var ne "type" && $var ne "*") {
-	if (!defined($self->loctype->{$loc})) {
+	if (!defined($self->scope->loctype->{$loc})) {
 	    confess "In switch rule for ", $self->scope->type, ": Can't access $loc.$var because type of $loc is not bound\n";
 	}
     }
@@ -657,14 +703,17 @@ sub firstNonzeroTag {
     return undef;
 }
 
-# fully-qualified particle state: .state => { 'tag' => tag, 'type' => name, 'var' => { 'varname1' => val1, 'varname2' => val2, ... } }
+# fully-qualified particle state: .state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
 sub typeAndVars {
     my ($self, $n) = @_;
+    confess "Not a HASH reference" unless ref($n) && ref($n) eq 'HASH';
     my $type = $n->{'type'};
     my $state = $self->getType($type) << $self->getShift($type,"type");
-    while (my ($var, $val) = each %{$n->{'var'}}) {
-	$state = $state | ($val << $self->getShift($type,$var));
+    while (my ($var, $val) = each %$n) {
+	if ($var ne 'type') {
+	    $state = $state | ($val << $self->getShift($type,$var));
 	}
+    }
     return $state;
 };
 
