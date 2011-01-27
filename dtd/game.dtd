@@ -20,7 +20,7 @@
 <!ELEMENT setgame (gamestate)>
 <!ELEMENT usetool (tool)>
 <!ELEMENT print (message)>
-<!ELEMENT place (balloon)>
+<!ELEMENT place (balloon?)>
 
 <!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
@@ -42,7 +42,7 @@
 <!ELEMENT lazy EMPTY>
 <!ELEMENT cache EMPTY>
 
-<!ELEMENT balloon (pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,rate?)>
+<!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT color (#PCDATA)>
 <!ELEMENT hexcolor (#PCDATA)>
 <!ELEMENT text (#PCDATA)>
@@ -52,6 +52,7 @@
 <!ELEMENT zoom (#PCDATA)>
 <!ELEMENT fade (#PCDATA)>
 <!ELEMENT rate (#PCDATA)>
+<!ELEMENT persist EMPTY>
 
 <!ELEMENT tool (name,size,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
@@ -85,7 +86,7 @@
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
 
-<!ELEMENT colrule (rshift?,mask?,(mul|hexmul)?,(inc|hexinc)?)>
+<!ELEMENT colrule (mask?,rshift?,(mul|hexmul)?,(inc|hexinc)?)>
 <!ELEMENT rshift (#PCDATA)>
 <!ELEMENT mul (#PCDATA)>
 <!ELEMENT hexmul (#PCDATA)>

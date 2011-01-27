@@ -108,7 +108,7 @@ sub addType {
 # new tool helper
 sub addTool {
     my ($self, @tool_proto_xml) = @_;
-    push @{$self->xml->tool}, "tool" => { @tool_proto_xml };
+    push @{$self->xml->tool}, ".tool" => [ sortHash ({@tool_proto_xml}, qw(name size brush state type overwrite spray reserve recharge maxreserve hide)) ];
 }
 
 
@@ -338,6 +338,18 @@ sub transform_hash {
 			     ]);
 
 	    return @particle;
+	},
+
+	# tool
+	'.tool' => sub {
+	    my ($self, $n) = @_;
+	    $n = force_hash ($n);
+
+	    my ($typeandvars, $type) = map ($n->{$_}, qw(state type));
+	    my $hexstate = defined($typeandvars) ? hexv($self->typeAndVars($typeandvars)) : $self->getTypeAsHexState($type);
+	    $n->{'hexstate'} = $hexstate;
+
+	    return ('tool' => [ $self->transform_list (sortHash ($n, qw(name size brush hexstate overwrite spray reserve recharge maxreserve hide))) ]);
 	},
 
 	# location identifier & type switch
@@ -582,13 +594,11 @@ sub transform_hash {
 	'.text' => sub {
 	    my ($self, $n) = @_;
 	    $n = force_hash ($n);
-	    return ("goal" => ['@type' => "and",  # "and"ing result with 0 means this goal will persist
-			       "lazy" => "",
-			       "goal" => ['@type' => "maybe",
-					  "prob" => $n->{'rate'}],
-			       "goal" => ['@type' => "balloon",
-					  "balloon" => $n],
-			       "goal" => ['@type' => "false"]]);
+	    return ("goal" => ["and" => ["lazy" => "",
+					 "goal" => ["and" => ["lazy" => "",
+							      "goal" => ["maybe" => ["prob" => $n->{'rate'}]],
+							      "goal" => ["place" => ["balloon" => [ sortHash ($n, qw(rate pos color hexcolor text size ttl rise zoom fade)) ]]]]],
+					 "goal" => ["false" => ""]]]);  # "and"ing result with 0 means this goal will persist & not automatically be deleted the first time the balloon is placed (this behavior can still be triggered by tweaking balloon pr
 	}
 
     };
@@ -799,7 +809,10 @@ sub new_XML_element {
 }
 
 sub sortHash {
-    my ($hashRef) = @_;
+    my ($hashRef, @key_order) = @_;
+    if (@key_order) {
+	return map (exists($hashRef->{$_}) ? ($_ => $hashRef->{$_}) : (), @key_order);
+    }
     return map (($_ => $hashRef->{$_}), sort keys %$hashRef);
 }
 

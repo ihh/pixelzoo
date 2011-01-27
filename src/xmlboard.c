@@ -41,7 +41,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
-      state = OPTCHILDINT(node,DECVAL,OPTCHILDHEX(node,HEXVAL,OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift));
+      state = OPTCHILDINT(node,DECSTATE,OPTCHILDHEX(node,HEXSTATE,OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift));
       writeBoardState (board, x, y, state);
     }
 
@@ -145,7 +145,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
 
     } else if (MATCHES (ruleNode, GOAL)) {
       rule = newGoalRule();
-      rule->param.goal = newGoalFromXmlNode (CHILD (ruleNode, GOAL), game);
+      rule->param.goal = newGoalFromXmlNode (ruleNode, game);
 
     } else {
       Abort ("Unknown rule type");

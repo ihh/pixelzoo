@@ -34,8 +34,6 @@
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
 #define XMLZOO_MASK        "mask"
-#define XMLZOO_DECVAL      "val"
-#define XMLZOO_HEXVAL      "hexval"
 #define XMLZOO_SRC         "src"
 #define XMLZOO_DEST        "dest"
 #define XMLZOO_DECINC      "inc"

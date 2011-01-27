@@ -58,7 +58,7 @@ $gram->addType ('name' => 'cement',
 # cement tool
 $gram->addTool ('name' => 'Cement spray',
 		'size' => 8,
-		'.tstate' => { '@tag' => 'hexstate', 'type' => 'cement' },
+		'type' => 'cement',
 		'reserve' => 100,
 		'recharge' => 100,
 		'overwrite' => [ '.tstate' => { '@tag' => 'hexstate', 'type' => 'empty' } ]);
@@ -74,9 +74,9 @@ $gram->addType ('name' => 'wall',
 		'rule' => ['.switch' => ['loc' => $gram->origin,
 					 'var' => 'decay',
 					 'case' => { 15 => [ '.modify' => { 'set' => { 'type' => $gram->empty },
-									    'next' => [ '.text' => [ 'rate' => .01,
-												     'hue' => 32,
-												     'text' => 'decay' ] ] } ] },
+									    'next' => [ 'rule' => ['.text' => [ 'rate' => .01,
+														'hexcolor' => "20ffff",
+														'text' => 'decay' ] ] ] } ] },
 					 'default' => [ '.modify' => { 'dest' => { 'var' => 'decay' },
 								       'inc' => 1 }]]]);
 

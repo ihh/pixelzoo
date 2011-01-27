@@ -45,7 +45,7 @@ sub make_entrance_brush {
     my $entranceHeight = $self->entrancePort->height;
     for (my $w = 0; $w < $entranceWidth; ++$w) {
 	for (my $h = 0; $h < $entranceHeight; ++$h) {
-	    push @entranceLoc, "pos" => ["x" => $w, "y" => $h];
+	    push @entranceLoc, "spot" => ["x" => $w, "y" => $h];
 	}
     }
     return \@entranceLoc;
@@ -69,7 +69,7 @@ sub prep_exit {
 		my $ex = $exitx + $x;
 		my $ey = $exity + $y;
 		push @exitLoc, "pos" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
-		push @exitInit, "init" => ["x" => $ex, "y" => $ey, "hexval" => hexv($col)];
+		push @exitInit, "init" => ["x" => $ex, "y" => $ey, "hexstate" => hexv($col)];
 	    }
 	}
     }
@@ -79,7 +79,7 @@ sub prep_exit {
 sub make_exit {
     my ($self) = @_;
     my ($exitLoc, $exitInit) = $self->prep_exit;
-    return ("exit" => [%{$self->exitPort}, @$exitLoc]);
+    return ("exit" => [sortHash ($self->exitPort, qw(type hextype)), @$exitLoc]);
 }
 
 sub make_exit_init {
@@ -117,8 +117,8 @@ sub make_goal {
 											   "size" => minPowerOfTwo (max ($self->entrancePort->width, $self->entrancePort->height)),
 											   "brush" => ["center" => ["x" => int($self->entrancePort->width/2), "y" => int($self->entrancePort->height/2)],
 												       "intensity" => $self->make_entrance_brush],
-											   "spray" => 1,
 											   "hexstate" => $self->getTypeAsHexState($self->entrancePort->type),
+											   "spray" => 1,
 											   "reserve" => $self->entrancePort->count,
 											   "recharge" => 0]]]]],
 
@@ -146,8 +146,7 @@ sub make_goal {
 # Could add a stub here, e.g.  @{$self-xml->midgoal},  but seems a bit premature without concrete use case
 
 # wait for player to reach the guest exit count
-				 "goal" => ["setexit" => ["exitstate" => "PortalCounting",
-							  "count" => ["min" => $self->exitPort->count]]],
+				 "goal" => ["setexit" => ["exitstate" => "PortalCounting"]],
 
 # delete exit balloon
 				 "goal" => ["area" => ["pos" => $self->exitPort->pos,
