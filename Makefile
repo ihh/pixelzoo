@@ -13,7 +13,7 @@ CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS) -Isrc
 ANSI        := -ansi
 LIBS        := -lc $(SDL_LDFLAGS) $(XML_LDFLAGS)
 
-TARGETS := test_red_black_tree sdltest sdlgame
+TARGETS := test_red_black_tree sdlgame
 
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
@@ -32,11 +32,8 @@ all: lib targets xml
 clean:
 	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
 
-test: targets
+sdl: targets
 	bin/sdlgame t/testgame.xml
-
-oldtest: all
-	test/testrb.sh && bin/sdltest
 
 targets: $(XFILES)
 

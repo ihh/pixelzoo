@@ -1,0 +1,24 @@
+<!DOCTYPE game [
+
+<!ELEMENT game (goal,rate,tool,exit,board)>
+
+<!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
+<!ELEMENT area (pos*,goal)>
+<!ELEMENT cage (wall+,goal,count?,points?)>
+
+<!ELEMENT pos (x,y)>
+<!ELEMENT x (#PCDATA)>
+<!ELEMENT y (#PCDATA)>
+
+<!ELEMENT points (min?,max?)>
+<!ELEMENT count (min?,max?)>
+<!ELEMENT min (#PCDATA)>
+<!ELEMENT max (#PCDATA)>
+
+<!ELEMENT wall (#PCDATA)>
+
+
+
+<!ELEMENT rule (switch|modify|random|overload|goal) #REQUIRED>
+
+]>

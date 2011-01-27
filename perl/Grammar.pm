@@ -121,7 +121,7 @@ sub print {
 
     warn "Generating proto-XML...\n" if $self->verbose;
     my $game_proto = $self->make_game;
-    my $wrapped_proto = ["xml" => ["game" => $game_proto]];
+    my $wrapped_proto = ["game" => $game_proto];
 
     if ($self->debug) {
 	warn "Proto-XML passed to Grammar::transform_proto:\n", Data::Dumper->Dump($wrapped_proto);
@@ -371,14 +371,13 @@ sub transform_hash {
 
 	    $self->pop_scope;
 
-	    return ('rule' => [ '@type' => 'switch',
-				'pos' => { 'x' => $x, 'y' => $y },
-				'mask' => $self->typemask,
-				'rshift' => $self->typeshift,
-				map (('case' => ['state' => $self->getType($_),
-						 @{$transformed_case{$_}}]),
-				     keys %$case),
-				defined($default) ? ('default' => $transformed_default) : () ] );
+	    return ('rule' => [ 'switch' => ['pos' => { 'x' => $x, 'y' => $y },
+					     'mask' => $self->typemask,
+					     'rshift' => $self->typeshift,
+					     map (('case' => ['state' => $self->getType($_),
+							      @{$transformed_case{$_}}]),
+						  keys %$case),
+					     defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
 
@@ -405,14 +404,13 @@ sub transform_hash {
 	    }
 	    my $transformed_default = $self->transform_value ($default);
 	    
-	    return ('rule' => [ '@type' => 'switch',
-				'pos' => { 'x' => $x, 'y' => $y },
-				'mask' => $self->getMask($loctype,$varid),
-				'rshift' => $self->getShift($loctype,$varid),
-				map (('case' => ['state' => $_,
-						 @{$transformed_case{$_}}]),
-				     keys %$case),
-				defined($default) ? ('default' => $transformed_default) : () ] );
+	    return ('rule' => [ 'switch' => [ 'pos' => { 'x' => $x, 'y' => $y },
+					      'mask' => $self->getMask($loctype,$varid),
+					      'rshift' => $self->getShift($loctype,$varid),
+					      map (('case' => ['state' => $_,
+							       @{$transformed_case{$_}}]),
+						   keys %$case),
+					      defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
 
@@ -531,22 +529,20 @@ sub transform_hash {
 	    $self->pop_scope;
 
 	    # return
-	    return ('rule' => [ '@type' => 'modify',
-				'src' => { 'x' => $srcx, 'y' => $srcy },
-				'srcmask' => $srcmask,
-				'rshift' => $srcshift,
-				defined($offset) ? ('hexinc' => hexv($offset)) : (),
-				'lshift' => $destshift,
-				'destmask' => $destmask,
-				'dest' => { 'x' => $destx, 'y' => $desty },
-				@transformed_next ] );
+	    return ('rule' => [ 'modify' => [ 'src' => { 'x' => $srcx, 'y' => $srcy },
+					      'srcmask' => $srcmask,
+					      'rshift' => $srcshift,
+					      defined($offset) ? ('hexinc' => hexv($offset)) : (),
+					      'lshift' => $destshift,
+					      'destmask' => $destmask,
+					      'dest' => { 'x' => $destx, 'y' => $desty },
+					      @transformed_next ] ] );
 	},
 
 
 	# nop (no operation)
 	'.nop' => sub {
-	    return ('rule' => [ '@type' => 'modify',
-				'destmask' => 0 ]);
+	    return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]);
 	},
 
 	# random (build a Huffman tree)
@@ -576,8 +572,7 @@ sub transform_hash {
 	'.load' => sub {
 	    my ($self, $n) = @_;
 	    $n = force_hash ($n);
-	    return ('rule' => [ '@type' => 'overload',
-				map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] );
+	    return ('rule' => [ 'overload' => [ map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] ] );
 	},
 
 
@@ -604,10 +599,9 @@ sub huff_to_rule {
 	my $rule = $node->{'rule'};
 	return ref($rule) eq 'HASH' ? %$rule : @$rule;
     }
-    return ('rule' => [ '@type' => 'random',
-			'prob' => $node->{'l'}->{'prob'} / ($node->{'l'}->{'prob'} + $node->{'r'}->{'prob'}),
-			'pass' => [ huff_to_rule ($node->{'l'}) ],
-			'fail' => [ huff_to_rule ($node->{'r'}) ] ] );
+    return ('rule' => [ 'random' => [ 'prob' => $node->{'l'}->{'prob'} / ($node->{'l'}->{'prob'} + $node->{'r'}->{'prob'}),
+				      'pass' => [ huff_to_rule ($node->{'l'}) ],
+				      'fail' => [ huff_to_rule ($node->{'r'}) ] ] ] );
 }
 
 

@@ -1,45 +1,44 @@
-<xml>
   <game>
 
-    <goal type="and">
+    <goal><and>
       <lazy/>
-      <goal type="cached">
-	<goal type="population">
+      <goal><cached>
+	<goal><population>
 	  <type>1</type>
 	  <type>2</type>
 	  <count><min>20</min></count>
-	</goal>
-      </goal>
-      <goal type="cached">
+	</population></goal>
+      </cached></goal>
+      <goal><cached>
 	<reps>3</reps>
-	<goal type="print">
-	  <text>You have reached your population target.
-	    I will say this three times.</text>
-	</goal>
-      </goal>
-      <goal type="cached">
-	<goal type="repeat">
+	<goal><print>
+	  <message>You have reached your population target.
+	    I will say this three times.</message>
+	</print></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><repeat>
 	  <reps>5</reps>
-	  <goal type="print">
-	    <text>(pauses for effect)</text>
-	  </goal>
-	</goal>
-      </goal>
-      <goal type="cached">
-	<goal type="and">
+	  <goal><print>
+	    <message>(pauses for effect)</message>
+	  </print></goal>
+	</repeat></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><and>
 	  <lazy/>
 	  <cached/>
-	  <goal type="print"><text>The portal is opening...</text></goal>
-	  <goal type="print"><text>...wait for it...</text></goal>
-	  <goal type="print"><text>...right about NOW!</text></goal>
-	</goal>
-      </goal>
-      <goal type="cached">
-	<goal type="setexit">
-	  <state>PortalCounting</state>
-	</goal>
-      </goal>
-    </goal>
+	  <goal><print><message>The portal is opening...</message></print></goal>
+	  <goal><print><message>...wait for it...</message></print></goal>
+	  <goal><print><message>...right about NOW!</message></print></goal>
+	</and></goal>
+      </cached></goal>
+      <goal><cached>
+	<goal><setexit>
+	  <exitstate>PortalCounting</exitstate>
+	</setexit></goal>
+      </cached></goal>
+    </and></goal>
 
     <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
 
@@ -70,158 +69,157 @@
 	  <name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>80ffff</hexinc></color>
 	  <rate>.03</rate>
 
-	  <rule type="random"><prob>.05</prob>
-	    <pass><rule type="random"><prob>.55</prob>
-		<pass><rule type="modify"><rshift>64</rshift>
-		</rule></pass>
-		<fail><rule type="modify"><rshift>64</rshift><hexinc>2000000000000</hexinc><dest><x>1</x></dest>
-		</rule></fail>
-	    </rule></pass>
-	    <fail><rule type="random">   <!-- x or y -->
-		<pass><rule type="random">   <!-- right(+1) or left(-1) -->
+	  <rule><random><prob>.05</prob>
+	    <pass><rule><random><prob>.55</prob>
+		<pass><rule><modify><rshift>64</rshift>
+		</modify></rule></pass>
+		<fail><rule><modify><rshift>64</rshift><hexinc>2000000000000</hexinc><dest><x>1</x></dest>
+		</modify></rule></fail>
+	    </random></rule></pass>
+	    <fail><rule><random>   <!-- x or y -->
+		<pass><rule><random>   <!-- right(+1) or left(-1) -->
 
-		    <pass><rule type="switch">
+		    <pass><rule><switch>
 			<pos><x>1</x></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></pass>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></pass>
 
-		    <fail><rule type="switch">
+		    <fail><rule><switch>
 			<pos><x>-1</x></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></fail>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></fail>
 
-		</rule></pass>
-		<fail><rule type="random">   <!-- down(+1) or up(-1) -->
+		</random></rule></pass>
+		<fail><rule><random>   <!-- down(+1) or up(-1) -->
 
-		    <pass><rule type="switch">
+		    <pass><rule><switch>
 			<pos><y>1</y></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></pass>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></pass>
 
-		    <fail><rule type="switch">
+		    <fail><rule><switch>
 			<pos><y>-1</y></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><y>-1</y></dest><rshift>64</rshift><hexinc>1000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></fail>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></fail>
 
-		</rule></fail>
-	    </rule></fail>
-	  </rule>
+		</random></rule></fail>
+	    </random></rule></fail>
+	  </random></rule>
 	</particle>
 
 	<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
 	  <rate>.03</rate>
 
-	  <rule type="random"><prob>.05</prob>
-	    <pass><rule type="random"><prob>.55</prob>
-		<pass><rule type="modify"><rshift>64</rshift>
-		</rule></pass>
-		<fail><rule type="modify"><rshift>64</rshift><hexinc>1000000000000</hexinc><dest><x>1</x></dest>
-		</rule></fail>
-	    </rule></pass>
-	    <fail><rule type="random">   <!-- x or y -->
-		<pass><rule type="random">   <!-- right(+1) or left(-1) -->
+	  <rule><random><prob>.05</prob>
+	    <pass><rule><random><prob>.55</prob>
+		<pass><rule><modify><rshift>64</rshift>
+		</modify></rule></pass>
+		<fail><rule><modify><rshift>64</rshift><hexinc>1000000000000</hexinc><dest><x>1</x></dest>
+		</modify></rule></fail>
+	    </random></rule></pass>
+	    <fail><rule><random>   <!-- x or y -->
+		<pass><rule><random>   <!-- right(+1) or left(-1) -->
 
-		    <pass><rule type="switch">
+		    <pass><rule><switch>
 			<pos><x>1</x></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><x>1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><x>1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></pass>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></pass>
 
-		    <fail><rule type="switch">
+		    <fail><rule><switch>
 			<pos><x>-1</x></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><x>-1</x></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><x>-1</x></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></fail>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></fail>
 
-		</rule></pass>
-		<fail><rule type="random">   <!-- down(+1) or up(-1) -->
+		</random></rule></pass>
+		<fail><rule><random>   <!-- down(+1) or up(-1) -->
 
-		    <pass><rule type="switch">
+		    <pass><rule><switch>
 			<pos><y>1</y></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><y>1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
+				<next><rule><modify>
 				    <dest><y>1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></pass>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></pass>
 
-		    <fail><rule type="switch">
+		    <fail><rule><switch>
 			<pos><y>-1</y></pos>
 			<mask>ffff000000000000</mask>
-			<case><state>0</state><rule type="modify">
+			<case><state>0</state><rule><modify>
 			    <rshift>64</rshift>
-			    <next><rule type="modify">
+			    <next><rule><modify>
 				<src><y>-1</y></src><dest></dest><hexinc>49</hexinc><srcmask>ff9</srcmask>
-				<next><rule type="modify">
-				    <dest><y>-1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
-				</rule></next>
-			    </rule></next>
-			</rule></case>
-		    </rule></fail>
+				<next><rule><modify>
+				      <dest><y>-1</y></dest><rshift>64</rshift><hexinc>2000000000001</hexinc>
+				</modify></rule></next>
+			    </modify></rule></next>
+			</modify></rule></case>
+		    </switch></rule></fail>
 
-		</rule></fail>
-	    </rule></fail>
-	  </rule>
+		</random></rule></fail>
+	    </random></rule></fail>
+	  </random></rule>
 
 	</particle>
-
+	
       </grammar><init><x>64</x><y>64</y><type>1</type></init></board>
   </game>
-</xml>

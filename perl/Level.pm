@@ -92,53 +92,42 @@ sub make_goal {
     my ($self) = @_;
     my ($exitLoc, $exitInit) = $self->make_exit;
 
-    return ("goal" => ['@type' => "and",
-		       "lazy" => "",
-		       "cached" => "",
+    return ("goal" => ["and" => ["lazy" => "",
+				 "cached" => "",
 
 # place entrance and exit balloons
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->pos,
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "ENTRANCE",
-							   "persist" => '']]],
-
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->exitPort->pos,
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "EXIT",
-							   "persist" => '']]],
+				 "goal" => ["area" => ["pos" => $self->entrancePort->pos,
+						       "goal" => ["place" => ["balloon" => ["text" => "ENTRANCE",
+											    "persist" => '']]]]],
+				 
+				 "goal" => ["area" => ["pos" => $self->exitPort->pos,
+						       "goal" => ["place" => ["balloon" => ["text" => "EXIT",
+											    "persist" => '']]]]],
 
 # print hello message
-		       "goal" => ['@type' => "print",
-				  "text" => "Welcome to level 1!\n" .
-				  "Guide guests safely to the Exit.\n"],
+				 "goal" => ["print" => ["message" => "Welcome to level 1!\n" .
+							"Guide guests safely to the Exit.\n"]],
 
 # open the guest exit (currently the only exit)
-		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalCounting"],
+				 "goal" => ["setexit" => ["exitstate" => "PortalCounting"]],
 
 # introduce the guests
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->pos,
-				  "goal" => ['@type' => "spray",
-					     "tool" => ["name" => "entrance",
-							"size" => minPowerOfTwo (max ($self->entrancePort->width, $self->entrancePort->height)),
-							"brush" => ["center" => ["x" => int($self->entrancePort->width/2), "y" => int($self->entrancePort->height/2)],
-								    "intensity" => $self->make_entrance_brush],
-							"spray" => 1,
-							"hexstate" => $self->getTypeAsHexState($self->entrancePort->type),
-							"reserve" => $self->entrancePort->count,
-							"recharge" => 0]]],
+				 "goal" => ["area" => ["pos" => $self->entrancePort->pos,
+						       "goal" => ["usetool" => ["tool" => ["name" => "entrance",
+											   "size" => minPowerOfTwo (max ($self->entrancePort->width, $self->entrancePort->height)),
+											   "brush" => ["center" => ["x" => int($self->entrancePort->width/2), "y" => int($self->entrancePort->height/2)],
+												       "intensity" => $self->make_entrance_brush],
+											   "spray" => 1,
+											   "hexstate" => $self->getTypeAsHexState($self->entrancePort->type),
+											   "reserve" => $self->entrancePort->count,
+											   "recharge" => 0]]]]],
 
 # delete entrance balloon
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->entrancePort->{"pos"},
-				  "goal" => ['@type' => "balloon"]],
+				 "goal" => ["area" => ["pos" => $self->entrancePort->{"pos"},
+						       "goal" => ["place" => ""]]],
 
 # print status message
-		       "goal" => ['@type' => "print",
-				  "text" => "The zoo is now closed to further guests.\nGuide all remaining guests to the Exit."],
+		       "goal" => ["print" => ["message" => "The zoo is now closed to further guests.\nGuide all remaining guests to the Exit."]],
 
 
 # more goals here... e.g.,
@@ -157,43 +146,35 @@ sub make_goal {
 # Could add a stub here, e.g.  @{$self-xml->midgoal},  but seems a bit premature without concrete use case
 
 # wait for player to reach the guest exit count
-		       "goal" => ['@type' => "exit",
-				  "state" => "PortalCounting",
-				  "count" => ["min" => $self->exitPort->count]],
+				 "goal" => ["setexit" => ["exitstate" => "PortalCounting",
+							  "count" => ["min" => $self->exitPort->count]]],
 
 # delete exit balloon
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->exitPort->pos,
-				  "goal" => ['@type' => "balloon"]],
+				 "goal" => ["area" => ["pos" => $self->exitPort->pos,
+						       "goal" => ["place" => ""]]],
 
 # place "UNLOCKED" balloon at exit
-		       "goal" => ['@type' => "area",
-				  "pos" => $self->exitPort->pos,
-				  "goal" => ['@type' => "balloon",
-					     "balloon" => ["text" => "UNLOCKED!"]]],
+				 "goal" => ["area" => ["pos" => $self->exitPort->pos,
+						       "goal" => ["place" => ["balloon" => ["text" => "UNLOCKED!"]]]]],
 
 # print "UNLOCKED" message
-		       "goal" => ['@type' => "print",
-				  "text" => "Exit unlocked! You could try the next level, if there was one."],
+				 "goal" => ["print" => ["message" => "Exit unlocked! You could try the next level, if there was one."]],
 
 # "unlock" the guest exit achievment
-		       "goal" => ['@type' => "setexit",
-				  "state" => "PortalUnlocked"],
+				 "goal" => ["setexit" => ["exitstate" => "PortalUnlocked"]],
 
 
 # more goals here... (e.g., steal the owner's HQ exit)
 
 
 # print win message
-		       "goal" => ['@type' => "print",
-				  "text" => "YOU WIN! Congratulations."],
+		       "goal" => ["print" => ["message" => "YOU WIN! Congratulations."]],
 
 # set the game state to WIN!!!
-		       "goal" => ['@type' => "setgame",
-				  "state" => "GameWon"],
+		       "goal" => ["setgame" => ["gamestate" => "GameWon"]],
 
 # that's all, folks
-	    ]);
+	    ]]);
 }
 
 

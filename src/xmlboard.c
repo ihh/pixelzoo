@@ -104,9 +104,9 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent) {
   return rule;
 }
 
-ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
+ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
+  xmlNode *ruleNode;
   ParticleRule* rule;
-  const char *ruleTypeAttr;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
   RandomRuleParams *random;
@@ -114,33 +114,36 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode* ruleNode) {
 
   rule = NULL;
 
-  if (ruleNode != NULL) {
-    ruleTypeAttr = ATTR(ruleNode,RULETYPE);
-    Assert (ruleTypeAttr != NULL, "Missing " XMLPREFIX(RULETYPE) " attribute in rule");
-    if (ATTRMATCHES (ruleTypeAttr, SWITCH)) {
+  if (ruleParentNode != NULL) {
+    ruleNode = ruleParentNode->children;
+    while (ruleNode != NULL && ruleNode->type != XML_ELEMENT_NODE)
+      ruleNode = ruleNode->next;
+    Assert (ruleNode != NULL && ruleNode->type == XML_ELEMENT_NODE, "Missing rule node");
+
+    if (MATCHES (ruleNode, SWITCH)) {
       rule = newLookupRule();
       lookup = &rule->param.lookup;
       initLookupRuleFromXmlNode (lookup, ruleNode, game);
 
-    } else if (ATTRMATCHES (ruleTypeAttr, MODIFY)) {
+    } else if (MATCHES (ruleNode, MODIFY)) {
       rule = newModifyRule();
       modify = &rule->param.modify;
       initModifyRuleFromXmlNode (modify, ruleNode, game);
 
-    } else if (ATTRMATCHES (ruleTypeAttr, RANDOM)) {
+    } else if (MATCHES (ruleNode, RANDOM)) {
       rule = newRandomRule();
       random = &rule->param.random;
       random->prob = OPTCHILDFLOAT (ruleNode, PROB, 0.5);
       random->passRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, PASS));
       random->failRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAIL));
 
-    } else if (ATTRMATCHES (ruleTypeAttr, OVERLOAD)) {
+    } else if (MATCHES (ruleNode, OVERLOAD)) {
       rule = newOverloadRule();
       overload = &rule->param.overload;
       overload->slowRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, SLOW));
       overload->fastRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAST));
 
-    } else if (ATTRMATCHES (ruleTypeAttr, GOAL)) {
+    } else if (MATCHES (ruleNode, GOAL)) {
       rule = newGoalRule();
       rule->param.goal = newGoalFromXmlNode (CHILD (ruleNode, GOAL), game);
 

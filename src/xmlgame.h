@@ -8,7 +8,6 @@
 #define XMLZOO_GAME       "game"
 #define XMLZOO_PROTECT    "protect"
 #define XMLZOO_EXIT       "exit"
-#define XMLZOO_COUNT      "count"
 #define XMLZOO_TOOL       "tool"
 #define XMLZOO_HIDE       "hide"
 #define XMLZOO_BRUSH      "brush"

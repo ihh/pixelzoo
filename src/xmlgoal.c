@@ -8,20 +8,25 @@
 Balloon* newBalloonFromXmlNode (xmlNode* node);
 
 /* method defs */
-Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
+Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
   Goal *goal, *subGoal[2];
-  const char *goalTypeAttr, *enumText;
-  xmlNode *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
+  const char *enumText;
+  xmlNode *goalNode, *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
   XYSet *area;
   StateSet *wallSet, *typeSet;
   int n, lazy, cached, enumState;
   Tool *tool;
 
   goal = NULL;
-  Assert (goalNode != NULL, "newGoalFromXmlNode: null goal node");
 
-  goalTypeAttr = ATTR(goalNode,GOALTYPE);
-  if (ATTRMATCHES (goalTypeAttr, AREA_GOAL)) {
+  Assert (goalParentNode != NULL, "newGoalFromXmlNode: null goal parent node");
+
+  goalNode = goalParentNode->children;
+  while (goalNode != NULL && goalNode->type != XML_ELEMENT_NODE)
+    goalNode = goalNode->next;
+  Assert (goalNode != NULL && goalNode->type == XML_ELEMENT_NODE, "newGoalFromXmlNode: null goal node");
+
+  if (MATCHES (goalNode, AREA_GOAL)) {
     area = newXYSet();
     for (node = goalNode->children; node; node = node->next)
       if (MATCHES (node, POS_GPARAM))
@@ -30,7 +35,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     goal = newAreaGoal (area,
 			subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
 
-  } else if (ATTRMATCHES (goalTypeAttr, CAGE_GOAL)) {
+  } else if (MATCHES (goalNode, CAGE_GOAL)) {
     /* currently the XML adapter sets up the EnclosuresGoal to determine whether a given state is a wall by examining Type only, ignoring Vars */
     wallSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
@@ -38,7 +43,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 	(void) StateSetInsert (wallSet, OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift);  /* hardwired to match Type bits only */
     subGoalNode = CHILD (goalNode, GOAL_GPARAM);
     countNode = CHILD (goalNode, COUNT_GPARAM);
-    areaNode = CHILD (goalNode, AREA_GPARAM);
+    areaNode = CHILD (goalNode, POINTS_GPARAM);
     goal = newEnclosuresGoal (TypeMask,  /* hardwired to match Type bits only */
 			      wallSet,
 			      countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0) : 0,
@@ -48,7 +53,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			      CHILD(goalNode,MOORE_GPARAM) == NULL,  /* if using Moore (as opposed to von Neumann) topology, diagonal connections are not allowed */
 			      subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
 
-  } else if (ATTRMATCHES (goalTypeAttr, POPULATION_GOAL)) {
+  } else if (MATCHES (goalNode, POPULATION_GOAL)) {
     typeSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
       if (MATCHES (node, DECTYPE_GPARAM))
@@ -65,13 +70,13 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MIN_GPARAM,0) : 0,
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MAX_GPARAM,-1) : -1);
 
-  } else if (ATTRMATCHES (goalTypeAttr, CACHED_GOAL)) {
+  } else if (MATCHES (goalNode, CACHED_GOAL)) {
     goal = newCachedGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game),
 			  OPTCHILDINT (goalNode, REPS_GPARAM, 1));
 
-  } else if (ATTRMATCHES (goalTypeAttr, AND_GOAL)) {
+  } else if (MATCHES (goalNode, AND_GOAL)) {
     lazy = CHILD (goalNode, LAZY_GPARAM) != NULL;
-    cached = CHILD (goalNode, CACHED_GPARAM) != NULL;
+    cached = CHILD (goalNode, CACHE_GPARAM) != NULL;
     for (n = 0, node = goalNode->children; node; node = node->next)
       if (MATCHES (node, GOAL_GPARAM)) {
 	if (n == 2) {
@@ -88,9 +93,9 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
       subGoal[1] = newTrueGoal();
     goal = newAndGoal (subGoal[0], subGoal[1], lazy);
 
-  } else if (ATTRMATCHES (goalTypeAttr, OR_GOAL)) {
+  } else if (MATCHES (goalNode, OR_GOAL)) {
     lazy = CHILD (goalNode, LAZY_GPARAM) != NULL;
-    cached = CHILD (goalNode, CACHED_GPARAM) != NULL;
+    cached = CHILD (goalNode, CACHE_GPARAM) != NULL;
     for (n = 0, node = goalNode->children; node; node = node->next)
       if (MATCHES (node, GOAL_GPARAM)) {
 	if (n == 2) {
@@ -107,27 +112,27 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
       subGoal[1] = newFalseGoal();
     goal = newOrGoal (subGoal[0], subGoal[1], lazy);
 
-  } else if (ATTRMATCHES (goalTypeAttr, NOT_GOAL)) {
+  } else if (MATCHES (goalNode, NOT_GOAL)) {
     goal = newNotGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game));
 
-  } else if (ATTRMATCHES (goalTypeAttr, REPEAT_GOAL)) {
+  } else if (MATCHES (goalNode, REPEAT_GOAL)) {
     goal = newRepeatGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game),
 			  CHILDINT (goalNode, REPS_GPARAM));
 
-  } else if (ATTRMATCHES (goalTypeAttr, TIME_GOAL)) {
+  } else if (MATCHES (goalNode, TIME_GOAL)) {
     goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->updatesPerSecond,
 			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->updatesPerSecond);
 
-  } else if (ATTRMATCHES (goalTypeAttr, TESTTOOL_GOAL)) {
+  } else if (MATCHES (goalNode, TESTTOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
     reserveNode = CHILD (goalNode, RESERVE_GPARAM);
     goal = newCheckToolGoal ((void*) tool,
 			     reserveNode ? OPTCHILDFLOAT(reserveNode,MIN_GPARAM,0.) : 0.,
 			     reserveNode ? OPTCHILDFLOAT(reserveNode,MAX_GPARAM,tool->maxReserve) : tool->maxReserve);
 
-  } else if (ATTRMATCHES (goalTypeAttr, TESTEXIT_GOAL)) {
+  } else if (MATCHES (goalNode, TESTEXIT_GOAL)) {
     countNode = CHILD (goalNode, COUNT_GPARAM);
-    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+    enumText = (const char*) CHILDSTRING (goalNode, EXSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, PortalWaiting);
     MATCHENUM (enumState, enumText, PortalCounting);
@@ -139,8 +144,8 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
 			       countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0.) : 0.,
 			       countNode ? OPTCHILDINT(countNode,MAX_GPARAM,-1.) : -1.);
 
-  } else if (ATTRMATCHES (goalTypeAttr, TESTGAME_GOAL)) {
-    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+  } else if (MATCHES (goalNode, TESTGAME_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, GSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, GameOn);
     MATCHENUM (enumState, enumText, GameWon);
@@ -148,13 +153,13 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     Assert (enumState >= 0, "Attempt to find unknown game state");
     goal = newCheckGameStateGoal (enumState);
 
-  } else if (ATTRMATCHES (goalTypeAttr, CHARGE_GOAL)) {
+  } else if (MATCHES (goalNode, CHARGE_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
     goal = newChargeToolPseudoGoal (tool,
 				    OPTCHILDFLOAT(goalNode,RESERVE_GPARAM,tool->maxReserve));
 
-  } else if (ATTRMATCHES (goalTypeAttr, SETEXIT_GOAL)) {
-    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+  } else if (MATCHES (goalNode, SETEXIT_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, EXSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, PortalCounting);
     MATCHENUM (enumState, enumText, PortalUnlocked);
@@ -163,32 +168,32 @@ Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
     goal = newSetPortalStatePseudoGoal ((void*) &game->theExit,
 					enumState);
 
-  } else if (ATTRMATCHES (goalTypeAttr, SETGAME_GOAL)) {
-    enumText = (const char*) CHILDSTRING (goalNode, STATE_GPARAM);
+  } else if (MATCHES (goalNode, SETGAME_GOAL)) {
+    enumText = (const char*) CHILDSTRING (goalNode, GSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, GameWon);
     MATCHENUM (enumState, enumText, GameLost);
     Assert (enumState >= 0, "Attempt to set unknown game state");
     goal = newSetGameStatePseudoGoal (enumState);
 
-  } else if (ATTRMATCHES (goalTypeAttr, SPRAY_GOAL)) {
+  } else if (MATCHES (goalNode, USETOOL_GOAL)) {
     tool = newToolFromXmlNode (CHILD (goalNode, TOOL_GPARAM));
     goal = newUseToolPseudoGoal (tool, OPTCHILDFLOAT (goalNode, DURATION_GPARAM, game->updatesPerSecond / game->goalTestsPerSecond));
 
-  } else if (ATTRMATCHES (goalTypeAttr, PRINT_GOAL)) {
-    goal = newPrintMessagePseudoGoal ((const char*) CHILDSTRING (goalNode, TEXT_GPARAM));
+  } else if (MATCHES (goalNode, PRINT_GOAL)) {
+    goal = newPrintMessagePseudoGoal ((const char*) CHILDSTRING (goalNode, MESSAGE_GPARAM));
 
-  } else if (ATTRMATCHES (goalTypeAttr, BALLOON_GOAL)) {
+  } else if (MATCHES (goalNode, BALLOON_GOAL)) {
     balloonNode = CHILD (goalNode, BALLOON_GPARAM);
     goal = newPlaceBalloonPseudoGoal (balloonNode ? newBalloonFromXmlNode (balloonNode) : NULL);
 
-  } else if (ATTRMATCHES (goalTypeAttr, TRUE_GOAL)) {
+  } else if (MATCHES (goalNode, TRUE_GOAL)) {
     goal = newTrueGoal();
 
-  } else if (ATTRMATCHES (goalTypeAttr, FALSE_GOAL)) {
+  } else if (MATCHES (goalNode, FALSE_GOAL)) {
     goal = newFalseGoal();
 
-  } else if (ATTRMATCHES (goalTypeAttr, MAYBE_GOAL)) {
+  } else if (MATCHES (goalNode, MAYBE_GOAL)) {
     goal = newMaybeGoal (CHILDFLOAT (goalNode, PROB_GPARAM));
 
   } else {

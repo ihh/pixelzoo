@@ -32,13 +32,11 @@ Game* newGameFromXmlDocument (xmlDoc *doc) {
   return newGameFromXmlRoot (xmlDocGetRootElement (doc));
 }
 
-Game* newGameFromXmlRoot (xmlNode *root) {
+Game* newGameFromXmlRoot (xmlNode *gameNode) {
   Game *game;
-  xmlNode *gameNode, *exitNode, *goalNode, *node;
+  xmlNode *exitNode, *goalNode, *node;
   Tool *tool, *selectedTool;
 
-  gameNode = CHILD(root,GAME);
- 
   game = newGame();
   game->board = newBoardFromXmlRoot ((void*)game, gameNode);
 
