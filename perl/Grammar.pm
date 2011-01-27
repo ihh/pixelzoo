@@ -616,12 +616,12 @@ sub parse_color {
 	if ($k eq $tag) {
 	    $v = { 'inc' => $v } unless ref($v);
 	    my ($var, $vmul, $inc) = map ($v->{$_}, qw(var mul inc));
-	    push @col, 'color' => [ exists ($v->{'var'})
-				    ? ('mask' => $self->getMask($type,$var),
-				       'rshift' => $self->getShift($type,$var),
-				       'hexmul' => hexv ($mul * (defined($vmul) ? $vmul : 1)))
-				    : ('mask' => 0),
-				    defined($inc) ? ('hexinc' => hexv($mul * $inc)) : () ];
+	    push @col, 'colrule' => [ exists ($v->{'var'})
+				      ? ('mask' => $self->getMask($type,$var),
+					 'rshift' => $self->getShift($type,$var),
+					 'hexmul' => hexv ($mul * (defined($vmul) ? $vmul : 1)))
+				      : ('mask' => 0),
+				      defined($inc) ? ('hexinc' => hexv($mul * $inc)) : () ];
 	}
     }
     return @col;

@@ -70,19 +70,19 @@ Board* newBoardFromXmlString (void *game, const char* string) {
 Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
   int nColorRules;
-  xmlNode *curNode;
+  xmlNode *curNode, *syncNode;
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
-  if (CHILD(node,SYNC)) {
+  if ((syncNode = CHILD(node,SYNC))) {
     p->synchronous = 1;
-    p->syncPeriod = OPTCHILDINT(node,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
-    p->syncPhase = OPTCHILDINT(node,PHASE,0);
+    p->syncPeriod = OPTCHILDINT(syncNode,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
+    p->syncPhase = OPTCHILDINT(syncNode,PHASE,0);
   }
   p->rule = newRuleFromXmlNode (game, CHILD(node,RULE));
   p->rate = OPTCHILDFLOAT(node,RATE,1.);
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
   nColorRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,COLOR)) {
+    if (MATCHES(curNode,COLRULE)) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode);
     }
@@ -105,7 +105,7 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent) {
 }
 
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
-  xmlNode *ruleNode;
+  xmlNode *ruleNode, *failNode;
   ParticleRule* rule;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;

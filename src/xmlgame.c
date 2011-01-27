@@ -88,13 +88,13 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
 	for (y = 0; y < size; ++y)
 	  updateQuadTree (tool->brushIntensity, x, y, 0.);
       for (node = intensityNode->children; node; node = node->next)
-	if (MATCHES(node,POS))
+	if (MATCHES(node,SPOT))
 	  updateQuadTree (tool->brushIntensity, CHILDINT(node,X), CHILDINT(node,Y), OPTCHILDINT(node,RATE,1.));
     }
     if ((patternNode = CHILD(brushNode,PATTERN))) {
       tool->brushState = newXYMap (copyState, deleteState, printState);
       for (node = patternNode->children; node; node = node->next)
-	if (MATCHES(node,POS))
+	if (MATCHES(node,PIXEL))
 	  (void) XYMapInsert (tool->brushState, CHILDINT(node,X), CHILDINT(node,Y), newState(OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE))));
     }
   }

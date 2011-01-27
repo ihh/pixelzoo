@@ -65,8 +65,8 @@
       <grammar>
 
 	<particle>
-	  <sync/><shuffle/>
-	  <name>drifter</name><type>1</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>80ffff</hexinc></color>
+	  <sync/>
+	  <name>drifter</name><type>1</type><colrule><mask>3</mask><hexmul>80000</hexmul></colrule><colrule><mask>0</mask><hexinc>80ffff</hexinc></colrule>
 	  <rate>.03</rate>
 
 	  <rule><random><prob>.05</prob>
@@ -143,7 +143,7 @@
 	  </random></rule>
 	</particle>
 
-	<particle><name>stepper</name><type>2</type><color><mask>3</mask><hexmul>80000</hexmul></color><color><mask>0</mask><hexinc>ffff</hexinc></color>
+	<particle><name>stepper</name><type>2</type><colrule><mask>3</mask><hexmul>80000</hexmul></colrule><colrule><mask>0</mask><hexinc>ffff</hexinc></colrule>
 	  <rate>.03</rate>
 
 	  <rule><random><prob>.05</prob>

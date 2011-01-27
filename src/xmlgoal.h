@@ -55,6 +55,8 @@
 #define XMLZOO_GOAL_GPARAM     XMLZOO_GOAL
 
 #define XMLZOO_TEXT        "text"
+#define XMLZOO_COLOR       "color"
+#define XMLZOO_HEXCOLOR    "hexcolor"
 #define XMLZOO_TTL         "ttl"
 #define XMLZOO_RISE        "rise"
 #define XMLZOO_ZOOM        "zoom"

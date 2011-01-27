@@ -1,6 +1,6 @@
 <!DOCTYPE game [
 
-<!ELEMENT game (goal,rate,tool,exit,board)>
+<!ELEMENT game (goal,rate,exit,board,tool+)>
 
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
@@ -53,7 +53,59 @@
 <!ELEMENT fade (#PCDATA)>
 <!ELEMENT rate (#PCDATA)>
 
+<!ELEMENT tool (size,name,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT brush (center?,intensity?,pattern?)>
+<!ELEMENT center (x,y)>
+<!ELEMENT intensity (spot+)>
+<!ELEMENT spot (x,y,rate?)>
+<!ELEMENT pattern (pixel+)>
+<!ELEMENT pixel (x,y,(state|hexstate))>
+<!ELEMENT overwrite (disallow*,(state|hexstate)*,mask?)>
 
-<!ELEMENT rule (switch|modify|random|overload|goal) #REQUIRED>
+<!ELEMENT spray (#PCDATA)>
+<!ELEMENT reserve (#PCDATA)>
+<!ELEMENT recharge (#PCDATA)>
+<!ELEMENT maxreserve (#PCDATA)>
+<!ELEMENT mask (#PCDATA)>
+<!ELEMENT hide EMPTY>
+
+<!ELEMENT exit ((type|hextype),pos+)>
+
+<!ELEMENT board (size,grammar,init*)>
+<!ELEMENT grammar (particle+)>
+<!ELEMENT init (x,y,(state|hexstate|type|hextype))>
+
+<!ELEMENT particle (name,sync?,rule,rate?,(type|hextype),colrule*)>
+<!ELEMENT sync (period?,phase?)>
+<!ELEMENT period (#PCDATA)>
+<!ELEMENT phase (#PCDATA)>
+
+<!ELEMENT colrule (rshift?,mask?,(mul|hexmul)?,(inc|hexinc)?)>
+<!ELEMENT rshift (#PCDATA)>
+<!ELEMENT mul (#PCDATA)>
+<!ELEMENT hexmul (#PCDATA)>
+<!ELEMENT inc (#PCDATA)>
+<!ELEMENT hexinc (#PCDATA)>
+
+<!ELEMENT rule (switch|modify|random|overload|goal)>
+
+<!ELEMENT switch (pos?,mask?,rshift?,case*,default?)>
+<!ELEMENT case ((state|hexstate)?,rule)>
+<!ELEMENT default (rule)>
+
+<!ELEMENT modify (src?,dest?,srcmask?,rshift?,(inc|hexinc)?,lshift?,destmask?)>
+<!ELEMENT src (x?,y?)>
+<!ELEMENT dest (x?,y?)>
+<!ELEMENT srcmask (#PCDATA)>
+<!ELEMENT destmask (#PCDATA)>
+<!ELEMENT lshift (#PCDATA)>
+
+<!ELEMENT random (prob,pass?,fail?)>
+<!ELEMENT pass (rule)>
+<!ELEMENT fail (rule)>
+
+<!ELEMENT overload (slow,fast)>
+<!ELEMENT slow (rule)>
+<!ELEMENT fast (rule)>
 
 ]>
