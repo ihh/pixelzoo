@@ -49,11 +49,11 @@ bin/%:  test/%.c $(OFILES)
 
 .SECONDARY:
 
-t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm
-	perl/zoocompiler.pl -verbose >t/simple.xml
+t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
+	perl/zoocompiler.pl -proto t/proto.xml -out t/simple.xml -verbose
 
-xml-debug: perl/zoocompiler.pl perl/Grammar.pm
-	perl/zoocompiler.pl -debug >t/simple.xml
+xml-debug: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
+	perl/zoocompiler.pl -proto t/proto.xml -out t/simple.xml -debug
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj

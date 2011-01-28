@@ -184,11 +184,11 @@ sub bindDirs {
     $loc = $self->neighbor unless defined $loc;
     confess "Not an ARRAY" unless ref($dirs) eq 'ARRAY';
     my $prob = $totalProb / @$dirs;
-    return map (($prob => ['bind' => {'loc' => $loc,
+    return map (($prob => ['bind' => ['loc' => $loc,
 				       'x' => $self->dir->{$_}->x,
 				       'y' => $self->dir->{$_}->y,
 				       defined($cases) ? ('case' => $cases) : (),
-				       defined($default) ? ('default' => $default) : ()}]),
+				       defined($default) ? ('default' => $default) : ()]]),
 		@$dirs);
 }
 
@@ -215,11 +215,11 @@ sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$s
 sub moveTo {
     my ($self, $loc, $next) = @_;
     $loc = $self->neighbor unless defined $loc;
-    return ['modify' => { 'src' => { 'loc' => 'o' },
-			  'dest' => { 'loc' => $loc },
-			  'next' => [ 'modify' => { 'dest' => { 'loc' => 'o' },
-						    'set' => { 'type' => $self->empty },
-						    defined($next) ? ('next' => $next) : () } ] } ];
+    return ['modify' => [ 'src' => [ 'loc' => 'o' ],
+			  'dest' => [ 'loc' => $loc ],
+			  'next' => [ 'modify' => [ 'set' => [ 'type' => $self->empty ],
+						    'dest' => [ 'loc' => 'o' ],
+						    defined($next) ? ('next' => $next) : () ] ] ] ];
 }
 
 1;

@@ -10,6 +10,9 @@ use Carp qw(carp croak cluck confess);
 use XML::Twig;
 use Data::Dumper;
 use File::Temp;
+use Scalar::Util;
+use IPC::Open3;
+use Symbol qw(gensym);
 
 use AutoHash;
 
@@ -73,6 +76,9 @@ sub newGrammar {
 
 	'xmllint' => 'xmllint --noout --dtdvalid',
 	'gameDTD' => pixelzoo_dir('dtd/game.dtd'),
+	'protoDTD' => pixelzoo_dir('dtd/proto.dtd'),
+	'protofile' => undef,
+	'outfile' => undef,
 
 # other helpers
 	'empty' => $emptyType,
@@ -92,10 +98,10 @@ sub newGrammar {
     bless $self, $class;
 
     $self->addType ('name' => $emptyType,
-		    'var' => { 'hue' => 6, 'saturation' => 3, 'brightness' => 3 },
-		    'hue' => { 'var' => 'hue' },
-		    'sat' => { 'var' => 'saturation' },
-		    'bri' => { 'var' => 'brightness' },
+		    'vars' => [ 'hue' => 6, 'saturation' => 3, 'brightness' => 3 ],
+		    'hue' => [ 'var' => 'hue' ],
+		    'sat' => [ 'var' => 'saturation' ],
+		    'bri' => [ 'var' => 'brightness' ],
 		    'rate' => 0,
 		    'rule' => ['nop']);
 
@@ -106,7 +112,7 @@ sub newGrammar {
 # new type helper
 sub addType {
     my ($self, @type_proto_xml) = @_;
-    push @{$self->xml->type}, 'particle' => { @type_proto_xml };
+    push @{$self->xml->type}, 'particle' => \@type_proto_xml;
 }
 
 # new tool helper
@@ -123,17 +129,69 @@ sub print {
     warn "Parsing types...\n" if $self->verbose;
     $self->parse_types;
 
-    warn "Generating proto-XML...\n" if $self->verbose;
+    warn "Generating proto-game XML...\n" if $self->verbose;
     my $game_proto = $self->make_game;
     my $wrapped_proto = ["game" => $game_proto];
 
     if ($self->debug) {
-	warn "Proto-XML passed to Grammar::transform_proto:\n", Data::Dumper->Dump($wrapped_proto);
+	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($wrapped_proto);
     }
 
-    warn "Compiling proto-XML...\n" if $self->verbose;
+    # "Sanitize" the proto-game XML, i.e. remove the quick-and-dirty shortcuts that don't translate well to XML
+    # (such as using var names as hash keys).
+    # Not sure this is the wisest idea if we do eventually plan to load XML back in...
+    # at minimum, we would need to write an inverse transformation to go the other way.
+    # We'd also need to avoid clashes between the unsanitized and sanitized tag names.
+    warn "Sanitizing proto-game XML...\n" if $self->verbose;
+    my $sanitized_proto = $self->sanitize_proto($wrapped_proto);
+
+    warn "Generating proto-game XML for validation...\n" if $self->verbose;
+    my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
+
+    if (defined $self->protofile) {
+	warn "Saving proto-game XML to file...\n" if $self->verbose;
+	local *PROTO;
+	open PROTO, '>' . $self->protofile;
+	print PROTO $sanitized_proto_xml;
+	close PROTO;
+    }
+
+    warn "Validating proto-game XML...\n" if $self->verbose;
+    if (defined $self->protofile) {
+	$self->validate_xml_file ($self->protofile, $self->protoDTD);
+    } else {
+	$self->validate_xml_string ($sanitized_proto_xml, $self->protoDTD);
+    }
+
+    warn "Compiling proto-game XML...\n" if $self->verbose;
     my $transformed_proto = $self->transform_proto ($wrapped_proto);
-    $self->print_proto_xml ($transformed_proto);
+
+    if ($self->debug) {
+	warn "Data structure representing game XML:\n", Data::Dumper->Dump($transformed_proto);
+    }
+
+    warn "Generating game XML...\n" if $self->verbose;
+    my $transformed_proto_xml = $self->generate_xml ($transformed_proto);
+
+    if (defined $self->outfile) {
+	warn "Saving game XML...\n" if $self->verbose;
+	local *OUT;
+	open OUT, ">" . $self->outfile or die "Couldn't open ", $self->outfile, ": $!";
+	print OUT $transformed_proto_xml;
+	close OUT or die "Couldn't close ", $self->outfile, ": $!";
+    }
+
+    warn "Validating generated game XML...\n" if $self->verbose;
+    if (defined $self->outfile) {
+	$self->validate_xml_file ($self->outfile, $self->gameDTD);
+    } else {
+	$self->validate_xml_string ($transformed_proto_xml, $self->gameDTD);
+    }
+
+    if (!defined $self->outfile) {
+	warn "Printing game XML...\n" if $self->verbose;
+	print $transformed_proto_xml;
+    }
 }
 
 # dummy methods subclasses should override
@@ -205,7 +263,7 @@ sub parse_node {
 	my $v = shift @node;
 	if ($k eq 'particle') {
 	    my $vhash = forceHash($v);
-	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'var'}) ? %{forceHash($vhash->{'var'})} : ());
+	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'vars'}) ? %{forceHash($vhash->{'vars'})} : ());
 	} else {
 	    $self->parse_node ($v);
 	}
@@ -239,7 +297,7 @@ sub transform_list {
     warn "Transforming list (@kv_in)" if $self->debug;
 
     my @kv_out;
-    my $trans = $self->transform_hash;
+    my $trans = $self->trans;
 
     while (@kv_in) {
 	# fetch key, value
@@ -296,7 +354,83 @@ sub forceHash {
     confess "Not a HASH";
 }
 
-# transformation functions
+# helper to sanitize the proto-XML
+# hack: temporarily overrides the transformation functions used for the main XML tree transformation
+sub sanitize_proto {
+    my ($self, $proto) = @_;
+    my $old_trans = $self->trans;
+    $self->trans ({ 'switch' => switch_sanitizer('sane-switch','state',1),
+		    'bind' => switch_sanitizer('sane-bind','type',0),
+		    'huff' => \&sanitize_huff,
+		    'gvars' => typevar_sanitizer('sane-gvars','setvar','value'),
+		    'vars' => typevar_sanitizer('sane-vars','varsize','size'),
+		    'set' => typevar_sanitizer('sane-set','setvar','value'),
+		    map (($_ => hsv_sanitizer("sane-$_")), qw(hue sat bri)),
+		  });
+
+    my $sanitized_proto = $self->transform_value ($proto);
+    $self->trans ($old_trans);  # restore the old transformations
+    return $sanitized_proto;
+}
+
+# helpers to perform, or make subroutines that perform, sanitization transformations
+sub sanitize_huff {
+    my ($self, $n) = @_;
+    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
+    my @out;
+    while (@vars) {
+	my $k = shift @vars;
+	my $v = shift @vars;
+	push @out, ('numeric' => [ '@value' => $k, @{$self->transform_value($v)} ]);
+    }
+    return ('sane-huff' => \@out);
+}
+
+sub switch_sanitizer {
+    my ($switch_tag, $case_tag, $has_var) = @_;
+    return sub {
+	my ($self, $n) = @_;
+	$n = forceHash($n);
+	my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
+	my %case = ref($case) eq 'HASH' ? %$case : @$case;
+	return ($switch_tag => [defined($locid) ? ('loc' => $locid) : (),
+				$has_var && defined($varid) ? ('var' => $varid) : (),
+				defined($case) ? map (('case' => { '@'.$case_tag => $_, @{$self->transform_value($case{$_})} }), keys %case) : (),
+				defined($default) ? ('default' => $self->transform_value($default)) : ()]);
+    };
+}
+
+sub typevar_sanitizer {
+    my ($vars_tag, $var_tag, $value_tag) = @_;
+    return sub {
+	    my ($self, $n) = @_;
+	    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
+	    my @out;
+	    while (@vars) {
+		my $k = shift @vars;
+		my $v = shift @vars;
+		if ($k eq 'type') {
+		    push @out, ($k => $v);
+		} else {
+		    push @out, ($var_tag => { 'name' => $_, $value_tag => $v });
+		}
+	    }
+	    return ($vars_tag => \@out);
+    };
+}
+
+sub hsv_sanitizer {
+    my ($tag) = @_;
+    return sub {
+	    my ($self, $n) = @_;
+	    if (ref($n)) {
+		return ($tag => $n);
+	    }
+	    return ($tag => [ 'add' => $n ]);
+    };
+}
+
+# primary transformation functions
 sub transform_hash {
 
     # main hash
@@ -400,6 +534,7 @@ sub transform_hash {
 	    $n = forceHash($n);
 
 	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
+	    $locid = $self->origin unless defined $locid;
 	    $case = {} unless defined $case;
 
 	    if (!defined($self->scope->loc->{$locid})) {
@@ -618,7 +753,6 @@ sub huff_to_rule {
 				      'fail' => [ huff_to_rule ($node->{'r'}) ] ] ] );
 }
 
-
 # color helper
 sub parse_color {
     my ($self, $n, $type, $tag, $mul) = @_;
@@ -628,9 +762,9 @@ sub parse_color {
 	my $k = shift @n;
 	my $v = shift @n;
 	if ($k eq $tag) {
-	    $v = { 'inc' => $v } unless ref($v);
+	    $v = { 'add' => $v } unless ref($v);
 	    my $vhash = forceHash($v);
-	    my ($var, $vmul, $inc) = map ($vhash->{$_}, qw(var mul inc));
+	    my ($var, $vmul, $inc) = map ($vhash->{$_}, qw(var mul add));
 	    push @col, 'colrule' => [ defined($var)
 				      ? ('mask' => $self->getMask($type,$var),
 					 'rshift' => $self->getShift($type,$var),
@@ -669,37 +803,32 @@ sub declare_type {
     }
 }
 
-# code to actually generate & print real XML from proto-XML
-
-sub print_proto_xml {
-    my ($self, $proto) = @_;
-
-    if ($self->debug) {
-	warn "Proto-XML passed to XML::Twig:\n", Data::Dumper->Dump($proto);
-    }
-
-    warn "Generating game XML...\n" if $self->verbose;
-    my $xml = $self->generate_xml ($proto);
-
-    warn "Validating generated game XML...\n" if $self->verbose;
-    $self->validate_xml ($xml, $self->gameDTD);
-
-    warn "Printing game XML...\n" if $self->verbose;
-    print $xml;
-}
-
-sub validate_xml {
+sub validate_xml_string {
     my ($self, $xml, $dtd) = @_;
     my $xmllint = $self->xmllint;
     my $tmp = File::Temp->new();
     print $tmp $xml;
-    my $lint = `$xmllint $dtd $tmp`;
-    if ($lint =~ /\S/) {
+    my $valid = $self->validate_xml_file ($tmp->filename, $dtd);
+    $tmp->unlink_on_destroy(0);
+    return $valid;
+}
+
+sub validate_xml_file {
+    my ($self, $filename, $dtd) = @_;
+    my $xmllint = $self->xmllint;
+
+    my $pid = open3(gensym, ">&STDERR", \*PH, "$xmllint $dtd $filename");
+    my @lint = <PH>;
+    waitpid($pid, 0);
+
+    if (@lint) {
 	cluck "DTD validation errors";
-	warn $lint;
-    } else {
-	warn "The XML is valid according to the DTD ($dtd)\n" if $self->verbose;
+	warn @lint;
+	return 0;
     }
+
+    warn "Validated DTD: $dtd\n" if $self->verbose;
+    return 1;
 }
 
 sub generate_xml {
@@ -824,8 +953,13 @@ sub new_XML_element {
 	    my $v = shift @child;
 	    if ($k =~ s/^\@//) {
 		$t->set_att ($k => $v);
+	    } elsif (Scalar::Util::looks_like_number($k)) {
+		my $elt = new_XML_element('numeric', $v);
+		$elt->set_att ('value' => $k);
+		$elt->paste(last_child => $t);
 	    } else {
-		new_XML_element($k, $v)->paste(last_child => $t);
+		my $elt = new_XML_element($k, $v);
+		$elt->paste(last_child => $t);
 	    }
 	}
     } else {

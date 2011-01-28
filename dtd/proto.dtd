@@ -1,0 +1,142 @@
+<!ELEMENT game (board,rate,tool+,exit,goal)>
+
+<!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
+<!ELEMENT area (pos*,goal)>
+<!ELEMENT cage (wall+,goal,count?,points?)>
+<!ELEMENT population ((type|hextype|gtype)+,count?,entropy?)>
+<!ELEMENT repeat (reps,goal)>
+<!ELEMENT cached (reps?,goal)>
+<!ELEMENT and (lazy?,cache?,goal+)>
+<!ELEMENT or (lazy?,cache?,goal+)>
+<!ELEMENT not (goal)>
+<!ELEMENT true EMPTY>
+<!ELEMENT false EMPTY>
+<!ELEMENT maybe (prob)>
+<!ELEMENT time (min?,max?)>
+<!ELEMENT testexit (count,exitstate)>
+<!ELEMENT testgame (count,gamestate)>
+<!ELEMENT charge (toolname,reserve?)>
+<!ELEMENT setexit (exitstate)>
+<!ELEMENT setgame (gamestate)>
+<!ELEMENT usetool (tool)>
+<!ELEMENT print (message)>
+<!ELEMENT place (balloon?)>
+
+<!ELEMENT pos (x?,y?)>
+<!ELEMENT x (#PCDATA)>
+<!ELEMENT y (#PCDATA)>
+
+<!ELEMENT points (min?,max?)>
+<!ELEMENT count (min?,max?)>
+<!ELEMENT entropy (min?,max?)>
+
+<!ELEMENT min (#PCDATA)>
+<!ELEMENT max (#PCDATA)>
+<!ELEMENT wall (#PCDATA)>
+<!ELEMENT reps (#PCDATA)>
+<!ELEMENT exitstate (#PCDATA)>
+<!ELEMENT gamestate (#PCDATA)>
+<!ELEMENT toolname (#PCDATA)>
+<!ELEMENT message (#PCDATA)>
+<!ELEMENT prob (#PCDATA)>
+<!ELEMENT lazy EMPTY>
+<!ELEMENT cache EMPTY>
+
+<!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
+<!ELEMENT ball (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
+<!ELEMENT color (#PCDATA)>
+<!ELEMENT hexcolor (#PCDATA)>
+<!ELEMENT text (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT ttl (#PCDATA)>
+<!ELEMENT rise (#PCDATA)>
+<!ELEMENT zoom (#PCDATA)>
+<!ELEMENT fade (#PCDATA)>
+<!ELEMENT rate (#PCDATA)>
+<!ELEMENT persist EMPTY>
+
+<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|sane-gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT brush (center?,intensity?,pattern?)>
+<!ELEMENT center (x,y)>
+<!ELEMENT intensity (spot+)>
+<!ELEMENT spot (x,y,rate?)>
+<!ELEMENT pattern (pixel+)>
+<!ELEMENT pixel (x,y,(state|hexstate|gstate|sane-gvars))>
+<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|sane-gvars)*,(mask|tmask)?)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT hexstate (#PCDATA)>
+<!ELEMENT gstate (#PCDATA)>
+
+<!ELEMENT sane-gvars (type,setvar*)>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT spray (#PCDATA)>
+<!ELEMENT reserve (#PCDATA)>
+<!ELEMENT recharge (#PCDATA)>
+<!ELEMENT maxreserve (#PCDATA)>
+<!ELEMENT mask (#PCDATA)>
+<!ELEMENT tmask (#PCDATA)>
+<!ELEMENT hide EMPTY>
+
+<!ELEMENT exit ((type|hextype),pos+)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT hextype (#PCDATA)>
+
+<!ELEMENT board (size,grammar,init*)>
+<!ELEMENT grammar (particle+)>
+<!ELEMENT init (x,y,(state|hexstate|gstate|sane-gvars|type|hextype|gtype))>
+
+<!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
+
+<!ELEMENT sane-vars (type|varsize*)>
+<!ELEMENT varsize (name,size)>
+
+<!ELEMENT sane-hue (var?,mul?,add?)>
+<!ELEMENT sane-sat (var?,mul?,add?)>
+<!ELEMENT sane-bri (var?,mul?,add?)>
+<!ELEMENT add (#PCDATA)>
+
+<!ELEMENT sync (period?,phase?)>
+<!ELEMENT period (#PCDATA)>
+<!ELEMENT phase (#PCDATA)>
+
+<!ELEMENT var (#PCDATA)>
+<!ELEMENT mul (#PCDATA)>
+<!ELEMENT hexinc (#PCDATA)>
+
+<!ELEMENT rule (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+
+<!ELEMENT sane-bind (loc,x?,y?,case*,default?)>
+<!ELEMENT sane-switch (loc?,var,case*,default?)>
+<!ELEMENT loc (#PCDATA)>
+
+<!ELEMENT case (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ATTLIST case state CDATA #IMPLIED>
+<!ATTLIST case type CDATA #IMPLIED>
+
+<!ELEMENT default (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+
+<!ELEMENT modify (src?,(inc|sane-set)?,dest?,next?)>
+<!ELEMENT src (loc?,var?)>
+<!ELEMENT dest (loc?,var?)>
+<!ELEMENT next (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+
+<!ELEMENT sane-set (type,setvar*)>
+<!ELEMENT setvar (name,value)>
+<!ELEMENT value (#PCDATA)>
+
+<!ELEMENT inc (#PCDATA)>
+
+<!ELEMENT nop EMPTY>
+
+<!ELEMENT random (prob?,pass?,fail?)>
+<!ELEMENT pass (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT fail (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+
+<!ELEMENT sane-huff (numeric+)>
+<!ELEMENT numeric (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ATTLIST numeric value CDATA #REQUIRED>
+
+<!ELEMENT overload (slow,fast)>
+<!ELEMENT slow (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT fast (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
