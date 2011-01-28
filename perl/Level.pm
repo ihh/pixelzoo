@@ -184,7 +184,7 @@ sub bindDirs {
     $loc = $self->neighbor unless defined $loc;
     confess "Not an ARRAY" unless ref($dirs) eq 'ARRAY';
     my $prob = $totalProb / @$dirs;
-    return map (($prob => ['.bind' => {'loc' => $loc,
+    return map (($prob => ['bind' => {'loc' => $loc,
 				       'x' => $self->dir->{$_}->x,
 				       'y' => $self->dir->{$_}->y,
 				       defined($cases) ? ('case' => $cases) : (),
@@ -207,19 +207,19 @@ sub bindNeumann {
     return $self->bindDirs ([qw(n ne e se s sw w nw)], $totalProb, $cases, $default, $loc);
 }
 
-sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindDirs (1, $cases, $default, $loc)]] }
-sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
-sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
-sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['.huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
+sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindDirs (1, $cases, $default, $loc)]] }
+sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
+sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
+sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
 
 sub moveTo {
     my ($self, $loc, $next) = @_;
     $loc = $self->neighbor unless defined $loc;
-    return ['.modify' => { 'src' => { 'loc' => 'o' },
-			   'dest' => { 'loc' => $loc },
-			   'next' => [ '.modify' => { 'dest' => { 'loc' => 'o' },
-						      'set' => { 'type' => $self->empty },
-						      defined($next) ? ('next' => $next) : () } ] } ];
+    return ['modify' => { 'src' => { 'loc' => 'o' },
+			  'dest' => { 'loc' => $loc },
+			  'next' => [ 'modify' => { 'dest' => { 'loc' => 'o' },
+						    'set' => { 'type' => $self->empty },
+						    defined($next) ? ('next' => $next) : () } ] } ];
 }
 
 1;

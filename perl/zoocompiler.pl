@@ -45,23 +45,23 @@ my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .01, .5, .01);
 my @wallHue = (0, 42, 84);
 $gram->addType ('name' => 'cement',
 		'rate' => $cementRate,
-		'rule' => ['.huff' => [$cementDrain => [ '.modify' => [ 'set' => [ 'type' => $gram->empty ] ] ],
-				       map (($cementSet/@wallHue => [ '.modify' => [ 'set' => [ 'type' => 'wall',
-												'decay' => 0,
-												'hue' => $_ ]]]),
+		'rule' => ['huff' => [$cementDrain => [ 'modify' => [ 'set' => [ 'type' => $gram->empty ] ] ],
+				       map (($cementSet/@wallHue => [ 'modify' => [ 'set' => [ 'type' => 'wall',
+											       'decay' => 0,
+											       'hue' => $_ ]]]),
 					    @wallHue),
 				       $gram->bindNeumann (1 - $cementSet - $cementDrain,
 							   [$gram->empty => $gram->moveTo,
-							    'wall' => [ '.huff' => [$cementStick => ['.modify' => [ 'src' => [ 'loc' => $gram->neighbor ],
-														    'dest' => [ 'loc' => $gram->origin ] ] ]]]])]]);
+							    'wall' => [ 'huff' => [$cementStick => ['modify' => [ 'src' => [ 'loc' => $gram->neighbor ],
+														  'dest' => [ 'loc' => $gram->origin ] ] ]]]])]]);
 
 # cement tool
 $gram->addTool ('name' => 'Cement spray',
 		'size' => 8,
-		'type' => 'cement',
+		'gstate' => 'cement',
 		'reserve' => 100,
 		'recharge' => 100,
-		'overwrite' => [ '.tstate' => [ '@tag' => 'hexstate', 'type' => 'empty' ] ]);
+		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # wall
 my $wallRate = .0002;
@@ -71,13 +71,13 @@ $gram->addType ('name' => 'wall',
 		'bri' => [ 'var' => 'decay', 'mul' => -8, 'inc' => 255 ],
 		'sat' => 32,
 		'rate' => $wallRate,
-		'rule' => ['.switch' => ['loc' => $gram->origin,
+		'rule' => ['switch' => ['loc' => $gram->origin,
 					 'var' => 'decay',
-					 'case' => [ 15 => [ '.modify' => [ 'set' => [ 'type' => $gram->empty ],
-									    'next' => [ 'rule' => ['.text' => [ 'rate' => .01,
+					 'case' => [ 15 => [ 'modify' => [ 'set' => [ 'type' => $gram->empty ],
+									    'next' => [ 'rule' => ['ball' => [ 'rate' => .01,
 														'hexcolor' => "20ffff",
 														'text' => 'decay' ] ] ] ] ] ],
-					 'default' => [ '.modify' => [ 'dest' => [ 'var' => 'decay' ],
+					 'default' => [ 'modify' => [ 'dest' => [ 'var' => 'decay' ],
 								       'inc' => 1 ]]]]);
 
 # print

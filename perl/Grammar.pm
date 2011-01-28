@@ -21,8 +21,8 @@ use AutoHash;
 # game data structures
 sub newGrammar {
     my ($class) = @_;
-    my $emptyType = "empty";
-    my $orig = "o";
+    my $emptyType = 'empty';
+    my $orig = 'o';
     my $self = { 
 
 # constants
@@ -97,7 +97,7 @@ sub newGrammar {
 		    'sat' => { 'var' => 'saturation' },
 		    'bri' => { 'var' => 'brightness' },
 		    'rate' => 0,
-		    'rule' => ['.nop']);
+		    'rule' => ['nop']);
 
     return $self;
 }
@@ -106,13 +106,13 @@ sub newGrammar {
 # new type helper
 sub addType {
     my ($self, @type_proto_xml) = @_;
-    push @{$self->xml->type}, ".particle" => { @type_proto_xml };
+    push @{$self->xml->type}, 'particle' => { @type_proto_xml };
 }
 
 # new tool helper
 sub addTool {
     my ($self, @tool_proto_xml) = @_;
-    push @{$self->xml->tool}, ".tool" => [ sortHash ({@tool_proto_xml}, qw(name size brush state type overwrite spray reserve recharge maxreserve hide)) ];
+    push @{$self->xml->tool}, 'tool' => [ sortHash ({@tool_proto_xml}, qw(name size brush gstate gtype overwrite spray reserve recharge maxreserve hide)) ];
 }
 
 
@@ -203,7 +203,7 @@ sub parse_node {
     while (@node) {
 	my $k = shift @node;
 	my $v = shift @node;
-	if ($k eq ".particle") {
+	if ($k eq 'particle') {
 	    my $vhash = forceHash($v);
 	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'var'}) ? %{forceHash($vhash->{'var'})} : ());
 	} else {
@@ -301,20 +301,19 @@ sub transform_hash {
 
     # main hash
     return {
-	'.type' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getType($n->{'type'})) },
-	'.tstate' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getTypeAsHexState($n->{'type'})) },
-	'.tmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},'type')) },
-	'.vmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
-	'.vshift' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
-	'.state' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->typeAndVars($n)) },
-	'.hexstate' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, hexv ($self->typeAndVars($n))) },
+	'gtype' => sub { my ($self, $n) = @_; return ('type' => $self->getType($n)) },
+	'gstate' => sub { my ($self, $n) = @_; return ('hexstate' => $self->getTypeAsHexState($n)) },
+	'gvars' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'} || 'hexstate', hexv($self->typeAndVars($n))) },
+	'tmask' => sub { my ($self, $n) = @_; return ('mask', $self->getMask($n,'type')) },
+	'vmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'} || 'mask', $self->getMask($n->{'type'},$n->{'var'})) },
+	'vshift' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'} || 'rshift', $self->getShift($n->{'type'},$n->{'var'})) },
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
 	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (.type, .tmask, etc)
 
-	# begin particle
-	'.particle' => sub {
+	# particle declaration
+	'particle' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
@@ -344,19 +343,15 @@ sub transform_hash {
 	},
 
 	# tool
-	'.tool' => sub {
+	'tool' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
-	    my ($typeandvars, $type) = map ($n->{$_}, qw(state type));
-	    my $hexstate = defined($typeandvars) ? hexv($self->typeAndVars($typeandvars)) : $self->getTypeAsHexState($type);
-	    $n->{'hexstate'} = $hexstate;
-
-	    return ('tool' => [ $self->transform_list (sortHash ($n, qw(name size brush hexstate overwrite spray reserve recharge maxreserve hide))) ]);
+	    return ('tool' => [ $self->transform_list (sortHash ($n, qw(name size brush state hexstate gstate gtype overwrite spray reserve recharge maxreserve hide))) ]);
 	},
 
 	# location identifier & type switch
-	'.bind' => sub {
+	'bind' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
@@ -400,7 +395,7 @@ sub transform_hash {
 
 
 	# location var switch
-	'.switch' => sub {
+	'switch' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
@@ -434,7 +429,7 @@ sub transform_hash {
 
 
 	# modify
-	'.modify' => sub {
+	'modify' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
@@ -562,12 +557,12 @@ sub transform_hash {
 
 
 	# nop (no operation)
-	'.nop' => sub {
+	'nop' => sub {
 	    return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]);
 	},
 
 	# random (build a Huffman tree)
-	'.huff' => sub {
+	'huff' => sub {
 	    my ($self, $n) = @_;
 	    my @n = @$n;
 	    my @node;
@@ -590,7 +585,7 @@ sub transform_hash {
 	},
 
 	# overload
-	'.load' => sub {
+	'overload' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 	    return ('rule' => [ 'overload' => [ map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] ] );
@@ -598,7 +593,7 @@ sub transform_hash {
 
 
 	# text balloon
-	'.text' => sub {
+	'ball' => sub {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 	    return ("goal" => ["and" => ["lazy" => "",
