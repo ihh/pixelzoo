@@ -692,19 +692,25 @@ sub transform_hash {
 
 
 	# nop (no operation)
-	'nop' => sub {
-	    return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]);
-	},
+	'nop' => \&make_nop,
 
 	# random (build a Huffman tree)
 	'huff' => sub {
 	    my ($self, $n) = @_;
 	    my @n = @$n;
 	    my @node;
+	    my $total = 0;
 	    while (@n) {
 		my $prob = shift @n;
 		my $rule = shift @n;
 		push @node, { 'prob' => $prob, 'rule' => $self->transform_value($rule) };
+		$total += $prob;
+	    }
+
+	    if ($total < 1) {
+		push @node, { 'prob' => 1 - $total, 'rule' => [ make_nop() ] };
+	    } elsif ($total > 1) {
+		grep ($_->{'prob'} /= $total, @node);
 	    }
 
 	    confess "Can't build a Huffman tree with no nodes" unless @node > 0;
@@ -739,6 +745,11 @@ sub transform_hash {
 	}
 
     };
+}
+
+# nop rule
+sub make_nop {
+    return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]);
 }
 
 # helper to convert Huffman tree to random rule tree

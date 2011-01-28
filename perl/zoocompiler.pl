@@ -37,7 +37,7 @@ $gram->outfile($out) if defined $proto;
 # add some stuff
 
 # cement
-my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .01, .5, .01);
+my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .03, .5, .01);
 my @wallHue = (0, 42, 84);
 $gram->addType ('name' => 'cement',
 		'rate' => $cementRate,
@@ -53,10 +53,11 @@ $gram->addType ('name' => 'cement',
 
 # cement tool
 $gram->addTool ('name' => 'Cement spray',
-		'size' => 8,
+		'size' => 2,
 		'gstate' => 'cement',
-		'reserve' => 100,
+		'reserve' => 1000,
 		'recharge' => 100,
+		'spray' => 100,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # wall
