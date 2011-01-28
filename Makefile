@@ -50,9 +50,6 @@ bin/%:  test/%.c $(OFILES)
 .SECONDARY:
 
 t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm
-	perl/zoocompiler.pl >$@
-
-xml-verbose: perl/zoocompiler.pl perl/Grammar.pm
 	perl/zoocompiler.pl -verbose >t/simple.xml
 
 xml-debug: perl/zoocompiler.pl perl/Grammar.pm

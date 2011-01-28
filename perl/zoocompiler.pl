@@ -45,15 +45,15 @@ my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .01, .5, .01);
 my @wallHue = (0, 42, 84);
 $gram->addType ('name' => 'cement',
 		'rate' => $cementRate,
-		'rule' => ['.huff' => [$cementDrain => [ '.modify' => { 'set' => { 'type' => $gram->empty } } ],
-				       map (($cementSet/@wallHue => [ '.modify' => { 'set' => { 'type' => 'wall',
+		'rule' => ['.huff' => [$cementDrain => [ '.modify' => [ 'set' => [ 'type' => $gram->empty ] ] ],
+				       map (($cementSet/@wallHue => [ '.modify' => [ 'set' => [ 'type' => 'wall',
 												'decay' => 0,
-												'hue' => $_ }}]),
+												'hue' => $_ ]]]),
 					    @wallHue),
 				       $gram->bindNeumann (1 - $cementSet - $cementDrain,
-							   {$gram->empty => $gram->moveTo,
-							    'wall' => [ '.huff' => [$cementStick => ['.modify' => { 'src' => { 'loc' => $gram->neighbor },
-														    'dest' => { 'loc' => $gram->origin } } ]]]})]]);
+							   [$gram->empty => $gram->moveTo,
+							    'wall' => [ '.huff' => [$cementStick => ['.modify' => [ 'src' => [ 'loc' => $gram->neighbor ],
+														    'dest' => [ 'loc' => $gram->origin ] ] ]]]])]]);
 
 # cement tool
 $gram->addTool ('name' => 'Cement spray',
@@ -61,24 +61,24 @@ $gram->addTool ('name' => 'Cement spray',
 		'type' => 'cement',
 		'reserve' => 100,
 		'recharge' => 100,
-		'overwrite' => [ '.tstate' => { '@tag' => 'hexstate', 'type' => 'empty' } ]);
+		'overwrite' => [ '.tstate' => [ '@tag' => 'hexstate', 'type' => 'empty' ] ]);
 
 # wall
 my $wallRate = .0002;
 $gram->addType ('name' => 'wall',
-		'var' => { 'hue' => 8, 'decay' => 4 },
-		'hue' => { 'var' => 'hue' },
-		'bri' => { 'var' => 'decay', 'mul' => -8, 'inc' => 255 },
+		'var' => [ 'hue' => 8, 'decay' => 4 ],
+		'hue' => [ 'var' => 'hue' ],
+		'bri' => [ 'var' => 'decay', 'mul' => -8, 'inc' => 255 ],
 		'sat' => 32,
 		'rate' => $wallRate,
 		'rule' => ['.switch' => ['loc' => $gram->origin,
 					 'var' => 'decay',
-					 'case' => { 15 => [ '.modify' => { 'set' => { 'type' => $gram->empty },
+					 'case' => [ 15 => [ '.modify' => [ 'set' => [ 'type' => $gram->empty ],
 									    'next' => [ 'rule' => ['.text' => [ 'rate' => .01,
 														'hexcolor' => "20ffff",
-														'text' => 'decay' ] ] ] } ] },
-					 'default' => [ '.modify' => { 'dest' => { 'var' => 'decay' },
-								       'inc' => 1 }]]]);
+														'text' => 'decay' ] ] ] ] ] ],
+					 'default' => [ '.modify' => [ 'dest' => [ 'var' => 'decay' ],
+								       'inc' => 1 ]]]]);
 
 # print
 $gram->print;

@@ -9,11 +9,12 @@ use Exporter;
 use Carp qw(carp croak cluck confess);
 use XML::Twig;
 use Data::Dumper;
+use File::Temp;
 
 use AutoHash;
 
 @ISA = qw (AutoHash);
-@EXPORT = qw (hexv decv min max minPowerOfTwo sortHash AUTOLOAD);
+@EXPORT = qw (hexv decv min max minPowerOfTwo sortHash forceHash AUTOLOAD);
 @EXPORT_OK = @EXPORT;
 
 
@@ -69,6 +70,9 @@ sub newGrammar {
 					     'se' => [+1,+1] },
 				  'loctype' => { }),
 	'scopeStack' => [],
+
+	'xmllint' => 'xmllint --noout --dtdvalid',
+	'gameDTD' => pixelzoo_dir('dtd/game.dtd'),
 
 # other helpers
 	'empty' => $emptyType,
@@ -129,8 +133,6 @@ sub print {
 
     warn "Compiling proto-XML...\n" if $self->verbose;
     my $transformed_proto = $self->transform_proto ($wrapped_proto);
-
-    warn "Generating XML...\n" if $self->verbose;
     $self->print_proto_xml ($transformed_proto);
 }
 
@@ -202,7 +204,8 @@ sub parse_node {
 	my $k = shift @node;
 	my $v = shift @node;
 	if ($k eq ".particle") {
-	    $self->declare_type ($v->{'name'}, defined($v->{'var'}) ? %{$v->{'var'}} : ());
+	    my $vhash = forceHash($v);
+	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'var'}) ? %{forceHash($vhash->{'var'})} : ());
 	} else {
 	    $self->parse_node ($v);
 	}
@@ -283,7 +286,7 @@ sub transform_value {
 }
 
 # transformation function helper
-sub force_hash {
+sub forceHash {
     my ($n) = @_;
     if (ref($n) && ref($n) eq 'HASH') {
 	return $n;
@@ -298,13 +301,13 @@ sub transform_hash {
 
     # main hash
     return {
-	'.type' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getType($n->{'type'})) },
-	'.tstate' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getTypeAsHexState($n->{'type'})) },
-	'.tmask' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},'type')) },
-	'.vmask' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
-	'.vshift' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
-	'.state' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, $self->typeAndVars($n)) },
-	'.hexstate' => sub { my ($self, $n) = @_; $n = force_hash($n); return ($n->{'@tag'}, hexv ($self->typeAndVars($n))) },
+	'.type' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getType($n->{'type'})) },
+	'.tstate' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getTypeAsHexState($n->{'type'})) },
+	'.tmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},'type')) },
+	'.vmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getMask($n->{'type'},$n->{'var'})) },
+	'.vshift' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->getShift($n->{'type'},$n->{'var'})) },
+	'.state' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, $self->typeAndVars($n)) },
+	'.hexstate' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'}, hexv ($self->typeAndVars($n))) },
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
@@ -313,7 +316,7 @@ sub transform_hash {
 	# begin particle
 	'.particle' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash ($n);
+	    $n = forceHash ($n);
 
 	    my ($type, $rate, $rule, $hue, $sat, $bri) = map ($n->{$_}, qw(name rate rule));
 	    my @particle;
@@ -343,7 +346,7 @@ sub transform_hash {
 	# tool
 	'.tool' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash ($n);
+	    $n = forceHash ($n);
 
 	    my ($typeandvars, $type) = map ($n->{$_}, qw(state type));
 	    my $hexstate = defined($typeandvars) ? hexv($self->typeAndVars($typeandvars)) : $self->getTypeAsHexState($type);
@@ -355,7 +358,7 @@ sub transform_hash {
 	# location identifier & type switch
 	'.bind' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash($n);
+	    $n = forceHash($n);
 
 	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
 	    $case = {} unless defined $case;
@@ -374,8 +377,9 @@ sub transform_hash {
 	    $self->push_scope;
 	    $self->scope->loc->{$locid} = [$x, $y];
 
+	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
-	    while (my ($name, $rule) = each %$case) {
+	    while (my ($name, $rule) = each %case_hash) {
 		$self->push_scope;
 		$self->scope->loctype->{$locid} = $name;
 		$transformed_case{$name} = $self->transform_value ($rule);
@@ -390,7 +394,7 @@ sub transform_hash {
 					     'rshift' => $self->typeshift,
 					     map (('case' => ['state' => $self->getType($_),
 							      @{$transformed_case{$_}}]),
-						  keys %$case),
+						  keys %case_hash),
 					     defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -398,7 +402,7 @@ sub transform_hash {
 	# location var switch
 	'.switch' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash($n);
+	    $n = forceHash($n);
 
 	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
 	    $case = {} unless defined $case;
@@ -412,8 +416,9 @@ sub transform_hash {
 	    $self->assertLocTypeBound ($locid, $varid);
 	    my $loctype = $self->scope->loctype->{$locid};
 
+	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
-	    while (my ($name, $rule) = each %$case) {
+	    while (my ($name, $rule) = each %case_hash) {
 		$transformed_case{$name} = $self->transform_value ($rule);
 	    }
 	    my $transformed_default = $self->transform_value ($default);
@@ -423,7 +428,7 @@ sub transform_hash {
 					      'rshift' => $self->getShift($loctype,$varid),
 					      map (('case' => ['state' => $_,
 							       @{$transformed_case{$_}}]),
-						   keys %$case),
+						   keys %case_hash),
 					      defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -431,7 +436,7 @@ sub transform_hash {
 	# modify
 	'.modify' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash ($n);
+	    $n = forceHash ($n);
 
 	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
 	    confess "In .modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
@@ -441,7 +446,8 @@ sub transform_hash {
 	    # check whether src specified
 	    my ($srcloc, $srcvar, $srcmask, $srcshift);
 	    if (defined $src) {
-		($srcloc, $srcvar) = map ($src->{$_}, qw(loc var));
+		my $srchash = forceHash($src);
+		($srcloc, $srcvar) = map ($srchash->{$_}, qw(loc var));
 
 		$srcloc = $self->origin unless defined $srcloc;
 		$srcvar = "*" unless defined $srcvar;
@@ -472,7 +478,8 @@ sub transform_hash {
 	    # check whether dest specified
 	    my ($destloc, $destvar, $destmask, $destshift);
 	    if (defined $dest) {
-		($destloc, $destvar) = map ($dest->{$_}, qw(loc var));
+		my $desthash = forceHash($dest);
+		($destloc, $destvar) = map ($desthash->{$_}, qw(loc var));
 	    }
 	    $destloc = $self->origin unless defined $destloc;
 	    $destvar = $srcvar unless defined $destvar;
@@ -528,7 +535,7 @@ sub transform_hash {
 		} else {  # $destvar eq "*", $srcmask == 0
 		    if (defined $inc) {
 			$offset = $self->typeAndVars ($inc);
-			$self->scope->loctype->{$destloc} = $inc->{'type'};
+			$self->scope->loctype->{$destloc} = forceHash($inc)->{'type'};
 		    } else {
 			$offset = $self->getType ($self->empty);
 			$self->scope->loctype->{$destloc} = $self->empty;
@@ -585,7 +592,7 @@ sub transform_hash {
 	# overload
 	'.load' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash ($n);
+	    $n = forceHash ($n);
 	    return ('rule' => [ 'overload' => [ map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] ] );
 	},
 
@@ -593,7 +600,7 @@ sub transform_hash {
 	# text balloon
 	'.text' => sub {
 	    my ($self, $n) = @_;
-	    $n = force_hash ($n);
+	    $n = forceHash ($n);
 	    return ("goal" => ["and" => ["lazy" => "",
 					 "goal" => ["and" => ["lazy" => "",
 							      "goal" => ["maybe" => ["prob" => $n->{'rate'}]],
@@ -627,8 +634,9 @@ sub parse_color {
 	my $v = shift @n;
 	if ($k eq $tag) {
 	    $v = { 'inc' => $v } unless ref($v);
-	    my ($var, $vmul, $inc) = map ($v->{$_}, qw(var mul inc));
-	    push @col, 'colrule' => [ exists ($v->{'var'})
+	    my $vhash = forceHash($v);
+	    my ($var, $vmul, $inc) = map ($vhash->{$_}, qw(var mul inc));
+	    push @col, 'colrule' => [ defined($var)
 				      ? ('mask' => $self->getMask($type,$var),
 					 'rshift' => $self->getShift($type,$var),
 					 'hexmul' => hexv ($mul * (defined($vmul) ? $vmul : 1)))
@@ -675,13 +683,37 @@ sub print_proto_xml {
 	warn "Proto-XML passed to XML::Twig:\n", Data::Dumper->Dump($proto);
     }
 
+    warn "Generating game XML...\n" if $self->verbose;
+    my $xml = $self->generate_xml ($proto);
+
+    warn "Validating generated game XML...\n" if $self->verbose;
+    $self->validate_xml ($xml, $self->gameDTD);
+
+    warn "Printing game XML...\n" if $self->verbose;
+    print $xml;
+}
+
+sub validate_xml {
+    my ($self, $xml, $dtd) = @_;
+    my $xmllint = $self->xmllint;
+    my $tmp = File::Temp->new();
+    print $tmp $xml;
+    my $lint = `$xmllint $dtd $tmp`;
+    if ($lint =~ /\S/) {
+	cluck "DTD validation errors";
+	warn $lint;
+    } else {
+	warn "The XML is valid according to the DTD ($dtd)\n" if $self->verbose;
+    }
+}
+
+sub generate_xml {
+    my ($self, $proto) = @_;
     my $elt = new_XML_element(@$proto);
     my $twig = XML::Twig->new(pretty_print => 'indented');
     $twig->set_root($elt);
-
-    $twig->print;
+    return $twig->sprint;
 }
-
 
 sub compiler_warn {
     my ($self, $fmt, @args) = @_;
@@ -712,7 +744,7 @@ sub firstNonzeroTag {
 # fully-qualified particle state: .state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
 sub typeAndVars {
     my ($self, $n) = @_;
-    confess "Not a HASH reference" unless ref($n) && ref($n) eq 'HASH';
+    $n = forceHash($n);
     my $type = $n->{'type'};
     my $state = $self->getType($type) << $self->getShift($type,"type");
     while (my ($var, $val) = each %$n) {
@@ -835,5 +867,21 @@ sub minPowerOfTwo {
     return $p;
 }
 
+
+# helper to find file relative to pixelzoo directory
+sub pixelzoo_dir {
+    my ($file) = @_;
+    my $dir;
+    for my $inc (@INC) {
+	if (-e $inc . '/' . __PACKAGE__ . '.pm') {
+	    $dir = $inc . '/..';
+	    last;
+	}
+    }
+    if (defined($dir) && defined($file)) {
+	$dir .= '/' . $file;
+    }
+    return $dir;
+}
 
 1;
