@@ -222,7 +222,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	shift = lookup->shift;
 	if (shift < BitsPerState) {
 	  /* read-write var */
-	  var = (currentSrcState & modify->srcMask) >> modify->rightShift;
+	  var = (currentSrcState & lookup->mask) >> shift;
 	} else {
 	  /* read-only var */
 	  type = StateType (currentSrcState);
@@ -248,7 +248,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	if (onBoard (board, xDest, yDest)) {
 
 	  currentSrcState = (*read) (board, xSrc, ySrc);
-	  shift = lookup->shift;
+	  shift = modify->rightShift;
 	  if (shift < BitsPerState) {
 	    /* read-write var */
 	    var = (currentSrcState & modify->srcMask) >> modify->rightShift;
@@ -258,7 +258,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	    particle = board->byType[type];
 	    shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
 	    var = particle
-	      ? ((particle->readOnly[shift / BitsPerState] & lookup->mask) >> (shift % BitsPerState))
+	      ? ((particle->readOnly[shift / BitsPerState] & modify->srcMask) >> (shift % BitsPerState))
 	      : 0;
 	  }
 
