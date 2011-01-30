@@ -52,8 +52,8 @@
 #define XMLZOO_DECSTATE    "state"
 #define XMLZOO_HEXSTATE    "hexstate"
 #define XMLZOO_DELIVER     "deliver"
-#define XMLZOO_DECMESSAGE  "message"
-#define XMLZOO_HEXMESSAGE  "hexmessage"
+#define XMLZOO_DECMESSAGE  "msg"
+#define XMLZOO_HEXMESSAGE  "hexmsg"
 #define XMLZOO_GOTO        "goto"
 #define XMLZOO_DISPATCH    "dispatch"
 

@@ -109,8 +109,8 @@
 <!ELEMENT lshift (#PCDATA)>
 <!ELEMENT next (rule)>
 
-<!ELEMENT deliver (pos,message)>
-<!ELEMENT message (#PCDATA)>
+<!ELEMENT deliver (pos,msg)>
+<!ELEMENT msg (#PCDATA)>
 
 <!ELEMENT goto (#PCDATA)>
 
@@ -122,4 +122,4 @@
 <!ELEMENT slow (rule)>
 <!ELEMENT fast (rule)>
 
-<!ELEMENT dispatch (message,rule)>
+<!ELEMENT dispatch (msg,rule)>
