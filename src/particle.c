@@ -20,15 +20,24 @@ Particle* newParticle (const char* name) {
   p->synchronous = p->syncPeriod = p->syncPhase = 0;
   p->rule = NULL;
   p->rate = p->asyncFiringRate = p->syncFiringRate = 0.;
+  p->dispatch = NULL;
   p->count = 0;
   return p;
 }
 
 void deleteParticle (Particle* p) {
+  if (p->dispatch)
+    deleteRBTree (p->dispatch);
   if (p->rule)
     deleteParticleRule (p->rule);
   SafeFree(p->name);
   SafeFree(p);
+}
+
+void addParticleMessageHandler (Particle *p, Message message, ParticleRule *handler) {
+  if (p->dispatch == NULL)
+    p->dispatch = newRBTree (IntCompare, IntCopy, AbortCopyFunction, IntDelete, deleteParticleRule, NullPrintFunction, NullPrintFunction);
+  RBTreeInsert (p->dispatch, &message, handler);
 }
 
 PaletteIndex getParticleColor (Particle* particle, State state) {

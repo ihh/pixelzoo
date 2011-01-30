@@ -26,6 +26,12 @@ ParticleRule* newModifyRule() {
   return rule;
 }
 
+ParticleRule* newDeliverRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (DeliverRule);
+  return rule;
+}
+
 ParticleRule* newRandomRule() {
   ParticleRule* rule;
   rule = newParticleRule (RandomRule);
@@ -46,6 +52,13 @@ ParticleRule* newGoalRule() {
   ParticleRule* rule;
   rule = newParticleRule (LookupRule);
   rule->param.goal = NULL;
+  return rule;
+}
+
+ParticleRule* newGotoRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (GotoRule);
+  rule->param.gotoLabel = NULL;
   return rule;
 }
 
@@ -93,6 +106,10 @@ void deleteParticleRule (void *voidRule) {
     goal = rule->param.goal;
     if (goal)
       deleteGoal (goal);
+    break;
+
+  case GotoRule:
+  case DeliverRule:
     break;
 
   default:

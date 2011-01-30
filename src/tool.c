@@ -70,7 +70,7 @@ void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yE
 	oldState = readBoardStateUnguarded(board,xPaint,yPaint);
 	maskedOldState = oldState & tool->overwriteMask;
 	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
-	  writeBoardStateUnguarded (board, xPaint, yPaint, newState);
+	  writeBoardStateUnguardedFunction (board, xPaint, yPaint, newState);
 	  if (oldState != newState)
 	    tool->reserve = MAX (tool->reserve - 1, 0.);
 	}

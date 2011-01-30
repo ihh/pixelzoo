@@ -12,9 +12,9 @@
 
 	  <rule><random><prob>.05</prob>
 	    <pass><rule><random><prob>.55</prob>
-		<pass><rule><modify><rshift>64</rshift>
+		<pass><rule><modify><srcmask>0</srcmask>
 		</modify></rule></pass>
-		<fail><rule><modify><rshift>64</rshift><hexinc>2000000000000</hexinc><dest><x>1</x></dest>
+		<fail><rule><modify><srcmask>0</srcmask><hexinc>2000000000000</hexinc><dest><x>1</x></dest>
 		</modify></rule></fail>
 	    </random></rule></pass>
 	    <fail><rule><random>   <!-- x or y -->
@@ -24,11 +24,11 @@
 			<pos><x>1</x></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><x>1</x></dest>
+				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -38,11 +38,11 @@
 			<pos><x>-1</x></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><x>-1</x></dest>
+				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -55,11 +55,11 @@
 			<pos><y>1</y></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><y>1</y></dest>
+				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -69,11 +69,11 @@
 			<pos><y>-1</y></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>1000000000001</hexinc><dest><y>-1</y></dest>
+				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -89,9 +89,9 @@
 
 	  <rule><random><prob>.05</prob>
 	    <pass><rule><random><prob>.55</prob>
-		<pass><rule><modify><rshift>64</rshift>
+		<pass><rule><modify><srcmask>0</srcmask>
 		</modify></rule></pass>
-		<fail><rule><modify><rshift>64</rshift><hexinc>1000000000000</hexinc><dest><x>1</x></dest>
+		<fail><rule><modify><srcmask>0</srcmask><hexinc>1000000000000</hexinc><dest><x>1</x></dest>
 		</modify></rule></fail>
 	    </random></rule></pass>
 	    <fail><rule><random>   <!-- x or y -->
@@ -101,11 +101,11 @@
 			<pos><x>1</x></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><x>1</x></dest>
+				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -115,11 +115,11 @@
 			<pos><x>-1</x></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><x>-1</x></dest>
+				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -132,11 +132,11 @@
 			<pos><y>1</y></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				    <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><y>1</y></dest>
+				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>
@@ -146,11 +146,11 @@
 			<pos><y>-1</y></pos>
 			<mask>ffff000000000000</mask>
 			<case><state>0</state><rule><modify>
-			    <rshift>64</rshift>
+			    <srcmask>0</srcmask>
 			    <next><rule><modify>
 				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
 				<next><rule><modify>
-				      <rshift>64</rshift><hexinc>2000000000001</hexinc><dest><y>-1</y></dest>
+				      <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
 			    </modify></rule></next>
 			</modify></rule></case>

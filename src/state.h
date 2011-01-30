@@ -40,6 +40,14 @@ typedef unsigned long long int Vars;
 /* Type <-> State conversion macros */
 #define StateType(STATE) (((STATE) & TypeMask) >> TypeShift)
 
+/* read-only State's for given Type */
+#define ReadOnlyStates    15
+#define AddressableStates 16
+#define AddressableBits   (BitsPerState * AddressableStates)
+
+/* Messages */
+typedef unsigned long long int Message;
+
 /* Reserved states & types */
 /* Empty (aka "void", "scenery black") */
 #define EmptyState 0

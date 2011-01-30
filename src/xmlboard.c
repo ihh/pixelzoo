@@ -14,6 +14,8 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent);
 
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game);
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game);
+void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void *game);
+void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *game);
 
 /* method defs */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
@@ -22,9 +24,11 @@ Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
 
 Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   Board *board;
-  xmlNode *boardNode, *grammar, *node;
+  xmlNode *boardNode, *ruleNode, *grammar, *node;
   int x, y;
   State state;
+  const char* subRuleName;
+  ParticleRule *rule;
 
   boardNode = CHILD(root,BOARD);
   Assert (boardNode != NULL, "XML board tag not found");
@@ -33,6 +37,14 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   board->game = game;
 
   grammar = CHILD(boardNode,GRAMMAR);
+  for (node = grammar->children; node; node = node->next)
+    if (MATCHES(node,SUBRULE)) {
+      subRuleName = (const char*) CHILDSTRING(node,NAME);
+      ruleNode = CHILD(node,RULE);
+      rule = newRuleFromXmlNode (game, ruleNode);
+      Assert (StringMapFind (board->subRule, subRuleName) == 0, "Duplicate subrule name");
+      (void) StringMapInsert (board->subRule, (char*) subRuleName, rule);
+    }
   for (node = grammar->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
       addParticleToBoard (newParticleFromXmlNode(game,node), board);
@@ -69,23 +81,43 @@ Board* newBoardFromXmlString (void *game, const char* string) {
 
 Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
-  int nColorRules;
+  Message message;
+  int nColorRules, readOnlyIndex;
   xmlNode *curNode, *syncNode;
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
+
   if ((syncNode = CHILD(node,SYNC))) {
     p->synchronous = 1;
     p->syncPeriod = OPTCHILDINT(syncNode,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
     p->syncPhase = OPTCHILDINT(syncNode,PHASE,0);
   }
+
   p->rule = newRuleFromXmlNode (game, CHILD(node,RULE));
+
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,DISPATCH)) {
+      message = OPTCHILDINT(curNode,DECMESSAGE,CHILDHEX(curNode,HEXMESSAGE));
+      addParticleMessageHandler (p, message, newRuleFromXmlParentNode (game, curNode));
+    }
+
+  readOnlyIndex = 0;
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,READONLY)) {
+      readOnlyIndex = OPTCHILDINT (node, READONLY, readOnlyIndex + 1);
+      Assert (readOnlyIndex >= 0 && readOnlyIndex < ReadOnlyStates, "newParticleFromXmlNode: read-only state index out of range");
+      p->readOnly[readOnlyIndex] = OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE));
+    }
+
   p->rate = OPTCHILDFLOAT(node,RATE,1.);
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
+
   nColorRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,COLRULE)) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode);
     }
+
   return p;
 }
 
@@ -106,9 +138,10 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent) {
 
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
   xmlNode *ruleNode;
-  ParticleRule* rule;
+  ParticleRule *rule, **gotoLabelRef;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
+  DeliverRuleParams *deliver;
   RandomRuleParams *random;
   OverloadRuleParams *overload;
 
@@ -129,6 +162,16 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
       rule = newModifyRule();
       modify = &rule->param.modify;
       initModifyRuleFromXmlNode (modify, ruleNode, game);
+
+    } else if (MATCHES (ruleNode, DELIVER)) {
+      rule = newDeliverRule();
+      deliver = &rule->param.deliver;
+      initDeliverRuleFromXmlNode (deliver, ruleNode, game);
+
+    } else if (MATCHES (ruleNode, GOTO)) {
+      rule = newGotoRule();
+      gotoLabelRef = &rule->param.gotoLabel;
+      initGotoRuleFromXmlNode (gotoLabelRef, ruleNode, game);
 
     } else if (MATCHES (ruleNode, RANDOM)) {
       rule = newRandomRule();
@@ -183,14 +226,12 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
 
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game) {
   xmlNode *src, *dest;
-  State defaultSrcMask;
 
   op->rightShift = OPTCHILDINT(node,RSHIFT,0);
   op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
   op->leftShift = OPTCHILDINT(node,LSHIFT,0);
 
-  defaultSrcMask = op->rightShift >= BitsPerState ? 0 : StateMask;
-  op->srcMask = OPTCHILDHEX(node,SRCMASK,defaultSrcMask);
+  op->srcMask = OPTCHILDHEX(node,SRCMASK,StateMask);
   op->destMask = OPTCHILDHEX(node,DESTMASK,StateMask);
 
   src = CHILD(node,SRC);
@@ -207,4 +248,24 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game)
     op->dest = op->src;
 
   op->nextRule = newRuleFromXmlParentNode (game, CHILD (node, NEXT));
+}
+
+void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void *game) {
+  xmlNode *recip;
+  recip = CHILD(node,POS);
+  deliver->recipient.x = CHILDINT(recip,X);
+  deliver->recipient.y = CHILDINT(recip,Y);
+  deliver->message = OPTCHILDINT(node,DECMESSAGE,CHILDHEX(node,HEXMESSAGE));
+}
+
+void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *game) {
+  StringMapNode *subRuleNode;
+  const char* label;
+  label = (const char*) getNodeContentOrComplain (node, NULL);
+  subRuleNode = StringMapFind (((Game*)game)->board->subRule, label);
+  *gotoLabelRef = subRuleNode ? ((ParticleRule*) (subRuleNode->value)) : ((ParticleRule*) NULL);
+  if (*gotoLabelRef == NULL) {
+    fprintf (stderr, "Unresolved goto label: %s\n", label);
+    Abort ("Couldn't find goto label");
+  }
 }

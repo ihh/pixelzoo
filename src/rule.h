@@ -35,11 +35,11 @@ typedef struct LocalOffset {
 */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, ModifyRule, RandomRule, OverloadRule, GoalRule };
+enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, OverloadRule, GoalRule, GotoRule };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
-  unsigned char shift;
+  unsigned int shift;
   State mask;
   StateMap *matchRule;
   ParticleRule *defaultRule;
@@ -47,10 +47,15 @@ typedef struct LookupRuleParams {
 
 typedef struct ModifyRuleParams {
   LocalOffset src, dest;
-  unsigned char rightShift, leftShift;
+  unsigned int rightShift, leftShift;
   State srcMask, destMask, offset;
   ParticleRule *nextRule;
 } ModifyRuleParams;
+
+typedef struct DeliverRuleParams {
+  LocalOffset recipient;
+  Message message;
+} DeliverRuleParams;
 
 typedef struct RandomRuleParams {
   double prob;
@@ -64,9 +69,11 @@ typedef struct OverloadRuleParams {
 typedef union RuleParams {
   LookupRuleParams lookup;
   ModifyRuleParams modify;
+  DeliverRuleParams deliver;
   RandomRuleParams random;
   OverloadRuleParams overload;
   void *goal;
+  ParticleRule *gotoLabel;
 } RuleParams;
 
 struct ParticleRule {
@@ -77,9 +84,11 @@ struct ParticleRule {
 /* methods */
 ParticleRule* newLookupRule();
 ParticleRule* newModifyRule();
+ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
 ParticleRule* newOverloadRule();
 ParticleRule* newGoalRule();
+ParticleRule* newGotoRule();
 
 void deleteParticleRule (void *rule);
 

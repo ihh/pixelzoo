@@ -78,10 +78,12 @@
 <!ELEMENT hextype (#PCDATA)>
 
 <!ELEMENT board (size,grammar,init*)>
-<!ELEMENT grammar (particle+)>
+<!ELEMENT grammar (subrule*,particle+)>
 <!ELEMENT init (x,y,(state|hexstate|type|hextype))>
 
-<!ELEMENT particle (name,(type|hextype),colrule*,sync?,rate?,rule)>
+<!ELEMENT subrule (name,rule)>
+
+<!ELEMENT particle (name,(type|hextype),colrule*,sync?,rate?,rule,dispatch*)>
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
@@ -93,7 +95,7 @@
 <!ELEMENT inc (#PCDATA)>
 <!ELEMENT hexinc (#PCDATA)>
 
-<!ELEMENT rule (switch|modify|random|overload|goal)>
+<!ELEMENT rule (switch|modify|deliver|random|overload|goal|goto)>
 
 <!ELEMENT switch (pos?,mask?,rshift?,case*,default?)>
 <!ELEMENT case ((state|hexstate)?,rule)>
@@ -107,6 +109,11 @@
 <!ELEMENT lshift (#PCDATA)>
 <!ELEMENT next (rule)>
 
+<!ELEMENT deliver (pos,message)>
+<!ELEMENT message (#PCDATA)>
+
+<!ELEMENT goto (#PCDATA)>
+
 <!ELEMENT random (prob?,pass?,fail?)>
 <!ELEMENT pass (rule)>
 <!ELEMENT fail (rule)>
@@ -114,3 +121,5 @@
 <!ELEMENT overload (slow,fast)>
 <!ELEMENT slow (rule)>
 <!ELEMENT fast (rule)>
+
+<!ELEMENT dispatch (message,rule)>

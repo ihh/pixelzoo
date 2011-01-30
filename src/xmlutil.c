@@ -53,7 +53,10 @@ xmlChar* getNodeContent (xmlNode* node) {
 
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
   if (node == NULL) {
-    fprintf (stderr, "Missing tag: %s\n", tag);
+    if (tag)
+      fprintf (stderr, "Missing tag: %s\n", tag);
+    else
+      fprintf (stderr, "Missing node\n");
     Abort("XML parse error");
   }
   if (node->children == NULL) {

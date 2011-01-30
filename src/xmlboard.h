@@ -14,6 +14,9 @@
 #define XMLZOO_PHASE       "phase"
 #define XMLZOO_DECTYPE     "type"
 #define XMLZOO_HEXTYPE     "hextype"
+#define XMLZOO_READONLY    "readonly"
+#define XMLZOO_INDEX       "index"
+#define XMLZOO_SUBRULE     "subrule"
 #define XMLZOO_NAME        "name"
 #define XMLZOO_RULE        "rule"
 #define XMLZOO_RATE        "rate"
@@ -48,6 +51,11 @@
 #define XMLZOO_INIT        "init"
 #define XMLZOO_DECSTATE    "state"
 #define XMLZOO_HEXSTATE    "hexstate"
+#define XMLZOO_DELIVER     "deliver"
+#define XMLZOO_DECMESSAGE  "message"
+#define XMLZOO_HEXMESSAGE  "hexmessage"
+#define XMLZOO_GOTO        "goto"
+#define XMLZOO_DISPATCH    "dispatch"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);

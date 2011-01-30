@@ -11,6 +11,7 @@ Board* newBoard (int size) {
 	Board *board;
 	board = SafeMalloc (sizeof (Board));
 	board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
+	board->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
 	board->size = size;
 	board->cell = SafeCalloc (size * size, sizeof(State));
 	board->sync = SafeCalloc (size * size, sizeof(State));
@@ -45,6 +46,7 @@ void deleteBoard (Board* board) {
 	for (t = 0; t < NumTypes; ++t)
 		if (board->byType[(Type) t])
 			deleteParticle (board->byType[(Type) t]);
+	deleteStringMap (board->subRule);
 	SafeFree(board->byType);
 	SafeFree(board);
 }
@@ -57,7 +59,7 @@ State readSyncBoardStateUnguardedFunction (Board* board, int x, int y) {
   return readSyncBoardStateUnguarded(board,x,y);
 }
 
-void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
+void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
 	int i;
 	Type t;
 	Particle *p, *pOld;
@@ -96,14 +98,14 @@ void writeBoardStateUnguarded (Board* board, int x, int y, State state) {
 		board->sync[i] = state;
 }
 
-void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state) {
+void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
 	int i;
 	i = boardIndex(board->size,x,y);
 	board->sync[i] = state;
 	board->syncWrite[i] = 1;
 }
 
-void dummyWriteBoardState (Board* board, int x, int y, State state) {
+void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
   return;
 }
 
@@ -148,7 +150,7 @@ void evolveBoardCell (Board* board, int x, int y) {
 		/*
 		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
 		 */
-	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguarded);
+	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
 	}
 }
 
@@ -157,11 +159,14 @@ void evolveBoardCellSync (Board* board, int x, int y) {
 	/* do an update */
 	p = readBoardParticle (board, x, y);
 	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-	  /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction" if Particle's modify operations are to be cumulative
-	     (useful e.g. for accumulator rules, c.f. Conway's Life; however, Conway's Life is simultaneous,
-	     so modifies *can't* be cumulative - they must be instantaneous/atomic)
+	  /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction"
+	     to allow synchronous Particle's to preview the upcoming sync state of the Board.
+	     This allows sync Particle's modify operations to be cumulative
+	     (useful e.g. for accumulator rules that count the neighborhood;
+	     note however that Conway's Life - an obvious application for accumulator rules -
+	     requires simultaneity, so Conway modifies *can't* be cumulative - they must be instantaneous/atomic)
 	   */
-	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguarded);
+	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
 	}
 }
 
@@ -178,7 +183,7 @@ void syncBoard (Board* board) {
 			for (y = 0; y < size; ++y) {
 				i = boardIndex(size,x,y);
 				if (syncWrite[i]) {
-					writeBoardStateUnguarded (board, x, y, sync[i]);
+					writeBoardStateUnguardedFunction (board, x, y, sync[i]);
 					syncWrite[i] = 0;
 				}
 			}
@@ -191,13 +196,18 @@ void syncBoard (Board* board) {
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
   int xSrc, ySrc, xDest, yDest;
-  State oldSrcState, oldDestState, state;
+  State currentSrcState, currentDestState, newDestState, var;
+  Type type;
+  Particle *particle;
+  unsigned int shift;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
+  DeliverRuleParams *deliver;
   RandomRuleParams *random;
   OverloadRuleParams *overload;
   Goal *goal;
-  StateMapNode *node;
+  StateMapNode *lookupNode;
+  RBNode *dispatchNode;
 
   while (rule != NULL) {
     switch (rule->type) {
@@ -207,9 +217,24 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       xSrc = x + lookup->loc.x;
       ySrc = y + lookup->loc.y;
       if (onBoard (board, xSrc, ySrc)) {
-	state = ((*read) (board,xSrc,ySrc) & lookup->mask) >> lookup->shift;
-	node = StateMapFind (lookup->matchRule, state);
-	rule = node ? (ParticleRule*) node->value : lookup->defaultRule;
+
+	currentSrcState = (*read) (board, xSrc, ySrc);
+	shift = lookup->shift;
+	if (shift < BitsPerState) {
+	  /* read-write var */
+	  var = (currentSrcState & modify->srcMask) >> modify->rightShift;
+	} else {
+	  /* read-only var */
+	  type = StateType (currentSrcState);
+	  particle = board->byType[type];
+	  shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
+	  var = particle
+	    ? ((particle->readOnly[shift / BitsPerState] & lookup->mask) >> (shift % BitsPerState))
+	    : 0;
+	}
+
+	lookupNode = StateMapFind (lookup->matchRule, var);
+	rule = lookupNode ? (ParticleRule*) lookupNode->value : lookup->defaultRule;
       }
       break;
 
@@ -221,14 +246,46 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	xDest = x + modify->dest.x;
 	yDest = y + modify->dest.y;
 	if (onBoard (board, xDest, yDest)) {
-	  oldSrcState = (*read) (board, xSrc, ySrc);
-	  oldDestState = (*read) (board, xDest, yDest);
-	  state = (oldDestState & (StateMask ^ modify->destMask))
-	    | (((((oldSrcState & modify->srcMask) >> modify->rightShift) + modify->offset) << modify->leftShift) & modify->destMask);
-	  (*write) (board, xDest, yDest, state);
+
+	  currentSrcState = (*read) (board, xSrc, ySrc);
+	  shift = lookup->shift;
+	  if (shift < BitsPerState) {
+	    /* read-write var */
+	    var = (currentSrcState & modify->srcMask) >> modify->rightShift;
+	  } else {
+	    /* read-only var */
+	    type = StateType (currentSrcState);
+	    particle = board->byType[type];
+	    shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
+	    var = particle
+	      ? ((particle->readOnly[shift / BitsPerState] & lookup->mask) >> (shift % BitsPerState))
+	      : 0;
+	  }
+
+	  currentDestState = (*read) (board, xDest, yDest);
+	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
+	    | (((var + modify->offset) << modify->leftShift) & modify->destMask);
+	  (*write) (board, xDest, yDest, newDestState);
 	}
       }
       rule = modify->nextRule;
+      break;
+
+    case DeliverRule:
+      deliver = &rule->param.deliver;
+      /* DeliverRule hands over control: update x, y, ruleOwner and rule */
+      x += deliver->recipient.x;
+      y += deliver->recipient.y;
+      if (onBoard (board, x, y)) {
+	currentSrcState = (*read) (board, x, y);
+	type = StateType (currentSrcState);
+	ruleOwner = board->byType[type];
+	dispatchNode = ruleOwner ? RBTreeFind (ruleOwner->dispatch, &deliver->message) : (RBNode*) NULL;
+	rule = (ruleOwner && dispatchNode) ? ((ParticleRule*) dispatchNode->value) : ((ParticleRule*) NULL);
+      } else {
+	ruleOwner = NULL;
+	rule = NULL;
+      }
       break;
 
     case RandomRule:
@@ -249,6 +306,10 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  rule->param.goal = NULL;
 	}
       rule = NULL;
+      break;
+
+    case GotoRule:
+      rule = rule->param.gotoLabel;
       break;
 
     default:

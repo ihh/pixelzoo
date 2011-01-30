@@ -6,11 +6,13 @@
 #include "bintree.h"
 #include "util.h"
 #include "vector.h"
+#include "stringmap.h"
 
 typedef struct CellWatcher CellWatcher;
 
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
+  StringMap* subRule;  /* subroutine ParticleRule's */
   int size;  /* board is a square, this is the length of each side in cells */
   State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */
   unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y)] is true if sync[boardIndex(size,x,y)] should be written to cell[boardIndex(size,x,y)] at next board sync */
@@ -38,7 +40,7 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
 /* macros to access board without bounds overrun errors */
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
 #define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? (State) readBoardStateUnguarded(BOARD_PTR,X,Y) : (State) 0)
-#define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguarded(BOARD_PTR,X,Y,STATE); }
+#define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguardedFunction(BOARD_PTR,X,Y,STATE); }
 #define readBoardParticle(BOARD_PTR,X,Y) (BOARD_PTR)->byType[StateType(readBoardState(BOARD_PTR,X,Y))]
 #define readBoardParticleUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->byType[StateType(readBoardStateUnguarded(BOARD_PTR,X,Y))]
 
@@ -60,6 +62,36 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
 */
 void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret);
 
+
+/* Board read accessors.
+   These "unguarded" methods do not check for off-board co-ordinates. Use readBoardState macro instead.
+*/
+
+/* Board read accessor for asynchronous updates.
+ */
+State readBoardStateUnguardedFunction (Board* board, int x, int y);
+
+/* Board read accessor for synchronous updates.
+ */
+State readSyncBoardStateUnguardedFunction (Board* board, int x, int y);
+
+/* Board write accessors.
+   These "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
+*/
+
+/* Board write accessor for asynchronous updates.
+ */
+void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state);
+
+/* Board write accessor for synchronous updates.
+ */
+void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state);
+
+/* Dummy Board write accessor
+ */
+void dummyWriteBoardStateFunction (Board* board, int x, int y, State state);
+
+
 /* Private helper methods & macros */
 
 /* private board index conversion macros */
@@ -70,34 +102,6 @@ void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSec
 /* private board read macros */
 #define readBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->cell[boardIndex((BOARD_PTR)->size,X,Y)]
 #define readSyncBoardStateUnguarded(BOARD_PTR,X,Y) (BOARD_PTR)->sync[boardIndex((BOARD_PTR)->size,X,Y)]
-
-/* Board read accessors.
-   These "unguarded" methods do not check for off-board co-ordinates. Use readBoardState macro instead.
-*/
-
-/* Board write accessor for asynchronous updates.
- */
-State readBoardStateUnguardedFunction (Board* board, int x, int y);
-
-/* Board write accessor for synchronous updates.
- */
-State readSyncBoardStateUnguardedFunction (Board* board, int x, int y);
-
-/* Board write accessors.
-   These "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
-*/
-
-/* Board write accessor for asynchronous updates.
- */
-void writeBoardStateUnguarded (Board* board, int x, int y, State state);
-
-/* Board write accessor for synchronous updates.
- */
-void writeSyncBoardStateUnguarded (Board* board, int x, int y, State state);
-
-/* Dummy Board write accessor
- */
-void dummyWriteBoardState (Board* board, int x, int y, State state);
 
 /* Function pointers for board read & write.
  */
