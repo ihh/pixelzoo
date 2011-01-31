@@ -256,7 +256,9 @@ sub homicide {
 
 sub balloon {
     my ($self, $text, @args) = @_;
-    my %ballArgs = ('text' => $text, @args);
+    my %ballArgs = ('text' => $text,
+		    'rate' => 1,
+		    @args);
     return ['rule' => ['ball' => [sortHash(\%ballArgs, $self->balloonArgs)]]];
 }
 

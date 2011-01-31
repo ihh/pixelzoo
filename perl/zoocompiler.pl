@@ -126,7 +126,8 @@ my %rps = ('name' => 'cyclobs',
 	   'breedfat' => 1,
 	   'breedhungry' => .006,
 	   'diecrowded' => .008,
-	   'dielonely' => .005);
+	   'dielonely' => .005,
+	   'text' => .001);
 
 $gram->addType ('name' => $rps{'name'},
 		'vars' => [ 'species' => 2 ],
@@ -145,12 +146,15 @@ $gram->addType ('name' => $rps{'name'},
 							(1 - $rps{'dielonely'},
 							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'},
 															     $gram->neighbor,
-															     undef,
-															     $gram->balloon("yum yum"))]],
+															     $gram->balloon("step",'rate'=>$rps{'text'}),
+															     $gram->balloon("breed",'rate'=>$rps{'text'}))]],
 							   $rps{'name'} => [ make_species_switch
 									     ($gram,
 									      [ 'huff' => [ $rps{'diecrowded'} => $gram->suicide ] ],
-									      [ 'huff' => [ $rps{'eat'} => $gram->moveOrSpawnTo ($rps{'breedfat'}) ]]) ] ])]]]]);
+									      [ 'huff' => [ $rps{'eat'} => $gram->moveOrSpawnTo ($rps{'breedfat'},
+																 $gram->neighbor,
+																 $gram->balloon("eat",'rate'=>$rps{'text'}),
+																 $gram->balloon("spawn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
 
 # rps animal tool
 $gram->addTool ('name' => $rps{'name'},
