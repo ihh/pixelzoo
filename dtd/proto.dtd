@@ -134,7 +134,7 @@
 <!ELEMENT fail (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
 
 <!ELEMENT sane-huff (numeric+)>
-<!ELEMENT numeric (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT numeric (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
 <!ATTLIST numeric value CDATA #REQUIRED>
 
 <!ELEMENT overload (slow,fast)>

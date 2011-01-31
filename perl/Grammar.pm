@@ -126,6 +126,10 @@ sub toolArgs {
     return qw(name size brush state hexstate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
 }
 
+sub balloonArgs {
+    return qw(rate pos color hexcolor text size ttl rise zoom fade);
+}
+
 # top-level method to generate, compile & print XML
 sub print {
     my ($self) = @_;
@@ -748,8 +752,8 @@ sub transform_hash {
 	    return ("goal" => ["and" => ["lazy" => "",
 					 "goal" => ["and" => ["lazy" => "",
 							      "goal" => ["maybe" => ["prob" => $n->{'rate'}]],
-							      "goal" => ["place" => ["balloon" => [ sortHash ($n, qw(rate pos color hexcolor text size ttl rise zoom fade)) ]]]]],
-					 "goal" => ["false" => ""]]]);  # "and"ing result with 0 means this goal will persist & not automatically be deleted the first time the balloon is placed (this behavior can still be triggered by tweaking balloon pr
+							      "goal" => ["place" => ["balloon" => [ sortHash ($n, $self->balloonArgs) ]]]]],
+					 "goal" => ["false" => ""]]]);  # "and"ing result with 0 means this goal will persist & not automatically be deleted the first time the balloon is placed
 	}
 
     };

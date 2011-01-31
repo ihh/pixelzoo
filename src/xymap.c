@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "XYmap.h"
+#include "xymap.h"
 
 XYCoord* newXYCoord (int x, int y) {
   XYCoord* c;

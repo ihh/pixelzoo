@@ -73,9 +73,7 @@ $gram->addType ('name' => 'wall',
 		'rate' => $wallRate,
 		'rule' => ['switch' => ['loc' => $gram->origin,
 					'var' => 'decay',
-					'case' => [ $wallMaxDecay => $gram->suicide ($gram->balloon ([ 'rate' => .01,
-												       'hexcolor' => "20ffff",
-												       'text' => 'decay' ]))],
+					'case' => [ $wallMaxDecay => $gram->suicide ($gram->balloon ("decay", 'rate' => .01, 'hexcolor' => "20ffff"))],
 					'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
 								     'inc' => 1 ]]]]);
 
@@ -145,7 +143,10 @@ $gram->addType ('name' => $rps{'name'},
 			      'default' => ['huff' => [ $rps{'dielonely'} => $gram->suicide,
 							$gram->bindNeumann
 							(1 - $rps{'dielonely'},
-							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'})]],
+							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'},
+															     $gram->neighbor,
+															     undef,
+															     $gram->balloon("yum yum"))]],
 							   $rps{'name'} => [ make_species_switch
 									     ($gram,
 									      [ 'huff' => [ $rps{'diecrowded'} => $gram->suicide ] ],

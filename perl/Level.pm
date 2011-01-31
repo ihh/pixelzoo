@@ -215,10 +215,11 @@ sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$se
 sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
 
 sub moveOrSpawnTo {
-    my ($self, $spawnProb, $loc, $next) = @_;
+    my ($self, $spawnProb, $loc, $afterMove, $afterSpawn) = @_;
     $loc = $self->neighbor unless defined $loc;
     return $self->copyTo ($self->neighbor,
-			  ['huff' => [(1-$spawnProb) => $self->suicide]]);
+			  ['huff' => [defined($afterSpawn) ? ($spawnProb => $afterSpawn) : (),
+				      (1-$spawnProb) => $self->suicide ($afterMove)]]);
 }
 
 sub moveTo {
@@ -254,8 +255,9 @@ sub homicide {
 }
 
 sub balloon {
-    my ($self, $balloon) = @_;
-    return ['rule' => ['ball' => $balloon]];
+    my ($self, $text, @args) = @_;
+    my %ballArgs = ('text' => $text, @args);
+    return ['rule' => ['ball' => [sortHash(\%ballArgs, $self->balloonArgs)]]];
 }
 
 1;
