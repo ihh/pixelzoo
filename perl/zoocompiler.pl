@@ -16,9 +16,10 @@ my $man = 0;
 my $help = 0;
 my $debug = 0;
 my $verbose = 0;
+my $xmllint;
 my ($proto, $out);
 
-GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'out=s' => \$out, 'proto=s' => \$proto) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'out=s' => \$out, 'proto=s' => \$proto, 'xmllint=s' => \$xmllint) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -33,6 +34,7 @@ $gram->verbose($verbose);
 $gram->debug($debug);
 $gram->protofile($proto) if defined $proto;
 $gram->outfile($out) if defined $proto;
+$gram->xmllint($xmllint) if defined $xmllint;
 
 # add some stuff
 
@@ -41,8 +43,8 @@ my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .03, .5, .01);
 my @wallHue = (0, 42, 84);
 $gram->addType ('name' => 'cement',
 		'rate' => $cementRate,
-		'rule' => ['huff' => [$cementDrain => [ 'modify' => [ 'set' => [ 'type' => $gram->empty ] ] ],
-				       map (($cementSet/@wallHue => [ 'modify' => [ 'set' => [ 'type' => 'wall',
+		'rule' => ['huff' => [$cementDrain => $gram->suicide,
+				      map (($cementSet/@wallHue => [ 'modify' => [ 'set' => [ 'type' => 'wall',
 											       'decay' => 0,
 											       'hue' => $_ ]]]),
 					    @wallHue),
@@ -61,7 +63,8 @@ $gram->addTool ('name' => 'Cement spray',
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # wall
-my $wallRate = .0002;
+my ($wallRate, $wallMaxDecay) = (.0002,
+				 15);
 $gram->addType ('name' => 'wall',
 		'vars' => [ 'hue' => 8, 'decay' => 4 ],
 		'hue' => [ 'var' => 'hue' ],
@@ -69,13 +72,111 @@ $gram->addType ('name' => 'wall',
 		'bri' => [ 'var' => 'decay', 'mul' => -8, 'add' => 255 ],
 		'rate' => $wallRate,
 		'rule' => ['switch' => ['loc' => $gram->origin,
-					 'var' => 'decay',
-					 'case' => [ 15 => [ 'modify' => [ 'set' => [ 'type' => $gram->empty ],
-									   'next' => [ 'rule' => ['ball' => [ 'rate' => .01,
-													      'hexcolor' => "20ffff",
-													      'text' => 'decay' ] ] ] ] ] ],
-					 'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
-								      'inc' => 1 ]]]]);
+					'var' => 'decay',
+					'case' => [ $wallMaxDecay => $gram->suicide ($gram->balloon ([ 'rate' => .01,
+												       'hexcolor' => "20ffff",
+												       'text' => 'decay' ]))],
+					'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
+								     'inc' => 1 ]]]]);
+
+
+# acid
+my ($acidRate, $acidDrain, $acidBurn) = (.1, .03, .5);
+$gram->addType ('name' => 'acid',
+		'rate' => $acidRate,
+		'rule' => ['huff' => [$acidDrain => $gram->suicide,
+				       $gram->bindNeumann (1 - $acidDrain,
+							   [$gram->empty => $gram->moveTo],
+							   ['huff' => [ $acidBurn => $gram->homicide ($gram->suicide) ] ])]]);
+
+# acid tool
+$gram->addTool ('name' => 'Acid spray',
+		'size' => 16,
+		'gstate' => 'acid',
+		'reserve' => 1000,
+		'recharge' => 100,
+		'spray' => 2,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
+# rock-paper-scissors animal
+sub make_species_switch {
+    my ($gram, $selfRule, $predatorRule, $preyRule) = @_;
+    ($selfRule, $predatorRule, $preyRule) = map (defined($_) ? (ref($_) ? $_ : []) : ['nop'], $selfRule, $predatorRule, $preyRule);
+    my %sw;
+    for my $orig (0..2) {
+	for my $nbr (0..2) {
+	    $sw{$orig}->{$nbr} =
+		$nbr == $orig
+		? $selfRule
+		: ((($nbr + 1) % 3 == $orig)
+		   ? $predatorRule
+		   : $preyRule);
+	}
+    }
+    return ('switch' => ['loc' => $gram->origin,
+			 'var' => 'species',
+			 map (('case' => [ $_ => ['switch' => ['loc' => $gram->neighbor,
+							       'var' => 'species',
+							       'case' => [%{$sw{$_}}]]]]),
+			      0..2)]);
+}
+
+my %rps = ('name' => 'cyclobs',
+	   'rate' => .03,
+	   'step' => .2,
+	   'eat' => 1,
+	   'breedfat' => 1,
+	   'breedhungry' => .006,
+	   'diecrowded' => .008,
+	   'dielonely' => .005);
+
+$gram->addType ('name' => $rps{'name'},
+		'vars' => [ 'species' => 2 ],
+		'hue' => [ 'var' => 'species', 'mul' => 83 ],
+		'sat' => 255,
+		'bri' => 255,
+		'rate' => $rps{'rate'},
+		'rule' =>
+		['switch' => ['loc' => $gram->origin,
+			      'var' => 'species',
+			      'case' => [3 => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
+										     'dest' => ['var' => 'species']]]),
+							       0..2)]]],
+			      'default' => ['huff' => [ $rps{'dielonely'} => $gram->suicide,
+							$gram->bindNeumann
+							(1 - $rps{'dielonely'},
+							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'})]],
+							   $rps{'name'} => [ make_species_switch
+									     ($gram,
+									      [ 'huff' => [ $rps{'diecrowded'} => $gram->suicide ] ],
+									      [ 'huff' => [ $rps{'eat'} => $gram->moveOrSpawnTo ($rps{'breedfat'}) ]]) ] ])]]]]);
+
+# rps animal tool
+$gram->addTool ('name' => $rps{'name'},
+		'size' => 1,
+		'gvars' => [ 'type' => $rps{'name'}, 'species' => 3 ],
+		'reserve' => 1,
+		'recharge' => 100,
+		'spray' => 100,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
+# perfume
+my ($perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce) = (.6, .03, .03, .5);
+$gram->addType ('name' => 'perfume',
+		'rate' => $perfumeRate,
+		'rule' => ['huff' => [$perfumeDrain => $gram->suicide,
+				       $gram->bindNeumann (1 - $perfumeDrain,
+							   [$gram->empty => $gram->moveOrSpawnTo ($perfumeBillow),
+							    $rps{'name'} => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
+
+# perfume tool
+$gram->addTool ('name' => 'Perfume spray',
+		'size' => 4,
+		'gstate' => 'perfume',
+		'reserve' => 1000,
+		'recharge' => 100,
+		'spray' => 2500,
+		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # print
 $gram->print;
@@ -95,6 +196,7 @@ zoocompiler.pl [options] <.zg file>
   -man                full documentation
   -proto              file to save proto-XML
   -out                file to save output XML (otherwise sent to stdout)
+  -xmllint            path to xmllint
   -verbose            report progress
   -debug              more info than you want
 
@@ -109,6 +211,10 @@ Prints a brief help message and exits.
 =item B<-man>
 
 Prints the manual page and exits.
+
+=item B<-xmllint>
+
+Specify the path to xmllint.
 
 =item B<-proto>
 

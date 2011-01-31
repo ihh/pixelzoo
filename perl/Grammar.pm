@@ -74,7 +74,8 @@ sub newGrammar {
 				  'loctype' => { }),
 	'scopeStack' => [],
 
-	'xmllint' => 'xmllint --noout --dtdvalid',
+	'xmllint' => 'xmllint',
+	'xmllint_opts' => '--noout --dtdvalid',
 	'gameDTD' => pixelzoo_dir('dtd/game.dtd'),
 	'protoDTD' => pixelzoo_dir('dtd/proto.dtd'),
 	'protofile' => undef,
@@ -118,9 +119,12 @@ sub addType {
 # new tool helper
 sub addTool {
     my ($self, @tool_proto_xml) = @_;
-    push @{$self->xml->tool}, 'tool' => [ sortHash ({@tool_proto_xml}, qw(name size brush gstate gtype overwrite spray reserve recharge maxreserve hide)) ];
+    push @{$self->xml->tool}, 'tool' => [ sortHash ({@tool_proto_xml}, $self->toolArgs) ];
 }
 
+sub toolArgs {
+    return qw(name size brush state hexstate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
+}
 
 # top-level method to generate, compile & print XML
 sub print {
@@ -349,6 +353,9 @@ sub forceHash {
     if (ref($n) && ref($n) eq 'HASH') {
 	return $n;
     } elsif (ref($n) && ref($n) eq 'ARRAY') {
+	if (@$n % 2 != 0) {
+	    confess "Odd number of elements in array, can't convert to hash: (@$n)";
+	}
 	return {@$n};
     }
     confess "Not a HASH";
@@ -404,6 +411,7 @@ sub typevar_sanitizer {
     my ($vars_tag, $var_tag, $value_tag) = @_;
     return sub {
 	    my ($self, $n) = @_;
+	    confess "Expected a {Type=>Value} hash/array reference" unless ref($n);
 	    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
 	    my @out;
 	    while (@vars) {
@@ -481,7 +489,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
-	    return ('tool' => [ $self->transform_list (sortHash ($n, qw(name size brush state hexstate gstate gtype overwrite spray reserve recharge maxreserve hide))) ]);
+	    return ('tool' => [ $self->transform_list (sortHash ($n, $self->toolArgs)) ]);
 	},
 
 	# location identifier & type switch
@@ -816,7 +824,6 @@ sub declare_type {
 
 sub validate_xml_string {
     my ($self, $xml, $dtd) = @_;
-    my $xmllint = $self->xmllint;
     my $tmp = File::Temp->new();
     print $tmp $xml;
     my $valid = $self->validate_xml_file ($tmp->filename, $dtd);
@@ -826,14 +833,14 @@ sub validate_xml_string {
 
 sub validate_xml_file {
     my ($self, $filename, $dtd) = @_;
-    my $xmllint = $self->xmllint;
+    my $xmllint = $self->xmllint . ' ' . $self->xmllint_opts;
 
     my $pid = open3(gensym, ">&STDERR", \*PH, "$xmllint $dtd $filename");
     my @lint = <PH>;
     waitpid($pid, 0);
 
     if (@lint) {
-	cluck "DTD validation errors";
+	carp "DTD validation errors";
 	warn @lint;
 	return 0;
     }

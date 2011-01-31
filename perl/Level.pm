@@ -180,7 +180,9 @@ sub make_goal {
 
 # addType helpers
 sub bindDirs {
-    my ($self, $dirs, $totalProb, $cases, $default, $loc) = @_;
+    my ($self, $dirs, $totalProb, $cases, $default, $loc, $guard) = @_;
+    die "Too many arguments" if defined($guard);
+    die "Loc should not be a reference" if ref($loc);
     $loc = $self->neighbor unless defined $loc;
     confess "Not an ARRAY" unless ref($dirs) eq 'ARRAY';
     my $prob = $totalProb / @$dirs;
@@ -212,14 +214,48 @@ sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$sel
 sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
 sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
 
+sub moveOrSpawnTo {
+    my ($self, $spawnProb, $loc, $next) = @_;
+    $loc = $self->neighbor unless defined $loc;
+    return $self->copyTo ($self->neighbor,
+			  ['huff' => [(1-$spawnProb) => $self->suicide]]);
+}
+
 sub moveTo {
     my ($self, $loc, $next) = @_;
     $loc = $self->neighbor unless defined $loc;
-    return ['modify' => [ 'src' => [ 'loc' => 'o' ],
-			  'dest' => [ 'loc' => $loc ],
-			  'next' => [ 'modify' => [ 'set' => [ 'type' => $self->empty ],
-						    'dest' => [ 'loc' => 'o' ],
-						    defined($next) ? ('next' => $next) : () ] ] ] ];
+    return $self->copyTo ($loc, $self->suicide ($next));
+}
+
+sub copyTo {
+    my ($self, $loc, $next) = @_;
+    $loc = $self->neighbor unless defined $loc;
+    return $self->copyFromTo ('o', $loc, $next);
+}
+
+sub copyFromTo {
+    my ($self, $src, $dest, $next) = @_;
+    return ['modify' => [ 'src' => [ 'loc' => $src ],
+			  'dest' => [ 'loc' => $dest ],
+			  defined($next) ? ('next' => $next) : () ] ];
+}
+
+sub suicide {
+    my ($self, $next) = @_;
+    return ['modify' => [ 'set' => [ 'type' => $self->empty  ],
+			  defined($next) ? ('next' => $next) : () ] ];
+}
+
+sub homicide {
+    my ($self, $next) = @_;
+    return ['modify' => [ 'set' => [ 'type' => $self->empty  ],
+			  'dest' => [ 'loc' => $self->neighbor ],
+			  defined($next) ? ('next' => $next) : () ] ];
+}
+
+sub balloon {
+    my ($self, $balloon) = @_;
+    return ['rule' => ['ball' => $balloon]];
 }
 
 1;

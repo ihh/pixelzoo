@@ -7,6 +7,9 @@
 #include "notify.h"
 #include "goal.h"
 
+/* for attemptRule() debugging: max rule depth, and rule trace */
+#define MaxRuleDepth 100
+
 Board* newBoard (int size) {
 	Board *board;
 	board = SafeMalloc (sizeof (Board));
@@ -208,15 +211,21 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   Goal *goal;
   StateMapNode *lookupNode;
   RBNode *dispatchNode;
+  int tracePos;
+  ParticleRule *ruleTrace[MaxRuleDepth];
 
+  tracePos = 0;
   while (rule != NULL) {
+
+    Assert (tracePos < MaxRuleDepth, "Rules nested too deep");
+    ruleTrace[tracePos++] = rule;
+
     switch (rule->type) {
     case LookupRule:
       lookup = &rule->param.lookup;
-      rule = lookup->defaultRule;
       xSrc = x + lookup->loc.x;
       ySrc = y + lookup->loc.y;
-      if (onBoard (board, xSrc, ySrc)) {
+      if (onBoard (board, xSrc, ySrc) && lookup->matchRule != NULL) {
 
 	currentSrcState = (*read) (board, xSrc, ySrc);
 	shift = lookup->shift;
@@ -235,7 +244,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
 	lookupNode = StateMapFind (lookup->matchRule, var);
 	rule = lookupNode ? (ParticleRule*) lookupNode->value : lookup->defaultRule;
-      }
+      } else
+	rule = lookup->defaultRule;
       break;
 
     case ModifyRule:

@@ -7,6 +7,8 @@ SDL_LDFLAGS := $(shell $(SDLCONFIG) --libs) -L/usr/X11R6/lib -lXi
 XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
 XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
 
+XMLLINT     := /usr/bin/xmllint
+
 CC          := gcc
 COPTS       := -g -Wall
 CFLAGS      := $(SDL_CFLAGS) $(XML_CFLAGS) -Isrc
@@ -50,10 +52,10 @@ bin/%:  test/%.c $(OFILES)
 .SECONDARY:
 
 t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
-	perl/zoocompiler.pl -proto t/proto.xml -out t/simple.xml -verbose
+	perl/zoocompiler.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -verbose
 
 xml-debug: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
-	perl/zoocompiler.pl -proto t/proto.xml -out t/simple.xml -debug
+	perl/zoocompiler.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -debug
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj

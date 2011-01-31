@@ -50,7 +50,7 @@ ParticleRule* newOverloadRule() {
 
 ParticleRule* newGoalRule() {
   ParticleRule* rule;
-  rule = newParticleRule (LookupRule);
+  rule = newParticleRule (GoalRule);
   rule->param.goal = NULL;
   return rule;
 }
