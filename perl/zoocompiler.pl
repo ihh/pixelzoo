@@ -126,13 +126,13 @@ sub make_species_switch {
 }
 
 my %rps = ('name' => 'cyclobs',
-	   'rate' => .03,
+	   'rate' => 10* .03,  # debug
 	   'step' => .2,
 	   'eat' => 1,
 	   'breedfat' => 1,
-	   'breedhungry' => .006,
-	   'diecrowded' => .008,
-	   'dielonely' => .005,
+	   'diespontaneous' => .005,
+	   'breedhungry' => .006 / (1 - .005),
+	   'diecrowded' => .006,
 	   'text' => .001);
 
 $gram->addType ('name' => $rps{'name'},
@@ -147,9 +147,9 @@ $gram->addType ('name' => $rps{'name'},
 			      'case' => [3 => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
 										     'dest' => ['var' => 'species']]]),
 							       0..2)]]],
-			      'default' => ['huff' => [ $rps{'dielonely'} => $gram->suicide,
+			      'default' => ['huff' => [ $rps{'diespontaneous'} => $gram->suicide,
 							$gram->bindNeumann
-							(1 - $rps{'dielonely'},
+							(1 - $rps{'diespontaneous'},
 							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'},
 															     $gram->neighbor,
 															     $gram->balloon("step",'rate'=>$rps{'text'}),
