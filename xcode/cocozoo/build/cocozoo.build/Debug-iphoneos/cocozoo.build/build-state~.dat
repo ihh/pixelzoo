@@ -1,0 +1,2213 @@
+Tcocozoo
+v7
+r0
+t318367462.831178
+cCheck dependencies
+cCpResource build/Debug-iphoneos/cocozoo.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+cProcessInfoPlistFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Info.plist Resources/Info.plist
+cPhaseScriptExecution "Build level XML" /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Script-28F1C87F12F9DAFF00D6221E.sh
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Default.png Resources/Default.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/fps_images.png Resources/fps_images.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon.png Resources/Icon.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon@2x.png Resources/Icon@2x.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png Resources/Icon-Small@2x.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small.png Resources/Icon-Small.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png Resources/Icon-Small-50.png
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-72.png Resources/Icon-72.png
+cCpResource build/Debug-iphoneos/cocozoo.app/iTunesArtwork Resources/iTunesArtwork
+cCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/grossini.png ../../png/grossini.png
+cProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch.gch cocozoo_Prefix.pch normal armv6 objective-c com.apple.compilers.llvmgcc42
+cProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch.gch cocozoo_Prefix.pch normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/main.o /Users/yam/pixelzoo/xcode/cocozoo/main.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozooAppDelegate.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/HelloWorldScene.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/RootViewController.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/balloon.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/bintree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/board.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/color.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/game.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/goal.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/list.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/notify.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/particle.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/quadtree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rbtree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rule.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/statemap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/stringmap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/tool.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/util.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/vector.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlboard.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgame.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgoal.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlutil.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xymap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c normal armv6 c com.apple.compilers.llvmgcc42
+cCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/SceneTest.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+cLd /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo normal armv6
+cGenerateDSYMFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app.dSYM /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo
+cProcessProductPackaging "/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision" /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision
+cTouch /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+cProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent
+cCodeSign /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk
+c000000004CC7DC9E0000000000000110
+t1288166558
+s272
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist
+c000000004CB3DFCF00000000000001A7
+t1286856655
+s423
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+c000000004CB3DFCF00000000000001E5
+t1286856655
+s485
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/AVFoundation.framework/AVFoundation
+c000000004CC11C42000000000020BF30
+t1287724098
+s2146096
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/AudioToolbox.framework/AudioToolbox
+c000000004CC10EF400000000003B8CB0
+t1287720692
+s3902640
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004CC10EF500000000003532B0
+t1287720693
+s3486384
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGGeometry.h
+c000000004CC10DCA00000000000022F0
+t1287720394
+s8944
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGImage.h
+c000000004CC10DCA0000000000002650
+t1287720394
+s9808
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004CC10F4700000000003E1F20
+t1287720775
+s4071200
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004CC10F1C0000000000001466
+t1287720732
+s5222
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenAL.framework/OpenAL
+c000000004CC10F3800000000000459B0
+t1287720760
+s285104
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGL.h
+c000000004CC110BE000000000000094F
+t1287721150
+s2383
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/EAGLDrawable.h
+c000000004CC110BE0000000000000A61
+t1287721150
+s2657
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/ES1/gl.h
+c000000004CC110BE0000000000009369
+t1287721150
+s37737
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/ES1/glext.h
+c000000004CC110BE0000000000003C4A
+t1287721150
+s15434
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/OpenGLES.framework/OpenGLES
+c000000004CC110CB000000000002C650
+t1287721163
+s181840
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h
+c000000004CC1111C00000000000000C4
+t1287721244
+s196
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/QuartzCore.framework/QuartzCore
+c000000004CC1127D0000000000267530
+t1287721597
+s2520368
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004CC11AE60000000000000AA1
+t1287723750
+s2721
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004CC11B750000000000C769F0
+t1287723893
+s13068784
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/Availability.h
+c000000004CB3FBB80000000000001ADD
+t1286863800
+s6877
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/ctype.h
+c000000004CB3E4B80000000000002C18
+t1286857912
+s11288
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/inttypes.h
+c000000004CB3E4B800000000000027D1
+t1286857912
+s10193
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2/libxml/tree.h
+c000000004CC10E340000000000008F14
+t1287720500
+s36628
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/math.h
+c000000004CB3E44400000000000004F1
+t1286857796
+s1265
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/objc/objc.h
+c000000004CC1098E0000000000000A2F
+t1287719310
+s2607
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/stddef.h
+c000000004CB3E4B80000000000001404
+t1286857912
+s5124
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/stdio.h
+c000000004CB3E4B800000000000040AC
+t1286857912
+s16556
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/stdlib.h
+c000000004CB3E4B80000000000002DF5
+t1286857912
+s11765
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/string.h
+c000000004CB3E4B80000000000001731
+t1286857912
+s5937
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/sys/time.h
+c000000004CBFACD90000000000001E17
+t1287630041
+s7703
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/time.h
+c000000004CB3E4B8000000000000178E
+t1286857912
+s6030
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/lib/libxml2.dylib
+c000000004CC10E3500000000001E1430
+t1287720501
+s1971248
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/lib/libz.dylib
+c000000004CC105400000000000020FF0
+t1287718208
+s135152
+
+N/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision
+c000000004D2A6E980000000000001C06
+t1294626456
+s7174
+
+N/Users/yam/pixelzoo/src/balloon.h
+c000000004D2D410E00000000000004AC
+t1294811406
+s1196
+i"color.h"
+
+N/Users/yam/pixelzoo/src/bintree.h
+c000000004D3736D70000000000000344
+t1295464151
+s836
+i"rule.h"
+
+N/Users/yam/pixelzoo/src/board.h
+c000000004D4527470000000000001822
+t1296377671
+s6178
+i"rule.h"
+i"particle.h"
+i"bintree.h"
+i"util.h"
+i"vector.h"
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/src/color.h
+c000000004D33B811000000000000129B
+t1295235089
+s4763
+
+N/Users/yam/pixelzoo/src/game.h
+c000000004D33B81100000000000011CE
+t1295235089
+s4558
+i<time.h>
+i"board.h"
+i"tool.h"
+i"stringmap.h"
+i"xymap.h"
+i"goal.h"
+
+N/Users/yam/pixelzoo/src/goal.h
+c000000004D33B8110000000000001716
+t1295235089
+s5910
+i"board.h"
+i"balloon.h"
+i"tool.h"
+i"xymap.h"
+i"statemap.h"
+i"stringmap.h"
+i"list.h"
+
+N/Users/yam/pixelzoo/src/list.h
+c000000004D220B63000000000000085C
+t1294076771
+s2140
+i<stdlib.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/src/notify.h
+c000000004D2D3A2E000000000000052C
+t1294809646
+s1324
+i"rule.h"
+i"particle.h"
+i"board.h"
+i"xymap.h"
+
+N/Users/yam/pixelzoo/src/particle.h
+c000000004D4527470000000000000678
+t1296377671
+s1656
+i"rule.h"
+i"color.h"
+i"util.h"
+i"statemap.h"
+
+N/Users/yam/pixelzoo/src/quadtree.h
+c000000004D2B5A2E000000000000038E
+t1294686766
+s910
+i"rule.h"
+
+N/Users/yam/pixelzoo/src/rbtree.h
+c000000004D4527470000000000000AB1
+t1296377671
+s2737
+i"util.h"
+i"list.h"
+
+N/Users/yam/pixelzoo/src/rule.h
+c000000004D45274700000000000008F5
+t1296377671
+s2293
+i"statemap.h"
+
+N/Users/yam/pixelzoo/src/state.h
+c000000004D45274700000000000006D6
+t1296377671
+s1750
+
+N/Users/yam/pixelzoo/src/statemap.h
+c000000004D3B2DC30000000000000657
+t1295723971
+s1623
+i"rbtree.h"
+i"state.h"
+
+N/Users/yam/pixelzoo/src/stringmap.h
+c000000004D1B75860000000000000E35
+t1293645190
+s3637
+i"rbtree.h"
+i"list.h"
+i"vector.h"
+
+N/Users/yam/pixelzoo/src/tool.h
+c000000004D2B6A5E00000000000005E4
+t1294690910
+s1508
+i"quadtree.h"
+i"rule.h"
+i"board.h"
+i"statemap.h"
+i"xymap.h"
+
+N/Users/yam/pixelzoo/src/util.h
+c000000004D28B48400000000000008C7
+t1294513284
+s2247
+i<stdlib.h>
+
+N/Users/yam/pixelzoo/src/vector.h
+c000000004D28B4840000000000000597
+t1294513284
+s1431
+i<stdlib.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/src/xmlboard.h
+c000000004D4527470000000000000894
+t1296377671
+s2196
+i<libxml/tree.h>
+i"board.h"
+
+N/Users/yam/pixelzoo/src/xmlgame.h
+c000000004D41DB3C0000000000000400
+t1296161596
+s1024
+i<libxml/tree.h>
+i"game.h"
+
+N/Users/yam/pixelzoo/src/xmlgoal.h
+c000000004D41DD430000000000000961
+t1296162115
+s2401
+i<libxml/tree.h>
+i"goal.h"
+i"game.h"
+i"xmlboard.h"
+
+N/Users/yam/pixelzoo/src/xmlutil.h
+c000000004D22616D0000000000000944
+t1294098797
+s2372
+i<libxml/tree.h>
+
+N/Users/yam/pixelzoo/src/xymap.h
+c000000004D1B75860000000000000CE6
+t1293645190
+s3302
+i"rbtree.h"
+i"list.h"
+i"vector.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../png/grossini.png
+c000000004D49AC6E00000000000005F1
+t1296673902
+s1521
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c
+c000000004D2D55230000000000000589
+t1294816547
+s1417
+i"balloon.h"
+i"util.h"
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c
+c000000004D4705EE0000000000000843
+t1296500206
+s2115
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i"bintree.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c
+c000000004D47136F00000000000035D6
+t1296503663
+s13782
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i<time.h>
+i<math.h>
+i"board.h"
+i"notify.h"
+i"goal.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c
+c000000004D1B758600000000000006F4
+t1293645190
+s1780
+i"color.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c
+c000000004D3735C20000000000001C14
+t1295463874
+s7188
+i<stdio.h>
+i<math.h>
+i"game.h"
+i"notify.h"
+i"tool.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c
+c000000004D33B8110000000000003F28
+t1295235089
+s16168
+i<stdio.h>
+i<math.h>
+i"goal.h"
+i"tool.h"
+i"game.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c
+c000000004D1B75860000000000000E0E
+t1293645190
+s3598
+i"list.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c
+c000000004D2D3A4200000000000003D7
+t1294809666
+s983
+i"notify.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c
+c000000004D45274700000000000005DD
+t1296377671
+s1501
+i<stdlib.h>
+i<string.h>
+i<stdio.h>
+i"particle.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c
+c000000004D4705F60000000000000CA1
+t1296500214
+s3233
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i"quadtree.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c
+c000000004D223B9D000000000000595C
+t1294089117
+s22876
+i<stdio.h>
+i<stdlib.h>
+i"rbtree.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c
+c000000004D47146E0000000000000A74
+t1296503918
+s2676
+i"rule.h"
+i"statemap.h"
+i"goal.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c
+c000000004D20EEEE00000000000001DE
+t1294003950
+s478
+i<stdio.h>
+i"statemap.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c
+c000000004D1B75860000000000000218
+t1293645190
+s536
+i<string.h>
+i<stdio.h>
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c
+c000000004D4527470000000000000C16
+t1296377671
+s3094
+i<stdio.h>
+i"tool.h"
+i"util.h"
+i"stringmap.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c
+c000000004D28B4840000000000000A47
+t1294513284
+s2631
+i<stdio.h>
+i<stdlib.h>
+i<string.h>
+i<math.h>
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c
+c000000004D28B484000000000000097B
+t1294513284
+s2427
+i"vector.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c
+c000000004D452747000000000000251D
+t1296377671
+s9501
+i<stdio.h>
+i<stdlib.h>
+i<string.h>
+i"xmlboard.h"
+i"xmlutil.h"
+i"xmlgoal.h"
+i"game.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c
+c000000004D41DB410000000000001436
+t1296161601
+s5174
+i<string.h>
+i"notify.h"
+i"xmlgame.h"
+i"xmlboard.h"
+i"xmlgoal.h"
+i"xmlutil.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c
+c000000004D41C6C700000000000026EC
+t1296156359
+s9964
+i<string.h>
+i"xmlgoal.h"
+i"xmlboard.h"
+i"xmlutil.h"
+i"xmlgame.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c
+c000000004D45274700000000000007D6
+t1296377671
+s2006
+i<string.h>
+i<ctype.h>
+i"xmlutil.h"
+i"util.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c
+c000000004D472D8300000000000002CC
+t1296510339
+s716
+i<stdio.h>
+i"xymap.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/GameConfig.h
+c000000004D486503000000000000021D
+t1296590083
+s541
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.h
+c000000004D4865030000000000000171
+t1296590083
+s369
+i"cocos2d.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m
+c000000004D48650300000000000005D2
+t1296590083
+s1490
+i"HelloWorldScene.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.h
+c000000004D48650300000000000000E5
+t1296590083
+s229
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m
+c000000004D4865030000000000001139
+t1296590083
+s4409
+i"cocos2d.h"
+i"RootViewController.h"
+i"GameConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.h
+c000000004D49AD9100000000000001AB
+t1296674193
+s427
+i"cocos2d.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m
+c000000004D49AD7F00000000000013B5
+t1296674175
+s5045
+i"SceneTest.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.h
+c000000004D49AE62000000000000017A
+t1296674402
+s378
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m
+c000000004D49AEB30000000000001502
+t1296674483
+s5378
+i"cocos2d.h"
+i"cocozooAppDelegate.h"
+i"GameConfig.h"
+i"HelloWorldScene.h"
+i"RootViewController.h"
+i"SceneTest.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Default.png
+c000000004D48650300000000000077AB
+t1296590083
+s30635
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-72.png
+c000000004D4865030000000000002C96
+t1296590083
+s11414
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small-50.png
+c000000004D4865030000000000001F2B
+t1296590083
+s7979
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small.png
+c000000004D486503000000000000135C
+t1296590083
+s4956
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small@2x.png
+c000000004D48650300000000000024F9
+t1296590083
+s9465
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon.png
+c000000004D486503000000000000246F
+t1296590083
+s9327
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon@2x.png
+c000000004D4865030000000000005375
+t1296590083
+s21365
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/fps_images.png
+c000000004D486503000000000000183B
+t1296590083
+s6203
+
+N/Users/yam/pixelzoo/xcode/cocozoo/Resources/iTunesArtwork
+c000000004D486503000000000000F21E
+t1296590083
+s61982
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+t1296674662
+s646
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app.dSYM
+t1296674662
+s102
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Default.png
+t1296674657
+s31932
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-72.png
+t1296674657
+s12252
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png
+t1296674656
+s8600
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small.png
+t1296674656
+s5241
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png
+t1296674656
+s10151
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon.png
+t1296674656
+s10022
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon@2x.png
+t1296674656
+s23297
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Info.plist
+t1296674656
+s1044
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/PkgInfo
+t1296674656
+s8
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/ResourceRules.plist
+t1296674656
+s485
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo
+t1296674662
+s1528160
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision
+t1296674662
+s7174
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/fps_images.png
+t1296674656
+s7188
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/grossini.png
+t1296674657
+s1233
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/iTunesArtwork
+t1296674657
+s61982
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/libcocos2d libraries.a
+c000000004D49AF6000000000003A1820
+t1296674656
+s3807264
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/HelloWorldScene.o
+t1296674658
+s14420
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/RootViewController.o
+t1296674658
+s46912
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/SceneTest.o
+t1296674661
+s34144
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/balloon.o
+t1296674658
+s5480
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/bintree.o
+t1296674658
+s7236
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/board.o
+t1296674658
+s26052
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozoo.LinkFileList
+c000000004D49AF600000000000000C0E
+t1296674656
+s3086
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozooAppDelegate.o
+t1296674658
+s64940
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/color.o
+t1296674658
+s5364
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/game.o
+t1296674658
+s20316
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/goal.o
+t1296674659
+s36696
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/list.o
+t1296674659
+s10164
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/main.o
+t1296674658
+s3360
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/notify.o
+t1296674659
+s8220
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/particle.o
+t1296674659
+s8280
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/quadtree.o
+t1296674659
+s9220
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rbtree.o
+t1296674660
+s24052
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rule.o
+t1296674659
+s9436
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/statemap.o
+t1296674659
+s3972
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/stringmap.o
+t1296674660
+s4472
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/tool.o
+t1296674660
+s11236
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/util.o
+t1296674660
+s10412
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/vector.o
+t1296674660
+s8416
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlboard.o
+t1296674660
+s29020
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgame.o
+t1296674660
+s24144
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgoal.o
+t1296674661
+s30448
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlutil.o
+t1296674661
+s9072
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xymap.o
+t1296674661
+s4384
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Script-28F1C87F12F9DAFF00D6221E.sh
+c000000004D49AF60000000000000002B
+t1296674656
+s43
+
+N/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent
+t1296674662
+s420
+
+N/Users/yam/pixelzoo/xcode/cocozoo/cocozoo_Prefix.pch
+c000000004D48650300000000000000B1
+t1296590083
+s177
+i<Foundation/Foundation.h>
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCAction.h
+c000000004D486503000000000000167A
+t1296590083
+s5754
+i<sys/time.h>
+i<Foundation/Foundation.h>
+i"ccTypes.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionCamera.h
+c000000004D48650300000000000009BC
+t1296590083
+s2492
+i"CCActionInterval.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionEase.h
+c000000004D4865030000000000001671
+t1296590083
+s5745
+i"CCActionInterval.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionGrid.h
+c000000004D486503000000000000148B
+t1296590083
+s5259
+i"CCActionInterval.h"
+i"CCActionInstant.h"
+i"CCGrid.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionGrid3D.h
+c000000004D4865030000000000001A8A
+t1296590083
+s6794
+i"CCActionGrid.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionInstant.h
+c000000004D48650300000000000013AA
+t1296590083
+s5034
+i"CCAction.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionInterval.h
+c000000004D4865030000000000003265
+t1296590083
+s12901
+i"CCNode.h"
+i"CCAction.h"
+i"CCProtocols.h"
+i<sys/time.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionManager.h
+c000000004D4865030000000000001071
+t1296590083
+s4209
+i"CCAction.h"
+i"Support/ccCArray.h"
+i"Support/uthash.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionPageTurn3D.h
+c000000004D4865030000000000000644
+t1296590083
+s1604
+i"CCActionGrid3D.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionProgressTimer.h
+c000000004D486503000000000000088D
+t1296590083
+s2189
+i<Foundation/Foundation.h>
+i"CCProgressTimer.h"
+i"CCActionInterval.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionTiledGrid.h
+c000000004D4865030000000000001A15
+t1296590083
+s6677
+i"CCActionGrid.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCActionTween.h
+c000000004D4865030000000000000931
+t1296590083
+s2353
+i<Foundation/Foundation.h>
+i"CCActionInterval.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCAnimation.h
+c000000004D486503000000000000126D
+t1296590083
+s4717
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCAnimationCache.h
+c000000004D48650300000000000008DD
+t1296590083
+s2269
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCAtlasNode.h
+c000000004D4865030000000000000C06
+t1296590083
+s3078
+i"CCTextureAtlas.h"
+i"CCNode.h"
+i"CCProtocols.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCBlockSupport.h
+c000000004D486503000000000000066F
+t1296590083
+s1647
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCCamera.h
+c000000004D4865030000000000000C84
+t1296590083
+s3204
+i"CCNode.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCCompatibility.h
+c000000004D4865030000000000003891
+t1296590083
+s14481
+i<Foundation/Foundation.h>
+i"cocos2d.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCConfiguration.h
+c000000004D4865030000000000000D36
+t1296590083
+s3382
+i<Foundation/Foundation.h>
+i"Platforms/CCGL.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCDirector.h
+c000000004D48650300000000000025C4
+t1296590083
+s9668
+i"ccConfig.h"
+i"ccTypes.h"
+i"Platforms/CCGL.h"
+i"CCProtocols.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCDrawingPrimitives.h
+c000000004D4865030000000000000C32
+t1296590083
+s3122
+i<Availability.h>
+i<Foundation/Foundation.h>
+i<CoreGraphics/CGGeometry.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCGrabber.h
+c000000004D48650300000000000005E4
+t1296590083
+s1508
+i"Platforms/CCGL.h"
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCGrid.h
+c000000004D4865030000000000000E5A
+t1296590083
+s3674
+i<Foundation/Foundation.h>
+i"CCNode.h"
+i"CCCamera.h"
+i"ccTypes.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCLabelAtlas.h
+c000000004D4865030000000000000B24
+t1296590083
+s2852
+i"CCAtlasNode.h"
+i"CCTextureAtlas.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCLabelBMFont.h
+c000000004D4865030000000000001641
+t1296590083
+s5697
+i"CCSpriteBatchNode.h"
+i"Support/uthash.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCLabelTTF.h
+c000000004D4865030000000000000A87
+t1296590083
+s2695
+i"CCTexture2D.h"
+i"CCSprite.h"
+i"Platforms/CCNS.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCLayer.h
+c000000004D48650300000000000020E9
+t1296590083
+s8425
+i<Availability.h>
+i<UIKit/UIKit.h>
+i"Platforms/iOS/CCTouchDelegateProtocol.h"
+i"Platforms/Mac/CCEventDispatcher.h"
+i"CCProtocols.h"
+i"CCNode.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCMenu.h
+c000000004D4865030000000000000B29
+t1296590083
+s2857
+i"CCMenuItem.h"
+i"CCLayer.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCMenuItem.h
+c000000004D48650300000000000033A8
+t1296590083
+s13224
+i"CCBlockSupport.h"
+i"CCNode.h"
+i"CCProtocols.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCMotionStreak.h
+c000000004D4865030000000000000B2A
+t1296590083
+s2858
+i<Foundation/Foundation.h>
+i"CCNode.h"
+i"CCRibbon.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCNode.h
+c000000004D4865030000000000004485
+t1296590083
+s17541
+i<Availability.h>
+i"Platforms/CCGL.h"
+i"CCAction.h"
+i"ccTypes.h"
+i"CCTexture2D.h"
+i"CCProtocols.h"
+i"ccConfig.h"
+i"Support/CCArray.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCParallaxNode.h
+c000000004D486503000000000000075D
+t1296590083
+s1885
+i"CCNode.h"
+i"Support/ccCArray.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCParticleExamples.h
+c000000004D4865030000000000000AD0
+t1296590083
+s2768
+i<Availability.h>
+i"CCParticleSystemPoint.h"
+i"CCParticleSystemQuad.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCParticleSystem.h
+c000000004D48650300000000000037B8
+t1296590083
+s14264
+i"CCProtocols.h"
+i"CCNode.h"
+i"ccTypes.h"
+i"ccConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCParticleSystemPoint.h
+c000000004D4865030000000000000846
+t1296590083
+s2118
+i<Availability.h>
+i"CCParticleSystem.h"
+i"CCParticleSystemQuad.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCParticleSystemQuad.h
+c000000004D48650300000000000009F8
+t1296590083
+s2552
+i"CCParticleSystem.h"
+i"ccConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCProgressTimer.h
+c000000004D4865030000000000000B48
+t1296590083
+s2888
+i<Foundation/Foundation.h>
+i"CCSprite.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCProtocols.h
+c000000004D4865030000000000000F9A
+t1296590083
+s3994
+i"ccTypes.h"
+i"CCTexture2D.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCRenderTexture.h
+c000000004D4865030000000000000F2A
+t1296590083
+s3882
+i<Foundation/Foundation.h>
+i"CCNode.h"
+i"CCSprite.h"
+i"Support/OpenGL_Internal.h"
+i<Availability.h>
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCRibbon.h
+c000000004D4865030000000000000FCD
+t1296590083
+s4045
+i"CCNode.h"
+i"CCTexture2D.h"
+i"CCProtocols.h"
+i"Platforms/CCGL.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCScene.h
+c000000004D4865040000000000000676
+t1296590084
+s1654
+i"CCNode.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCScheduler.h
+c000000004D48650400000000000019D7
+t1296590084
+s6615
+i"Support/uthash.h"
+i"ccTypes.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCSprite.h
+c000000004D486504000000000000345C
+t1296590084
+s13404
+i"CCNode.h"
+i"CCProtocols.h"
+i"CCTextureAtlas.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCSpriteBatchNode.h
+c000000004D48650400000000000018F8
+t1296590084
+s6392
+i"CCNode.h"
+i"CCProtocols.h"
+i"CCTextureAtlas.h"
+i"ccMacros.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCSpriteFrame.h
+c000000004D4865040000000000000D5A
+t1296590084
+s3418
+i<Foundation/Foundation.h>
+i"CCNode.h"
+i"CCProtocols.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCSpriteFrameCache.h
+c000000004D4865040000000000001394
+t1296590084
+s5012
+i<Foundation/Foundation.h>
+i"CCSpriteFrame.h"
+i"CCTexture2D.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCSpriteSheet.h
+c000000004D48650400000000000009FE
+t1296590084
+s2558
+i"CCSpriteBatchNode.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTMXLayer.h
+c000000004D486504000000000000182A
+t1296590084
+s6186
+i"CCAtlasNode.h"
+i"CCSpriteBatchNode.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTMXObjectGroup.h
+c000000004D48650400000000000008D5
+t1296590084
+s2261
+i"CCSpriteSheet.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTMXTiledMap.h
+c000000004D48650400000000000014D4
+t1296590084
+s5332
+i"CCSpriteSheet.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTMXXMLParser.h
+c000000004D48650400000000000016B9
+t1296590084
+s5817
+i<Availability.h>
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTexture2D.h
+c000000004D4865040000000000002C9A
+t1296590084
+s11418
+i<Availability.h>
+i<UIKit/UIKit.h>
+i<Foundation/Foundation.h>
+i"Platforms/CCGL.h"
+i"Platforms/CCNS.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTextureAtlas.h
+c000000004D486504000000000000145B
+t1296590084
+s5211
+i"CCTexture2D.h"
+i"ccTypes.h"
+i"ccConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTextureCache.h
+c000000004D48650400000000000014C2
+t1296590084
+s5314
+i<Availability.h>
+i<CoreGraphics/CGImage.h>
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTexturePVR.h
+c000000004D4865040000000000000FB9
+t1296590084
+s4025
+i<Foundation/Foundation.h>
+i"Platforms/CCGL.h"
+i"CCTextureCache.h"
+i"CCTexture2D.h"
+i"ccCArray.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTileMapAtlas.h
+c000000004D4865040000000000000B86
+t1296590084
+s2950
+i"CCTextureAtlas.h"
+i"CCAtlasNode.h"
+i"Support/TGAlib.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTransition.h
+c000000004D4865040000000000002134
+t1296590084
+s8500
+i"CCScene.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTransitionPageTurn.h
+c000000004D4865040000000000000917
+t1296590084
+s2327
+i"CCTransition.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/CCTransitionRadial.h
+c000000004D4865040000000000000630
+t1296590084
+s1584
+i"CCTransition.h"
+i"CCProgressTimer.h"
+i"CCActionProgressTimer.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/CCGL.h
+c000000004D4865040000000000000BF8
+t1296590084
+s3064
+i<Availability.h>
+i<OpenGLES/ES1/gl.h>
+i<OpenGLES/ES1/glext.h>
+i<OpenGLES/EAGL.h>
+i"iOS/glu.h"
+i"iOS/EAGLView.h"
+i<OpenGL/gl.h>
+i<OpenGL/glu.h>
+i<Cocoa/Cocoa.h>
+i"Mac/MacGLView.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/CCNS.h
+c000000004D4865040000000000000965
+t1296590084
+s2405
+i<Availability.h>
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/Mac/CCDirectorMac.h
+c000000004D4865040000000000000C84
+t1296590084
+s3204
+i<Availability.h>
+i<QuartzCore/CVDisplayLink.h>
+i"../../CCDirector.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/Mac/CCEventDispatcher.h
+c000000004D4865040000000000001AA7
+t1296590084
+s6823
+i<Availability.h>
+i<Cocoa/Cocoa.h>
+i"MacGLView.h"
+i"../../Support/uthash.h"
+i"../../Support/utlist.h"
+i"../../ccConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/Mac/MacGLView.h
+c000000004D4865040000000000000B8C
+t1296590084
+s2956
+i<Availability.h>
+i<Cocoa/Cocoa.h>
+i"../../ccConfig.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/CCDirectorIOS.h
+c000000004D4865040000000000002B53
+t1296590084
+s11091
+i<Availability.h>
+i"../../CCDirector.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/CCTouchDelegateProtocol.h
+c000000004D4865040000000000000BC3
+t1296590084
+s3011
+i<Availability.h>
+i<UIKit/UIKit.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/CCTouchDispatcher.h
+c000000004D48650400000000000010CA
+t1296590084
+s4298
+i<Availability.h>
+i"CCTouchDelegateProtocol.h"
+i"EAGLView.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/CCTouchHandler.h
+c000000004D4865040000000000000D99
+t1296590084
+s3481
+i<Availability.h>
+i"CCTouchDelegateProtocol.h"
+i"CCTouchDispatcher.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/EAGLView.h
+c000000004D4865040000000000001B69
+t1296590084
+s7017
+i<Availability.h>
+i<UIKit/UIKit.h>
+i<OpenGLES/EAGL.h>
+i<OpenGLES/EAGLDrawable.h>
+i<OpenGLES/ES1/gl.h>
+i<OpenGLES/ES1/glext.h>
+i"ESRenderer.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/ESRenderer.h
+c000000004D486504000000000000083A
+t1296590084
+s2106
+i<Availability.h>
+i<QuartzCore/QuartzCore.h>
+i<OpenGLES/EAGL.h>
+i<OpenGLES/EAGLDrawable.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Platforms/iOS/glu.h
+c000000004D486504000000000000030D
+t1296590084
+s781
+i<Availability.h>
+i<OpenGLES/ES1/gl.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/CCArray.h
+c000000004D4865040000000000000BED
+t1296590084
+s3053
+i"ccCArray.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/CCFileUtils.h
+c000000004D48650400000000000007E8
+t1296590084
+s2024
+i<Foundation/Foundation.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/CCProfiling.h
+c000000004D48650400000000000006E9
+t1296590084
+s1769
+i<Foundation/Foundation.h>
+i<sys/time.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/CGPointExtension.h
+c000000004D4865040000000000001EAB
+t1296590084
+s7851
+i<Availability.h>
+i<CoreGraphics/CGGeometry.h>
+i<Foundation/Foundation.h>
+i<math.h>
+i<objc/objc.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/OpenGL_Internal.h
+c000000004D48650400000000000011A7
+t1296590084
+s4519
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/TGAlib.h
+c000000004D4865040000000000000444
+t1296590084
+s1092
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/ccCArray.h
+c000000004D48650400000000000030F3
+t1296590084
+s12531
+i<Foundation/Foundation.h>
+i<stdlib.h>
+i<string.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/ccUtils.h
+c000000004D4865040000000000000204
+t1296590084
+s516
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/uthash.h
+c000000004D486504000000000000FB13
+t1296590084
+s64275
+i<string.h>
+i<stddef.h>
+i<inttypes.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/Support/utlist.h
+c000000004D4865040000000000009091
+t1296590084
+s37009
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/ccConfig.h
+c000000004D4865040000000000002896
+t1296590084
+s10390
+i<Availability.h>
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/ccMacros.h
+c000000004D4865040000000000001DFE
+t1296590084
+s7678
+i<math.h>
+i"ccConfig.h"
+i<Foundation/Foundation.h>
+i<Availability.h>
+i"Platforms/iOS/CCDirectorIOS.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/ccTypes.h
+c000000004D48650400000000000016D2
+t1296590084
+s5842
+i<Availability.h>
+i<Foundation/Foundation.h>
+i<CoreGraphics/CGGeometry.h>
+i"Platforms/CCGL.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/libs/cocos2d/cocos2d.h
+c000000004D48650400000000000010FF
+t1296590084
+s4351
+i<Availability.h>
+i"ccConfig.h"
+i"CCActionManager.h"
+i"CCAction.h"
+i"CCActionInstant.h"
+i"CCActionInterval.h"
+i"CCActionEase.h"
+i"CCActionCamera.h"
+i"CCActionTween.h"
+i"CCActionEase.h"
+i"CCActionTiledGrid.h"
+i"CCActionGrid3D.h"
+i"CCActionGrid.h"
+i"CCActionProgressTimer.h"
+i"CCActionPageTurn3D.h"
+i"CCAnimation.h"
+i"CCAnimationCache.h"
+i"CCSprite.h"
+i"CCSpriteFrame.h"
+i"CCSpriteSheet.h"
+i"CCSpriteBatchNode.h"
+i"CCSpriteFrameCache.h"
+i"CCLabelTTF.h"
+i"CCLabelBMFont.h"
+i"CCLabelAtlas.h"
+i"CCParticleSystem.h"
+i"CCParticleSystemPoint.h"
+i"CCParticleSystemQuad.h"
+i"CCParticleExamples.h"
+i"CCTexture2D.h"
+i"CCTexturePVR.h"
+i"CCTextureCache.h"
+i"CCTextureAtlas.h"
+i"CCTransition.h"
+i"CCTransitionPageTurn.h"
+i"CCTransitionRadial.h"
+i"CCTMXTiledMap.h"
+i"CCTMXLayer.h"
+i"CCTMXObjectGroup.h"
+i"CCTMXXMLParser.h"
+i"CCTileMapAtlas.h"
+i"CCLayer.h"
+i"CCMenu.h"
+i"CCMenuItem.h"
+i"CCDrawingPrimitives.h"
+i"CCScene.h"
+i"CCScheduler.h"
+i"CCBlockSupport.h"
+i"CCCamera.h"
+i"CCProtocols.h"
+i"CCNode.h"
+i"CCDirector.h"
+i"CCAtlasNode.h"
+i"CCGrabber.h"
+i"CCGrid.h"
+i"CCParallaxNode.h"
+i"CCRenderTexture.h"
+i"CCMotionStreak.h"
+i"CCConfiguration.h"
+i"ccTypes.h"
+i"ccMacros.h"
+i"Platforms/CCGL.h"
+i"Platforms/CCNS.h"
+i"Platforms/iOS/CCTouchDispatcher.h"
+i"Platforms/iOS/CCTouchDelegateProtocol.h"
+i"Platforms/iOS/CCTouchHandler.h"
+i"Platforms/iOS/EAGLView.h"
+i"Platforms/iOS/CCDirectorIOS.h"
+i"Platforms/Mac/MacGLView.h"
+i"Platforms/Mac/CCDirectorMac.h"
+i"Support/OpenGL_Internal.h"
+i"Support/CCFileUtils.h"
+i"Support/CGPointExtension.h"
+i"Support/ccCArray.h"
+i"Support/CCArray.h"
+i"Support/ccUtils.h"
+i"Support/CCProfiling.h"
+i"CCCompatibility.h"
+
+N/Users/yam/pixelzoo/xcode/cocozoo/main.m
+c000000004D486504000000000000015D
+t1296590084
+s349
+i<UIKit/UIKit.h>
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch.gch
+t1296674657
+s7726808
+
+N/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch.gch
+t1296674657
+s757988
+
+NResources/Info.plist
+c000000004D4865030000000000000515
+t1296590083
+s1301
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies318367456#318367456#0(0"0(0#1#0"8683421952#0"0#
+
+CCodeSign /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+s318367462.350040
+e318367462.831127
+r1
+xCodeSign
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+lSLF07#2@41"CodeSign build/Debug-iphoneos/cocozoo.app318367462#318367462#0(0"0(0#0#66"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app8629088096#626"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    setenv _CODESIGN_ALLOCATE_ /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate    /usr/bin/codesign -f -s "iPhone Developer: Ian Holmes (LVAQCJ6L7N)" --resource-rules=/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/ResourceRules.plist --entitlements /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/HelloWorldScene.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367458.322738
+e318367458.514350
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/HelloWorldScene.o
+x/Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@67"Compile /Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m318367458#318367458#0(0"0(0#0#59"/Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m8676439552#1924"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/Classes/HelloWorldScene.m -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/HelloWorldScene.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/RootViewController.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367458.514465
+e318367458.734210
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/RootViewController.o
+x/Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@70"Compile /Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m318367458#318367458#0(0"0(0#0#62"/Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m8686148000#1930"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/Classes/RootViewController.m -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/RootViewController.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/SceneTest.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367461.259750
+e318367461.658566
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/SceneTest.o
+x/Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m318367461#318367461#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m8623044992#1912"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/Classes/SceneTest.m -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/SceneTest.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/balloon.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.545411
+e318367458.609678
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/balloon.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c318367458#318367458#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c8684855200#1900"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/balloon.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/balloon.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/bintree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.609794
+e318367458.711837
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/bintree.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c318367458#318367458#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c8680173248#1900"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/bintree.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/bintree.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/board.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.711953
+e318367458.957661
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/board.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c318367458#318367458#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c8617809344#1896"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/board.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/board.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozooAppDelegate.o /Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367458.257800
+e318367458.545276
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozooAppDelegate.o
+x/Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@70"Compile /Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m318367458#318367458#0(0"0(0#0#62"/Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m8623831392#1930"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/Classes/cocozooAppDelegate.m -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozooAppDelegate.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/color.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.734342
+e318367458.818982
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/color.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c318367458#318367458#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c8684255872#1896"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/color.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/color.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/game.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.819113
+e318367458.990185
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/game.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c318367458#318367458#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c8646309920#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/game.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/game.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/goal.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.957802
+e318367459.219899
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/goal.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c318367458#318367459#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c8686046304#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/goal.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/goal.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/list.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367458.990322
+e318367459.089190
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/list.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c318367458#318367459#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c8684461056#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/list.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/list.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/main.o /Users/yam/pixelzoo/xcode/cocozoo/main.m normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367458.256376
+e318367458.322620
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/main.o
+x/Users/yam/pixelzoo/xcode/cocozoo/main.m
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@48"Compile /Users/yam/pixelzoo/xcode/cocozoo/main.m318367458#318367458#0(0"0(0#0#40"/Users/yam/pixelzoo/xcode/cocozoo/main.m8687245632#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/main.m -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/main.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/notify.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.089312
+e318367459.178551
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/notify.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c318367459#318367459#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c8674609664#1898"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/notify.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/notify.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/particle.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.178674
+e318367459.272689
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/particle.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c318367459#318367459#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c8638873472#1902"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/particle.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/particle.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/quadtree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.220034
+e318367459.424706
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/quadtree.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c318367459#318367459#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c8626603712#1902"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/quadtree.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/quadtree.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rbtree.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.272813
+e318367460.054193
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rbtree.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c318367459#318367460#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c8601252512#1898"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/rbtree.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rbtree.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rule.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.424980
+e318367459.645290
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rule.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c318367459#318367459#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c8643138976#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/rule.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/rule.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/statemap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.645607
+e318367459.962598
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/statemap.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c318367459#318367459#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c8621212864#1902"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/statemap.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/statemap.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/stringmap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367459.963040
+e318367460.187859
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/stringmap.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@63"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c318367459#318367460#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c8686503232#1904"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/stringmap.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/stringmap.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/tool.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.054440
+e318367460.262229
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/tool.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c318367460#318367460#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c8604378368#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/tool.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/tool.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/util.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.187986
+e318367460.341224
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/util.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@58"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c318367460#318367460#0(0"0(0#0#50"/Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c8639475264#1894"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/util.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/util.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/vector.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.262362
+e318367460.354321
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/vector.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@60"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c318367460#318367460#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c8685266656#1898"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/vector.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/vector.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlboard.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.341359
+e318367460.689206
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlboard.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@62"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c318367460#318367460#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c8646222144#1902"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlboard.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlboard.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgame.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.354751
+e318367460.614345
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgame.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c318367460#318367460#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c8679470560#1900"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgame.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgame.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgoal.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.614491
+e318367461.494306
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgoal.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c318367460#318367461#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c8686062400#1900"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlgoal.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlgoal.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlutil.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367460.689666
+e318367461.079715
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlutil.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@61"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c318367460#318367461#0(0"0(0#0#53"/Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c8685005600#1900"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/xmlutil.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xmlutil.o0#
+
+CCompileC build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xymap.o /Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c normal armv6 c com.apple.compilers.llvmgcc42
+s318367461.079958
+e318367461.259501
+r1
+xCompileC
+xbuild/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xymap.o
+x/Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@59"Compile /Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c318367461#318367461#0(0"0(0#0#51"/Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c8646263200#1896"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -include /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch -c /Users/yam/pixelzoo/xcode/cocozoo/../../src/xymap.c -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/xymap.o0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Default.png Resources/Default.png
+s318367456.420897
+e318367457.019064
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Default.png
+xResources/Default.png
+lSLF07#2@78"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Default.png Resources/Default.png318367456#318367457#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Default.png8686525760#557"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Default.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Default.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-72.png Resources/Icon-72.png
+s318367456.975151
+e318367457.038063
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-72.png
+xResources/Icon-72.png
+lSLF07#2@78"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon-72.png Resources/Icon-72.png318367456#318367457#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-72.png8648400352#557"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-72.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-72.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png Resources/Icon-Small-50.png
+s318367456.934644
+e318367456.975028
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png
+xResources/Icon-Small-50.png
+lSLF07#2@90"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png Resources/Icon-Small-50.png318367456#318367456#0(0"0(0#0#61"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small-50.png8674657824#569"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small-50.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small-50.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small.png Resources/Icon-Small.png
+s318367456.892794
+e318367456.934275
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small.png
+xResources/Icon-Small.png
+lSLF07#2@84"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon-Small.png Resources/Icon-Small.png318367456#318367456#0(0"0(0#0#58"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small.png8683918752#563"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png Resources/Icon-Small@2x.png
+s318367456.846567
+e318367456.892681
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png
+xResources/Icon-Small@2x.png
+lSLF07#2@90"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png Resources/Icon-Small@2x.png318367456#318367456#0(0"0(0#0#61"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small@2x.png8686245696#569"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon-Small@2x.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon-Small@2x.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon.png Resources/Icon.png
+s318367456.584443
+e318367456.658368
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon.png
+xResources/Icon.png
+lSLF07#2@72"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon.png Resources/Icon.png318367456#318367456#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon.png8606343840#551"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon@2x.png Resources/Icon@2x.png
+s318367456.658492
+e318367456.846439
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon@2x.png
+xResources/Icon@2x.png
+lSLF07#2@78"CopyPNGFile build/Debug-iphoneos/cocozoo.app/Icon@2x.png Resources/Icon@2x.png318367456#318367456#0(0"0(0#0#55"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon@2x.png8683812384#557"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/Icon@2x.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Icon@2x.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/fps_images.png Resources/fps_images.png
+s318367456.421723
+e318367456.584339
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/fps_images.png
+xResources/fps_images.png
+lSLF07#2@84"CopyPNGFile build/Debug-iphoneos/cocozoo.app/fps_images.png Resources/fps_images.png318367456#318367456#0(0"0(0#0#58"/Users/yam/pixelzoo/xcode/cocozoo/Resources/fps_images.png8685814336#563"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/Resources/fps_images.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/fps_images.png0#
+
+CCopyPNGFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/grossini.png ../../png/grossini.png
+s318367457.020181
+e318367457.075755
+r1
+xCopyPNGFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/grossini.png
+x../../png/grossini.png
+lSLF07#2@80"CopyPNGFile build/Debug-iphoneos/cocozoo.app/grossini.png ../../png/grossini.png318367457#318367457#0(0"0(0#0#56"/Users/yam/pixelzoo/xcode/cocozoo/../../png/grossini.png8632161888#559"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv COPY_COMMAND /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    "/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Plug-ins/iPhoneOS Build System Support.xcplugin/Contents/Resources/copypng" -compress "" /Users/yam/pixelzoo/xcode/cocozoo/../../png/grossini.png /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/grossini.png0#
+
+CCpResource build/Debug-iphoneos/cocozoo.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+s318367456.374914
+e318367456.388267
+r1
+xCpResource
+xbuild/Debug-iphoneos/cocozoo.app/ResourceRules.plist
+x/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+lSLF07#2@94"Copy /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist318367456#318367456#0(0"0(0#0#89"/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist8685017824#484"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app0#
+
+CCpResource build/Debug-iphoneos/cocozoo.app/iTunesArtwork Resources/iTunesArtwork
+s318367457.019187
+e318367457.030670
+r1
+xCpResource
+xbuild/Debug-iphoneos/cocozoo.app/iTunesArtwork
+xResources/iTunesArtwork
+lSLF07#2@28"Copy Resources/iTunesArtwork318367457#318367457#0(0"0(0#0#57"/Users/yam/pixelzoo/xcode/cocozoo/Resources/iTunesArtwork8642976704#452"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/yam/pixelzoo/xcode/cocozoo/Resources/iTunesArtwork /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app0#
+
+CGenerateDSYMFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app.dSYM /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo
+s318367462.132690
+e318367462.337046
+r1
+xGenerateDSYMFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app.dSYM
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo
+lSLF07#2@95"GenerateDSYMFile build/Debug-iphoneos/cocozoo.app.dSYM build/Debug-iphoneos/cocozoo.app/cocozoo318367462#318367462#0(0"0(0#0#74"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo8623087296#347"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo -o /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app.dSYM0#
+
+CLd /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo normal armv6
+s318367461.658693
+e318367462.132552
+r1
+xLd
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo
+xnormal
+xarmv6
+lSLF07#2@79"Link /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo318367461#318367462#0(0"0(0#0#0"8640837504#959"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv IPHONEOS_DEPLOYMENT_TARGET 3.0    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -arch armv6 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -L/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -filelist /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozoo.LinkFileList -dead_strip -all_load -ObjC -miphoneos-version-min=3.0 -framework CoreGraphics -framework Foundation -framework OpenGLES -framework QuartzCore -framework UIKit -framework AudioToolbox -framework OpenAL -lz -framework AVFoundation "-lcocos2d libraries" -lxml2 -o /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/cocozoo0#
+
+CPhaseScriptExecution "Build level XML" /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Script-28F1C87F12F9DAFF00D6221E.sh
+s318367456.388351
+e318367456.420800
+r1
+xPhaseScriptExecution
+xBuild level XML
+x/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Script-28F1C87F12F9DAFF00D6221E.sh
+omake: sdl-config: Command not found
+omake: sdl-config: Command not found
+omake: pkg-config: Command not found
+omake: pkg-config: Command not found
+omake: Nothing to be done for `xml'.
+lSLF07#2@41"Run custom shell script 'Build level XML'318367456#318367456#0(180"make: sdl-config: Command not foundmake: sdl-config: Command not foundmake: pkg-config: Command not foundmake: pkg-config: Command not foundmake: Nothing to be done for `xml'.5(13@36"make: sdl-config: Command not found318367456#0#36#0(1@0"0(13@36"make: sdl-config: Command not found318367456#36#36#0(1@0"0(13@36"make: pkg-config: Command not found318367456#72#36#0(1@0"0(13@36"make: pkg-config: Command not found318367456#108#36#0(1@0"0(13@36"make: Nothing to be done for `xml'.318367456#144#36#0(1@0"0(0#0#0"8687246720#17238"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv ACTION build    setenv AD_HOC_CODE_SIGNING_ALLOWED NO    setenv ALTERNATE_GROUP staff    setenv ALTERNATE_MODE u+w,go-w,a+rX    setenv ALTERNATE_OWNER yam    setenv ALWAYS_SEARCH_USER_PATHS NO    setenv APPLE_INTERNAL_DEVELOPER_DIR /AppleInternal/Developer    setenv APPLE_INTERNAL_DIR /AppleInternal    setenv APPLE_INTERNAL_DOCUMENTATION_DIR /AppleInternal/Documentation    setenv APPLE_INTERNAL_LIBRARY_DIR /AppleInternal/Library    setenv APPLE_INTERNAL_TOOLS /AppleInternal/Developer/Tools    setenv APPLY_RULES_IN_COPY_FILES NO    setenv ARCHS armv6    setenv ARCHS_STANDARD_32_64_BIT "armv6 armv7"    setenv ARCHS_STANDARD_32_BIT "armv6 armv7"    setenv ARCHS_UNIVERSAL_IPHONE_OS armv7    setenv BUILD_COMPONENTS "headers build"    setenv BUILD_DIR /Users/yam/pixelzoo/xcode/cocozoo/build    setenv BUILD_ROOT /Users/yam/pixelzoo/xcode/cocozoo/build    setenv BUILD_STYLE Debug    setenv BUILD_VARIANTS normal    setenv BUILT_PRODUCTS_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos    setenv CACHE_ROOT /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501    setenv CCHROOT /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501    setenv CHMOD /bin/chmod    setenv CHOWN /usr/sbin/chown    setenv CLASS_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/JavaClasses    setenv CLEAN_PRECOMPS YES    setenv CLONE_HEADERS NO    setenv CODESIGNING_FOLDER_PATH /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app    setenv CODE_SIGNING_ALLOWED YES    setenv CODE_SIGNING_REQUIRED YES    setenv CODE_SIGN_CONTEXT_CLASS XCiPhoneOSCodeSignContext    setenv CODE_SIGN_IDENTITY "iPhone Developer"    setenv COMMAND_MODE legacy    setenv COMPOSITE_SDK_DIRS /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/CompositeSDKs    setenv COMPRESS_PNG_FILES YES    setenv CONFIGURATION Debug    setenv CONFIGURATION_BUILD_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos    setenv CONFIGURATION_TEMP_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos    setenv CONTENTS_FOLDER_PATH cocozoo.app    setenv COPYING_PRESERVES_HFS_DATA NO    setenv COPY_PHASE_STRIP NO    setenv COPY_RESOURCES_FROM_STATIC_FRAMEWORKS YES    setenv CP /bin/cp    setenv CURRENT_ARCH armv6    setenv CURRENT_VARIANT normal    setenv DEAD_CODE_STRIPPING YES    setenv DEBUGGING_SYMBOLS YES    setenv DEBUG_INFORMATION_FORMAT dwarf-with-dsym    setenv DEPLOYMENT_LOCATION NO    setenv DEPLOYMENT_POSTPROCESSING NO    setenv DERIVED_FILES_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources    setenv DERIVED_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources    setenv DERIVED_SOURCES_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources    setenv DEVELOPER_APPLICATIONS_DIR /Developer/Applications    setenv DEVELOPER_BIN_DIR /Developer/usr/bin    setenv DEVELOPER_DIR /Developer    setenv DEVELOPER_FRAMEWORKS_DIR /Developer/Library/Frameworks    setenv DEVELOPER_FRAMEWORKS_DIR_QUOTED "\"/Developer/Library/Frameworks\""    setenv DEVELOPER_LIBRARY_DIR /Developer/Library    setenv DEVELOPER_SDK_DIR /Developer/SDKs    setenv DEVELOPER_TOOLS_DIR /Developer/Tools    setenv DEVELOPER_USR_DIR /Developer/usr    setenv DEVELOPMENT_LANGUAGE English    setenv DOCUMENTATION_FOLDER_PATH cocozoo.app/English.lproj/Documentation    setenv DO_HEADER_SCANNING_IN_JAM NO    setenv DSTROOT /tmp/cocozoo.dst    setenv DWARF_DSYM_FILE_NAME cocozoo.app.dSYM    setenv DWARF_DSYM_FOLDER_PATH /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos    setenv EFFECTIVE_PLATFORM_NAME -iphoneos    setenv EMBEDDED_PROFILE_NAME embedded.mobileprovision    setenv ENABLE_HEADER_DEPENDENCIES YES    setenv ENABLE_OPENMP_SUPPORT NO    setenv ENTITLEMENTS_ALLOWED YES    setenv ENTITLEMENTS_REQUIRED YES    setenv EXCLUDED_INSTALLSRC_SUBDIRECTORY_PATTERNS ".svn .git CVS"    setenv EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES "*.nib *.lproj *.framework *.gch (*) CVS .svn .git *.xcodeproj *.xcode *.pbproj *.pbxproj"    setenv EXECUTABLES_FOLDER_PATH cocozoo.app/Executables    setenv EXECUTABLE_FOLDER_PATH cocozoo.app    setenv EXECUTABLE_NAME cocozoo    setenv EXECUTABLE_PATH cocozoo.app/cocozoo    setenv FILE_LIST /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects/LinkFileList    setenv FIXED_FILES_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/FixedFiles    setenv FRAMEWORKS_FOLDER_PATH cocozoo.app/Frameworks    setenv FRAMEWORK_FLAG_PREFIX -framework    setenv FRAMEWORK_SEARCH_PATHS "\"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos\" "    setenv FRAMEWORK_VERSION A    setenv FULL_PRODUCT_NAME cocozoo.app    setenv GCC3_VERSION 3.3    setenv GCC_C_LANGUAGE_STANDARD c99    setenv GCC_DYNAMIC_NO_PIC NO    setenv GCC_ENABLE_FIX_AND_CONTINUE NO    setenv GCC_INLINES_ARE_PRIVATE_EXTERN YES    setenv GCC_OPTIMIZATION_LEVEL 0    setenv GCC_PFE_FILE_C_DIALECTS "c objective-c c++ objective-c++"    setenv GCC_PRECOMPILE_PREFIX_HEADER YES    setenv GCC_PREFIX_HEADER cocozoo_Prefix.pch    setenv GCC_PREPROCESSOR_DEFINITIONS "DEBUG COCOS2D_DEBUG=1 CD_DEBUG=1"    setenv GCC_SYMBOLS_PRIVATE_EXTERN YES    setenv GCC_THUMB_SUPPORT YES    setenv GCC_TREAT_WARNINGS_AS_ERRORS NO    setenv GCC_VERSION com.apple.compilers.llvmgcc42    setenv GCC_VERSION_IDENTIFIER com_apple_compilers_llvmgcc42    setenv GCC_WARN_ABOUT_RETURN_TYPE YES    setenv GCC_WARN_UNUSED_VARIABLE YES    setenv GENERATE_MASTER_OBJECT_FILE NO    setenv GENERATE_PKGINFO_FILE YES    setenv GENERATE_PROFILING_CODE NO    setenv GID 20    setenv GROUP staff    setenv HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT YES    setenv HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES YES    setenv HEADERMAP_INCLUDES_NONPUBLIC_NONPRIVATE_HEADERS YES    setenv HEADERMAP_INCLUDES_PROJECT_HEADERS YES    setenv HEADER_SEARCH_PATHS "/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2"    setenv ICONV /usr/bin/iconv    setenv INFOPLIST_EXPAND_BUILD_SETTINGS YES    setenv INFOPLIST_FILE Resources/Info.plist    setenv INFOPLIST_OUTPUT_FORMAT binary    setenv INFOPLIST_PATH cocozoo.app/Info.plist    setenv INFOPLIST_PREPROCESS NO    setenv INFOSTRINGS_PATH cocozoo.app/English.lproj/InfoPlist.strings    setenv INSTALL_DIR /tmp/cocozoo.dst/Users/yam/Applications    setenv INSTALL_GROUP staff    setenv INSTALL_MODE_FLAG u+w,go-w,a+rX    setenv INSTALL_OWNER yam    setenv INSTALL_PATH /Users/yam/Applications    setenv INSTALL_ROOT /tmp/cocozoo.dst    setenv IPHONEOS_DEPLOYMENT_TARGET 3.0    setenv JAVAC_DEFAULT_FLAGS "-J-Xms64m -J-XX:NewSize=4M -J-Dfile.encoding=UTF8"    setenv JAVA_APP_STUB /System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub    setenv JAVA_ARCHIVE_CLASSES YES    setenv JAVA_ARCHIVE_TYPE JAR    setenv JAVA_COMPILER /usr/bin/javac    setenv JAVA_FOLDER_PATH cocozoo.app/Java    setenv JAVA_FRAMEWORK_RESOURCES_DIRS Resources    setenv JAVA_JAR_FLAGS cv    setenv JAVA_SOURCE_SUBDIR .    setenv JAVA_USE_DEPENDENCIES YES    setenv JAVA_ZIP_FLAGS -urg    setenv JIKES_DEFAULT_FLAGS "+E +OLDCSO"    setenv KEEP_PRIVATE_EXTERNS NO    setenv LD_GENERATE_MAP_FILE NO    setenv LD_MAP_FILE_PATH /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-LinkMap-normal-armv6.txt    setenv LD_OPENMP_FLAGS -fopenmp    setenv LEX /Developer/usr/bin/lex    setenv LIBRARY_FLAG_NOSPACE YES    setenv LIBRARY_FLAG_PREFIX -l    setenv LIBRARY_SEARCH_PATHS "\"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos\" "    setenv LINKER_DISPLAYS_MANGLED_NAMES NO    setenv LINK_FILE_LIST_normal_armv6 /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal/armv6/cocozoo.LinkFileList    setenv LINK_WITH_STANDARD_LIBRARIES YES    setenv LOCALIZED_RESOURCES_FOLDER_PATH cocozoo.app/English.lproj    setenv LOCAL_ADMIN_APPS_DIR /Applications/Utilities    setenv LOCAL_APPS_DIR /Applications    setenv LOCAL_DEVELOPER_DIR /Library/Developer    setenv LOCAL_LIBRARY_DIR /Library    setenv MACH_O_TYPE mh_execute    setenv MAC_OS_X_VERSION_ACTUAL 1065    setenv MAC_OS_X_VERSION_MAJOR 1060    setenv MAC_OS_X_VERSION_MINOR 0605    setenv NATIVE_ARCH i386    setenv NATIVE_ARCH_32_BIT i386    setenv NATIVE_ARCH_64_BIT x86_64    setenv NATIVE_ARCH_ACTUAL x86_64    setenv NO_COMMON YES    setenv OBJECT_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects    setenv OBJECT_FILE_DIR_normal /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Objects-normal    setenv OBJROOT /Users/yam/pixelzoo/xcode/cocozoo/build    setenv ONLY_ACTIVE_ARCH YES    setenv OPTIMIZATION_LEVEL 0    setenv OS MACOS    setenv OSAC /usr/bin/osacompile    setenv OTHER_LDFLAGS "-all_load -ObjC"    setenv PACKAGE_TYPE com.apple.package-type.wrapper.application    setenv PASCAL_STRINGS YES    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    setenv PATH_PREFIXES_EXCLUDED_FROM_HEADER_DEPENDENCIES "/usr/include /usr/local/include /System/Library/Frameworks /System/Library/PrivateFrameworks /Developer/Headers /Developer/SDKs /Developer/Platforms"    setenv PBDEVELOPMENTPLIST_PATH cocozoo.app/pbdevelopment.plist    setenv PFE_FILE_C_DIALECTS "c objective-c"    setenv PKGINFO_FILE_PATH /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/PkgInfo    setenv PKGINFO_PATH cocozoo.app/PkgInfo    setenv PLATFORM_DEVELOPER_APPLICATIONS_DIR /Developer/Platforms/iPhoneOS.platform/Developer/Applications    setenv PLATFORM_DEVELOPER_BIN_DIR /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin    setenv PLATFORM_DEVELOPER_LIBRARY_DIR /Developer/Platforms/iPhoneOS.platform/Developer/Library    setenv PLATFORM_DEVELOPER_SDK_DIR /Developer/Platforms/iPhoneOS.platform/Developer/SDKs    setenv PLATFORM_DEVELOPER_TOOLS_DIR /Developer/Platforms/iPhoneOS.platform/Developer/Tools    setenv PLATFORM_DEVELOPER_USR_DIR /Developer/Platforms/iPhoneOS.platform/Developer/usr    setenv PLATFORM_DIR /Developer/Platforms/iPhoneOS.platform    setenv PLATFORM_NAME iphoneos    setenv PLATFORM_PRODUCT_BUILD_VERSION 8C134    setenv PLIST_FILE_OUTPUT_FORMAT binary    setenv PLUGINS_FOLDER_PATH cocozoo.app/PlugIns    setenv PREBINDING NO    setenv PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR YES    setenv PRECOMP_DESTINATION_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/PrefixHeaders    setenv PRESERVE_DEAD_CODE_INITS_AND_TERMS NO    setenv PRIVATE_HEADERS_FOLDER_PATH cocozoo.app/PrivateHeaders    setenv PRODUCT_NAME cocozoo    setenv PRODUCT_SETTINGS_PATH /Users/yam/pixelzoo/xcode/cocozoo/Resources/Info.plist    setenv PRODUCT_TYPE com.apple.product-type.application    setenv PROFILING_CODE NO    setenv PROJECT cocozoo    setenv PROJECT_DERIVED_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/DerivedSources    setenv PROJECT_DIR /Users/yam/pixelzoo/xcode/cocozoo    setenv PROJECT_FILE_PATH /Users/yam/pixelzoo/xcode/cocozoo/cocozoo.xcodeproj    setenv PROJECT_NAME cocozoo    setenv PROJECT_TEMP_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build    setenv PROVISIONING_PROFILE_REQUIRED YES    setenv PUBLIC_HEADERS_FOLDER_PATH cocozoo.app/Headers    setenv RECURSIVE_SEARCH_PATHS_FOLLOW_SYMLINKS YES    setenv REMOVE_CVS_FROM_RESOURCES YES    setenv REMOVE_GIT_FROM_RESOURCES YES    setenv REMOVE_SVN_FROM_RESOURCES YES    setenv RESOURCE_RULES_REQUIRED YES    setenv REZ_COLLECTOR_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/ResourceManagerResources    setenv REZ_OBJECTS_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/ResourceManagerResources/Objects    setenv REZ_SEARCH_PATHS "\"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos\" "    setenv RUN_CLANG_STATIC_ANALYZER NO    setenv SCAN_ALL_SOURCE_FILES_FOR_INCLUDES NO    setenv SCRIPTS_FOLDER_PATH cocozoo.app/Scripts    setenv SCRIPT_INPUT_FILE_COUNT 0    setenv SCRIPT_OUTPUT_FILE_COUNT 0    setenv SDKROOT /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk    setenv SDK_DIR /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk    setenv SDK_NAME iphoneos4.2    setenv SED /usr/bin/sed    setenv SEPARATE_STRIP NO    setenv SEPARATE_SYMBOL_EDIT NO    setenv SET_DIR_MODE_OWNER_GROUP YES    setenv SET_FILE_MODE_OWNER_GROUP NO    setenv SHALLOW_BUNDLE YES    setenv SHARED_DERIVED_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/DerivedSources    setenv SHARED_FRAMEWORKS_FOLDER_PATH cocozoo.app/SharedFrameworks    setenv SHARED_PRECOMPS_DIR /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders    setenv SHARED_SUPPORT_FOLDER_PATH cocozoo.app/SharedSupport    setenv SKIP_INSTALL YES    setenv SOURCE_ROOT /Users/yam/pixelzoo/xcode/cocozoo    setenv SRCROOT /Users/yam/pixelzoo/xcode/cocozoo    setenv STANDARD_C_PLUS_PLUS_LIBRARY_TYPE dynamic    setenv STRINGS_FILE_OUTPUT_ENCODING binary    setenv STRIP_INSTALLED_PRODUCT YES    setenv STRIP_STYLE all    setenv SUPPORTED_DEVICE_FAMILIES 1,2    setenv SYMBOL_REPOSITORY_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/SymbolRepositories    setenv SYMROOT /Users/yam/pixelzoo/xcode/cocozoo/build    setenv SYSTEM_ADMIN_APPS_DIR /Applications/Utilities    setenv SYSTEM_APPS_DIR /Applications    setenv SYSTEM_CORE_SERVICES_DIR /System/Library/CoreServices    setenv SYSTEM_DEMOS_DIR /Applications/Extras    setenv SYSTEM_DEVELOPER_APPS_DIR /Developer/Applications    setenv SYSTEM_DEVELOPER_BIN_DIR /Developer/usr/bin    setenv SYSTEM_DEVELOPER_DEMOS_DIR "/Developer/Applications/Utilities/Built Examples"    setenv SYSTEM_DEVELOPER_DIR /Developer    setenv SYSTEM_DEVELOPER_DOC_DIR "/Developer/ADC Reference Library"    setenv SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR "/Developer/Applications/Graphics Tools"    setenv SYSTEM_DEVELOPER_JAVA_TOOLS_DIR "/Developer/Applications/Java Tools"    setenv SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR "/Developer/Applications/Performance Tools"    setenv SYSTEM_DEVELOPER_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes"    setenv SYSTEM_DEVELOPER_TOOLS /Developer/Tools    setenv SYSTEM_DEVELOPER_TOOLS_DOC_DIR "/Developer/ADC Reference Library/documentation/DeveloperTools"    setenv SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR "/Developer/ADC Reference Library/releasenotes/DeveloperTools"    setenv SYSTEM_DEVELOPER_USR_DIR /Developer/usr    setenv SYSTEM_DEVELOPER_UTILITIES_DIR /Developer/Applications/Utilities    setenv SYSTEM_DOCUMENTATION_DIR /Library/Documentation    setenv SYSTEM_LIBRARY_DIR /System/Library    setenv TARGETED_DEVICE_FAMILY 1,2    setenv TARGETNAME cocozoo    setenv TARGET_BUILD_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos    setenv TARGET_NAME cocozoo    setenv TARGET_TEMP_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build    setenv TEMP_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build    setenv TEMP_FILES_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build    setenv TEMP_FILE_DIR /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build    setenv TEMP_ROOT /Users/yam/pixelzoo/xcode/cocozoo/build    setenv UID 501    setenv UNLOCALIZED_RESOURCES_FOLDER_PATH cocozoo.app    setenv UNSTRIPPED_PRODUCT NO    setenv USER yam    setenv USER_APPS_DIR /Users/yam/Applications    setenv USER_LIBRARY_DIR /Users/yam/Library    setenv USE_DYNAMIC_NO_PIC YES    setenv USE_HEADERMAP YES    setenv USE_HEADER_SYMLINKS NO    setenv VALIDATE_PRODUCT NO    setenv VALID_ARCHS "armv6 armv7"    setenv VERBOSE_PBXCP NO    setenv VERSIONPLIST_PATH cocozoo.app/version.plist    setenv VERSION_INFO_BUILDER yam    setenv VERSION_INFO_FILE cocozoo_vers.c    setenv VERSION_INFO_STRING "\"@(#)PROGRAM:cocozoo  PROJECT:cocozoo-\""    setenv WARNING_CFLAGS -Wall    setenv WRAPPER_EXTENSION app    setenv WRAPPER_NAME cocozoo.app    setenv WRAPPER_SUFFIX .app    setenv XCODE_APP_SUPPORT_DIR /Developer/Library/Xcode    setenv XCODE_PRODUCT_BUILD_VERSION 10M2423    setenv XCODE_VERSION_ACTUAL 0325    setenv XCODE_VERSION_MAJOR 0300    setenv XCODE_VERSION_MINOR 0320    setenv YACC /Developer/usr/bin/yacc    setenv _REAL_SDKROOT iphoneos    /bin/sh -c /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/Script-28F1C87F12F9DAFF00D6221E.sh0#
+
+CProcessInfoPlistFile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Info.plist Resources/Info.plist
+s318367456.375840
+e318367456.387293
+r1
+xProcessInfoPlistFile
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Info.plist
+xResources/Info.plist
+lSLF07#2@28"Process Resources/Info.plist318367456#318367456#0(0"0(0#0#54"/Users/yam/pixelzoo/xcode/cocozoo/Resources/Info.plist8681149888#544"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility Resources/Info.plist -genpkginfo /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -resourcerulesfile /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/ResourceRules.plist -o /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/Info.plist0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch.gch cocozoo_Prefix.pch normal armv6 objective-c com.apple.compilers.llvmgcc42
+s318367457.075924
+e318367458.255938
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch.gch
+xcocozoo_Prefix.pch
+xnormal
+xarmv6
+xobjective-c
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@29"Precompile cocozoo_Prefix.pch318367457#318367458#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/cocozoo_Prefix.pch8619974624#1797"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x objective-c-header -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -c /Users/yam/pixelzoo/xcode/cocozoo/cocozoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-cutnkyhojsasgvbxlapxmbhzlyjy/cocozoo_Prefix.pch.gch0#
+
+CProcessPCH /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch.gch cocozoo_Prefix.pch normal armv6 c com.apple.compilers.llvmgcc42
+s318367457.077180
+e318367457.179353
+r1
+xProcessPCH
+x/var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch.gch
+xcocozoo_Prefix.pch
+xnormal
+xarmv6
+xc
+xcom.apple.compilers.llvmgcc42
+lSLF07#2@29"Precompile cocozoo_Prefix.pch318367457#318367457#0(0"0(0#0#52"/Users/yam/pixelzoo/xcode/cocozoo/cocozoo_Prefix.pch8617284480#1787"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/llvm-gcc-4.2 -x c-header -arch armv6 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -DDEBUG -DCOCOS2D_DEBUG=1 -DCD_DEBUG=1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -fvisibility=hidden -gdwarf-2 -mno-thumb -miphoneos-version-min=3.0 -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-generated-files.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-own-target-headers.hmap -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-all-target-headers.hmap -iquote /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo-project-headers.hmap -Wall -F/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos -I/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/include -I/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/usr/include/libxml2 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources/armv6 -I/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/DerivedSources -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk -c /Users/yam/pixelzoo/xcode/cocozoo/cocozoo_Prefix.pch -o /var/folders/NG/NGmLO7fxHle7ERWliv1DjU+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/cocozoo_Prefix-gmxhrlvqlyivhocwcjbvusvvgois/cocozoo_Prefix.pch.gch0#
+
+CProcessProductPackaging "/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision" /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision
+s318367462.337189
+e318367462.339805
+r1
+xProcessProductPackaging
+x/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision
+lSLF07#2@190"ProcessProductPackaging "/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision" build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision318367462#318367462#0(0"0(0#0#91"/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision8684709920#411"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    <com.apple.tools.product-pkg-utility> "/Users/yam/Library/MobileDevice/Provisioning Profiles/941032E7-A69B-409C-B238-EDA25616A493.mobileprovision" -o /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app/embedded.mobileprovision0#
+
+CProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent
+s318367462.346804
+e318367462.349823
+r1
+xProcessProductPackaging
+x/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist
+x/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent
+lSLF07#2@175"ProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent318367462#318367462#0(0"0(0#0#96"/Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent8640889920#422"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    <com.apple.tools.product-pkg-utility> /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist -entitlements -format xml -o /Users/yam/pixelzoo/xcode/cocozoo/build/cocozoo.build/Debug-iphoneos/cocozoo.build/cocozoo.xcent0#
+
+CTouch /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+s318367462.339896
+e318367462.346521
+r1
+xTouch
+x/Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app
+lSLF07#2@72"Touch /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app318367462#318367462#0(0"0(0#0#0"8680931968#254"    cd /Users/yam/pixelzoo/xcode/cocozoo    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/yam/pixelzoo/xcode/cocozoo/build/Debug-iphoneos/cocozoo.app0#
+

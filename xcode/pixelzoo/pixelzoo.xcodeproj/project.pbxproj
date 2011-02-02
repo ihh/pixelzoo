@@ -185,7 +185,6 @@
 				28BDF9CC12CBE53800173B45 /* vector.h */,
 				28BDF9CD12CBE53800173B45 /* xmlboard.c */,
 				28BDF9CE12CBE53800173B45 /* xmlboard.h */,
-				28BDF9EC12CBE65400173B45 /* libxml2.dylib */,
 				28BDF9CF12CBE53800173B45 /* xmlgame.c */,
 				28BDF9D012CBE53800173B45 /* xmlgame.h */,
 				28D740DC12CF221200D402B8 /* xmlgoal.c */,
@@ -213,6 +212,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				28BDF9EC12CBE65400173B45 /* libxml2.dylib */,
 				28BDF9A312CBE51100173B45 /* PixelZoo sources */,
 				32CA4F630368D1EE00C91783 /* pixelzoo_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -249,7 +249,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "pixelzoo" */;
 			buildPhases = (
-				28EE239F12F8F30A00E75FAC /* ShellScript */,
+				28EE239F12F8F30A00E75FAC /* Build level XML */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
@@ -302,13 +302,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		28EE239F12F8F30A00E75FAC /* ShellScript */ = {
+		28EE239F12F8F30A00E75FAC /* Build level XML */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Build level XML";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
