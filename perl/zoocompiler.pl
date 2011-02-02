@@ -39,9 +39,12 @@ $gram->xmllint($xmllint) if defined $xmllint;
 # add some stuff
 
 # cement
-my ($cementRate, $cementDrain, $cementStick, $cementSet) = (.1, .03, .5, .01);
+my ($cementRate, $cementStep, $cementDrain, $cementStick, $cementSet) = (.1, .02, .001, 1, .02);
 my @wallHue = (0, 42, 84);
 $gram->addType ('name' => 'cement',
+		'hue' => 32,
+		'sat' => 192,
+		'bri' => 96,
 		'rate' => $cementRate,
 		'rule' => ['huff' => [$cementDrain => $gram->suicide,
 				      map (($cementSet/@wallHue => [ 'modify' => [ 'set' => [ 'type' => 'wall',
@@ -49,7 +52,7 @@ $gram->addType ('name' => 'cement',
 											       'hue' => $_ ]]]),
 					    @wallHue),
 				       $gram->bindNeumann (1 - $cementSet - $cementDrain,
-							   [$gram->empty => $gram->moveTo,
+							   [$gram->empty => ['huff' => [$cementStep => $gram->moveTo]],
 							    'wall' => [ 'huff' => [$cementStick => ['modify' => [ 'src' => [ 'loc' => $gram->neighbor ],
 														  'dest' => [ 'loc' => $gram->origin ] ] ]]]])]]);
 
@@ -59,7 +62,7 @@ $gram->addTool ('name' => 'Cement spray',
 		'gstate' => 'cement',
 		'reserve' => 1000,
 		'recharge' => 100,
-		'spray' => 100,
+		'spray' => 1000,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # wall
@@ -81,6 +84,9 @@ $gram->addType ('name' => 'wall',
 # acid
 my ($acidRate, $acidDrain, $acidBurn) = (.1, .03, .5);
 $gram->addType ('name' => 'acid',
+		'hue' => 80,
+		'sat' => 192,
+		'bri' => 64,
 		'rate' => $acidRate,
 		'rule' => ['huff' => [$acidDrain => $gram->suicide,
 				       $gram->bindNeumann (1 - $acidDrain,
@@ -131,7 +137,7 @@ my %rps = ('name' => 'cyclobs',
 
 $gram->addType ('name' => $rps{'name'},
 		'vars' => [ 'species' => 2 ],
-		'hue' => [ 'var' => 'species', 'mul' => 83 ],
+		'hue' => [ 'var' => 'species', 'mul' => 42, 'add' => 10 ],
 		'sat' => 255,
 		'bri' => 255,
 		'rate' => $rps{'rate'},
@@ -168,6 +174,9 @@ $gram->addTool ('name' => $rps{'name'},
 # perfume
 my ($perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce) = (.6, .03, .03, .5);
 $gram->addType ('name' => 'perfume',
+		'hue' => 192,
+		'sat' => 192,
+		'bri' => 96,
 		'rate' => $perfumeRate,
 		'rule' => ['huff' => [$perfumeDrain => $gram->suicide,
 				       $gram->bindNeumann (1 - $perfumeDrain,
