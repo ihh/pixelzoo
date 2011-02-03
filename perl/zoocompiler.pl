@@ -39,31 +39,53 @@ $gram->xmllint($xmllint) if defined $xmllint;
 # add some stuff
 
 # cement
-my ($cementRate, $cementStep, $cementDrain, $cementStick, $cementSet) = (.1, .02, .001, 1, .02);
-my @wallHue = (0, 42, 84);
-$gram->addType ('name' => 'cement',
-		'hue' => 32,
-		'sat' => 192,
-		'bri' => 96,
-		'rate' => $cementRate,
-		'rule' => ['huff' => [$cementDrain => $gram->suicide,
-				      map (($cementSet/@wallHue => [ 'modify' => [ 'set' => [ 'type' => 'wall',
-											       'decay' => 0,
-											       'hue' => $_ ]]]),
-					    @wallHue),
-				       $gram->bindNeumann (1 - $cementSet - $cementDrain,
-							   [$gram->empty => ['huff' => [$cementStep => $gram->moveTo]],
-							    'wall' => [ 'huff' => [$cementStick => ['modify' => [ 'src' => [ 'loc' => $gram->neighbor ],
-														  'dest' => [ 'loc' => $gram->origin ] ] ]]]])]]);
+my %cement = ('name' => 'cement',
+	      'rate' => .1,
+	      'step' => .02,
+	      'drain' => .001,
+	      'stick' => 1,
+	      'sticksto' => 'wall',
+	      'copies' => 1,
+	      'set' => .02,
+	      'setsto' => 'wall',
+	      'setsvar' => 'hue',
+	      'setsvals' => [0,42,84]);
 
-# cement tool
-$gram->addTool ('name' => 'Cement spray',
-		'size' => 2,
-		'gstate' => 'cement',
-		'reserve' => 1000,
-		'recharge' => 100,
-		'spray' => 1000,
-		'overwrite' => [ 'gstate' => 'empty' ]);
+make_spray_tool(%cement);
+
+sub make_spray_tool {
+    my %cement = @_;
+
+    my ($cementName, $cementRate, $cementStep, $cementDrain, $cementStick, $cementSet, $stickType, $copyFlag, $setType, $wallVar, $wallVals)
+	= map ($cement{$_}, qw(name rate step drain stick set sticksto copies setsto setsvar setsvals));
+
+    # cement type
+    my $setSub = ['huff' => [ map ((1/@$wallVals => [ 'modify' => [ 'set' => [ 'type' => $setType, $wallVar => $_ ] ] ]),
+				   @$wallVals) ]];
+    my $stickSub = $copyFlag
+	? ['modify' => [ 'src' => [ 'loc' => $gram->neighbor ], 'dest' => [ 'loc' => $gram->origin ] ] ]
+	: $setSub;
+
+    $gram->addType ('name' => $cementName,
+		    'hue' => 32,
+		    'sat' => 192,
+		    'bri' => 96,
+		    'rate' => $cementRate,
+		    'rule' => ['huff' => [$cementDrain => $gram->suicide,
+					  $cementSet => $setSub,
+					  $gram->bindNeumann (1 - $cementSet - $cementDrain,
+							      [$gram->empty => ['huff' => [$cementStep => $gram->moveTo]],
+							       $stickType => [ 'huff' => [$cementStick => $stickSub]]])]]);
+    
+    # cement tool
+    $gram->addTool ('name' => "$cementName spray",
+		    'size' => 2,
+		    'gstate' => $cementName,
+		    'reserve' => 1000,
+		    'recharge' => 100,
+		    'spray' => 1000,
+		    'overwrite' => [ 'gstate' => 'empty' ]);
+}
 
 # wall
 my ($wallRate, $wallMaxDecay) = (.0002,
@@ -103,14 +125,44 @@ $gram->addTool ('name' => 'Acid spray',
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # plant
-my %plant = ('rate' => .3, 'maxlen' => 10, 'branch' => .1, 'extend' => .7);
+my %plant = ('rate' => .01, 'branch' => .2, 'die' => .0001, 'max_branches' => 3);
+my $no_branch = ['modify' => ['src' => ['loc' => $gram->neighbor, 'var' => 'gens_left'],
+			      'inc' => -1,
+			      'dest' => ['loc' => $gram->neighbor, 'var' => 'gens_left' ]]];
 $gram->addType ('name' => 'plant',
-		'vars' => [ 'seg' => 4, 'branch' => 4 ],
-		'hue' => 82,
-		'sat' => 255,
-		'bri' => 255,
+		'vars' => [ 'gens_left' => 3, 'branches' => 2 ],
+		'hue' => ['var' => 'gens_left', 'mul' => +8, 'add' => 82],
+		'sat' => 240,
+		'bri' =>  ['var' => 'gens_left', 'mul' => -16, 'add' => 144],
 		'rate' => $plant{rate},
-		'rule' => $gram->nop);
+		'rule' => ['huff' => [$plant{'die'} => $gram->suicide,
+				      (1 - $plant{'die'}) => ['switch' => ['loc' => $gram->origin,
+									   'var' => 'gens_left',
+									   'case' => { '0' => $gram->nop },
+									   'default' => $gram->huffMoore
+									   ({ $gram->empty => $gram->copyTo
+										  ($gram->neighbor,
+										   ['switch' => ['loc' => $gram->origin,
+												 'var' => 'branches',
+												 'case' => { $plant{'max_branches'} => $no_branch },
+												 'default' => ['huff' => [(1-$plant{'branch'}) => $no_branch,
+															  $plant{'branch'} => ['modify' => ['src' => ['loc' => $gram->origin, 'var' => 'branches'],
+																			    'inc' => +1,
+																			    'dest' => ['loc' => $gram->origin, 'var' => 'branches' ]]] ]]]]) }) ] ] ] ] );
+
+my %seed = ('name' => 'seed',
+	    'rate' => .1,
+	    'step' => .05,
+	    'drain' => .03,
+	    'stick' => 1,
+	    'sticksto' => 'wall',
+	    'copies' => 0,
+	    'set' => .0005,
+	    'setsto' => 'plant',
+	    'setsvar' => 'gens_left',
+	    'setsvals' => [1,3,6]);
+
+make_spray_tool(%seed);
 
 
 # rock-paper-scissors animal
@@ -121,10 +173,6 @@ sub make_species_switch {
     for my $orig (0..2) {
 	my $prey = ($orig + 1) % 3;
 	for my $nbr (0..2) {
-#	    $predatorRule = $gram->moveOrSpawnTo (1,
-#						  $gram->neighbor,
-#						  $gram->balloon("$orig eats $nbr"),
-#						  $gram->balloon("$orig eats $nbr and spawns"));  # DEBUG
 	    $sw{$orig}->{$nbr} =
 		($nbr == $orig)
 		? $selfRule
@@ -143,18 +191,20 @@ sub make_species_switch {
 
 my %rps = ('name' => 'cyclobs',
 	   'rate' => .08,
+	   'food' => 'plant',
+	   'food_unripeness_var' => 'gens_left',
 
 	   # if next to empty space...
 	   'step' => .2,
-	   'breed' => .01,
+	   'breed' => .005,
 	   'die' => .005,
 
 	   # if next to same species...
-	   'choke' => .005,
+	   'choke' => .003,
 
-	   # if next to prey species...
-	   'eat' => 0,
-	   'convert' => 1,
+	   # if next to prey species, or food...
+	   'eat' => .2,
+	   'convert' => .8,
 
 	   # text feedback rates
 	   'text' => .001,
@@ -181,12 +231,20 @@ $gram->addType ('name' => $rps{'name'},
 															     $gram->neighbor,
 															     $gram->balloon("step",'rate'=>$rps{'text'}),
 															     $gram->balloon("breed",'rate'=>$rps{'text'}))]],
+							   $rps{'food'} => ['switch' => ['loc' => $gram->neighbor,
+											 'var' => $rps{'food_unripeness_var'},
+											 'case' => { 0 => [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
+																			       $gram->neighbor,
+																			       $gram->balloon("eat",'rate'=>$rps{'text'}),
+																			       $gram->balloon("spawn",'rate'=>$rps{'text'})) ] ],
+												     1 => [ 'huff' => [ $rps{'eat'} => $gram->moveTo ] ] }]],
+							   
 							   $rps{'name'} => [ make_species_switch
 									     ($gram,
 									      [ 'huff' => [ $rps{'choke'} => $gram->suicide ] ],
 									      [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
 																   $gram->neighbor,
-																   $gram->balloon("eat",'rate'=>$rps{'text'}),
+																   $gram->balloon("prey",'rate'=>$rps{'text'}),
 																   $gram->balloon("0wn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
 
 # rps animal tool

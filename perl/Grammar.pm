@@ -422,7 +422,7 @@ sub switch_sanitizer {
 	else { confess "Not a hash or array ref" }
 	return ($switch_tag => [defined($locid) ? ('loc' => $locid) : (),
 				$has_var && defined($varid) ? ('var' => $varid) : (),
-				defined($case) ? map (('case' => { '@'.$case_tag => $_, @{$self->transform_value($case{$_})} }), keys %case) : (),
+				defined($case) ? (map (( 'case' => [ '@'.$case_tag => $_, @{$self->transform_value($case{$_})} ] ), keys %case) ) : (),
 				defined($default) ? ('default' => $self->transform_value($default)) : ()]);
     };
 }
@@ -542,7 +542,7 @@ sub transform_hash {
 		$transformed_case{$name} = $self->transform_value ($rule);
 		$self->pop_scope;
 	    }
-	    my $transformed_default = $self->transform_value ($default);
+	    my $transformed_default = defined($default) ? $self->transform_value($default) : undef;
 
 	    $self->pop_scope;
 
@@ -579,7 +579,7 @@ sub transform_hash {
 	    while (my ($name, $rule) = each %case_hash) {
 		$transformed_case{$name} = $self->transform_value ($rule);
 	    }
-	    my $transformed_default = $self->transform_value ($default);
+	    my $transformed_default = defined($default) ? $self->transform_value($default) : undef;
 	    
 	    return ('rule' => [ 'switch' => [ 'pos' => { 'x' => $x, 'y' => $y },
 					      'mask' => $self->getMask($loctype,$varid),
