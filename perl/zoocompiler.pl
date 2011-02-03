@@ -102,39 +102,66 @@ $gram->addTool ('name' => 'Acid spray',
 		'spray' => 2,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
+# plant
+my %plant = ('rate' => .3, 'maxlen' => 10, 'branch' => .1, 'extend' => .7);
+$gram->addType ('name' => 'plant',
+		'vars' => [ 'seg' => 4, 'branch' => 4 ],
+		'hue' => 82,
+		'sat' => 255,
+		'bri' => 255,
+		'rate' => $plant{rate},
+		'rule' => $gram->nop);
+
+
 # rock-paper-scissors animal
 sub make_species_switch {
     my ($gram, $selfRule, $predatorRule, $preyRule) = @_;
-    ($selfRule, $predatorRule, $preyRule) = map (defined($_) ? (ref($_) ? $_ : []) : ['nop'], $selfRule, $predatorRule, $preyRule);
+    ($selfRule, $predatorRule, $preyRule) = map (defined($_) ? (ref($_) ? $_ : []) : $gram->nop, $selfRule, $predatorRule, $preyRule);
     my %sw;
     for my $orig (0..2) {
+	my $prey = ($orig + 1) % 3;
 	for my $nbr (0..2) {
+#	    $predatorRule = $gram->moveOrSpawnTo (1,
+#						  $gram->neighbor,
+#						  $gram->balloon("$orig eats $nbr"),
+#						  $gram->balloon("$orig eats $nbr and spawns"));  # DEBUG
 	    $sw{$orig}->{$nbr} =
-		$nbr == $orig
+		($nbr == $orig)
 		? $selfRule
-		: ((($nbr + 1) % 3 == $orig)
+		: (($nbr == $prey)
 		   ? $predatorRule
 		   : $preyRule);
 	}
     }
     return ('switch' => ['loc' => $gram->origin,
 			 'var' => 'species',
-			 map (('case' => [ $_ => ['switch' => ['loc' => $gram->neighbor,
+			 'case' => [map (( $_ => ['switch' => ['loc' => $gram->neighbor,
 							       'var' => 'species',
-							       'case' => [%{$sw{$_}}]]]]),
-			      0..2)]);
+							       'case' => [%{$sw{$_}}]]] ),
+					 0..2)]]);
 }
 
 my %rps = ('name' => 'cyclobs',
-	   'rate' => 10* .03,  # debug
-	   'step' => .2,
-	   'eat' => 1,
-	   'breedfat' => 1,
-	   'diespontaneous' => .005,
-	   'breedhungry' => .006 / (1 - .005),
-	   'diecrowded' => .006,
-	   'text' => .001);
+	   'rate' => .08,
 
+	   # if next to empty space...
+	   'step' => .2,
+	   'breed' => .01,
+	   'die' => .005,
+
+	   # if next to same species...
+	   'choke' => .005,
+
+	   # if next to prey species...
+	   'eat' => 0,
+	   'convert' => 1,
+
+	   # text feedback rates
+	   'text' => .001,
+	   'log' => 1);
+
+my $stepOrBreed = $rps{'breed'} + $rps{'step'};
+my $eatOrConvert = $rps{'convert'} + $rps{'eat'};
 $gram->addType ('name' => $rps{'name'},
 		'vars' => [ 'species' => 2 ],
 		'hue' => [ 'var' => 'species', 'mul' => 42, 'add' => 10 ],
@@ -147,26 +174,26 @@ $gram->addType ('name' => $rps{'name'},
 			      'case' => [3 => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
 										     'dest' => ['var' => 'species']]]),
 							       0..2)]]],
-			      'default' => ['huff' => [ $rps{'diespontaneous'} => $gram->suicide,
-							$gram->bindNeumann
-							(1 - $rps{'diespontaneous'},
-							 [ $gram->empty => ['huff' => [$rps{'step'} => $gram->moveOrSpawnTo ($rps{'breedhungry'},
+			      'default' => ['huff' => [ $gram->bindMoore
+							(1,
+							 [ $gram->empty => ['huff' => [$rps{'die'} => $gram->suicide,
+										       $stepOrBreed => $gram->moveOrSpawnTo ($rps{'breed'} / $stepOrBreed,
 															     $gram->neighbor,
 															     $gram->balloon("step",'rate'=>$rps{'text'}),
 															     $gram->balloon("breed",'rate'=>$rps{'text'}))]],
 							   $rps{'name'} => [ make_species_switch
 									     ($gram,
-									      [ 'huff' => [ $rps{'diecrowded'} => $gram->suicide ] ],
-									      [ 'huff' => [ $rps{'eat'} => $gram->moveOrSpawnTo ($rps{'breedfat'},
-																 $gram->neighbor,
-																 $gram->balloon("eat",'rate'=>$rps{'text'}),
-																 $gram->balloon("spawn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
+									      [ 'huff' => [ $rps{'choke'} => $gram->suicide ] ],
+									      [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
+																   $gram->neighbor,
+																   $gram->balloon("eat",'rate'=>$rps{'text'}),
+																   $gram->balloon("0wn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
 
 # rps animal tool
 $gram->addTool ('name' => $rps{'name'},
-		'size' => 1,
+		'size' => 8,
 		'gvars' => [ 'type' => $rps{'name'}, 'species' => 3 ],
-		'reserve' => 1,
+		'reserve' => 5,
 		'recharge' => 100,
 		'spray' => 100,
 		'overwrite' => [ 'gstate' => 'empty' ]);
@@ -179,9 +206,9 @@ $gram->addType ('name' => 'perfume',
 		'bri' => 96,
 		'rate' => $perfumeRate,
 		'rule' => ['huff' => [$perfumeDrain => $gram->suicide,
-				       $gram->bindNeumann (1 - $perfumeDrain,
-							   [$gram->empty => $gram->moveOrSpawnTo ($perfumeBillow),
-							    $rps{'name'} => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
+				      $gram->bindNeumann (1 - $perfumeDrain,
+							  [$gram->empty => $gram->moveOrSpawnTo ($perfumeBillow),
+							   $rps{'name'} => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
 
 # perfume tool
 $gram->addTool ('name' => 'Perfume spray',

@@ -153,6 +153,16 @@ sub print {
     warn "Sanitizing proto-game XML...\n" if $self->verbose;
     my $sanitized_proto = $self->sanitize_proto($wrapped_proto);
 
+
+    if ($self->debug) {
+	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($wrapped_proto);
+    }
+
+    if ($self->debug) {
+	warn "Data structure representing sanitized proto-game XML:\n", Data::Dumper->Dump($sanitized_proto);
+    }
+
+
     warn "Generating proto-game XML for validation...\n" if $self->verbose;
     my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
 
@@ -327,7 +337,7 @@ sub transform_list {
 
 	} else {
 	    # neither key nor value represents code or transformation, so just copy value
-	    push @kv_out, ($k, $self->transform_value ($v));
+	    push @kv_out, $k, defined($v) ? $self->transform_value($v) : ();
 	}
     }
 
@@ -338,6 +348,9 @@ sub transform_list {
 sub transform_value {
     my ($self, $v) = @_;
 
+    if (!defined($v)) {
+	cluck "Undefined value passed to transform_value";
+    }
     warn "Transforming value $v" if $self->debug;
 
     if (ref($v) && ref($v) eq 'HASH') {
@@ -362,7 +375,7 @@ sub forceHash {
 	}
 	return {@$n};
     }
-    confess "Not a HASH";
+    confess "Not a reference";
 }
 
 # helper to sanitize the proto-XML
@@ -403,7 +416,10 @@ sub switch_sanitizer {
 	my ($self, $n) = @_;
 	$n = forceHash($n);
 	my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
-	my %case = ref($case) eq 'HASH' ? %$case : @$case;
+	my %case;
+	if (ref($case) eq 'HASH') { %case = %$case }
+	elsif (ref($case) eq 'ARRAY') { confess "Odd number of elements in (@$case)" if @$case % 2 != 0; %case = @$case }
+	else { confess "Not a hash or array ref" }
 	return ($switch_tag => [defined($locid) ? ('loc' => $locid) : (),
 				$has_var && defined($varid) ? ('var' => $varid) : (),
 				defined($case) ? map (('case' => { '@'.$case_tag => $_, @{$self->transform_value($case{$_})} }), keys %case) : (),
@@ -424,7 +440,7 @@ sub typevar_sanitizer {
 		if ($k eq 'type') {
 		    push @out, ($k => $v);
 		} else {
-		    push @out, ($var_tag => { 'name' => $_, $value_tag => $v });
+		    push @out, ($var_tag => { 'name' => $k, $value_tag => $v });
 		}
 	    }
 	    return ($vars_tag => \@out);
@@ -760,9 +776,10 @@ sub transform_hash {
 }
 
 # nop rule
-sub make_nop {
-    return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]);
-}
+# first the actual code for 'nop'
+sub make_nop { return ('rule' => [ 'modify' => [ 'destmask' => 0 ] ]); }
+# now the mnemonic
+sub nop { return [ 'nop' => '' ] }
 
 # helper to convert Huffman tree to random rule tree
 sub huff_to_rule {
