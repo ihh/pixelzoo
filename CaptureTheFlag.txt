@@ -1,0 +1,16 @@
+Capture the flag
+
+If, during your turn, you are able to destroy all particles of type X,
+then you gain ownership of the board.
+
+Constraints:
+ Turns have fixed time limits.
+ After their turn, a player is locked out for a random time.
+ Guest-writable-cells  \subset  Owner-writable-cells  \subseteq  Board
+
+Richard's advice: implement this game exactly as described.
+
+Extensions:
+Users can upload their own particle and tool XML.
+New particles/tools are priced by the system.
+Tool designers get in-game credit when players buy their tools.
