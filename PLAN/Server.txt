@@ -1,0 +1,13 @@
+GET lock/BoardID  -->  (UserName,ExpirationTime) or 404
+PUT lock/BoardID  -->  (UserName,ExpirationTime) or failure code
+DELETE lock/BoardID  -->  success or failure code
+
+GET meta/BoardID  -->   (Lock,BoardMetaData)
+
+GET board/BoardID  -->   (Lock,BoardMetaData,BoardData)
+
+PUT move/BoardID (TurnsSinceLock,X,Y,Type)  -->  success or failure code   (fails if not your lock)
+
+GET type/Type  -->  (Type) or 404     (mirrors S3)
+PUT type/Type (TypeInfo)  -->  success or failure code   (fails if no designer privs, not your namespace, etc)
+
