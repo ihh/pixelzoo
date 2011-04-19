@@ -4,7 +4,7 @@ DELETE lock/BoardID  -->  success or failure code
 
 GET meta/BoardID  -->   (Lock,BoardOwner,BoardMetaData)
 
-GET board/BoardID  -->   (BoardOwner,BoardMetaData,BoardData) or failure   (same result as PUT lock/BoardID; tools reflect ownership/inventory)
+GET board/BoardID  -->   (BoardOwner,BoardMetaData,Board,CompiledBoard) or failure   (if lock is yours, CompiledBoard includes rules + appropriate tools; otherwise it's empty)
 
 PUT move/BoardID (LockID,TimeSinceLock,X,Y,Type)  -->  success or failure code   (fails if not your lock, move illegal, etc)
 
