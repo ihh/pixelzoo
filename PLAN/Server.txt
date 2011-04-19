@@ -1,18 +1,28 @@
-GET lock/BoardID  -->  (UserName,LockID,ExpirationTime) or 404
-PUT lock/BoardID  -->  (UserName,LockID,ExpirationTime) or failure code   (compiles the board)
-DELETE lock/BoardID  -->  success or failure code
+Resource representations:
 
-GET meta/BoardID  -->   (Lock,BoardOwner,BoardMetaData)
+Lock: (LockID,BoardID,UserName,ExpirationTime)
+Board: (BoardID,LockID,BoardName,BoardOwner,YourNextCheckoutTime,GameData)
+Move: ((TimeSinceLock,X,Y,State)+)
+Type: (TypeName,TypeInfo)
+Status: (UserName,Privileges,BoardsOwned,CashLevel,PixelInventory)
+PixelPurchase: (TypeName,CashToSpend)
 
-GET board/BoardID  -->   (BoardOwner,BoardMetaData,Board,CompiledBoard) or failure   (if lock is yours, CompiledBoard includes rules + appropriate tools; otherwise it's empty)
 
-PUT move/BoardID (LockID,TimeSinceLock,X,Y,State)  -->  success or failure code   (fails if not your lock, move is illegal, etc)
 
-GET type/TypeName  -->  (TypeName,TypeInfo) or 404            (mirrors S3)
-PUT type/TypeName  -->  (TypeName,TypeInfo) or failure code   (fails if no designer privileges, not your namespace, etc)
+RESTful HTTP operations & responses (all can return 401 Unauthorized for authentication):
 
-GET status  -->  (UserName,Privileges,BoardsOwned,CashLevel,PixelInventory)
+GET lock/BoardID  -->  303 See Other --> GET lock/BoardID/LockID, 404 Not Found
+GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
+PUT lock/BoardID (null)  -->  200 See Other --> GET lock/BoardID/LockID (silently compiles board), 404 Not Found (bad BoardID), 423 Locked
+DELETE lock/BoardID/LockID  -->  204 No Content (success), 404 Not Found (bad BoardID or LockID), 410 Gone (timeout)
 
-GET price/Type  -->  (PricePerUnit)
+GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes rules + appropriate tools; otherwise it's empty), 404 Not Found (bad BoardID)
 
-PUT buy/Type  (PixelsToBuy)  -->  (PixelInventory) or failure code
+PUT move/BoardID/LockID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
+
+GET type/TypeName  -->  200 Success + Type (mirrors S3), 404 Not Found (bad TypeName)
+PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc)
+
+GET status  -->  200 Success + Status
+
+PUT buy  (PixelPurchase)  -->  200 Success + Status, 402 Payment Required, 404 Not Found
