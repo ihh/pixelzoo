@@ -6,7 +6,7 @@ GET meta/BoardID  -->   (Lock,BoardOwner,BoardMetaData)
 
 GET board/BoardID  -->   (BoardOwner,BoardMetaData,Board,CompiledBoard) or failure   (if lock is yours, CompiledBoard includes rules + appropriate tools; otherwise it's empty)
 
-PUT move/BoardID (LockID,TimeSinceLock,X,Y,State)  -->  success or failure code   (fails if not your lock, move illegal, etc)
+PUT move/BoardID (LockID,TimeSinceLock,X,Y,State)  -->  success or failure code   (fails if not your lock, move is illegal, etc)
 
 GET type/TypeName  -->  (TypeName,TypeInfo) or 404            (mirrors S3)
 PUT type/TypeName  -->  (TypeName,TypeInfo) or failure code   (fails if no designer privileges, not your namespace, etc)
