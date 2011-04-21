@@ -1,0 +1,5 @@
+Refactoring from continuous-time to discrete-time
+
+Convert double's to long int's BinTree and QuadTree.
+Convert randomDouble() and randomExp() to return long int's (multiples of 2^{-31}) instead of double's.
+Convert "seconds" (double's) to "nanoseconds" (long int's) in Board and Game.
