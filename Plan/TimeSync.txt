@@ -1,6 +1,22 @@
-Refactoring from continuous-time to discrete-time
+Refactoring from continuous-time to discrete-time to allow "time sync" (100% accurate board replay given initial state + moves)
 
-Convert double's to long int's BinTree and QuadTree.
-Convert randomDouble() and randomExp() to return long int's (multiples of 2^{-31}) instead of double's.
-Convert "seconds" (double's) to "nanoseconds" (long int's) in Board and Game.
+New types:
+
+uint64_Secs
+uint64_Nanosecs
+uint64_Hertz
+uint64_Nanohertz
+
+uint64_Billionths
+
+
+Tasks:
+
+BinTree, QuadTree: Convert double --> uint64_Nanohertz
+randomDouble: Convert double --> uint64_Billionth
+randomExp: Convert double --> uint64_Nanosecs, rename to randomWait (1 Hertz)
+Board, Game: Convert double --> uint64_Nanosecs (board time), uint64_Secs (input evolve-time arg), uint64_Hertz (input board-rate arg)
+
 Remove all "overload"-related game logic (rules, tests).
+Add an input queue to Board.
+Implement an integer-based random number generator.
