@@ -1,15 +1,78 @@
+Model-View-Controller architecture
+
+Model
+-----
+
+Local database:
+User table (UserID, UserName, Role, Cash)
+User inventory table (UserID, TypeID, PixelCount)
+Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerID, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorID)
+Type metadata table (TypeID, CreatorID, CreatorEncodedTypeName, PixelPrice)
+
+S3 bucket:
+type/CreatorName/RestOfTypeName
+board/BoardName
+game/BoardName
+compiled/BoardName
+
+
+Comments:
+
+UserID, BoardID, TypeID
+ these are autoincremented integer primary keys
+
+UserName, BoardName
+ these are strings which must be unique & exclude '/'
+
+CreatorEncodedTypeName = CreatorName/RestOfTypeName
+
+Roles: Player < Creator
+
+Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
+ board-specific, but generally 64-bit integers measuring (approx) nanoseconds of on-time since deployment.
+
+Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
+
+XML contents of bucket:
+type/CreatorEncodedTypeName  leads to  <particle>
+board/BoardName  leads to a  <board>  block in proto.dtd
+game/BoardName  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
+compiled/BoardName  leads to the  <board>  block in game.dtd
+
+
+Views
+-----
+
 Resource representations:
 
-Lock: (LockID,BoardID,UserName,ExpirationTime)
-Board: (BoardID,LockID,BoardName,BoardOwner,YourNextCheckoutTime,GameData)
-Move: ((TimeSinceLock,X,Y,State)+)
-Type: (TypeName,TypeInfo)
-Status: (UserName,Privileges,BoardsOwned,CashLevel,PixelInventory)
-PixelPurchase: (TypeName,CashToSpend)
+Lock: (LockID, BoardID, LockOwnerID, ExpirationTime)
+Board: (BoardID, BoardName, LockID?, BoardOwnerID, NextAvailableCheckoutTime, GameData)
+Move: ((PlayerID, MoveTime, X, Y, TypeID)+)
+Type: (TypeName, TypeImage, TypeRule, TypeEstimatedPrice?)
+Status: (UserID, UserName, AllowedRoles, BoardsOwned, CashLevel, PixelInventory)
+PixelPurchase: (BuyerID, TypeID, CashValue)
 
 
+Comments:
 
-RESTful HTTP operations & responses (all can return 401 Unauthorized for authentication):
+The appearance of a "lock collection" is maintained as a RESTful illusion; there can only ever be at most one lock per board.
+LockID is just the lock count.
+TypeName = CreatorEncodedTypeName
+
+AllowedRoles \in { {Player}, {Player,Creator} }
+
+GameData is synthesized dynamically from BucketURL/(game|board|compiled)/*
+If player doesn't have a lock, game/ & board/ are used, and the view conforms to proto.dtd.
+If player has lock, game/ & compiled/ are used, view conforms to game.dtd.
+
+Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
+
+
+Controller
+----------
+
+RESTful HTTP operations & responses.
+All can return 401 Unauthorized for authentication (incl. challenge URL)
 
 GET lock/BoardID  -->  303 See Other --> GET lock/BoardID/LockID, 404 Not Found
 GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
@@ -20,8 +83,8 @@ GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes r
 
 PUT move/BoardID/LockID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
-GET type/TypeName  -->  200 Success + Type (mirrors S3), 404 Not Found (bad TypeName)
-PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc)
+GET type/TypeID  -->  200 Success + Type (mirrors S3), 404 Not Found (bad TypeID)
+PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
 
 GET status  -->  200 Success + Status
 
