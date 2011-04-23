@@ -4,13 +4,12 @@ Model
 -----
 
 Local database:
-User table (UserID, MainRole, Cash)
-User inventory table (UserID, TypeID, PixelCount)
-Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerID, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorID)
-Type metadata table (TypeID, CreatorID, PixelPrice)
+User table (UserName, MainRole, Cash)
+User inventory table (UserName, TypeName, PixelCount)
+Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerName, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
 
 S3 bucket:
-type/CreatorID/RestOfTypeID
+type/CreatorName/RestOfTypeName
 board/BoardID
 game/BoardID
 compiled/BoardID
@@ -24,10 +23,10 @@ BoardID
 BoardName
  is never used as a key, and is not required to be unique.
 
-UserID, TypeID
+UserName, TypeName
  These are strings that serve as primary keys in their respective tables, and so must be unique.
  Allowed characters: [A-Za-z0-9_.]
- TypeID = CreatorID/RestOfTypeID
+ TypeName = CreatorName/RestOfTypeName
 
 MainRole: Player < Creator
 
@@ -37,7 +36,7 @@ Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
 Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
 
 XML contents of bucket:
-type/CreatorID/RestOfTypeID  leads to  <particle>
+type/CreatorName/RestOfTypeName  leads to  <particle>
 board/BoardID  leads to a  <board>  block in proto.dtd
 game/BoardID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
 compiled/BoardID  leads to the  <board>  block in game.dtd
@@ -48,12 +47,13 @@ Views
 
 Resource representations:
 
-Lock: (LockID, BoardID, LockOwnerID, ExpirationTime)
-Board: (BoardID, LockID?, BoardOwnerID, NextAvailableCheckoutTime, GameData)
-Move: ((PlayerID, MoveTime, X, Y, TypeID)+)
-Type: (TypeID, TypeImage, TypeRule, CurrentPrice?)
-Status: (UserID, (AllowedRole)+, BoardsOwned, CashLevel, (TypeID,PixelsOwned)+)
-PixelPurchase: (BuyerID, TypeID, CashAmount)
+Lock: (LockID, BoardID, LockOwnerName, ExpirationTime)
+Board: (BoardID, LockID?, BoardOwnerName, NextAvailableCheckoutTime, GameData)
+Move: ((PlayerName, MoveTime, X, Y, TypeName)+)
+Type: (TypeName, TypeImage, TypeRule)
+Price: (CashPerPixel)
+Status: (UserName, (AllowedRole)+, BoardsOwned, CashLevel, (TypeName,PixelsOwned)+)
+PixelPurchase: (BuyerName, TypeName, CashAmount)
 
 
 Comments:
@@ -83,8 +83,10 @@ GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes r
 
 PUT move/BoardID/LockID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
-GET type/TypeID  -->  200 Success + Type (proxies S3 bucket & adds price), 404 Not Found (bad TypeID)
+GET type/TypeName  -->  200 Success + Type (proxies S3 bucket), 404 Not Found (bad TypeName)
 PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
+
+GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
 
 GET status  -->  200 Success + Status
 
