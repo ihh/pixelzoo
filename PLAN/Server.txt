@@ -4,29 +4,32 @@ Model
 -----
 
 Local database:
-User table (UserID, UserName, Role, Cash)
+User table (UserID, MainRole, Cash)
 User inventory table (UserID, TypeID, PixelCount)
 Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerID, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorID)
-Type metadata table (TypeID, CreatorID, CreatorEncodedTypeName, PixelPrice)
+Type metadata table (TypeID, CreatorID, PixelPrice)
 
 S3 bucket:
-type/CreatorName/RestOfTypeName
-board/BoardName
-game/BoardName
-compiled/BoardName
+type/CreatorID/RestOfTypeID
+board/BoardID
+game/BoardID
+compiled/BoardID
 
 
 Comments:
 
-UserID, BoardID, TypeID
- these are autoincremented integer primary keys
+BoardID
+ This is an integer primary key.
 
-UserName, BoardName
- these are strings which must be unique & exclude '/'
+BoardName
+ is never used as a key, and is not required to be unique.
 
-CreatorEncodedTypeName = CreatorName/RestOfTypeName
+UserID, TypeID
+ These are strings that serve as primary keys in their respective tables, and so must be unique.
+ Allowed characters: [A-Za-z0-9_.]
+ TypeID = CreatorID/RestOfTypeID
 
-Roles: Player < Creator
+MainRole: Player < Creator
 
 Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
  board-specific, but generally 64-bit integers measuring (approx) nanoseconds of on-time since deployment.
@@ -34,10 +37,10 @@ Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
 Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
 
 XML contents of bucket:
-type/CreatorEncodedTypeName  leads to  <particle>
-board/BoardName  leads to a  <board>  block in proto.dtd
-game/BoardName  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
-compiled/BoardName  leads to the  <board>  block in game.dtd
+type/CreatorID/RestOfTypeID  leads to  <particle>
+board/BoardID  leads to a  <board>  block in proto.dtd
+game/BoardID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
+compiled/BoardID  leads to the  <board>  block in game.dtd
 
 
 Views
@@ -46,26 +49,23 @@ Views
 Resource representations:
 
 Lock: (LockID, BoardID, LockOwnerID, ExpirationTime)
-Board: (BoardID, BoardName, LockID?, BoardOwnerID, NextAvailableCheckoutTime, GameData)
+Board: (BoardID, LockID?, BoardOwnerID, NextAvailableCheckoutTime, GameData)
 Move: ((PlayerID, MoveTime, X, Y, TypeID)+)
-Type: (TypeName, TypeImage, TypeRule, TypeEstimatedPrice?)
-Status: (UserID, UserName, AllowedRoles, BoardsOwned, CashLevel, PixelInventory)
-PixelPurchase: (BuyerID, TypeID, CashValue)
+Type: (TypeID, TypeImage, TypeRule, CurrentPrice?)
+Status: (UserID, (AllowedRole)+, BoardsOwned, CashLevel, (TypeID,PixelsOwned)+)
+PixelPurchase: (BuyerID, TypeID, CashAmount)
 
 
 Comments:
 
 The appearance of a "lock collection" is maintained as a RESTful illusion; there can only ever be at most one lock per board.
 LockID is just the lock count.
-TypeName = CreatorEncodedTypeName
-
-AllowedRoles \in { {Player}, {Player,Creator} }
 
 GameData is synthesized dynamically from BucketURL/(game|board|compiled)/*
 If player doesn't have a lock, game/ & board/ are used, and the view conforms to proto.dtd.
 If player has lock, game/ & compiled/ are used, view conforms to game.dtd.
 
-Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
+Cash amounts are measured in virtual dollars, at parity with US$.
 
 
 Controller
@@ -79,11 +79,11 @@ GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
 PUT lock/BoardID (null)  -->  200 See Other --> GET lock/BoardID/LockID (silently compiles board), 404 Not Found (bad BoardID), 423 Locked
 DELETE lock/BoardID/LockID  -->  204 No Content (success), 404 Not Found (bad BoardID or LockID), 410 Gone (timeout)
 
-GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes rules + appropriate tools; otherwise it's empty), 404 Not Found (bad BoardID)
+GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes rules + appropriate tools; otherwise, just type names), 404 Not Found (bad BoardID)
 
 PUT move/BoardID/LockID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
-GET type/TypeID  -->  200 Success + Type (mirrors S3), 404 Not Found (bad TypeID)
+GET type/TypeID  -->  200 Success + Type (proxies S3 bucket & adds price), 404 Not Found (bad TypeID)
 PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
 
 GET status  -->  200 Success + Status
