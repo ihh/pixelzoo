@@ -9,7 +9,7 @@ User inventory table (UserName, TypeName, PixelCount)
 Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerName, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
 
 S3 bucket:
-type/CreatorName/RestOfTypeName
+type/TypeName = type/CreatorName/RestOfTypeName
 board/BoardID
 game/BoardID
 compiled/BoardID
@@ -25,8 +25,8 @@ BoardName
 
 UserName, TypeName
  These are strings that serve as primary keys in their respective tables, and so must be unique.
- Allowed characters: [A-Za-z0-9_.]
- TypeName = CreatorName/RestOfTypeName
+ Allowed characters in UserName: [A-Za-z0-9_.]
+ TypeName always has the format "CreatorName/RestOfTypeName" where CreatorName is a UserName
 
 MainRole: Player < Creator
 
