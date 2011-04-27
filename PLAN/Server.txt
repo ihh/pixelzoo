@@ -76,18 +76,18 @@ All can return 401 Unauthorized for authentication (incl. challenge URL)
 
 GET lock/BoardID  -->  303 See Other --> GET lock/BoardID/LockID, 404 Not Found
 GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
-PUT lock/BoardID (null)  -->  200 See Other --> GET lock/BoardID/LockID (silently compiles board), 404 Not Found (bad BoardID), 423 Locked
+POST lock/BoardID (null)  -->  200 Success + Lock (board compiled), 404 Not Found (bad BoardID), 408 Request Timeout (failed to compile board), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
 DELETE lock/BoardID/LockID  -->  204 No Content (success), 404 Not Found (bad BoardID or LockID), 410 Gone (timeout)
 
 GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes rules + appropriate tools; otherwise, just type names), 404 Not Found (bad BoardID)
 
-PUT move/BoardID/LockID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
+POST move/BoardID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
 GET type/TypeName  -->  200 Success + Type (proxies S3 bucket), 404 Not Found (bad TypeName)
-PUT type (Type)  -->  200 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
+PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
 
 GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
 
 GET status  -->  200 Success + Status
 
-PUT buy  (PixelPurchase)  -->  200 Success + Status, 402 Payment Required, 404 Not Found
+PUT buy  (PixelPurchase)  -->  201 Success, 402 Payment Required, 404 Not Found
