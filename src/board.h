@@ -19,17 +19,17 @@ typedef struct Board {
   CellWatcher **watcher;  /* notify[boardIndex(size,x,y)] is pointer to CellWatcher object that intercepts & potentially modifies writes to cell (x,y) */
   BinTree *asyncBin, *syncBin, *syncUpdateBin;  /* asyncBin = stochastic update rates AND queue, syncBin = sync update rates, syncUpdateBin = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
-  double overloadThreshold;  /* overload rules will be used at (x,y) if boardFiringRate(board) > overloadThreshold */
   Palette palette;  /* cell color scheme used by this Board */
-  double updatesPerCell;  /* time elapsed on this board, in units of expected updates per cell */
-  double updatesPerCellAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
+  int64_Microticks microticks;  /* time elapsed on this board, in units of (expected updates per cell / 2^{20}) */
+  int64_Microticks microticksAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's */
+  RandomNumberGenerator rng;
 } Board;
 
 /* public methods */
-Board* newBoard (int size);
+Board* newBoard (int size, RandomNumberGenerator rng);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 PaletteIndex readBoardColor (Board* board, int x, int y);

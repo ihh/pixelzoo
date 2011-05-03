@@ -143,7 +143,6 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
   ModifyRuleParams *modify;
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
-  OverloadRuleParams *overload;
 
   rule = NULL;
 
@@ -179,12 +178,6 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
       random->prob = OPTCHILDFLOAT (ruleNode, PROB, 0.5);
       random->passRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, PASS));
       random->failRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAIL));
-
-    } else if (MATCHES (ruleNode, OVERLOAD)) {
-      rule = newOverloadRule();
-      overload = &rule->param.overload;
-      overload->slowRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, SLOW));
-      overload->fastRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAST));
 
     } else if (MATCHES (ruleNode, GOAL)) {
       rule = newGoalRule();

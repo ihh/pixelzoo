@@ -25,7 +25,7 @@ BinTree* newBinTree (int size) {
     ++bin->K;
   }
   totalNodes = totalBinTreeNodes (bin->K);
-  bin->binRate = SafeCalloc (totalNodes, sizeof(double));  /* initialized to zero */
+  bin->binRate = SafeCalloc (totalNodes, sizeof(int64_Millionths));  /* initialized to zero */
   return bin;
 }
 
@@ -33,7 +33,7 @@ void copyBinTree (BinTree* src, BinTree* dest) {
   int size;
   Assert (src->K == dest->K, "BinTree sizes don't match");
   size = binTreeSize (src);
-  memcpy (dest->binRate, src->binRate, totalBinTreeNodes(src->K) * sizeof(double));
+  memcpy (dest->binRate, src->binRate, totalBinTreeNodes(src->K) * sizeof(int64_Millionths));
 }
 
 void deleteBinTree (BinTree* bin) {
@@ -41,12 +41,12 @@ void deleteBinTree (BinTree* bin) {
   SafeFree(bin);
 }
 
-double readBinTree (BinTree* bin, int x) {
+int64_Millionths readBinTree (BinTree* bin, int x) {
   return bin->binRate[binNodeIndex(bin, x, bin->K)];
 }
 
-void updateBinTree(BinTree* bin, int x, double val) {
-  double oldVal, diff;
+void updateBinTree(BinTree* bin, int x, int64_Millionths val) {
+  int64_Millionths oldVal, diff;
   int lev, n;
   oldVal = bin->binRate[binNodeIndex(bin, x, bin->K)];
   diff = val - oldVal;
@@ -56,14 +56,14 @@ void updateBinTree(BinTree* bin, int x, double val) {
   }
 }
 
-void sampleBinLeaf(BinTree* bin, int* x_ret) {
+void sampleBinLeaf(BinTree* bin, RandomNumberGenerator rng, int* x_ret) {
   int node, lev, whichChild, leftChild;
-  double prob;
+  int64_Millionths prob;
 
   node = 0;
   *x_ret = 0;
   for (lev = 0; lev < bin->K; ++lev) {
-    prob = randomDouble() * bin->binRate[node];
+    prob = rngRandomProb(rng) * bin->binRate[node];
     leftChild = binLeftChildIndex(node);
     whichChild = (prob < bin->binRate[leftChild]) ? 0 : 1;
     node = leftChild + whichChild;
@@ -71,10 +71,10 @@ void sampleBinLeaf(BinTree* bin, int* x_ret) {
   }
 }
 
-double topBinRate(BinTree* bin) {
+int64_Millionths topBinRate(BinTree* bin) {
   return bin->binRate[0];
 }
 
-double getBinRate (BinTree* bin, int x, int level) {
+int64_Millionths getBinRate (BinTree* bin, int x, int level) {
   return bin->binRate[binNodeIndex(bin,x,level)];
 }

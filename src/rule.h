@@ -1,6 +1,7 @@
 #ifndef RULE_INCLUDED
 #define RULE_INCLUDED
 
+#include "util.h"
 #include "statemap.h"
 
 /* Short-range relative co-ordinate offset.
@@ -25,17 +26,14 @@ typedef struct LocalOffset {
   then nextRule
 
   (Random)
-  randomDouble() < prob ? passRule : failRule
-
-  (Overload)
-  if board is overloaded, slowRule; else fastRule
+  syncRandomProb() < prob ? passRule : failRule
 
   (Goal)
   passes control to a goal
 */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, OverloadRule, GoalRule, GotoRule };
+enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
@@ -58,20 +56,15 @@ typedef struct DeliverRuleParams {
 } DeliverRuleParams;
 
 typedef struct RandomRuleParams {
-  double prob;
+  int64_Millionths prob;
   ParticleRule *passRule, *failRule;
 } RandomRuleParams;
-
-typedef struct OverloadRuleParams {
-  ParticleRule *slowRule, *fastRule;
-} OverloadRuleParams;
 
 typedef union RuleParams {
   LookupRuleParams lookup;
   ModifyRuleParams modify;
   DeliverRuleParams deliver;
   RandomRuleParams random;
-  OverloadRuleParams overload;
   void *goal;
   ParticleRule *gotoLabel;
 } RuleParams;
@@ -86,7 +79,6 @@ ParticleRule* newLookupRule();
 ParticleRule* newModifyRule();
 ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
-ParticleRule* newOverloadRule();
 ParticleRule* newGoalRule();
 ParticleRule* newGotoRule();
 

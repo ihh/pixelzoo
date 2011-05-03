@@ -2,21 +2,22 @@
 #define BINTREE_INCLUDED
 
 #include "rule.h"
+#include "util.h"
 
-/* a fully-populated binary tree of double's with fast lookup & sampling */
+/* a fully-populated binary tree of int64_Millionth's with fast lookup & sampling */
 typedef struct BinTree {
-  double* binRate;
+  int64_Millionths* binRate;
   unsigned char K;  /* K = log_2(size) */
 } BinTree;
 
 BinTree* newBinTree (int size);
 void deleteBinTree (BinTree* bin);
 void copyBinTree (BinTree* src, BinTree* dest);
-double readBinTree (BinTree* bin, int x);
-void updateBinTree (BinTree* bin, int x, double val);
-void sampleBinLeaf (BinTree* bin, int* x_ret);
-double topBinRate (BinTree* bin);
-double getBinRate (BinTree* bin, int x, int level);
+int64_Millionths readBinTree (BinTree* bin, int x);
+void updateBinTree (BinTree* bin, int x, int64_Millionths val);
+void sampleBinLeaf (BinTree* bin, RandomNumberGenerator rng, int* x_ret);
+int64_Millionths topBinRate (BinTree* bin);
+int64_Millionths getBinRate (BinTree* bin, int x, int level);
 
 /* macro for size */
 #define binTreeSize(BIN_PTR) (1 << (BIN_PTR)->K)

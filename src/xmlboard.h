@@ -23,7 +23,6 @@
 #define XMLZOO_SWITCH      "switch"
 #define XMLZOO_MODIFY      "modify"
 #define XMLZOO_RANDOM      "random"
-#define XMLZOO_OVERLOAD    "overload"
 #define XMLZOO_GOAL        "goal"
 #define XMLZOO_CASE        "case"
 #define XMLZOO_DEFAULT     "default"

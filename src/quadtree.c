@@ -24,7 +24,7 @@ QuadTree* newQuadTree (int size) {
     ++quad->K;
   }
   totalNodes = totalQuadTreeNodes(size);
-  quad->quadRate = SafeCalloc (totalNodes, sizeof(double));  /* initialized to zero */
+  quad->quadRate = SafeCalloc (totalNodes, sizeof(int64_Millionths));  /* initialized to zero */
   return quad;
 }
 
@@ -32,7 +32,7 @@ void copyQuadTree (QuadTree* src, QuadTree* dest) {
   int size;
   Assert (src->K == dest->K, "QuadTree sizes don't match");
   size = quadTreeSize (src);
-  memcpy (dest->quadRate, src->quadRate, totalQuadTreeNodes(size) * sizeof(double));
+  memcpy (dest->quadRate, src->quadRate, totalQuadTreeNodes(size) * sizeof(int64_Millionths));
 }
 
 void deleteQuadTree (QuadTree* quad) {
@@ -40,12 +40,12 @@ void deleteQuadTree (QuadTree* quad) {
   SafeFree(quad);
 }
 
-double readQuadTree (QuadTree* quad, int x, int y) {
+int64_Millionths readQuadTree (QuadTree* quad, int x, int y) {
   return quad->quadRate[quadNodeIndex(quad, x, y, quad->K)];
 }
 
-void updateQuadTree(QuadTree* quad, int x, int y, double val) {
-  double oldVal, diff;
+void updateQuadTree(QuadTree* quad, int x, int y, int64_Millionths val) {
+  int64_Millionths oldVal, diff;
   int lev, n;
   oldVal = quad->quadRate[quadNodeIndex(quad, x, y, quad->K)];
   diff = val - oldVal;
@@ -55,14 +55,14 @@ void updateQuadTree(QuadTree* quad, int x, int y, double val) {
   }
 }
 
-void sampleQuadLeaf(QuadTree* quad, int* x_ret, int* y_ret) {
+void sampleQuadLeaf(QuadTree* quad, RandomNumberGenerator rng, int* x_ret, int* y_ret) {
   int node, lev, whichChild, childNode;
-  double prob;
+  int64_Millionths prob;
 
   node = 0;
   *x_ret = *y_ret = 0;
   for (lev = 0; lev < quad->K; ++lev) {
-    prob = randomDouble() * quad->quadRate[node];
+    prob = rngRandomProb(rng) * quad->quadRate[node];
     whichChild = 0;
     while (1) {
       childNode = quadChildIndex(node, lev, whichChild);
@@ -77,11 +77,11 @@ void sampleQuadLeaf(QuadTree* quad, int* x_ret, int* y_ret) {
   }
 }
 
-double topQuadRate(QuadTree* quad) {
+int64_Millionths topQuadRate(QuadTree* quad) {
   return quad->quadRate[0];
 }
 
-double getQuadRate (QuadTree* quad, int x, int y, int level) {
+int64_Millionths getQuadRate (QuadTree* quad, int x, int y, int level) {
   return quad->quadRate[quadNodeIndex(quad,x,y,level)];
 }
 

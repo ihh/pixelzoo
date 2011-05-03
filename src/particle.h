@@ -26,7 +26,7 @@ typedef struct Particle {
   /*  evolution rule callback style: synchronous or (preferred) asynchronous? */
   int synchronous, syncPeriod, syncPhase;  /* if synchronous=1, rules will be updated synchronously vs randomly, whenever (board->syncUpdates % syncPeriod == syncPhase) */
   /*  evolution rule callback rate */
-  double rate;
+  int64_Microhurtz rate;
   /*  evolution rule */
   ParticleRule* rule;
 
@@ -38,7 +38,7 @@ typedef struct Particle {
 
   /* Meta-info */
   int count;  /* number of instances of this Particle on the board */
-  double asyncFiringRate, syncFiringRate;  /* if async then (asyncFiringRate, syncFiringRate) = (rate, 0)  else (asyncFiringRate, syncFiringRate) = (0, rate) */
+  int64_Microhurtz asyncFiringRate, syncFiringRate;  /* if async then (asyncFiringRate, syncFiringRate) = (rate, 0)  else (asyncFiringRate, syncFiringRate) = (0, rate) */
 
 } Particle;
 
