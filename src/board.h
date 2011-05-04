@@ -25,7 +25,7 @@ typedef struct Board {
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's */
-  RandomNumberGenerator rng;
+  RandomNumberGenerator *rng;
 } Board;
 
 /* public methods */

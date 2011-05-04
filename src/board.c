@@ -6,6 +6,7 @@
 #include "board.h"
 #include "notify.h"
 #include "goal.h"
+#include "mersenne.h"
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
@@ -29,7 +30,7 @@ Board* newBoard (int size) {
 	board->syncUpdates = 0;
 	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
 	board->game = NULL;
-	board->rng = NULL;
+	board->rng = newRNG();
 
 	initializePalette (&board->palette);
 
@@ -38,6 +39,7 @@ Board* newBoard (int size) {
 
 void deleteBoard (Board* board) {
 	State t;
+	deleteRNG (board->rng);
 	deleteVector (board->balloon);
 	deleteBinTree (board->syncUpdateBin);
 	deleteBinTree (board->syncBin);

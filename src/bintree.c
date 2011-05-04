@@ -56,7 +56,7 @@ void updateBinTree(BinTree* bin, int x, int64_Millionths val) {
   }
 }
 
-void sampleBinLeaf(BinTree* bin, RandomNumberGenerator rng, int* x_ret) {
+void sampleBinLeaf(BinTree* bin, RandomNumberGenerator* rng, int* x_ret) {
   int node, lev, whichChild, leftChild;
   int64_Millionths prob;
 

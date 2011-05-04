@@ -55,7 +55,7 @@ void updateQuadTree(QuadTree* quad, int x, int y, int64_Millionths val) {
   }
 }
 
-void sampleQuadLeaf(QuadTree* quad, RandomNumberGenerator rng, int* x_ret, int* y_ret) {
+void sampleQuadLeaf(QuadTree* quad, RandomNumberGenerator* rng, int* x_ret, int* y_ret) {
   int node, lev, whichChild, childNode;
   int64_Millionths prob;
 

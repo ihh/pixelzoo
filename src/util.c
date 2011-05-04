@@ -18,10 +18,6 @@ double randomExp() {
   return r > 0. ? -log(r) : 0.;
 }
 
-/* need to refactor these to use integer arithmetic ONLY, and a predictable, seeded, robust 64-bit random number generator */
-int64_Millionths rngRandomProb (RandomNumberGenerator rng) { return (int64_Millionths) ((1 << 20) * randomDouble()); }
-int64_Microticks rngRandomWait (RandomNumberGenerator rng, int64_Microhurtz rate) { return (int64_Microticks) ( ((double)(((int64_Microticks)1) << 40)) * randomExp() / (double) rate); }
-
 void Abort(char* error) {
   printf("Abort: %s\n",error);
   exit(-1);

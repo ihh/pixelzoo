@@ -18,7 +18,7 @@ void NullPrintFunction(void*);  /* does nothing */
 void AbortDestroyFunction(void*);
 void* AbortCopyFunction(void*);
 
-/* Container functions for int's.
+/* typedef and container functions for 64-bit signed int's.
    (It's tempting to think that rather than allocating space, one could just use the (void*) pointer to store the int value;
    however, this risks platform-specific errors/warnings due to differences in bytesize/signedness between void* and int)
 */
@@ -59,19 +59,17 @@ typedef signed long long int int64_Hurtz;        /* 1 Hurtz = 1 Tick^{-1} */
 typedef signed long long int int64_Microhurtz;   /* 1 Microhurtz = 2^{-20} Hurtz */
 typedef signed long long int int64_Millionths;   /* 1 Millionth = 2^{-20} */
 
-#define PowerOfTwoClosestToOneMillion (1 << 20)
+#define PowerOfTwoClosestToOneMillion 0x100000
+#define MillionthsMask                0x0fffff
 #define FloatToIntMillionths(F) ((int) (.5 + (F) * PowerOfTwoClosestToOneMillion))
 #define IntMillionthsToFloat(I) ((double) ((int64_Millionths) I) / (double) PowerOfTwoClosestToOneMillion)
 
-/* Unimportant random numbers */
+/* Unimportant random numbers (e.g. for UI); these need not be reproducible.
+   Use RandomNumberGenerator (mersenne.h) for reproducible pseudorandom numbers.
+ */
 double randomDouble();  /* randomDouble() returns a uniformly-distributed real number between 0 and 1 */
 int randomInt(int);  /* randomInt(N) returns a uniformly-distributed integer from 0 to N-1 */
 double randomExp();  /* randomExp() returns an exponentially-distributed real number between 0 and infinity */
-
-/* Important random numbers (must be reproducible) */
-typedef void* RandomNumberGenerator;
-int64_Millionths rngRandomProb (RandomNumberGenerator rng);  /* synchronized equivalent to (int) (2^{20} * randomDouble()) */
-int64_Microticks rngRandomWait (RandomNumberGenerator rng, int64_Microhurtz rate);  /* synchronized equivalent to (int) (2^{40} * randomExp() / rate) */
 
 /* DUMP */
 #undef DUMP

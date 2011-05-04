@@ -2,6 +2,7 @@
 #define QUADTREE_INCLUDED
 
 #include "rule.h"
+#include "mersenne.h"
 
 /* a fully-populated quad tree of int64_Millionths's with fast lookup & sampling */
 typedef struct QuadTree {
@@ -14,7 +15,7 @@ void deleteQuadTree (QuadTree* quad);
 void copyQuadTree (QuadTree* src, QuadTree* dest);
 int64_Millionths readQuadTree (QuadTree* quad, int x, int y);
 void updateQuadTree (QuadTree* quad, int x, int y, int64_Millionths val);
-void sampleQuadLeaf (QuadTree* quad, RandomNumberGenerator rng, int* x_ret, int* y_ret);
+void sampleQuadLeaf (QuadTree* quad, RandomNumberGenerator* rng, int* x_ret, int* y_ret);
 int64_Millionths topQuadRate (QuadTree* quad);
 int64_Millionths getQuadRate (QuadTree* quad, int x, int y, int level);
 

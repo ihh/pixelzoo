@@ -3,6 +3,7 @@
 
 #include "rule.h"
 #include "util.h"
+#include "mersenne.h"
 
 /* a fully-populated binary tree of int64_Millionth's with fast lookup & sampling */
 typedef struct BinTree {
@@ -15,7 +16,7 @@ void deleteBinTree (BinTree* bin);
 void copyBinTree (BinTree* src, BinTree* dest);
 int64_Millionths readBinTree (BinTree* bin, int x);
 void updateBinTree (BinTree* bin, int x, int64_Millionths val);
-void sampleBinLeaf (BinTree* bin, RandomNumberGenerator rng, int* x_ret);
+void sampleBinLeaf (BinTree* bin, RandomNumberGenerator* rng, int* x_ret);
 int64_Millionths topBinRate (BinTree* bin);
 int64_Millionths getBinRate (BinTree* bin, int x, int level);
 
