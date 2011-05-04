@@ -233,14 +233,15 @@ void renderPixel( SDL_Surface *g_screenSurface, int x, int y, Uint32 color )
 int evolveThreadFunc(void *voidGame)
 {
   Game *game = (Game*) voidGame;
-  double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->updatesPerSecond, updatesPerCell, evolveTime, loopTime;
+  double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->ticksPerSecond, updatesPerCell, evolveTime, loopTime;
+  int64_Microticks microticks;
   int actualUpdates;
 
   while ( gameRunning(game) ) {
     clock_t start, now;
     start = clock();
 
-    gameLoop (game, targetUpdatesPerCell, 1., &updatesPerCell, &actualUpdates, &evolveTime);
+    gameLoop (game, targetUpdatesPerCell, 1., &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
 
     now = clock();
     loopTime = ((double) now - start) / (double) CLOCKS_PER_SEC;

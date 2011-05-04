@@ -9,10 +9,8 @@
 #include "goal.h"
 
 /* default rates */
-#define DefaultUpdatesPerSecond   100
+#define DefaultTicksPerSecond     100
 #define DefaultGoalTestsPerSecond 1
-#define DefaultOverloadCreep      1.1
-#define DefaultMinOverload        .001
 
 /* console */
 #define ConsoleLines 100
@@ -38,12 +36,12 @@ typedef struct Game {
   /* board */
   Board *board;
 
-  /* timing */
-  double updatesPerSecond;     /* rate at which to run the Board. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
+  /* Non-critical timing variables (i.e. used only by solo-player mode or UI).
+     Being non-critical to distributed consensus, these can be floating-point variables and subject to local FPU peculiarities.
+  */
+  double ticksPerSecond;     /* rate at which to run the Board, in Ticks/second. DO NOT MODIFY WHILE RUNNING - conversions to "Board time" depend on this being constant! */
   double goalTestsPerSecond;   /* rate at which to test Goal */
   double lastGoalTestTime;     /* measured in "Board time", i.e. updates/cell/second */
-  double boardMinOverload;     /* minimum value of board overload threshold */
-  double boardOverloadCreep;   /* factor by which board overload threshold is multiplied every update that the board is NOT overloaded */
 
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
@@ -86,7 +84,7 @@ typedef struct Game {
 Game* newGame();
 void deleteGame (Game *game);
 void gameStart (Game *game);
-void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell, int *actualUpdates, double *evolveTime);
+void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
 
 #define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn || (GAME_PTR)->gameState == GameWon || (GAME_PTR)->gameState == GameLost)
 #define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }

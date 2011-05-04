@@ -16,10 +16,8 @@ Game* newGame() {
 
   game->board = NULL;
 
-  game->updatesPerSecond = DefaultUpdatesPerSecond;
+  game->ticksPerSecond = DefaultTicksPerSecond;
   game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
-  game->boardOverloadCreep = DefaultOverloadCreep;
-  game->boardMinOverload = DefaultMinOverload;
   game->lastGoalTestTime = 0;
 
   game->toolByName = newStringMap (AbortCopyFunction, deleteTool, printTool);
@@ -69,29 +67,26 @@ void gameStart (Game *game) {
   testGameGoal (game, 1);
 }
 
-void gameLoop (Game *game, double targetUpdatesPerCell, double maxFractionOfTimeInterval, double *actualUpdatesPerCell_ret, int *actualUpdates, double *evolveTime) {
-  double maxUpdateTimeInSeconds, actualUpdatesPerCell, currentOverloadThreshold, newOverloadThreshold, overloadScaleFactor;
-  maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetUpdatesPerCell / game->updatesPerSecond;
+void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime) {
+  double maxUpdateTimeInSeconds, actualTicks;
+  int64_Microticks targetMicroticks, actualMicroticks;
 
-  evolveBoard (game->board, targetUpdatesPerCell, maxUpdateTimeInSeconds, &actualUpdatesPerCell, actualUpdates, evolveTime);
+  maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetTicks / game->ticksPerSecond;
+  targetMicroticks = FloatToIntMillionths (targetTicks);
+
+  evolveBoard (game->board, targetMicroticks, maxUpdateTimeInSeconds, &actualMicroticks, actualUpdates, evolveTime);
+  actualTicks = IntMillionthsToFloat (actualMicroticks);
+
   if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
-    useTools (game, actualUpdatesPerCell);
+    useTools (game, actualTicks);
   testGameGoal (game, 0);
-  updateBalloons (game->board, actualUpdatesPerCell / game->updatesPerSecond);
+  updateBalloons (game->board, actualTicks / game->ticksPerSecond);
 
-  if (actualUpdatesPerCell_ret)
-    *actualUpdatesPerCell_ret = actualUpdatesPerCell;
+  if (actualMicroticks_ret)
+    *actualMicroticks_ret = actualMicroticks;
 
-  /* update overload threshold */
-  currentOverloadThreshold = game->board->overloadThreshold;
-  overloadScaleFactor = pow (game->boardOverloadCreep, targetUpdatesPerCell);
-  if (actualUpdatesPerCell < targetUpdatesPerCell) {
-    newOverloadThreshold = boardFiringRate(game->board) / overloadScaleFactor;
-    game->board->overloadThreshold = MAX (game->boardMinOverload, newOverloadThreshold);
-  } else if (currentOverloadThreshold < 1.) {
-    newOverloadThreshold = currentOverloadThreshold * overloadScaleFactor;
-    game->board->overloadThreshold = MIN (1., newOverloadThreshold);
-  }
+  if (actualTicks_ret)
+    *actualTicks_ret = actualTicks;
 }
 
 void useTools (Game *game, double duration) {
@@ -111,13 +106,14 @@ void useTools (Game *game, double duration) {
 }
 
 void testGameGoal (Game *game, int forceTest) {
-  double elapsedBoardTime;
+  double currentBoardTime, elapsedBoardTime;
 
   /* check the clock - time for a goal test? */
-  elapsedBoardTime = game->board->updatesPerCell - game->lastGoalTestTime;
-  if (!forceTest && elapsedBoardTime < game->updatesPerSecond / game->goalTestsPerSecond)
+  currentBoardTime = IntMillionthsToFloat (game->board->microticks);
+  elapsedBoardTime = currentBoardTime - game->lastGoalTestTime;
+  if (!forceTest && elapsedBoardTime < game->ticksPerSecond / game->goalTestsPerSecond)
     return;
-  game->lastGoalTestTime = game->board->updatesPerCell;
+  game->lastGoalTestTime = currentBoardTime;
 
   /* delegate game logic to Goal */
   if (game->gameState == GameOn && game->goal != NULL)

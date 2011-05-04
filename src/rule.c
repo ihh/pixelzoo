@@ -40,14 +40,6 @@ ParticleRule* newRandomRule() {
   return rule;
 }
 
-ParticleRule* newOverloadRule() {
-  ParticleRule* rule;
-  rule = newParticleRule (OverloadRule);
-  rule->param.overload.slowRule = NULL;
-  rule->param.overload.fastRule = NULL;
-  return rule;
-}
-
 ParticleRule* newGoalRule() {
   ParticleRule* rule;
   rule = newParticleRule (GoalRule);
@@ -67,7 +59,6 @@ void deleteParticleRule (void *voidRule) {
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
   RandomRuleParams *random;
-  OverloadRuleParams *overload;
   Goal *goal;
 
   rule = (ParticleRule*) voidRule;
@@ -92,14 +83,6 @@ void deleteParticleRule (void *voidRule) {
       deleteParticleRule (random->passRule);
     if (random->failRule)
       deleteParticleRule (random->failRule);
-    break;
-
-  case OverloadRule:
-    overload = &rule->param.overload;
-    if (overload->slowRule)
-      deleteParticleRule (overload->slowRule);
-    if (overload->fastRule)
-      deleteParticleRule (overload->fastRule);
     break;
 
   case GoalRule:
