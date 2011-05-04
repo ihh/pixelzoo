@@ -123,12 +123,11 @@
 /* Board updates */
 - (void)callGameLoop
 {   
-	double targetUpdatesPerCell = game->updatesPerSecond / GAMELOOP_CALLS_PER_SECOND;
-	double actualUpdatesPerCell, elapsedTime;
+	double targetTicks = game->ticksPerSecond / GAMELOOP_CALLS_PER_SECOND;
+	double actualTicks, elapsedTime;
+	int64_Microticks actualMicroticks;
 	int cellUpdates;
-	gameLoop (game, targetUpdatesPerCell, MAX_PROPORTION_TIME_EVOLVING, &actualUpdatesPerCell, &cellUpdates, &elapsedTime);
-	if (game->board->overloadThreshold < 1.)
-		NSLog(@"updatesPerSecond:%g gameloopCallsPerSecond=%d targetUpdatesPerCell:%g actualUpdatesPerCell:%g firingRate:%g overloadThreshold:%g",game->updatesPerSecond,GAMELOOP_CALLS_PER_SECOND,targetUpdatesPerCell,actualUpdatesPerCell,boardFiringRate(game->board),game->board->overloadThreshold);
+	gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
 }
 
 
