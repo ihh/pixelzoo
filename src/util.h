@@ -40,23 +40,27 @@ void DoublePrint(void* a);
 /* Synchronized integer times and probabilities */
 /* The considerations driving the choice of units are as follows.
    We don't want arithmetic involving random numbers in BinTree/QuadTree to get too large:
-    (# of cells on board) * (max rate per cell in integer units) * (max random number returned by syncRandomProb) < (max value of 'signed long long int')
-   Assume max rate is 100Hz = 10^8 Microhertz:
-    (128*128) * (10^8) * (10^6) < (2^63)
-   In fact this holds for a board size up to 256*256.
+    (max top-level value in a BinTree or QuadTree) * (max random number returned by rngRandomProb) < (max value of 'signed long long int')
+ =>  (# of cells on board) * (max rate per cell in microHurtz) * (max random number returned by rngRandomProb) < (max value of 'signed long long int')
+ =>  (2^X * 2^X) * (2^20) * (2^20) < (2^63)   for an X*X board
+ =>  2X < 23
+ =>   X <= 11
    We also want the time resolution to be fine enough to resolve individual cell events:
-    (# of cells on board) * (max rate per cell in Hertz) * (shortest measurable time interval in seconds) <~ 1
-    (128*128) * (10^2) * (10^-6) = 1.6384   .... a bit high, but should be OK unless board is literally filled with bullets/gas
-
+    (# of cells on board) * (max rate per cell in Hertz) * (shortest measurable time interval in Ticks) <= 1
+ =>  (2^X * 2^X) * (1) * (2^{-20}) <= 2^0
+ =>  2X <= 20
+ =>   X <= 10
+  So in practice the largest possible board should be 1024*1024.
   Note that, rather than Seconds and Hertz (i.e. Seconds^{-1}), we actually use Ticks (i.e. mean updates per cell) and Hurtz (i.e. Ticks^{-1}).
  */
-typedef signed long long int int64_Ticks;
-typedef signed long long int int64_Microticks;   /* actually multiples of 2^{-20} Ticks */
-typedef signed long long int int64_Hurtz;
-typedef signed long long int int64_Microhurtz;   /* actually multiples of 2^{-20} Hurtz */
-typedef signed long long int int64_Millionths;   /* actually multiples of 2^{-20} */
+typedef signed long long int int64_Ticks;        /* 1 Tick = one expected update per cell */
+typedef signed long long int int64_Microticks;   /* 1 Microtick = 2^{-20} Ticks */
+typedef signed long long int int64_Hurtz;        /* 1 Hurtz = 1 Tick^{-1} */
+typedef signed long long int int64_Microhurtz;   /* 1 Microhurtz = 2^{-20} Hurtz */
+typedef signed long long int int64_Millionths;   /* 1 Millionth = 2^{-20} */
 
 #define PowerOfTwoClosestToOneMillion (1 << 20)
+#define FloatToIntMillionths(F) ((int) (.5 + (F) * PowerOfTwoClosestToOneMillion))
 
 /* Unimportant random numbers */
 double randomDouble();  /* randomDouble() returns a uniformly-distributed real number between 0 and 1 */

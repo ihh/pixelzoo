@@ -29,7 +29,7 @@ typedef struct Board {
 } Board;
 
 /* public methods */
-Board* newBoard (int size, RandomNumberGenerator rng);
+Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 PaletteIndex readBoardColor (Board* board, int x, int y);
@@ -60,7 +60,7 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
    *actualUpdates_ret = the actual number of cells updated
    *elapsedTimeInSeconds_ret = the actual elapsed time in seconds
 */
-void evolveBoard (Board* board, double targetUpdatesPerCell, double maxTimeInSeconds, double *updatesPerCell_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret);
+void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret);
 
 
 /* Board read accessors.

@@ -108,7 +108,7 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
       p->readOnly[readOnlyIndex] = OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE));
     }
 
-  p->rate = OPTCHILDFLOAT(node,RATE,1.);
+  p->rate = FloatToIntMillionths (OPTCHILDFLOAT(node,RATE,1.));
   p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
 
   nColorRules = 0;
@@ -175,7 +175,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleParentNode) {
     } else if (MATCHES (ruleNode, RANDOM)) {
       rule = newRandomRule();
       random = &rule->param.random;
-      random->prob = OPTCHILDFLOAT (ruleNode, PROB, 0.5);
+      random->prob = FloatToIntMillionths (OPTCHILDFLOAT (ruleNode, PROB, 0.5));
       random->passRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, PASS));
       random->failRule = newRuleFromXmlParentNode (game, CHILD (ruleNode, FAIL));
 

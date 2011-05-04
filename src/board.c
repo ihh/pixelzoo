@@ -10,7 +10,7 @@
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
 
-Board* newBoard (int size, RandomNumberGenerator rng) {
+Board* newBoard (int size) {
 	Board *board;
 	board = SafeMalloc (sizeof (Board));
 	board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
@@ -29,7 +29,7 @@ Board* newBoard (int size, RandomNumberGenerator rng) {
 	board->syncUpdates = 0;
 	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
 	board->game = NULL;
-	board->rng = rng;
+	board->rng = NULL;
 
 	initializePalette (&board->palette);
 
@@ -323,7 +323,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   }
 }
 
-void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTimeInSeconds, int64_Microticks *microticks_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {
+void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {
   int actualUpdates, boardIdx, x, y;
   int64_Microticks startingBoardTime, targetBoardTime, timeToTarget, timeToNextBoardSync, timeToNextSyncEvent, timeToNextAsyncEvent;
   double elapsedClockTime;
@@ -334,8 +334,8 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 	start = clock();
 	actualUpdates = 0;
 	elapsedClockTime = 0.;
-	startingBoardTime = board->updatesPerCell;
-	targetBoardTime = startingBoardTime + targetUpdatesPerCell;
+	startingBoardTime = board->microticks;
+	targetBoardTime = startingBoardTime + targetMicroticks;
 	
 	/* main loop */
 	while (1) {
@@ -347,9 +347,9 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 			break;
 		
 		/* check if board clock target reached */
-		timeToTarget = targetBoardTime - board->updatesPerCell;
+		timeToTarget = targetBoardTime - board->microticks;
 		if (timeToTarget <= 0) {
-			board->updatesPerCell = targetBoardTime;
+			board->microticks = targetBoardTime;
 			break;
 		}
 		
@@ -367,12 +367,12 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 		timeToNextSyncEvent = pendingSyncTicks > 0 ? (MAX(timeToNextBoardSync,0) / pendingSyncTicks) : (2*timeToTarget);
 		
 		asyncEventRate = topBinRate (board->asyncBin);
-		timeToNextAsyncEvent = asyncEventRate > 0 ? rngRandomWait(rng,asyncEventRate) : (2*timeToTarget);
+		timeToNextAsyncEvent = asyncEventRate > 0 ? rngRandomWait(board->rng,asyncEventRate) : (2*timeToTarget);
 		
 		/* decide: sync or async? */
 		if (timeToNextSyncEvent < MIN(timeToNextAsyncEvent,timeToTarget)) {
 			
-			board->updatesPerCell += timeToNextSyncEvent;
+			board->microticks += timeToNextSyncEvent;
 			
 			/* sync: randomly process a pending synchronized cell update */
 			sampleBinLeaf (board->syncUpdateBin, board->rng, &boardIdx);
@@ -386,7 +386,7 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 			
 		} else if (timeToNextAsyncEvent < timeToTarget) {
 			
-			board->updatesPerCell += timeToNextAsyncEvent;
+			board->microticks += timeToNextAsyncEvent;
 			
 			/* async: evolve a random cell */
 			sampleBinLeaf (board->asyncBin, board->rng, &boardIdx);
@@ -399,14 +399,14 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 			
 		} else {
 			/* reached target time */
-			board->updatesPerCell = targetBoardTime;
+			board->microticks = targetBoardTime;
 			break;  /* this 'break' should actually be redundant, but this depends on an FPU equality, so... */
 		}
 		
 	}
 	/* calculate update rates */
-	if (updatesPerCell_ret)
-		*updatesPerCell_ret = board->updatesPerCell - startingBoardTime;
+	if (elapsedMicroticks_ret)
+		*elapsedMicroticks_ret = board->microticks - startingBoardTime;
 	if (actualUpdates_ret)
 		*actualUpdates_ret = actualUpdates;
 	if (elapsedTimeInSeconds_ret)

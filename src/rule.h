@@ -26,7 +26,7 @@ typedef struct LocalOffset {
   then nextRule
 
   (Random)
-  syncRandomProb() < prob ? passRule : failRule
+  rngRandomProb() < prob ? passRule : failRule
 
   (Goal)
   passes control to a goal
