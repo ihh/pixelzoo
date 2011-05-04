@@ -63,7 +63,7 @@ void sampleBinLeaf(BinTree* bin, RandomNumberGenerator rng, int* x_ret) {
   node = 0;
   *x_ret = 0;
   for (lev = 0; lev < bin->K; ++lev) {
-    prob = rngRandomProb(rng) * bin->binRate[node];
+    prob = rngRandomProb(rng) * bin->binRate[node] / PowerOfTwoClosestToOneMillion;
     leftChild = binLeftChildIndex(node);
     whichChild = (prob < bin->binRate[leftChild]) ? 0 : 1;
     node = leftChild + whichChild;

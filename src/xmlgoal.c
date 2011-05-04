@@ -120,8 +120,8 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 			  CHILDINT (goalNode, REPS_GPARAM));
 
   } else if (MATCHES (goalNode, TIME_GOAL)) {
-    goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->updatesPerSecond,
-			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->updatesPerSecond);
+    goal = newBoardTimeGoal (OPTCHILDFLOAT(goalNode,MIN_GPARAM,0.) * game->ticksPerSecond,
+			     OPTCHILDFLOAT(goalNode,MAX_GPARAM,-1.) * game->ticksPerSecond);
 
   } else if (MATCHES (goalNode, TESTTOOL_GOAL)) {
     tool = (Tool*) StringMapFind (game->toolByName, (const char*) CHILDSTRING (goalNode, TOOLNAME_GPARAM))->value;
@@ -178,7 +178,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 
   } else if (MATCHES (goalNode, USETOOL_GOAL)) {
     tool = newToolFromXmlNode (CHILD (goalNode, TOOL_GPARAM));
-    goal = newUseToolPseudoGoal (tool, OPTCHILDFLOAT (goalNode, DURATION_GPARAM, game->updatesPerSecond / game->goalTestsPerSecond));
+    goal = newUseToolPseudoGoal (tool, OPTCHILDFLOAT (goalNode, DURATION_GPARAM, game->ticksPerSecond / game->goalTestsPerSecond));
 
   } else if (MATCHES (goalNode, PRINT_GOAL)) {
     goal = newPrintMessagePseudoGoal ((const char*) CHILDSTRING (goalNode, MESSAGE_GPARAM));

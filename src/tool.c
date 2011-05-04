@@ -57,7 +57,7 @@ void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yE
   xDelta = xEnd - xStart;
   yDelta = yEnd - yStart;
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
-    sampleQuadLeaf (tool->brushIntensity, &xOffset, &yOffset);
+    sampleQuadLeaf (tool->brushIntensity, board->rng, &xOffset, &yOffset);
     newState = tool->defaultBrushState;
     if (tool->brushState)
       if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))

@@ -142,8 +142,10 @@ void addParticleToBoard (Particle* p, Board* board) {
 	board->byType[p->type] = p;
 	p->asyncFiringRate = p->synchronous ? 0 : MIN (p->rate, PowerOfTwoClosestToOneMillion);
 	p->syncFiringRate = p->synchronous ? PowerOfTwoClosestToOneMillion : 0;
-	if (p->synchronous && p->syncPeriod == 0)
-		p->syncPeriod = 1;  /* use a sensible default for period */
+	if (p->synchronous && p->syncPeriod == 0) {
+	  p->syncPeriod = (int) (.5 + (1. / IntMillionthsToFloat(p->rate)));  /* use a sensible default for period */
+	  p->syncPeriod = MAX (p->syncPeriod, 1);  /* period must not be zero */
+	}
 }
 
 void evolveBoardCell (Board* board, int x, int y) {
@@ -364,10 +366,10 @@ void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTim
 		}
 		
 		/* calculate the time to the next sync event & the next async event */
-		timeToNextSyncEvent = pendingSyncTicks > 0 ? (MAX(timeToNextBoardSync,0) / pendingSyncTicks) : (2*timeToTarget);
+		timeToNextSyncEvent = pendingSyncTicks > 0 ? (MAX(timeToNextBoardSync-1,0) / pendingSyncTicks) : (timeToTarget + 1);
 		
 		asyncEventRate = topBinRate (board->asyncBin);
-		timeToNextAsyncEvent = asyncEventRate > 0 ? rngRandomWait(board->rng,asyncEventRate) : (2*timeToTarget);
+		timeToNextAsyncEvent = asyncEventRate > 0 ? rngRandomWait(board->rng,asyncEventRate) : (timeToTarget + 1);
 		
 		/* decide: sync or async? */
 		if (timeToNextSyncEvent < MIN(timeToNextAsyncEvent,timeToTarget)) {

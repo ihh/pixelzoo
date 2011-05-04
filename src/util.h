@@ -61,7 +61,7 @@ typedef signed long long int int64_Millionths;   /* 1 Millionth = 2^{-20} */
 
 #define PowerOfTwoClosestToOneMillion (1 << 20)
 #define FloatToIntMillionths(F) ((int) (.5 + (F) * PowerOfTwoClosestToOneMillion))
-#define IntMillionthsToFloat(I) ((double) I / (double) PowerOfTwoClosestToOneMillion)
+#define IntMillionthsToFloat(I) ((double) ((int64_Millionths) I) / (double) PowerOfTwoClosestToOneMillion)
 
 /* Unimportant random numbers */
 double randomDouble();  /* randomDouble() returns a uniformly-distributed real number between 0 and 1 */

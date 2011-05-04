@@ -40,7 +40,7 @@ Game* newGameFromXmlRoot (xmlNode *gameNode) {
   game = newGame();
   game->board = newBoardFromXmlRoot ((void*)game, gameNode);
 
-  game->updatesPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultUpdatesPerSecond);
+  game->ticksPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultTicksPerSecond);
 
   selectedTool = NULL;
   for (node = gameNode->children; node; node = node->next)

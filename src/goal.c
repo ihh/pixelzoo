@@ -344,6 +344,7 @@ int testGoalMet (Goal* goal, void *voidGame) {
   void **ptr, **write;
   Balloon *b;
   Stack *enumResult;
+  double ticks;
 
   Assert (goal != NULL, "testGoalMet: null goal");
   game = (Game*) voidGame;
@@ -395,7 +396,8 @@ int testGoalMet (Goal* goal, void *voidGame) {
     return goal->intData[1] >= goal->intData[0];
 
   case BoardTimeGoal:
-    return goal->dblData[0] <= board->updatesPerCell && (goal->dblData[1] <= 0. || board->updatesPerCell <= goal->dblData[1]);
+    ticks = IntMillionthsToFloat (board->microticks);
+    return goal->dblData[0] <= ticks && (goal->dblData[1] <= 0. || ticks <= goal->dblData[1]);
 
   case CheckToolGoal:
     tool = (Tool*) goal->context;
