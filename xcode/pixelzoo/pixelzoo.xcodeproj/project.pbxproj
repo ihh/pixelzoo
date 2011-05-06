@@ -41,6 +41,7 @@
 		28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28D740DC12CF221200D402B8 /* xmlgoal.c */; };
 		28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */; };
 		28DF177F12EFB5AD00B398DA /* rule.c in Sources */ = {isa = PBXBuildFile; fileRef = 28DF177D12EFB5AD00B398DA /* rule.c */; };
+		28F5673D1373639300651353 /* move.c in Sources */ = {isa = PBXBuildFile; fileRef = 28F5673B1373639300651353 /* move.c */; };
 		28FF1F811372115600EF36C2 /* mersenne.c in Sources */ = {isa = PBXBuildFile; fileRef = 28FF1F7F1372115600EF36C2 /* mersenne.c */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,8 @@
 		28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooViewController.m; sourceTree = "<group>"; };
 		28DF177D12EFB5AD00B398DA /* rule.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule.c; path = ../../src/rule.c; sourceTree = SOURCE_ROOT; };
 		28DF177E12EFB5AD00B398DA /* state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = state.h; path = ../../src/state.h; sourceTree = SOURCE_ROOT; };
+		28F5673B1373639300651353 /* move.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = move.c; path = ../../src/move.c; sourceTree = SOURCE_ROOT; };
+		28F5673C1373639300651353 /* move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = move.h; path = ../../src/move.h; sourceTree = SOURCE_ROOT; };
 		28FF1F7F1372115600EF36C2 /* mersenne.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mersenne.c; path = ../../src/mersenne.c; sourceTree = SOURCE_ROOT; };
 		28FF1F801372115600EF36C2 /* mersenne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mersenne.h; path = ../../src/mersenne.h; sourceTree = SOURCE_ROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				28BDF9B912CBE53800173B45 /* list.h */,
 				28FF1F7F1372115600EF36C2 /* mersenne.c */,
 				28FF1F801372115600EF36C2 /* mersenne.h */,
+				28F5673B1373639300651353 /* move.c */,
+				28F5673C1373639300651353 /* move.h */,
 				28BDF9BA12CBE53800173B45 /* notify.c */,
 				28BDF9BB12CBE53800173B45 /* notify.h */,
 				28BDF9BC12CBE53800173B45 /* particle.c */,
@@ -355,6 +360,7 @@
 				284466D712E77588002D8581 /* bintree.c in Sources */,
 				28DF177F12EFB5AD00B398DA /* rule.c in Sources */,
 				28FF1F811372115600EF36C2 /* mersenne.c in Sources */,
+				28F5673D1373639300651353 /* move.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

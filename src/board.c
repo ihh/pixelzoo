@@ -12,48 +12,50 @@
 #define MaxRuleDepth 100
 
 Board* newBoard (int size) {
-	Board *board;
-	board = SafeMalloc (sizeof (Board));
-	board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
-	board->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
-	board->size = size;
-	board->cell = SafeCalloc (size * size, sizeof(State));
-	board->sync = SafeCalloc (size * size, sizeof(State));
-	board->watcher = SafeCalloc (size * size, sizeof(CellWatcher*));
-	board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
-	board->syncBin = newBinTree (size * size);
-	board->asyncBin = newBinTree (size * size);
-	board->syncUpdateBin = newBinTree (size * size);
-	board->syncParticles = 0;
-	board->lastSyncParticles = 0;
-	board->microticks = 0;
-	board->syncUpdates = 0;
-	board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
-	board->game = NULL;
-	board->rng = newRNG();
+  Board *board;
+  board = SafeMalloc (sizeof (Board));
+  board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
+  board->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
+  board->size = size;
+  board->cell = SafeCalloc (size * size, sizeof(State));
+  board->sync = SafeCalloc (size * size, sizeof(State));
+  board->watcher = SafeCalloc (size * size, sizeof(CellWatcher*));
+  board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
+  board->syncBin = newBinTree (size * size);
+  board->asyncBin = newBinTree (size * size);
+  board->syncUpdateBin = newBinTree (size * size);
+  board->syncParticles = 0;
+  board->lastSyncParticles = 0;
+  board->microticks = 0;
+  board->syncUpdates = 0;
+  board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
+  board->game = NULL;
+  board->rng = newRNG();
+  board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
+  board->moveLog = board->moveQueue = NULL;
 
-	initializePalette (&board->palette);
+  initializePalette (&board->palette);
 
-	return board;
+  return board;
 }
 
 void deleteBoard (Board* board) {
-	State t;
-	deleteRNG (board->rng);
-	deleteVector (board->balloon);
-	deleteBinTree (board->syncUpdateBin);
-	deleteBinTree (board->syncBin);
-	deleteBinTree (board->asyncBin);
-	SafeFree(board->cell);
-	SafeFree(board->sync);
-	SafeFree(board->syncWrite);
-	SafeFree(board->watcher);
-	for (t = 0; t < NumTypes; ++t)
-		if (board->byType[(Type) t])
-			deleteParticle (board->byType[(Type) t]);
-	deleteStringMap (board->subRule);
-	SafeFree(board->byType);
-	SafeFree(board);
+  State t;
+  deleteRNG (board->rng);
+  deleteVector (board->balloon);
+  deleteBinTree (board->syncUpdateBin);
+  deleteBinTree (board->syncBin);
+  deleteBinTree (board->asyncBin);
+  SafeFree(board->cell);
+  SafeFree(board->sync);
+  SafeFree(board->syncWrite);
+  SafeFree(board->watcher);
+  for (t = 0; t < NumTypes; ++t)
+    if (board->byType[(Type) t])
+      deleteParticle (board->byType[(Type) t]);
+  deleteStringMap (board->subRule);
+  SafeFree(board->byType);
+  SafeFree(board);
 }
 
 State readBoardStateUnguardedFunction (Board* board, int x, int y) {
@@ -65,49 +67,49 @@ State readSyncBoardStateUnguardedFunction (Board* board, int x, int y) {
 }
 
 void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
-	int i;
-	Type t;
-	Particle *p, *pOld;
-	CellWatcher *watcher;
-	/* if there's a CellWatcher watching this cell, allow it to intercept & modify the write */
-	i = boardIndex(board->size,x,y);
-	watcher = board->watcher[i];
-	if (watcher)
-		state = (*watcher->intercept) (watcher, board, x, y, state);
-	/* get new Type & Particle, and old Particle */
-	t = StateType(state);
-	p = board->byType[t];
-	pOld = board->byType[StateType(board->cell[i])];
-	/* decrement old count */
-	if (pOld) {
-		--pOld->count;
-		if (pOld->synchronous)
-			--board->syncParticles;
-	}
-	/* update cell array & bin trees */
-	if (p == NULL) {
-		if (t != EmptyType)  /* handle the EmptyType specially: allow it to keep its color state */
-			state = EmptyState;
-		updateBinTree (board->asyncBin, i, 0);
-		updateBinTree (board->syncBin, i, 0);
-	} else {
-		updateBinTree (board->asyncBin, i, p->asyncFiringRate);
-		updateBinTree (board->syncBin, i, p->syncFiringRate);
-		/* update new count */
-		++p->count;
-		if (p->synchronous)
-			++board->syncParticles;
-	}
-	board->cell[i] = state;
-	if (!board->syncWrite[i])
-		board->sync[i] = state;
+  int i;
+  Type t;
+  Particle *p, *pOld;
+  CellWatcher *watcher;
+  /* if there's a CellWatcher watching this cell, allow it to intercept & modify the write */
+  i = boardIndex(board->size,x,y);
+  watcher = board->watcher[i];
+  if (watcher)
+    state = (*watcher->intercept) (watcher, board, x, y, state);
+  /* get new Type & Particle, and old Particle */
+  t = StateType(state);
+  p = board->byType[t];
+  pOld = board->byType[StateType(board->cell[i])];
+  /* decrement old count */
+  if (pOld) {
+    --pOld->count;
+    if (pOld->synchronous)
+      --board->syncParticles;
+  }
+  /* update cell array & bin trees */
+  if (p == NULL) {
+    if (t != EmptyType)  /* handle the EmptyType specially: allow it to keep its color state */
+      state = EmptyState;
+    updateBinTree (board->asyncBin, i, 0);
+    updateBinTree (board->syncBin, i, 0);
+  } else {
+    updateBinTree (board->asyncBin, i, p->asyncFiringRate);
+    updateBinTree (board->syncBin, i, p->syncFiringRate);
+    /* update new count */
+    ++p->count;
+    if (p->synchronous)
+      ++board->syncParticles;
+  }
+  board->cell[i] = state;
+  if (!board->syncWrite[i])
+    board->sync[i] = state;
 }
 
 void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
-	int i;
-	i = boardIndex(board->size,x,y);
-	board->sync[i] = state;
-	board->syncWrite[i] = 1;
+  int i;
+  i = boardIndex(board->size,x,y);
+  board->sync[i] = state;
+  board->syncWrite[i] = 1;
 }
 
 void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
@@ -115,90 +117,90 @@ void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
 }
 
 PaletteIndex readBoardColor (Board* board, int x, int y) {
-	Particle *p;
-	State s;
-	Type t;
-	PaletteIndex c;
-	c = 0;  /* default to black */
-	s = readBoardState (board, x, y);
-	t = StateType(s);
-	if (t == EmptyType)
-		c = s & PaletteMask;  /* hard-wired shortcut for empties */
-	else {
-		p = board->byType[t];
-		if (p)
-			c = getParticleColor (p, s);
-	}
-	return c;
+  Particle *p;
+  State s;
+  Type t;
+  PaletteIndex c;
+  c = 0;  /* default to black */
+  s = readBoardState (board, x, y);
+  t = StateType(s);
+  if (t == EmptyType)
+    c = s & PaletteMask;  /* hard-wired shortcut for empties */
+  else {
+    p = board->byType[t];
+    if (p)
+      c = getParticleColor (p, s);
+  }
+  return c;
 }
 
 Particle* newBoardParticle (Board* board, char* name, Type type, int nRules) {
-	Particle* p;
-	p = newParticle (name);
-	p->type = type;
-	board->byType[type] = p;
-	return p;
+  Particle* p;
+  p = newParticle (name);
+  p->type = type;
+  board->byType[type] = p;
+  return p;
 }
 
 void addParticleToBoard (Particle* p, Board* board) {
-	board->byType[p->type] = p;
-	p->asyncFiringRate = p->synchronous ? 0 : MIN (p->rate, PowerOfTwoClosestToOneMillion);
-	p->syncFiringRate = p->synchronous ? PowerOfTwoClosestToOneMillion : 0;
-	if (p->synchronous && p->syncPeriod == 0) {
-	  p->syncPeriod = (int) (.5 + (1. / IntMillionthsToFloat(p->rate)));  /* use a sensible default for period */
-	  p->syncPeriod = MAX (p->syncPeriod, 1);  /* period must not be zero */
-	}
+  board->byType[p->type] = p;
+  p->asyncFiringRate = p->synchronous ? 0 : MIN (p->rate, PowerOfTwoClosestToOneMillion);
+  p->syncFiringRate = p->synchronous ? PowerOfTwoClosestToOneMillion : 0;
+  if (p->synchronous && p->syncPeriod == 0) {
+    p->syncPeriod = (int) (.5 + (1. / IntMillionthsToFloat(p->rate)));  /* use a sensible default for period */
+    p->syncPeriod = MAX (p->syncPeriod, 1);  /* period must not be zero */
+  }
 }
 
 void evolveBoardCell (Board* board, int x, int y) {
-	Particle* p;
-	p = readBoardParticle (board, x, y);
-	if (p) {
-		/*
-		 Assert (!p->synchronous, "evolveBoardCell called on async particle");
-		 */
-	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
-	}
+  Particle* p;
+  p = readBoardParticle (board, x, y);
+  if (p) {
+    /*
+      Assert (!p->synchronous, "evolveBoardCell called on async particle");
+    */
+    attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
+  }
 }
 
 void evolveBoardCellSync (Board* board, int x, int y) {
-	Particle* p;
-	/* do an update */
-	p = readBoardParticle (board, x, y);
-	if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
-	  /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction"
-	     to allow synchronous Particle's to preview the upcoming sync state of the Board.
-	     This allows sync Particle's modify operations to be cumulative
-	     (useful e.g. for accumulator rules that count the neighborhood;
-	     note however that Conway's Life - an obvious application for accumulator rules -
-	     requires simultaneity, so Conway modifies *can't* be cumulative - they must be instantaneous/atomic)
-	   */
-	  attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
-	}
+  Particle* p;
+  /* do an update */
+  p = readBoardParticle (board, x, y);
+  if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
+    /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction"
+       to allow synchronous Particle's to preview the upcoming sync state of the Board.
+       This allows sync Particle's modify operations to be cumulative
+       (useful e.g. for accumulator rules that count the neighborhood;
+       note however that Conway's Life - an obvious application for accumulator rules -
+       requires simultaneity, so Conway modifies *can't* be cumulative - they must be instantaneous/atomic)
+    */
+    attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
+  }
 }
 
 void syncBoard (Board* board) {
-	int x, y, size, i;
-	State *sync;
-	unsigned char *syncWrite;
-	sync = board->sync;
-	syncWrite = board->syncWrite;
-	size = board->size;
-	/* update only the cells that changed */
-	if (board->lastSyncParticles > 0)
-		for (x = 0; x < size; ++x)
-			for (y = 0; y < size; ++y) {
-				i = boardIndex(size,x,y);
-				if (syncWrite[i]) {
-					writeBoardStateUnguardedFunction (board, x, y, sync[i]);
-					syncWrite[i] = 0;
-				}
-			}
-	/* freeze the update queue */
-	copyBinTree (board->syncBin, board->syncUpdateBin);
-	board->lastSyncParticles = board->syncParticles;
-	board->microticksAfterLastBoardSync = board->microticks;
-	board->syncUpdates++;
+  int x, y, size, i;
+  State *sync;
+  unsigned char *syncWrite;
+  sync = board->sync;
+  syncWrite = board->syncWrite;
+  size = board->size;
+  /* update only the cells that changed */
+  if (board->lastSyncParticles > 0)
+    for (x = 0; x < size; ++x)
+      for (y = 0; y < size; ++y) {
+	i = boardIndex(size,x,y);
+	if (syncWrite[i]) {
+	  writeBoardStateUnguardedFunction (board, x, y, sync[i]);
+	  syncWrite[i] = 0;
+	}
+      }
+  /* freeze the update queue */
+  copyBinTree (board->syncBin, board->syncUpdateBin);
+  board->lastSyncParticles = board->syncParticles;
+  board->microticksAtLastBoardSync = board->microticks;
+  board->syncUpdates++;
 }
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
@@ -327,94 +329,126 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   }
 }
 
-void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret) {
-  int actualUpdates, boardIdx, x, y;
-  int64_Microticks startingBoardTime, targetBoardTime, timeToTarget, timeToNextBoardSync, timeToNextSyncEvent, timeToNextAsyncEvent;
+void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret) {
+  int cellUpdates, boardIdx, x, y;
+  int64_Microticks microticksAtStart, microticksAtTarget, microticksToNextBoardSync, microticksAtNextMoveDeadline, microticksAtNextMove;
   double elapsedClockTime;
-  int64_Microhurtz asyncEventRate, pendingSyncTicks;
+  int64_Microhurtz asyncEventRate, pendingSyncEvents;
   clock_t start, now;
+  Move *nextMove;
 	
-	/* start the clocks */
-	start = clock();
-	actualUpdates = 0;
-	elapsedClockTime = 0.;
-	startingBoardTime = board->microticks;
-	targetBoardTime = startingBoardTime + targetMicroticks;
-	
-	/* main loop */
-	while (1) {
-		
-		/* check if realtime clock deadline reached */
-		now = clock();
-		elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-		if (elapsedClockTime > maxTimeInSeconds)
-			break;
-		
-		/* check if board clock target reached */
-		timeToTarget = targetBoardTime - board->microticks;
-		if (timeToTarget <= 0) {
-			board->microticks = targetBoardTime;
-			break;
-		}
-		
-		/* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
-		while (1) {
-			timeToNextBoardSync = board->microticksAfterLastBoardSync + PowerOfTwoClosestToOneMillion - board->microticks;
-			pendingSyncTicks = topBinRate(board->syncUpdateBin) / PowerOfTwoClosestToOneMillion;
-			if (pendingSyncTicks <= 0 && timeToNextBoardSync <= 0)
-				syncBoard (board);
-			else
-				break;
-		}
-		
-		/* calculate the time to the next sync event & the next async event */
-		timeToNextSyncEvent = pendingSyncTicks > 0 ? (MAX(timeToNextBoardSync-1,0) / pendingSyncTicks) : (timeToTarget + 1);
-		
-		asyncEventRate = topBinRate (board->asyncBin);
-		timeToNextAsyncEvent = asyncEventRate > 0 ? rngRandomWait(board->rng,asyncEventRate) : (timeToTarget + 1);
-		
-		/* decide: sync or async? */
-		if (timeToNextSyncEvent < MIN(timeToNextAsyncEvent,timeToTarget)) {
-			
-			board->microticks += timeToNextSyncEvent;
-			
-			/* sync: randomly process a pending synchronized cell update */
-			sampleBinLeaf (board->syncUpdateBin, board->rng, &boardIdx);
-			updateBinTree (board->syncUpdateBin, boardIdx, 0);
+  /* start the clocks */
+  start = clock();
+  cellUpdates = 0;
+  elapsedClockTime = 0.;
+  microticksAtStart = board->microticks;
+  microticksAtTarget = microticksAtStart + targetElapsedMicroticks;
 
-			x = boardIndexToX (board->size, boardIdx);
-			y = boardIndexToY (board->size, boardIdx);
-			
-			evolveBoardCellSync (board, x, y);
-			++actualUpdates;
-			
-		} else if (timeToNextAsyncEvent < timeToTarget) {
-			
-			board->microticks += timeToNextAsyncEvent;
-			
-			/* async: evolve a random cell */
-			sampleBinLeaf (board->asyncBin, board->rng, &boardIdx);
-
-			x = boardIndexToX (board->size, boardIdx);
-			y = boardIndexToY (board->size, boardIdx);
-			
-			evolveBoardCell (board, x, y);
-			++actualUpdates;
-			
-		} else {
-			/* reached target time */
-			board->microticks = targetBoardTime;
-			break;  /* this 'break' should actually be redundant, but this depends on an FPU equality, so... */
-		}
+  /* main loop */
+  while (1) {
 		
-	}
-	/* calculate update rates */
-	if (elapsedMicroticks_ret)
-		*elapsedMicroticks_ret = board->microticks - startingBoardTime;
-	if (actualUpdates_ret)
-		*actualUpdates_ret = actualUpdates;
-	if (elapsedTimeInSeconds_ret)
-		*elapsedTimeInSeconds_ret = elapsedClockTime;
+    /* check if realtime clock deadline reached */
+    now = clock();
+    elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
+    if (elapsedClockTime > maxElapsedTimeInSeconds)
+      break;
+		
+    /* check if board clock target reached */
+    if (board->microticks >= microticksAtTarget) {
+      board->microticks = microticksAtTarget;
+      break;
+    }
+		
+    /* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
+    while (1) {
+      pendingSyncEvents = topBinRate(board->syncUpdateBin) / PowerOfTwoClosestToOneMillion;
+      microticksToNextBoardSync = board->microticksAtLastBoardSync + PowerOfTwoClosestToOneMillion - board->microticks;
+      if (pendingSyncEvents <= 0 && microticksToNextBoardSync <= 0)
+	syncBoard (board);
+      else
+	break;
+    }
+
+    /* calculate the time to the next sync event & the next async event */
+    if (!board->sampledNextSyncEventTime) {
+      board->microticksAtNextSyncEvent = microticksAtTarget + 1;  /* by default, postpone the next event to some indefinite point in the future */
+      if (pendingSyncEvents > 0) {
+	board->microticksAtNextSyncEvent = board->microticks + (MAX (microticksToNextBoardSync - 1, 0) / pendingSyncEvents);
+	board->sampledNextSyncEventTime = 1;
+      }
+    }
+
+    if (!board->sampledNextAsyncEventTime) {
+      board->microticksAtNextAsyncEvent = microticksAtTarget + 1;  /* by default, postpone the next event to some indefinite point in the future */
+      asyncEventRate = topBinRate (board->asyncBin);
+      if (asyncEventRate > 0) {
+	board->microticksAtNextAsyncEvent = board->microticks + rngRandomWait(board->rng,asyncEventRate);
+	board->sampledNextAsyncEventTime = 1;
+      }
+    }
+
+    /* poll move queue */
+    microticksAtNextMoveDeadline = MIN(board->microticksAtNextSyncEvent, MIN(board->microticksAtNextAsyncEvent, microticksAtTarget));
+    microticksAtNextMove = microticksAtTarget + 1;  /* by default, assume the next move is at some indefinite point in the future */
+    nextMove = NULL;
+    if (board->moveQueue)
+      if (!MoveListEmpty (board->moveQueue)) {
+	nextMove = MoveListFront (board->moveQueue);
+	microticksAtNextMove = nextMove->t;
+      }
+
+    /* figure out what the next event is */
+    if (microticksAtNextMove <= microticksAtNextMoveDeadline) {  /* move? */
+
+      board->microticks = microticksAtNextMove;
+      writeBoardState (board, nextMove->x, nextMove->y, nextMove->state);
+      MoveListShift (board->moveQueue);
+
+    } else if (board->microticksAtNextSyncEvent < MIN (board->microticksAtNextAsyncEvent, microticksAtTarget)) {  /* sync? */
+			
+      board->microticks = board->microticksAtNextSyncEvent;
+      board->sampledNextAsyncEventTime = 0;
+      board->sampledNextSyncEventTime = 0;
+			
+      /* sync: randomly process a pending synchronized cell update */
+      sampleBinLeaf (board->syncUpdateBin, board->rng, &boardIdx);
+      updateBinTree (board->syncUpdateBin, boardIdx, 0);
+
+      x = boardIndexToX (board->size, boardIdx);
+      y = boardIndexToY (board->size, boardIdx);
+			
+      evolveBoardCellSync (board, x, y);
+      ++cellUpdates;
+
+    } else if (board->microticksAtNextAsyncEvent < microticksAtTarget) {  /* async? */
+			
+      board->microticks = board->microticksAtNextAsyncEvent;
+      board->sampledNextAsyncEventTime = 0;
+      board->sampledNextSyncEventTime = 0;
+			
+      /* async: evolve a random cell */
+      sampleBinLeaf (board->asyncBin, board->rng, &boardIdx);
+
+      x = boardIndexToX (board->size, boardIdx);
+      y = boardIndexToY (board->size, boardIdx);
+			
+      evolveBoardCell (board, x, y);
+      ++cellUpdates;
+			
+    } else {
+      /* reached target time */
+      board->microticks = microticksAtTarget;
+      break;  /* this 'break' should actually be redundant, but this depends on an FPU equality, so... */
+    }
+		
+  }
+  /* calculate update rates */
+  if (elapsedMicroticks_ret)
+    *elapsedMicroticks_ret = board->microticks - microticksAtStart;
+  if (cellUpdates_ret)
+    *cellUpdates_ret = cellUpdates;
+  if (elapsedTimeInSeconds_ret)
+    *elapsedTimeInSeconds_ret = elapsedClockTime;
 }
 
 void updateBalloons (Board *board, double duration) {

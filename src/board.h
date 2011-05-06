@@ -4,6 +4,7 @@
 #include "rule.h"
 #include "particle.h"
 #include "bintree.h"
+#include "move.h"
 #include "util.h"
 #include "vector.h"
 #include "stringmap.h"
@@ -21,11 +22,14 @@ typedef struct Board {
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
   Palette palette;  /* cell color scheme used by this Board */
   int64_Microticks microticks;  /* time elapsed on this board, in units of (expected updates per cell / 2^{20}) */
-  int64_Microticks microticksAfterLastBoardSync;  /* time elapsed on this board at time of last board sync */
+  int64_Microticks microticksAtLastBoardSync;  /* time elapsed on this board at time of last board sync */
+  char sampledNextAsyncEventTime, sampledNextSyncEventTime;  /* if true, then the next async/sync event time has been predetermined by a call to the random number generator */
+  int64_Microticks microticksAtNextAsyncEvent, microticksAtNextSyncEvent;  /* time of upcoming async/sync events */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's */
   RandomNumberGenerator *rng;
+  MoveList *moveLog, *moveQueue;
 } Board;
 
 /* public methods */
@@ -54,13 +58,13 @@ void updateBalloons (Board *board, double duration);  /* duration is measured in
 #define boardAsyncParticles(BOARD_PTR) (boardCells(BOARD_PTR) - (BOARD_PTR)->syncParticles)
 
 /* evolveBoard
-   attempts to update each cell targetUpdatesPerCell times, terminating if this limit is reached or maxTimeInSeconds has elapsed (whichever occurs first).
+   attempts to update each cell targetUpdatesPerCell times, terminating if this limit is reached or maxElapsedTimeInSeconds has elapsed (whichever occurs first).
    return values:
-   *updatesPerCell_ret = elapsed time on board clock
-   *actualUpdates_ret = the actual number of cells updated
+   *elapsedMicroticks_ret = elapsed time on board clock
+   *cellUpdates_ret = the actual number of cells updated
    *elapsedTimeInSeconds_ret = the actual elapsed time in seconds
 */
-void evolveBoard (Board* board, int64_Microticks targetMicroticks, double maxTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *actualUpdates_ret, double *elapsedTimeInSeconds_ret);
+void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret);
 
 
 /* Board read accessors.

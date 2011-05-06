@@ -71,6 +71,8 @@ void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yE
 	maskedOldState = oldState & tool->overwriteMask;
 	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
 	  writeBoardStateUnguardedFunction (board, xPaint, yPaint, newState);
+	  if (board->moveLog)
+	    (void) MoveListAppend (board->moveLog, board->microticks, xPaint, yPaint, newState);
 	  if (oldState != newState)
 	    tool->reserve = MAX (tool->reserve - 1, 0.);
 	}
