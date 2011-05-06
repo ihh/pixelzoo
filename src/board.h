@@ -37,11 +37,14 @@ Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 PaletteIndex readBoardColor (Board* board, int x, int y);
+void writeBoardMove (Board* board, int x, int y, State state);
 
 void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */
 #define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y, (1. - IntMillionthsToFloat((BOARD_PTR)->microticks % PowerOfTwoClosestToOneMillion)))); }
 
-/* macros to access board without bounds overrun errors */
+/* macros to access board without bounds overrun errors.
+   Note: to ensure moves are logged, use writeBoardMove function, rather than writeBoardState macro.
+*/
 #define onBoard(BOARD_PTR,X,Y) ((X) >= 0 && (X) < (BOARD_PTR)->size && (Y) >= 0 && (Y) < (BOARD_PTR)->size)
 #define readBoardState(BOARD_PTR,X,Y) (onBoard(BOARD_PTR,X,Y) ? (State) readBoardStateUnguarded(BOARD_PTR,X,Y) : (State) 0)
 #define writeBoardState(BOARD_PTR,X,Y,STATE) { if (onBoard(BOARD_PTR,X,Y)) writeBoardStateUnguardedFunction(BOARD_PTR,X,Y,STATE); }
@@ -80,7 +83,7 @@ State readBoardStateUnguardedFunction (Board* board, int x, int y);
 State readSyncBoardStateUnguardedFunction (Board* board, int x, int y);
 
 /* Board write accessors.
-   These "unguarded" methods do not check for off-board co-ordinates. Use writeBoardState macro instead.
+   These "unguarded" methods do not check for off-board co-ordinates, or log the move. Use writeBoardMove function instead.
 */
 
 /* Board write accessor for asynchronous updates.

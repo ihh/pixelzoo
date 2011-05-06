@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+
 #include "board.h"
 #include "notify.h"
 #include "goal.h"
@@ -41,6 +42,10 @@ Board* newBoard (int size) {
 
 void deleteBoard (Board* board) {
   State t;
+  if (board->moveQueue)
+    deleteMoveList (board->moveQueue);
+  if (board->moveLog)
+    deleteMoveList (board->moveLog);
   deleteRNG (board->rng);
   deleteVector (board->balloon);
   deleteBinTree (board->syncUpdateBin);
@@ -64,6 +69,15 @@ State readBoardStateUnguardedFunction (Board* board, int x, int y) {
 
 State readSyncBoardStateUnguardedFunction (Board* board, int x, int y) {
   return readSyncBoardStateUnguarded(board,x,y);
+}
+
+void writeBoardMove (Board* board, int x, int y, State state) {
+  if (onBoard(board,x,y)) {
+    writeBoardStateUnguardedFunction (board, x, y, state);
+    if (board->moveLog)
+      (void) MoveListAppend (board->moveLog, board->microticks, x, y, state);
+    board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
+  }
 }
 
 void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
@@ -401,8 +415,13 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     if (microticksAtNextMove <= microticksAtNextMoveDeadline) {  /* move? */
 
       board->microticks = microticksAtNextMove;
+      board->sampledNextAsyncEventTime = 0;
+      board->sampledNextSyncEventTime = 0;
+
       writeBoardState (board, nextMove->x, nextMove->y, nextMove->state);
+
       MoveListShift (board->moveQueue);
+      deleteMove (nextMove);
 
     } else if (board->microticksAtNextSyncEvent < MIN (board->microticksAtNextAsyncEvent, microticksAtTarget)) {  /* sync? */
 			
