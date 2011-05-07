@@ -48,6 +48,7 @@
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
 #define XMLZOO_INIT        "init"
+#define XMLZOO_QUEUE       "queue"
 #define XMLZOO_DECSTATE    "state"
 #define XMLZOO_HEXSTATE    "hexstate"
 #define XMLZOO_DELIVER     "deliver"

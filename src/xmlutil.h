@@ -1,6 +1,7 @@
 #ifndef XMLUTIL_INCLUDED
 #define XMLUTIL_INCLUDED
 
+#include <string.h>
 #include <libxml/tree.h>
 
 /* This header file is "private" to the PixelZoo XML adapter.

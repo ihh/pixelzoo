@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "xmlgame.h"
+#include "xmlmove.h"
 
 //-----------------------------------------------------------------------------
 // SYMBOLIC CONSTANTS
@@ -43,35 +44,28 @@ int renderThreadFunc( void *voidSdlGame );
 int main( int argc, char *argv[] )
 {
   SDLGame *sdlGame = NULL;
-  SDL_Thread *evolveThread;
-  // COMMENTED OUT FOR DEBUGGING - BECAUSE IT SEGFAULTS
-  //  SDL_Thread *renderThread;
+  char *moveLogFilename = NULL;
 
-  if (argc != 2) {
-    printf ("Usage: %s <XML game file>\n", argv[0]);
+  if (argc != 2 && argc != 3) {
+    printf ("Usage: %s <XML game file> [<XML move log>]\n", argv[0]);
     Abort ("Missing game file");
   }
   
   sdlGame = newSDLGame (argv[1]);
-
-  evolveThread = SDL_CreateThread(evolveThreadFunc, sdlGame->game);
-  if ( evolveThread == NULL ) {
-    fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
-    return 1;
+  if (argc == 3) {
+    logBoardMoves (sdlGame->game->board);
+    moveLogFilename = argv[2];
   }
-
-  // COMMENTED OUT FOR DEBUGGING BECAUSE IT SEGFAULTS
-  /*
-  renderThread = SDL_CreateThread(renderThreadFunc, sdlGame);
-  if ( renderThread == NULL ) {
-    fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
-    return 1;
-  }
-  */
 
   while( gameRunning(sdlGame->game) )
     {
-      renderAndDelay (sdlGame);  // DEBUG - BECAUSE IT SEGFAULTS IF IN A SEPARATE THREAD
+      const double targetUpdatesPerCell = sdlGame->game->ticksPerSecond / (double) RENDER_RATE;
+      double updatesPerCell, evolveTime;
+      int64_Microticks microticks;
+      int actualUpdates;
+
+      gameLoop (sdlGame->game, targetUpdatesPerCell, 0.5, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
+      renderAndDelay (sdlGame);
 
       SDL_Event event;
 
@@ -109,9 +103,11 @@ int main( int argc, char *argv[] )
         }
     }
 
-  // COMMENTED OUT FOR DEBUGGING BECAUSE IT SEGFAULTS
-  //  SDL_WaitThread(renderThread, NULL);
-  SDL_WaitThread(evolveThread, NULL);
+  if (moveLogFilename) {
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename (moveLogFilename, 0);
+    writeMoveList (sdlGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+    xmlFreeTextWriter (writer);
+  }
 
   deleteSDLGame(sdlGame);
 
@@ -230,38 +226,6 @@ void renderPixel( SDL_Surface *g_screenSurface, int x, int y, Uint32 color )
     }
 }
 
-int evolveThreadFunc(void *voidGame)
-{
-  Game *game = (Game*) voidGame;
-  double targetUpdatesPerCell = 1., updatePeriodInSeconds = targetUpdatesPerCell / game->ticksPerSecond, updatesPerCell, evolveTime, loopTime;
-  int64_Microticks microticks;
-  int actualUpdates;
-
-  while ( gameRunning(game) ) {
-    clock_t start, now;
-    start = clock();
-
-    gameLoop (game, targetUpdatesPerCell, 1., &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
-
-    now = clock();
-    loopTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    SDL_Delay(1000 * MAX(0.,updatePeriodInSeconds - loopTime));
-  }
-  printf("Evolve thread quitting\n");
-  return(0);
-}
-
-int renderThreadFunc( void *voidSdlGame )
-{
-  SDLGame* sdlGame = (SDLGame*) voidSdlGame;
-
-  while ( gameRunning(sdlGame->game) ) {
-    renderAndDelay (sdlGame);
-  }
-
-  printf("Render thread quitting\n");
-  return(0);
-}
 
 void renderAndDelay(SDLGame* sdlGame) {
   double renderPeriodInSeconds = 1. / RENDER_RATE, elapsedClockTime;

@@ -28,6 +28,7 @@ Board* newBoard (int size) {
   board->syncParticles = 0;
   board->lastSyncParticles = 0;
   board->microticks = 0;
+  board->microticksAtNextBoardSync = 0;
   board->syncUpdates = 0;
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
   board->game = NULL;
@@ -78,6 +79,11 @@ void writeBoardMove (Board* board, int x, int y, State state) {
       (void) MoveListAppend (board->moveLog, board->microticks, x, y, state);
     board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   }
+}
+
+void logBoardMoves (Board* board) {
+  if (board->moveLog == NULL)
+    board->moveLog = newMoveList();
 }
 
 void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
@@ -213,7 +219,6 @@ void syncBoard (Board* board) {
   /* freeze the update queue */
   copyBinTree (board->syncBin, board->syncUpdateBin);
   board->lastSyncParticles = board->syncParticles;
-  board->microticksAtLastBoardSync = board->microticks;
   board->syncUpdates++;
 }
 
@@ -345,7 +350,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
 void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret) {
   int cellUpdates, boardIdx, x, y;
-  int64_Microticks microticksAtStart, microticksAtTarget, microticksToNextBoardSync, microticksAtNextMoveDeadline, microticksAtNextMove;
+  int64_Microticks microticksAtStart, microticksAtTarget, microticksAtNextMoveDeadline, microticksAtNextMove, microticksAtNextBoardSyncDeadline, microticksToNextBoardSync;
   double elapsedClockTime;
   int64_Microhurtz asyncEventRate, pendingSyncEvents;
   clock_t start, now;
@@ -367,27 +372,19 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     if (elapsedClockTime > maxElapsedTimeInSeconds)
       break;
 		
-    /* check if board clock target reached */
-    if (board->microticks >= microticksAtTarget) {
+    /* check if board clock target already passed */
+    if (board->microticks > microticksAtTarget) {
       board->microticks = microticksAtTarget;
       break;
     }
-		
-    /* if it's past time for an update, and the sync queue is empty, flush all synchronized updates to board */
-    while (1) {
-      pendingSyncEvents = topBinRate(board->syncUpdateBin) / PowerOfTwoClosestToOneMillion;
-      microticksToNextBoardSync = board->microticksAtLastBoardSync + PowerOfTwoClosestToOneMillion - board->microticks;
-      if (pendingSyncEvents <= 0 && microticksToNextBoardSync <= 0)
-	syncBoard (board);
-      else
-	break;
-    }
 
     /* calculate the time to the next sync event & the next async event */
+    pendingSyncEvents = topBinRate(board->syncUpdateBin) / PowerOfTwoClosestToOneMillion;
     if (!board->sampledNextSyncEventTime) {
       board->microticksAtNextSyncEvent = microticksAtTarget + 1;  /* by default, postpone the next event to some indefinite point in the future */
       if (pendingSyncEvents > 0) {
-	board->microticksAtNextSyncEvent = board->microticks + (MAX (microticksToNextBoardSync - 1, 0) / pendingSyncEvents);
+	microticksToNextBoardSync = board->microticksAtNextBoardSync - board->microticks;
+	board->microticksAtNextSyncEvent = board->microticks + (MAX (microticksToNextBoardSync - 1, 0) / pendingSyncEvents);  /* try to evenly spread sync events in time */
 	board->sampledNextSyncEventTime = 1;
       }
     }
@@ -412,24 +409,36 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       }
 
     /* figure out what the next event is */
-    if (microticksAtNextMove <= microticksAtNextMoveDeadline) {  /* move? */
+    microticksAtNextBoardSyncDeadline = MIN (microticksAtNextMove, microticksAtNextMoveDeadline);
+    if (pendingSyncEvents <= 0 && board->microticksAtNextBoardSync <= microticksAtNextBoardSyncDeadline) {  /* board sync? (won't happen until all pending sync events are processed) */
+
+      board->microticks = board->microticksAtNextBoardSync;
+      board->sampledNextAsyncEventTime = 0;
+      board->sampledNextSyncEventTime = 0;
+
+      board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
+
+      syncBoard (board);
+      continue;
+
+    } else if (microticksAtNextMove <= microticksAtNextMoveDeadline) {  /* move from queue? */
 
       board->microticks = microticksAtNextMove;
       board->sampledNextAsyncEventTime = 0;
       board->sampledNextSyncEventTime = 0;
 
-      writeBoardState (board, nextMove->x, nextMove->y, nextMove->state);
+      writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
 
       MoveListShift (board->moveQueue);
       deleteMove (nextMove);
+      continue;
 
-    } else if (board->microticksAtNextSyncEvent < MIN (board->microticksAtNextAsyncEvent, microticksAtTarget)) {  /* sync? */
+    } else if (board->microticksAtNextSyncEvent < MIN (board->microticksAtNextAsyncEvent, microticksAtTarget)) {  /* synchronized cell update? */
 			
       board->microticks = board->microticksAtNextSyncEvent;
       board->sampledNextAsyncEventTime = 0;
       board->sampledNextSyncEventTime = 0;
 			
-      /* sync: randomly process a pending synchronized cell update */
       sampleBinLeaf (board->syncUpdateBin, board->rng, &boardIdx);
       updateBinTree (board->syncUpdateBin, boardIdx, 0);
 
@@ -438,14 +447,14 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCellSync (board, x, y);
       ++cellUpdates;
+      continue;
 
-    } else if (board->microticksAtNextAsyncEvent < microticksAtTarget) {  /* async? */
+    } else if (board->microticksAtNextAsyncEvent < microticksAtTarget) {  /* asynchronous cell update? */
 			
       board->microticks = board->microticksAtNextAsyncEvent;
       board->sampledNextAsyncEventTime = 0;
       board->sampledNextSyncEventTime = 0;
 			
-      /* async: evolve a random cell */
       sampleBinLeaf (board->asyncBin, board->rng, &boardIdx);
 
       x = boardIndexToX (board->size, boardIdx);
@@ -453,13 +462,14 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
+      continue;
 			
     } else {
       /* reached target time */
       board->microticks = microticksAtTarget;
-      break;  /* this 'break' should actually be redundant, but this depends on an FPU equality, so... */
+      break;
     }
-		
+
   }
   /* calculate update rates */
   if (elapsedMicroticks_ret)

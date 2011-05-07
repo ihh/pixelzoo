@@ -22,9 +22,9 @@ typedef struct Board {
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
   Palette palette;  /* cell color scheme used by this Board */
   int64_Microticks microticks;  /* time elapsed on this board, in units of (expected updates per cell / 2^{20}) */
-  int64_Microticks microticksAtLastBoardSync;  /* time elapsed on this board at time of last board sync */
   char sampledNextAsyncEventTime, sampledNextSyncEventTime;  /* if true, then the next async/sync event time has been predetermined by a call to the random number generator */
   int64_Microticks microticksAtNextAsyncEvent, microticksAtNextSyncEvent;  /* time of upcoming async/sync events */
+  int64_Microticks microticksAtNextBoardSync;  /* time of next board sync */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's */
@@ -37,6 +37,8 @@ Board* newBoard (int size);
 void deleteBoard (Board* board);
 void addParticleToBoard (Particle* p, Board* board);  /* turns over responsibility for deleting the Particle to the Board */
 PaletteIndex readBoardColor (Board* board, int x, int y);
+
+void logBoardMoves (Board* board);
 void writeBoardMove (Board* board, int x, int y, State state);
 
 void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */

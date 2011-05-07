@@ -4,6 +4,7 @@
 #include "xmlboard.h"
 #include "xmlutil.h"
 #include "xmlgoal.h"
+#include "xmlmove.h"
 #include "game.h"
 
 /* prototypes for private builder methods */
@@ -24,7 +25,7 @@ Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
 
 Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   Board *board;
-  xmlNode *boardNode, *ruleNode, *grammar, *node;
+  xmlNode *boardNode, *ruleNode, *queueNode, *grammarNode, *node;
   int x, y;
   State state;
   const char* subRuleName;
@@ -36,8 +37,8 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   board = newBoard (CHILDINT(boardNode,SIZE));
   board->game = game;
 
-  grammar = CHILD(boardNode,GRAMMAR);
-  for (node = grammar->children; node; node = node->next)
+  grammarNode = CHILD(boardNode,GRAMMAR);
+  for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,SUBRULE)) {
       subRuleName = (const char*) CHILDSTRING(node,NAME);
       ruleNode = CHILD(node,RULE);
@@ -45,7 +46,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
       Assert (StringMapFind (board->subRule, subRuleName) == 0, "Duplicate subrule name");
       (void) StringMapInsert (board->subRule, (char*) subRuleName, rule);
     }
-  for (node = grammar->children; node; node = node->next)
+  for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
       addParticleToBoard (newParticleFromXmlNode(game,node), board);
 
@@ -56,6 +57,10 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
       state = OPTCHILDINT(node,DECSTATE,OPTCHILDHEX(node,HEXSTATE,OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift));
       writeBoardState (board, x, y, state);
     }
+
+  queueNode = CHILD (boardNode, QUEUE);
+  if (queueNode)
+    board->moveQueue = newMoveListFromXmlNode (queueNode);
 
   return board;
 }
