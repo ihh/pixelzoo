@@ -77,9 +77,14 @@
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT hextype (#PCDATA)>
 
-<!ELEMENT board (size,grammar,init*)>
+<!ELEMENT board (size,seed?,grammar,init*,queue?,seed?)>
 <!ELEMENT grammar (subrule*,particle+)>
 <!ELEMENT init (x,y,(state|hexstate|type|hextype))>
+<!ELEMENT seed (#PCDATA)>
+
+<!ELEMENT queue (move*)>
+<!ELEMENT move (t,x,y,(state|hexstate))>
+<!ELEMENT t (#PCDATA)>
 
 <!ELEMENT subrule (name,rule)>
 

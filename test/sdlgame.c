@@ -6,6 +6,7 @@
 
 #include "xmlgame.h"
 #include "xmlmove.h"
+#include "optlist.h"
 
 //-----------------------------------------------------------------------------
 // SYMBOLIC CONSTANTS
@@ -43,19 +44,51 @@ int renderThreadFunc( void *voidSdlGame );
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  SDLGame *sdlGame = NULL;
-  char *moveLogFilename = NULL;
+  char *gameFilename, *moveLogFilename;
+  option_t *optList, *thisOpt;
 
-  if (argc != 2 && argc != 3) {
-    printf ("Usage: %s <XML game file> [<XML move log>]\n", argv[0]);
-    Abort ("Missing game file");
+  /* parse list of command line options and their arguments */
+  optList = NULL;
+  optList = GetOptList(argc, argv, "g:l:h?");
+
+  /* get options */
+  gameFilename = NULL;
+  moveLogFilename = NULL;
+  while (optList != NULL)
+    {
+      thisOpt = optList;
+      optList = optList->next;
+
+      if ('?' == thisOpt->option || 'h' == thisOpt->option) {
+	printf("Usage: %s <options>\n\n", argv[0]);
+	printf("options:\n");
+	printf("     -g : specify input XML file describing game/board (mandatory).\n");
+	printf("     -l : specify output XML file for move log (optional).\n");
+	printf(" -h, -? : print out command line options.\n\n");
+
+	FreeOptList(thisOpt); /* done with this list, free it */
+	break;
+
+      } else if ('g' == thisOpt->option) {
+
+	gameFilename = thisOpt->argument;
+
+      } else if ('l' == thisOpt->option) {
+
+	moveLogFilename = thisOpt->argument;
+
+      }
+    }
+
+  SDLGame *sdlGame = NULL;
+
+  if (gameFilename == NULL) {
+    Abort ("Game file not specified");
   }
   
-  sdlGame = newSDLGame (argv[1]);
-  if (argc == 3) {
+  sdlGame = newSDLGame (gameFilename);
+  if (moveLogFilename != NULL)
     logBoardMoves (sdlGame->game->board);
-    moveLogFilename = argv[2];
-  }
 
   while( gameRunning(sdlGame->game) )
     {
@@ -110,6 +143,8 @@ int main( int argc, char *argv[] )
   }
 
   deleteSDLGame(sdlGame);
+
+  free(thisOpt); /* done with this item, free it */
 
   return 0;
 }

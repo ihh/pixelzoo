@@ -9,7 +9,7 @@
 
 /* XML node names */
 #define XMLZOO_MOVE  "move"
-#define XMLZOO_TIME  "time"
+#define XMLZOO_TIME  "t"
 #define XMLZOO_LOG   "log"
 
 /* methods */

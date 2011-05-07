@@ -39,7 +39,7 @@ clean:
 	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
 
 sdl: targets
-	bin/sdlgame t/testgame.xml t/movelog.xml
+	bin/sdlgame -g t/testgame.xml -l t/movelog.xml
 
 targets: $(XFILES)
 

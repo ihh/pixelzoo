@@ -162,7 +162,9 @@
 
 	</particle>
 	
-      </grammar><init><x>64</x><y>64</y><type>1</type></init></board>
+      </grammar><init><x>64</x><y>64</y><type>1</type></init>
+<seed>222345</seed>
+</board>
 
     <rate>240</rate> <!-- 240 updates/second is about as fast as we can clock it -->
 

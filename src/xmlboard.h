@@ -7,6 +7,7 @@
 /* XML node names */
 #define XMLZOO_BOARD       "board"
 #define XMLZOO_SIZE        "size"
+#define XMLZOO_SEED        "seed"
 #define XMLZOO_GRAMMAR     "grammar"
 #define XMLZOO_PARTICLE    "particle"
 #define XMLZOO_SYNC        "sync"

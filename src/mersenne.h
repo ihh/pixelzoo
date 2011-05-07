@@ -9,7 +9,9 @@
    http://en.wikipedia.org/wiki/Mersenne_twister
  */
 
-#define MERSENNE_ARRAY_SIZE 624
+#define MERSENNE_ARRAY_SIZE   624
+#define MERSENNE_DEFAULT_SEED 5489UL
+
 typedef struct RandomNumberGenerator {
   unsigned long mt[MERSENNE_ARRAY_SIZE]; /* the array for the state vector  */
   int mti;  /* mti==MERSENNE_ARRAY_SIZE+1 means mt[MERSENNE_ARRAY_SIZE] is not initialized */

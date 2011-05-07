@@ -37,6 +37,8 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   board = newBoard (CHILDINT(boardNode,SIZE));
   board->game = game;
 
+  rngSeed (board->rng, OPTCHILDINT(boardNode,SEED,MERSENNE_DEFAULT_SEED));
+
   grammarNode = CHILD(boardNode,GRAMMAR);
   for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,SUBRULE)) {

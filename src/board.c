@@ -9,6 +9,12 @@
 #include "goal.h"
 #include "mersenne.h"
 
+/* uncomment the #define to log all board writes to stderr */
+#undef BOARD_DEBUG
+/*
+#define BOARD_DEBUG
+*/
+
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
 
@@ -123,6 +129,9 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) 
   board->cell[i] = state;
   if (!board->syncWrite[i])
     board->sync[i] = state;
+#ifdef BOARD_DEBUG
+  fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
+#endif /* BOARD_DEBUG */
 }
 
 void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
@@ -130,6 +139,9 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State sta
   i = boardIndex(board->size,x,y);
   board->sync[i] = state;
   board->syncWrite[i] = 1;
+#ifdef BOARD_DEBUG
+  fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
+#endif /* BOARD_DEBUG */
 }
 
 void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
@@ -408,7 +420,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 	microticksAtNextMove = nextMove->t;
       }
 
-    /* figure out what the next event is */
+    /* Figure out what the next event is.
+       Precedence:  BoardSync > MoveQueue > SyncParticles > AsyncParticles > TargetReached
+    */
     microticksAtNextBoardSyncDeadline = MIN (microticksAtNextMove, microticksAtNextMoveDeadline);
     if (pendingSyncEvents <= 0 && board->microticksAtNextBoardSync <= microticksAtNextBoardSyncDeadline) {  /* board sync? (won't happen until all pending sync events are processed) */
 
@@ -464,8 +478,8 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       ++cellUpdates;
       continue;
 			
-    } else {
-      /* reached target time */
+    } else {  /* reached target time */
+
       board->microticks = microticksAtTarget;
       break;
     }
