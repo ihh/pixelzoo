@@ -9,8 +9,8 @@
    http://en.wikipedia.org/wiki/Mersenne_twister
  */
 
-#define MERSENNE_ARRAY_SIZE   624
-#define MERSENNE_DEFAULT_SEED 5489UL
+#define MERSENNE_ARRAY_SIZE 624
+#define MERSENNE_STATE_STRING_LENGTH (8 * MERSENNE_ARRAY_SIZE)
 
 typedef struct RandomNumberGenerator {
   unsigned long mt[MERSENNE_ARRAY_SIZE]; /* the array for the state vector  */
@@ -20,14 +20,22 @@ typedef struct RandomNumberGenerator {
 RandomNumberGenerator* newRNG();
 void deleteRNG (RandomNumberGenerator* rng);
 
+/* the following seed functions are intended to create randomness - not reproducibility */
 void rngSeed (RandomNumberGenerator* rng, unsigned long seed);
 void rngSeedArray (RandomNumberGenerator* rng, unsigned long init_key[], int key_length);
 
-unsigned long rngRandomInt32 (RandomNumberGenerator* rng);
-long rngRandomInt31 (RandomNumberGenerator* rng);
+/* these functions can be used for reproducibility */
+char* getRngStateString (RandomNumberGenerator* rng);  /* allocates new string; caller's responsibility to delete */
+void rngSetStateString (RandomNumberGenerator* rng, char* stateString);
 
-int64_Millionths rngRandomProb (RandomNumberGenerator* rng);  /* samples from [0,1) in multiples of 2^{-20} */
-int64_Microticks rngRandomWait (RandomNumberGenerator* rng, int64_Microhurtz rate);  /* equivalent to (int) (2^{40} * randomExp() / rate) */
+#define deleteRngStateString(S) SafeFree(S)
+
+/* actual methods to sample random deviates */
+unsigned long rngRandomInt32 (RandomNumberGenerator* rng);  /* samples integer from [0,0xFFFFFFFF] */
+long rngRandomInt31 (RandomNumberGenerator* rng);  /* samples integer from [0,0x7FFFFFFF] */
+
+int64_Millionths rngRandomProb (RandomNumberGenerator* rng);  /* returns x from [0,0xFFFFF] where x = (p / 2^{20}) and p is sampled from [0,1) */
+int64_Microticks rngRandomWait (RandomNumberGenerator* rng, int64_Microhurtz rate);  /* returns w from [0,0x7FFFFFFFFFFFFFFF] where w = (2^{40} * -log(p) / rate) and p is sampled from [0,1) */
 
 
 

@@ -6,6 +6,7 @@
 
 #include "xmlgame.h"
 #include "xmlmove.h"
+#include "xmlutil.h"
 #include "optlist.h"
 
 //-----------------------------------------------------------------------------
@@ -44,16 +45,19 @@ int renderThreadFunc( void *voidSdlGame );
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  char *gameFilename, *moveLogFilename;
+  char *gameFilename, *moveLogFilename, *boardFilename;
   option_t *optList, *thisOpt;
+  int64_Microticks totalMicroticks;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
-  optList = GetOptList(argc, argv, "g:l:h?");
+  optList = GetOptList(argc, argv, "g:t:l:b:h?");
 
   /* get options */
   gameFilename = NULL;
   moveLogFilename = NULL;
+  boardFilename = NULL;
+  totalMicroticks = -1;
   while (optList != NULL)
     {
       thisOpt = optList;
@@ -64,19 +68,23 @@ int main( int argc, char *argv[] )
 	printf("options:\n");
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
+	printf("     -b : specify output XML file for board (optional).\n");
 	printf(" -h, -? : print out command line options.\n\n");
 
 	FreeOptList(thisOpt); /* done with this list, free it */
 	break;
 
       } else if ('g' == thisOpt->option) {
-
 	gameFilename = thisOpt->argument;
 
       } else if ('l' == thisOpt->option) {
-
 	moveLogFilename = thisOpt->argument;
 
+      } else if ('b' == thisOpt->option) {
+	boardFilename = thisOpt->argument;
+
+      } else if ('t' == thisOpt->option) {
+	totalMicroticks = decToSignedLongLong (thisOpt->argument);
       }
     }
 
@@ -90,14 +98,19 @@ int main( int argc, char *argv[] )
   if (moveLogFilename != NULL)
     logBoardMoves (sdlGame->game->board);
 
-  while( gameRunning(sdlGame->game) )
+  while( gameRunning(sdlGame->game) && (totalMicroticks < 0 || sdlGame->game->board->microticks < totalMicroticks ))
     {
       const double targetUpdatesPerCell = sdlGame->game->ticksPerSecond / (double) RENDER_RATE;
+      const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / sdlGame->game->ticksPerSecond;
+      int64_Microticks targetMicroticks = FloatToIntMillionths (targetUpdatesPerCell);
+      if (totalMicroticks >= 0)
+	targetMicroticks = MIN (totalMicroticks - sdlGame->game->board->microticks, targetMicroticks);
+
       double updatesPerCell, evolveTime;
       int64_Microticks microticks;
       int actualUpdates;
 
-      gameLoop (sdlGame->game, targetUpdatesPerCell, 0.5, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
+      innerGameLoop (sdlGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
       renderAndDelay (sdlGame);
 
       SDL_Event event;
@@ -139,6 +152,12 @@ int main( int argc, char *argv[] )
   if (moveLogFilename) {
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (moveLogFilename, 0);
     writeMoveList (sdlGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+    xmlFreeTextWriter (writer);
+  }
+
+  if (boardFilename) {
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
+    writeBoard (sdlGame->game->board, writer);
     xmlFreeTextWriter (writer);
   }
 

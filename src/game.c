@@ -68,11 +68,18 @@ void gameStart (Game *game) {
 }
 
 void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime) {
-  double maxUpdateTimeInSeconds, actualTicks;
-  int64_Microticks targetMicroticks, actualMicroticks;
+  double maxUpdateTimeInSeconds;
+  int64_Microticks targetMicroticks;
 
   maxUpdateTimeInSeconds = maxFractionOfTimeInterval * targetTicks / game->ticksPerSecond;
   targetMicroticks = FloatToIntMillionths (targetTicks);
+
+  innerGameLoop (game, targetMicroticks, maxUpdateTimeInSeconds, actualMicroticks_ret, actualTicks_ret, actualUpdates, evolveTime);
+}
+
+void innerGameLoop (Game *game, int64_Microticks targetMicroticks, double maxUpdateTimeInSeconds, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime) {
+  double actualTicks;
+  int64_Microticks actualMicroticks;
 
   evolveBoard (game->board, targetMicroticks, maxUpdateTimeInSeconds, &actualMicroticks, actualUpdates, evolveTime);
   actualTicks = IntMillionthsToFloat (actualMicroticks);

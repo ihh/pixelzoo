@@ -49,11 +49,11 @@
 #define RNG_DEBUG
 */
 
-#ifdef RNG_DEBUG
 #include <stdio.h>
-#endif /* RNG_DEBUG */
+#include <string.h>
 
 #include "mersenne.h"
+#include "xmlutil.h"
 
 /* Period parameters */  
 #define N MERSENNE_ARRAY_SIZE   /* 624 */
@@ -61,6 +61,8 @@
 #define MATRIX_A 0x9908b0dfUL   /* constant vector a */
 #define UPPER_MASK 0x80000000UL /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffffUL /* least significant r bits */
+
+#define MERSENNE_DEFAULT_SEED 5489UL
 
 RandomNumberGenerator* newRNG() {
   RandomNumberGenerator* rng;
@@ -116,6 +118,29 @@ void rngSeedArray (RandomNumberGenerator* rng, unsigned long init_key[], int key
     }
 
     rng->mt[0] = 0x80000000UL; /* MSB is 1; assuring non-zero initial array */ 
+}
+
+char* getRngStateString (RandomNumberGenerator* rng) {
+  char *s;
+  int n;
+  s = SafeMalloc ((MERSENNE_STATE_STRING_LENGTH + 1) * sizeof(char));
+  for (n = 0; n < MERSENNE_ARRAY_SIZE; ++n)
+    sprintf (s + 8*n, "%lx", rng->mt[n]);
+  return s;
+}
+
+void rngSetStateString (RandomNumberGenerator* rng, char* stateString) {
+  char tmp;
+  int n, startpos, endpos;
+  Assert (stateString != NULL && strlen(stateString) == MERSENNE_STATE_STRING_LENGTH, "Bad state string for random number generator");
+  for (n = 0; n < MERSENNE_ARRAY_SIZE; ++n) {
+    startpos = 8*n;
+    endpos = startpos + 8;
+    tmp = stateString[endpos];
+    stateString[endpos] = '\0';
+    rng->mt[n] = (unsigned long) hexToUnsignedLongLong (stateString + startpos);
+    stateString[endpos] = tmp;
+  }
 }
 
 /* generates a random number on [0,0xffffffff]-interval */

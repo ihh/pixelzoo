@@ -83,6 +83,12 @@ double randomExp();  /* randomExp() returns an exponentially-distributed real nu
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define ABS(X)   ((X) >= 0 ? (X) : -(X))
 
+#define MIN2(X,Y,Z) MIN(MIN(X,Y),Z)
+#define MAX2(X,Y,Z) MAX(MAX(X,Y),Z)
+
+#define MIN3(W,X,Y,Z) MIN(MIN(W,X),MIN(Y,Z))
+#define MAX3(W,X,Y,Z) MAX(MAX(W,X),MAX(Y,Z))
+
 /* alloc functions */
 void Abort(char* error);
 void Assert(int assertion, char* error);

@@ -25,7 +25,7 @@ Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
 
 Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   Board *board;
-  xmlNode *boardNode, *ruleNode, *queueNode, *grammarNode, *node;
+  xmlNode *boardNode, *ruleNode, *queueNode, *grammarNode, *seedNode, *node;
   int x, y;
   State state;
   const char* subRuleName;
@@ -37,7 +37,11 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   board = newBoard (CHILDINT(boardNode,SIZE));
   board->game = game;
 
-  rngSeed (board->rng, OPTCHILDINT(boardNode,SEED,MERSENNE_DEFAULT_SEED));
+  seedNode = CHILD(boardNode,SEED);
+  if (seedNode)
+    rngSetStateString (board->rng, (char*) getNodeContent (seedNode));
+
+  board->microticks = OPTCHILDINT(boardNode,TIME,0);
 
   grammarNode = CHILD(boardNode,GRAMMAR);
   for (node = grammarNode->children; node; node = node->next)
@@ -268,4 +272,45 @@ void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *
     fprintf (stderr, "Unresolved goto label: %s\n", label);
     Abort ("Couldn't find goto label");
   }
+}
+
+void writeBoard (Board* board, xmlTextWriterPtr writer) {
+  int x, y, i;
+  State t;
+  char *rngState;
+
+   /* the following call to boardReleaseRandomNumbers simply ensures that after calling writeBoard(), the Board behaves exactly as if it had just been input */
+  boardReleaseRandomNumbers (board);
+
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_BOARD);  /* begin board */
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SIZE, "%d", board->size);
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_TIME, "%lld", board->microticks);
+
+  rngState = getRngStateString (board->rng);
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SEED, "%s", rngState);
+  SafeFree(rngState);
+
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GRAMMAR);   /* begin grammar */
+  for (t = 0; t <= MaxType; ++t)
+    if (board->byType[t]) {
+      xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_PARTICLE);   /* begin particle */
+      xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_NAME, "%s", board->byType[t]->name);
+      xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXTYPE, "%hx", board->byType[t]->type);
+      xmlTextWriterFullEndElement (writer);  /* end particle */
+    }
+  xmlTextWriterFullEndElement (writer);  /* end grammar */
+
+  for (x = 0; x < board->size; ++x)
+    for (y = 0; y < board->size; ++y) {
+      i = boardIndex (board->size, x, y);
+      if (board->cell[i]) {
+	xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_INIT);  /* begin init */
+	xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_X, "%d", x);
+	xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Y, "%d", y);
+	xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXSTATE, "%llx", board->cell[i]);
+	xmlTextWriterFullEndElement (writer);  /* end init */
+      }
+    }
+
+  xmlTextWriterFullEndElement (writer);  /* end board */
 }

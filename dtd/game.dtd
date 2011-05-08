@@ -77,7 +77,7 @@
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT hextype (#PCDATA)>
 
-<!ELEMENT board (size,seed?,grammar,init*,queue?,seed?)>
+<!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
 <!ELEMENT grammar (subrule*,particle+)>
 <!ELEMENT init (x,y,(state|hexstate|type|hextype))>
 <!ELEMENT seed (#PCDATA)>

@@ -2,6 +2,8 @@
 #define XMLBOARD_INCLUDED
 
 #include <libxml/tree.h>
+#include <libxml/xmlwriter.h>
+
 #include "board.h"
 
 /* XML node names */
@@ -63,5 +65,7 @@ Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
 Board* newBoardFromXmlRoot (void *game, xmlNode *root);
 Board* newBoardFromXmlFile (void *game, const char* filename);
 Board* newBoardFromXmlString (void *game, const char* string);
+
+void writeBoard (Board* board, xmlTextWriterPtr writer);
 
 #endif /* XMLBOARD_INCLUDED */

@@ -41,6 +41,8 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 void logBoardMoves (Board* board);
 void writeBoardMove (Board* board, int x, int y, State state);
 
+void boardReleaseRandomNumbers (Board* board);   /* causes the Board to forget any random numbers (i.e. upcoming event times) that it has sampled */
+
 void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */
 #define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y, (1. - IntMillionthsToFloat((BOARD_PTR)->microticks % PowerOfTwoClosestToOneMillion)))); }
 

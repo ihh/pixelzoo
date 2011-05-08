@@ -362,7 +362,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
 void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret) {
   int cellUpdates, boardIdx, x, y;
-  int64_Microticks microticksAtStart, microticksAtTarget, microticksAtNextMoveDeadline, microticksAtNextMove, microticksAtNextBoardSyncDeadline, microticksToNextBoardSync;
+  int64_Microticks microticksAtStart, microticksAtTarget, microticksAtNextMove, microticksToNextBoardSync;
+  int64_Microticks deadline0, deadline1, deadline2, deadline3;
   double elapsedClockTime;
   int64_Microhurtz asyncEventRate, pendingSyncEvents;
   clock_t start, now;
@@ -381,7 +382,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     /* check if realtime clock deadline reached */
     now = clock();
     elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    if (elapsedClockTime > maxElapsedTimeInSeconds)
+    if (elapsedClockTime > maxElapsedTimeInSeconds && maxElapsedTimeInSeconds >= 0)
       break;
 		
     /* check if board clock target already passed */
@@ -411,7 +412,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     }
 
     /* poll move queue */
-    microticksAtNextMoveDeadline = MIN(board->microticksAtNextSyncEvent, MIN(board->microticksAtNextAsyncEvent, microticksAtTarget));
     microticksAtNextMove = microticksAtTarget + 1;  /* by default, assume the next move is at some indefinite point in the future */
     nextMove = NULL;
     if (board->moveQueue)
@@ -420,11 +420,19 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 	microticksAtNextMove = nextMove->t;
       }
 
-    /* Figure out what the next event is.
-       Precedence:  BoardSync > MoveQueue > SyncParticles > AsyncParticles > TargetReached
+    /* Figure out what the next event is, and service it.
+       In the event that multiple events coincide at the same discrete timepoint, the precedence of event service is as follows:
+
+          BoardSynchronization > SynchronousParticleUpdates > AsynchronousParticleUpdates > UpdatesFromMoveQueue > TargetTimeReached
+
+       In particular, the move queue is the last thing to be serviced, since it is used to simulate the "tool usages" (user events and goal triggers)
+       that occur in gameLoop outside of (and after) calls to evolveBoard().
     */
-    microticksAtNextBoardSyncDeadline = MIN (microticksAtNextMove, microticksAtNextMoveDeadline);
-    if (pendingSyncEvents <= 0 && board->microticksAtNextBoardSync <= microticksAtNextBoardSyncDeadline) {  /* board sync? (won't happen until all pending sync events are processed) */
+    deadline0 = microticksAtTarget;  /* deadline for popping moves from move queue */
+    deadline1 = MIN (deadline0, microticksAtNextMove);   /* deadline for async particle updates */
+    deadline2 = MIN (deadline1, board->microticksAtNextAsyncEvent);  /* deadline for sync particle updates */
+    deadline3 = MIN (deadline2, board->microticksAtNextSyncEvent);  /* deadline for board syncs */
+    if (board->microticksAtNextBoardSync <= deadline3 && pendingSyncEvents <= 0) {  /* do a board sync? (won't happen until all pending sync events are processed) */
 
       board->microticks = board->microticksAtNextBoardSync;
       board->sampledNextAsyncEventTime = 0;
@@ -435,19 +443,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       syncBoard (board);
       continue;
 
-    } else if (microticksAtNextMove <= microticksAtNextMoveDeadline) {  /* move from queue? */
-
-      board->microticks = microticksAtNextMove;
-      board->sampledNextAsyncEventTime = 0;
-      board->sampledNextSyncEventTime = 0;
-
-      writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
-
-      MoveListShift (board->moveQueue);
-      deleteMove (nextMove);
-      continue;
-
-    } else if (board->microticksAtNextSyncEvent < MIN (board->microticksAtNextAsyncEvent, microticksAtTarget)) {  /* synchronized cell update? */
+    } else if (board->microticksAtNextSyncEvent <= deadline2) {  /* do a synchronized cell update? */
 			
       board->microticks = board->microticksAtNextSyncEvent;
       board->sampledNextAsyncEventTime = 0;
@@ -463,7 +459,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       ++cellUpdates;
       continue;
 
-    } else if (board->microticksAtNextAsyncEvent < microticksAtTarget) {  /* asynchronous cell update? */
+    } else if (board->microticksAtNextAsyncEvent <= deadline1) {  /* do an asynchronous cell update? */
 			
       board->microticks = board->microticksAtNextAsyncEvent;
       board->sampledNextAsyncEventTime = 0;
@@ -476,6 +472,18 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
+      continue;
+
+    } else if (microticksAtNextMove <= deadline0) {  /* take a move from the queue? */
+
+      board->microticks = microticksAtNextMove;
+      board->sampledNextAsyncEventTime = 0;
+      board->sampledNextSyncEventTime = 0;
+
+      writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
+
+      MoveListShift (board->moveQueue);
+      deleteMove (nextMove);
       continue;
 			
     } else {  /* reached target time */
@@ -511,4 +519,9 @@ void updateBalloons (Board *board, double duration) {
   }
   board->balloon->end = write;
   qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (void*), BalloonCompare);
+}
+
+void boardReleaseRandomNumbers (Board *board) {
+  board->sampledNextAsyncEventTime = 0;
+  board->sampledNextSyncEventTime = 0;
 }
