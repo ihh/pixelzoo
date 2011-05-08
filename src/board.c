@@ -39,6 +39,7 @@ Board* newBoard (int size) {
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
   board->game = NULL;
   board->rng = newRNG();
+  board->rngReleased = 1;
   board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   board->moveLog = board->moveQueue = NULL;
 
@@ -412,6 +413,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       if (asyncEventRate > 0) {
 	board->microticksAtNextAsyncEvent = board->microticks + rngRandomWait(board->rng,asyncEventRate);
 	board->sampledNextAsyncEventTime = 1;
+	board->rngReleased = 0;
       }
     }
 
@@ -556,4 +558,5 @@ void updateBalloons (Board *board, double duration) {
 void boardReleaseRandomNumbers (Board *board) {
   board->sampledNextAsyncEventTime = 0;
   board->sampledNextSyncEventTime = 0;
+  board->rngReleased = 1;
 }

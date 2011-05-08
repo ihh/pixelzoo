@@ -28,8 +28,9 @@ typedef struct Board {
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's */
-  RandomNumberGenerator *rng;
-  MoveList *moveLog, *moveQueue;
+  RandomNumberGenerator *rng;  /* the Board's random number generator. Drives all random simulation events */
+  char rngReleased;  /* if true, then the Board has no cached random samples from the random number generator: the RNG's state can be saved or restored. Call boardReleaseRandomNumbers() to set this flag */
+  MoveList *moveLog, *moveQueue; /* log of past user moves, and queue of simulated upcoming user moves */
 } Board;
 
 /* public methods */

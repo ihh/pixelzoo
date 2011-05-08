@@ -279,8 +279,7 @@ void writeBoard (Board* board, xmlTextWriterPtr writer) {
   State t;
   char *rngState;
 
-   /* the following call to boardReleaseRandomNumbers simply ensures that after calling writeBoard(), the Board behaves exactly as if it had just been input */
-  boardReleaseRandomNumbers (board);
+  Assert (board->rngReleased, "writeBoard: random number generator not released. You need to call boardReleaseRandomNumbers");
 
   xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_BOARD);  /* begin board */
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SIZE, "%d", board->size);

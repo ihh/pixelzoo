@@ -42,7 +42,7 @@ sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml
 
 timed-sdl: targets
-	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -t 500000000
+	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -t 5000000000
 
 targets: $(XFILES)
 

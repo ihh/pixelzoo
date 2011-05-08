@@ -158,6 +158,8 @@ int main( int argc, char *argv[] )
   }
 
   if (boardFilename) {
+    boardReleaseRandomNumbers (sdlGame->game->board);
+
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
     writeBoard (sdlGame->game->board, writer);
     xmlFreeTextWriter (writer);
