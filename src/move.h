@@ -23,7 +23,7 @@ typedef ListNode MoveListNode;
 #define MoveListSize(MLPTR) ListSize ((List*) MLPTR)
 #define MoveListInsertBefore(MLPTR,MLNODEPTR,T,X,Y,S) ((MoveListNode*) ListInsertBefore ((List*) MLPTR, (ListNode*) MLNODEPTR, (void*) newMove(T,X,Y,S)))
 #define MoveListAppend(MLPTR,T,X,Y,S) MoveListInsertBefore (MLPTR, NULL, T, X, Y, S)
-#define MoveListShift(MLPTR) ListShift ((List*) MLPTR)
+#define MoveListShift(MLPTR) ((Move*) ListShift ((List*) MLPTR))
 #define MoveListFront(MLPTR) ((Move*) ((List*) MLPTR)->head->value)
 
 #endif /* MOVE_INCLUDED */

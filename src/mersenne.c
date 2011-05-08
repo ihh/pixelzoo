@@ -125,7 +125,7 @@ char* getRngStateString (RandomNumberGenerator* rng) {
   int n;
   s = SafeMalloc ((MERSENNE_STATE_STRING_LENGTH + 1) * sizeof(char));
   for (n = 0; n < MERSENNE_ARRAY_SIZE; ++n)
-    sprintf (s + 8*n, "%lx", rng->mt[n]);
+    sprintf (s + 8*n, "%08lx", rng->mt[n]);
   return s;
 }
 

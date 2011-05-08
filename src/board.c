@@ -480,10 +480,17 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       board->sampledNextAsyncEventTime = 0;
       board->sampledNextSyncEventTime = 0;
 
-      writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
-
-      MoveListShift (board->moveQueue);
-      deleteMove (nextMove);
+      /* In one swoop, service all moves that have the same timepoint, without sampling other events.
+	 This reflects the way that moves are put on the queue (they represent user actions, which occur outside the evolve loop).
+       */
+      while (nextMove->t == microticksAtNextMove) {
+	writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
+	(void) MoveListShift (board->moveQueue);
+	deleteMove (nextMove);
+	if (MoveListEmpty (board->moveQueue))
+	  break;
+	nextMove = MoveListFront (board->moveQueue);
+      }
       continue;
 			
     } else {  /* reached target time */
