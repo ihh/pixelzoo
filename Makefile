@@ -44,6 +44,20 @@ sdl: targets
 timed-sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -t 5000000000
 
+# Simple replay test, constructed as follows:
+#
+#  % cp t/board.xml t/eloise_board.xml
+#  % cp t/movelog.xml t/eloise_movelog.xml
+#  % cp t/testgame.xml t/eloise_queue.xml
+#
+#   ...then paste t/eloise_movelog.xml into t/eloise_queue.xml
+#
+# eloise_X.xml should be identical to eloise_copy_X.xml for X in { movelog, board }
+eloise-sdl: targets
+	bin/sdlgame -d -g t/eloise_queue.xml -l t/eloise_copy_movelog.xml -b t/eloise_copy_board.xml -t 5000000000
+	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
+	diff t/eloise_board.xml t/eloise_copy_board.xml
+
 targets: $(XFILES)
 
 xml: $(XMLFILES)

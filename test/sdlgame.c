@@ -46,18 +46,20 @@ int renderThreadFunc( void *voidSdlGame );
 int main( int argc, char *argv[] )
 {
   char *gameFilename, *moveLogFilename, *boardFilename;
+  int userInputAllowed;
   option_t *optList, *thisOpt;
   int64_Microticks totalMicroticks;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
-  optList = GetOptList(argc, argv, "g:t:l:b:h?");
+  optList = GetOptList(argc, argv, "g:t:l:b:dh?");
 
   /* get options */
   gameFilename = NULL;
   moveLogFilename = NULL;
   boardFilename = NULL;
   totalMicroticks = -1;
+  userInputAllowed = 1;
   while (optList != NULL)
     {
       thisOpt = optList;
@@ -69,6 +71,8 @@ int main( int argc, char *argv[] )
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
+	printf("     -t : specify simulation time limit in microticks (optional).\n");
+	printf("     -d : disable user input (optional).\n");
 	printf(" -h, -? : print out command line options.\n\n");
 
 	FreeOptList(thisOpt); /* done with this list, free it */
@@ -85,6 +89,9 @@ int main( int argc, char *argv[] )
 
       } else if ('t' == thisOpt->option) {
 	totalMicroticks = decToSignedLongLong (thisOpt->argument);
+
+      } else if ('d' == thisOpt->option) {
+	userInputAllowed = 0;
       }
     }
 
@@ -116,39 +123,40 @@ int main( int argc, char *argv[] )
       SDL_Event event;
 
       while( SDL_PollEvent( &event ) )
-        {
-	  switch( event.type ) 
-            {
-	    case SDL_QUIT:
-	      quitGame(sdlGame->game);
-	      break;
-
-	    case SDL_KEYDOWN:
-	      if( event.key.keysym.sym == SDLK_ESCAPE ) 
+	if (userInputAllowed)
+	  {
+	    switch( event.type ) 
+	      {
+	      case SDL_QUIT:
 		quitGame(sdlGame->game);
-	      break;
+		break;
 
-	    case SDL_MOUSEMOTION:
-	      sdlGame->game->toolPos.x = event.motion.x / PIXELS_PER_CELL;
-	      sdlGame->game->toolPos.y = event.motion.y / PIXELS_PER_CELL;
-	      break;
+	      case SDL_KEYDOWN:
+		if( event.key.keysym.sym == SDLK_ESCAPE ) 
+		  quitGame(sdlGame->game);
+		break;
 
-	    case SDL_MOUSEBUTTONUP:
-	      if ( event.button.button == SDL_BUTTON_LEFT)
-		sdlGame->game->toolActive = 0;
-	      break;
+	      case SDL_MOUSEMOTION:
+		sdlGame->game->toolPos.x = event.motion.x / PIXELS_PER_CELL;
+		sdlGame->game->toolPos.y = event.motion.y / PIXELS_PER_CELL;
+		break;
 
-	    case SDL_MOUSEBUTTONDOWN:
-	      if ( event.button.button == SDL_BUTTON_LEFT) {
-		sdlGame->game->toolActive = 1;
-		sdlGame->game->lastToolPos = sdlGame->game->toolPos;
+	      case SDL_MOUSEBUTTONUP:
+		if ( event.button.button == SDL_BUTTON_LEFT)
+		  sdlGame->game->toolActive = 0;
+		break;
+
+	      case SDL_MOUSEBUTTONDOWN:
+		if ( event.button.button == SDL_BUTTON_LEFT) {
+		  sdlGame->game->toolActive = 1;
+		  sdlGame->game->lastToolPos = sdlGame->game->toolPos;
+		}
+		break;
+
+	      default:
+		break;
 	      }
-	      break;
-
-	    default:
-	      break;
-	    }
-        }
+	  }
     }
 
   if (moveLogFilename) {
