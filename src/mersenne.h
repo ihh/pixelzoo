@@ -20,11 +20,11 @@ typedef struct RandomNumberGenerator {
 RandomNumberGenerator* newRNG();
 void deleteRNG (RandomNumberGenerator* rng);
 
-/* the following seed functions are intended to create randomness - not reproducibility */
+/* the following "seeding" functions are used to create initial randomness */
 void rngSeed (RandomNumberGenerator* rng, unsigned long seed);
 void rngSeedArray (RandomNumberGenerator* rng, unsigned long init_key[], int key_length);
 
-/* these functions can be used for reproducibility */
+/* the following "state" functions can be used to save/load the state of the RNG for exact reproducibility */
 char* getRngStateString (RandomNumberGenerator* rng);  /* allocates new string; caller's responsibility to delete */
 void rngSetStateString (RandomNumberGenerator* rng, char* stateString);
 
@@ -34,8 +34,8 @@ void rngSetStateString (RandomNumberGenerator* rng, char* stateString);
 unsigned long rngRandomInt32 (RandomNumberGenerator* rng);  /* samples integer from [0,0xFFFFFFFF] */
 long rngRandomInt31 (RandomNumberGenerator* rng);  /* samples integer from [0,0x7FFFFFFF] */
 
-int64_Millionths rngRandomProb (RandomNumberGenerator* rng);  /* returns x from [0,0xFFFFF] where x = (p / 2^{20}) and p is sampled from [0,1) */
-int64_Microticks rngRandomWait (RandomNumberGenerator* rng, int64_Microhurtz rate);  /* returns w from [0,0x7FFFFFFFFFFFFFFF] where w = (2^{40} * -log(p) / rate) and p is sampled from [0,1) */
+int64_Millionths rngRandomProb (RandomNumberGenerator* rng);  /* returns x from [0,0xFFFFF] where x = (unsigned long long) (p / 2^{20}) and p is sampled from [0,1) */
+int64_Microticks rngRandomWait (RandomNumberGenerator* rng, int64_Microhurtz rate);  /* returns w from [0,0x7FFFFFFFFFFFFFFF] where w = (unsigned long long) (2^{40} * -log(p) / rate) and p is sampled from [0,1) */
 
 
 
