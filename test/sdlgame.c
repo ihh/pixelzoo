@@ -139,8 +139,10 @@ int main( int argc, char *argv[] )
 	      break;
 
 	    case SDL_MOUSEBUTTONDOWN:
-	      if ( event.button.button == SDL_BUTTON_LEFT)
+	      if ( event.button.button == SDL_BUTTON_LEFT) {
 		sdlGame->game->toolActive = 1;
+		sdlGame->game->lastToolPos = sdlGame->game->toolPos;
+	      }
 	      break;
 
 	    default:

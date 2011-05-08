@@ -63,7 +63,7 @@ void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int 
   xDelta = xEnd - xStart;
   yDelta = yEnd - yStart;
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
-    sampleQuadLeaf (tool->brushIntensity, game->rng, &xOffset, &yOffset);
+    sampleQuadLeaf (tool->brushIntensity, game->rng, &xOffset, &yOffset);   /* NB this must *not* use the Board's RNG, as it is a user event, not a simulation event */
     newState = tool->defaultBrushState;
     if (tool->brushState)
       if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))
