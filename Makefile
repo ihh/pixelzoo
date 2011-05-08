@@ -35,6 +35,8 @@ endif
 
 all: lib targets xml
 
+test: all eloise-sdl
+
 clean:
 	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
 
@@ -45,6 +47,10 @@ timed-sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -t 5000000000
 
 # Simple replay test, constructed as follows:
+#
+#  % bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -t 5000000000
+#
+#   ...trace the letters "eloise" on the screen for the 20 seconds or so that the test runs
 #
 #  % cp t/board.xml t/eloise_board.xml
 #  % cp t/movelog.xml t/eloise_movelog.xml
