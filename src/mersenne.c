@@ -45,8 +45,8 @@
 
 /* uncomment the #define to log all random numbers to stderr */
 #undef RNG_DEBUG
-/*
 #define RNG_DEBUG
+/*
 */
 
 #include <stdio.h>
@@ -124,17 +124,25 @@ char* getRngStateString (RandomNumberGenerator* rng) {
   char *s;
   int n;
   s = SafeMalloc ((MERSENNE_STATE_STRING_LENGTH + 1) * sizeof(char));
+  sprintf (s, "%08lx", (unsigned long) rng->mti);
   for (n = 0; n < MERSENNE_ARRAY_SIZE; ++n)
-    sprintf (s + 8*n, "%08lx", rng->mt[n]);
+    sprintf (s + 8*(n+1), "%08lx", rng->mt[n]);
   return s;
 }
 
 void rngSetStateString (RandomNumberGenerator* rng, char* stateString) {
   char tmp;
   int n, startpos, endpos;
+
   Assert (stateString != NULL && strlen(stateString) == MERSENNE_STATE_STRING_LENGTH, "Bad state string for random number generator");
+
+  tmp = stateString[8];
+  stateString[8] = '\0';
+  rng->mti = (unsigned long) hexToUnsignedLongLong (stateString);
+  stateString[8] = tmp;
+
   for (n = 0; n < MERSENNE_ARRAY_SIZE; ++n) {
-    startpos = 8*n;
+    startpos = 8*(n+1);
     endpos = startpos + 8;
     tmp = stateString[endpos];
     stateString[endpos] = '\0';

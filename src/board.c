@@ -11,8 +11,8 @@
 
 /* uncomment the #define to log all board writes to stderr */
 #undef BOARD_DEBUG
-/*
 #define BOARD_DEBUG
+/*
 */
 
 /* for attemptRule() debugging: max rule depth, and rule trace */

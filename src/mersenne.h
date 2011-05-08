@@ -10,7 +10,7 @@
  */
 
 #define MERSENNE_ARRAY_SIZE 624
-#define MERSENNE_STATE_STRING_LENGTH (8 * MERSENNE_ARRAY_SIZE)
+#define MERSENNE_STATE_STRING_LENGTH (8 * MERSENNE_ARRAY_SIZE + 8)
 
 typedef struct RandomNumberGenerator {
   unsigned long mt[MERSENNE_ARRAY_SIZE]; /* the array for the state vector  */
