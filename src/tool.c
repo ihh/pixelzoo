@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "tool.h"
+#include "game.h"
 #include "util.h"
 #include "stringmap.h"
 
@@ -45,19 +46,24 @@ void deleteTool (void *voidTool) {
   SafeFree (tool);
 }
 
-void useTool (Tool *tool, Board *board, int xStart, int yStart, int xEnd, int yEnd, double duration) {
+void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int yEnd, double duration) {
+  Game *game;
+  Board *board;
   int particles, xOffset, yOffset, xPaint, yPaint;
   State oldState, maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
   double linePos, linePosDelta, xDelta, yDelta;
+
+  game = (Game*) voidGame;
+  board = game->board;
   particles = (int) (.5 + tool->sprayRate * duration);
   linePos = 0.;
   linePosDelta = 1. / (double) particles;
   xDelta = xEnd - xStart;
   yDelta = yEnd - yStart;
   while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
-    sampleQuadLeaf (tool->brushIntensity, board->rng, &xOffset, &yOffset);
+    sampleQuadLeaf (tool->brushIntensity, game->rng, &xOffset, &yOffset);
     newState = tool->defaultBrushState;
     if (tool->brushState)
       if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))

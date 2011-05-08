@@ -15,6 +15,7 @@ Game* newGame() {
   game = SafeMalloc (sizeof (Game));
 
   game->board = NULL;
+  game->rng = newRNG();
 
   game->ticksPerSecond = DefaultTicksPerSecond;
   game->goalTestsPerSecond = DefaultGoalTestsPerSecond;
@@ -55,6 +56,8 @@ void deleteGame (Game *game) {
   deleteList (game->trigger);
   if (game->goal)
     deleteGoal (game->goal);
+  deleteRNG (game->rng);
+  deleteBoard (game->board);
   SafeFree (game);
 }
 
@@ -104,7 +107,7 @@ void useTools (Game *game, double duration) {
   while ((node = (RBNode*) StackPop (enumResult))) {
     tool = (Tool*) node->value;
     if (tool == game->selectedTool && game->toolActive) {
-      useTool (tool, game->board, game->toolPos.x, game->toolPos.y, game->lastToolPos.x, game->lastToolPos.y, duration);
+      useTool (tool, game, game->toolPos.x, game->toolPos.y, game->lastToolPos.x, game->lastToolPos.y, duration);
       game->lastToolPos = game->toolPos;
     } else
       rechargeTool (tool, duration);

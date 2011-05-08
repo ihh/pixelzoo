@@ -11,8 +11,8 @@
 
 /* uncomment the #define to log all board writes to stderr */
 #undef BOARD_DEBUG
-#define BOARD_DEBUG
 /*
+#define BOARD_DEBUG
 */
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
@@ -129,9 +129,11 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) 
   board->cell[i] = state;
   if (!board->syncWrite[i])
     board->sync[i] = state;
+
 #ifdef BOARD_DEBUG
   fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
 #endif /* BOARD_DEBUG */
+
 }
 
 void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
@@ -139,9 +141,11 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State sta
   i = boardIndex(board->size,x,y);
   board->sync[i] = state;
   board->syncWrite[i] = 1;
+
 #ifdef BOARD_DEBUG
   fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
 #endif /* BOARD_DEBUG */
+
 }
 
 void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
@@ -440,6 +444,10 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
 
+#ifdef BOARD_DEBUG
+      fprintf (stderr, "Synchronizing board\n");
+#endif /* BOARD_DEBUG */
+
       syncBoard (board);
       continue;
 
@@ -454,6 +462,10 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
+
+#ifdef BOARD_DEBUG
+      fprintf (stderr, "Updating synchronized cell at (%d,%d)\n", x, y);
+#endif /* BOARD_DEBUG */
 			
       evolveBoardCellSync (board, x, y);
       ++cellUpdates;
@@ -469,6 +481,10 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
+
+#ifdef BOARD_DEBUG
+      fprintf (stderr, "Updating asynchronous cell at (%d,%d)\n", x, y);
+#endif /* BOARD_DEBUG */
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
@@ -484,6 +500,11 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 	 This reflects the way that moves are put on the queue (they represent user actions, which occur outside the evolve loop).
        */
       while (nextMove->t == microticksAtNextMove) {
+
+#ifdef BOARD_DEBUG
+	fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
+#endif /* BOARD_DEBUG */
+
 	writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
 	(void) MoveListShift (board->moveQueue);
 	deleteMove (nextMove);
@@ -494,6 +515,10 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       continue;
 			
     } else {  /* reached target time */
+
+#ifdef BOARD_DEBUG
+      fprintf (stderr, "Reached target time\n");
+#endif /* BOARD_DEBUG */
 
       board->microticks = microticksAtTarget;
       break;

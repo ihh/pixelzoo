@@ -43,6 +43,9 @@ typedef struct Game {
   double goalTestsPerSecond;   /* rate at which to test Goal */
   double lastGoalTestTime;     /* measured in "Board time", i.e. updates/cell/second */
 
+  /* Non-reproducible random numbers */
+  RandomNumberGenerator *rng;
+
   /* toolbox */
   StringMap *toolByName;     /* all Tool's, including empty/locked; this is the owning container for Tool's */
   List *toolOrder;           /* this does not own Tool's, just specifies what order they should be displayed in */

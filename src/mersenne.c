@@ -45,8 +45,8 @@
 
 /* uncomment the #define to log all random numbers to stderr */
 #undef RNG_DEBUG
-#define RNG_DEBUG
 /*
+#define RNG_DEBUG
 */
 
 #include <stdio.h>

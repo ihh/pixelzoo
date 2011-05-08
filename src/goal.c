@@ -441,7 +441,7 @@ int testGoalMet (Goal* goal, void *voidGame) {
       x = randomInt (board->size);
       y = randomInt (board->size);
     }
-    useTool ((Tool*) goal->context, board, x, y, x, y, goal->dblData[0]);
+    useTool ((Tool*) goal->context, game, x, y, x, y, goal->dblData[0]);
     return ((Tool*) goal->context)->reserve <= 0;
 
   case PrintMessagePseudoGoal:
