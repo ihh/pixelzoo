@@ -55,7 +55,7 @@ PlayerAvatar: the player's Avatar. The player may, or may not, be the owner of t
 OwnerAvatar: the Avatar of the owner of this world. The player is not the owner of the World.
 GuestAvatar: the Avatar of a guest that is neither the player, nor this World's owner (if that is not the player).
 
-The StealGoal is (PlayerGuestAvatars > 0 && OtherOwnerAvatars == 0).
+The OwnershipGoal is (PlayerAvatars > 0 && OwnerAvatars == 0).
 
 
 
@@ -65,7 +65,7 @@ Views
 Resource representations (need a DTD for each of these):
 
 Lock: (LockID, WorldID, LockOwnerID, ExpirationTime)
-World: (WorldID, LockID?, WorldOwnerID, NextAvailableCheckoutTime, Game, StealGoal)
+World: (WorldID, LockID?, WorldOwnerID, NextAvailableCheckoutTime, Game, OwnershipGoal)
 Turn: (MoveLog, UpdatedBoard)
 Type: (TypeDependency*, TypeImageName, TypeParticle)
 Price: (TypeName, CashPerPixel)
