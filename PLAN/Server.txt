@@ -102,12 +102,12 @@ GET world/WorldID  -->   200 Success + World (if lock is yours, includes tools),
 POST turn/WorldID (Turn) -->  204 No Content (success), 410 Gone (lock expired), 423 Locked (not your lock), 403 Forbidden (illegal turn), 402 Payment Required, 413 Request Entity Too Large
 
 GET type/TypeName  -->  200 Success + Type (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
-POST type (Type)  -->  403 Forbidden (currently unimplemented; eventually, implement as "PUT type/TypeName" and return a 303)
 PUT type/TypeName (Type)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
+POST type (Type)  -->  403 Forbidden (currently unimplemented; eventually, implement as "PUT type/TypeName" and return a 303)
 
 GET image/ImageName  -->  200 Success + Image (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
-POST type (Image)  -->  403 Forbidden (currently unimplemented; eventually, implement as "PUT image/ImageName" and return a 303)
 PUT image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
+POST type (Image)  -->  403 Forbidden (currently unimplemented; eventually, implement as "PUT image/ImageName" and return a 303)
 
 GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
 
