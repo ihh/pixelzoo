@@ -84,28 +84,28 @@ RESTful HTTP operations & responses.
 All can return 401 Unauthorized for authentication (incl. challenge URL)
 
 GET lock/WorldID  -->  303 See Other --> GET lock/WorldID/LockID, 404 Not Found
-GET lock/WorldID/LockID  -->  200 Success + Lock, 404 Not Found
+GET lock/WorldID/LockID  -->  200 Success + Lock (HTTP headers: "Expires"=expiration time, "Last-Modified"=creation time), 404 Not Found
 POST lock/WorldID (null)  -->  200 Success + Lock (board proto assembled), 404 Not Found (bad WorldID), 408 Request Timeout (failed to assemble), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
 DELETE lock/WorldID/LockID  -->  204 No Content (success), 404 Not Found (bad WorldID or LockID), 410 Gone (lock expired)
 
-GET world/board/WorldID  -->   200 Success + Board (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
-GET world/game/WorldID  -->   200 Success + Game metadata (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
-GET world/proto/WorldID/LockID  -->   200 Success + Proto (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID or LockID)
-GET world/compiled/WorldID/LockID  -->   200 Success + Game (compiles, caches results in S3 bucket/filesystem), 404 Not Found (bad WorldID or LockID), 408 Request Timeout (failed to compile)
+GET world/board/WorldID  -->   200 Success + Board (HTTP headers: "Last-Modified"=last move) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
+GET world/game/WorldID  -->   200 Success + Game metadata (HTTP headers: "Last-Modified"=last change of owner) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
+GET world/proto/WorldID/LockID  -->   200 Success + Proto (HTTP headers: "Last-Modified"=lock creation time) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID or LockID)
+GET world/compiled/WorldID/LockID  -->   200 Success + Game (HTTP headers: same as proto) (compiles, caches results in S3 bucket/filesystem), 404 Not Found (bad WorldID or LockID), 408 Request Timeout (failed to compile)
 
 POST turn/WorldID (Turn) -->  204 No Content (success), 410 Gone (lock expired), 423 Locked (not your lock), 403 Forbidden (illegal turn), 402 Payment Required, 413 Request Entity Too Large
 
-GET type/TypeName  -->  200 Success + Type (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
+GET type/TypeName  -->  200 Success + Type (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
 PUT type/TypeName (Type)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
 POST type (Type)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT type/TypeName" and return a 303 to "GET type/TypeName")
 
-GET image/ImageName  -->  200 Success + Image (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
+GET image/ImageName  -->  200 Success + Image (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
 PUT image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
 POST type (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT image/ImageName" and return a 303 to "GET image/ImageName")
 
-GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
+GET price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
 
 GET status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 
-GET order/UserID  -->  200 Success + PixelPurchaseOrder (account history)
+GET order/UserID  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last purchase) (account history)
 POST order/UserID  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
