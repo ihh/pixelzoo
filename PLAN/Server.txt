@@ -13,10 +13,10 @@ S3 bucket (or local filesystem):
 type/TypeName  --> Particle
 tool/ToolName  --> Tool
 image/ImageName  --> SVG
-world/board/WorldID  --> Board (no grammar)
-world/game/WorldID  --> Proto (metadata only; no Board or grammar)
-world/proto/WorldID/LockID  --> Proto (metadata + Board + grammar + tools)
-world/compiled/WorldID/LockID  --> Game (compiled)
+world/WorldID/board  --> Board (no grammar)
+world/WorldID/game  --> Proto (metadata only; no Board or grammar)
+world/WorldID/lock/LockID/proto  --> Proto (metadata + Board + grammar + tools)
+world/WorldID/lock/LockID/compiled  --> Game (compiled)
 
 Comments:
 
