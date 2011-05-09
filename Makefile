@@ -35,7 +35,7 @@ endif
 
 all: lib targets xml
 
-test: all eloise-sdl
+test: all eloise-sdl-test xml-valid-test
 
 clean:
 	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
@@ -59,10 +59,18 @@ timed-sdl: targets
 #   ...then paste t/eloise_movelog.xml into t/eloise_queue.xml
 #
 # eloise_X.xml should be identical to eloise_copy_X.xml for X in { movelog, board }
-eloise-sdl: targets
+eloise-sdl-test: targets
 	bin/sdlgame -d -g t/eloise_queue.xml -l t/eloise_copy_movelog.xml -b t/eloise_copy_board.xml -t 5000000000
 	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
 	diff t/eloise_board.xml t/eloise_copy_board.xml
+
+# XML validation tests
+# These should produce no output
+xml-valid-test:
+	$(XMLLINT) --dtdvalid dtd/game.dtd --noout t/testgame.xml
+	$(XMLLINT) --dtdvalid dtd/proto.dtd --noout t/proto.xml
+
+# Targets
 
 targets: $(XFILES)
 

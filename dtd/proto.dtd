@@ -82,9 +82,14 @@
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT hextype (#PCDATA)>
 
-<!ELEMENT board (size,grammar,init*)>
+<!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
 <!ELEMENT grammar (particle+)>
 <!ELEMENT init (x,y,(state|hexstate|gstate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT seed (#PCDATA)>
+
+<!ELEMENT queue (move*)>
+<!ELEMENT move (t,x,y,(state|hexstate|gstate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT t (#PCDATA)>
 
 <!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
 
