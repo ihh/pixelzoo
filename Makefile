@@ -70,9 +70,9 @@ xml: $(XMLFILES)
 
 lib: $(OFILES)
 
-bin/%:  test/%.c $(OFILES)
+bin/%:  tsrc/%.c $(OFILES)
 	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ test/$*.c $(OFILES)
+	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ tsrc/$*.c $(OFILES)
 
 .SUFFIXES :
 
