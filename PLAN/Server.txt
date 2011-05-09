@@ -4,7 +4,7 @@ Model
 -----
 
 Local database:
-User table (UserName, MainRole, Cash)
+User table (UserID, UserName, MainRole, Cash)
 User inventory table (UserName, TypeName, PixelCount)
 World metadata table (WorldID, WorldName, WorldOwnerName, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
 
@@ -15,19 +15,18 @@ world/board/WorldID
 world/game/WorldID
 world/compiled/WorldID
 
-
 Comments:
 
-WorldID
- This is an integer primary key.
+WorldID, UserID
+ These are 48-bit integer primary keys.
 
 BoardName
- is never used as a key, and is not required to be unique.
+ This string is never used as a key, and is not required to be unique.
 
 UserName, TypeName
- These are strings that serve as primary keys in their respective tables, and so must be unique.
+ These are strings that must be unique.
  Allowed characters in UserName: [A-Za-z0-9_.]
- TypeName always has the format "CreatorName/RestOfTypeName" where CreatorName is a UserName
+ TypeName always has the format "CreatorName/TypeNoun" where CreatorName is a UserName
 
 MainRole: Player < Creator
 
@@ -37,7 +36,7 @@ Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
 Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
 
 XML contents of bucket/filesystem:
-type/CreatorName/RestOfTypeName  leads to  <particle>
+type/CreatorName/TypeNoun  leads to  <particle>
 world/board/WorldID  leads to a  <board>  block in proto.dtd
 world/game/WorldID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
 world/compiled/WorldID  leads to the  <board>  block in game.dtd
@@ -46,17 +45,32 @@ Other contents of bucket/filesystem:
 image/ImageName  -- PNG images
 
 
+Grammar extensions to support multiplayer:
+
+A unique special proto-Particle, "Avatar", has one 48-bit state variable, corresponding to a UserID.
+This Particle automatically gets compiled into four game-Particles: "PlayerOwnerAvatar", "PlayerGuestAvatar", "OtherOwnerAvatar", "OtherGuestAvatar".
+
+The description of these game-Particles is as follows.
+PlayerOwnerAvatar: player is owner of the World. This is their Avatar.
+PlayerGuestAvatar: player is guest in a World owned by another. This is the player's Avatar.
+OtherOwnerAvatar: player is guest in a World owned by another. This is the owner's Avatar.
+OtherGuestAvatar: the Avatar of a guest that is neither the player, nor this World's owner.
+
+The StealGoal is (PlayerGuestAvatars > 0 && OtherOwnerAvatars == 0).
+
+
+
 Views
 -----
 
 Resource representations (need a DTD for each of these):
 
-Lock: (LockID, WorldID, LockOwnerName, ExpirationTime)
-World: (WorldID, LockID?, WorldOwnerName, NextAvailableCheckoutTime, GameData)
-Move: ((MoveTime, X, Y, State)+)
+Lock: (LockID, WorldID, LockOwnerID, ExpirationTime)
+World: (WorldID, LockID?, WorldOwnerID, NextAvailableCheckoutTime, Game, StealGoal)
+MoveList: ((MoveTime, X, Y, State)+)
 Type: (TypeDependency*, TypeImageName, TypeParticle)
 Price: (TypeName, CashPerPixel)
-Status: (UserName, AllowedRole+, OwnedWorldName*, CashLevel, (TypeName,PixelsOwned)+)
+Status: (UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (TypeName,PixelsOwned)+)
 PixelPurchase: (BuyerName, TypeName, CashAmount)
 
 
@@ -85,7 +99,7 @@ DELETE lock/WorldID/LockID  -->  204 No Content (success), 404 Not Found (bad Wo
 
 GET world/WorldID  -->   200 Success + World (if lock is yours, includes tools), 404 Not Found (bad WorldID)
 
-POST move/WorldID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
+POST move/WorldID (MoveList) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
 GET type/TypeName  -->  200 Success + Type (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
 PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
@@ -93,5 +107,6 @@ PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 
 GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
 
 GET status  -->  200 Success + Status
+GET status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 
 PUT buy  (PixelPurchase)  -->  201 Success, 402 Payment Required, 404 Not Found
