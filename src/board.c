@@ -373,21 +373,25 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
   int64_Microhurtz asyncEventRate, pendingSyncEvents;
   clock_t start, now;
   Move *nextMove;
-	
+
+  /* check parameters */
+  Assert (targetElapsedMicroticks > 0, "The board clock must advance during the simulation");
+
   /* start the clocks */
   start = clock();
-  cellUpdates = 0;
   elapsedClockTime = 0.;
+
+  cellUpdates = 0;
   microticksAtStart = board->microticks;
   microticksAtTarget = microticksAtStart + targetElapsedMicroticks;
 
   /* main loop */
   while (1) {
-		
-    /* check if realtime clock deadline reached */
+
+    /* check if realtime clock deadline reached; if so, bail out as soon as the minimum one microtick of Board time has elapsed */
     now = clock();
     elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-    if (elapsedClockTime > maxElapsedTimeInSeconds && maxElapsedTimeInSeconds >= 0)
+    if (board->microticks > microticksAtStart && elapsedClockTime > maxElapsedTimeInSeconds && maxElapsedTimeInSeconds >= 0)
       break;
 		
     /* check if board clock target already passed */
@@ -396,7 +400,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       break;
     }
 
-    /* calculate the time to the next sync event & the next async event */
+    /* calculate the Board time to the next sync event & the next async event */
     pendingSyncEvents = topBinRate(board->syncUpdateBin) / PowerOfTwoClosestToOneMillion;
     if (!board->sampledNextSyncEventTime) {
       board->microticksAtNextSyncEvent = microticksAtTarget + 1;  /* by default, postpone the next event to some indefinite point in the future */
@@ -431,8 +435,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
           BoardSynchronization > SynchronousParticleUpdates > AsynchronousParticleUpdates > UpdatesFromMoveQueue > TargetTimeReached
 
-       In particular, the move queue is the last thing to be serviced, since it is used to simulate the "tool usages" (user events and goal triggers)
-       that occur in gameLoop outside of (and after) calls to evolveBoard().
+       Reaching the target time corresponds to ceding control to the Game loop, at which point Game events (UI moves & Goal triggers) occur.
+       This cession of control is the lowest-priority event to be serviced.
+       The second lowest-priority is the move queue, which is used to play back Game events.
     */
     deadline0 = microticksAtTarget;  /* deadline for popping moves from move queue */
     deadline1 = MIN (deadline0, microticksAtNextMove);   /* deadline for async particle updates */
