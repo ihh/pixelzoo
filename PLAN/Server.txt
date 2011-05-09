@@ -8,7 +8,7 @@ User table (UserName, MainRole, Cash)
 User inventory table (UserName, TypeName, PixelCount)
 World metadata table (WorldID, WorldName, WorldOwnerName, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
 
-S3 bucket:
+S3 bucket (or local filesystem):
 type/TypeName = type/CreatorName/RestOfTypeName
 world/board/WorldID
 world/game/WorldID
@@ -83,7 +83,7 @@ GET world/WorldID  -->   200 Success + World (if lock is yours, includes tools),
 
 POST move/WorldID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
-GET type/TypeName  -->  200 Success + Type (proxies S3 bucket), 404 Not Found (bad TypeName)
+GET type/TypeName  -->  200 Success + Type (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
 PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
 
 GET price/TypeName  -->  200 Success + Type (for the moment just returns default price), 404 Not Found (bad TypeName)
