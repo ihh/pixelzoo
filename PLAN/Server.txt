@@ -10,9 +10,9 @@ Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerName, 
 
 S3 bucket:
 type/TypeName = type/CreatorName/RestOfTypeName
-board/BoardID
-game/BoardID
-compiled/BoardID
+world/board/BoardID
+world/game/BoardID
+world/compiled/BoardID
 
 
 Comments:
@@ -37,9 +37,9 @@ Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity w
 
 XML contents of bucket:
 type/CreatorName/RestOfTypeName  leads to  <particle>
-board/BoardID  leads to a  <board>  block in proto.dtd
-game/BoardID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
-compiled/BoardID  leads to the  <board>  block in game.dtd
+world/board/BoardID  leads to a  <board>  block in proto.dtd
+world/game/BoardID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
+world/compiled/BoardID  leads to the  <board>  block in game.dtd
 
 
 Views
@@ -62,8 +62,8 @@ The appearance of a "lock collection" is maintained as a RESTful illusion; there
 LockID is just the lock count.
 
 GameData is synthesized dynamically from BucketURL/(game|board|compiled)/*
-If player doesn't have a lock, game/ & board/ are used, and the view conforms to proto.dtd.
-If player has lock, game/ & compiled/ are used, view conforms to game.dtd.
+If player doesn't have a lock, world/game/ & world/board/ are used, and the view conforms to proto.dtd.
+If player has lock, world/game/ & world/compiled/ are used, view conforms to game.dtd.
 
 Cash amounts are measured in virtual dollars, at parity with US$.
 
@@ -79,7 +79,7 @@ GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
 POST lock/BoardID (null)  -->  200 Success + Lock (board compiled), 404 Not Found (bad BoardID), 408 Request Timeout (failed to compile board), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
 DELETE lock/BoardID/LockID  -->  204 No Content (success), 404 Not Found (bad BoardID or LockID), 410 Gone (timeout)
 
-GET board/BoardID  -->   200 Success + Board (if lock is yours, Board includes rules + appropriate tools; otherwise, just type names), 404 Not Found (bad BoardID)
+GET world/BoardID  -->   200 Success + Game (if lock is yours, includes tools), 404 Not Found (bad BoardID)
 
 POST move/BoardID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
