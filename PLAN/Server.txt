@@ -24,7 +24,7 @@ WorldID, UserID
 BoardName
  This string is never used as a key, and is not required to be unique.
 
-UserName, TypeName, ImageName
+UserName, TypeName, ToolName, ImageName
  These are strings that must be unique.
 
 Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
@@ -49,11 +49,13 @@ Resource representations (need a DTD for each of these):
 Lock: (LockID, WorldID, LockOwnerUserID, ExpirationTime)
 World: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime, Game, OwnershipGoal)
 Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, UpdatedWorldOwnerUserID)
-Type: (TypeDependency*, TypeImageName, TypeParticle)
+Type: (TypeDependency*, TypeImageName, Particle)
 Price: (TypeName, CashPerPixel)
-Status: (UserID, UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (TypeName,PixelsOwned)+)
+Status: (UserID, UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedToolName)+, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID, NextToolPurchaseOrderID)
 PixelPurchaseOrder: ((OrderID, BuyerName, TypeName, CashAmount)+)
 Image: SVG
+
+Tool, Game, Board, Proto, etc. as per current definitions.
 
 Comments:
 
@@ -73,8 +75,8 @@ Roles/privileges
 Player - POST/DELETE lock, POST turn, POST order
 Artist - POST new image
 Vandal - PUT replacement image
-Coder - POST new type
-Hacker - PUT replacement type
+Coder - POST new type/tool
+Hacker - PUT replacement type/tool
 
 
 Controller
@@ -99,13 +101,21 @@ GET type/TypeName  -->  200 Success + Type (HTTP headers: "Last-Modified") (prox
 PUT type/TypeName (Type)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
 POST type (Type)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT type/TypeName" and return a 303 to "GET type/TypeName")
 
+GET tool/ToolName  -->  200 Success + Type (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ToolName)
+PUT tool/ToolName (Tool)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
+POST tool (Tool)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT tool/ToolName" and return a 303 to "GET tool/ToolName")
+
 GET image/ImageName  -->  200 Success + Image (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
 PUT image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
-POST type (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT image/ImageName" and return a 303 to "GET image/ImageName")
-
-GET price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
+POST image (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT image/ImageName" and return a 303 to "GET image/ImageName")
 
 GET status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 
-GET order/UserID  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last purchase) (account history)
-POST order/UserID  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
+GET price/type/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
+GET price/tool/ToolName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad ToolName)
+
+GET order/type/UserID  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
+POST order/type/UserID  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
+
+GET order/tool/UserID  -->  200 Success + ToolPurchaseOrder (HTTP headers: "Last-Modified"=time of last tool purchase) (account history)
+POST order/tool/UserID  (ToolPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
