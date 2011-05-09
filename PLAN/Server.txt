@@ -47,15 +47,9 @@ image/ImageName  -- PNG images
 
 Grammar extensions to support multiplayer:
 
-A unique special proto-Particle, "Avatar", has one 48-bit state variable, corresponding to a UserID.
-This Particle automatically gets compiled into three distinct game-Particles: "PlayerAvatar", "OwnerAvatar", "GuestAvatar".
-
-The description of these game-Particles is as follows.
-PlayerAvatar: the player's Avatar. The player may, or may not, be the owner of the World.
-OwnerAvatar: the Avatar of the owner of this world. The player is not the owner of the World.
-GuestAvatar: the Avatar of a guest that is neither the player, nor this World's owner (if that is not the player).
-
-The OwnershipGoal is (PlayerAvatars > 0 && OwnerAvatars == 0).
+user-particle (similar to particle, but no sane-vars; instead, 48-bit var field reserved for UserID)
+player-gstate (similar to gstate, but UserID set to player's ID)
+owner-gstate (similar to gstate, but UserID set to World owner's ID)
 
 
 
