@@ -67,12 +67,11 @@ Resource representations (need a DTD for each of these):
 
 Lock: (LockID, WorldID, LockOwnerID, ExpirationTime)
 World: (WorldID, LockID?, WorldOwnerID, NextAvailableCheckoutTime, Game, StealGoal)
-MoveList: ((MoveTime, X, Y, State)+)
+Turn: (MoveLog, UpdatedBoard)
 Type: (TypeDependency*, TypeImageName, TypeParticle)
 Price: (TypeName, CashPerPixel)
 Status: (UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (TypeName,PixelsOwned)+)
 PixelPurchase: (BuyerName, TypeName, CashAmount)
-
 
 Comments:
 
@@ -99,7 +98,7 @@ DELETE lock/WorldID/LockID  -->  204 No Content (success), 404 Not Found (bad Wo
 
 GET world/WorldID  -->   200 Success + World (if lock is yours, includes tools), 404 Not Found (bad WorldID)
 
-POST move/WorldID (MoveList) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
+POST turn/WorldID (Turn) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal turn), 402 Payment Required
 
 GET type/TypeName  -->  200 Success + Type (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
 PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
