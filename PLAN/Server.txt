@@ -65,7 +65,7 @@ Comments:
 The appearance of a "lock collection" is maintained as a RESTful illusion; there can only ever be at most one lock per board.
 LockID is just the lock count.
 
-GameData is synthesized dynamically from BucketURL/(game|board|compiled)/*
+GameData is synthesized dynamically from BucketURLPrefix/world/(game|board|compiled)/*
 If player doesn't have a lock, world/game/ & world/board/ are used, and the view conforms to proto.dtd.
 If player has lock, world/game/ & world/compiled/ are used, view conforms to game.dtd.
 
