@@ -60,7 +60,7 @@ Resource representations (need a DTD for each of these):
 
 Lock: (LockID, WorldID, LockOwnerID, ExpirationTime)
 World: (WorldID, LockID?, WorldOwnerID, NextAvailableCheckoutTime, Game, OwnershipGoal)
-Turn: (MoveLog, UpdatedBoard)
+Turn: (MoveLog, UpdatedBoard, UpdatedWorldOwnerID)
 Type: (TypeDependency*, TypeImageName, TypeParticle)
 Price: (TypeName, CashPerPixel)
 Status: (UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (TypeName,PixelsOwned)+)
@@ -101,4 +101,4 @@ GET price/TypeName  -->  200 Success + Type (for the moment just returns default
 GET status  -->  200 Success + Status
 GET status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 
-PUT buy  (PixelPurchase)  -->  201 Success, 402 Payment Required, 404 Not Found
+POST buy  (PixelPurchase)  -->  201 Success, 402 Payment Required, 404 Not Found
