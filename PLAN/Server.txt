@@ -6,18 +6,18 @@ Model
 Local database:
 User table (UserName, MainRole, Cash)
 User inventory table (UserName, TypeName, PixelCount)
-Board metadata table (BoardID, BoardName, BoardSize, BoardTime, BoardOwnerName, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
+World metadata table (WorldID, WorldName, WorldOwnerName, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorName)
 
 S3 bucket:
 type/TypeName = type/CreatorName/RestOfTypeName
-world/board/BoardID
-world/game/BoardID
-world/compiled/BoardID
+world/board/WorldID
+world/game/WorldID
+world/compiled/WorldID
 
 
 Comments:
 
-BoardID
+WorldID
  This is an integer primary key.
 
 BoardName
@@ -37,9 +37,9 @@ Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity w
 
 XML contents of bucket:
 type/CreatorName/RestOfTypeName  leads to  <particle>
-world/board/BoardID  leads to a  <board>  block in proto.dtd
-world/game/BoardID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
-world/compiled/BoardID  leads to the  <board>  block in game.dtd
+world/board/WorldID  leads to a  <board>  block in proto.dtd
+world/game/WorldID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
+world/compiled/WorldID  leads to the  <board>  block in game.dtd
 
 
 Views
@@ -47,12 +47,12 @@ Views
 
 Resource representations:
 
-Lock: (LockID, BoardID, LockOwnerName, ExpirationTime)
-Board: (BoardID, LockID?, BoardOwnerName, NextAvailableCheckoutTime, GameData)
-Move: ((PlayerName, MoveTime, X, Y, TypeName)+)
-Type: (TypeName, TypeImage, TypeRule)
-Price: (CashPerPixel)
-Status: (UserName, (AllowedRole)+, BoardsOwned, CashLevel, (TypeName,PixelsOwned)+)
+Lock: (LockID, WorldID, LockOwnerName, ExpirationTime)
+World: (WorldID, LockID?, WorldOwnerName, NextAvailableCheckoutTime, GameData)
+Move: ((MoveTime, X, Y, State)+)
+Type: (TypeDependency*, TypeImage, TypeParticle)
+Price: (TypeName, CashPerPixel)
+Status: (UserName, AllowedRole+, OwnedWorldName*, CashLevel, (TypeName,PixelsOwned)+)
 PixelPurchase: (BuyerName, TypeName, CashAmount)
 
 
@@ -74,14 +74,14 @@ Controller
 RESTful HTTP operations & responses.
 All can return 401 Unauthorized for authentication (incl. challenge URL)
 
-GET lock/BoardID  -->  303 See Other --> GET lock/BoardID/LockID, 404 Not Found
-GET lock/BoardID/LockID  -->  200 Success + Lock, 404 Not Found
-POST lock/BoardID (null)  -->  200 Success + Lock (board compiled), 404 Not Found (bad BoardID), 408 Request Timeout (failed to compile board), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
-DELETE lock/BoardID/LockID  -->  204 No Content (success), 404 Not Found (bad BoardID or LockID), 410 Gone (timeout)
+GET lock/WorldID  -->  303 See Other --> GET lock/WorldID/LockID, 404 Not Found
+GET lock/WorldID/LockID  -->  200 Success + Lock, 404 Not Found
+POST lock/WorldID (null)  -->  200 Success + Lock (board compiled), 404 Not Found (bad WorldID), 408 Request Timeout (failed to compile board), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
+DELETE lock/WorldID/LockID  -->  204 No Content (success), 404 Not Found (bad WorldID or LockID), 410 Gone (timeout)
 
-GET world/BoardID  -->   200 Success + Game (if lock is yours, includes tools), 404 Not Found (bad BoardID)
+GET world/WorldID  -->   200 Success + World (if lock is yours, includes tools), 404 Not Found (bad WorldID)
 
-POST move/BoardID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
+POST move/WorldID (Move) -->  204 No Content (success), 410 Gone (timeout), 423 Locked (not your lock), 403 Forbidden (illegal move), 402 Payment Required
 
 GET type/TypeName  -->  200 Success + Type (proxies S3 bucket), 404 Not Found (bad TypeName)
 PUT type (Type)  -->  201 Success + Type, 405 Method Not Allowed (type exists), 403 Forbidden (no designer privileges, not your namespace, etc), 402 Payment Required
