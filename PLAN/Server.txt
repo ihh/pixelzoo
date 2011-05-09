@@ -10,6 +10,7 @@ World metadata table (WorldID, WorldName, WorldOwnerName, BoardSize, BoardTime, 
 
 S3 bucket (or local filesystem):
 type/TypeName = type/CreatorName/RestOfTypeName
+image/ImageName
 world/board/WorldID
 world/game/WorldID
 world/compiled/WorldID
@@ -35,22 +36,25 @@ Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
 
 Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
 
-XML contents of bucket:
+XML contents of bucket/filesystem:
 type/CreatorName/RestOfTypeName  leads to  <particle>
 world/board/WorldID  leads to a  <board>  block in proto.dtd
 world/game/WorldID  leads to the outer part of a  <game>  block in proto.dtd, excluding the  <board>
 world/compiled/WorldID  leads to the  <board>  block in game.dtd
 
+Other contents of bucket/filesystem:
+image/ImageName  -- PNG images
+
 
 Views
 -----
 
-Resource representations:
+Resource representations (need a DTD for each of these):
 
 Lock: (LockID, WorldID, LockOwnerName, ExpirationTime)
 World: (WorldID, LockID?, WorldOwnerName, NextAvailableCheckoutTime, GameData)
 Move: ((MoveTime, X, Y, State)+)
-Type: (TypeDependency*, TypeImage, TypeParticle)
+Type: (TypeDependency*, TypeImageName, TypeParticle)
 Price: (TypeName, CashPerPixel)
 Status: (UserName, AllowedRole+, OwnedWorldName*, CashLevel, (TypeName,PixelsOwned)+)
 PixelPurchase: (BuyerName, TypeName, CashAmount)
