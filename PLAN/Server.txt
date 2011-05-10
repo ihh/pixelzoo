@@ -87,7 +87,7 @@ GET user/login/UserID/Password  -->  204 No Content (success), 404 Not Found (ba
 
 GET user/logout  -->  204 No Content (success)
 
-GET user/status  -->  303 redirect to "GET user/status/UserID"
+GET user/status  -->  internally redirect to "GET user/status/UserID"
 POST user/status  (Status)   -->  201 Created + Status (success), 409 Conflict (username taken)
 
 GET user/status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
