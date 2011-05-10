@@ -3,50 +3,13 @@ Model-View-Controller architecture
 Model
 -----
 
-Local database:
-User table (UserID, UserName, Privileges, Cash)
-User pixel inventory table (UserID, TypeName, PixelCount)
-World metadata table (WorldID, WorldName, WorldOwnerUserID, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorUserID)
-
-S3 bucket (or local filesystem):
-type/TypeName  --> Type
-tool/ToolName  --> Tool
-image/ImageName  --> Image
-world/WorldID/board  --> Board (no grammar)
-world/WorldID/owner  --> Proto (metadata for owner only; no Board or grammar)
-world/WorldID/guest  --> Proto (metadata for guest only; no Board or grammar)
-world/WorldID/lock/LockID/proto  --> Proto (metadata + Board + grammar + tools)
-world/WorldID/lock/LockID/compiled  --> Game (compiled)
-
-Comments:
-
-WorldID, UserID
- These are 48-bit integer primary keys.
-
-BoardName, UserName
- These strings are never used as a key, and are not required to be unique.
-
-TypeName, ToolName, ImageName
- These are strings that must be unique.
-
-Times (StartTime, ExpirationTime, NextAvailableCheckoutTime, MoveTime)
- board-specific, but generally 64-bit integers measuring (approx) nanoseconds of on-time since deployment.
-
-Cash amounts (CashLevel, CashValue) are measured in virtual dollars, at parity with US$.
-
-
-Grammar extensions to support multiplayer:
-
-user-particle (similar to particle, but no sane-vars; instead, 48-bit var field reserved for UserID)
-player-gstate (similar to gstate, but UserID set to player's ID)
-owner-gstate (similar to gstate, but UserID set to World owner's ID)
-
+See sql/zoo.sql.
 
 
 Views
 -----
 
-Resource representations (need a DTD for each of these):
+Resource representations (need a DTD and a Template Toolkit View+template for each of these):
 
 Lock: (LockID, WorldID, LockOwnerUserID, ToolName+, ExpirationTime)
 WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime, OwnershipGoal)
@@ -71,17 +34,6 @@ If player has lock, world/game/ & world/compiled/ are used, view conforms to gam
 
 Cash amounts are measured in virtual dollars, at parity with US$.
 
-
-Roles/privileges
-----------------
-
-Player - POST/DELETE lock, POST turn, POST order
-Artist - POST new image
-Vandal - PUT replacement image
-Smith - POST new tool
-Maker - PUT replacement tool
-Coder - POST new type
-Hacker - PUT replacement type
 
 
 Controllers

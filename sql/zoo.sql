@@ -49,8 +49,8 @@ CREATE TABLE world (
 	board_size INTEGER,   -- size of the board
 	board_time INTEGER,   -- number of "microticks" on the board clock
 	board_xml TEXT,  -- current state of the Board
-	owner_game_xml TEXT,  -- headers for owner's turn
-	guest_game_xml TEXT  -- headers for guest's turn
+	owner_xml TEXT,  -- Game headers for owner's turn
+	guest_xml TEXT  -- Game headers for guest's turn
 	);
 
 CREATE TABLE lock (
