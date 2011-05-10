@@ -45,19 +45,20 @@ int renderThreadFunc( void *voidSdlGame );
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  char *gameFilename, *moveLogFilename, *boardFilename;
+  char *gameFilename, *moveLogFilename, *boardFilename, *revcompiledBoardFilename;
   int userInputAllowed;
   option_t *optList, *thisOpt;
   int64_Microticks totalMicroticks;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
-  optList = GetOptList(argc, argv, "g:t:l:b:dh?");
+  optList = GetOptList(argc, argv, "g:t:l:b:r:dh?");
 
   /* get options */
   gameFilename = NULL;
   moveLogFilename = NULL;
   boardFilename = NULL;
+  revcompiledBoardFilename = NULL;
   totalMicroticks = -1;
   userInputAllowed = 1;
   while (optList != NULL)
@@ -71,6 +72,7 @@ int main( int argc, char *argv[] )
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
+	printf("     -r : specify output XML file for reverse-compiled board (optional).\n");
 	printf("     -t : specify simulation time limit in microticks (optional).\n");
 	printf("     -d : disable user input (optional).\n");
 	printf(" -h, -? : print out command line options.\n\n");
@@ -86,6 +88,9 @@ int main( int argc, char *argv[] )
 
       } else if ('b' == thisOpt->option) {
 	boardFilename = thisOpt->argument;
+
+      } else if ('r' == thisOpt->option) {
+	revcompiledBoardFilename = thisOpt->argument;
 
       } else if ('t' == thisOpt->option) {
 	totalMicroticks = decToSignedLongLong (thisOpt->argument);
@@ -169,7 +174,15 @@ int main( int argc, char *argv[] )
     boardReleaseRandomNumbers (sdlGame->game->board);
 
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
-    writeBoard (sdlGame->game->board, writer);
+    writeBoard (sdlGame->game->board, writer, 0);
+    xmlFreeTextWriter (writer);
+  }
+
+  if (revcompiledBoardFilename) {
+    boardReleaseRandomNumbers (sdlGame->game->board);
+
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename (revcompiledBoardFilename, 0);
+    writeBoard (sdlGame->game->board, writer, 1);
     xmlFreeTextWriter (writer);
   }
 

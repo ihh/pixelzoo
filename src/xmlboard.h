@@ -56,6 +56,8 @@
 #define XMLZOO_QUEUE       "queue"
 #define XMLZOO_DECSTATE    "state"
 #define XMLZOO_HEXSTATE    "hexstate"
+#define XMLZOO_GVARS       "gvars"
+#define XMLZOO_TYPE        "type"
 #define XMLZOO_DELIVER     "deliver"
 #define XMLZOO_DECMESSAGE  "msg"
 #define XMLZOO_HEXMESSAGE  "hexmsg"
@@ -68,6 +70,8 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root);
 Board* newBoardFromXmlFile (void *game, const char* filename);
 Board* newBoardFromXmlString (void *game, const char* string);
 
-void writeBoard (Board* board, xmlTextWriterPtr writer);
+void writeBoard (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
+void writeTypes (Board* board, xmlTextWriterPtr writer);
+void writeGVars (Board* board, State s, xmlTextWriterPtr writer);
 
 #endif /* XMLBOARD_INCLUDED */
