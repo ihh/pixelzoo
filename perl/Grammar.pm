@@ -47,6 +47,8 @@ sub newGrammar {
 # other game data
 	'boardRate' => 240,
 	'boardSize' => 128,
+	'playerID' => 0,
+	'ownerID' => 0,
 
 # XML
 	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire default Game structure (almost certainly not advisable)
@@ -123,7 +125,7 @@ sub addTool {
 }
 
 sub toolArgs {
-    return qw(name size brush state hexstate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
+    return qw(name size brush state hexstate pstate ostate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
 }
 
 sub balloonArgs {
@@ -465,6 +467,8 @@ sub transform_hash {
     return {
 	'gtype' => sub { my ($self, $n) = @_; return ('type' => $self->getType($n)) },
 	'gstate' => sub { my ($self, $n) = @_; return ('hexstate' => $self->getTypeAsHexState($n)) },
+	'pstate' => sub { my ($self, $n) = @_; return ('hexstate' => hexv($self->userState($n,$self->playerID))) },
+	'ostate' => sub { my ($self, $n) = @_; return ('hexstate' => hexv($self->userState($n,$self->ownerID))) },
 	'gvars' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'} || 'hexstate', hexv($self->typeAndVars($n))) },
 	'tmask' => sub { my ($self, $n) = @_; return ('mask', $self->getMask($n,'type')) },
 	'vmask' => sub { my ($self, $n) = @_; $n = forceHash($n); return ($n->{'@tag'} || 'mask', $self->getMask($n->{'type'},$n->{'var'})) },
@@ -586,7 +590,7 @@ sub transform_hash {
 					      'rshift' => $self->getShift($loctype,$varid),
 					      map (('case' => ['state' => $_,
 							       @{$transformed_case{$_}}]),
-						   keys %case_hash),
+						   keys %transformed_case),
 					      defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -955,6 +959,14 @@ sub getShift {
     confess "Var '$var' unknown for type '$type'" unless defined $self->pvbits->{$type}->{$var};
     return $self->pvoffset->{$type}->{$var};
 }
+
+sub userState {
+    my ($self, $type, $userID) = @_;
+    my $shift = $self->getShift($type,"type");
+    my $state = $self->getType($type) << $shift;
+    $state = $state | ($userID & ((1 << $shift) - 1));
+    return $state;
+};
 
 sub hexv {
     my ($val) = @_;

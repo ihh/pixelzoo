@@ -55,17 +55,20 @@
 <!ELEMENT rate (#PCDATA)>
 <!ELEMENT persist EMPTY>
 
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|sane-gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|sane-gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate|gstate|sane-gvars))>
-<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|sane-gvars)*,(mask|tmask)?)>
+<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars))>
+<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|sane-gvars)*,(mask|tmask)?)>
 <!ELEMENT state (#PCDATA)>
 <!ELEMENT hexstate (#PCDATA)>
 <!ELEMENT gstate (#PCDATA)>
+<!ELEMENT gtype (#PCDATA)>
+<!ELEMENT pstate (#PCDATA)>
+<!ELEMENT ostate (#PCDATA)>
 
 <!ELEMENT sane-gvars (type,setvar*)>
 
@@ -84,11 +87,11 @@
 
 <!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
 <!ELEMENT grammar (particle+)>
-<!ELEMENT init (x,y,(state|hexstate|gstate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
 <!ELEMENT seed (#PCDATA)>
 
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate|gstate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
 <!ELEMENT t (#PCDATA)>
 
 <!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
