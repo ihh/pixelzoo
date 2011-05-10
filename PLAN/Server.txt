@@ -13,7 +13,8 @@ type/TypeName  --> Type
 tool/ToolName  --> Tool
 image/ImageName  --> Image
 world/WorldID/board  --> Board (no grammar)
-world/WorldID/game  --> Proto (metadata only; no Board or grammar)
+world/WorldID/owner  --> Proto (metadata for owner only; no Board or grammar)
+world/WorldID/guest  --> Proto (metadata for guest only; no Board or grammar)
 world/WorldID/lock/LockID/proto  --> Proto (metadata + Board + grammar + tools)
 world/WorldID/lock/LockID/compiled  --> Game (compiled)
 
@@ -64,8 +65,8 @@ Comments:
 The appearance of a "lock collection" is maintained as a RESTful illusion; there can only ever be at most one lock per board.
 LockID is just the lock count.
 
-Game data is synthesized dynamically from BucketURLPrefix/world/(game|board)/WorldID
-If player doesn't have a lock, world/game/ & world/board/ are used, and the view conforms to proto.dtd.
+Game data is synthesized dynamically from BucketURLPrefix/world/(owner|guest|board)/WorldID
+If player doesn't have a lock, world/guest/ or world/owner/ is combined with world/board/, and the view conforms to proto.dtd.
 If player has lock, world/game/ & world/compiled/ are used, view conforms to game.dtd.
 
 Cash amounts are measured in virtual dollars, at parity with US$.
@@ -94,7 +95,9 @@ World controller
 
 GET world/WorldID/board  -->    200 Success + Board (HTTP headers: "Last-Modified"=last move) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
 GET world/WorldID/status  -->   200 Success + WorldStatus (HTTP headers: "Last-Modified"=last change of owner) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
-GET world/WorldID/game  -->     200 Success + WorldGame (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
+GET world/WorldID/owner  -->    200 Success + WorldGame (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
+GET world/WorldID/guest  -->    200 Success + WorldGame (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
+GET world/WorldID/view  -->     200 Success + Game (assembles & compiles board without any Tools), 404 Not Found (bad WorldID), 408 Request Timeout
 
 GET world/WorldID/lock  -->  303 See Other --> GET world/WorldID/lock/LockID, 404 Not Found
 POST world/WorldID/lock (ToolName+)  -->  201 Created + Lock (HTTP headers: "Location: world/WorldID//lock/LockID"), 404 Not Found (bad WorldID), 408 Request Timeout (assembly fail), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
