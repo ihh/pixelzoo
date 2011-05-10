@@ -6,7 +6,6 @@ Model
 Local database:
 User table (UserID, UserName, Privileges, Cash)
 User pixel inventory table (UserID, TypeName, PixelCount)
-User tool inventory table (UserID, ToolName)
 World metadata table (WorldID, WorldName, WorldOwnerUserID, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorUserID)
 
 S3 bucket (or local filesystem):
