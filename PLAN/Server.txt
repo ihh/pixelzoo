@@ -23,17 +23,6 @@ Image: SVG
 WorldGame = Game without Board
 Tool, Game, Board, Proto, etc. as per current definitions.
 
-Comments:
-
-The appearance of a "lock collection" is maintained as a RESTful illusion; there can only ever be at most one lock per board.
-LockID is just the lock count.
-
-Game data is synthesized dynamically from BucketURLPrefix/world/(owner|guest|board)/WorldID
-If player doesn't have a lock, world/guest/ or world/owner/ is combined with world/board/, and the view conforms to proto.dtd.
-If player has lock, world/game/ & world/compiled/ are used, view conforms to game.dtd.
-
-Cash amounts are measured in virtual dollars, at parity with US$.
-
 
 
 Controllers
