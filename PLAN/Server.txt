@@ -10,9 +10,9 @@ User tool inventory table (UserID, ToolName)
 World metadata table (WorldID, WorldName, WorldOwnerUserID, BoardSize, BoardTime, BoardLockExpiryTime, BoardLockCount, BoardLockCreatorUserID)
 
 S3 bucket (or local filesystem):
-type/TypeName  --> Particle
+type/TypeName  --> Type
 tool/ToolName  --> Tool
-image/ImageName  --> SVG
+image/ImageName  --> Image
 world/WorldID/board  --> Board (no grammar)
 world/WorldID/game  --> Proto (metadata only; no Board or grammar)
 world/WorldID/lock/LockID/proto  --> Proto (metadata + Board + grammar + tools)
@@ -84,11 +84,14 @@ Coder - POST new type
 Hacker - PUT replacement type
 
 
-Controller
-----------
+Controllers
+-----------
 
 RESTful HTTP operations & responses.
 All can return 401 Unauthorized for authentication (incl. challenge URL)
+
+World controller
+----------------
 
 GET world/WorldID/board  -->    200 Success + Board (HTTP headers: "Last-Modified"=last move) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
 GET world/WorldID/status  -->   200 Success + WorldStatus (HTTP headers: "Last-Modified"=last change of owner) (proxies S3 bucket/filesystem), 404 Not Found (bad WorldID)
@@ -105,21 +108,29 @@ GET world/WorldID/lock/LockID/compiled  -->   200 Success + Game (HTTP headers: 
 
 POST world/WorldID/turn (Turn) -->  204 No Content (success), 410 Gone (lock expired), 423 Locked (not your lock), 403 Forbidden (illegal turn), 402 Payment Required, 413 Request Entity Too Large
 
-GET type/TypeName  -->  200 Success + Type (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
-PUT type/TypeName (Type)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
-POST type (Type)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT type/TypeName" and return a 303 to "GET type/TypeName")
 
-GET tool/ToolName  -->  200 Success + Type (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ToolName)
-PUT tool/ToolName (Tool)  -->  204 No Content (success), 403 Forbidden (no smith/maker privileges), 402 Payment Required, 413 Request Entity Too Large
-POST tool (Tool)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT tool/ToolName" and return a 303 to "GET tool/ToolName")
+Store controller
+----------------
 
-GET image/ImageName  -->  200 Success + Image (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
-PUT image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
-POST image (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT image/ImageName" and return a 303 to "GET image/ImageName")
+GET store/type/TypeName  -->  200 Success + Type (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad TypeName)
+PUT store/type/TypeName (Type)  -->  204 No Content (success), 403 Forbidden (no coder/hacker privileges), 402 Payment Required, 413 Request Entity Too Large
+POST store/type (Type)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT store/type/TypeName" and return a 303 to "GET store/type/TypeName")
 
-GET status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
+GET store/tool/ToolName  -->  200 Success + Tool (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ToolName)
+PUT store/tool/ToolName (Tool)  -->  204 No Content (success), 403 Forbidden (no smith/maker privileges), 402 Payment Required, 413 Request Entity Too Large
+POST store/tool (Tool)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT store/tool/ToolName" and return a 303 to "GET store/tool/ToolName")
 
-GET price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
+GET store/image/ImageName  -->  200 Success + Image (HTTP headers: "Last-Modified") (proxies S3 bucket/filesystem), 404 Not Found (bad ImageName)
+PUT store/image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
+POST store/image (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT store/image/ImageName" and return a 303 to "GET store/image/ImageName")
 
-GET order/UserID  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
-POST order/UserID  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
+GET store/price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
+
+GET store/order  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
+POST store/order  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
+
+
+User controller
+---------------
+
+GET user/UserID/status  -->  200 Success + Status, 404 Not Found (bad UserID)
