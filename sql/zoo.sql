@@ -27,19 +27,22 @@ CREATE TABLE particle_dep (  -- Particle dependencies
 CREATE TABLE user (
 	id INTEGER PRIMARY KEY,   -- the UserID
 	name VARCHAR(15),   -- same max length as a Twitter handle
-	cash DECIMAL,  -- user's current cash level
-	is_artist BOOLEAN,  -- user can upload new images
-	is_vandal BOOLEAN,  -- user can replace existing images
-	is_smith BOOLEAN,  -- user can upload new tools
-	is_maker BOOLEAN,  -- user can replace existing tools
-	is_coder BOOLEAN,  -- user can upload new types
-	is_hacker BOOLEAN  -- user can replace existing types
+        password TEXT,
+	cash DECIMAL  -- user's current cash level
+--- Permissions: commented out for now, until I figure out the Catalyst roles.
+---	is_artist BOOLEAN,  -- user can upload new images
+---	is_vandal BOOLEAN,  -- user can replace existing images
+---	is_smith BOOLEAN,  -- user can upload new tools
+---	is_maker BOOLEAN,  -- user can replace existing tools
+---	is_coder BOOLEAN,  -- user can upload new types
+---	is_hacker BOOLEAN  -- user can replace existing types
 	);
 
 CREATE TABLE inventory (
 	user_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the UserID of the particle owner
 	particle_name TEXT REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the particle type
-	amount INTEGER  -- the number of particles owned
+	amount INTEGER,  -- the number of particles owned
+	PRIMARY KEY (user_id, particle_name)
 	);
 
 CREATE TABLE world (
@@ -51,7 +54,7 @@ CREATE TABLE world (
 	board_xml TEXT,  -- current state of the Board
 	owner_xml TEXT,  -- Game headers for owner's turn
 	guest_xml TEXT,  -- Game headers for guest's turn
-	voyeur_xml TEXT  -- Game headers for voyeur's turn
+	voyeur_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
 	);
 
 CREATE TABLE lock (

@@ -9,14 +9,14 @@ See sql/zoo.sql.
 Views
 -----
 
-Resource representations (need a DTD and a Template Toolkit View+template for each of these):
+Resource representations (need a Template Toolkit View/template, and ideally a DTD, for each of these):
 
 Lock: (LockID, WorldID, LockOwnerUserID, ToolName+, ExpirationTime)
-WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime, OwnershipGoal)
-Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, UpdatedWorldOwnerUserID)
-Type: (TypeDependency*, TypeImageName, Particle)
+WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime)
+Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, OwnershipWinFlag)
+Type: (TypeName, TypeDependency*, TypeImageName, Particle)
 Price: (TypeName, CashPerPixel)
-Status: (UserID, UserName, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID)
+Status: (UserID?, UserName, Password?, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID)
 PixelPurchaseOrder: ((UserID, OrderID, TypeName, CashAmount)+)
 Image: SVG
 
@@ -34,11 +34,15 @@ All can return 401 Unauthorized for authentication (incl. challenge URL)
 World controller
 ----------------
 
+GET world  -->    200 Success + WorldStatus list
+
 GET world/WorldID/board  -->    200 Success + Board (HTTP headers: "Last-Modified"=last move), 404 Not Found (bad WorldID)
 GET world/WorldID/status  -->   200 Success + WorldStatus (HTTP headers: "Last-Modified"=last change of owner), 404 Not Found (bad WorldID)
 GET world/WorldID/owner  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
 GET world/WorldID/guest  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
-GET world/WorldID/view  -->     200 Success + Game (assembles & compiles board without any Tools), 404 Not Found (bad WorldID), 408 Request Timeout
+
+GET world/WorldID/view  -->            200 Success + Proto (assembles board without any Tools), 404 Not Found (bad WorldID), 408 Request Timeout
+GET world/WorldID/view/compiled  -->   200 Success + Game (assembles & compiles board without any Tools), 404 Not Found (bad WorldID), 408 Request Timeout
 
 GET world/WorldID/lock  -->  303 See Other --> GET world/WorldID/lock/LockID, 404 Not Found
 POST world/WorldID/lock (ToolName+)  -->  201 Created + Lock (HTTP headers: "Location: world/WorldID//lock/LockID"), 404 Not Found (bad WorldID), 408 Request Timeout (assembly fail), 423 Locked (someone else's lock), 409 Conflict (too soon since last lock)
@@ -46,8 +50,11 @@ POST world/WorldID/lock (ToolName+)  -->  201 Created + Lock (HTTP headers: "Loc
 GET world/WorldID/lock/LockID  -->  200 Success + Lock (HTTP headers: "Expires"=expiration time, "Last-Modified"=creation time), 404 Not Found
 DELETE world/WorldID/lock/LockID  -->  204 No Content (success), 404 Not Found (bad WorldID or LockID), 410 Gone (lock expired)
 
-GET world/WorldID/lock/LockID/proto  -->   200 Success + Proto (HTTP headers: "Last-Modified"=lock creation time), 404 Not Found (bad WorldID or LockID)
-GET world/WorldID/lock/LockID/compiled  -->   200 Success + Game (HTTP headers: same as proto) (compiles, caches results), 404 Not Found (bad WorldID or LockID), 408 Request Timeout (failed to compile)
+GET world/WorldID/lock/LockID/view  -->            200 Success + Proto (HTTP headers: "Last-Modified"=lock creation time), 404 Not Found (bad WorldID or LockID)
+GET world/WorldID/lock/LockID/view/compiled  -->   200 Success + Game (HTTP headers: same as proto) (compiles, caches results), 404 Not Found (bad WorldID or LockID), 408 Request Timeout (failed to compile)
+
+GET world/WorldID/lock/LockID/turn  -->       403 Forbidden (currently unimplemented; eventually, shows current turn, if uploaded)
+GET world/WorldID/lock/LockID/turn/valid  --> 403 Forbidden (currently unimplemented; eventually, validates current turn, if uploaded)
 
 POST world/WorldID/turn (Turn) -->  204 No Content (success), 410 Gone (lock expired), 423 Locked (not your lock), 403 Forbidden (illegal turn), 402 Payment Required, 413 Request Entity Too Large
 
@@ -69,11 +76,19 @@ POST store/image (Image)  -->  403 Forbidden (currently unimplemented; eventuall
 
 GET store/price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
 
-GET store/order  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
-POST store/order  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
+GET store/order/type  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
+POST store/order/type  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
 
 
 User controller
 ---------------
 
-GET user/UserID/status  -->  200 Success + Status, 404 Not Found (bad UserID)
+GET user/login/UserID/Password  -->  204 No Content (success), 404 Not Found (bad UserID), 403 Forbidden (wrong password)
+
+GET user/logout  -->  204 No Content (success)
+
+GET user/status  -->  303 redirect to "GET user/status/UserID"
+POST user/status  (Status)   -->  201 Created + Status (success), 409 Conflict (username taken)
+
+GET user/status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
+PUT user/status/UserID  (Status)  -->  200 Success + Status
