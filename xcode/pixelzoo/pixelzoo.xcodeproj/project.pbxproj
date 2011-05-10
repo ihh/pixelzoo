@@ -12,6 +12,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2800A66012CBFF99002BC1FC /* pixelzooView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2800A65F12CBFF99002BC1FC /* pixelzooView.m */; };
+		280CB3CE1379CD9300AD247C /* vars.c in Sources */ = {isa = PBXBuildFile; fileRef = 280CB3CC1379CD9300AD247C /* vars.c */; };
 		280F1C9A12CF1A4A00C8FA38 /* goal.c in Sources */ = {isa = PBXBuildFile; fileRef = 280F1C9812CF1A4A00C8FA38 /* goal.c */; };
 		284466D712E77588002D8581 /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 284466D512E77588002D8581 /* bintree.c */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
@@ -54,6 +55,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2800A65E12CBFF99002BC1FC /* pixelzooView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooView.h; sourceTree = "<group>"; };
 		2800A65F12CBFF99002BC1FC /* pixelzooView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooView.m; sourceTree = "<group>"; };
+		280CB3CC1379CD9300AD247C /* vars.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vars.c; path = ../../src/vars.c; sourceTree = SOURCE_ROOT; };
+		280CB3CD1379CD9300AD247C /* vars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vars.h; path = ../../src/vars.h; sourceTree = SOURCE_ROOT; };
 		280F1C9812CF1A4A00C8FA38 /* goal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = goal.c; path = ../../src/goal.c; sourceTree = SOURCE_ROOT; };
 		280F1C9912CF1A4A00C8FA38 /* goal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = goal.h; path = ../../src/goal.h; sourceTree = SOURCE_ROOT; };
 		284466D512E77588002D8581 /* bintree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bintree.c; path = ../../src/bintree.c; sourceTree = SOURCE_ROOT; };
@@ -194,6 +197,8 @@
 				28BDF9C812CBE53800173B45 /* tool.h */,
 				28BDF9C912CBE53800173B45 /* util.c */,
 				28BDF9CA12CBE53800173B45 /* util.h */,
+				280CB3CC1379CD9300AD247C /* vars.c */,
+				280CB3CD1379CD9300AD247C /* vars.h */,
 				28BDF9CB12CBE53800173B45 /* vector.c */,
 				28BDF9CC12CBE53800173B45 /* vector.h */,
 				28BDF9CD12CBE53800173B45 /* xmlboard.c */,
@@ -367,6 +372,7 @@
 				28FF1F811372115600EF36C2 /* mersenne.c in Sources */,
 				28F5673D1373639300651353 /* move.c in Sources */,
 				28EE91671374C078001CB8E8 /* xmlmove.c in Sources */,
+				280CB3CE1379CD9300AD247C /* vars.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
