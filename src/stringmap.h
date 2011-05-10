@@ -5,6 +5,10 @@
 #include "list.h"
 #include "vector.h"
 
+/* Strings and string containers.
+   A "string" object is just a C string of type char*.
+*/
+
 /* container functions for strings */
 void* StringNew(char *a);
 void* StringCopy(void* a);

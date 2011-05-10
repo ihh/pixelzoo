@@ -5,6 +5,7 @@
 #include "color.h"
 #include "util.h"
 #include "statemap.h"
+#include "list.h"
 
 /* number of ColorRule's per Particle */
 #define NumColorRules 4
@@ -39,6 +40,7 @@ typedef struct Particle {
   /* Meta-info */
   int count;  /* number of instances of this Particle on the board */
   int64_Microhurtz asyncFiringRate, syncFiringRate;  /* if async then (asyncFiringRate, syncFiringRate) = (rate, 0)  else (asyncFiringRate, syncFiringRate) = (0, rate) */
+  List* vars;  /* list of VarsDescriptor's: pre-compilation variable field names and sizes (purely decorative, used for debugging and encoding) */
 
 } Particle;
 

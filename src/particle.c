@@ -2,14 +2,16 @@
 #include <string.h>
 #include <stdio.h>
 #include "particle.h"
+#include "stringmap.h"
+#include "vars.h"
 
 Particle* newParticle (const char* name) {
   Particle* p;
   int c;
   p = SafeMalloc (sizeof (Particle));
   p->type = 0;
-  p->name = SafeMalloc ((strlen (name) + 1) * sizeof(char));
-  strcpy (p->name, (char*) name);
+  p->name = StringCopy ((void*) name);
+  p->vars = newList (AbortCopyFunction, deleteVarsDescriptor, NullPrintFunction);
   for (c = 0; c < NumColorRules; ++c) {
     p->colorRule[c].mask = 0;
     p->colorRule[c].offset = 0;
@@ -30,7 +32,8 @@ void deleteParticle (Particle* p) {
     deleteRBTree (p->dispatch);
   if (p->rule)
     deleteParticleRule (p->rule);
-  SafeFree(p->name);
+  deleteList (p->vars);
+  StringDelete(p->name);
   SafeFree(p);
 }
 

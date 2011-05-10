@@ -88,7 +88,7 @@
 
 <!ELEMENT subrule (name,rule)>
 
-<!ELEMENT particle (name,(type|hextype),colrule*,sync?,rate?,rule,dispatch*)>
+<!ELEMENT particle (name,(type|hextype),vars?,colrule*,sync?,rate?,rule,dispatch*)>
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
@@ -99,6 +99,9 @@
 <!ELEMENT hexmul (#PCDATA)>
 <!ELEMENT inc (#PCDATA)>
 <!ELEMENT hexinc (#PCDATA)>
+
+<!ELEMENT vars (varsize*)>
+<!ELEMENT varsize (name,size)>
 
 <!ELEMENT rule (switch|modify|deliver|random|overload|goal|goto)>
 

@@ -96,7 +96,7 @@
 
 <!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
 
-<!ELEMENT sane-vars (type|varsize*)>
+<!ELEMENT sane-vars (type?,varsize*)>
 <!ELEMENT varsize (name,size)>
 
 <!ELEMENT sane-hue (var?,mul?,add?)>

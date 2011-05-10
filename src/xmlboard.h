@@ -17,6 +17,8 @@
 #define XMLZOO_PHASE       "phase"
 #define XMLZOO_DECTYPE     "type"
 #define XMLZOO_HEXTYPE     "hextype"
+#define XMLZOO_VARS        "vars"
+#define XMLZOO_VARSIZE     "varsize"
 #define XMLZOO_READONLY    "readonly"
 #define XMLZOO_INDEX       "index"
 #define XMLZOO_SUBRULE     "subrule"

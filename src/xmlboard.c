@@ -6,6 +6,7 @@
 #include "xmlgoal.h"
 #include "xmlmove.h"
 #include "game.h"
+#include "vars.h"
 
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (void *game, xmlNode* node);
@@ -93,8 +94,9 @@ Board* newBoardFromXmlString (void *game, const char* string) {
 Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   Particle* p;
   Message message;
-  int nColorRules, readOnlyIndex;
-  xmlNode *curNode, *syncNode;
+  VarsDescriptor* vd;
+  int nColorRules, readOnlyIndex, varOffset, varWidth;
+  xmlNode *curNode, *syncNode, *varsNode;
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
 
   if ((syncNode = CHILD(node,SYNC))) {
@@ -114,9 +116,9 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
   readOnlyIndex = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,READONLY)) {
-      readOnlyIndex = OPTCHILDINT (node, READONLY, readOnlyIndex + 1);
+      readOnlyIndex = OPTCHILDINT (curNode, INDEX, readOnlyIndex + 1);
       Assert (readOnlyIndex >= 0 && readOnlyIndex < ReadOnlyStates, "newParticleFromXmlNode: read-only state index out of range");
-      p->readOnly[readOnlyIndex] = OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE));
+      p->readOnly[readOnlyIndex] = OPTCHILDINT(curNode,DECSTATE,CHILDHEX(curNode,HEXSTATE));
     }
 
   p->rate = FloatToIntMillionths (OPTCHILDFLOAT(node,RATE,1.));
@@ -128,6 +130,19 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode);
     }
+
+  varsNode = CHILD (node, VARS);
+  if (varsNode) {
+    varOffset = 0;
+    for (curNode = varsNode->children; curNode; curNode = curNode->next)
+      if (MATCHES(curNode,VARSIZE)) {
+	varWidth = CHILDINT (curNode, SIZE);
+	vd = newVarsDescriptor ((const char*) CHILDSTRING (curNode, NAME), varOffset, varWidth);
+	varOffset += varWidth;
+	Assert (varOffset <= 48 && varWidth > 0, "newParticleFromXmlNode: bad vars descriptor");
+	ListAppend (p->vars, vd);
+      }
+  }
 
   return p;
 }
@@ -278,6 +293,8 @@ void writeBoard (Board* board, xmlTextWriterPtr writer) {
   int x, y, i;
   State t;
   char *rngState;
+  ListNode *node;
+  VarsDescriptor *vd;
 
   Assert (board->rngReleased, "writeBoard: random number generator not released. You need to call boardReleaseRandomNumbers");
 
@@ -295,6 +312,17 @@ void writeBoard (Board* board, xmlTextWriterPtr writer) {
       xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_PARTICLE);   /* begin particle */
       xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_NAME, "%s", board->byType[t]->name);
       xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXTYPE, "%hx", board->byType[t]->type);
+      if (!ListEmpty (board->byType[t]->vars)) {
+	xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_VARS);   /* begin vars */
+	for (node = board->byType[t]->vars->head; node; node = node->next) {
+	  vd = (VarsDescriptor*) node->value;
+	  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_VARSIZE);   /* begin varsize */
+	  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_NAME, "%s", vd->name);
+	  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SIZE, "%d", vd->width);
+	  xmlTextWriterFullEndElement (writer);  /* end varsize */
+	}
+	xmlTextWriterFullEndElement (writer);  /* end vars */
+      }
       xmlTextWriterFullEndElement (writer);  /* end particle */
     }
   xmlTextWriterFullEndElement (writer);  /* end grammar */
