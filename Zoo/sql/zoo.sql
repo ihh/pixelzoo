@@ -3,19 +3,19 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE image (
 	name varchar(255) PRIMARY KEY,  -- the name of this image
-	image_xml TEXT  -- SVG image XML
+	xml TEXT  -- SVG image XML
 	);
 
 CREATE TABLE particle (
 	name varchar(255) PRIMARY KEY,  -- the name of this Particle
 	image_name varchar(255) REFERENCES image(name) ON DELETE SET NULL ON UPDATE CASCADE,
 	cost DECIMAL,
-	particle_xml TEXT  -- Particle XML
+	xml TEXT  -- Particle XML
 	);
 
 CREATE TABLE tool (
 	name varchar(255) PRIMARY KEY,  -- the name of this Tool
-	tool_xml TEXT  -- Tool XML
+	xml TEXT  -- Tool XML
 	);
 
 CREATE TABLE particle_dep (  -- Particle dependencies
@@ -26,16 +26,27 @@ CREATE TABLE particle_dep (  -- Particle dependencies
 
 CREATE TABLE user (
 	id INTEGER PRIMARY KEY,   -- the UserID
-	name VARCHAR(15),   -- same max length as a Twitter handle
+	username VARCHAR(15),   -- same max length as a Twitter handle
         password TEXT,
 	cash DECIMAL  -- user's current cash level
---- Permissions: commented out for now, until I figure out the Catalyst roles.
----	is_artist BOOLEAN,  -- user can upload new images
----	is_vandal BOOLEAN,  -- user can replace existing images
----	is_smith BOOLEAN,  -- user can upload new tools
----	is_maker BOOLEAN,  -- user can replace existing tools
----	is_coder BOOLEAN,  -- user can upload new types
----	is_hacker BOOLEAN  -- user can replace existing types
+	);
+
+CREATE TABLE role (
+        id   INTEGER PRIMARY KEY,
+        name TEXT
+	);
+
+insert into role values (1, 'artist');  -- user can upload new images
+insert into role values (2, 'vandal');  -- user can replace existing images
+insert into role values (3, 'smith');  -- user can upload new tools
+insert into role values (4, 'maker');  -- user can replace existing tools
+insert into role values (5, 'coder');  -- user can upload new types
+insert into role values (6, 'hacker');  -- user can replace existing types
+
+CREATE TABLE user_role (
+        user_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        role_id INTEGER REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        PRIMARY KEY (user_id, role_id)
 	);
 
 CREATE TABLE inventory (
@@ -52,9 +63,9 @@ CREATE TABLE world (
 	board_size INTEGER,   -- size of the board
 	board_time INTEGER,   -- number of "microticks" on the board clock
 	board_xml TEXT,  -- current state of the Board
-	owner_xml TEXT,  -- Game headers for owner's turn
-	guest_xml TEXT,  -- Game headers for guest's turn
-	voyeur_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
+	owner_game_xml TEXT,  -- Game headers for owner's turn
+	guest_game_xml TEXT,  -- Game headers for guest's turn
+	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
 	);
 
 CREATE TABLE lock (
