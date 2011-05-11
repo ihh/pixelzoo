@@ -67,6 +67,7 @@ sub board :Chained('world') :PathPart('board') :Args(0) :ActionClass('REST') { }
 sub board_GET {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/board.tt2';
+    $c->response->headers->last_modified($c->stash->{world}->last_modified_time);
 }
 
 
@@ -79,6 +80,7 @@ sub status :Chained('world') :PathPart('status') :Args(0) :ActionClass('REST') {
 sub status_GET {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/status.tt2';
+    $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
 }
 
 

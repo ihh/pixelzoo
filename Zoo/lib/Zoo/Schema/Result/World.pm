@@ -11,7 +11,7 @@ use MooseX::NonMoose;
 use namespace::autoclean;
 extends 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -50,6 +50,16 @@ __PACKAGE__->table("world");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 last_modified_time
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 last_stolen_time
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 board_xml
 
   data_type: 'text'
@@ -82,6 +92,10 @@ __PACKAGE__->add_columns(
   "board_size",
   { data_type => "integer", is_nullable => 1 },
   "board_time",
+  { data_type => "integer", is_nullable => 1 },
+  "last_modified_time",
+  { data_type => "integer", is_nullable => 1 },
+  "last_stolen_time",
   { data_type => "integer", is_nullable => 1 },
   "board_xml",
   { data_type => "text", is_nullable => 1 },
@@ -132,8 +146,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-10 18:44:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d935JXWYZihs8T+WdtARTg
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:59:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FTMn8O3LbDl6hU+LeZZhMA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

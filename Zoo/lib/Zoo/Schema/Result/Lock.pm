@@ -11,7 +11,7 @@ use MooseX::NonMoose;
 use namespace::autoclean;
 extends 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
+__PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
@@ -41,9 +41,14 @@ __PACKAGE__->table("lock");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 create_time
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 expiry_time
 
-  data_type: 'text'
+  data_type: 'integer'
   is_nullable: 1
 
 =head2 proto_xml
@@ -70,8 +75,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "owner_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "create_time",
+  { data_type => "integer", is_nullable => 1 },
   "expiry_time",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "proto_xml",
   { data_type => "text", is_nullable => 1 },
   "compiled_xml",
@@ -124,8 +131,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-10 18:44:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iOrWt9wnNhghheA1C1Km/g
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TbLRm4cM0A5uAlZCmQgs3A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

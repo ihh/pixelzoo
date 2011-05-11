@@ -64,6 +64,8 @@ CREATE TABLE world (
 	owner_id INTEGER REFERENCES user(id) ON DELETE SET NULL ON UPDATE SET NULL,   -- the UserID of the world owner
 	board_size INTEGER,   -- size of the board
 	board_time INTEGER,   -- number of "microticks" on the board clock
+	last_modified_time INTEGER,  -- time board was last modified (UNIX timestamp)
+	last_stolen_time INTEGER,  -- time world's ownership was last changed (UNIX timestamp)
 	board_xml TEXT,  -- current state of the Board
 	owner_game_xml TEXT,  -- Game headers for owner's turn
 	guest_game_xml TEXT,  -- Game headers for guest's turn
@@ -74,7 +76,8 @@ CREATE TABLE lock (
 	lock_id INTEGER PRIMARY KEY,   -- the LockID
 	world_id INTEGER REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the WorldID
 	owner_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the UserID of the lock owner
-	expiry_time TEXT,  -- lock expiration time
+	create_time INTEGER,  -- lock creation time (UNIX timestamp)
+	expiry_time INTEGER,  -- lock expiration time (UNIX timestamp)
 	proto_xml TEXT,  -- temporary assembled board
 	compiled_xml TEXT,  -- temporary compiled board
 	turn_xml TEXT  -- the lock owner's turn
