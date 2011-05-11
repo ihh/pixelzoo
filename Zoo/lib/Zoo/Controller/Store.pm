@@ -28,6 +28,13 @@ sub index :Path :Args(0) {
 }
 
 
+=head2 end
+
+=cut
+
+sub end : ActionClass('RenderView') { }
+
+
 =head1 AUTHOR
 
 Ian Holmes

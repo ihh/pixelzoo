@@ -31,6 +31,8 @@ CREATE TABLE user (
 	cash DECIMAL  -- user's current cash level
 	);
 
+insert into user values (1, 'yam', 'pass', 100);
+
 CREATE TABLE role (
         id   INTEGER PRIMARY KEY,
         name TEXT
@@ -67,6 +69,8 @@ CREATE TABLE world (
 	guest_game_xml TEXT,  -- Game headers for guest's turn
 	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
 	);
+
+insert into world values (1, 'earth', 1, 128, 0, '<board></board>', '<!-- owner -->', '<!-- guest -->', '<!-- voyeur -->');
 
 CREATE TABLE lock (
 	lock_id INTEGER PRIMARY KEY,   -- the LockID
