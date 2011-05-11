@@ -35,8 +35,6 @@
 #define XMLZOO_PROB        "prob"
 #define XMLZOO_PASS        "pass"
 #define XMLZOO_FAIL        "fail"
-#define XMLZOO_SLOW        "slow"
-#define XMLZOO_FAST        "fast"
 #define XMLZOO_POS         "pos"
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"

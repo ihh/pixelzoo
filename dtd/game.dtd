@@ -1,4 +1,7 @@
-<!ELEMENT game (board,rate,tool+,exit,goal)>
+<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
+
+<!ELEMENT trigger (goal,(type|hextype),pos+)>
+<!ELEMENT protect (x,y)>
 
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
