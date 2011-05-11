@@ -2,7 +2,7 @@ package Zoo::Controller::World;
 use Moose;
 use namespace::autoclean;
 
-BEGIN {extends 'Catalyst::Controller'; }
+BEGIN { extends 'Catalyst::Controller::REST' }
 
 =head1 NAME
 
