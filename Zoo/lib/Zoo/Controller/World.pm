@@ -67,7 +67,6 @@ sub board :Chained('world') :PathPart('board') :Args(0) :ActionClass('REST') { }
 sub board_GET {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/board.tt2';
-    $c->stash->{board_xml} = $c->stash->{world}->board_xml;
 }
 
 

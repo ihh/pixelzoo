@@ -1,1 +1,1 @@
-[% board_xml %]
+[% world.board_xml %]
