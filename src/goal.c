@@ -98,13 +98,14 @@ Goal* newNotGoal (Goal* l) {
   return g;
 }
 
-Goal* newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
+Goal* newEntropyGoal (StateSet* allowedStateSet, State allowedStateMask, State entropyStateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy) {
   Goal* g;
-  g = newGoal (EntropyGoal, 2, 3);
-  g->tree = (RBTree*) typeSet;
-  g->intData[0] = stateMask;
-  g->intData[1] = minCount;
-  g->intData[2] = maxCount;
+  g = newGoal (EntropyGoal, 2, 4);
+  g->tree = (RBTree*) allowedStateSet;
+  g->intData[0] = allowedStateMask;
+  g->intData[1] = entropyStateMask;
+  g->intData[2] = minCount;
+  g->intData[3] = maxCount;
   g->dblData[0] = minEntropy;
   g->dblData[1] = maxEntropy;
   return g;
@@ -532,27 +533,28 @@ int testEntropyGoal (Goal* goal, Board *board) {
   int x, y, population;
   Int64 minPopulation, maxPopulation;
   double prob, entropy, minEntropy, maxEntropy;
-  StateSet *allowedTypes;
+  StateSet *allowedStates;
   StateMap *stateCount;
   StateMapNode *stateCountNode;
-  State state, type, stateMask, maskedState;  /* NB we store type as a State, because allowedTypes is a StateSet */
+  State state, allowedStateMask, entropyStateMask, maskedState;
   Stack *stateCountEnum;
-  stateMask = goal->intData[0];
-  minPopulation = goal->intData[1];
-  maxPopulation = goal->intData[2];
+  allowedStateMask = goal->intData[0];
+  entropyStateMask = goal->intData[1];
+  minPopulation = goal->intData[2];
+  maxPopulation = goal->intData[3];
   minEntropy = goal->dblData[0];
   maxEntropy = goal->dblData[1];
-  allowedTypes = (StateSet*) goal->tree;
-  /* count state types */
+  allowedStates = (StateSet*) goal->tree;
+  /* count states */
   stateCount = newStateMap(IntCopy,IntDelete,IntPrint);
   population = 0;
   parentArea = getGoalArea (goal);
   for (x = 0; x < board->size; ++x)
     for (y = 0; y < board->size; ++y) {
       state = readBoardStateUnguarded(board,x,y);
-      type = StateType (state);
-      if (StateMapFind (allowedTypes, type)) {
-	maskedState = state & stateMask;
+      maskedState = state & allowedStateMask;
+      if (StateMapFind (allowedStates, maskedState)) {
+	maskedState = state & entropyStateMask;
 	stateCountNode = StateMapFind (stateCount, maskedState);
 	if (stateCountNode)
 	  ++*(int*)stateCountNode->value;

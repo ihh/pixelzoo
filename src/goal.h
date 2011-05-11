@@ -19,8 +19,8 @@ enum GoalType { AreaGoal,        /* subgoal (l) is met for given constant area
 				    Goal is met if subgoal (l) is met by N enclosures satisfying (intData[2] <= enclosureArea <= intData[3]),
 				    where (intData[4] <= N <= intData[5]) */
 
-		EntropyGoal,     /* for every state S in parent area, if (S & TypeMask) is in ((StateSet*)tree), then add (S & intData[0]) to set.
-				    Goal is met if states in set satisfy (intData[1] <= population <= intData[2]) and (dblData[0] <= entropy in bits <= dblData[1]) */
+		EntropyGoal,     /* for every state S in parent area, if (S & intData[0]) is in ((StateSet*)tree), then add (S & intData[1]) to set.
+				    Goal is met if states in set satisfy (intData[2] <= population <= intData[3]) and (dblData[0] <= entropy in bits <= dblData[1]) */
 
 		AndGoal,         /* both subgoals (l & r) are met simultaneously within parent area. Both l & r are guaranteed to be evaluated */
 		OrGoal,          /* at least one of the two subgoals (l & r) is met within parent area. Both l & r are guaranteed to be evaluated */
@@ -83,7 +83,7 @@ Goal *newCachedGoal (Goal *l, int reps);
 Goal *newAndGoal (Goal *l, Goal *r, int lazy);
 Goal *newOrGoal (Goal *l, Goal *r, int lazy);
 Goal *newNotGoal (Goal *g);
-Goal *newEntropyGoal (StateSet* typeSet, State stateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
+Goal *newEntropyGoal (StateSet* allowedStateSet, State allowedStateMask, State entropyStateMask, unsigned long minCount, unsigned long maxCount, double minEntropy, double maxEntropy);
 Goal *newRepeatGoal (Goal *subGoal, unsigned long minReps);
 Goal *newBoardTimeGoal (double minUpdatesPerCell, double maxUpdatesPerCell);
 

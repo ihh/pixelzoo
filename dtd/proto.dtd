@@ -1,9 +1,12 @@
-<!ELEMENT game (board,rate,tool+,exit,goal)>
+<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
+
+<!ELEMENT trigger (goal,(type|hextype),pos+)>
+<!ELEMENT protect (x,y)>
 
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
 <!ELEMENT cage (wall+,goal,count?,points?)>
-<!ELEMENT population ((type|hextype|gtype)+,count?,entropy?)>
+<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype)+,mask?,count?,entropy?)>
 <!ELEMENT repeat (reps,goal)>
 <!ELEMENT cached (reps?,goal)>
 <!ELEMENT and (lazy?,cache?,goal+)>
@@ -27,6 +30,7 @@
 <!ELEMENT y (#PCDATA)>
 
 <!ELEMENT points (min?,max?)>
+<!ELEMENT allowmask (#PCDATA)>
 <!ELEMENT count (min?,max?)>
 <!ELEMENT entropy (min?,max?)>
 

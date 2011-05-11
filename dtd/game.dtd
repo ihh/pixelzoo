@@ -6,7 +6,7 @@
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
 <!ELEMENT cage (wall+,goal,count?,points?)>
-<!ELEMENT population ((type|hextype)+,count?,entropy?)>
+<!ELEMENT population (allowmask?,(state|hexstate|type|hextype)+,mask?,count?,entropy?)>
 <!ELEMENT repeat (reps,goal)>
 <!ELEMENT cached (reps?,goal)>
 <!ELEMENT and (lazy?,cache?,goal+)>
@@ -30,6 +30,7 @@
 <!ELEMENT y (#PCDATA)>
 
 <!ELEMENT points (min?,max?)>
+<!ELEMENT allowmask (#PCDATA)>
 <!ELEMENT count (min?,max?)>
 <!ELEMENT entropy (min?,max?)>
 

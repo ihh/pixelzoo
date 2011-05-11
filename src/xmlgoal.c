@@ -13,7 +13,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
   const char *enumText;
   xmlNode *goalNode, *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
   XYSet *area;
-  StateSet *wallSet, *typeSet;
+  StateSet *wallSet, *popSet;
   int n, lazy, cached, enumState;
   Tool *tool;
 
@@ -54,17 +54,22 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 			      subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
 
   } else if (MATCHES (goalNode, POPULATION_GOAL)) {
-    typeSet = newStateSet();
+    popSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
-      if (MATCHES (node, DECTYPE_GPARAM))
-	(void) StateSetInsert (typeSet, decToSignedLongLong ((const char*) getNodeContent(node)));
+      if (MATCHES (node, DECSTATE_GPARAM))
+	(void) StateSetInsert (popSet, decToSignedLongLong ((const char*) getNodeContent(node)));
+      else if (MATCHES (node, HEXSTATE_GPARAM))
+	(void) StateSetInsert (popSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)));
+      else if (MATCHES (node, DECTYPE_GPARAM))
+	(void) StateSetInsert (popSet, decToSignedLongLong ((const char*) getNodeContent(node)) << TypeShift);
       else if (MATCHES (node, HEXTYPE_GPARAM))
-	(void) StateSetInsert (typeSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)));
-    Assert (RBTreeSize(typeSet) > 0, "In " XMLPREFIX(POPULATION_GOAL) " goal: no specified types to count");
+	(void) StateSetInsert (popSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)) << TypeShift);
+    Assert (RBTreeSize(popSet) > 0, "In " XMLPREFIX(POPULATION_GOAL) " goal: no specified types to count");
     countNode = CHILD (goalNode, COUNT_GPARAM);
     entropyNode = CHILD (goalNode, ENTROPY_GPARAM);
-    goal = newEntropyGoal (typeSet,
-			   OPTCHILDHEX(goalNode,MASK_GPARAM,StateMask),
+    goal = newEntropyGoal (popSet,
+			   OPTCHILDHEX(goalNode,ALLOWMASK_GPARAM,TypeMask),
+			   OPTCHILDHEX(goalNode,COUNTMASK_GPARAM,StateMask),
 			   countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0) : 0,
 			   countNode ? OPTCHILDINT(countNode,MAX_GPARAM,0) : 0,
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MIN_GPARAM,0) : 0,
