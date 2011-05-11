@@ -27,6 +27,22 @@ TT View for Zoo.
 
 L<Zoo>
 
+=head1 METHODS
+
+=cut
+
+
+=head2 process - Override the process method to force XML response
+
+=cut
+
+sub process {
+    my ( $self, $c ) = @_;
+    $c->response->content_type('text/xml; charset=utf-8');
+    $self->SUPER::process($c);
+}
+
+
 =head1 AUTHOR
 
 Ian Holmes
@@ -37,5 +53,8 @@ This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+
+
 
 1;

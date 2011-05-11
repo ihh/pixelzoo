@@ -70,8 +70,6 @@ CREATE TABLE world (
 	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
 	);
 
-insert into world values (1, 'earth', 1, 128, 0, '<board></board>', '<!-- owner -->', '<!-- guest -->', '<!-- voyeur -->');
-
 CREATE TABLE lock (
 	lock_id INTEGER PRIMARY KEY,   -- the LockID
 	world_id INTEGER REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the WorldID

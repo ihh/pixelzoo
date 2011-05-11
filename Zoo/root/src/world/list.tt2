@@ -1,3 +1,11 @@
 <world-list>
-<!-- world list template -->
+[% FOREACH world IN worlds -%]
+<world>
+  <id>[% world.id %]</id>
+  <name>[% world.name %]</name>
+  <size>[% world.board_size %]</size>
+  <owner>
+    <id>[% world.owner_id %]</id>
+    <name>[% world.owner.username %]</name></owner></world>
+[% END -%]
 </world-list>

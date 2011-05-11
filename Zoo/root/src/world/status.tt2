@@ -1,3 +1,9 @@
 <world>
-<!-- world status template -->
+  <id>[% world.id %]</id>
+  <name>[% world.name %]</name>
+  <owner>
+    <id>[% world.owner_id %]</id>
+    <name>[% world.owner.username %]</name></owner>
+  <size>[% world.board_size %]</size>
+  <time>[% world.board_time %]</time>
 </world>
