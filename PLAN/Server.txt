@@ -15,7 +15,7 @@ Lock: (LockID, WorldID, LockOwnerUserID, ToolName+, ExpirationTime)
 WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime)
 Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, OwnershipWinFlag)
 Type: (TypeName, TypeDependency*, TypeImageName, Particle)
-Price: (TypeName, CashPerPixel)
+PixelPrice: (TypeName, CashPerPixel)
 Status: (UserID?, UserName, Password?, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID)
 PixelPurchaseOrder: ((UserID, OrderID, TypeName, CashAmount)+)
 Image: SVG
@@ -74,7 +74,7 @@ GET store/image/ImageName  -->  200 Success + Image (HTTP headers: "Last-Modifie
 PUT store/image/ImageName (Image)  -->  204 No Content (success), 403 Forbidden (no artist/vandal privileges), 402 Payment Required, 413 Request Entity Too Large
 POST store/image (Image)  -->  403 Forbidden (currently unimplemented; eventually, redirect internally to "PUT store/image/ImageName" and return a 303 to "GET store/image/ImageName")
 
-GET store/price/TypeName  -->  200 Success + Type (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
+GET store/price/type/TypeName  -->  200 Success + PixelPrice (HTTP headers: "Expires") (for the moment just returns default price), 404 Not Found (bad TypeName)
 
 GET store/order/type  -->  200 Success + PixelPurchaseOrder (HTTP headers: "Last-Modified"=time of last pixel purchase) (account history)
 POST store/order/type  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Required, 404 Not Found
