@@ -182,13 +182,13 @@ __PACKAGE__->many_to_many('ancestors' => 'dependency_descendants', 'ancestor');
 
 =head2 twig
 
-Returned type: L<XML::Twig>
+Returned type: L<Twiggy>
 
 =cut
 
 sub twig {
     my ($self) = @_;
-    my $twig = XML::Twig->new();
+    my $twig = Twiggy->new();
     $twig->parse ($self->xml);
     return $twig;
 }

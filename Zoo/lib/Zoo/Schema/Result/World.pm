@@ -153,13 +153,13 @@ __PACKAGE__->has_many(
 
 =head2 board
 
-Returned type: L<XML::Twig>
+Returned type: L<Twiggy>
 
 =cut
 
 sub board {
     my ($self) = @_;
-    my $twig = XML::Twig->new();
+    my $twig = Twiggy->new();
     $twig->parse ($self->board_xml);
     return $twig;
 }

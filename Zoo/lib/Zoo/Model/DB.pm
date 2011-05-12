@@ -30,24 +30,6 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<Zoo::Schema>
 
 =cut
 
-
-=head2 twig_nest
-
-Returns an XML::Twig as a tree of nested anonymous arrays of tag=>value pairs.
-
-=cut
-
-sub twig_nest {
-    my ($self, $elt) = @_;
-    if (ref($elt) eq 'XML::Twig') {
-	$elt = $elt->root;
-    }
-    my @child = $elt->children;
-    return @child > 0
-	? [map (($_->tag => $self->twig_nest($_)), @child)]
-	: $_->text;
-}
-
 =head2 particle_names
 
 Returns a list of typenames of particles in a given XML::Twig tree.

@@ -1,6 +1,6 @@
 package Zoo::Controller::World;
 use Moose;
-use XML::Twig;
+use Twiggy;
 use Level;
 use namespace::autoclean;
 
@@ -162,7 +162,7 @@ sub view_compiled_GET {
 
     for my $particle (@particles) {
 	my $twig = $particle->twig;
-	my $nest = $c->model('DB')->twig_nest ($twig);
+	my $nest = $twig->twig_nest;
 	$gram->addType (@$nest);
     }
 
