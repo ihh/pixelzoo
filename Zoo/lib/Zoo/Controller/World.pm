@@ -161,8 +161,10 @@ sub view_compiled_GET {
 
     for my $particle (@particles) {
 	my $twig = $particle->twig;
-	my $nest = $twig->twig_nest;
-	$gram->addType (@$nest);
+	my @nest = $twig->twig_nest;
+	if (@nest == 2) {
+	    $gram->addType (@{$nest[1]});
+	}
     }
 
     $c->stash->{template} = 'world/compiled.tt2';
