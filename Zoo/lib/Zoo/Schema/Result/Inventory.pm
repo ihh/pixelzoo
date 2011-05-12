@@ -29,7 +29,7 @@ __PACKAGE__->table("inventory");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 particle_name
+=head2 particle_id
 
   data_type: 'text'
   is_foreign_key: 1
@@ -45,16 +45,16 @@ __PACKAGE__->table("inventory");
 __PACKAGE__->add_columns(
   "user_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "particle_name",
+  "particle_id",
   { data_type => "text", is_foreign_key => 1, is_nullable => 0 },
   "amount",
   { data_type => "integer", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("user_id", "particle_name");
+__PACKAGE__->set_primary_key("user_id", "particle_id");
 
 =head1 RELATIONS
 
-=head2 particle_name
+=head2 particle
 
 Type: belongs_to
 
@@ -63,9 +63,9 @@ Related object: L<Zoo::Schema::Result::Particle>
 =cut
 
 __PACKAGE__->belongs_to(
-  "particle_name",
+  "particle",
   "Zoo::Schema::Result::Particle",
-  { name => "particle_name" },
+  { name => "particle_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
@@ -85,8 +85,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dHLyPBh286IeXujdPfy8/Q
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 21:17:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fBM+BokIMfMIO18WXCcHyg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

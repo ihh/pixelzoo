@@ -23,14 +23,14 @@ __PACKAGE__->table("dependency");
 
 =head1 ACCESSORS
 
-=head2 creator_name
+=head2 ancestor_id
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
   size: 255
 
-=head2 downstream_name
+=head2 descendant_id
 
   data_type: 'varchar'
   is_foreign_key: 1
@@ -40,16 +40,16 @@ __PACKAGE__->table("dependency");
 =cut
 
 __PACKAGE__->add_columns(
-  "creator_name",
+  "ancestor_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 255 },
-  "downstream_name",
+  "descendant_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 255 },
 );
-__PACKAGE__->set_primary_key("creator_name", "downstream_name");
+__PACKAGE__->set_primary_key("ancestor_id", "descendant_id");
 
 =head1 RELATIONS
 
-=head2 downstream_name
+=head2 descendant
 
 Type: belongs_to
 
@@ -58,13 +58,13 @@ Related object: L<Zoo::Schema::Result::Particle>
 =cut
 
 __PACKAGE__->belongs_to(
-  "downstream_name",
+  "descendant",
   "Zoo::Schema::Result::Particle",
-  { name => "downstream_name" },
+  { name => "descendant_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 creator_name
+=head2 ancestor
 
 Type: belongs_to
 
@@ -73,15 +73,15 @@ Related object: L<Zoo::Schema::Result::Particle>
 =cut
 
 __PACKAGE__->belongs_to(
-  "creator_name",
+  "ancestor",
   "Zoo::Schema::Result::Particle",
-  { name => "creator_name" },
+  { name => "ancestor_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 18:19:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tSSOu3ImGJ9LVkaNny704w
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 21:22:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1hfcVaexrriPFHLjJYb/2A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

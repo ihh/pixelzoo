@@ -48,6 +48,8 @@ __PACKAGE__->set_primary_key("name");
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bf9Mmjqo11kOOZCjB/q8qw
 
+=head1 METHODS
+
 =head2 twig
 
 Returned type: L<XML::Twig>

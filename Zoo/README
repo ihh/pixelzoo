@@ -6,3 +6,5 @@ rm zoo.db ; sqlite3 zoo.db < sql/zoo.sql ; sqlite3 zoo.db < sql/test.sql
 Model classes created with
 script/zoo_create.pl model DB DBIC::Schema Zoo::Schema create=static dbi:SQLite:zoo.db on_connect_do="PRAGMA foreign_keys = ON"
 
+In one line:
+cd ~/pixelzoo/Zoo/;rm zoo.db ; sqlite3 zoo.db < sql/zoo.sql ; sqlite3 zoo.db < sql/test.sql;script/zoo_create.pl model DB DBIC::Schema Zoo::Schema create=static dbi:SQLite:zoo.db on_connect_do="PRAGMA foreign_keys = ON"

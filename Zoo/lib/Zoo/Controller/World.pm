@@ -154,14 +154,16 @@ sub view_compiled_GET {
     my ( $self, $c ) = @_;
 
     my $world = $c->stash->{world};
-    my @board_particle_names = $world->board_particle_names;
-    my @particles = $c->model('DB')->downstream_particles(@board_particle_names);
+    my @particles = $c->model('DB')->descendant_particles($world->board);
+    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
 
     my $gram = Level->newLevel;
     $gram->boardSize($world->board_size);
 
     for my $particle (@particles) {
-#	$gram->addType ($particle->xml);
+	my $twig = $particle->twig;
+	my $nest = $c->model('DB')->twig_nest ($twig);
+	$gram->addType (@$nest);
     }
 
     $c->stash->{template} = 'world/compiled.tt2';

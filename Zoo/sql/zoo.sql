@@ -8,7 +8,7 @@ CREATE TABLE image (
 
 CREATE TABLE particle (
 	name varchar(255) PRIMARY KEY,  -- the name of this Particle
-	image_name varchar(255) REFERENCES image(name) ON DELETE SET NULL ON UPDATE CASCADE,
+	image_id varchar(255) REFERENCES image(name) ON DELETE SET NULL ON UPDATE CASCADE,
 	cost DECIMAL,
 	xml TEXT  -- Particle XML
 	);
@@ -19,9 +19,9 @@ CREATE TABLE tool (
 	);
 
 CREATE TABLE dependency (  -- Particle dependencies
-	creator_name varchar(255) REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the type that owns the original event
-	downstream_name varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the type that may be created any number of events downstream
-	PRIMARY KEY (creator_name, downstream_name)
+	ancestor_id varchar(255) REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the type that owns the original event
+	descendant_id varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the type that may be created any number of events downstream
+	PRIMARY KEY (ancestor_id, descendant_id)
 	);
 
 CREATE TABLE user (
@@ -53,9 +53,9 @@ CREATE TABLE user_role (
 
 CREATE TABLE inventory (
 	user_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the UserID of the particle owner
-	particle_name TEXT REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the particle type
+	particle_id TEXT REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the particle type
 	amount INTEGER,  -- the number of particles owned
-	PRIMARY KEY (user_id, particle_name)
+	PRIMARY KEY (user_id, particle_id)
 	);
 
 CREATE TABLE world (

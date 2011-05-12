@@ -57,13 +57,13 @@ Related object: L<Zoo::Schema::Result::Particle>
 __PACKAGE__->has_many(
   "particles",
   "Zoo::Schema::Result::Particle",
-  { "foreign.image_name" => "self.name" },
+  { "foreign.image_id" => "self.name" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aYiK9+MLQ+H7aCwAi95hEA
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 21:17:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z8au1cHhlS+Uk/7am5P9kQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
