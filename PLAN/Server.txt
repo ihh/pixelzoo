@@ -1,30 +1,5 @@
 Model-View-Controller architecture
 
-Model
------
-
-See sql/zoo.sql.
-
-
-Views
------
-
-Resource representations (need a Template Toolkit View/template, and ideally a DTD, for each of these):
-
-Lock: (LockID, WorldID, LockOwnerUserID, ToolName+, ExpirationTime)
-WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime)
-Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, OwnershipWinFlag)
-Type: (TypeName, TypeDependency*, TypeImageName, Particle)
-PixelPrice: (TypeName, CashPerPixel)
-Status: (UserID?, UserName, Password?, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID)
-PixelPurchaseOrder: ((UserID, OrderID, TypeName, CashAmount)+)
-Image: SVG
-
-WorldGame = Game without Board
-Tool, Game, Board, Proto, etc. as per current definitions.
-
-
-
 Controllers
 -----------
 
@@ -94,3 +69,26 @@ POST user/status  (Status)   -->  201 Created + Status (success), 409 Conflict (
 
 GET user/status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 PUT user/status/UserID  (Status)  -->  200 Success + Status
+
+Model
+-----
+
+See sql/zoo.sql.
+
+
+Views
+-----
+
+Resource representations (need a Template Toolkit View/template, and ideally a DTD, for each of these):
+
+Lock: (LockID, WorldID, LockOwnerUserID, ToolName+, ExpirationTime)
+WorldStatus: (WorldID, LockID?, WorldOwnerUserID, NextAvailableCheckoutTime)
+Turn: (PlayerUserID, LockID, MoveLog, UpdatedBoard, OwnershipWinFlag)
+Type: (TypeName, TypeDependency*, TypeImageName, Particle)
+PixelPrice: (TypeName, CashPerPixel)
+Status: (UserID?, UserName, Password?, AvatarImageName, AllowedRole+, OwnedWorldID*, CashLevel, (OwnedPixelTypeName,NumberOfPixelsOwned)+, NextPixelPurchaseOrderID)
+PixelPurchaseOrder: ((UserID, OrderID, TypeName, CashAmount)+)
+Image: SVG
+
+WorldGame = Game without Board
+Tool, Game, Board, Proto, etc. as per current definitions.

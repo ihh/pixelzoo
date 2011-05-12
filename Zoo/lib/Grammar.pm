@@ -132,8 +132,8 @@ sub balloonArgs {
     return qw(rate pos color hexcolor text size ttl rise zoom fade);
 }
 
-# top-level method to generate, compile & print XML
-sub print {
+# generate the "proto-game XML", i.e. a hashref representing prototype Game XML
+sub proto_xml {
     my ($self) = @_;
 
     warn "Parsing types...\n" if $self->verbose;
@@ -147,23 +147,29 @@ sub print {
 	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($wrapped_proto);
     }
 
+    return $wrapped_proto;
+}
+
+# validate the proto-game XML
+sub validate_proto_xml {
+    my ($self, $proto_xml) = @_;
+    $proto_xml = $self->proto_xml unless defined $proto_xml;
+
     # "Sanitize" the proto-game XML, i.e. remove the quick-and-dirty shortcuts that don't translate well to XML
     # (such as using var names as hash keys).
     # Not sure this is the wisest idea if we do eventually plan to load XML back in...
     # at minimum, we would need to write an inverse transformation to go the other way.
     # We'd also need to avoid clashes between the unsanitized and sanitized tag names.
     warn "Sanitizing proto-game XML...\n" if $self->verbose;
-    my $sanitized_proto = $self->sanitize_proto($wrapped_proto);
-
+    my $sanitized_proto = $self->sanitize_proto($proto_xml);
 
     if ($self->debug) {
-	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($wrapped_proto);
+	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($proto_xml);
     }
 
     if ($self->debug) {
 	warn "Data structure representing sanitized proto-game XML:\n", Data::Dumper->Dump($sanitized_proto);
     }
-
 
     warn "Generating proto-game XML for validation...\n" if $self->verbose;
     my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
@@ -182,22 +188,36 @@ sub print {
     } else {
 	$self->validate_xml_string ($sanitized_proto_xml, $self->protoDTD);
     }
+}
+
+sub compiled_proto_xml {
+    my ($self, $proto_xml) = @_;
+    $proto_xml = $self->proto_xml unless defined $proto_xml;
+
+    $self->validate_proto_xml ($proto_xml);
 
     warn "Compiling proto-game XML...\n" if $self->verbose;
-    my $transformed_proto = $self->transform_proto ($wrapped_proto);
+    my $transformed_proto = $self->transform_proto ($proto_xml);
 
     if ($self->debug) {
 	warn "Data structure representing game XML:\n", Data::Dumper->Dump($transformed_proto);
     }
 
+    return $transformed_proto;
+}
+
+sub compiled_xml {
+    my ($self, $compiled_proto_xml) = @_;
+    $compiled_proto_xml = $self->compiled_proto_xml unless defined $compiled_proto_xml;
+
     warn "Generating game XML...\n" if $self->verbose;
-    my $transformed_proto_xml = $self->generate_xml ($transformed_proto);
+    my $compiled_xml = $self->generate_xml ($compiled_proto_xml);
 
     if (defined $self->outfile) {
 	warn "Saving game XML...\n" if $self->verbose;
 	local *OUT;
 	open OUT, ">" . $self->outfile or die "Couldn't open ", $self->outfile, ": $!";
-	print OUT $transformed_proto_xml;
+	print OUT $compiled_xml;
 	close OUT or die "Couldn't close ", $self->outfile, ": $!";
     }
 
@@ -205,12 +225,21 @@ sub print {
     if (defined $self->outfile) {
 	$self->validate_xml_file ($self->outfile, $self->gameDTD);
     } else {
-	$self->validate_xml_string ($transformed_proto_xml, $self->gameDTD);
+	$self->validate_xml_string ($compiled_xml, $self->gameDTD);
     }
+
+    return $compiled_xml;
+}
+
+# top-level method to generate, compile & print XML
+sub print {
+    my ($self) = @_;
+
+    my $compiled_xml = $self->compiled_xml;
 
     if (!defined $self->outfile) {
 	warn "Printing game XML...\n" if $self->verbose;
-	print $transformed_proto_xml;
+	print $compiled_xml;
     }
 }
 

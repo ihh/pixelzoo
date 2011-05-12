@@ -149,6 +149,21 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:59:08
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FTMn8O3LbDl6hU+LeZZhMA
 
+=head1 METHODS
+
+=head2 board
+
+Returned type: L<XML::Twig>
+
+=cut
+
+sub board {
+    my ($self) = @_;
+    my $twig = XML::Twig->new();
+    $twig->parse ($self->board_xml);
+    return $twig;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

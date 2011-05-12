@@ -67,8 +67,8 @@ eloise-sdl-test: targets
 # XML validation tests
 # These should produce no output
 xml-valid-test:
-	$(XMLLINT) --dtdvalid dtd/game.dtd --noout t/testgame.xml
-	$(XMLLINT) --dtdvalid dtd/proto.dtd --noout t/proto.xml
+	$(XMLLINT) --dtdvalid Zoo/dtd/game.dtd --noout t/testgame.xml
+	$(XMLLINT) --dtdvalid Zoo/dtd/proto.dtd --noout t/proto.xml
 
 # Targets
 
@@ -86,10 +86,10 @@ bin/%:  tsrc/%.c $(OFILES)
 
 .SECONDARY:
 
-t/simple.xml: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
+t/simple.xml: perl/zoocompiler.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/zoocompiler.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -verbose
 
-xml-debug: perl/zoocompiler.pl perl/Grammar.pm perl/Level.pm
+xml-debug: perl/zoocompiler.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/zoocompiler.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -debug
 
 obj/%.o: src/%.c

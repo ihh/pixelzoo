@@ -1,5 +1,7 @@
 package Zoo::Controller::World;
 use Moose;
+use XML::Twig;
+use Level;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
@@ -54,7 +56,11 @@ sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
 	$c->detach();
     }
 
-    $c->stash->{world} = pop(@world);
+    my ($world) = @world;
+    $c->stash->{world} = $world;
+# The commented-out line auto-calculates the board size from the XML, and stuffs it in the stash
+# I think ideally we should do it the other way round - keep it in the world table (which we do now) and enforce XML consistency (which we don't)
+#    $c->stash->{board_size} = $world->board->root->first_child_text('size');
 }
 
 
@@ -83,14 +89,81 @@ sub status_GET {
     $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
 }
 
+=head2 owner
+
+=cut
+
+sub owner :Chained('world') :PathPart('owner') :Args(0) :ActionClass('REST') { }
+
+sub owner_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/game.tt2';
+    $c->stash->{game_xml} = $c->stash->{world}->owner_game_xml;
+}
+
+=head2 guest
+
+=cut
+
+sub guest :Chained('world') :PathPart('guest') :Args(0) :ActionClass('REST') { }
+
+sub guest_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/game.tt2';
+    $c->stash->{game_xml} = $c->stash->{world}->guest_game_xml;
+}
+
+=head2 voyeur
+
+=cut
+
+sub voyeur :Chained('world') :PathPart('voyeur') :Args(0) :ActionClass('REST') { }
+
+sub voyeur_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/game.tt2';
+    $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
+}
+
+=head2 view
+
+=cut
+
+sub view :Chained('world') :PathPart('view') :Args(0) :ActionClass('REST') { }
+
+sub view_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/game.tt2';
+    $c->stash->{board_xml} = $c->stash->{world}->board_xml;
+    $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
+}
+
+=head2 view_compiled
+
+=cut
+
+sub view_compiled :Chained('world') :PathPart('view/compiled') :Args(0) :ActionClass('REST') { }
+
+sub view_compiled_GET {
+    my ( $self, $c ) = @_;
+
+    my $world = $c->stash->{world};
+    my $board = $world->board;
+
+    my $gram = Level->newLevel;
+    $gram->boardSize($world->board_size);
+
+    $c->stash->{template} = 'world/compiled.tt2';
+    $c->stash->{compiled_xml} = $gram->compiled_xml;
+}
+
 
 =head2 end
 
 =cut
 
 # The "right" way to provide XML as a web service is probably to use
-# the REST Controller's serialization action class to serialize XML::Twig objects,
-# together with XML::Twig accessors on the Model so that everything passes through as XML::Twig.
+# the REST Controller's serialization action class to serialize XML::Twig objects.
 # However, for now it's easier just to use Template Toolkit templates to stitch text together.
 # Thus, I restore the default ActionClass on the end method, like so:
 sub end : ActionClass('RenderView') { }

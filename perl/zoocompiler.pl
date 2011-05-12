@@ -7,7 +7,7 @@ use XML::Twig;
 use Carp;
 
 use FindBin qw($Bin); 
-use lib $Bin;
+use lib "$Bin/../Zoo/lib";
 
 use Level;
 

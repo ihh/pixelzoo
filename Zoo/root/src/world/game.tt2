@@ -1,3 +1,4 @@
 <game>
-<!-- game template -->
+  [% game_xml %]
+  [% board_xml %]
 </game>
