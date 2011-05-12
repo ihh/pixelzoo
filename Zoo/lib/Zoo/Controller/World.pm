@@ -5,11 +5,10 @@ use Level;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
-#BEGIN { extends 'Catalyst::Controller' }
 
 __PACKAGE__->config(
     'map'       => {
-        'text/xml'           => 'XML::Twig',
+        'text/xml'           => 'Twiggy',
     },
 );
 
