@@ -164,6 +164,22 @@ sub board {
     return $twig;
 }
 
+=head2 board_particle_names
+
+Returns a list of typenames of particles in the board.
+
+=cut
+
+sub board_particle_names {
+    my ($self) = @_;
+    my $board = $self->board;
+    my @init = $board->descendants('init');
+    my %particle_name_count;
+    for my $init (@init) {
+	++$particle_name_count{$init->first_child('gvars')->first_child_text('type')};
+    }
+    return sort { $particle_name_count{$a} <=> $particle_name_count{$b} } keys %particle_name_count;
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

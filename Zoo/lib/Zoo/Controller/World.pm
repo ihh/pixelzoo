@@ -33,7 +33,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    my @worlds = $c->model('DB')->resultset('World')->all;
+    my @worlds = $c->model('DB')->worlds;
     $c->stash->{worlds} = \@worlds;
 
     $c->stash->{template} = 'world/list.tt2';
@@ -49,14 +49,13 @@ sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
 
     $c->stash->{template} = 'empty.tt2';   # start of chain: default to empty view template
 
-    my @world = $c->model('DB')->resultset('World')->search({ 'id' => $worldId });
-    if (@world != 1) {
+    my $world = $c->model('DB')->world_by_id($worldId);
+    if (!defined $world) {
 	$c->stash( error_msg => "World $worldId does not exist" );
 	$c->response->status(404);
 	$c->detach();
     }
 
-    my ($world) = @world;
     $c->stash->{world} = $world;
 # The commented-out line auto-calculates the board size from the XML, and stuffs it in the stash
 # I think ideally we should do it the other way round - keep it in the world table (which we do now) and enforce XML consistency (which we don't)
@@ -155,10 +154,15 @@ sub view_compiled_GET {
     my ( $self, $c ) = @_;
 
     my $world = $c->stash->{world};
-    my $board = $world->board;
+    my @board_particle_names = $world->board_particle_names;
+    my @particles = $c->model('DB')->downstream_particles(@board_particle_names);
 
     my $gram = Level->newLevel;
     $gram->boardSize($world->board_size);
+
+    for my $particle (@particles) {
+#	$gram->addType ($particle->xml);
+    }
 
     $c->stash->{template} = 'world/compiled.tt2';
     $c->stash->{compiled_xml} = $gram->compiled_xml;

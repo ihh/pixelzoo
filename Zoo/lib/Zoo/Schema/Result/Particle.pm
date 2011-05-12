@@ -82,33 +82,33 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 particle_dep_dep_names
+=head2 dependency_downstream_names
 
 Type: has_many
 
-Related object: L<Zoo::Schema::Result::ParticleDep>
+Related object: L<Zoo::Schema::Result::Dependency>
 
 =cut
 
 __PACKAGE__->has_many(
-  "particle_dep_dep_names",
-  "Zoo::Schema::Result::ParticleDep",
-  { "foreign.dep_name" => "self.name" },
+  "dependency_downstream_names",
+  "Zoo::Schema::Result::Dependency",
+  { "foreign.downstream_name" => "self.name" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 particle_dep_particle_names
+=head2 dependency_creator_names
 
 Type: has_many
 
-Related object: L<Zoo::Schema::Result::ParticleDep>
+Related object: L<Zoo::Schema::Result::Dependency>
 
 =cut
 
 __PACKAGE__->has_many(
-  "particle_dep_particle_names",
-  "Zoo::Schema::Result::ParticleDep",
-  { "foreign.particle_name" => "self.name" },
+  "dependency_creator_names",
+  "Zoo::Schema::Result::Dependency",
+  { "foreign.creator_name" => "self.name" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -128,8 +128,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YdhS2zICS2hUmTyipuruzw
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 18:19:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xImAYxRYEBogieMi4qF+QQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

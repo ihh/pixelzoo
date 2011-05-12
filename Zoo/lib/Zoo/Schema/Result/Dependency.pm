@@ -1,4 +1,4 @@
-package Zoo::Schema::Result::ParticleDep;
+package Zoo::Schema::Result::Dependency;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
@@ -15,22 +15,22 @@ __PACKAGE__->load_components("InflateColumn::DateTime");
 
 =head1 NAME
 
-Zoo::Schema::Result::ParticleDep
+Zoo::Schema::Result::Dependency
 
 =cut
 
-__PACKAGE__->table("particle_dep");
+__PACKAGE__->table("dependency");
 
 =head1 ACCESSORS
 
-=head2 particle_name
+=head2 creator_name
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
   size: 255
 
-=head2 dep_name
+=head2 downstream_name
 
   data_type: 'varchar'
   is_foreign_key: 1
@@ -40,16 +40,16 @@ __PACKAGE__->table("particle_dep");
 =cut
 
 __PACKAGE__->add_columns(
-  "particle_name",
+  "creator_name",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 255 },
-  "dep_name",
+  "downstream_name",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 255 },
 );
-__PACKAGE__->set_primary_key("particle_name", "dep_name");
+__PACKAGE__->set_primary_key("creator_name", "downstream_name");
 
 =head1 RELATIONS
 
-=head2 dep_name
+=head2 downstream_name
 
 Type: belongs_to
 
@@ -58,13 +58,13 @@ Related object: L<Zoo::Schema::Result::Particle>
 =cut
 
 __PACKAGE__->belongs_to(
-  "dep_name",
+  "downstream_name",
   "Zoo::Schema::Result::Particle",
-  { name => "dep_name" },
+  { name => "downstream_name" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 particle_name
+=head2 creator_name
 
 Type: belongs_to
 
@@ -73,15 +73,15 @@ Related object: L<Zoo::Schema::Result::Particle>
 =cut
 
 __PACKAGE__->belongs_to(
-  "particle_name",
+  "creator_name",
   "Zoo::Schema::Result::Particle",
-  { name => "particle_name" },
+  { name => "creator_name" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u5yzxR8X7GQAsUGh7lf2Ew
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 18:19:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tSSOu3ImGJ9LVkaNny704w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

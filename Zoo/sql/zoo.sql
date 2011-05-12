@@ -18,10 +18,10 @@ CREATE TABLE tool (
 	xml TEXT  -- Tool XML
 	);
 
-CREATE TABLE particle_dep (  -- Particle dependencies
-	particle_name varchar(255) REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the dependent type
-	dep_name varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the depended-upon type
-	PRIMARY KEY (particle_name, dep_name)
+CREATE TABLE dependency (  -- Particle dependencies
+	creator_name varchar(255) REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the type that owns the original event
+	downstream_name varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the type that may be created any number of events downstream
+	PRIMARY KEY (creator_name, downstream_name)
 	);
 
 CREATE TABLE user (
