@@ -53,7 +53,7 @@ sub newGrammar {
 # XML
 	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire default Game structure (almost certainly not advisable)
 				'goal' => [],   # allow designer to override default Goal structure (probably not advisable)
-				'init' => [],   # allow designed to initialize Board
+				'init' => [],   # allow designer to initialize Board
 				'tool' => [],   # to add tools, use addTool helper
 				'type' => []),
 
