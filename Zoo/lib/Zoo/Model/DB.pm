@@ -30,20 +30,9 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<Zoo::Schema>
 
 =cut
 
-=head2 particle_names
-
-Returns a list of typenames of particles in a given XML::Twig tree.
-
-=cut
-
-sub particle_names {
-    my ($self, $twig) = @_;
-    my %particle_hash = map (($_->text => 1),
-			     $twig->descendants('type'));
-    return sort keys %particle_hash;
-}
-
 =head2 worlds
+
+Get a list of L<Zoo::Schema::Result::World> identifiers.
 
 =cut
 
@@ -56,6 +45,8 @@ sub worlds {
 
 =head2 world_by_id
 
+Get a L<Zoo::Schema::Result::World> object, given its identifier.
+
 =cut
 
 sub world_by_id {
@@ -67,6 +58,8 @@ sub world_by_id {
 
 =head2 particles_by_name
 
+Get a list of L<Zoo::Schema::Result::Particle> objects, given a list of their name identifiers.
+
 =cut
 
 sub particles_by_name {
@@ -77,11 +70,13 @@ sub particles_by_name {
 
 =head2 descendant_particles
 
+Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a particular L<Twiggy> object (according to the dependency table).
+
 =cut
 
 sub descendant_particles {
     my ($self, $twig) = @_;
-    my @particle_names = $self->particle_names ($twig);
+    my @particle_names = $twig->particle_names;
     my @particles = $self->particles_by_name (@particle_names);
     my @descendants = map ($_->descendants, @particles);
     my %descendant_hash = map (($_->name => $_), @particles, @descendants);

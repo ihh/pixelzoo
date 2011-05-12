@@ -15,7 +15,7 @@ XML::Twig, with minor enhancements
 
 =head1 DESCRIPTION
 
-L<XML::Twig> derived class, offering conversion to a nested-array format
+L<XML::Twig> derived class, offering a few helper methods for the Zoo.
 
 =head1 METHODS
 
@@ -23,7 +23,7 @@ L<XML::Twig> derived class, offering conversion to a nested-array format
 
 =head2 twig_nest
 
-Returns an XML::Twig as a tree of nested anonymous arrays of tag=>value pairs.
+Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pairs.
 
 =cut
 
@@ -37,6 +37,19 @@ sub twig_nest {
 	return ($elt->tag => $child[0]->text);
     }
     return ($elt->tag => [map ($self->twig_nest($_), @child)]);
+}
+
+=head2 particle_names
+
+Returns a list of particles named by a given L<XML::Twig> tree.
+
+=cut
+
+sub particle_names {
+    my ($self) = @_;
+    my %particle_hash = map (($_->text => 1),
+			     $self->descendants('type'));
+    return sort keys %particle_hash;
 }
 
 =head1 AUTHOR
