@@ -33,7 +33,7 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<Zoo::Schema>
 
 =head2 twig_nest
 
-Returns an XML::Twig as a tree of nested anonymous arrays.
+Returns an XML::Twig as a tree of nested anonymous arrays of tag=>value pairs.
 
 =cut
 
