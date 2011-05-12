@@ -14,9 +14,9 @@ GET world  -->    200 Success + WorldStatus list
 GET world/WorldID/board  -->    200 Success + Board (HTTP headers: "Last-Modified"=last move), 404 Not Found (bad WorldID)
 GET world/WorldID/status  -->   200 Success + WorldStatus (HTTP headers: "Last-Modified"=last change of owner), 404 Not Found (bad WorldID)
 
-GET world/WorldID/owner  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
-GET world/WorldID/guest  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
-GET world/WorldID/voyeur  -->   200 Success + WorldGame, 404 Not Found (bad WorldID)
+GET world/WorldID/game/owner  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
+GET world/WorldID/game/guest  -->    200 Success + WorldGame, 404 Not Found (bad WorldID)
+GET world/WorldID/game/voyeur  -->   200 Success + WorldGame, 404 Not Found (bad WorldID)
 
 GET world/WorldID/view  -->            200 Success + Proto (assembles Board with voyeur Game wrapper and no Tools), 404 Not Found (bad WorldID), 408 Request Timeout
 GET world/WorldID/view/compiled  -->   200 Success + Game (assembles & compiles Board with voyeur Game wrapper and no Tools), 404 Not Found (bad WorldID), 408 Request Timeout

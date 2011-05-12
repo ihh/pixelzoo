@@ -48,6 +48,18 @@ __PACKAGE__->set_primary_key("name");
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bf9Mmjqo11kOOZCjB/q8qw
 
+=head2 twig
+
+Returned type: L<XML::Twig>
+
+=cut
+
+sub twig {
+    my ($self) = @_;
+    my $twig = XML::Twig->new();
+    $twig->parse ($self->xml);
+    return $twig;
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

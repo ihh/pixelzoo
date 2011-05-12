@@ -89,15 +89,24 @@ sub status_GET {
     $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
 }
 
+=head2 game
+
+=cut
+
+sub game :Chained('world') :PathPart('game') :CaptureArgs(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/game.tt2';
+}
+
+
 =head2 owner
 
 =cut
 
-sub owner :Chained('world') :PathPart('owner') :Args(0) :ActionClass('REST') { }
+sub owner :Chained('game') :PathPart('owner') :Args(0) :ActionClass('REST') { }
 
 sub owner_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'world/game.tt2';
     $c->stash->{game_xml} = $c->stash->{world}->owner_game_xml;
 }
 
@@ -105,11 +114,10 @@ sub owner_GET {
 
 =cut
 
-sub guest :Chained('world') :PathPart('guest') :Args(0) :ActionClass('REST') { }
+sub guest :Chained('game') :PathPart('guest') :Args(0) :ActionClass('REST') { }
 
 sub guest_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'world/game.tt2';
     $c->stash->{game_xml} = $c->stash->{world}->guest_game_xml;
 }
 
@@ -117,11 +125,10 @@ sub guest_GET {
 
 =cut
 
-sub voyeur :Chained('world') :PathPart('voyeur') :Args(0) :ActionClass('REST') { }
+sub voyeur :Chained('game') :PathPart('voyeur') :Args(0) :ActionClass('REST') { }
 
 sub voyeur_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'world/game.tt2';
     $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
 }
 
