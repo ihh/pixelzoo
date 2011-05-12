@@ -240,6 +240,8 @@ sub print {
     if (!defined $self->outfile) {
 	warn "Printing game XML...\n" if $self->verbose;
 	print $compiled_xml;
+    } else {
+	warn "Game XML printed to ", $self->outfile, "\n";
     }
 }
 
