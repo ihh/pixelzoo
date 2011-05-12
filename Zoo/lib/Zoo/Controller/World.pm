@@ -153,10 +153,12 @@ sub view_compiled_GET {
     my ( $self, $c ) = @_;
 
     my $world = $c->stash->{world};
-    my @particles = $c->model('DB')->descendant_particles($world->board);
+    my $board = $world->board;
+
+    my @particles = $c->model('DB')->descendant_particles($board);
     $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
 
-    my $gram = Level->newLevel;
+    my $gram = Grammar->newGrammar;
     $gram->boardSize($world->board_size);
 
     for my $particle (@particles) {
@@ -166,6 +168,19 @@ sub view_compiled_GET {
 	    $gram->addType (@{$nest[1]});
 	}
     }
+
+    for my $board_tag (qw(init seed)) {
+	for my $child ($board->children ($board_tag)) {
+	    push @{$gram->xml->init}, $board->twig_nest ($child);  # stash all recognized board tags in 'init' block
+	}
+    }
+
+    my $game_twig = $world->voyeur_game;
+    my @game_nest = $game_twig->twig_nest;
+    push @{$gram->xml->goal}, @{$game_nest[1]};  # stash all game meta-info in 'goal' block
+
+    # For more general code, need the following:
+    # Tools (DB.pm needs a method that, given a list of tool names, returns a list of Tool objects)
 
     $c->stash->{template} = 'world/compiled.tt2';
     $c->stash->{compiled_xml} = $gram->compiled_xml;

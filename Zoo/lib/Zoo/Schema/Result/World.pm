@@ -164,6 +164,52 @@ sub board {
     return $twig;
 }
 
+
+=head1 METHODS
+
+=head2 voyeur_game
+
+Returned type: L<Twiggy>
+
+=cut
+
+sub voyeur_game {
+    my ($self) = @_;
+    my $twig = Twiggy->new();
+    $twig->parse ($self->voyeur_game_xml);
+    return $twig;
+}
+
+=head1 METHODS
+
+=head2 owner_game
+
+Returned type: L<Twiggy>
+
+=cut
+
+sub owner_game {
+    my ($self) = @_;
+    my $twig = Twiggy->new();
+    $twig->parse ($self->owner_game_xml);
+    return $twig;
+}
+
+=head1 METHODS
+
+=head2 guest_game
+
+Returned type: L<Twiggy>
+
+=cut
+
+sub guest_game {
+    my ($self) = @_;
+    my $twig = Twiggy->new();
+    $twig->parse ($self->guest_game_xml);
+    return $twig;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

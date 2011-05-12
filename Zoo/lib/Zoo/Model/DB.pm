@@ -70,14 +70,19 @@ sub particles_by_name {
 
 =head2 descendant_particles
 
-Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a particular L<Twiggy> object (according to the dependency table).
+Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a list of L<Twiggy> objects.
+
+The dependency table is used to find downstream particle dependencies.
 
 =cut
 
 sub descendant_particles {
-    my ($self, $twig) = @_;
-    my @particle_names = $twig->particle_names;
-    my @particles = $self->particles_by_name (@particle_names);
+    my ($self, @twig) = @_;
+    my %particle_name_hash;
+    for my $twig (@twig) {
+	%particle_name_hash = (%particle_name_hash, map (($_ => 1), $twig->particle_names));
+    }
+    my @particles = $self->particles_by_name (keys %particle_name_hash);
     my @descendants = map ($_->descendants, @particles);
     my %descendant_hash = map (($_->name => $_), @particles, @descendants);
     return values %descendant_hash;
