@@ -61,6 +61,51 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 images
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Image>
+
+=cut
+
+__PACKAGE__->has_many(
+  "images",
+  "Zoo::Schema::Result::Image",
+  { "foreign.creator_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 particles
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Particle>
+
+=cut
+
+__PACKAGE__->has_many(
+  "particles",
+  "Zoo::Schema::Result::Particle",
+  { "foreign.creator_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 tools
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Tool>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tools",
+  "Zoo::Schema::Result::Tool",
+  { "foreign.creator_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_roles
 
 Type: has_many
@@ -122,8 +167,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:57:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8yGpgzNxhAoRTRo7H++Rjg
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 23:12:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8BUkcAEZLlVQUtr/5krMNg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

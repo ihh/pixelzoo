@@ -29,6 +29,12 @@ __PACKAGE__->table("particle");
   is_nullable: 0
   size: 255
 
+=head2 creator_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 image_id
 
   data_type: 'varchar'
@@ -51,6 +57,8 @@ __PACKAGE__->table("particle");
 __PACKAGE__->add_columns(
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "creator_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "image_id",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 255 },
   "cost",
@@ -74,6 +82,26 @@ __PACKAGE__->belongs_to(
   "image",
   "Zoo::Schema::Result::Image",
   { name => "image_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 creator
+
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::User>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "creator",
+  "Zoo::Schema::Result::User",
+  { id => "creator_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -128,8 +156,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 21:22:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BWi6JjNp6RCE99dmRvBPEg
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 23:12:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AJAzS58tuQyX5X8TMjXSJQ
 
 
 =head2 descendants

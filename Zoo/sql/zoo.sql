@@ -3,11 +3,13 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE image (
 	name varchar(255) PRIMARY KEY,  -- the name of this image
+        creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- SVG image XML
 	);
 
 CREATE TABLE particle (
 	name varchar(255) PRIMARY KEY,  -- the name of this Particle
+        creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	image_id varchar(255) REFERENCES image(name) ON DELETE SET NULL ON UPDATE CASCADE,
 	cost DECIMAL,
 	xml TEXT  -- Particle XML
@@ -15,6 +17,7 @@ CREATE TABLE particle (
 
 CREATE TABLE tool (
 	name varchar(255) PRIMARY KEY,  -- the name of this Tool
+        creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
 	);
 
@@ -31,19 +34,14 @@ CREATE TABLE user (
 	cash DECIMAL  -- user's current cash level
 	);
 
-insert into user values (1, 'yam', 'pass', 100);
-
 CREATE TABLE role (
         id   INTEGER PRIMARY KEY,
         name TEXT
 	);
 
-insert into role values (1, 'artist');  -- user can upload new images
-insert into role values (2, 'vandal');  -- user can replace existing images
-insert into role values (3, 'smith');  -- user can upload new tools
-insert into role values (4, 'maker');  -- user can replace existing tools
-insert into role values (5, 'coder');  -- user can upload new types
-insert into role values (6, 'hacker');  -- user can replace existing types
+insert into role values (1, 'artist');  -- user can upload images
+insert into role values (2, 'maker');  -- user can upload tools
+insert into role values (3, 'hacker');  -- user can upload types
 
 CREATE TABLE user_role (
         user_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
