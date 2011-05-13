@@ -7,7 +7,6 @@ use vars ('@ISA', '@EXPORT', '@EXPORT_OK');
 
 use Exporter;
 use Carp qw(carp croak cluck confess);
-use XML::Twig;
 use Data::Dumper;
 use File::Temp;
 use Scalar::Util;
@@ -15,6 +14,7 @@ use IPC::Open3;
 use Symbol qw(gensym);
 
 use AutoHash;
+use Twiggy;
 
 @ISA = qw (AutoHash);
 @EXPORT = qw (hexv decv min max minPowerOfTwo sortHash forceHash AUTOLOAD);
@@ -908,7 +908,7 @@ sub validate_xml_file {
 sub generate_xml {
     my ($self, $proto) = @_;
     my $elt = new_XML_element(@$proto);
-    my $twig = XML::Twig->new(pretty_print => 'indented');
+    my $twig = Twiggy->new(pretty_print => 'indented');
     $twig->set_root($elt);
     return $twig->sprint;
 }

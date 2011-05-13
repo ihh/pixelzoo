@@ -1,5 +1,6 @@
 package Twiggy;
 use Moose;
+use Twiggy::Elt;
 use namespace::autoclean;
 
 extends 'XML::Twig';
@@ -21,6 +22,19 @@ L<XML::Twig> derived class, offering a few helper methods for the Zoo.
 
 =cut
 
+=head2 root
+
+Casts super method to L<Twiggy::Elt>
+
+=cut
+
+sub root {
+    my ($self) = @_;
+    my $root = $self->SUPER::root();
+    bless $root, 'Twiggy::Elt';
+    return $root;
+}
+
 =head2 twig_nest
 
 Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pairs.
@@ -32,11 +46,7 @@ sub twig_nest {
     if (!defined ($elt)) {
 	$elt = $self->root;
     }
-    my @child = $elt->children;
-    if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
-	return ($elt->tag => $child[0]->text);
-    }
-    return ($elt->tag => [map ($self->twig_nest($_), @child)]);
+    return $elt->twig_nest;
 }
 
 =head2 particle_names
