@@ -332,7 +332,7 @@ sub lock_view_compiled_GET {
 =cut
 
 # The "right" way to provide XML as a web service is probably to use
-# the REST Controller's serialization action class to serialize XML::Twig objects.
+# the REST Controller's serialization action class to serialize XML::Simple objects.
 # However, for now it's easier just to use Template Toolkit templates to stitch text together.
 # Thus, I restore the default ActionClass on the end method, like so:
 sub end : ActionClass('RenderView') { }
