@@ -51,11 +51,14 @@ sub newGrammar {
 	'ownerID' => 0,
 
 # XML
-	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire default Game structure (almost certainly not advisable)
-				'goal' => [],   # allow designer to override default Goal structure (probably not advisable)
-				'init' => [],   # allow designer to initialize Board
+	'xml' => AutoHash->new ('game' => [],   # allow designer/tester to override entire top-level Game structure (almost certainly not advisable)
+				'goal' => [],   # allow designer/tester to override default Goal structure
+				'game_stash' => [],   # allow web service to populate the Game structure
+				'board_stash' => [],   # allow web service to populate the Board structure
+				'init' => [],   # allow designer/tester/webservice to initialize Board
+				'seed' => [],   # allow designer/tester/webservice to initialize Board random number generator
 				'tool' => [],   # to add tools, use addTool helper
-				'type' => []),
+				'type' => []),  # to add types, use addType helper
 
 # compiler stuff
 	'debug' => 0,
@@ -267,6 +270,8 @@ sub make_game {
 
     my @game = ("board" => ["size" => $self->boardSize,
 			    "grammar" => $self->xml->type,
+			    @{$self->xml->board_stash},
+			    @{$self->xml->seed},
 			    $self->make_exit_init,
 			    @{$self->xml->init}],
 
@@ -275,6 +280,8 @@ sub make_game {
 		@{$self->xml->tool},
 
 		$self->make_exit,
+
+		@{$self->xml->game_stash},
 
 		@{$self->xml->goal} > 0
 		? @{$self->xml->goal}   # allow designer to override default Goal structure

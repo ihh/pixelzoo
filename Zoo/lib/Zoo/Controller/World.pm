@@ -171,13 +171,13 @@ sub view_compiled_GET {
 
     for my $board_tag (qw(init seed)) {
 	for my $child ($board->children ($board_tag)) {
-	    push @{$gram->xml->init}, $board->twig_nest ($child);  # stash all recognized board tags in 'init' block
+	    push @{$gram->xml->board_stash}, $board->twig_nest ($child);  # stash all recognized board tags
 	}
     }
 
     my $game_twig = $world->voyeur_game;
     my @game_nest = $game_twig->twig_nest;
-    push @{$gram->xml->goal}, @{$game_nest[1]};  # stash all game meta-info in 'goal' block
+    push @{$gram->xml->game_stash}, @{$game_nest[1]};  # stash all game meta-info
 
     # For more general code, need the following:
     # Tools (DB.pm needs a method that, given a list of tool names, returns a list of Tool objects)
