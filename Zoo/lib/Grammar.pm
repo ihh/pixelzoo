@@ -1019,7 +1019,7 @@ sub new_XML_element {
     my $gi   = shift;
     my $data = shift;
 
-    my $t = XML::Twig::Elt->new($gi);
+    my $t = Twiggy::Elt->new($gi);
 
     my @child;
     if (ref($data) eq "HASH") {

@@ -39,6 +39,8 @@ sub root {
 
 Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pairs.
 
+Wrapper for recursive Twiggy::Elt method.
+
 =cut
 
 sub twig_nest {
