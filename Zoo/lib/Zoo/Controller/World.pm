@@ -56,9 +56,6 @@ sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
     }
 
     $c->stash->{world} = $world;
-# The commented-out line auto-calculates the board size from the XML, and stuffs it in the stash
-# I think ideally we should do it the other way round - keep it in the world table (which we do now) and enforce XML consistency (which we don't)
-#    $c->stash->{board_size} = $world->board->root->first_child_text('size');
 }
 
 
@@ -130,57 +127,95 @@ sub voyeur_GET {
     $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
 }
 
+
+=head2 assemble
+
+Assembles a Grammar from the components (Board, Particles, Game metadata, Tools). A helper method called from the view and lock chains.
+
+=cut
+
+sub assemble {
+    my ( $self, $c, $board, $game, @tool_names ) = @_;
+
+    # tools
+    my @tools = $c->model('DB')->tools_by_name(@tool_names);
+    $c->log->debug ("Tool names: " . join (", ", map ($_->name, @tools)));
+    $c->stash->{tools} = \@tools;
+
+    my @tool_twig = map ($_->twig, @tools);
+
+    # What we should do here is loop over the following call to descendant_particles,
+    # popping tools until the number of particles is less than a configurable limit (<64k)
+
+    # What to do if the board itself contains >64K downstream particles?
+    # Ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
+
+    # particles
+    my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
+    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
+    $c->stash->{particles} = \@particles;
+
+    # grammar
+    my $gram = Grammar->newGrammar;
+
+    for my $particle (@{$c->stash->{particles}}) {
+	$gram->addType ($particle->nest);
+    }
+
+    # board size
+    $gram->boardSize($c->stash->{world}->board_size);
+
+    # misc tags
+    for my $board_tag (qw(init seed)) {
+	for my $child ($board->root->children ($board_tag)) {
+	    push @{$gram->xml->board_stash}, $board->twig_nest ($child);  # stash all recognized board tags
+	}
+    }
+
+    # game
+    my @game_nest = $game->twig_nest;
+    push @{$gram->xml->game_stash}, @{$game_nest[1]};  # stash all game meta-info
+
+    # tools
+    for my $tool (@{$c->stash->{tools}}) {
+	$gram->addTool ($tool->nest);
+    }
+
+    # stash grammar
+    $c->stash->{grammar} = $gram;
+}
+
 =head2 view
 
 =cut
 
-sub view :Chained('world') :PathPart('view') :Args(0) :ActionClass('REST') { }
-
-sub view_GET {
+sub view :Chained('world') :PathPart('view') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'world/game.tt2';
-    $c->stash->{board_xml} = $c->stash->{world}->board_xml;
-    $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
+
+    # assemble using world's current board, voyeur rules, and no tools
+    my $world = $c->stash->{world};
+    $self->assemble ($c, $world->board, $world->voyeur_game);
+}
+
+sub view_end :Chained('view') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub view_end_GET {
+    my ( $self, $c ) = @_;
+    my $gram = $c->stash->{grammar};
+
+    $c->stash->{template} = 'world/compiled.tt2';
+    $c->stash->{compiled_xml} = $gram->assembled_xml;
 }
 
 =head2 view_compiled
 
 =cut
 
-sub view_compiled :Chained('world') :PathPart('view/compiled') :Args(0) :ActionClass('REST') { }
+sub view_compiled :Chained('view') :PathPart('compiled') :Args(0) :ActionClass('REST') { }
 
 sub view_compiled_GET {
     my ( $self, $c ) = @_;
-
-    my $world = $c->stash->{world};
-    my $board = $world->board;
-
-    my @particles = $c->model('DB')->descendant_particles($board);
-    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
-
-    my $gram = Grammar->newGrammar;
-    $gram->boardSize($world->board_size);
-
-    for my $particle (@particles) {
-	my $twig = $particle->twig;
-	my @nest = $twig->twig_nest;
-	if (@nest == 2) {
-	    $gram->addType (@{$nest[1]});
-	}
-    }
-
-    for my $board_tag (qw(init seed)) {
-	for my $child ($board->children ($board_tag)) {
-	    push @{$gram->xml->board_stash}, $board->twig_nest ($child);  # stash all recognized board tags
-	}
-    }
-
-    my $game_twig = $world->voyeur_game;
-    my @game_nest = $game_twig->twig_nest;
-    push @{$gram->xml->game_stash}, @{$game_nest[1]};  # stash all game meta-info
-
-    # For more general code, need the following:
-    # Tools (DB.pm needs a method that, given a list of tool names, returns a list of Tool objects)
+    my $gram = $c->stash->{grammar};
 
     $c->stash->{template} = 'world/compiled.tt2';
     $c->stash->{compiled_xml} = $gram->compiled_xml;

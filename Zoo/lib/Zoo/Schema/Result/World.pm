@@ -164,9 +164,6 @@ sub board {
     return $twig;
 }
 
-
-=head1 METHODS
-
 =head2 voyeur_game
 
 Returned type: L<Twiggy>
@@ -180,8 +177,6 @@ sub voyeur_game {
     return $twig;
 }
 
-=head1 METHODS
-
 =head2 owner_game
 
 Returned type: L<Twiggy>
@@ -194,8 +189,6 @@ sub owner_game {
     $twig->parse ($self->owner_game_xml);
     return $twig;
 }
-
-=head1 METHODS
 
 =head2 guest_game
 

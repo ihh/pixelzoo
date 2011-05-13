@@ -153,6 +153,14 @@ sub proto_xml {
     return $wrapped_proto;
 }
 
+# generate the "proto-game XML" as an actual XML string
+sub assembled_xml {
+    my ($self) = @_;
+    my $proto_xml = $self->proto_xml;
+    my $xml = $self->generate_xml ($proto_xml);
+    return $xml;
+}
+
 # validate the proto-game XML
 sub validate_proto_xml {
     my ($self, $proto_xml) = @_;

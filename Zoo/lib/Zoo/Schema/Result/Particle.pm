@@ -193,6 +193,16 @@ sub twig {
     return $twig;
 }
 
+=head2 nest
+
+=cut
+
+sub nest {
+    my ($self) = @_;
+    my @nest = $self->twig->twig_nest;
+    return @nest == 2 ? @{$nest[1]} : ();
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

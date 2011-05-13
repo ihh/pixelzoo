@@ -68,6 +68,18 @@ sub particles_by_name {
     return @particles;
 }
 
+=head2 tools_by_name
+
+Get a list of L<Zoo::Schema::Result::Tool> objects, given a list of their name identifiers.
+
+=cut
+
+sub tools_by_name {
+    my ($self, @tool_names) = @_;
+    my @tools = $self->resultset('Tool')->search([map ({ 'name' => $_ }, @tool_names)]);
+    return @tools;
+}
+
 =head2 descendant_particles
 
 Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a list of L<Twiggy> objects.

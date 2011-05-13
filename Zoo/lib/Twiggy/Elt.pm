@@ -42,6 +42,7 @@ Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pa
 sub twig_nest {
     my ($self) = @_;
     my @child = $self->children;
+    return $self->tag unless @child;
     if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
 	return ($self->tag => $child[0]->text);
     }
