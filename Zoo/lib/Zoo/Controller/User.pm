@@ -4,12 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
-__PACKAGE__->config(
-    'map'       => {
-        'text/xml'           => 'Twiggy',
-    },
-);
-
 =head1 NAME
 
 Zoo::Controller::User - Catalyst Controller

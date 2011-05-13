@@ -6,12 +6,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
-__PACKAGE__->config(
-    'map'       => {
-        'text/xml'           => 'Twiggy',
-    },
-);
-
 =head1 NAME
 
 Zoo::Controller::World - Catalyst Controller
@@ -44,18 +38,27 @@ sub index :Path :Args(0) {
 =cut
 
 sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
-    my ( $self, $c, $worldId ) = @_;
+    my ( $self, $c, $world_id ) = @_;
 
     $c->stash->{template} = 'empty.tt2';   # start of chain: default to empty view template
 
-    my $world = $c->model('DB')->world_by_id($worldId);
+    my $world = $c->model('DB')->world_by_id($world_id);
     if (!defined $world) {
-	$c->stash( error_msg => "World $worldId does not exist" );
+	$c->stash( error_msg => "World $world_id does not exist" );
 	$c->response->status(404);
 	$c->detach();
     }
 
     $c->stash->{world} = $world;
+}
+
+sub world_end :Chained('world') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub world_end_GET {
+    my ( $self, $c ) = @_;
+    my $world = $c->stash->{world};
+    $c->response->redirect ("/world/" . $world->id . "/status", 303);
+    $c->detach;
 }
 
 
@@ -148,7 +151,7 @@ sub assemble {
     # popping tools until the number of particles is less than a configurable limit (<64k)
 
     # What to do if the board itself contains >64K downstream particles?
-    # Ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
+    # _ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
 
     # particles
     my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
@@ -219,6 +222,108 @@ sub view_compiled_GET {
 
     $c->stash->{template} = 'world/compiled.tt2';
     $c->stash->{compiled_xml} = $gram->compiled_xml;
+}
+
+
+=head2 lock
+
+Get the Lock(s) for the World.
+
+=cut
+
+sub lock :Chained('world') :PathPart('lock') :CaptureArgs(0) {
+    my ( $self, $c ) = @_;
+
+    my $world = $c->stash->{world};
+    my @lock = $world->locks;
+
+    $c->stash->{lock} = @lock == 1 ? $lock[0] : undef;
+}
+
+sub lock_end :Chained('lock') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub lock_end_GET {
+    my ( $self, $c ) = @_;
+    my $world = $c->stash->{world};
+    my $lock = $c->stash->{lock};
+    if (defined $lock) {
+	$c->response->redirect ("/world/" . $world->id . "/lock/" . $lock->id, 303);
+	$c->detach;
+    } else {
+	$c->stash( error_msg => "No lock found" );
+	$c->response->status(404);
+	$c->detach();
+    }
+}
+
+sub lock_end_POST {
+    my ( $self, $c ) = @_;
+    my $world = $c->stash->{world};
+    my $lock = $c->stash->{lock};
+    if (defined $lock) {
+	$c->response->status(423);
+	$c->detach();
+    } else {
+	# create the lock...
+	warn $c->request->data;
+    }
+}
+
+=head2 lock_id
+
+Check that there is exactly one Lock for this World, and that the path contains the correct Lock ID.
+
+=cut
+
+sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
+    my ( $self, $c, $lock_id ) = @_;
+
+    my $lock = $c->stash->{lock};
+    unless (defined($lock) && $lock->id == $lock_id) {
+	$c->stash( error_msg => "Lock $lock_id not found in world " . $c->stash->{world}->id );
+	$c->response->status(404);
+	$c->detach();
+    }
+
+    # TODO: check if the lock has expired; if so, delete it
+}
+
+sub lock_id_end :Chained('lock_id') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub lock_id_end_GET {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/lock.tt2';
+}
+
+
+
+=head2 lock_view
+
+=cut
+
+sub lock_view :Chained('lock_id') :PathPart('view') :CaptureArgs(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'world/compiled.tt2';
+}
+
+sub lock_view_end :Chained('lock_view') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub lock_view_end_GET {
+    my ( $self, $c ) = @_;
+    my $lock = $c->stash->{lock};
+    $c->stash->{compiled_xml} = $lock->proto_xml;
+}
+
+=head2 lock_view_compiled
+
+=cut
+
+sub lock_view_compiled :Chained('lock_view') :PathPart('compiled') :Args(0) :ActionClass('REST') { }
+
+sub lock_view_compiled_GET {
+    my ( $self, $c ) = @_;
+    my $lock = $c->stash->{lock};
+    $c->stash->{compiled_xml} = $lock->compiled_xml;
 }
 
 
