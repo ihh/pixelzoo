@@ -11,4 +11,4 @@ cd ~/pixelzoo/Zoo/;rm zoo.db ; sqlite3 zoo.db < sql/zoo.sql ; sqlite3 zoo.db < s
 
 
 To test POST requests:
-curl http://localhost:3000/world/2/lock --verbose -H "Content-Type: text/xml" --data ~/tmp/test.xml
+curl http://localhost:3000/world/2/lock --verbose -H "Content-type:text/xml" --data "<test>whatever</test>"
