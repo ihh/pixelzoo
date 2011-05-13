@@ -27,6 +27,7 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     my @worlds = $c->model('DB')->worlds;
+    warn "worlds=(@worlds)";
     $c->stash->{worlds} = \@worlds;
 
     $c->stash->{template} = 'world/list.tt2';

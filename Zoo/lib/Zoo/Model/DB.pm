@@ -38,8 +38,8 @@ Get a list of L<Zoo::Schema::Result::World> identifiers.
 
 sub worlds {
     my ($self) = @_;
-    my $world = $self->resultset('World')->all;
-    return $world;
+    my @world = $self->resultset('World')->all;
+    return @world;
 }
 
 
