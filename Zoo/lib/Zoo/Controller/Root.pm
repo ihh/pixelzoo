@@ -33,6 +33,9 @@ sub auto :Private {
         return 1;
     }
 
+    # Hack for now: return 1 without requiring login
+    return 1;
+
     # If a user doesn't exist, force login
     if (!$c->user_exists) {
         # Dump a log message to the development server debug output
