@@ -20,6 +20,34 @@ Zoo::Controller::Root - Root Controller for Zoo
 
 =head1 METHODS
 
+=head2 auto
+
+Check if there is a user and, if not, fail with 401 Unauthorized
+
+=cut
+
+sub auto :Private {
+    my ($self, $c) = @_;
+
+    if ($c->action eq $c->controller('User')->action_for('login')) {
+        return 1;
+    }
+
+    # If a user doesn't exist, force login
+    if (!$c->user_exists) {
+        # Dump a log message to the development server debug output
+        $c->log->debug('***Root::auto User not found, returning 401');
+        # 401 Unauthorized
+        $c->response->status(401);
+        $c->response->body("You need to log in first");
+        # Return 0 to cancel 'post-auto' processing and prevent use of application
+        return 0;
+    }
+
+    # User found, so return 1 to continue with processing after this 'auto'
+    return 1;
+}
+
 =head2 index
 
 The root page (/)

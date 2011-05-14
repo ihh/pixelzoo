@@ -27,7 +27,6 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     my @worlds = $c->model('DB')->worlds;
-    warn "worlds=(@worlds)";
     $c->stash->{worlds} = \@worlds;
 
     $c->stash->{template} = 'world/list.tt2';
@@ -58,7 +57,7 @@ sub world_end :Chained('world') :PathPart('') :Args(0) :ActionClass('REST') { }
 sub world_end_GET {
     my ( $self, $c ) = @_;
     my $world = $c->stash->{world};
-    $c->response->redirect ("/world/" . $world->id . "/status", 303);
+    $c->response->redirect ($c->uri_for($c->controller('World')->action_for('world')), 303);
     $c->detach;
 }
 

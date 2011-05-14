@@ -28,6 +28,49 @@ sub index :Path :Args(0) {
 }
 
 
+=head2 login
+
+=cut
+
+sub login :Local :Args(2) {
+    my ( $self, $c, $username, $password ) = @_;
+
+    # Attempt to log the user in
+    if ($c->authenticate({ username => $username,
+			   password => $password  } )) {
+	# If successful, then let them use the application
+	my $uri = $c->uri_for($c->controller('World')->action_for('index'));
+        $c->log->debug("URI is $uri");
+	$c->response->redirect($uri);
+    } else {
+	$c->stash(error_msg => "Bad username or password.");
+	$c->response->status(403);  # Forbidden
+	$c->detach();
+    }
+
+    unless ($c->user_exists) {
+	$c->stash(error_msg => "Empty username or password.");
+	$c->response->status(404);  # Not Found
+	$c->detach();
+    }
+}
+
+
+=head2 logout
+
+=cut
+
+sub logout :Local :Args(0) {
+    my ($self, $c) = @_;
+
+    # Clear the user's state
+    $c->logout;
+
+    # 204 No Content
+    $c->response->status(204);  # No Content
+    $c->detach();
+}
+
 =head2 end
 
 =cut

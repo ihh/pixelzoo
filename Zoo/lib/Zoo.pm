@@ -20,6 +20,15 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+
+    StackTrace
+            
+    Authentication
+    Authentication::Credential::Password
+
+    Session
+    Session::Store::FastMmap
+    Session::State::Cookie
 /;
 
 extends 'Catalyst';
@@ -40,6 +49,26 @@ __PACKAGE__->config(
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
 );
+
+__PACKAGE__->config->{authentication} =
+{
+    default_realm => 'members',
+    realms => {
+	members => {
+	    credential => {
+		class => 'Password',
+		password_field => 'password',
+		password_type => 'clear'
+	    },
+		    store => {
+			class => 'DBIx::Class',
+			user_model => 'DB::User',
+			role_relation => 'roles',
+			role_field => 'role_id',
+		}
+	}
+    }
+};
 
 # Start the application
 __PACKAGE__->setup();
