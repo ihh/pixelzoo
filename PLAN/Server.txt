@@ -9,7 +9,8 @@ All can return 401 Unauthorized for authentication (incl. challenge URL)
 World controller
 ----------------
 
-GET world  -->    200 Success + WorldStatus list
+GET world  -->    200 Success + WorldStatus list (may be empty unless 'page' & 'results' specified, but will contain <count>)
+GET world?page=PageNumber&results=RecordsPerPage  -->    200 Success + WorldStatus list, 416 Requested Range Not Satisfiable
 
 GET world/WorldID/board  -->    200 Success + Board (HTTP headers: "Last-Modified"=last move), 404 Not Found (bad WorldID)
 GET world/WorldID/status  -->   200 Success + WorldStatus (HTTP headers: "Last-Modified"=last change of owner), 404 Not Found (bad WorldID)
@@ -39,9 +40,15 @@ POST world/WorldID/turn (Turn) -->  204 No Content (success), 410 Gone (lock exp
 Store controller
 ----------------
 
+GET store/type  -->    200 Success + Type list (may be empty unless 'page' & 'results' specified, but will contain <count>)
+GET store/type?page=PageNumber&results=RecordsPerPage  -->    200 Success + Type list, 416 Requested Range Not Satisfiable
+
 POST store/type (Type)  -->  201 Created (success), 403 Forbidden (no coder privileges), 402 Payment Required, 413 Request Entity Too Large
 GET store/type/TypeName  -->  200 Success + Type, 404 Not Found
 DELETE store/type/TypeName  -->  204 No Content (success), 403 Forbidden
+
+GET store/tool  -->    200 Success + Tool list (may be empty unless 'page' & 'results' specified, but will contain <count>)
+GET store/tool?page=PageNumber&results=RecordsPerPage  -->    200 Success + Tool list, 416 Requested Range Not Satisfiable
 
 POST store/tool (Tool)  -->  201 Created (success), 403 Forbidden (no maker privileges), 402 Payment Required, 413 Request Entity Too Large
 GET store/tool/ToolName  -->  200 Success + Tool, 404 Not Found

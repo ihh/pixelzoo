@@ -1,0 +1,66 @@
+Menu system
+
+LogInOrCreate (menu)
+1. Log in   --> LogIn
+2. Create account  --> CreateUser
+
+LogIn (form)
+Username? (textbox)
+Password? (textbox)
+POST user/status
+ Correct? --> MainMenu
+ Incorrect? --> LogIn
+
+CreateUser (form)
+Username? (textbox)
+Password? (textbox)
+GET user/login/NAME/PASS
+ OK? --> MainMenu
+ Not OK? --> CreateUser
+
+
+MainMenu (menu)
+1. Play  --> WorldList
+2. View status  --> ViewStatus
+3. Select tools --> ToolStore
+4. Buy pixels --> PixelStore
+5. Logout  --> GET user/logout --> LogInOrCreate
+
+
+WorldList (entrance point)
+(Set PageNumber = 1)
+(fall through to WorldListGet)
+
+WorldListGet (menu)
+GET world?page=PageNumber&results=10
+ Success --> WorldListSelect
+ 416 Requested Range Not Satisfiable --> WorldList
+ Other error? pause 1-3 seconds, goto WorldListGet
+
+WorldListSelect
+[1-10]. (world_name, owner_name, last_move_time, lock_status)
+ Select world --> POST world/ID/lock
+  Success? --> GameMenu
+  423 Locked? --> GameLockedError
+  409 Conflict? --> TooSoonError
+  Other error? --> GenericError
+11. Next page  --> ++PageNumber (mod count); goto WorldListGet
+12. Previous page  --> --PageNumber (mod count); goto WorldListGet
+13. Back to main menu  --> MainMenu
+
+
+GameLockedError (dialog)
+"Sorry, someone else's turn"
+OK --> WorldList
+
+TooSoonError (dialog)
+"Sorry, your last turn was too recent"
+OK --> WorldList
+
+GenericError (dialog)
+"Sorry, an error occurred; try again shortly"
+OK --> WorldList
+
+GameMenu
+1. Play game
+2. End turn
