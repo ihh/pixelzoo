@@ -18,7 +18,7 @@
 /* power-up */
 typedef struct GoalTrigger GoalTrigger;
 
-/* exit portal */
+/* exit portal: the "get Lemmings to exit" mechanic */
 typedef struct ExitPortal {
   enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
 		     PortalCounting,   /* the endgame: exit portal is "open" and counting incoming Particle's */
@@ -58,7 +58,6 @@ typedef struct Game {
   enum GameState { GameOn,       /* board is evolving, player can use tools */
 		   GameWon,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
 		   GameLost,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
-		   GamePaused,   /* board not evolving, player can't use tools, can return to GameOn state (currently unimplemented) */
 		   GameQuit      /* game over, no way out of this state */
   } gameState;
 

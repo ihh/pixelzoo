@@ -346,7 +346,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case GoalRule:
       goal = (Goal*) rule->param.goal;
-      if (goal)
+      if (goal && board->game)
 	if (testGoalAtPos (goal, board->game, x, y)) {
 	  deleteGoal (goal);
 	  rule->param.goal = NULL;
