@@ -25,6 +25,18 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+    $c->response->redirect ($c->uri_for($c->controller('World')->action_for('worldlist')), 303);
+    $c->detach;
+}
+
+=head2 world/list
+
+This must come before world/*
+
+=cut
+
+sub worldlist :Path('list') :Args(0) {
+    my ( $self, $c ) = @_;
 
     my @worlds = $c->model('DB')->worlds;
     $c->stash->{worlds} = \@worlds;
@@ -32,12 +44,13 @@ sub index :Path :Args(0) {
     $c->stash->{template} = 'world/list.tt2';
 }
 
+=head2 world_id
 
-=head2 world
+This must come after world/list
 
 =cut
 
-sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
+sub world_id :Chained('/') :PathPart('world') :CaptureArgs(1) {
     my ( $self, $c, $world_id ) = @_;
 
     $c->stash->{template} = 'empty.tt2';   # start of chain: default to empty view template
@@ -52,12 +65,12 @@ sub world :Chained('/') :PathPart('world') :CaptureArgs(1) {
     $c->stash->{world} = $world;
 }
 
-sub world_end :Chained('world') :PathPart('') :Args(0) :ActionClass('REST') { }
+sub world_id_end :Chained('world_id') :PathPart('') :Args(0) :ActionClass('REST') { }
 
-sub world_end_GET {
+sub world_id_end_GET {
     my ( $self, $c ) = @_;
     my $world = $c->stash->{world};
-    $c->response->redirect ($c->uri_for($c->controller('World')->action_for('world')), 303);
+    $c->response->redirect ($c->uri_for($c->controller('World')->action_for('status'), [$world->id]), 303);
     $c->detach;
 }
 
@@ -66,7 +79,7 @@ sub world_end_GET {
 
 =cut
 
-sub board :Chained('world') :PathPart('board') :Args(0) :ActionClass('REST') { }
+sub board :Chained('world_id') :PathPart('board') :Args(0) :ActionClass('REST') { }
 
 sub board_GET {
     my ( $self, $c ) = @_;
@@ -79,7 +92,7 @@ sub board_GET {
 
 =cut
 
-sub status :Chained('world') :PathPart('status') :Args(0) :ActionClass('REST') { }
+sub status :Chained('world_id') :PathPart('status') :Args(0) :ActionClass('REST') { }
 
 sub status_GET {
     my ( $self, $c ) = @_;
@@ -91,7 +104,7 @@ sub status_GET {
 
 =cut
 
-sub game :Chained('world') :PathPart('game') :CaptureArgs(0) {
+sub game :Chained('world_id') :PathPart('game') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/game.tt2';
 }
@@ -192,7 +205,7 @@ sub assemble {
 
 =cut
 
-sub view :Chained('world') :PathPart('view') :CaptureArgs(0) {
+sub view :Chained('world_id') :PathPart('view') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     # assemble using world's current board, voyeur rules, and no tools
@@ -231,7 +244,7 @@ Get the Lock(s) for the World.
 
 =cut
 
-sub lock :Chained('world') :PathPart('lock') :CaptureArgs(0) {
+sub lock :Chained('world_id') :PathPart('lock') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     my $world = $c->stash->{world};
@@ -285,7 +298,8 @@ sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
 	$c->detach();
     }
 
-    # TODO: check if the lock has expired; if so, delete it
+    # TODO: check if the lock deletion time has passed; if so, delete it
+    # (deletion time > expiry time; deletion is when the player gets to make another turn)
 }
 
 sub lock_id_end :Chained('lock_id') :PathPart('') :Args(0) :ActionClass('REST') { }
