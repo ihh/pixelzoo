@@ -164,7 +164,7 @@ sub assemble {
     # popping tools until the number of particles is less than a configurable limit (<64k)
 
     # What to do if the board itself contains >64K downstream particles?
-    # _ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
+    # ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
 
     # particles
     my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
