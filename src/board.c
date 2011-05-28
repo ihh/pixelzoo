@@ -374,6 +374,13 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
   clock_t start, now;
   Move *nextMove;
 
+  /* TODO:
+
+     Synchronize moveQueue by ABSOLUTE NUMBER OF MOVES, not board time (as is currently done).
+     The latter is fragile, especially e.g. to replay Goal-triggered moves.
+
+   */
+
   /* check parameters */
   Assert (targetElapsedMicroticks > 0, "The board clock must advance during the simulation");
 
