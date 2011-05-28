@@ -20,11 +20,10 @@ GET user/login/NAME/PASS
 
 
 MainMenu (menu)
-1. Play  --> WorldList
-2. View status  --> ViewStatus
-3. Select tools --> ToolStore
-4. Buy pixels --> PixelStore
-5. Logout  --> GET user/logout --> LogInOrCreate
+1. Play  --> Game
+2. Solo worlds  --> TutorialWorldList
+3. Online worlds  --> WorldList
+4. Logout  --> GET user/logout --> LogInOrCreate
 
 
 WorldList (entrance point)
