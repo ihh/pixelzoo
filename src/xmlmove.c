@@ -4,6 +4,7 @@
 Move* newMoveFromXmlNode (xmlNode *moveNode) {
   Assert (moveNode != NULL, "newMoveFromXmlNode: null move node");
   return newMove (CHILDINT(moveNode,TIME),
+		  OPTCHILDINT(moveNode,UPDATE,-1),
 		  CHILDINT(moveNode,X),
 		  CHILDINT(moveNode,Y),
 		  OPTCHILDINT(moveNode,DECSTATE,CHILDHEX(moveNode,HEXSTATE)));
@@ -31,6 +32,7 @@ MoveList* newMoveListFromXmlNode (xmlNode *moveListNode) {
 void writeMove (Move* move, xmlTextWriterPtr writer) {
   xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_MOVE);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_TIME, "%lld", move->t);
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_UPDATE, "%lld", move->u);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_X, "%d", move->x);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Y, "%d", move->y);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXSTATE, "%llx", move->state);

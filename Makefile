@@ -26,13 +26,6 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 
 XMLFILES := t/simple.xml
 
-ifneq (,$(findstring debug,$(MAKECMDGOALS)))
-# 'debug' was specified:
-DEBUG := -debug
-else
-DEBUG :=
-endif
-
 all: lib targets xml
 
 test: all eloise-sdl-test xml-valid-test

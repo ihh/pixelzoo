@@ -8,9 +8,10 @@
 #include "xmlboard.h"
 
 /* XML node names */
-#define XMLZOO_MOVE  "move"
-#define XMLZOO_TIME  "t"
-#define XMLZOO_LOG   "log"
+#define XMLZOO_MOVE    "move"
+#define XMLZOO_TIME    "t"
+#define XMLZOO_UPDATE  "u"
+#define XMLZOO_LOG     "log"
 
 /* methods */
 Move* newMoveFromXmlNode (xmlNode *node);

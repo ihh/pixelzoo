@@ -35,6 +35,7 @@ Board* newBoard (int size) {
   board->lastSyncParticles = 0;
   board->microticks = 0;
   board->microticksAtNextBoardSync = 0;
+  board->updateCount = 0;
   board->syncUpdates = 0;
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
   board->game = NULL;
@@ -83,9 +84,28 @@ void writeBoardMove (Board* board, int x, int y, State state) {
   if (onBoard(board,x,y)) {
     writeBoardStateUnguardedFunction (board, x, y, state);
     if (board->moveLog)
-      (void) MoveListAppend (board->moveLog, board->microticks, x, y, state);
+      (void) MoveListAppend (board->moveLog, board->microticks, board->updateCount, x, y, state);
+    ++board->updateCount;
     board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   }
+}
+
+void replayBoardMove (Board* board) {
+  Move *nextMove;
+
+  nextMove = MoveListFront (board->moveQueue);
+
+  board->microticks = nextMove->t;
+  board->sampledNextAsyncEventTime = 0;
+  board->sampledNextSyncEventTime = 0;
+
+#ifdef BOARD_DEBUG
+  fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
+#endif /* BOARD_DEBUG */
+
+  writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);  /* auto-increments updateCount */
+  (void) MoveListShift (board->moveQueue);
+  deleteMove (nextMove);
 }
 
 void logBoardMoves (Board* board) {
@@ -374,13 +394,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
   clock_t start, now;
   Move *nextMove;
 
-  /* TODO:
-
-     Synchronize moveQueue by ABSOLUTE NUMBER OF MOVES, not board time (as is currently done).
-     The latter is fragile, especially e.g. to replay Goal-triggered moves.
-
-   */
-
   /* check parameters */
   Assert (targetElapsedMicroticks > 0, "The board clock must advance during the simulation");
 
@@ -450,7 +463,15 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     deadline1 = MIN (deadline0, microticksAtNextMove);   /* deadline for async particle updates */
     deadline2 = MIN (deadline1, board->microticksAtNextAsyncEvent);  /* deadline for sync particle updates */
     deadline3 = MIN (deadline2, board->microticksAtNextSyncEvent);  /* deadline for board syncs */
-    if (board->microticksAtNextBoardSync <= deadline3 && pendingSyncEvents <= 0) {  /* do a board sync? (won't happen until all pending sync events are processed) */
+
+    /* First check the update count of the next move */
+    if (nextMove && nextMove->u == board->updateCount) {
+ 
+      Assert (nextMove->t > microticksAtTarget || nextMove->t == deadline3, "Move with update count pre-empted scheduled Board events");
+      replayBoardMove (board);
+      continue;
+
+    } else if (board->microticksAtNextBoardSync <= deadline3 && pendingSyncEvents <= 0) {  /* do a board sync? (won't happen until all pending sync events are processed) */
 
       board->microticks = board->microticksAtNextBoardSync;
       board->sampledNextAsyncEventTime = 0;
@@ -463,6 +484,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 #endif /* BOARD_DEBUG */
 
       syncBoard (board);
+      ++board->updateCount;
       continue;
 
     } else if (board->microticksAtNextSyncEvent <= deadline2) {  /* do a synchronized cell update? */
@@ -483,6 +505,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCellSync (board, x, y);
       ++cellUpdates;
+      ++board->updateCount;
       continue;
 
     } else if (board->microticksAtNextAsyncEvent <= deadline1) {  /* do an asynchronous cell update? */
@@ -502,30 +525,14 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
+      ++board->updateCount;
       continue;
 
     } else if (microticksAtNextMove <= deadline0) {  /* take a move from the queue? */
 
-      board->microticks = microticksAtNextMove;
-      board->sampledNextAsyncEventTime = 0;
-      board->sampledNextSyncEventTime = 0;
-
-      /* In one swoop, service all moves that have the same timepoint, without sampling other events.
-	 This reflects the way that moves are put on the queue (they represent user actions, which occur outside the evolve loop).
-       */
-      while (nextMove->t == microticksAtNextMove) {
-
-#ifdef BOARD_DEBUG
-	fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
-#endif /* BOARD_DEBUG */
-
-	writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);
-	(void) MoveListShift (board->moveQueue);
-	deleteMove (nextMove);
-	if (MoveListEmpty (board->moveQueue))
-	  break;
-	nextMove = MoveListFront (board->moveQueue);
-      }
+      if (nextMove->u >= 0)
+	Assert (nextMove->u == board->updateCount, "Move count does not match Board update count");
+      replayBoardMove (board);
       continue;
 			
     } else {  /* reached target time */

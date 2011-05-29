@@ -25,6 +25,7 @@ typedef struct Board {
   char sampledNextAsyncEventTime, sampledNextSyncEventTime;  /* if true, then the next async/sync event time has been predetermined by a call to the random number generator */
   int64_Microticks microticksAtNextAsyncEvent, microticksAtNextSyncEvent;  /* time of upcoming async/sync events */
   int64_Microticks microticksAtNextBoardSync;  /* time of next board sync */
+  signed long long int updateCount;  /* total number of updates (calls to evolveBoardCell, evolveBoardCellSync, syncBoard, or replayBoardMove) */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   void *game;  /* passed to rule-triggered Goal's. Set this to NULL in "playback" mode to prevent Rule's from triggering Goal's */
@@ -41,6 +42,7 @@ PaletteIndex readBoardColor (Board* board, int x, int y);
 
 void logBoardMoves (Board* board);
 void writeBoardMove (Board* board, int x, int y, State state);
+void replayBoardMove (Board* board);
 
 void boardReleaseRandomNumbers (Board* board);   /* causes the Board to forget any random numbers (i.e. upcoming event times) that it has sampled */
 

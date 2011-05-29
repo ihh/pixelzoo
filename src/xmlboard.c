@@ -43,6 +43,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
     rngSetStateString (board->rng, (char*) getNodeContent (seedNode));
 
   board->microticks = OPTCHILDINT(boardNode,TIME,0);
+  board->updateCount = OPTCHILDINT(boardNode,UPDATE,0);
 
   grammarNode = CHILD(boardNode,GRAMMAR);
   for (node = grammarNode->children; node; node = node->next)
