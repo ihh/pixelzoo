@@ -1,16 +1,35 @@
 Capture the flag
 
-If, during your turn, you are able to destroy all particles of type X,
-then you gain ownership of the board.
+This game design requires a special 'user' particle, whose 'type' field is some constant (X), and whose 'vars' field specifies a player ID.
+It also requires a 'critter' particle, whose 'type' field is some constant (Y).
+Finally there are some numeric constants (NX, NY).
+
+Define an "owner-particle" to be a user particle whose 'vars' field is the ID of the current board owner.
+Define a "guest-particle" to be a user particle whose 'vars' field is the ID of the current player (who is NOT the board owner).
+
+At the end of the board owner's turn, if all of the following conditions are true, board ownership is retained:
+ (a) there are at least NX owner-particles on the board;
+ (b) there are at least NY critter-particles on the board.
+If either (or both) of these conditions is not met, the board becomes 'unclaimed' (no-one owns it).
+
+At the end of a guest player's turn, if all of the following conditions are true, board ownership passes to the guest:
+ (a) there are at least NX guest-particles on the board;
+ (b) there are fewer than NX owner-particles on the board;
+ (c) there are at least NY critter-particles on the board.
+If any (or all) of these conditions are not met, but both the following conditions are met, board ownership is retained by the current owner:
+ (a) there are at least NX owner-particles on the board;
+ (b) there are at least NY critter-particles on the board.
+If either (or both) of these conditions is not met, the board becomes 'unclaimed' (no-one owns it).
 
 Constraints:
  Turns have fixed time limits.
  After their turn, a player is locked out for a random time.
  Guest-writable-cells  \subset  Owner-writable-cells  \subseteq  Board
 
-Richard's advice: implement this game exactly as described.
 
-Extensions:
+
+
+Possible future extensions:
 Users can upload their own particle and tool XML.
 New particles/tools are priced by the system.
 Tool designers get in-game credit when players buy their tools.
