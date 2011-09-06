@@ -90,3 +90,6 @@ xml-debug: perl/zoocompiler.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
+
+xmltest: bin/xmltest
+	bin/xmltest t/testgame.xml
