@@ -57,6 +57,8 @@ eloise-sdl-test: targets
 	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
 	diff t/eloise_board.xml t/eloise_copy_board.xml
 
+eloise: eloise-sdl-test
+
 # XML validation tests
 # These should produce no output
 xml-valid-test:
