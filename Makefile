@@ -91,6 +91,8 @@ obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
 
+# The following target builds and runs a simple XML reader, without any other SDL or pixelzoo targets
+# It can be used to test libxml2 on a new platform.
 xmltest:
 	@test -e bin || mkdir bin
 	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
