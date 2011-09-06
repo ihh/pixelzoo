@@ -93,5 +93,5 @@ obj/%.o: src/%.c
 
 xmltest:
 	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o bin/xmltest tsrc/xmltest.c
+	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
 	bin/xmltest t/testgame.xml
