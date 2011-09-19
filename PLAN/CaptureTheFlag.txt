@@ -28,7 +28,6 @@ Constraints:
 
 
 
-
 Possible future extensions:
 Users can upload their own particle and tool XML.
 New particles/tools are priced by the system.
