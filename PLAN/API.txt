@@ -221,8 +221,8 @@ for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end;
 
 
 /* Main game wrapper */
-#define REDRAWS_PER_SECOND 30   /* frame rate */
-const char* xmlString = "";   /* get Game XML from somewhere... */
+#define REDRAWS_PER_SECOND 30   /* frame rate; should be 30 unless platform is v slow */
+const char* xmlString = "";   /* get game XML from somewhere... */
 Game* game = newGameFromXmlDocument(xmlString);
 if (game) {
     gameStart(game);
@@ -236,7 +236,7 @@ if (game) {
 }
 
 
-/* Call to main game loop */
+/* Call to main game loop. Should be called REDRAWS_PER_SECOND times per second */
 double targetTicks = game->ticksPerSecond / REDRAWS_PER_SECOND;
 double actualTicks, elapsedTime;
 int64_Microticks actualMicroticks;
