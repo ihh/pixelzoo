@@ -156,6 +156,7 @@ C client code recipes
 ---------------------
 
 /* Loop over board, getting cell colors for rendering */
+/* Note that (0,0) should be the top left corner of the board */
 for (int x = 0; x < game->board->size; ++x) {
     for (int y = 0; y < game->board->size; ++y) {
     	PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
