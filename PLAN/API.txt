@@ -1,0 +1,157 @@
+Pixel Zoo architecture
+----------------------
+
+C client overview
+-----------------
+
+A Board is a two-dimensional square cellular automata, asynchronously
+updated (there is also a synchronous update API but it is currently
+private).
+
+The individual cells evolve via a fixed global table of update
+rules. Each update rule is essentially a small program equivalent to a
+finite branching tree.
+
+A Game is essentially a Board and a set of Tools with which the player
+can paint on it, plus some feedback hooks for single-player mode.
+
+C client data structures
+------------------------
+
+A State is a 64-bit integer.
+The 16 most significant bits of a State are the Type.
+The 48 least significant bits of a State are the Vars.
+
+A VarsDescriptor consists of...
+ a string name,
+ an integer offset (ranging from 0 to 47),
+ an integer width (from 0 to 47, with offset + width < 48).
+
+A Var is obtained from a State and VarsDescriptor as follows:
+ right-shift the State by the 'offset',
+ mask out all but the lower 'width' bits.
+
+A Board consists of...
+ an integer size (which is a power of 2),
+ a square array of size*size cells (each cell holds a State),
+ an integer time value (measured in "microticks"),
+ a reproducible random number generator (Mersenne twister),
+ a mapping from 16-bit Types to Particles,
+ a mapping from strings (subroutine names) to ParticleRules,
+ a Palette (which is an array of 4096 24-bit RGB-values),
+ a set of Balloons (purely decorative: no effect on play),
+ a Game (optional),
+ a move log (optional),
+ a move queue (optional).
+
+A Particle consists of...
+ a 16-bit Type that serves as a unique identifier,
+ a string name that is also unique,
+ a list of VarsDescriptors,
+ an update rate (measured in "Microhurtz": 2^-{20} * ticks^{-1}),
+ an update ParticleRule,
+ a dispatch table, mapping 64-bit Messages to ParticleRules,
+ an array of #ReadOnlyStates# read-only States,
+ up to #NumColorRules# ColorRules
+  (constituting a simple formula relating State to HSB).
+ 
+A ParticleRule is one of the following:
+[one of the four public rules, Lookup/Modify/Random/Deliver]
+ a LookupRule, analogous to a "switch" statement
+  (read a Var from any local cell,
+   look up corresponding ParticleRule in a table,
+   execute that ParticleRule);
+ a ModifyRule, effectively a "load-add-store" instruction
+  (read a Var from any local cell,
+   add or subtract a certain amount,
+   store value in Var of any local cell);
+ a RandomRule, introducing stochasticity
+  (execute one of two ParticleRules by flipping a biased coin),
+ a DeliverRule, which sends a 64-bit Message to a local Particle,
+  (passing control to a ParticleRule in that Particle's dispatch table),
+[or one of two internally-used rules, Goto/Goal]
+ a GotoRule, which is used not to loop, but simply to save space,
+  (passes control to a named subroutine, which never returns),
+ a GoalRule, allowing a callback hook for in-game feedback and effects
+  (tests a Goal, if the Board has an associated Game).
+
+A Game consists of...
+ a Board,
+ floating-point timing parameters
+  (determining rates and timing of events in single-player mode),
+ a "non-reproducible" random number generator
+  (for non-critical UI effects that do not affect the Board),
+ the GameState, controlling whether the player can do anything
+  (including: GameOn, GameWon, GameLost, GameQuit),
+ some hooks for in-game triggers and logic:
+  a regularly-tested Goal,
+  a (possibly empty) set of write-protected cell co-ordinates,
+  an optional ExitPortal
+   (can count Particles moving through some part of the Board),
+ an output console (basically a list of colored strings),
+ a list of Tools,
+  a mapping from Tool names to Tools,
+ a series of tool variables intended to be set directly by the UI:
+  the currently selected Tool,
+  a flag indicating whether the Board is currently being touched,
+  the current and previous Tool touch position.
+
+A Goal can be one of a number of flexible tests and/or triggers,
+including e.g. entropy, enclosures, boolean logic, side effects
+(based on "Zoo Gas" prototype).
+
+A Tool consists of...
+ a string name,
+ a current reserve level,
+ a maximum reserve level,
+ various internals:
+  a recharge rate,
+  a brush shape and mask,
+  a permissions mask (restricts what Tool can write to Board).
+
+
+C client API
+------------
+
+Game* newGameFromXmlDocument(xmlDoc*);
+void deleteGame();
+void gameStart(Game*);
+void gameLoop(Game*,
+              double targetTicks,
+              double maxFractionOfTimeInterval,
+              int64_Microticks *actualMicroticks_ret,
+	      double *actualTicks_ret,
+	      int *actualUpdates,
+	      double *evolveTimeInSeconds);
+
+int gameRunning(Game*);
+void quitGame(Game*);
+
+int numberOfToolsVisible(Game*);
+
+void writeMoveList(MoveList*,xmlTextWriterPtr,const xmlChar*);
+void writeBoard(Board*,xmlTextWriterPtr,int reverseCompile);
+
+
+
+Perl server overview
+--------------------
+
+A RESTful server implements a single global registry of uniquely-named
+Particles, along with a large database of Worlds.
+
+The primary URL-accessed controllers are...
+ the world controller (for viewing Worlds & posting locks or turns),
+ the user controller (for plaintext player authentication & status info),
+ the store controller (for creating or buying Tools and Particles).
+
+A World consists of...
+ a Board,
+ the player ID of the current owner,
+ an optional Lock,
+ a set of Game XML headers for owners, guests & voyeurs.
+
+On the server, Perl modules compile a World from an "infinite"
+string-based Particle namespace to a finite 16-bit integer Type
+space. These modules can also be used to build levels for
+single-player mode.
