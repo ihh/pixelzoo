@@ -222,12 +222,16 @@ for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end;
 
 /* Main game wrapper */
 #define REDRAWS_PER_SECOND 30   /* frame rate */
-const char* xmlString = "...";
+const char* xmlString = "";   /* get Game XML from somewhere... */
 Game* game = newGameFromXmlDocument(xmlString);
 if (game) {
     gameStart(game);
     /* ... set timer to call the game loop REDRAWS_PER_SECOND times per second, as below ... */
     while (gameRunning(game)) { /* sleep */ }
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename ("dummyFilename.movelog", 0);
+    writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+    /* Optionally write the final board state via writeBoard() */
+    /* Save or post the XML describing the move or the final board state */
     deleteGame(game);
 }
 
