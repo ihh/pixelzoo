@@ -133,6 +133,7 @@ int gameRunning(Game*);
 void quitGame(Game*);
 
 int numberOfToolsVisible(Game*);
+PaletteIndex readBoardColor(Board*,int x,int y);
 
 void writeMoveList(MoveList*,xmlTextWriterPtr,const xmlChar*);
 void writeBoard(Board*,xmlTextWriterPtr,int reverseCompile);
