@@ -245,7 +245,26 @@ gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &a
 
 
 
-/* Flag a tool for use */
+/* Select a tool for later use (player has tapped in the tool area) */
+int foundTool = 0;
+for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
+    Tool *tool = toolNode->value;
+    if (!tool->hidden) {
+        if (/* this tool's rectangle contains the tap location */) {
+	   game->selectedTool = tool;
+	   foundTool = 1;
+	   break;
+	}
+    }
+}
+if (!foundTool) {
+   /* UI can choose what to do here, e.g. switch to "examine" tool  */
+   /* To de-select tool, do this: */
+   game->selectedTool = NULL;
+}
+
+
+/* Flag that current tool should be used (player is touching the board) */
 game->toolPos.x = x;
 game->toolPos.y = y;
 if (!game->toolActive)
@@ -253,7 +272,7 @@ if (!game->toolActive)
 game->toolActive = 1;
 
 
-/* Stop using the tool */
+/* Stop using the tool (player is not touching the board) */
 game->toolActive = 0;
 
 
