@@ -108,6 +108,7 @@ A Tool consists of...
  a string name,
  a current reserve level,
  a maximum reserve level,
+ a flag indicating whether the Tool is hidden or visible,
  various internals:
   a recharge rate,
   a brush shape and mask,
