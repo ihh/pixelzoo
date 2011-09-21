@@ -4,20 +4,24 @@ Pixel Zoo architecture
 C client overview
 -----------------
 
-A Board is a two-dimensional stochastic cellular automata,
-asynchronously updated (meaning that cells are updated in a random
-order, and rates are only averages). There is also a synchronous
-update API (whereby cells can be updated on a fixed clock) but it is
-currently private.
+A Board is a two-dimensional stochastic cellular automata, running off
+a reproducible random number generator. The Board is asynchronously
+updated (meaning that cells are updated in a random order; rates are
+only averages). There is also a synchronous update API (whereby cells
+can be updated on a fixed clock) but it is currently private.
 
 The individual cells evolve via a fixed global table of update
 rules. Each update rule is essentially a small program equivalent to a
-finite branching tree. The rule language is small & easy to analyze,
-but sophisticated enough to allow reaction-diffusion systems,
-polymers, simple state machines, and extremely basic messaging.
+finite branching tree of conditional tests and load-modify-store
+instructions. The rule language is small & easy to analyze, but
+sophisticated enough to allow reaction-diffusion systems, polymers,
+simple state machines, and extremely basic inter-cell messaging.
 
 A Game is essentially a Board and a set of Tools with which the player
-can paint on it, plus some feedback hooks for single-player mode.
+can paint on it, plus some feedback hooks for single-player
+mode. These feedback hooks (Goals) amount to another mini-language for
+implementing simple challenge-reward structures.
+
 
 C client data structures
 ------------------------
