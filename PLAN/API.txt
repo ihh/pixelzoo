@@ -205,3 +205,13 @@ On the server, Perl modules compile a World from an "infinite"
 string-based Particle namespace to a finite 16-bit integer Type
 space. These modules can also be used to build levels for
 single-player mode.
+
+
+XML format overview
+-------------------
+
+There are two dialects of the XML format for specifying Games.
+The "proto" dialect uses string names for Particles and Vars.
+The "game" dialect has these names compiled to integers.
+
+DTDs for both dialects can be found in Zoo/dtd/
