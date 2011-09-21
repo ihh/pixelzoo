@@ -181,6 +181,80 @@ for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = to
 }
 
 
+/* Read name of Particle in a particular cell, so player can "examine" it */
+/* It is recommended to implement a pseudo-tool for "examining" */
+State examState = readBoardState (game->board, x, y);
+Particle *particle = game->board->byType[StateType(examState)];
+PaletteIndex examColorIndex = particle ? getParticleColor (particle, examState) : PaletteWhite;
+RGB *rgb = &game->board->palette.rgb[examColorIndex];
+if (particle) {
+   char *text = particle->name;
+   /* Print text */
+}
+
+
+/* Print text console */
+for (int cl = ConsoleLines; cl > 0 && cy >= boardRect.size.height; --cl) {
+    int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
+    if (game->consoleText[ci]) {
+        double charsize = game->consoleSize[ci];   /* might want to multiply this by some base font size */
+	char *text = game->consoleText[ci];
+        RGB *textRgb = &game->board->palette.rgb[game->consoleColor[ci]];
+	/* print (text, charsize, textRgb) */
+    }
+}
+
+
+/* Draw speech balloons */
+for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end; ++ptr) {
+    Balloon *b = (Balloon*) *ptr;
+    int len = strlen(b->text);
+    RGB *textRgb = &game->board->palette.rgb[b->color];
+    double opacity = b->opacity;
+    double charSize = b->size,  /* might want to multiply this by some global font size */
+           charSpacing = b->z;
+    char *text = b->text;
+    double xCenterPos = (double) b->x,
+           yCenterPos = (double) b->y;
+    /* Plot (text, xCenterPos, yCenterPos, charSize, charSpacing, textRgb, opacity) */
+}
+
+
+/* Main game wrapper */
+#define REDRAWS_PER_SECOND 30   /* frame rate */
+const char* xmlString = "...";
+Game* game = newGameFromXmlDocument(xmlString);
+if (game) {
+    gameStart(game);
+    /* ... set timer to call the game loop REDRAWS_PER_SECOND times per second, as below ... */
+    while (gameRunning(game)) { /* sleep */ }
+    deleteGame(game);
+}
+
+
+/* Call to main game loop */
+double targetTicks = game->ticksPerSecond / REDRAWS_PER_SECOND;
+double actualTicks, elapsedTime;
+int64_Microticks actualMicroticks;
+int cellUpdates;
+gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
+
+
+
+/* Flag a tool for use */
+game->toolPos.x = x;
+game->toolPos.y = y;
+if (!game->toolActive)
+   game->lastToolPos = game->toolPos;
+game->toolActive = 1;
+
+
+/* Stop using the tool */
+game->toolActive = 0;
+
+
+
+
 For more code examples, see file xcode/pixelzoo/Classes/pixelzooView.m
 (mixes calls to Cocoa Objective C API with calls to PixelZoo C API)
 
