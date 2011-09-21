@@ -237,6 +237,7 @@ if (game) {
 
 
 /* Call to main game loop. Should be called REDRAWS_PER_SECOND times per second */
+#define MAX_PROPORTION_TIME_EVOLVING .9  /* this is just so that gameLoop doesn't eat 100% of the time between updates */
 double targetTicks = game->ticksPerSecond / REDRAWS_PER_SECOND;
 double actualTicks, elapsedTime;
 int64_Microticks actualMicroticks;
