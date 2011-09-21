@@ -139,6 +139,46 @@ void writeMoveList(MoveList*,xmlTextWriterPtr,const xmlChar*);
 void writeBoard(Board*,xmlTextWriterPtr,int reverseCompile);
 
 
+Some member variables are intended to be read directly, e.g.
+(Board*) game->board
+(int) game->board->size
+(RGB*) game->board->palette.rgb
+(List*) game->toolOrder
+(char*) tool->name
+(char*) particle->name
+
+
+C client code recipes
+---------------------
+
+/* Loop over board, getting cell colors for rendering */
+for (int x = 0; x < game->board->size; ++x) {
+    for (int y = 0; y < game->board->size; ++y) {
+    	PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
+	RGB *cellRgb = &game->board->palette.rgb[cellColorIndex];
+        /* Render cell (x, y, cellRgb) */
+    }
+}
+
+
+/* Loop through tools, getting information for rendering */
+for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
+	Tool *tool = toolNode->value;
+	if (!tool->hidden) {
+		State toolState = tool->defaultBrushState;
+		PaletteIndex toolColorIndex = getParticleColor (game->board->byType[StateType(toolState)], toolState);
+		RGB *toolRgb = &game->board->palette.rgb[toolColorIndex];
+		const char *toolName = tool->name;
+		int isSelected = (tool == game->selectedTool);
+		double toolReserveLevel = (tool->reserve / tool->maxReserve);
+		/* Render tool (toolName, toolRgb, isSelected, toolReserveLevel) */
+	}
+}
+
+
+For more code examples, see file xcode/pixelzoo/Classes/pixelzooView.m
+(mixes calls to Cocoa Objective C API with calls to PixelZoo C API)
+
 
 Perl server overview
 --------------------
