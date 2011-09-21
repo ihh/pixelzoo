@@ -1,0 +1,14 @@
+# Ignore generated files
+bin/
+gen/
+obj/
+libs/*
+*.o
+
+.svn
+
+jni/SDL/acinclude/
+jni/SDL/Xcode/
+jni/SDL/Xcode-iPhoneOS/
+jni/SDL/VisualC/
+jni/SDL/VisualCE/

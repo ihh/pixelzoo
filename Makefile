@@ -1,4 +1,5 @@
-PERL        := /opt/local/bin/perl
+#PERL        := /opt/local/bin/perl
+PERL        := /usr/bin/perl
 XMLLINT     := /usr/bin/xmllint
 
 SDLCONFIG = sdl-config
