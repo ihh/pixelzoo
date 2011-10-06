@@ -6,7 +6,7 @@ extern void deleteGame(Game*);
 extern void gameLoop (Game*, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
 
 /* functions defined here */
-void callGameLoop(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
+void updateGame(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
 
 int getBoardSize(Game*);
 int getCellRGB(Game*,int x,int y);  /* returns 24-bit RGB */
