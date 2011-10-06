@@ -16,19 +16,21 @@ public class PixelzooActivity extends Activity {
          * function.
          */
         TextView  tv = new TextView(this);
-        tv.setText( runXmlTest() );
-        // tv.setText( stringFromJNI() );
+        tv.setText( runSDLGame() );
         setContentView(tv);
     }
     
     public native String stringFromJNI();
     public native String runXmlTest();
+    public native String runSDLGame();
     
     static {
     	System.loadLibrary("hello-jni");
+
     	// Note that ndk does not automatically load dependencies!
     	System.loadLibrary("xml2");
     	System.loadLibrary("SDL");
-        System.loadLibrary("xmltest");
+        System.loadLibrary("pixelzoo");
+        System.loadLibrary("androidhook");
     }
 }
