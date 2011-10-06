@@ -1,40 +1,35 @@
+Game* pzNewGameFromXmlString(const char*);  /* wraps newGameFromXmlString */
+void pzDeleteGame(Game*);  /* wraps deleteGame */
 
-/* functions defined elsewhere */
-extern Game* newGameFromXmlString(const char*);
-extern void deleteGame(Game*);
+void pzUpdateGame(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
 
-extern void gameLoop (Game*, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
+int pzGetBoardSize(Game*);
+int pzGetCellRgb(Game*,int x,int y);  /* returns 24-bit RGB */
+char* pzGetCellName(Game*,int x,int y);
 
-/* functions defined here */
-void updateGame(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
+int pzGetNumberOfTools(Game*);
+char* pzGetToolName(Game*);
+int pzGetToolRgb(Game*,int toolNum);  /* returns 24-bit RGB */
+int pzGetToolSelectedFlag(Game*,int toolNum);
+double pzGetToolReserveLevel(Game*,int toolNum);
 
-int getBoardSize(Game*);
-int getCellRGB(Game*,int x,int y);  /* returns 24-bit RGB */
-char* getCellName(Game*,int x,int y);
+void pzSelectTool(Game*,int toolNum);
+void pzUnselectTool(Game*);
 
-int getNumberOfTools(Game*);
-char* getToolName(Game*);
-int getToolRGB(Game*,int toolNum);  /* returns 24-bit RGB */
-int getToolSelectedFlag(Game*,int toolNum);
-double getToolReserveLevel(Game*,int toolNum);
+void pzTouchCell(Game*,int x,int y);
+void pzUntouchCell(Game*);
 
-void selectTool(Game*,int toolNum);
-void unselectTool(Game*);
+int pzGetNumberOfConsoleLines(Game*);
+char* pzGetConsoleText(Game*,int lineNum);
 
-void touchCell(Game*,int x,int y);
-void untouchCell(Game*);
+int pzGetNumberOfBalloons(Game*);
+char* pzGetBalloonText(Game*,int balloonNum);
+double pzGetBalloonXpos(Game*,int balloonNum);
+double pzGetBalloonYpos(Game*,int balloonNum);
+double pzGetBalloonCharSize(Game*,int balloonNum);
+double pzGetBalloonCharSpacing(Game*,int balloonNum);
+int pzGetBalloonTextRgb(Game*,int balloonNum);  /* returns 24-bit RGB */
+double pzGetBalloonOpacity(Game*,int balloonNum);
 
-int getNumberOfConsoleLines(Game*);
-char* getConsoleText(Game*,int lineNum);
-
-int getNumberOfBalloons(Game*);
-char* getBalloonText(Game*,int balloonNum);
-double getBalloonXpos(Game*,int balloonNum);
-double getBalloonYpos(Game*,int balloonNum);
-double getBalloonCharSize(Game*,int balloonNum);
-double getBalloonCharSpacing(Game*,int balloonNum);
-int getBalloonTextRgb(Game*,int balloonNum);  /* returns 24-bit RGB */
-double getBalloonOpacity(Game*,int balloonNum);
-
-char* getMoveAsXmlString(Game*);  /* use to upload moves */
-char* getGameAsXmlString(Game*);  /* use to save game state */
+char* pzGetMoveAsXmlString(Game*);  /* use to upload moves */
+char* pzGetGameAsXmlString(Game*);  /* use to save game state */
