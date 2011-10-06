@@ -1,0 +1,40 @@
+
+/* functions defined elsewhere */
+extern Game* newGameFromXmlString(const char*);
+extern void deleteGame(Game*);
+
+extern void gameLoop (Game*, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
+
+/* functions defined here */
+void callGameLoop(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
+
+int getBoardSize(Game*);
+int getCellRGB(Game*,int x,int y);  /* returns 24-bit RGB */
+char* getCellName(Game*,int x,int y);
+
+int getNumberOfTools(Game*);
+char* getToolName(Game*);
+int getToolRGB(Game*,int toolNum);  /* returns 24-bit RGB */
+int getToolSelectedFlag(Game*,int toolNum);
+double getToolReserveLevel(Game*,int toolNum);
+
+void selectTool(Game*,int toolNum);
+void unselectTool(Game*);
+
+void touchCell(Game*,int x,int y);
+void untouchCell(Game*);
+
+int getNumberOfConsoleLines(Game*);
+char* getConsoleText(Game*,int lineNum);
+
+int getNumberOfBalloons(Game*);
+char* getBalloonText(Game*,int balloonNum);
+double getBalloonXpos(Game*,int balloonNum);
+double getBalloonYpos(Game*,int balloonNum);
+double getBalloonCharSize(Game*,int balloonNum);
+double getBalloonCharSpacing(Game*,int balloonNum);
+int getBalloonTextRgb(Game*,int balloonNum);
+double getBalloonOpacity(Game*,int balloonNum);
+
+char* getMoveAsXmlString(Game*);  /* use to upload moves */
+char* getGameAsXmlString(Game*);  /* use to save state */
