@@ -1,7 +1,7 @@
 Game* pzNewGameFromXmlString(const char*);  /* wraps newGameFromXmlString */
 void pzDeleteGame(Game*);  /* wraps deleteGame */
 
-void pzUpdateGame(Game*,int callsPerSecond);  /* simplified wrapper to gameLoop */
+void pzUpdateGame(Game*,int callsPerSecond);  /* simplified wrapper for gameLoop */
 
 int pzGetBoardSize(Game*);
 int pzGetCellRgb(Game*,int x,int y);  /* returns 24-bit RGB */
