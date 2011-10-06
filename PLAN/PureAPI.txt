@@ -33,8 +33,8 @@ double getBalloonXpos(Game*,int balloonNum);
 double getBalloonYpos(Game*,int balloonNum);
 double getBalloonCharSize(Game*,int balloonNum);
 double getBalloonCharSpacing(Game*,int balloonNum);
-int getBalloonTextRgb(Game*,int balloonNum);
+int getBalloonTextRgb(Game*,int balloonNum);  /* returns 24-bit RGB */
 double getBalloonOpacity(Game*,int balloonNum);
 
 char* getMoveAsXmlString(Game*);  /* use to upload moves */
-char* getGameAsXmlString(Game*);  /* use to save state */
+char* getGameAsXmlString(Game*);  /* use to save game state */
