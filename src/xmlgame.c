@@ -33,12 +33,32 @@ Game* newGameFromXmlDocument (xmlDoc *doc) {
 }
 
 Game* newGameFromXmlRoot (xmlNode *gameNode) {
+  return newGameFromXmlRootWithSeparateBoard (gameNode, gameNode);
+}
+
+Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separateBoardDoc) {
+  return newGameFromXmlRootWithSeparateBoard (xmlDocGetRootElement (gameDoc),
+					      xmlDocGetRootElement (separateBoardDoc));
+}
+
+Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* boardString) {
+  xmlDoc *doc, *boardDoc;
+  Game* game = NULL;
+  doc = xmlReadMemory (gameString, strlen(gameString), "noname.xml", NULL, 0);
+  Assert (doc != NULL, "Game XML string not parsed");
+  boardDoc = xmlReadMemory (boardString, strlen(boardString), "noname.xml", NULL, 0);
+  Assert (boardDoc != NULL, "Board XML string not parsed");
+  game = newGameFromXmlDocumentWithSeparateBoard (doc, boardDoc);
+  return game;
+}
+
+Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateBoardRoot) {
   Game *game;
   xmlNode *exitNode, *goalNode, *node;
   Tool *tool, *selectedTool;
 
   game = newGame();
-  game->board = newBoardFromXmlRoot ((void*)game, gameNode);
+  game->board = newBoardFromXmlRoot ((void*)game, separateBoardRoot);
 
   game->ticksPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultTicksPerSecond);
 

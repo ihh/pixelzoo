@@ -7,6 +7,8 @@ typedef struct RGB {
   unsigned char r, g, b;
 } RGB;
 
+#define PackRgbTo24Bit(rgb) (((rgb).r << 16) | ((rgb).g << 8) | (rgb).b)
+
 /* 24-bit HSB integer */
 typedef unsigned long HSB24;
 
