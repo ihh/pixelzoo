@@ -20,9 +20,9 @@ const char* pzGetCellName(Game*,int x,int y);
 int pzGetCellNameRgb(Game*,int x,int y);  /* returns 24-bit RGB */
 
 int pzGetNumberOfTools(Game*);
-Tool* getToolByNumber(Game*game,int toolNum);
+int getSelectedToolNumber(Game*);  /* returns -1 if no Tool selected */
+Tool* getToolByNumber(Game*,int toolNum);
 
-int pzGetToolSelectedFlag(Game*,Tool*);
 int pzGetToolRgb(Game*,Tool*);  /* returns 24-bit RGB */
 
 const char* pzGetToolName(Tool*);

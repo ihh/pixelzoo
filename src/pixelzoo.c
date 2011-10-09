@@ -96,8 +96,24 @@ const char* pzGetToolName(Tool*tool) {
   return toolName;
 }
 
-int pzGetToolSelectedFlag(Game*game,Tool*tool) {
-  return tool == game->selectedTool;
+int getSelectedToolNumber(Game*game) {
+  ListNode *toolNode;
+  Tool *tool;
+  int selectedToolNum, toolNum;
+  toolNum = 0;
+  selectedToolNum = -1;
+  if (game->selectedTool)
+    for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
+      tool = toolNode->value;
+      if (!tool->hidden) {
+	if (tool == game->selectedTool) {
+	  selectedToolNum = toolNum;
+	  break;
+	}
+	++toolNum;
+      }
+    }
+  return selectedToolNum;
 }
 
 int pzGetToolRgb(Game*game,Tool*tool) {
