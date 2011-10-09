@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "pixelzoo.h"
 #include "xmlmove.h"
 
@@ -188,21 +190,35 @@ double pzGetBalloonOpacity(Balloon*balloon) { return balloon->opacity; }
 const char* pzGetMoveAsXmlString(Game*game) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
-  buf = NULL;
-  /* TODO: allocate buf */
-  writer = xmlNewTextWriterMemory(buf, 0);
-  writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-  /* TODO: get the string and return it */
-  return NULL;
+  const char* str;
+  str = NULL;
+  buf = xmlBufferCreate();
+  if (buf) {
+    writer = xmlNewTextWriterMemory(buf, 0);
+    if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
+      writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+      str = SafeCalloc (buf->use + 1, sizeof(char));
+      strcpy ((char*) str, (char*) buf->content);
+    }
+    xmlBufferFree (buf);
+  }
+  return str;
 }
 
 const char* pzSaveBoardAsXmlString(Game*game) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
-  buf = NULL;
-  /* TODO: allocate buf */
-  writer = xmlNewTextWriterMemory(buf, 0);
-  writeBoard (game->board, writer, 1);
-  /* TODO: get the string and return it */
-  return NULL;
+  const char* str;
+  str = NULL;
+  buf = xmlBufferCreate();
+  if (buf) {
+    writer = xmlNewTextWriterMemory(buf, 0);
+    if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
+      writeBoard (game->board, writer, 1);
+      str = SafeCalloc (buf->use + 1, sizeof(char));
+      strcpy ((char*) str, (char*) buf->content);
+    }
+    xmlBufferFree (buf);
+  }
+  return str;
 }

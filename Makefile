@@ -32,7 +32,10 @@ all: lib targets xml
 test: all eloise-sdl-test xml-valid-test
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM $(XMLFILES)
+	rm -rf obj/* bin/* *~ *.dSYM
+
+cleanxml:
+	rm $(XMLFILES)
 
 sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -r t/revcomp.xml
