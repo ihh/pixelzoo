@@ -32,6 +32,9 @@ SDL_TRACKBALL_KEYUP_DELAY := 1
 # resized in HW-accelerated way, however it eats a tiny bit of CPU
 SDL_VIDEO_RENDER_RESIZE := 1
 
+# asw12
+# SDL_NOMOUSE := 1
+
 SDL_VIDEO_RENDER_RESIZE_KEEP_ASPECT := 0
 
 COMPILED_LIBRARIES := # jpeg png sdl_mixer sdl_net sdl_sound

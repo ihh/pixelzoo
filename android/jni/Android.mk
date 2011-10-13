@@ -32,7 +32,7 @@ include $(CLEAR_VARS)
 # LOCAL_SRC_FILES := $(wildcard ../../tsrc/*.c)
 
 LOCAL_MODULE := androidhook
-LOCAL_SRC_FILES := androidhook.c xmltest.c sdlgame.c \
+LOCAL_SRC_FILES := androidhook.c xmltest.c androidgame.c \
 	../../src/move.c ../../src/xymap.c ../../src/board.c ../../src/xmlmove.c ../../src/color.c ../../src/rule.c \
 	../../src/statemap.c ../../src/game.c ../../src/xmlutil.c ../../src/xmlgame.c ../../src/list.c ../../src/vector.c ../../src/quadtree.c \
 	../../src/particle.c ../../src/util.c ../../src/notify.c ../../src/balloon.c ../../src/vars.c ../../src/tool.c ../../src/bintree.c \
@@ -43,6 +43,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/xml2/include $(LOCAL_PATH)/SDL/include $(LOCAL
 
 LOCAL_LDLIBS := -llog
 LOCAL_SHARED_LIBRARIES := xml2 SDL # pixelzoo
-LOCAL_CFLAGS = -std=c99
+LOCAL_CFLAGS = -std=c99 -g
 
 include $(BUILD_SHARED_LIBRARY)
