@@ -1,6 +1,8 @@
 package com.pixelzoo;
 
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -34,26 +36,49 @@ public class PixelzooActivity extends Activity {
         // this should suffice for now, but ideally, only the viewport needs a fixed orientation
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        this.pv = new PixelzooView(this);
+        SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
+				public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
+	
+				public void surfaceCreated(SurfaceHolder arg0) {
+					// start JNI thread here
+					Log.d("SurfaceHolder.Callback", "should start drawing now");
+					startGameThread();
+					// runAndroidGame();
+					// requestRedrawBoard();
+				}
+	
+				public void surfaceDestroyed(SurfaceHolder arg0) {}
+        	
+        	};
+        this.pv = new PixelzooView(this, callback);
         setContentView(pv);
         pv.bringToFront();
-        pv.invalidate();
+        // pv.invalidate();
         
         Log.d("PixelzooActivity", "Set PixelzooView");
         
-        drawParticle(0, 0, 0xFF0000FF);
-        drawParticle(1, 1, 0xFFFF0000);
-        drawParticle(2, 2, 0xFF00FF00);
-        runAndroidGame();
+        
+        // runAndroidGame();
         // requestRedrawBoard();
+    }
+    
+    Thread jniThread;
+    
+    private void startGameThread() {
+        // INFO/dalvikvm(289): Landroid/view/ViewRoot$CalledFromWrongThreadException;: Only the original thread that created a view hierarchy can touch its views.
+        Thread jniThread = new Thread(new Runnable() {
+				public void run() {
+					runAndroidGame();					
+				}
+        	});
+        jniThread.setDaemon(true);
+        jniThread.start();
     }
     
     @Override
     public void onResume() {
     	Log.d("PixelzooActivity", "Resumed");
     	super.onResume();
-    	
-    	// pause
     }
     
     @Override
@@ -73,6 +98,12 @@ public class PixelzooActivity extends Activity {
     	Log.d("PixelZooActivity", "hello world");
     }
     
+    public void startDraw() {
+    }
+    public void endDraw() {
+    	pv.endDraw();
+    }
+    
     public void drawParticle(int x, int y, int color) {
     	pv.drawParticle(x, y, color);
     }
@@ -81,5 +112,4 @@ public class PixelzooActivity extends Activity {
 	public void drawTools(int x, int y, int color) {
 		
 	}
-    // public native String drawBoard();
 }

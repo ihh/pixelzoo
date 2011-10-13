@@ -7,7 +7,7 @@
 const int COLOR_DEPTH     = 8;
 const int RENDER_RATE = 50;
 
-int launch( int argc, char *argv[], JNIEnv* env, jobject thiz )
+int launch( int argc, char *argv[], jobject thiz )
 {
   char *gameFilename, *moveLogFilename, *boardFilename, *revcompiledBoardFilename;
   int userInputAllowed;
@@ -61,35 +61,35 @@ int launch( int argc, char *argv[], JNIEnv* env, jobject thiz )
       }
   }
 
-  AndroidGame *AndroidGame = NULL;
+  AndroidGame *androidGame = NULL;
 
   if (gameFilename == NULL) {
     LOGE ("Game file not specified");
   }
 
-  AndroidGame = newAndroidGame(gameFilename, env, thiz);
+  androidGame = newAndroidGame(gameFilename, thiz);
 
   if (moveLogFilename != NULL) {
-    logBoardMoves (AndroidGame->game->board);
+    logBoardMoves (androidGame->game->board);
   }
 
   LOGV("Starting game loop");
-  while( gameRunning(AndroidGame->game) && (totalMicroticks < 0 || AndroidGame->game->board->microticks < totalMicroticks ))
+  while( gameRunning(androidGame->game) && (totalMicroticks < 0 || androidGame->game->board->microticks < totalMicroticks ))
     {
-      /*const double targetUpdatesPerCell = AndroidGame->game->ticksPerSecond / (double) RENDER_RATE;
-      const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / AndroidGame->game->ticksPerSecond;
+      const double targetUpdatesPerCell = androidGame->game->ticksPerSecond / (double) RENDER_RATE;
+      const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / androidGame->game->ticksPerSecond;
       int64_Microticks targetMicroticks = FloatToIntMillionths (targetUpdatesPerCell);
       if (totalMicroticks >= 0)
-    	targetMicroticks = MIN (totalMicroticks - AndroidGame->game->board->microticks, targetMicroticks);
+    	targetMicroticks = MIN (totalMicroticks - androidGame->game->board->microticks, targetMicroticks);
 
       double updatesPerCell, evolveTime;
       int64_Microticks microticks;
       int actualUpdates;
 
-      innerGameLoop(AndroidGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
-      // LOGV("About to render");
-      // renderAndDelay(AndroidGame);
-      // LOGV("Rendered"); // */
+      innerGameLoop(androidGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
+      LOGV("Rendered");
+      renderAndDelay(androidGame);
+      // */
 
       /*SDL_Event event;
 
@@ -128,37 +128,41 @@ int launch( int argc, char *argv[], JNIEnv* env, jobject thiz )
 		break;
 	      }
 	  }*/
+
+
+      // test: do only one loop
+      // quitGame(androidGame->game);
     }
   LOGV("Exiting");
   if (moveLogFilename) {
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (moveLogFilename, 0);
-    writeMoveList (AndroidGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+    writeMoveList (androidGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
     xmlFreeTextWriter (writer);
   }
   LOGV("Finished writing moveLog");
 
   if (boardFilename) {
-    boardReleaseRandomNumbers (AndroidGame->game->board);
+    boardReleaseRandomNumbers (androidGame->game->board);
 
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
-    writeBoard (AndroidGame->game->board, writer, 0);
+    writeBoard (androidGame->game->board, writer, 0);
     xmlFreeTextWriter (writer);
   }
   LOGV("Finished writing board file");
 
   if (revcompiledBoardFilename) {
-    boardReleaseRandomNumbers (AndroidGame->game->board);
+    boardReleaseRandomNumbers (androidGame->game->board);
 
     xmlTextWriterPtr writer = xmlNewTextWriterFilename (revcompiledBoardFilename, 0);
-    writeBoard (AndroidGame->game->board, writer, 1);
+    writeBoard (androidGame->game->board, writer, 1);
     xmlFreeTextWriter (writer);
   }
   LOGV("Finished writing revCompiledBoard");
 
-  // deleteAndroidGame(AndroidGame);
+  deleteAndroidGame(androidGame);
   LOGV("AndroidGame released");
 
-  // free(thisOpt); /* done with this item, free it */
+  free(thisOpt); /* done with this item, free it */
 
   LOGV("Done cleanup");
   return 0;
@@ -168,82 +172,79 @@ int launch( int argc, char *argv[], JNIEnv* env, jobject thiz )
 // Name: newAndroidGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-AndroidGame* newAndroidGame( char *filename, JNIEnv* env, jobject thiz )
+AndroidGame* newAndroidGame(char *filename, jobject thiz)
 {
   PaletteIndex pal;
 
-  AndroidGame *AndroidGame = SafeMalloc(sizeof(AndroidGame));
+  AndroidGame *androidGame = SafeMalloc(sizeof(AndroidGame));
 
   //
   // Initialize Game...
   //
   LOGV("Making new game");
-  AndroidGame->game = newGameFromXmlFile(filename);
-  AndroidGame->game->selectedTool = AndroidGame->game->toolByName->root->left->value;
+  androidGame->game = newGameFromXmlFile(filename);
+  androidGame->game->selectedTool = androidGame->game->toolByName->root->left->value;
   LOGV("Made new game");
 
   /* init palette lookup */
+  // LOGV("sizeof AndroidGame %i", sizeof(AndroidGame));
   for (pal = 0; pal <= PaletteMax; ++pal) {
-	  //LOGV("%i %i %i %i", pal, AndroidGame->game->board->palette.rgb[pal].r, AndroidGame->game->board->palette.rgb[pal].g, AndroidGame->game->board->palette.rgb[pal].b);
-	  AndroidGame->sdlColor[pal] = (Uint32)((0xFF000000) | (AndroidGame->game->board->palette.rgb[pal].r << 24) | (AndroidGame->game->board->palette.rgb[pal].g << 16) | (AndroidGame->game->board->palette.rgb[pal].b));
+	  // LOGV("%i %i %i %i", pal, androidGame->game->board->palette.rgb[pal].r, androidGame->game->board->palette.rgb[pal].g, androidGame->game->board->palette.rgb[pal].b);
+	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | (androidGame->game->board->palette.rgb[pal].r << 24) | (androidGame->game->board->palette.rgb[pal].g << 16) | (androidGame->game->board->palette.rgb[pal].b));
+	  // androidGame->sdlColor[pal] = 0xFF00FF00;
   }
 
   /* JNI bindings */
-  // AndroidGame->env = env;
-  // AndroidGame->thiz = thiz;
+  androidGame->thiz = thiz;
 
-  while(1) {
-
-  }
-
-  return AndroidGame;
+  return androidGame;
 }
 
 //-----------------------------------------------------------------------------
 // Name: deleteAndroidGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-void deleteAndroidGame( AndroidGame* AndroidGame )
+void deleteAndroidGame( AndroidGame* androidGame )
 {
   // SDL_FreeSurface( AndroidGame->g_screenSurface );
-  deleteGame(AndroidGame->game);
-  SafeFree(AndroidGame);
+  deleteGame(androidGame->game);
+  SafeFree(androidGame);
 }
 
 //-----------------------------------------------------------------------------
 // Name: renderPixel()
 // Desc: 
 //-----------------------------------------------------------------------------
-void renderPixel(AndroidGame* AndroidGame, int x, int y, Uint32 color)
+void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color)
 {
 	// do some magic here
-	drawParticle(AndroidGame, x, y, color);
+	drawParticle(androidGame, x, y, color);
 }
 
 
-void renderAndDelay(AndroidGame* AndroidGame) {
+void renderAndDelay(AndroidGame* androidGame) {
   double renderPeriodInSeconds = 1. / RENDER_RATE, elapsedClockTime;
   clock_t start, now;
   start = clock();
-  render(AndroidGame);
+  render(androidGame);
   now = clock();
   elapsedClockTime = ((double) now - start) / (double) CLOCKS_PER_SEC;
-  LOGV("SDL delay?");
   SDL_Delay(1000 * MAX(0.,renderPeriodInSeconds - elapsedClockTime));
-  LOGV("SDL delay works");
 }
 
-void render(AndroidGame* AndroidGame) {
+void render(AndroidGame* androidGame) {
   //
-  // Plot each cell as a single pixel...
+  // Plot each cell
   //
   int x, y, i, j;
-  int size = AndroidGame->game->board->size;
-  for (x = 0; x < size; ++x)
+  int size = androidGame->game->board->size;
+  // renderPixel(androidGame, 20, 20, 0xFFFF0000);
+  for (x = 0; x < size; ++x) {
     for (y = 0; y < size; ++y) {
-      PaletteIndex pal = readBoardColor (AndroidGame->game->board, x, y);
-      for (i = 0; i < PIXELS_PER_CELL; ++i)
-	for (j = 0; j < PIXELS_PER_CELL; ++j)
-	  renderPixel( AndroidGame, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, AndroidGame->sdlColor[pal] );
-    }
+      PaletteIndex pal = readBoardColor (androidGame->game->board, x, y);
+      renderPixel( androidGame, x, y, androidGame->sdlColor[pal] );
+    } // */
+  }
+
+  endDraw(androidGame);
 }

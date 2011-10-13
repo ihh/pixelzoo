@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
@@ -23,13 +24,18 @@ public class PixelzooView extends SurfaceView {
 	private int maxXParticles = 0;
 	private int maxYParticles = 0;
 
-    public PixelzooView(Context context) { 
+    public PixelzooView(Context context, SurfaceHolder.Callback callback) { 
         super(context);
 
         this.setWillNotDraw(false); // necessary for View to call onDraw
 
         mBitmapDrawable = new BitmapDrawable(Bitmap.createBitmap(600, 800, Bitmap.Config.ARGB_8888));
         mBitmapDrawable.setBounds(0, 0, 600, 800);
+        
+        if(callback!= null) {
+        	getHolder().addCallback(callback);
+        }
+        setFocusable(true);
 
         Log.d("PixelzooView", "Created");
     }
@@ -53,9 +59,11 @@ public class PixelzooView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
     	super.onDraw(canvas);
     	
-        mBitmapDrawable.draw(canvas);
-    	    	
-        Log.d("PixelzooView", "should be drawn");
+        myDraw(canvas);
+    }
+    
+    private void myDraw(Canvas canvas) {
+    	mBitmapDrawable.draw(canvas);
     }
     
     public void clearScreen() {
@@ -67,12 +75,7 @@ public class PixelzooView extends SurfaceView {
 		particleDrawable.getPaint().setColor(color);
         int surfaceX = x * particleSize;
         int surfaceY = y * particleSize;
-        
-        // asw12: very heavy handed way of drawing an individual particle for now!
-        // particleDrawable.setBounds(surfaceX, surfaceY, surfaceX + particleSize, surfaceY + particleSize);
-        // particleDrawable.draw(mPicture.beginRecording(getWidth(), getHeight()));
-        // mPicture.endRecording();
-        
+                
         Canvas canvas = new Canvas();
         canvas.setBitmap(mBitmapDrawable.getBitmap());
         Paint paint = new Paint();
@@ -81,6 +84,25 @@ public class PixelzooView extends SurfaceView {
         // TODO: check bounds. It appears as if nothing will be drawn if the rect is out of bounds at all, rather than it being clipped to show the parts that are in bounds.
         canvas.drawRect(surfaceX, surfaceY, surfaceX + particleSize, surfaceY + particleSize, paint);
                 
-        invalidate();
+        // invalidate();
+        // 
+	}
+	
+	public void endDraw() {
+		repaint();
+	}
+	
+	private void repaint() {
+		Canvas c = null;
+		try {
+			c = getHolder().lockCanvas();
+			if(c != null) {
+				myDraw(c);
+			}
+		} finally {
+			if (c != null) {
+				getHolder().unlockCanvasAndPost(c);
+			}
+		}
 	}
 }

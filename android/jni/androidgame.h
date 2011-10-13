@@ -25,7 +25,7 @@ typedef struct AndroidGame {
   Uint32 sdlColor[PaletteSize];
 
   // asw12: too hackish?
-  JNIEnv* env;
+  // JNIEnv* env;
   jobject thiz;
 } AndroidGame;
 
@@ -35,12 +35,12 @@ typedef struct AndroidGame {
 extern "C" {
 #endif
 
-int launch(int argc, char *argv[], JNIEnv* env, jobject thiz);
-AndroidGame* newAndroidGame(char *filename, JNIEnv* env, jobject thiz);
-void deleteAndroidGame(AndroidGame*);
-void render(AndroidGame*);
-void renderAndDelay(AndroidGame*);
-void renderPixel(AndroidGame* AndroidGame, int x, int y, Uint32 color);
+int launch(int argc, char *argv[], jobject thiz);
+AndroidGame* newAndroidGame(char *filename, jobject thiz);
+void deleteAndroidGame(AndroidGame* androidGame);
+void render(AndroidGame* androidGame);
+void renderAndDelay(AndroidGame* androidGame);
+void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color);
 
 int evolveThreadFunc ( void *voidGame );
 int renderThreadFunc( void *voidAndroidGame );
