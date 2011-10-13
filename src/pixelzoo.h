@@ -21,8 +21,9 @@ void pzUpdateGame(pzGame,int callsPerSecond);  /* simplified wrapper for gameLoo
 int pzGetBoardSize(pzGame);
 int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
 
-int** pzNewCellRgbArray(pzGame);
-void pzDeleteCellRgbArray(pzGame);
+/* Some helper functions that allow caller to read the whole board at one go */
+int** pzNewCellRgbArray(pzGame);  /* Allocates boardSize*boardSize array of int's */
+void pzDeleteCellRgbArray(pzGame);  /* Frees the array */
 
 void pzWriteCellRgbArray(pzGame,int**cell);  /* cell[x][y] = pzGetCellRgb(pzGame,x,y) is 24-bit RGB */
 
