@@ -1,55 +1,57 @@
 #ifndef PIXELZOO_INCLUDED
 #define PIXELZOO_INCLUDED
 
-#include "xmlgame.h"
+typedef void* pzGame;
+typedef void* pzTool;
+typedef void* pzBalloon;
 
-Game* pzNewGameFromXmlString(const char*gameString);
-Game* pzRestoreBoardFromXmlString(const char*gameString,const char*boardString);
+pzGame pzNewGameFromXmlString(const char*gameString);
+pzGame pzRestoreBoardFromXmlString(const char*gameString,const char*boardString);
 
-void pzDeleteGame(Game*);
+void pzDeleteGame(pzGame);
 
-void pzStartGame(Game*);
-int pzGameRunning(Game*);
+void pzStartGame(pzGame);
+int pzGameRunning(pzGame);
 
-void pzUpdateGame(Game*,int callsPerSecond);  /* simplified wrapper for gameLoop */
+void pzUpdateGame(pzGame,int callsPerSecond);  /* simplified wrapper for gameLoop */
 
-int pzGetBoardSize(Game*);
-int pzGetCellRgb(Game*,int x,int y);  /* returns 24-bit RGB */
+int pzGetBoardSize(pzGame);
+int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
 
-const char* pzGetCellName(Game*,int x,int y);
-int pzGetCellNameRgb(Game*,int x,int y);  /* returns 24-bit RGB */
+const char* pzGetCellName(pzGame,int x,int y);
+int pzGetCellNameRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
 
-int pzGetNumberOfTools(Game*);
-int getSelectedToolNumber(Game*);  /* returns -1 if no Tool selected */
-Tool* getToolByNumber(Game*,int toolNum);
+int pzGetNumberOfTools(pzGame);
+int getSelectedToolNumber(pzGame);  /* returns -1 if no Tool selected */
+pzTool getToolByNumber(pzGame,int toolNum);
 
-int pzGetToolRgb(Game*,Tool*);  /* returns 24-bit RGB */
+int pzGetToolRgb(pzGame,pzTool);  /* returns 24-bit RGB */
 
-const char* pzGetToolName(Tool*);
-double pzGetToolReserveLevel(Tool*);
+const char* pzGetToolName(pzTool);
+double pzGetToolReserveLevel(pzTool);
 
-void pzSelectTool(Game*,int toolNum);
-void pzUnselectTool(Game*);
+void pzSelectTool(pzGame,int toolNum);
+void pzUnselectTool(pzGame);
 
-void pzTouchCell(Game*,int x,int y);
-void pzUntouchCell(Game*);
+void pzTouchCell(pzGame,int x,int y);
+void pzUntouchCell(pzGame);
 
-int pzGetNumberOfConsoleLines(Game*);
-const char* pzGetConsoleText(Game*,int lineNum);
+int pzGetNumberOfConsoleLines(pzGame);
+const char* pzGetConsoleText(pzGame,int lineNum);
 
-int pzGetNumberOfBalloons(Game*);
-Balloon* pzGetBalloonByNumber(Game*,int balloonNum);
+int pzGetNumberOfBalloons(pzGame);
+pzBalloon pzGetBalloonByNumber(pzGame,int balloonNum);
 
-int pzGetBalloonTextRgb(Game*,Balloon*);  /* returns 24-bit RGB */
+int pzGetBalloonTextRgb(pzGame,pzBalloon);  /* returns 24-bit RGB */
 
-const char* pzGetBalloonText(Balloon*);
-double pzGetBalloonXpos(Balloon*);
-double pzGetBalloonYpos(Balloon*);
-double pzGetBalloonCharSize(Balloon*);
-double pzGetBalloonCharSpacing(Balloon*);
-double pzGetBalloonOpacity(Balloon*);
+const char* pzGetBalloonText(pzBalloon);
+double pzGetBalloonXpos(pzBalloon);
+double pzGetBalloonYpos(pzBalloon);
+double pzGetBalloonCharSize(pzBalloon);
+double pzGetBalloonCharSpacing(pzBalloon);
+double pzGetBalloonOpacity(pzBalloon);
 
-const char* pzGetMoveAsXmlString(Game*);  /* use to upload moves */
-const char* pzSaveBoardAsXmlString(Game*);  /* use to save game state; restore with pzRestoreBoardFromXmlString */
+const char* pzGetMoveAsXmlString(pzGame);  /* use to upload moves */
+const char* pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore with pzRestoreBoardFromXmlString */
 
 #endif /* PIXELZOO_INCLUDED */

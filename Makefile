@@ -15,12 +15,15 @@ XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
 #XML_LDFLAGS := -L/usr/lib -lxml2 -lpthread -lz -lm
 
 CC          := gcc
+AR          := ar
 COPTS       := -g -Wall
 CFLAGS      := $(XML_CFLAGS) $(SDL_CFLAGS) -Isrc
 ANSI        := -ansi
 LIBS        := -lc $(XML_LDFLAGS) $(SDL_LDFLAGS)
+ARFLAGS     := -rcvs
 
-TARGETS := test_red_black_tree sdlgame
+TARGETS   := test_red_black_tree sdlgame
+LIBTARGET := lib/libpixelzoo.a
 
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
@@ -32,7 +35,7 @@ all: lib targets xml
 test: all eloise-sdl-test xml-valid-test
 
 clean:
-	rm -rf obj/* bin/* *~ *.dSYM
+	rm -rf obj/* bin/* lib/* *~ *.dSYM
 
 cleanxml:
 	rm $(XMLFILES)
@@ -75,11 +78,15 @@ targets: $(XFILES)
 
 xml: $(XMLFILES)
 
-lib: $(OFILES)
+lib: $(LIBTARGET)
 
 bin/%:  tsrc/%.c $(OFILES)
 	@test -e bin || mkdir bin
 	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ tsrc/$*.c $(OFILES)
+
+$(LIBTARGET): $(OFILES)
+	@test -e lib || mkdir lib
+	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES)
 
 .SUFFIXES :
 

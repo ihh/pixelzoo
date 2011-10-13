@@ -1,65 +1,82 @@
 #include <string.h>
 
 #include "pixelzoo.h"
+#include "xmlgame.h"
 #include "xmlmove.h"
 
 #define MAX_PROPORTION_TIME_EVOLVING .9  /* so that gameLoop doesn't eat 100% of the time between updates */
 
-Game* pzNewGameFromXmlString(const char*gameString) {
-  return newGameFromXmlString(gameString);
+pzGame pzNewGameFromXmlString(const char*gameString) {
+  return (pzGame) newGameFromXmlString(gameString);
 }
 
-Game* pzRestoreBoardFromXmlString(const char*gameString,const char*boardString) {
-  return newGameFromXmlStringWithSeparateBoard (gameString, boardString);
+pzGame pzRestoreBoardFromXmlString(const char*gameString,const char*boardString) {
+  return (pzGame) newGameFromXmlStringWithSeparateBoard (gameString, boardString);
 }
 
-void pzDeleteGame(Game*game) {
+void pzDeleteGame(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   deleteGame(game);
 }
 
-void pzStartGame(Game*game) {
+void pzStartGame(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   gameStart(game);
 }
 
-int pzGameRunning(Game*game) {
+int pzGameRunning(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   return gameRunning(game);
 }
 
-void pzUpdateGame(Game*game,int callsPerSecond) {
+void pzUpdateGame(pzGame pzg,int callsPerSecond) {
   double targetTicks, actualTicks, elapsedTime;
   int64_Microticks actualMicroticks;
   int cellUpdates;
+  Game* game;
+  game = (Game*) pzg;
   targetTicks = game->ticksPerSecond / (double) callsPerSecond;
   gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
 }
 
-int pzGetBoardSize(Game*game) {
+int pzGetBoardSize(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   return game->board->size;
 }
 
-int pzGetCellRgb(Game*game,int x,int y) {
+int pzGetCellRgb(pzGame pzg,int x,int y) {
   PaletteIndex cellColorIndex;
   RGB *cellRgb;
+  Game* game;
+  game = (Game*) pzg;
   cellColorIndex = readBoardColor(game->board, x, y);
   cellRgb = &game->board->palette.rgb[cellColorIndex];
   return PackRgbTo24Bit(*cellRgb);
 }
 
-const char* pzGetCellName(Game*game,int x,int y) {
+const char* pzGetCellName(pzGame pzg,int x,int y) {
   State examState;
   Particle *particle;
   char *text;
+  Game* game;
+  game = (Game*) pzg;
   examState = readBoardState (game->board, x, y);
   particle = game->board->byType[StateType(examState)];
   text = particle ? particle->name : NULL;
   return text;
 }
 
-int pzGetCellNameRgb(Game*game,int x,int y) {
+int pzGetCellNameRgb(pzGame pzg,int x,int y) {
   State examState;
   Particle *particle;
   PaletteIndex examColorIndex;
   RGB *cellNameRgb;
+  Game* game;
+  game = (Game*) pzg;
   examState = readBoardState (game->board, x, y);
   particle = game->board->byType[StateType(examState)];
   examColorIndex = particle ? getParticleColor (particle, examState) : PaletteWhite;
@@ -67,10 +84,12 @@ int pzGetCellNameRgb(Game*game,int x,int y) {
   return PackRgbTo24Bit(*cellNameRgb);
 }
 
-int pzGetNumberOfTools(Game*game) {
+int pzGetNumberOfTools(pzGame pzg) {
   ListNode *toolNode;
   Tool *tool;
   int nTools;
+  Game* game;
+  game = (Game*) pzg;
   nTools = 0;
   for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
     tool = toolNode->value;
@@ -80,28 +99,34 @@ int pzGetNumberOfTools(Game*game) {
   return nTools;
 }
 
-Tool* getToolByNumber(Game*game,int toolNum) {
+pzTool getToolByNumber(pzGame pzg,int toolNum) {
   ListNode *toolNode;
   Tool *tool;
+  Game* game;
+  game = (Game*) pzg;
   for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
     tool = toolNode->value;
     if (!tool->hidden)
       if (--toolNum < 0)
-	return tool;
+	return (pzTool) tool;
   }
-  return NULL;
+  return (pzTool) NULL;
 }
 
-const char* pzGetToolName(Tool*tool) {
+const char* pzGetToolName(pzTool pzt) {
   const char *toolName;
+  Tool* tool;
+  tool = (Tool*) pzt;
   toolName = tool ? tool->name : NULL;
   return toolName;
 }
 
-int getSelectedToolNumber(Game*game) {
+int getSelectedToolNumber(pzGame pzg) {
   ListNode *toolNode;
   Tool *tool;
   int selectedToolNum, toolNum;
+  Game* game;
+  game = (Game*) pzg;
   toolNum = 0;
   selectedToolNum = -1;
   if (game->selectedTool)
@@ -118,10 +143,14 @@ int getSelectedToolNumber(Game*game) {
   return selectedToolNum;
 }
 
-int pzGetToolRgb(Game*game,Tool*tool) {
+int pzGetToolRgb(pzGame pzg,pzTool pzt) {
   State toolState;
   PaletteIndex toolColorIndex;
   RGB *toolRgb;
+  Game* game;
+  Tool* tool;
+  tool = (Tool*) pzt;
+  game = (Game*) pzg;
   toolColorIndex = PaletteBlack;
   if (tool) {
     toolState = tool->defaultBrushState;
@@ -131,21 +160,29 @@ int pzGetToolRgb(Game*game,Tool*tool) {
   return PackRgbTo24Bit(*toolRgb);
 }
 
-double pzGetToolReserveLevel(Tool*tool) {
+double pzGetToolReserveLevel(pzTool pzt) {
   double toolReserveLevel;
+  Tool* tool;
+  tool = (Tool*) pzt;
   toolReserveLevel = tool ? (tool->reserve / tool->maxReserve) : 0.;
   return toolReserveLevel;
 }
 
-void pzSelectTool(Game*game,int toolNum) {
+void pzSelectTool(pzGame pzg,int toolNum) {
+  Game* game;
+  game = (Game*) pzg;
   game->selectedTool = getToolByNumber (game, toolNum);
 }
 
-void pzUnselectTool(Game*game) {
+void pzUnselectTool(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   game->selectedTool = NULL;
 }
 
-void pzTouchCell(Game*game,int x,int y) {
+void pzTouchCell(pzGame pzg,int x,int y) {
+  Game* game;
+  game = (Game*) pzg;
   game->toolPos.x = x;
   game->toolPos.y = y;
   if (!game->toolActive)
@@ -153,44 +190,58 @@ void pzTouchCell(Game*game,int x,int y) {
   game->toolActive = 1;
 }
 
-void pzUntouchCell(Game*game) {
+void pzUntouchCell(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   game->toolActive = 0;
 }
 
-int pzGetNumberOfConsoleLines(Game*game) {
+int pzGetNumberOfConsoleLines(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   return ConsoleLines;
 }
 
-const char* pzGetConsoleText(Game*game,int lineNum) {
+const char* pzGetConsoleText(pzGame pzg,int lineNum) {
   int ci;
+  Game* game;
+  game = (Game*) pzg;
   ci = (lineNum + game->consoleLastLineIndex) % ConsoleLines;
   return game->consoleText[ci];
 }
 
-int pzGetNumberOfBalloons(Game*game) {
+int pzGetNumberOfBalloons(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
   return VectorSize (game->board->balloon);
 }
 
-Balloon* pzGetBalloonByNumber(Game*game,int balloonNum) {
-  return (Balloon*) VectorGet (game->board->balloon, balloonNum);
+pzBalloon pzGetBalloonByNumber(pzGame pzg,int balloonNum) {
+  Game* game;
+  game = (Game*) pzg;
+  return (pzBalloon) VectorGet (game->board->balloon, balloonNum);
 }
 
-const char* pzGetBalloonText(Balloon*balloon) { return balloon->text; }
-double pzGetBalloonXpos(Balloon*balloon) { return balloon->x; }
-double pzGetBalloonYpos(Balloon*balloon) { return balloon->y; }
-double pzGetBalloonCharSize(Balloon*balloon) { return balloon->size; }
-double pzGetBalloonCharSpacing(Balloon*balloon) { return balloon->z; }
-int pzGetBalloonTextRgb(Game*game,Balloon*balloon) {
+const char* pzGetBalloonText(pzBalloon pzb) { return ((Balloon*)pzb)->text; }
+double pzGetBalloonXpos(pzBalloon pzb) { return ((Balloon*)pzb)->x; }
+double pzGetBalloonYpos(pzBalloon pzb) { return ((Balloon*)pzb)->y; }
+double pzGetBalloonCharSize(pzBalloon pzb) { return ((Balloon*)pzb)->size; }
+double pzGetBalloonCharSpacing(pzBalloon pzb) { return ((Balloon*)pzb)->z; }
+int pzGetBalloonTextRgb(pzGame pzg,pzBalloon pzb) {
   RGB *textRgb;
-  textRgb = &game->board->palette.rgb[balloon->color];
+  Game* game;
+  game = (Game*) pzg;
+  textRgb = &game->board->palette.rgb[((Balloon*)pzb)->color];
   return PackRgbTo24Bit(*textRgb);
 }
-double pzGetBalloonOpacity(Balloon*balloon) { return balloon->opacity; }
+double pzGetBalloonOpacity(pzBalloon pzb) { return ((Balloon*)pzb)->opacity; }
 
-const char* pzGetMoveAsXmlString(Game*game) {
+const char* pzGetMoveAsXmlString(pzGame pzg) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
   const char* str;
+  Game* game;
+  game = (Game*) pzg;
   str = NULL;
   buf = xmlBufferCreate();
   if (buf) {
@@ -205,10 +256,12 @@ const char* pzGetMoveAsXmlString(Game*game) {
   return str;
 }
 
-const char* pzSaveBoardAsXmlString(Game*game) {
+const char* pzSaveBoardAsXmlString(pzGame pzg) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
   const char* str;
+  Game* game;
+  game = (Game*) pzg;
   str = NULL;
   buf = xmlBufferCreate();
   if (buf) {
