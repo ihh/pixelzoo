@@ -74,7 +74,7 @@ void initializePalette (Palette* palette) {
     for (s = 0; s < PaletteSaturations; ++s)
       for (h = 0; h < PaletteHues; ++h) {
 	pal = ConvertPaletteHsbToPaletteIndex(h,s,b);
-	col = &palette->rgb[pal];
+	col = &(palette->rgb[pal]);
 	ConvertPaletteHsbToRealHsb (h, s, b, hReal, sReal, bReal);
 	ConvertRealHsbToRgb (hReal, sReal, bReal, col);
       }
