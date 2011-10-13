@@ -30,6 +30,10 @@ Game* newGameFromXmlRoot (xmlNode *root);
 Game* newGameFromXmlFile (const char* filename);
 Game* newGameFromXmlString (const char* string);
 
+Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separateBoardDoc);
+Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameRoot, xmlNode *separateBoardRoot);
+Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* separateBoardString);
+
 Tool* newToolFromXmlNode (xmlNode *node);
 
 #endif /* XMLGAME_INCLUDED */
