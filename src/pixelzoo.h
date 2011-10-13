@@ -21,6 +21,11 @@ void pzUpdateGame(pzGame,int callsPerSecond);  /* simplified wrapper for gameLoo
 int pzGetBoardSize(pzGame);
 int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
 
+int** pzNewCellRgbArray(pzGame);
+void pzDeleteCellRgbArray(pzGame);
+
+void pzWriteCellRgbArray(pzGame,int** cell);  /* cell[x][y] = pzGetCellRgb(pzGame,x,y) is 24-bit RGB */
+
 /* Information required to describe individual cells, for the "inspect" tool */
 const char* pzGetCellName(pzGame,int x,int y);
 int pzGetCellNameRgb(pzGame,int x,int y);  /* returns 24-bit RGB */

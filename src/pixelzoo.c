@@ -58,6 +58,38 @@ int pzGetCellRgb(pzGame pzg,int x,int y) {
   return PackRgbTo24Bit(*cellRgb);
 }
 
+int** pzNewCellRgbArray(pzGame pzg) {
+  int x, size;
+  int** cell;
+  Game* game;
+  size = game->board->size;
+  cell = SafeCalloc (size, sizeof(int*));
+  for (x = 0; x < size; ++x)
+    cell[x] = SafeCalloc (size, sizeof(int));
+  return cell;
+}
+
+void pzDeleteCellRgbArray(pzGame pzg) {
+  int x, size;
+  int** cell;
+  Game* game;
+  game = (Game*) pzg;
+  size = game->board->size;
+  for (x = 0; x < size; ++x)
+    SafeFree (cell[x]);
+  SafeFree (cell);
+}
+
+void pzWriteCellRgbArray(pzGame pzg,int** cell) {
+  int x, y, size;
+  Game* game;
+  game = (Game*) pzg;
+  size = game->board->size;
+  for (x = 0; x < size; ++x)
+    for (y = 0; y < size; ++y)
+      cell[x][y] = pzGetCellRgb (pzg, x, y);
+}
+
 const char* pzGetCellName(pzGame pzg,int x,int y) {
   State examState;
   Particle *particle;
