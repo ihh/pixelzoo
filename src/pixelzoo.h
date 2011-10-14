@@ -1,13 +1,37 @@
 #ifndef PIXELZOO_INCLUDED
 #define PIXELZOO_INCLUDED
 
+/* Typedefs
+
+The following typedefs can all be to void pointers:
+
 typedef void* pzGame;
 typedef void* pzTool;
 typedef void* pzBalloon;
 
-/* Functions to create & destroy a game */
-pzGame pzNewGameFromXmlString(const char*gameString);
-pzGame pzRestoreBoardFromXmlString(const char*gameString,const char*boardString);
+Alternatively, they can be more explicitly typed:
+
+#include "xmlgame.h"
+typedef Game* pzGame;
+typedef Tool* pzTool;
+typedef Balloon* pzBalloon;
+
+*/
+
+typedef void* pzGame;  /* (Game*) */
+typedef void* pzTool;  /* (Tool*) */
+typedef void* pzBalloon;  /* (Balloon*) */
+
+
+/* Functions */
+
+/* Functions to create & destroy a game.
+   If moveLogFlag is true, moves will be saved,
+   which is required if the move is to be uploaded to a store,
+   but can be a memory leak if the game is being run indefinitely.
+*/
+pzGame pzNewGameFromXmlString(const char*gameString,int moveLogFlag);
+pzGame pzNewGameAndBoardFromXmlStrings(const char*gameString,const char*boardString,int moveLogFlag);
 
 void pzDeleteGame(pzGame);
 
@@ -62,7 +86,7 @@ double pzGetBalloonOpacity(pzBalloon);
 
 /* Functions to save the game state */
 /* The following two functions return strings that must be free'd */
-const char* pzGetMoveAsXmlString(pzGame);  /* use to upload moves */
+const char* pzSaveMoveAsXmlString(pzGame);  /* use to upload moves */
 const char* pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore with pzRestoreBoardFromXmlString */
 
 #endif /* PIXELZOO_INCLUDED */
