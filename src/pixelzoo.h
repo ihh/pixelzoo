@@ -1,27 +1,24 @@
 #ifndef PIXELZOO_INCLUDED
 #define PIXELZOO_INCLUDED
 
-/* Typedefs
+/* Typedefs */
 
-The following typedefs can all be to void pointers:
+#undef USE_VOID_TYPEDEFS
+/* Uncomment next line to use explicit typedefs */
+/*
+#define USE_VOID_TYPEDEFS
+*/
 
+#ifdef USE_VOID_TYPEDEFS
 typedef void* pzGame;
 typedef void* pzTool;
 typedef void* pzBalloon;
-
-Alternatively, they can be more explicitly typed:
-
+#else
 #include "xmlgame.h"
 typedef Game* pzGame;
 typedef Tool* pzTool;
 typedef Balloon* pzBalloon;
-
-*/
-
-typedef void* pzGame;  /* (Game*) */
-typedef void* pzTool;  /* (Tool*) */
-typedef void* pzBalloon;  /* (Balloon*) */
-
+#endif
 
 /* Functions */
 
