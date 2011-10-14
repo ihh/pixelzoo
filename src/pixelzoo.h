@@ -4,8 +4,7 @@
 /* Typedefs */
 
 #undef USE_VOID_TYPEDEFS
-/* Uncomment next line to use explicit typedefs */
-/*
+/* Uncomment next line to use void* typedefs:
 #define USE_VOID_TYPEDEFS
 */
 
