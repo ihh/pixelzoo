@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "pixelzoo.h"
+#include "pzutil.h"
 #include "xmlgame.h"
 #include "xmlmove.h"
 
