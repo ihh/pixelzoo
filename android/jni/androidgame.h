@@ -8,7 +8,7 @@
 
 #include <time.h>
 
-#include "xmlgame.h"
+#include "xmlgame.h" // change to pixelzoo.h
 #include "xmlmove.h"
 #include "xmlutil.h"
 #include "optlist.h"
@@ -24,9 +24,7 @@ typedef struct AndroidGame {
   Game *game;
   Uint32 sdlColor[PaletteSize];
 
-  // asw12: too hackish?
-  // JNIEnv* env;
-  jobject thiz;
+  jobject thiz; // TODO: refactor this to Activity
 } AndroidGame;
 
 #include <androidhook.h>
@@ -41,9 +39,6 @@ void deleteAndroidGame(AndroidGame* androidGame);
 void render(AndroidGame* androidGame);
 void renderAndDelay(AndroidGame* androidGame);
 void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color);
-
-int evolveThreadFunc ( void *voidGame );
-int renderThreadFunc( void *voidAndroidGame );
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,7 @@ LOCAL_SRC_FILES := androidhook.c xmltest.c androidgame.c \
 	../../src/statemap.c ../../src/game.c ../../src/xmlutil.c ../../src/xmlgame.c ../../src/list.c ../../src/vector.c ../../src/quadtree.c \
 	../../src/particle.c ../../src/util.c ../../src/notify.c ../../src/balloon.c ../../src/vars.c ../../src/tool.c ../../src/bintree.c \
 	../../src/stringmap.c ../../src/xmlgoal.c ../../src/goal.c ../../src/mersenne.c ../../src/rbtree.c ../../src/xmlboard.c \
-	../../src/optlist.c
+	../../src/optlist.c ../../src/pixelzoo.c
 	
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/xml2/include $(LOCAL_PATH)/SDL/include $(LOCAL_PATH)/../../src
 
