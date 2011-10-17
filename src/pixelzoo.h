@@ -1,13 +1,33 @@
 #ifndef PIXELZOO_INCLUDED
 #define PIXELZOO_INCLUDED
 
+/* Typedefs */
+
+#undef USE_VOID_TYPEDEFS
+/* Uncomment next line to use void* typedefs:
+#define USE_VOID_TYPEDEFS
+*/
+
+#ifdef USE_VOID_TYPEDEFS
 typedef void* pzGame;
 typedef void* pzTool;
 typedef void* pzBalloon;
+#else
+#include "xmlgame.h"
+typedef Game* pzGame;
+typedef Tool* pzTool;
+typedef Balloon* pzBalloon;
+#endif
 
-/* Functions to create & destroy a game */
-pzGame pzNewGameFromXmlString(const char*gameString);
-pzGame pzRestoreBoardFromXmlString(const char*gameString,const char*boardString);
+/* Functions */
+
+/* Functions to create & destroy a game.
+   If moveLogFlag is true, moves will be saved,
+   which is required if the move is to be uploaded to a store,
+   but can be a memory leak if the game is being run indefinitely.
+*/
+pzGame pzNewGameFromXmlString(const char*gameString,int moveLogFlag);
+pzGame pzNewGameAndBoardFromXmlStrings(const char*gameString,const char*boardString,int moveLogFlag);
 
 void pzDeleteGame(pzGame);
 
@@ -20,11 +40,6 @@ void pzUpdateGame(pzGame,int callsPerSecond);  /* simplified wrapper for gameLoo
 /* Information required to render the board */
 int pzGetBoardSize(pzGame);
 int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
-
-int** pzNewCellRgbArray(pzGame);
-void pzDeleteCellRgbArray(pzGame);
-
-void pzWriteCellRgbArray(pzGame,int**cell);  /* cell[x][y] = pzGetCellRgb(pzGame,x,y) is 24-bit RGB */
 
 /* Information required to describe individual cells, for the "inspect" tool */
 const char* pzGetCellName(pzGame,int x,int y);
@@ -67,7 +82,7 @@ double pzGetBalloonOpacity(pzBalloon);
 
 /* Functions to save the game state */
 /* The following two functions return strings that must be free'd */
-const char* pzGetMoveAsXmlString(pzGame);  /* use to upload moves */
+const char* pzSaveMoveAsXmlString(pzGame);  /* use to upload moves */
 const char* pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore with pzRestoreBoardFromXmlString */
 
 #endif /* PIXELZOO_INCLUDED */

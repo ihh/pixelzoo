@@ -1,17 +1,26 @@
 #include <string.h>
 
 #include "pixelzoo.h"
+#include "pzutil.h"
 #include "xmlgame.h"
 #include "xmlmove.h"
 
 #define MAX_PROPORTION_TIME_EVOLVING .9  /* so that gameLoop doesn't eat 100% of the time between updates */
 
-pzGame pzNewGameFromXmlString(const char*gameString) {
-  return (pzGame) newGameFromXmlString(gameString);
+pzGame pzNewGameFromXmlString(const char*gameString,int logMoves) {
+  pzGame pzg;
+  pzg = (pzGame) newGameFromXmlString(gameString);
+  if (logMoves)
+    logBoardMoves (((Game*)pzg)->board);
+  return pzg;
 }
 
-pzGame pzRestoreBoardFromXmlString(const char*gameString,const char*boardString) {
-  return (pzGame) newGameFromXmlStringWithSeparateBoard (gameString, boardString);
+pzGame pzNewGameAndBoardFromXmlStrings(const char*gameString,const char*boardString,int logMoves) {
+  pzGame pzg;
+  pzg = (pzGame) newGameFromXmlStringWithSeparateBoard (gameString, boardString);
+  if (logMoves)
+    logBoardMoves (((Game*)pzg)->board);
+  return pzg;
 }
 
 void pzDeleteGame(pzGame pzg) {
@@ -268,23 +277,27 @@ int pzGetBalloonTextRgb(pzGame pzg,pzBalloon pzb) {
 }
 double pzGetBalloonOpacity(pzBalloon pzb) { return ((Balloon*)pzb)->opacity; }
 
-const char* pzGetMoveAsXmlString(pzGame pzg) {
+const char* pzSaveMoveAsXmlString(pzGame pzg) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
   const char* str;
   Game* game;
   game = (Game*) pzg;
+  boardReleaseRandomNumbers (game->board);
   str = NULL;
-  buf = xmlBufferCreate();
-  if (buf) {
-    writer = xmlNewTextWriterMemory(buf, 0);
-    if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
-      writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-      str = SafeCalloc (buf->use + 1, sizeof(char));
-      strcpy ((char*) str, (char*) buf->content);
+  if (game->board->moveLog)
+    {
+      buf = xmlBufferCreate();
+      if (buf) {
+	writer = xmlNewTextWriterMemory(buf, 0);
+	if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
+	  writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+	  str = SafeCalloc (buf->use + 1, sizeof(char));
+	  strcpy ((char*) str, (char*) buf->content);
+	}
+	xmlBufferFree (buf);
+      }
     }
-    xmlBufferFree (buf);
-  }
   return str;
 }
 
@@ -293,6 +306,7 @@ const char* pzSaveBoardAsXmlString(pzGame pzg) {
   xmlTextWriterPtr writer;
   const char* str;
   Game* game;
+  boardReleaseRandomNumbers (game->board);
   game = (Game*) pzg;
   str = NULL;
   buf = xmlBufferCreate();
