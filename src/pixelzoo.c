@@ -167,7 +167,7 @@ int pzGetNumberOfTools(pzGame pzg) {
   return nTools;
 }
 
-pzTool getToolByNumber(pzGame pzg,int toolNum) {
+pzTool pzGetToolByNumber(pzGame pzg,int toolNum) {
   ListNode *toolNode;
   Tool *tool;
   Game* game;
@@ -189,7 +189,7 @@ const char* pzGetToolName(pzTool pzt) {
   return toolName;
 }
 
-int getSelectedToolNumber(pzGame pzg) {
+int pzGetSelectedToolNumber(pzGame pzg) {
   ListNode *toolNode;
   Tool *tool;
   int selectedToolNum, toolNum;
@@ -239,7 +239,7 @@ double pzGetToolReserveLevel(pzTool pzt) {
 void pzSelectTool(pzGame pzg,int toolNum) {
   Game* game;
   game = (Game*) pzg;
-  game->selectedTool = getToolByNumber (game, toolNum);
+  game->selectedTool = pzGetToolByNumber (game, toolNum);
 }
 
 void pzUnselectTool(pzGame pzg) {
@@ -369,4 +369,4 @@ int pzGetPaletteRgb(pzGame pzg,int paletteIndex) {
 }
 
 void pzAbort(char* error) { Abort(error); }
-void psAssert(int assertion, char* error) { Assert(assertion,error); }
+void pzAssert(int assertion, char* error) { Assert(assertion,error); }

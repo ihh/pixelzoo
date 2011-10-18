@@ -58,8 +58,8 @@ void pzUntouchCell(pzGame);
 
 /* Information required to render tools */
 int pzGetNumberOfTools(pzGame);
-int getSelectedToolNumber(pzGame);  /* returns -1 if no Tool selected */
-pzTool getToolByNumber(pzGame,int toolNum);
+int pzGetSelectedToolNumber(pzGame);  /* returns -1 if no Tool selected */
+pzTool pzGetToolByNumber(pzGame,int toolNum);
 
 int pzGetToolRgb(pzGame,pzTool);  /* returns 24-bit RGB */
 
@@ -94,6 +94,6 @@ const char* pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore 
 
 /* Wrappers to general utility functions */
 void pzAbort(char* error);
-void psAssert(int assertion, char* error);
+void pzAssert(int assertion, char* error);
 
 #endif /* PIXELZOO_INCLUDED */

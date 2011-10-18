@@ -23,6 +23,7 @@ const int RENDER_RATE = 50;
 
 typedef struct SDLGame {
   pzGame game;
+  int toolNum;
   Uint32* sdlColor;
   SDL_Surface *g_screenSurface;
 } SDLGame;
@@ -110,6 +111,8 @@ int main( int argc, char *argv[] )
       renderAndDelay (sdlGame);
 
       SDL_Event event;
+      int tools, t;
+      pzTool pzt;
 
       while( SDL_PollEvent( &event ) )
 	if (userInputAllowed)
@@ -121,18 +124,51 @@ int main( int argc, char *argv[] )
 		break;
 
 	      case SDL_KEYDOWN:
-		if( event.key.keysym.sym == SDLK_ESCAPE ) 
+		switch (event.key.keysym.sym) {
+
+		case SDLK_ESCAPE:
 		  pzQuitGame(sdlGame->game);
+		  break;
+
+		case SDLK_t:
+		  tools = pzGetNumberOfTools(sdlGame->game);
+		  printf("Available tools:\n");
+		  for (t = 0; t < tools; ++t) {
+		    pzt = pzGetToolByNumber(sdlGame->game,t);
+		    printf ("Tool number: %d   Name: %s   Reserve: %g  %s\n", t+1, pzGetToolName(pzt), pzGetToolReserveLevel(pzt), t==sdlGame->toolNum ? "(currently selected)" : "");
+		  }
+		  printf("\n");
+		  break;
+
+		case SDLK_UP:
+		  tools = pzGetNumberOfTools(sdlGame->game);
+		  sdlGame->toolNum = (sdlGame->toolNum + 1) % tools;
+		  pzSelectTool (sdlGame->game, sdlGame->toolNum);
+		  pzt = pzGetToolByNumber(sdlGame->game,sdlGame->toolNum);
+		  printf ("Selected tool: %s   Reserve: %g\n", pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
+		  break;
+
+		case SDLK_DOWN:
+		  tools = pzGetNumberOfTools(sdlGame->game);
+		  sdlGame->toolNum = (sdlGame->toolNum + tools - 1) % tools;
+		  pzSelectTool (sdlGame->game, sdlGame->toolNum);
+		  pzt = pzGetToolByNumber(sdlGame->game,sdlGame->toolNum);
+		  printf ("Selected tool: %s   Reserve: %g\n", pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
+		  break;
+
+		default:
+		  break;
+		}
 		break;
 
 	      case SDL_MOUSEMOTION:
-		if (event.motion.state)
+		if (event.motion.state & SDL_BUTTON(1))
 		  pzTouchCell (sdlGame->game, event.motion.x / PIXELS_PER_CELL, event.motion.y / PIXELS_PER_CELL);
 		break;
 
 	      case SDL_MOUSEBUTTONUP:
 		if ( event.button.button == SDL_BUTTON_LEFT)
-		  pzUnselectTool (sdlGame->game);
+		  pzUntouchCell (sdlGame->game);
 		break;
 		
 	      case SDL_MOUSEBUTTONDOWN:
@@ -185,8 +221,9 @@ SDLGame* newSDLGame( char *filename, int logMoves )
   sdlGame->game = pzNewGameFromXmlString(gameString,logMoves);
   free ((void*) gameString);
 
+  sdlGame->toolNum = 0;
   if (pzGetNumberOfTools(sdlGame->game) > 0)
-    pzSelectTool(sdlGame->game,0);
+    pzSelectTool(sdlGame->game,sdlGame->toolNum);
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
