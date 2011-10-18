@@ -198,8 +198,6 @@ int main( int argc, char *argv[] )
 
   deleteSDLGame(sdlGame);
 
-  free(thisOpt); /* done with this item, free it */
-
   return 0;
 }
 
