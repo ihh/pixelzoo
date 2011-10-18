@@ -5,7 +5,7 @@
 #include <time.h>
 
 #include "pixelzoo.h"
-#include "xmlutil.h"  /* used only for string to 64-bit integer conversion function, decToSignedLongLong */
+#include "xmlutil.h"  /* used only for string to 64-bit integer conversion & file I/O helpers */
 #include "optlist.h"
 
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
