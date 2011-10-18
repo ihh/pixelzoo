@@ -5,19 +5,19 @@
 
 #undef USE_VOID_TYPEDEFS
 /* Uncomment next line to use void* typedefs:
-#define USE_VOID_TYPEDEFS
 */
+#define USE_VOID_TYPEDEFS
 
 #ifdef USE_VOID_TYPEDEFS
 typedef void* pzGame;
 typedef void* pzTool;
 typedef void* pzBalloon;
-#else
+#else  /* !defined(USE_VOID_TYPEDEFS) */
 #include "xmlgame.h"
 typedef Game* pzGame;
 typedef Tool* pzTool;
 typedef Balloon* pzBalloon;
-#endif
+#endif  /* defined(USE_VOID_TYPEDEFS) */
 
 /* Functions */
 
@@ -34,12 +34,19 @@ void pzDeleteGame(pzGame);
 /* The main game loop */
 void pzStartGame(pzGame);
 int pzGameRunning(pzGame);
+void pzQuitGame(pzGame);
 
-void pzUpdateGame(pzGame,int callsPerSecond);  /* simplified wrapper for gameLoop */
+void pzUpdateGame(pzGame,int callsPerSecond,long long boardClockTimeLimit);  /* simplified wrapper for gameLoop. Set boardClockTimeLimit=-1 for no time limit */
+unsigned long long pzBoardClock(pzGame);  /* measured in "microticks" (1 tick = 1 expected update per cell) */
 
 /* Information required to render the board */
 int pzGetBoardSize(pzGame);
-int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
+int pzGetCellRgb(pzGame,int x,int y);  /* returns 24-bit RGB; equivalent to pzGetPaletteRgb(game,pzGetCellPaletteIndex(game,x,y)) */
+int pzGetCellPaletteIndex(pzGame,int x,int y);
+
+/* Description of the board palette */
+int pzGetPaletteSize(pzGame);
+int pzGetPaletteRgb(pzGame,int paletteIndex);
 
 /* Information required to describe individual cells, for the "inspect" tool */
 const char* pzGetCellName(pzGame,int x,int y);
@@ -84,5 +91,9 @@ double pzGetBalloonOpacity(pzBalloon);
 /* The following two functions return strings that must be free'd */
 const char* pzSaveMoveAsXmlString(pzGame);  /* use to upload moves */
 const char* pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore with pzRestoreBoardFromXmlString */
+
+/* Wrappers to general utility functions */
+void pzAbort(char* error);
+void psAssert(int assertion, char* error);
 
 #endif /* PIXELZOO_INCLUDED */

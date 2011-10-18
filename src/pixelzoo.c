@@ -35,20 +35,39 @@ void pzStartGame(pzGame pzg) {
   gameStart(game);
 }
 
+void pzQuitGame(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
+  quitGame(game);
+}
+
 int pzGameRunning(pzGame pzg) {
   Game* game;
   game = (Game*) pzg;
   return gameRunning(game);
 }
 
-void pzUpdateGame(pzGame pzg,int callsPerSecond) {
-  double targetTicks, actualTicks, elapsedTime;
-  int64_Microticks actualMicroticks;
+void pzUpdateGame(pzGame pzg,int callsPerSecond,long long boardClockTimeLimit) {
+  double targetTicks, maxUpdateTimeInSeconds, actualTicks, elapsedTime;
+  int64_Microticks targetMicroticks, actualMicroticks;
   int cellUpdates;
   Game* game;
   game = (Game*) pzg;
+
   targetTicks = game->ticksPerSecond / (double) callsPerSecond;
-  gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
+  maxUpdateTimeInSeconds = MAX_PROPORTION_TIME_EVOLVING * targetTicks / game->ticksPerSecond;
+  targetMicroticks = FloatToIntMillionths(targetTicks);
+  if (boardClockTimeLimit >= 0)
+    targetMicroticks = MIN (targetMicroticks, boardClockTimeLimit - game->board->microticks);
+
+  if (targetMicroticks > 0)
+    innerGameLoop (game, targetMicroticks, maxUpdateTimeInSeconds, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
+}
+
+unsigned long long pzBoardClock (pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
+  return game->board->microticks;
 }
 
 int pzGetBoardSize(pzGame pzg) {
@@ -65,6 +84,14 @@ int pzGetCellRgb(pzGame pzg,int x,int y) {
   cellColorIndex = readBoardColor(game->board, x, y);
   cellRgb = &game->board->palette.rgb[cellColorIndex];
   return PackRgbTo24Bit(*cellRgb);
+}
+
+int pzGetCellPaletteIndex(pzGame pzg,int x,int y) {
+  PaletteIndex cellColorIndex;
+  Game* game;
+  game = (Game*) pzg;
+  cellColorIndex = readBoardColor(game->board, x, y);
+  return (int) cellColorIndex;
 }
 
 int** pzNewCellRgbArray(pzGame pzg) {
@@ -89,7 +116,7 @@ void pzDeleteCellRgbArray(pzGame pzg) {
   SafeFree (cell);
 }
 
-void pzWriteCellRgbArray(pzGame pzg,int** cell) {
+void pzReadCellRgbArray(pzGame pzg,int** cell) {
   int x, y, size;
   Game* game;
   game = (Game*) pzg;
@@ -280,6 +307,7 @@ double pzGetBalloonOpacity(pzBalloon pzb) { return ((Balloon*)pzb)->opacity; }
 const char* pzSaveMoveAsXmlString(pzGame pzg) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
+  int rc;
   const char* str;
   Game* game;
   game = (Game*) pzg;
@@ -290,11 +318,15 @@ const char* pzSaveMoveAsXmlString(pzGame pzg) {
       buf = xmlBufferCreate();
       if (buf) {
 	writer = xmlNewTextWriterMemory(buf, 0);
-	if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
-	  writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-	  str = SafeCalloc (buf->use + 1, sizeof(char));
-	  strcpy ((char*) str, (char*) buf->content);
-	}
+	if (writer)
+	  if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
+	    writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+	    rc = xmlTextWriterEndDocument(writer);
+	    if (rc >= 0) {
+	      str = SafeCalloc (xmlBufferLength(buf) + 1, sizeof(char));
+	      strcpy ((char*) str, (char*) buf->content);
+	    }
+	  }
 	xmlBufferFree (buf);
       }
     }
@@ -304,20 +336,37 @@ const char* pzSaveMoveAsXmlString(pzGame pzg) {
 const char* pzSaveBoardAsXmlString(pzGame pzg) {
   xmlBufferPtr buf;
   xmlTextWriterPtr writer;
+  int rc;
   const char* str;
   Game* game;
-  boardReleaseRandomNumbers (game->board);
   game = (Game*) pzg;
   str = NULL;
+  boardReleaseRandomNumbers (game->board);
   buf = xmlBufferCreate();
   if (buf) {
     writer = xmlNewTextWriterMemory(buf, 0);
     if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
       writeBoard (game->board, writer, 1);
-      str = SafeCalloc (buf->use + 1, sizeof(char));
-      strcpy ((char*) str, (char*) buf->content);
+      rc = xmlTextWriterEndDocument(writer);
+      if (rc >= 0) {
+	str = SafeCalloc (buf->use + 1, sizeof(char));
+	strcpy ((char*) str, (char*) buf->content);
+      }
     }
     xmlBufferFree (buf);
   }
   return str;
 }
+
+int pzGetPaletteSize(pzGame pzg) { return PaletteSize; }
+
+int pzGetPaletteRgb(pzGame pzg,int paletteIndex) {
+  RGB rgb;
+  Game* game;
+  game = (Game*) pzg;
+  rgb = game->board->palette.rgb[paletteIndex];
+  return PackRgbTo24Bit (rgb);
+}
+
+void pzAbort(char* error) { Abort(error); }
+void psAssert(int assertion, char* error) { Assert(assertion,error); }

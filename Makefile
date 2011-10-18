@@ -23,7 +23,9 @@ LIBS        := -lc $(XML_LDFLAGS) $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
 
 TARGETS   := test_red_black_tree sdlgame
-LIBTARGET := lib/libpixelzoo.a
+LIBDIR    := lib
+LIBNAME   := pixelzoo
+LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
@@ -60,7 +62,7 @@ timed-sdl: targets
 #
 # eloise_X.xml should be identical to eloise_copy_X.xml for X in { movelog, board }
 eloise-sdl-test: targets
-	bin/sdlgame -d -g t/eloise_queue.xml -l t/eloise_copy_movelog.xml -b t/eloise_copy_board.xml -r t/eloise_copy_revcomp.xml -t 5000000000
+	bin/sdlgame -d -g t/eloise_queue.xml -l t/eloise_copy_movelog.xml -b t/eloise_copy_board.xml -t 5000000000
 	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
 	diff t/eloise_board.xml t/eloise_copy_board.xml
 
@@ -80,9 +82,9 @@ xml: $(XMLFILES)
 
 lib: $(LIBTARGET)
 
-bin/%:  tsrc/%.c $(OFILES)
+bin/%:  tsrc/%.c $(LIBTARGET)
 	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -o $@ tsrc/$*.c $(OFILES)
+	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -L$(LIBDIR) -l$(LIBNAME) -o $@ tsrc/$*.c
 
 $(LIBTARGET): $(OFILES)
 	@test -e lib || mkdir lib

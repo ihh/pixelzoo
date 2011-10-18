@@ -4,10 +4,11 @@
 
 #include <time.h>
 
-#include "xmlgame.h"
-#include "xmlmove.h"
-#include "xmlutil.h"
+#include "pixelzoo.h"
+#include "xmlutil.h"  /* used only for string to 64-bit integer conversion function, decToSignedLongLong */
 #include "optlist.h"
+
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 //-----------------------------------------------------------------------------
 // SYMBOLIC CONSTANTS
@@ -21,8 +22,8 @@ const int RENDER_RATE = 50;
 //-----------------------------------------------------------------------------
 
 typedef struct SDLGame {
-  Game *game;
-  Uint32 sdlColor[PaletteSize];
+  pzGame game;
+  Uint32* sdlColor;
   SDL_Surface *g_screenSurface;
 } SDLGame;
 
@@ -30,7 +31,7 @@ typedef struct SDLGame {
 // PROTOTYPES
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[]);
-SDLGame* newSDLGame(char *filename);
+SDLGame* newSDLGame(char *filename,int logMoves);
 void deleteSDLGame(SDLGame*);
 void render(SDLGame*);
 void renderAndDelay(SDLGame*);
@@ -45,10 +46,10 @@ int renderThreadFunc( void *voidSdlGame );
 //-----------------------------------------------------------------------------
 int main( int argc, char *argv[] )
 {
-  char *gameFilename, *moveLogFilename, *boardFilename, *revcompiledBoardFilename;
+  char *gameFilename, *moveLogFilename, *boardFilename;
+  Uint64 totalMicroticks;
   int userInputAllowed;
   option_t *optList, *thisOpt;
-  int64_Microticks totalMicroticks;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
@@ -58,9 +59,8 @@ int main( int argc, char *argv[] )
   gameFilename = NULL;
   moveLogFilename = NULL;
   boardFilename = NULL;
-  revcompiledBoardFilename = NULL;
-  totalMicroticks = -1;
   userInputAllowed = 1;
+  totalMicroticks = -1;
   while (optList != NULL)
     {
       thisOpt = optList;
@@ -72,7 +72,6 @@ int main( int argc, char *argv[] )
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
-	printf("     -r : specify output XML file for reverse-compiled board (optional).\n");
 	printf("     -t : specify simulation time limit in microticks (optional).\n");
 	printf("     -d : disable user input (optional).\n");
 	printf(" -h, -? : print out command line options.\n\n");
@@ -89,9 +88,6 @@ int main( int argc, char *argv[] )
       } else if ('b' == thisOpt->option) {
 	boardFilename = thisOpt->argument;
 
-      } else if ('r' == thisOpt->option) {
-	revcompiledBoardFilename = thisOpt->argument;
-
       } else if ('t' == thisOpt->option) {
 	totalMicroticks = decToSignedLongLong (thisOpt->argument);
 
@@ -103,26 +99,14 @@ int main( int argc, char *argv[] )
   SDLGame *sdlGame = NULL;
 
   if (gameFilename == NULL) {
-    Abort ("Game file not specified");
+    pzAbort ("Game file not specified");
   }
   
-  sdlGame = newSDLGame (gameFilename);
-  if (moveLogFilename != NULL)
-    logBoardMoves (sdlGame->game->board);
+  sdlGame = newSDLGame (gameFilename, moveLogFilename != NULL);
 
-  while( gameRunning(sdlGame->game) && (totalMicroticks < 0 || sdlGame->game->board->microticks < totalMicroticks ))
+  while( pzGameRunning(sdlGame->game) && (totalMicroticks < 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
     {
-      const double targetUpdatesPerCell = sdlGame->game->ticksPerSecond / (double) RENDER_RATE;
-      const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / sdlGame->game->ticksPerSecond;
-      int64_Microticks targetMicroticks = FloatToIntMillionths (targetUpdatesPerCell);
-      if (totalMicroticks >= 0)
-	targetMicroticks = MIN (totalMicroticks - sdlGame->game->board->microticks, targetMicroticks);
-
-      double updatesPerCell, evolveTime;
-      int64_Microticks microticks;
-      int actualUpdates;
-
-      innerGameLoop (sdlGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
+      pzUpdateGame (sdlGame->game, RENDER_RATE, totalMicroticks);
       renderAndDelay (sdlGame);
 
       SDL_Event event;
@@ -133,29 +117,27 @@ int main( int argc, char *argv[] )
 	    switch( event.type ) 
 	      {
 	      case SDL_QUIT:
-		quitGame(sdlGame->game);
+		pzQuitGame(sdlGame->game);
 		break;
 
 	      case SDL_KEYDOWN:
 		if( event.key.keysym.sym == SDLK_ESCAPE ) 
-		  quitGame(sdlGame->game);
+		  pzQuitGame(sdlGame->game);
 		break;
 
 	      case SDL_MOUSEMOTION:
-		sdlGame->game->toolPos.x = event.motion.x / PIXELS_PER_CELL;
-		sdlGame->game->toolPos.y = event.motion.y / PIXELS_PER_CELL;
+		if (event.motion.state)
+		  pzTouchCell (sdlGame->game, event.motion.x / PIXELS_PER_CELL, event.motion.y / PIXELS_PER_CELL);
 		break;
 
 	      case SDL_MOUSEBUTTONUP:
 		if ( event.button.button == SDL_BUTTON_LEFT)
-		  sdlGame->game->toolActive = 0;
+		  pzUnselectTool (sdlGame->game);
 		break;
-
+		
 	      case SDL_MOUSEBUTTONDOWN:
-		if ( event.button.button == SDL_BUTTON_LEFT) {
-		  sdlGame->game->toolActive = 1;
-		  sdlGame->game->lastToolPos = sdlGame->game->toolPos;
-		}
+		if ( event.button.button == SDL_BUTTON_LEFT)
+		  pzTouchCell (sdlGame->game, event.button.x / PIXELS_PER_CELL, event.button.y / PIXELS_PER_CELL);
 		break;
 
 	      default:
@@ -165,25 +147,17 @@ int main( int argc, char *argv[] )
     }
 
   if (moveLogFilename) {
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (moveLogFilename, 0);
-    writeMoveList (sdlGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-    xmlFreeTextWriter (writer);
+    const char* moveStr = pzSaveMoveAsXmlString(sdlGame->game);
+    writeStringToFile (moveLogFilename, moveStr);
+    if (moveStr)
+      free ((void*) moveStr);
   }
 
   if (boardFilename) {
-    boardReleaseRandomNumbers (sdlGame->game->board);
-
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
-    writeBoard (sdlGame->game->board, writer, 0);
-    xmlFreeTextWriter (writer);
-  }
-
-  if (revcompiledBoardFilename) {
-    boardReleaseRandomNumbers (sdlGame->game->board);
-
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (revcompiledBoardFilename, 0);
-    writeBoard (sdlGame->game->board, writer, 1);
-    xmlFreeTextWriter (writer);
+    const char* boardStr = pzSaveBoardAsXmlString(sdlGame->game);
+    writeStringToFile (boardFilename, boardStr);
+    if (boardStr)
+      free ((void*) boardStr);
   }
 
   deleteSDLGame(sdlGame);
@@ -197,18 +171,22 @@ int main( int argc, char *argv[] )
 // Name: newSDLGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-SDLGame* newSDLGame( char *filename )
+SDLGame* newSDLGame( char *filename, int logMoves )
 {
-  PaletteIndex pal;
+  int pal;
 
-  SDLGame *sdlGame = SafeMalloc (sizeof (SDLGame));
+  SDLGame *sdlGame = malloc (sizeof (SDLGame));
   sdlGame->g_screenSurface = NULL;
   //
   // Initialize Game...
   //
 
-  sdlGame->game = newGameFromXmlFile(filename);
-  sdlGame->game->selectedTool = sdlGame->game->toolByName->root->left->value;
+  const char* gameString = readStringFromFile(filename);
+  sdlGame->game = pzNewGameFromXmlString(gameString,logMoves);
+  free ((void*) gameString);
+
+  if (pzGetNumberOfTools(sdlGame->game) > 0)
+    pzSelectTool(sdlGame->game,0);
 
   /* init SDL */
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -219,7 +197,7 @@ SDLGame* newSDLGame( char *filename )
 
   atexit( SDL_Quit );
 
-  int size = sdlGame->game->board->size;
+  int size = pzGetBoardSize(sdlGame->game);
   sdlGame->g_screenSurface = SDL_SetVideoMode( size * PIXELS_PER_CELL,
 					       size * PIXELS_PER_CELL,
 					       COLOR_DEPTH, 
@@ -232,9 +210,11 @@ SDLGame* newSDLGame( char *filename )
     }
 
   /* init palette lookup */
-  for (pal = 0; pal <= PaletteMax; ++pal)
-    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, sdlGame->game->board->palette.rgb[pal].r, sdlGame->game->board->palette.rgb[pal].g, sdlGame->game->board->palette.rgb[pal].b );
-
+  sdlGame->sdlColor = malloc (pzGetPaletteSize(sdlGame->game) * sizeof(Uint32));
+  for (pal = 0; pal <= pzGetPaletteSize(sdlGame->game); ++pal) {
+    int rgb = pzGetPaletteRgb (sdlGame->game, pal);
+    sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, (rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff );
+  }
 
   /* return */
   return sdlGame;
@@ -247,8 +227,9 @@ SDLGame* newSDLGame( char *filename )
 void deleteSDLGame( SDLGame* sdlGame )
 {
   SDL_FreeSurface( sdlGame->g_screenSurface );
-  deleteGame(sdlGame->game);
-  SafeFree (sdlGame);
+  pzDeleteGame(sdlGame->game);
+  free (sdlGame->sdlColor);
+  free (sdlGame);
 }
 
 //-----------------------------------------------------------------------------
@@ -334,10 +315,10 @@ void render(SDLGame* sdlGame) {
   //
 
   int x, y, i, j;
-  int size = sdlGame->game->board->size;
+  int size = pzGetBoardSize (sdlGame->game);
   for (x = 0; x < size; ++x)
     for (y = 0; y < size; ++y) {
-      PaletteIndex pal = readBoardColor (sdlGame->game->board, x, y);
+      int pal = pzGetCellPaletteIndex (sdlGame->game, x, y);
       for (i = 0; i < PIXELS_PER_CELL; ++i)
 	for (j = 0; j < PIXELS_PER_CELL; ++j)
 	  renderPixel( sdlGame->g_screenSurface, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, sdlGame->sdlColor[pal] );
