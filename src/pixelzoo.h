@@ -36,8 +36,9 @@ void pzStartGame(pzGame);
 int pzGameRunning(pzGame);  /* if true, the board is still evolving. The player may, or may not, be in control. */
 void pzQuitGame(pzGame);  /* This forces the game to stop: pzGameRunning() will return false. */
 
-void pzUpdateGame(pzGame,int callsPerSecond,long long boardClockTimeLimit);  /* simplified wrapper for gameLoop. Set boardClockTimeLimit=-1 for no time limit */
-unsigned long long pzBoardClock(pzGame);  /* measured in "microticks" (1 tick = 1 expected update per cell) */
+void pzUpdateGame(pzGame,int callsPerSecond,long long boardClockTimeLimit);  /* the main game loop. Set boardClockTimeLimit=-1 for no time limit */
+unsigned long long pzBoardClock(pzGame);  /* measured in "microticks" (2^20 microticks = 1 expected update per cell) */
+#define pzBoardClockMicroticksPerTick 1048576  /* conversion factor from board clock units ("microticks") to expected updates per cell; equal to 2^20 */
 
 /* Information required to render the board */
 int pzGetBoardSize(pzGame);  /* length of one side of the square board */
