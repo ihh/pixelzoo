@@ -17,7 +17,7 @@ JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, j
 // Asks androidgame to redraw the entire board
 JNIEXPORT jboolean Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard(JNIEnv* env, jobject thiz);
 
-void endDraw(AndroidGame* androidGame);
+// void endDraw(AndroidGame* androidGame);
 void drawBoard(AndroidGame *game);
 void drawParticle(AndroidGame *game, int x, int y, Uint32 color);
 

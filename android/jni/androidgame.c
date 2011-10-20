@@ -228,21 +228,6 @@ void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color)
 }
 
 void render(AndroidGame* androidGame) {
-  //
-  // Plot each cell
-  //
-  /*
-  int x, y, i, j;
-  int size = androidGame->game->board->size;
-  // renderPixel(androidGame, 20, 20, 0xFFFF0000);
-  for (x = 0; x < size; ++x) {
-    for (y = 0; y < size; ++y) {
-      PaletteIndex pal = readBoardColor (androidGame->game->board, x, y);
-      renderPixel( androidGame, x, y, androidGame->sdlColor[pal] );
-    }
-  }
-  */
+  // drawBoardTwoDTest(androidGame);
   drawBoard(androidGame);
-
-  endDraw(androidGame);
 }

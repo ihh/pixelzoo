@@ -19,6 +19,7 @@ import android.view.View;
 public class PixelzooView extends SurfaceView {
 	// TODO: 9patch drawable instead?
 	private BitmapDrawable mBitmapDrawable;
+	private Canvas mBitmapCanvas; // a canvas that uses the BitmapDrawable's bitmap
 	private final int particleSize = 4;
 	
 	private int maxXParticles = 0;
@@ -29,8 +30,7 @@ public class PixelzooView extends SurfaceView {
 
         this.setWillNotDraw(false); // necessary for View to call onDraw
 
-        mBitmapDrawable = new BitmapDrawable(Bitmap.createBitmap(600, 800, Bitmap.Config.ARGB_8888));
-        mBitmapDrawable.setBounds(0, 0, 600, 800);
+        initBitmap(600, 800);
         
         if(callback!= null) {
         	getHolder().addCallback(callback);
@@ -44,15 +44,28 @@ public class PixelzooView extends SurfaceView {
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
     	super.onSizeChanged(w, h, oldw, oldh);
     	
-    	// TODO: copy in old bitmap.
-    	BitmapDrawable newBitmapDrawable = new BitmapDrawable(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
-    	newBitmapDrawable.setBounds(0, 0, getWidth(), getHeight());
-    	// mBitmapDrawable = newBitmapDrawable;
+    	initBitmap(w, h);
 
     	maxXParticles = w / particleSize;
     	maxYParticles = h / particleSize;
     	
     	Log.d("PixelzooView", "resize");
+    }
+    
+    private void initBitmap(int width, int height) {
+    	// TODO: copy in old bitmap.
+    	if(mBitmapDrawable != null) {
+	    	BitmapDrawable newBitmapDrawable = new BitmapDrawable(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+	    	newBitmapDrawable.setBounds(0, 0, width, height);
+	    	mBitmapDrawable = newBitmapDrawable;
+    	}
+    	else {
+    		mBitmapDrawable = new BitmapDrawable(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+            mBitmapDrawable.setBounds(0, 0, width, height);
+    	}
+    	
+    	mBitmapCanvas = new Canvas();
+    	mBitmapCanvas.setBitmap(mBitmapDrawable.getBitmap());
     }
 
     @Override
@@ -69,23 +82,41 @@ public class PixelzooView extends SurfaceView {
     public void clearScreen() {
     	
     }
+    
+    public void drawBoardTwoDTest(int[][] board) {
+    	Paint paint = new Paint();
+    	for(int x = 0; x < 128; ++x) {
+	        for(int y = 0; y < 128; ++y) {
+	            paint.setColor(board[x][y]);
+	            mBitmapCanvas.drawRect((x * particleSize), (y * particleSize), (x * particleSize) + particleSize, (y * particleSize) + particleSize, paint);
+	        }
+    	}
+	}
+    
+    public void drawBoard(int[] board) {
+    	Paint paint = new Paint();
+    	for(int x = 0; x < 128; ++x) {
+	        for(int y = 0; y < 128; ++y) {
+	            paint.setColor(board[(128 * x) + y]);
+	            mBitmapCanvas.drawRect((x * particleSize), (y * particleSize), (x * particleSize) + particleSize, (y * particleSize) + particleSize, paint);
+	        }
+    	}
+	}
 	
 	public void drawParticle(int x, int y, int color) {
-		ShapeDrawable particleDrawable = new ShapeDrawable(new RectShape());
-		particleDrawable.getPaint().setColor(color);
         int surfaceX = x * particleSize;
         int surfaceY = y * particleSize;
-                
-        Canvas canvas = new Canvas();
-        canvas.setBitmap(mBitmapDrawable.getBitmap());
+        
         Paint paint = new Paint();
         paint.setColor(color);
+                
+        /*Canvas canvas = new Canvas();
+        canvas.setBitmap(mBitmapDrawable.getBitmap());
         
         // TODO: check bounds. It appears as if nothing will be drawn if the rect is out of bounds at all, rather than it being clipped to show the parts that are in bounds.
-        canvas.drawRect(surfaceX, surfaceY, surfaceX + particleSize, surfaceY + particleSize, paint);
-                
-        // invalidate();
-        // 
+        canvas.drawRect(surfaceX, surfaceY, surfaceX + particleSize, surfaceY + particleSize, paint);*/
+        
+        mBitmapCanvas.drawRect(surfaceX, surfaceY, surfaceX + particleSize, surfaceY + particleSize, paint);
 	}
 	
 	public void endDraw() {

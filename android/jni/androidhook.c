@@ -77,7 +77,7 @@ void startParticle(AndroidGame* androidGame) {
 
 	(*env)->CallVoidMethod(env, thiz, mid);
 }
-void endDraw(AndroidGame* androidGame) {
+/*void endDraw(AndroidGame* androidGame) {
 	static jmethodID mid = 0;
 	JNIEnv* env; // = AndroidGame->env;
 	(*cached_jvm)->GetEnv(cached_jvm,
@@ -90,7 +90,7 @@ void endDraw(AndroidGame* androidGame) {
 	}
 
 	(*env)->CallVoidMethod(env, thiz, mid);
-}
+}*/
 
 void drawParticle(AndroidGame* androidGame, int x, int y, Uint32 color) {
 	static jmethodID mid = 0;
@@ -108,6 +108,38 @@ void drawParticle(AndroidGame* androidGame, int x, int y, Uint32 color) {
 	(*env)->CallVoidMethod(env, thiz, mid, (jint)x, (jint)y, (jint)color);
 }
 
+void drawBoardTwoDTest(AndroidGame* androidGame) {
+	static jmethodID mid = 0;
+	JNIEnv* env; // = AndroidGame->env;
+	(*cached_jvm)->GetEnv(cached_jvm,
+	                           (void **)&env,
+	                           JNI_VERSION_1_2);
+	jobject thiz = androidGame->thiz;
+
+	// 2D
+	if(!mid) {
+		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawBoardTwoDTest", "([[I)V");
+	}
+
+	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
+	// TODO: need to check if 1D array is appreciably faster than a 2D array
+	jintArray row = (jintArray)(*env)->NewIntArray(env, androidGame->game->board->size);
+	jobjectArray board = (jobjectArray)(*env)->NewObjectArray(env, androidGame->game->board->size, (*env)->GetObjectClass(env, row), NULL);
+
+	int tmp[128];
+	for(int j=0; j<androidGame->game->board->size; ++j) {
+		tmp[j] = 0xFF00FF00;
+	}
+
+	for(int i=0; i<androidGame->game->board->size; ++i) {
+	    row = (jintArray)(*env)->NewIntArray(env, androidGame->game->board->size);
+	    (*env)->SetIntArrayRegion(env, (jintArray)row,(jsize)0, androidGame->game->board->size, tmp);
+	    (*env)->SetObjectArrayElement(env, board, i, row);
+	}
+
+	(*env)->CallVoidMethod(env, thiz, mid, board);
+}
+
 void drawBoard(AndroidGame* androidGame) {
 	static jmethodID mid = 0;
 	JNIEnv* env; // = AndroidGame->env;
@@ -117,13 +149,21 @@ void drawBoard(AndroidGame* androidGame) {
 	jobject thiz = androidGame->thiz;
 
 	if(!mid) {
-		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawBoard", "([[I)V");
+		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawBoard", "([I)V");
 	}
 
 	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
 	// TODO: need to check if 1D array is appreciably faster than a 2D array
-	// jintArray row = (jintArray)env->NewIntArray(androidGame->game->board->size);
-	// jobjectArray board = (jobjectArray)env->NewObjectArray(env->GetObjectCLass(row)), 0);
+	jintArray board = (jintArray)(*env)->NewIntArray(env, androidGame->game->board->size * androidGame->game->board->size);
 
-	// (*env)->CallVoidMethod(env, thiz, mid, board);
+	int tmp[128];
+	for(int j=0; j<androidGame->game->board->size; ++j) {
+		tmp[j] = 0xFF00FF00;
+	}
+
+	for(int i=0; i<androidGame->game->board->size; ++i) {
+		(*env)->SetIntArrayRegion(env, (jintArray)board,(jsize)(i * 128), androidGame->game->board->size, tmp);
+	}
+
+	(*env)->CallVoidMethod(env, thiz, mid, board);
 }
