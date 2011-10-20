@@ -98,6 +98,7 @@ int** pzNewCellRgbArray(pzGame pzg) {
   int x, size;
   int** cell;
   Game* game;
+  game = (Game*) pzg;
   size = game->board->size;
   cell = SafeCalloc (size, sizeof(int*));
   for (x = 0; x < size; ++x)
