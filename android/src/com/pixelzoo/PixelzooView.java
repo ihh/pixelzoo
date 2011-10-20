@@ -95,14 +95,21 @@ public class PixelzooView extends SurfaceView {
     
     public void drawBoard(int[] board) {
     	Paint paint = new Paint();
+    	
+    	Bitmap bitmap = mBitmapDrawable.getBitmap();
     	for(int x = 0; x < 128; ++x) {
 	        for(int y = 0; y < 128; ++y) {
-	            //int color = board[(128 * x) + y];
+	            int color = board[(128 * x) + y];
 	            //if(color != 0)
 	            //    Log.d("PixelzooView: color", color + "");
 
-	            paint.setColor(board[(128 * x) + y]);
-	            mBitmapCanvas.drawRect((x * particleSize), (y * particleSize), (x * particleSize) + particleSize, (y * particleSize) + particleSize, paint);
+	            // paint.setColor(board[(128 * x) + y]);
+	            // mBitmapCanvas.drawRect((x * particleSize), (y * particleSize), (x * particleSize) + particleSize, (y * particleSize) + particleSize, paint);
+	            
+	            // test: try drawing directly to bitmap
+	            for(int i = 0; i < particleSize; ++i)
+	                for(int j = 0; j < particleSize; ++j)
+	                    bitmap.setPixel((x * particleSize) + i,  (y * particleSize) + j, color);
 	        }
     	}
 	}
