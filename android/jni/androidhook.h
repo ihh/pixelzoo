@@ -5,11 +5,6 @@
 #include <jni.h>
 #include "androidgame.h"
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/encoding.h>
-#include <libxml/xmlwriter.h>
-
 #include <android/log.h>
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "libnav", __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "libnav", __VA_ARGS__)
@@ -23,6 +18,7 @@ JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, j
 JNIEXPORT jboolean Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard(JNIEnv* env, jobject thiz);
 
 void endDraw(AndroidGame* androidGame);
+void drawBoard(AndroidGame *game);
 void drawParticle(AndroidGame *game, int x, int y, Uint32 color);
 
 #endif

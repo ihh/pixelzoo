@@ -70,7 +70,7 @@ int launch( int argc, char *argv[], jobject thiz )
   androidGame = newAndroidGame(gameFilename, thiz);
 
   if (moveLogFilename != NULL) {
-    logBoardMoves (androidGame->game->board);
+    // logBoardMoves (androidGame->game->board);
   }
 
   LOGV("Starting game loop");
@@ -211,17 +211,6 @@ void deleteAndroidGame( AndroidGame* androidGame )
   SafeFree(androidGame);
 }
 
-//-----------------------------------------------------------------------------
-// Name: renderPixel()
-// Desc: 
-//-----------------------------------------------------------------------------
-void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color)
-{
-	// do some magic here
-	drawParticle(androidGame, x, y, color);
-}
-
-
 void renderAndDelay(AndroidGame* androidGame) {
   double renderPeriodInSeconds = 1. / RENDER_RATE, elapsedClockTime;
   clock_t start, now;
@@ -232,10 +221,17 @@ void renderAndDelay(AndroidGame* androidGame) {
   SDL_Delay(1000 * MAX(0.,renderPeriodInSeconds - elapsedClockTime));
 }
 
+// Obsolete
+void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color)
+{
+	drawParticle(androidGame, x, y, color);
+}
+
 void render(AndroidGame* androidGame) {
   //
   // Plot each cell
   //
+  /*
   int x, y, i, j;
   int size = androidGame->game->board->size;
   // renderPixel(androidGame, 20, 20, 0xFFFF0000);
@@ -243,8 +239,10 @@ void render(AndroidGame* androidGame) {
     for (y = 0; y < size; ++y) {
       PaletteIndex pal = readBoardColor (androidGame->game->board, x, y);
       renderPixel( androidGame, x, y, androidGame->sdlColor[pal] );
-    } // */
+    }
   }
+  */
+  drawBoard(androidGame);
 
   endDraw(androidGame);
 }

@@ -98,12 +98,18 @@ public class PixelzooActivity extends Activity {
     	Log.d("PixelZooActivity", "hello world");
     }
     
-    public void startDraw() {
-    }
     public void endDraw() {
     	pv.endDraw();
     }
     
+    public void drawBoard(int[][] board) {
+        for(int x = 0; x < 128; ++x) {
+            for(int y = 0; y < 128; ++y) {
+                pv.drawParticle(x, y, board[x][y]);
+            }
+        }
+    }
+
     public void drawParticle(int x, int y, int color) {
     	pv.drawParticle(x, y, color);
     }

@@ -55,21 +55,21 @@ Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz )
 JNIEXPORT jboolean
 Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard( JNIEnv* env, jobject thiz ) {
 	// test
-	AndroidGame *AndroidGame = SafeMalloc(sizeof(AndroidGame));
-	AndroidGame->thiz = thiz;
-	drawParticle(AndroidGame, 10, 10, 0xFF00FF00);
-	SafeFree(AndroidGame);
+	AndroidGame *androidGame = SafeMalloc(sizeof(AndroidGame));
+	androidGame->thiz = thiz;
+	drawParticle(androidGame, 10, 10, 0xFF00FF00);
+	SafeFree(androidGame);
 
 	return 0;
 }
 
-void startParticle(AndroidGame* AndroidGame) {
+void startParticle(AndroidGame* androidGame) {
 	static jmethodID mid = 0;
 	JNIEnv* env; // = AndroidGame->env;
 	(*cached_jvm)->GetEnv(cached_jvm,
 							   (void **)&env,
 							   JNI_VERSION_1_2);
-	jobject thiz = AndroidGame->thiz;
+	jobject thiz = androidGame->thiz;
 
 	if(!mid) {
 		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "startDraw", "()V");
@@ -77,13 +77,13 @@ void startParticle(AndroidGame* AndroidGame) {
 
 	(*env)->CallVoidMethod(env, thiz, mid);
 }
-void endDraw(AndroidGame* AndroidGame) {
+void endDraw(AndroidGame* androidGame) {
 	static jmethodID mid = 0;
 	JNIEnv* env; // = AndroidGame->env;
 	(*cached_jvm)->GetEnv(cached_jvm,
 							   (void **)&env,
 							   JNI_VERSION_1_2);
-	jobject thiz = AndroidGame->thiz;
+	jobject thiz = androidGame->thiz;
 
 	if(!mid) {
 		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "endDraw", "()V");
@@ -92,14 +92,13 @@ void endDraw(AndroidGame* AndroidGame) {
 	(*env)->CallVoidMethod(env, thiz, mid);
 }
 
-
-void drawParticle(AndroidGame* AndroidGame, int x, int y, Uint32 color) {
+void drawParticle(AndroidGame* androidGame, int x, int y, Uint32 color) {
 	static jmethodID mid = 0;
 	JNIEnv* env; // = AndroidGame->env;
 	(*cached_jvm)->GetEnv(cached_jvm,
 	                           (void **)&env,
 	                           JNI_VERSION_1_2);
-	jobject thiz = AndroidGame->thiz;
+	jobject thiz = androidGame->thiz;
 
 	if(!mid) {
 		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawParticle", "(III)V");
@@ -107,4 +106,24 @@ void drawParticle(AndroidGame* AndroidGame, int x, int y, Uint32 color) {
 
 	// asw12: not sure if cast from int to jint is always safe + portable
 	(*env)->CallVoidMethod(env, thiz, mid, (jint)x, (jint)y, (jint)color);
+}
+
+void drawBoard(AndroidGame* androidGame) {
+	static jmethodID mid = 0;
+	JNIEnv* env; // = AndroidGame->env;
+	(*cached_jvm)->GetEnv(cached_jvm,
+	                           (void **)&env,
+	                           JNI_VERSION_1_2);
+	jobject thiz = androidGame->thiz;
+
+	if(!mid) {
+		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawBoard", "([[I)V");
+	}
+
+	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
+	// TODO: need to check if 1D array is appreciably faster than a 2D array
+	// jintArray row = (jintArray)env->NewIntArray(androidGame->game->board->size);
+	// jobjectArray board = (jobjectArray)env->NewObjectArray(env->GetObjectCLass(row)), 0);
+
+	// (*env)->CallVoidMethod(env, thiz, mid, board);
 }

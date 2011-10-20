@@ -11,14 +11,16 @@
 #include "xmlgame.h" // change to pixelzoo.h
 #include "xmlmove.h"
 #include "xmlutil.h"
-#include "optlist.h"
+#include "pixelzoo.h"
+#include "pzutil.h"
 
-/*#include <android/log.h>
-#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "libnav", __VA_ARGS__)
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "libnav", __VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "libnav", __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "libnav", __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "libnav", __VA_ARGS__)*/
+// remove?
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/encoding.h>
+#include <libxml/xmlwriter.h>
+
+#include "optlist.h"
 
 typedef struct AndroidGame {
   Game *game;
