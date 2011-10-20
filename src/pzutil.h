@@ -5,7 +5,7 @@
 
 /* Some helper functions that allow caller to read the whole board at one go */
 int** pzNewCellRgbArray(pzGame);  /* Allocates boardSize*boardSize array of int's */
-void pzDeleteCellRgbArray(pzGame);  /* Frees the array */
+void pzDeleteCellRgbArray(pzGame, int**cell);  /* Frees the array */
 
 void pzReadCellRgbArray(pzGame,int**cell);  /* cell[x][y] <- pzGetCellRgb(pzGame,x,y)   (24-bit RGB) */
 

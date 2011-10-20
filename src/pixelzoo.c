@@ -105,9 +105,8 @@ int** pzNewCellRgbArray(pzGame pzg) {
   return cell;
 }
 
-void pzDeleteCellRgbArray(pzGame pzg) {
+void pzDeleteCellRgbArray(pzGame pzg, int** cell) {
   int x, size;
-  int** cell;
   Game* game;
   game = (Game*) pzg;
   size = game->board->size;
