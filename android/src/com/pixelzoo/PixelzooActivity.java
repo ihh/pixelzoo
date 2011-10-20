@@ -1,6 +1,7 @@
 package com.pixelzoo;
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.app.Activity;
@@ -97,24 +98,16 @@ public class PixelzooActivity extends Activity {
     public void javaCall() {
     	Log.d("PixelZooActivity", "hello world");
     }
-    
-    @Deprecated
-    public void endDraw() {
-    	pv.endDraw();
-    }
-    
-    public void drawBoardTwoDTest(int[][] board) {
-    	pv.drawBoardTwoDTest(board);
-        pv.endDraw();
-    }
-    
+        
     public void drawBoard(int[] board) {
     	pv.drawBoard(board);
-        pv.endDraw();
     }
-
-    public void drawParticle(int x, int y, int color) {
-    	pv.drawParticle(x, y, color);
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("PixelzooActivity", "Creating menu");
+        menu.add(Menu.NONE, Menu.NONE, Menu.NONE, "test tool");
+        return true;
     }
     
     // TODO: implement

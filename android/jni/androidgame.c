@@ -167,12 +167,11 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
   //androidGame->game->selectedTool = androidGame->game->toolByName->root->left->value;
   const char* gameString = readStringFromFile(filename);
   androidGame->game = pzNewGameFromXmlString(gameString,logMoves);
-  free ((void*) gameString);
+  free((void *)gameString);
   LOGV("Made new game");
 
   /* init palette lookup */
-  // LOGV("sizeof AndroidGame %i", sizeof(AndroidGame));
-  androidGame->sdlColor = malloc (pzGetPaletteSize(androidGame->game) * sizeof(Uint32));
+  androidGame->sdlColor =malloc (pzGetPaletteSize(androidGame->game) * sizeof(Uint32));
   for (pal = 0; pal <= pzGetPaletteSize(androidGame->game); ++pal) {
       int rgb = pzGetPaletteRgb (androidGame->game, pal);
 	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | rgb);
@@ -206,13 +205,6 @@ void renderAndDelay(AndroidGame* androidGame) {
   SDL_Delay(1000 * MAX(0.,renderPeriodInSeconds - elapsedClockTime));
 }
 
-// Obsolete
-void renderPixel(AndroidGame* androidGame, int x, int y, Uint32 color)
-{
-	drawParticle(androidGame, x, y, color);
-}
-
 void render(AndroidGame* androidGame) {
-  // drawBoardTwoDTest(androidGame);
   drawBoard(androidGame);
 }
