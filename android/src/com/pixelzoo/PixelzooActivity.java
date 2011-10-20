@@ -22,6 +22,7 @@ public class PixelzooActivity extends Activity {
     }
     
     PixelzooView pv;
+    long androidGamePtr = 0;
 	
     /** Called when the activity is first created. */
     @Override

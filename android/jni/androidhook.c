@@ -42,7 +42,8 @@ Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz )
 	argv[4] = "/sdcard/board.xml";
 
 	LOGV("STARTING GAME");
-	launch(argc, argv, thiz);
+	AndroidGame *androidGame = createAndroidGame(argc, argv, thiz);
+	startAndroidGame(androidGame);
 	LOGV("GAME ENDED");
 
 	// jmethodID mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "javaCall", "()V");

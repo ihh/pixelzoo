@@ -25,6 +25,9 @@
 typedef struct AndroidGame {
   pzGame *game;
   Uint32 *sdlColor;
+  char *moveLogFilename;
+  char *boardFilename;
+  Uint64 totalMicroticks;
 
   jobject thiz; // TODO: refactor this to Activity
 } AndroidGame;
@@ -35,8 +38,9 @@ typedef struct AndroidGame {
 extern "C" {
 #endif
 
-int launch(int argc, char *argv[], jobject thiz);
-AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves);
+AndroidGame* createAndroidGame(int argc, char *argv[], jobject thiz);
+AndroidGame* newAndroidGame(char *filename, jobject thiz, char *boardFilename, char *moveLogFilename, Uint64 totalMicroticks);
+int startAndroidGame(AndroidGame *androidGame);
 void deleteAndroidGame(AndroidGame* androidGame);
 void render(AndroidGame* androidGame);
 void renderAndDelay(AndroidGame* androidGame);

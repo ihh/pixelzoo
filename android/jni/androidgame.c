@@ -7,7 +7,7 @@
 const int COLOR_DEPTH     = 8;
 const int RENDER_RATE = 50;
 
-int launch( int argc, char *argv[], jobject thiz )
+AndroidGame* createAndroidGame( int argc, char *argv[], jobject thiz )
 {
   char *gameFilename, *moveLogFilename, *boardFilename, *revcompiledBoardFilename;
   int userInputAllowed;
@@ -24,7 +24,7 @@ int launch( int argc, char *argv[], jobject thiz )
   moveLogFilename = NULL;
   boardFilename = NULL;
   revcompiledBoardFilename = NULL;
-  totalMicroticks = -1;
+  totalMicroticks = 0;
   userInputAllowed = 1;
 
   LOGV("Processing Options");
@@ -61,32 +61,36 @@ int launch( int argc, char *argv[], jobject thiz )
       }
   }
 
-  AndroidGame *androidGame = NULL;
-
   if (gameFilename == NULL) {
     LOGE ("Game file not specified");
   }
 
-  androidGame = newAndroidGame(gameFilename, thiz, moveLogFilename != NULL);
+  AndroidGame *androidGame = NULL;
+  androidGame = newAndroidGame(gameFilename, thiz, boardFilename, moveLogFilename, totalMicroticks);
+  free(thisOpt); /* done with this item, free it */
 
+  return androidGame;
+}
+
+int startAndroidGame(AndroidGame *androidGame) {
   LOGV("Starting game loop");
-  while( pzGameRunning(androidGame->game) && (totalMicroticks < 0 || pzBoardClock(androidGame->game) < totalMicroticks ) )
+  while( pzGameRunning(androidGame->game) && (androidGame->totalMicroticks == 0 || pzBoardClock(androidGame->game) < androidGame->totalMicroticks ) )
   {
-      pzUpdateGame (androidGame->game, RENDER_RATE, totalMicroticks);
+      pzUpdateGame (androidGame->game, RENDER_RATE, androidGame->totalMicroticks);
       LOGV("Rendered");
       renderAndDelay(androidGame);
   }
   LOGV("Exiting");
-  if (moveLogFilename) {
+  if (androidGame->moveLogFilename) {
       const char* moveStr = pzSaveMoveAsXmlString(androidGame->game);
-      writeStringToFile (moveLogFilename, moveStr);
+      writeStringToFile (androidGame->moveLogFilename, moveStr);
       if (moveStr)
         free ((void*) moveStr);
   }
   LOGV("Finished writing moveLog");
-  if (boardFilename) {
+  if (androidGame->boardFilename) {
       const char* boardStr = pzSaveBoardAsXmlString(androidGame->game);
-          writeStringToFile (boardFilename, boardStr);
+          writeStringToFile (androidGame->boardFilename, boardStr);
           if (boardStr)
             free ((void*) boardStr);
   }
@@ -95,9 +99,7 @@ int launch( int argc, char *argv[], jobject thiz )
   deleteAndroidGame(androidGame);
   LOGV("AndroidGame released");
 
-  free(thisOpt); /* done with this item, free it */
 
-  LOGV("Done cleanup");
   return 0;
 }
 
@@ -105,7 +107,7 @@ int launch( int argc, char *argv[], jobject thiz )
 // Name: newAndroidGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
+AndroidGame* newAndroidGame(char *filename, jobject thiz, char *boardFilename, char *moveLogFilename, Uint64 totalMicroticks)
 {
   int pal;
 
@@ -116,7 +118,7 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
   //
   LOGV("Making new game");
   const char* gameString = readStringFromFile(filename);
-  androidGame->game = pzNewGameFromXmlString(gameString,logMoves);
+  androidGame->game = pzNewGameFromXmlString(gameString, moveLogFilename != NULL);
   free((void *)gameString);
   LOGV("Made new game");
 
@@ -127,6 +129,24 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
 	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | rgb);
   }
 
+  androidGame->totalMicroticks = totalMicroticks;
+
+  /* copy input filenames */
+  if(boardFilename) {
+      androidGame->boardFilename = (char *)malloc(sizeof(char) * (strlen(boardFilename) + 1));
+      strcpy(androidGame->boardFilename, boardFilename);
+  }
+  else {
+        androidGame->boardFilename = NULL;
+    }
+
+  if(moveLogFilename) {
+      androidGame->moveLogFilename = (char *)malloc(sizeof(char) * (strlen(moveLogFilename) + 1));
+      strcpy(androidGame->moveLogFilename, moveLogFilename);
+  }
+  else {
+      androidGame->moveLogFilename = NULL;
+  }
   /* JNI bindings */
   androidGame->thiz = thiz;
 
@@ -141,6 +161,8 @@ void deleteAndroidGame( AndroidGame* androidGame )
 {
   pzDeleteGame(androidGame->game);
   free(androidGame->sdlColor);
+  free(androidGame->moveLogFilename);
+  free(androidGame->boardFilename);
   free(androidGame);
 }
 
