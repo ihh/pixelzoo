@@ -77,12 +77,10 @@ int pzGetBoardSize(pzGame pzg) {
 }
 
 int pzGetCellRgb(pzGame pzg,int x,int y) {
-  PaletteIndex cellColorIndex;
   RGB *cellRgb;
   Game* game;
   game = (Game*) pzg;
-  cellColorIndex = readBoardColor(game->board, x, y);
-  cellRgb = &game->board->palette.rgb[cellColorIndex];
+  cellRgb = &game->board->palette.rgb[pzGetCellPaletteIndex(pzg, x, y)];
   return PackRgbTo24Bit(*cellRgb);
 }
 

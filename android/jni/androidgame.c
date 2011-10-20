@@ -189,9 +189,7 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz)
   /* init palette lookup */
   // LOGV("sizeof AndroidGame %i", sizeof(AndroidGame));
   for (pal = 0; pal <= PaletteMax; ++pal) {
-	  // LOGV("%i %i %i %i", pal, androidGame->game->board->palette.rgb[pal].r, androidGame->game->board->palette.rgb[pal].g, androidGame->game->board->palette.rgb[pal].b);
 	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | (androidGame->game->board->palette.rgb[pal].r << 24) | (androidGame->game->board->palette.rgb[pal].g << 16) | (androidGame->game->board->palette.rgb[pal].b));
-	  // androidGame->sdlColor[pal] = 0xFF00FF00;
   }
 
   /* JNI bindings */
