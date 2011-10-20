@@ -60,7 +60,7 @@ int main( int argc, char *argv[] )
   moveLogFilename = NULL;
   boardFilename = NULL;
   userInputAllowed = 1;
-  totalMicroticks = -1;
+  totalMicroticks = 0;
   while (optList != NULL)
     {
       thisOpt = optList;
@@ -104,7 +104,7 @@ int main( int argc, char *argv[] )
   
   sdlGame = newSDLGame (gameFilename, moveLogFilename != NULL);
 
-  while( pzGameRunning(sdlGame->game) && (totalMicroticks < 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
+  while( pzGameRunning(sdlGame->game) && (totalMicroticks == 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
     {
       pzUpdateGame (sdlGame->game, RENDER_RATE, totalMicroticks);
       renderAndDelay (sdlGame);
