@@ -20,10 +20,10 @@ typedef struct GoalTrigger GoalTrigger;
 
 /* exit portal: the "get Lemmings to exit" mechanic */
 typedef struct ExitPortal {
-  enum PortalState { PortalWaiting,    /* the startgame: exit portal closed, i.e. ignoring incoming Particle's. Player must meet openGoal */
-		     PortalCounting,   /* the endgame: exit portal is "open" and counting incoming Particle's */
-		     PortalUnlocked,   /* the "win" outcome: exit portal count reached */
-		     PortalDestroyed   /* the "fail" outcome: aliveGoal not met */
+  enum PortalState { PortalWaiting = 0,    /* exit portal ignoring incoming Particle's; no "win/fail" outcomes yet flagged */
+		     PortalCounting = 1,   /* exit portal is counting incoming Particle's */
+		     PortalUnlocked = 2,   /* "win" outcome flagged, exit portal ignoring incoming Particle's */
+		     PortalDestroyed = 3   /* "fail" outcome flagged, exit portal ignoring incoming Particle's */
   } portalState;
 
   Type type;
@@ -55,10 +55,10 @@ typedef struct Game {
 
   /* Game logic */
   /* game state */
-  enum GameState { GameOn,       /* board is evolving, player can use tools */
-		   GameWon,      /* board is evolving, player can use tools, they've won (exit portal opened, etc) */
-		   GameLost,     /* board is evolving, player can't use tools because they've lost (the time limit has expired, etc) */
-		   GameQuit      /* game over, no way out of this state */
+  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
+		   GameWon = 1,      /* board is evolving, player can use tools (exit portal opened, level stolen, etc) */
+		   GameLost = 2,     /* board is evolving, player can't use tools (timeout, etc) */
+		   GameQuit = 3      /* board has stopped; no way out of this state (player hits quit) */
   } gameState;
 
   /* main Goal */

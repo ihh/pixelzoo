@@ -8,14 +8,19 @@
    It should not be #include'd from public .h files.
  */
 
-/* all XML keyword #define's begin with this prefix */
-#define XMLPREFIX(KEYWORD)  XMLZOO_ ## KEYWORD
+/* functions to read/write files */
+const char* readStringFromFile (const char* filename);  /* caller must free the string */
+void writeStringToFile (const char* filename, const char* contents);
+void writeStringToFileAndDelete (const char* filename, const char* contents);
 
 /* functions to convert decimal/hexadecimal strings to 64-bit ints.
    basically the 64-bit versions of atoi() and strtoi()
  */
 long long decToSignedLongLong (const char *);
 unsigned long long hexToUnsignedLongLong (const char *);
+
+/* all XML keyword #define's begin with this prefix */
+#define XMLPREFIX(KEYWORD)  XMLZOO_ ## KEYWORD
 
 /* private macros for matching XML nodes */
 #define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLPREFIX(KEYWORD)) == 0)
