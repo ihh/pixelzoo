@@ -69,60 +69,13 @@ int launch( int argc, char *argv[], jobject thiz )
 
   androidGame = newAndroidGame(gameFilename, thiz, moveLogFilename != NULL);
 
-  if (moveLogFilename != NULL) {
-    // logBoardMoves (androidGame->game->board);
-  }
-
   LOGV("Starting game loop");
   while( pzGameRunning(androidGame->game) && (totalMicroticks < 0 || pzBoardClock(androidGame->game) < totalMicroticks ) )
   {
       pzUpdateGame (androidGame->game, RENDER_RATE, totalMicroticks);
       LOGV("Rendered");
       renderAndDelay(androidGame);
-      // */
-
-      /*SDL_Event event;
-
-      while( SDL_PollEvent( &event ) )
-	if (userInputAllowed)
-	  {
-	    switch( event.type ) 
-	      {
-	      case SDL_QUIT:
-		quitGame(AndroidGame->game);
-		break;
-
-	      case SDL_KEYDOWN:
-		if( event.key.keysym.sym == SDLK_ESCAPE ) 
-		  quitGame(AndroidGame->game);
-		break;
-
-	      case SDL_MOUSEMOTION:
-		AndroidGame->game->toolPos.x = event.motion.x / PIXELS_PER_CELL;
-		AndroidGame->game->toolPos.y = event.motion.y / PIXELS_PER_CELL;
-		break;
-
-	      case SDL_MOUSEBUTTONUP:
-		if ( event.button.button == SDL_BUTTON_LEFT)
-		  AndroidGame->game->toolActive = 0;
-		break;
-
-	      case SDL_MOUSEBUTTONDOWN:
-		if ( event.button.button == SDL_BUTTON_LEFT) {
-		  AndroidGame->game->toolActive = 1;
-		  AndroidGame->game->lastToolPos = AndroidGame->game->toolPos;
-		}
-		break;
-
-	      default:
-		break;
-	      }
-	  }*/
-
-
-      // test: do only one loop
-      // quitGame(androidGame->game);
-    }
+  }
   LOGV("Exiting");
   if (moveLogFilename) {
       const char* moveStr = pzSaveMoveAsXmlString(androidGame->game);
@@ -131,7 +84,6 @@ int launch( int argc, char *argv[], jobject thiz )
         free ((void*) moveStr);
   }
   LOGV("Finished writing moveLog");
-
   if (boardFilename) {
       const char* boardStr = pzSaveBoardAsXmlString(androidGame->game);
           writeStringToFile (boardFilename, boardStr);
@@ -163,8 +115,6 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
   // Initialize Game...
   //
   LOGV("Making new game");
-  //androidGame->game = newGameFromXmlFile(filename);
-  //androidGame->game->selectedTool = androidGame->game->toolByName->root->left->value;
   const char* gameString = readStringFromFile(filename);
   androidGame->game = pzNewGameFromXmlString(gameString,logMoves);
   free((void *)gameString);
@@ -189,7 +139,6 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
 //-----------------------------------------------------------------------------
 void deleteAndroidGame( AndroidGame* androidGame )
 {
-  // SDL_FreeSurface( AndroidGame->g_screenSurface );
   pzDeleteGame(androidGame->game);
   free(androidGame->sdlColor);
   free(androidGame);
