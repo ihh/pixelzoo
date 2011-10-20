@@ -12,7 +12,7 @@ int launch( int argc, char *argv[], jobject thiz )
   char *gameFilename, *moveLogFilename, *boardFilename, *revcompiledBoardFilename;
   int userInputAllowed;
   option_t *optList, *thisOpt;
-  int64_Microticks totalMicroticks;
+  Uint64 totalMicroticks;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
@@ -67,16 +67,16 @@ int launch( int argc, char *argv[], jobject thiz )
     LOGE ("Game file not specified");
   }
 
-  androidGame = newAndroidGame(gameFilename, thiz);
+  androidGame = newAndroidGame(gameFilename, thiz, moveLogFilename != NULL);
 
   if (moveLogFilename != NULL) {
     // logBoardMoves (androidGame->game->board);
   }
 
   LOGV("Starting game loop");
-  while( gameRunning(androidGame->game) && (totalMicroticks < 0 || androidGame->game->board->microticks < totalMicroticks ))
-    {
-      const double targetUpdatesPerCell = androidGame->game->ticksPerSecond / (double) RENDER_RATE;
+  while( pzGameRunning(androidGame->game) && (totalMicroticks < 0 || pzBoardClock(androidGame->game) < totalMicroticks ) )
+  {
+      /*const double targetUpdatesPerCell = androidGame->game->ticksPerSecond / (double) RENDER_RATE;
       const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / androidGame->game->ticksPerSecond;
       int64_Microticks targetMicroticks = FloatToIntMillionths (targetUpdatesPerCell);
       if (totalMicroticks >= 0)
@@ -86,7 +86,9 @@ int launch( int argc, char *argv[], jobject thiz )
       int64_Microticks microticks;
       int actualUpdates;
 
-      innerGameLoop(androidGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);
+      innerGameLoop(androidGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);*/
+
+      pzUpdateGame (androidGame->game, RENDER_RATE, totalMicroticks);
       LOGV("Rendered");
       renderAndDelay(androidGame);
       // */
@@ -135,29 +137,20 @@ int launch( int argc, char *argv[], jobject thiz )
     }
   LOGV("Exiting");
   if (moveLogFilename) {
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (moveLogFilename, 0);
-    writeMoveList (androidGame->game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-    xmlFreeTextWriter (writer);
+      const char* moveStr = pzSaveMoveAsXmlString(androidGame->game);
+      writeStringToFile (moveLogFilename, moveStr);
+      if (moveStr)
+        free ((void*) moveStr);
   }
   LOGV("Finished writing moveLog");
 
   if (boardFilename) {
-    boardReleaseRandomNumbers (androidGame->game->board);
-
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (boardFilename, 0);
-    writeBoard (androidGame->game->board, writer, 0);
-    xmlFreeTextWriter (writer);
+      const char* boardStr = pzSaveBoardAsXmlString(androidGame->game);
+          writeStringToFile (boardFilename, boardStr);
+          if (boardStr)
+            free ((void*) boardStr);
   }
   LOGV("Finished writing board file");
-
-  if (revcompiledBoardFilename) {
-    boardReleaseRandomNumbers (androidGame->game->board);
-
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename (revcompiledBoardFilename, 0);
-    writeBoard (androidGame->game->board, writer, 1);
-    xmlFreeTextWriter (writer);
-  }
-  LOGV("Finished writing revCompiledBoard");
 
   deleteAndroidGame(androidGame);
   LOGV("AndroidGame released");
@@ -172,24 +165,29 @@ int launch( int argc, char *argv[], jobject thiz )
 // Name: newAndroidGame()
 // Desc: 
 //-----------------------------------------------------------------------------
-AndroidGame* newAndroidGame(char *filename, jobject thiz)
+AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves)
 {
-  PaletteIndex pal;
+  int pal;
 
-  AndroidGame *androidGame = SafeMalloc(sizeof(AndroidGame));
+  AndroidGame *androidGame = malloc(sizeof(AndroidGame));
 
   //
   // Initialize Game...
   //
   LOGV("Making new game");
-  androidGame->game = newGameFromXmlFile(filename);
-  androidGame->game->selectedTool = androidGame->game->toolByName->root->left->value;
+  //androidGame->game = newGameFromXmlFile(filename);
+  //androidGame->game->selectedTool = androidGame->game->toolByName->root->left->value;
+  const char* gameString = readStringFromFile(filename);
+  androidGame->game = pzNewGameFromXmlString(gameString,logMoves);
+  free ((void*) gameString);
   LOGV("Made new game");
 
   /* init palette lookup */
   // LOGV("sizeof AndroidGame %i", sizeof(AndroidGame));
-  for (pal = 0; pal <= PaletteMax; ++pal) {
-	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | (androidGame->game->board->palette.rgb[pal].r << 24) | (androidGame->game->board->palette.rgb[pal].g << 16) | (androidGame->game->board->palette.rgb[pal].b));
+  androidGame->sdlColor = malloc (pzGetPaletteSize(androidGame->game) * sizeof(Uint32));
+  for (pal = 0; pal <= pzGetPaletteSize(androidGame->game); ++pal) {
+      int rgb = pzGetPaletteRgb (androidGame->game, pal);
+	  androidGame->sdlColor[pal] = (Uint32)((0xFF000000) | rgb);
   }
 
   /* JNI bindings */
@@ -205,8 +203,9 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz)
 void deleteAndroidGame( AndroidGame* androidGame )
 {
   // SDL_FreeSurface( AndroidGame->g_screenSurface );
-  deleteGame(androidGame->game);
-  SafeFree(androidGame);
+  pzDeleteGame(androidGame->game);
+  free(androidGame->sdlColor);
+  free(androidGame);
 }
 
 void renderAndDelay(AndroidGame* androidGame) {

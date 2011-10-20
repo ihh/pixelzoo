@@ -55,10 +55,10 @@ Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz )
 JNIEXPORT jboolean
 Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard( JNIEnv* env, jobject thiz ) {
 	// test
-	AndroidGame *androidGame = SafeMalloc(sizeof(AndroidGame));
+	AndroidGame *androidGame = malloc(sizeof(AndroidGame));
 	androidGame->thiz = thiz;
 	drawParticle(androidGame, 10, 10, 0xFF00FF00);
-	SafeFree(androidGame);
+	free(androidGame);
 
 	return 0;
 }
@@ -123,17 +123,19 @@ void drawBoardTwoDTest(AndroidGame* androidGame) {
 
 	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
 	// TODO: need to check if 1D array is appreciably faster than a 2D array
-	jintArray row = (jintArray)(*env)->NewIntArray(env, androidGame->game->board->size);
-	jobjectArray board = (jobjectArray)(*env)->NewObjectArray(env, androidGame->game->board->size, (*env)->GetObjectClass(env, row), NULL);
+	int size = pzGetBoardSize(androidGame->game);
+
+	jintArray row = (jintArray)(*env)->NewIntArray(env, size);
+	jobjectArray board = (jobjectArray)(*env)->NewObjectArray(env, size, (*env)->GetObjectClass(env, row), NULL);
 
 	int tmp[128];
-	for(int j=0; j<androidGame->game->board->size; ++j) {
+	for(int j=0; j < size; ++j) {
 		tmp[j] = 0xFF00FF00;
 	}
 
-	for(int i=0; i<androidGame->game->board->size; ++i) {
-	    row = (jintArray)(*env)->NewIntArray(env, androidGame->game->board->size);
-	    (*env)->SetIntArrayRegion(env, (jintArray)row,(jsize)0, androidGame->game->board->size, tmp);
+	for(int i=0; i < size; ++i) {
+	    row = (jintArray)(*env)->NewIntArray(env, size);
+	    (*env)->SetIntArrayRegion(env, (jintArray)row,(jsize)0, size, tmp);
 	    (*env)->SetObjectArrayElement(env, board, i, row);
 	}
 
@@ -152,7 +154,7 @@ void drawBoard(AndroidGame* androidGame) {
 		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "drawBoard", "([I)V");
 	}
 
-	int size = androidGame->game->board->size;
+	int size = pzGetBoardSize(androidGame->game);
 
 	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
 	// TODO: need to check if 1D array is appreciably faster than a 2D array

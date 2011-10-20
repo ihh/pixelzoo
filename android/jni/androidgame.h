@@ -8,11 +8,9 @@
 
 #include <time.h>
 
-#include "xmlgame.h" // change to pixelzoo.h
-#include "xmlmove.h"
-#include "xmlutil.h"
 #include "pixelzoo.h"
 #include "pzutil.h"
+#include "xmlutil.h"
 
 // remove?
 #include <libxml/parser.h>
@@ -22,9 +20,11 @@
 
 #include "optlist.h"
 
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+
 typedef struct AndroidGame {
-  Game *game;
-  Uint32 sdlColor[PaletteSize];
+  pzGame *game;
+  Uint32 *sdlColor;
 
   jobject thiz; // TODO: refactor this to Activity
 } AndroidGame;
@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 int launch(int argc, char *argv[], jobject thiz);
-AndroidGame* newAndroidGame(char *filename, jobject thiz);
+AndroidGame* newAndroidGame(char *filename, jobject thiz, int logMoves);
 void deleteAndroidGame(AndroidGame* androidGame);
 void render(AndroidGame* androidGame);
 void renderAndDelay(AndroidGame* androidGame);
