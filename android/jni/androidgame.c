@@ -76,18 +76,6 @@ int launch( int argc, char *argv[], jobject thiz )
   LOGV("Starting game loop");
   while( pzGameRunning(androidGame->game) && (totalMicroticks < 0 || pzBoardClock(androidGame->game) < totalMicroticks ) )
   {
-      /*const double targetUpdatesPerCell = androidGame->game->ticksPerSecond / (double) RENDER_RATE;
-      const double maxElapsedTimeInSeconds = 0.5 * targetUpdatesPerCell / androidGame->game->ticksPerSecond;
-      int64_Microticks targetMicroticks = FloatToIntMillionths (targetUpdatesPerCell);
-      if (totalMicroticks >= 0)
-    	targetMicroticks = MIN (totalMicroticks - androidGame->game->board->microticks, targetMicroticks);
-
-      double updatesPerCell, evolveTime;
-      int64_Microticks microticks;
-      int actualUpdates;
-
-      innerGameLoop(androidGame->game, targetMicroticks, maxElapsedTimeInSeconds, &microticks, &updatesPerCell, &actualUpdates, &evolveTime);*/
-
       pzUpdateGame (androidGame->game, RENDER_RATE, totalMicroticks);
       LOGV("Rendered");
       renderAndDelay(androidGame);
