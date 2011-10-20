@@ -54,8 +54,10 @@ const char* readStringFromFile (const char* filename) {
       size = ftell(fp);
       fseek(fp, 0, SEEK_SET);
       buf = SafeMalloc(size + 1);
-      if (fread (buf, size, 1, fp))
+      if (fread (buf, size, 1, fp)) {
 	success = 1;
+	buf[size] = '\0';
+      }
       fclose(fp);
     }
     if (!success) {
