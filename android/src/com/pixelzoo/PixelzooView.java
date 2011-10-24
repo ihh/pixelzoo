@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 public class PixelzooView extends SurfaceView {
     private final int particleSize = 4;
@@ -22,10 +23,11 @@ public class PixelzooView extends SurfaceView {
 	private int maxXParticles = 0;
 	private int maxYParticles = 0;
 
-    public PixelzooView(Context context, SurfaceHolder.Callback callback) { 
+    public PixelzooView(Context context, SurfaceHolder.Callback callback, View.OnTouchListener touchListener) {
         super(context);
-
+        
         this.setWillNotDraw(false); // necessary for View to call onDraw
+        this.setOnTouchListener(touchListener);
         
         if(callback!= null) {
         	getHolder().addCallback(callback);
@@ -70,8 +72,9 @@ public class PixelzooView extends SurfaceView {
             mSmallBitmap.setPixels(board, 0, boardSize, 0, 0, boardSize, boardSize);
             
             repaint();
+            Log.v("PixelzooView", "rendered board");
         }
-	}
+    }
 
 	
 	private void repaint() {

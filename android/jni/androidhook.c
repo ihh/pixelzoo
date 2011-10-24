@@ -1,34 +1,31 @@
 #include <androidhook.h>
 
- JavaVM *cached_jvm;
- // jclass Class_C;
- // jmethodID MID_C_g;
- JNIEXPORT jint JNICALL
- JNI_OnLoad(JavaVM *jvm, void *reserved)
- {
-     JNIEnv *env;
-     // jclass cls;
-     cached_jvm = jvm;  /* cache the JavaVM pointer */
+JavaVM *cached_jvm;
+// jclass Class_C;
+// jmethodID MID_C_g;
+JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *jvm, void *reserved)
+{
+    JNIEnv *env;
+    // jclass cls;
+    cached_jvm = jvm;  /* cache the JavaVM pointer */
+    if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2)) {
+        return JNI_ERR; /* JNI version not supported */
+    }
+    return JNI_VERSION_1_2;
+}
 
-     if ((*jvm)->GetEnv(jvm, (void **)&env, JNI_VERSION_1_2)) {
-         return JNI_ERR; /* JNI version not supported */
-     }
-     /*cls = (*env)->FindClass(env, "C");
-     if (cls == NULL) {
-         return JNI_ERR;
-     }
-     // Use weak global ref to allow C class to be unloaded
-     Class_C = (*env)->NewWeakGlobalRef(env, cls);
-     if (Class_C == NULL) {
-         return JNI_ERR;
-     }
-     // Compute and cache the method ID
-     MID_C_g = (*env)->GetMethodID(env, cls, "g", "()V");
-     if (MID_C_g == NULL) {
-         return JNI_ERR;
-     }*/
-     return JNI_VERSION_1_2;
- }
+// Asks androidgame to redraw the entire board
+JNIEXPORT jboolean
+Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard( JNIEnv* env, jobject thiz ) {
+    // test
+    AndroidGame *androidGame = malloc(sizeof(AndroidGame));
+    androidGame->thiz = thiz;
+    drawParticle(androidGame, 10, 10, 0xFF00FF00);
+    free(androidGame);
+
+    return 0;
+}
 
 JNIEXPORT jlong
 Java_com_pixelzoo_PixelzooActivity_createAndroidGame( JNIEnv* env, jobject thiz )
@@ -46,51 +43,43 @@ Java_com_pixelzoo_PixelzooActivity_createAndroidGame( JNIEnv* env, jobject thiz 
 }
 
 JNIEXPORT void
-Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz, jlong androidGamePtr )
-{
+Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz, jlong androidGamePtr ) {
 	startAndroidGame((AndroidGame*)((long)androidGamePtr));
 }
 
-// Asks androidgame to redraw the entire board
-JNIEXPORT jboolean
-Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard( JNIEnv* env, jobject thiz ) {
-	// test
-	AndroidGame *androidGame = malloc(sizeof(AndroidGame));
-	androidGame->thiz = thiz;
-	drawParticle(androidGame, 10, 10, 0xFF00FF00);
-	free(androidGame);
+JNIEXPORT jint
+Java_com_pixelzoo_PixelzooActivity_getNumberOfTools( JNIEnv* env, jobject thiz, jlong androidGamePtr ) {
+    if(androidGamePtr)
+        return (jint)(pzGetNumberOfTools((pzGame)((AndroidGame*)((long)androidGamePtr))->game));
 
-	return 0;
+    return 0;
 }
 
-void startParticle(AndroidGame* androidGame) {
-	static jmethodID mid = 0;
-	JNIEnv* env; // = AndroidGame->env;
-	(*cached_jvm)->GetEnv(cached_jvm,
-							   (void **)&env,
-							   JNI_VERSION_1_2);
-	jobject thiz = androidGame->thiz;
+JNIEXPORT jstring
+Java_com_pixelzoo_PixelzooActivity_getToolName( JNIEnv* env, jobject thiz, jlong androidGamePtr, jint index ) {
+    pzGame game = (pzGame)((AndroidGame*)((long)androidGamePtr))->game;
+    pzTool tool = pzGetToolByNumber(game, (int)index);
+    const char *toolName = pzGetToolName(tool);
 
-	if(!mid) {
-		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "startDraw", "()V");
-	}
-
-	(*env)->CallVoidMethod(env, thiz, mid);
+    return (*env)->NewStringUTF(env, toolName);
 }
-/*void endDraw(AndroidGame* androidGame) {
-	static jmethodID mid = 0;
-	JNIEnv* env; // = AndroidGame->env;
-	(*cached_jvm)->GetEnv(cached_jvm,
-							   (void **)&env,
-							   JNI_VERSION_1_2);
-	jobject thiz = androidGame->thiz;
 
-	if(!mid) {
-		mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "endDraw", "()V");
-	}
+JNIEXPORT void
+Java_com_pixelzoo_PixelzooActivity_touchCell( JNIEnv* env, jobject thiz, jlong androidGamePtr, jint x, jint y ) {
+    pzGame game = (pzGame)((AndroidGame*)((long)androidGamePtr))->game;
 
-	(*env)->CallVoidMethod(env, thiz, mid);
-}*/
+    // TODO: make this schedule a draw instead of doing it immediately
+    LOGV("Touched %i %i", (int)x, (int)y);
+    pzTouchCell(game, (int)x, (int)y);
+}
+
+JNIEXPORT void
+Java_com_pixelzoo_PixelzooActivity_untouchCell( JNIEnv* env, jobject thiz, jlong androidGamePtr ) {
+    pzGame game = (pzGame)((AndroidGame*)((long)androidGamePtr))->game;
+
+    LOGV("Stopped touch");
+    pzUntouchCell(game);
+}
 
 void drawParticle(AndroidGame* androidGame, int x, int y, Uint32 color) {
 	static jmethodID mid = 0;

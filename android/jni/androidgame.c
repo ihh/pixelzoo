@@ -77,7 +77,6 @@ int startAndroidGame(AndroidGame *androidGame) {
   while( pzGameRunning(androidGame->game) && (androidGame->totalMicroticks == 0 || pzBoardClock(androidGame->game) < androidGame->totalMicroticks ) )
   {
       pzUpdateGame (androidGame->game, RENDER_RATE, androidGame->totalMicroticks);
-      LOGV("Rendered");
       renderAndDelay(androidGame);
   }
   LOGV("Exiting");

@@ -2,8 +2,10 @@ package com.pixelzoo;
 
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -38,7 +40,7 @@ public class PixelzooActivity extends Activity {
         // this should suffice for now, but ideally, only the viewport needs a fixed orientation
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
+        SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 				public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
 	
 				public void surfaceCreated(SurfaceHolder arg0) {
@@ -51,8 +53,27 @@ public class PixelzooActivity extends Activity {
 	
 				public void surfaceDestroyed(SurfaceHolder arg0) {}
         	
-        	};
-        this.pv = new PixelzooView(this, callback);
+            };
+        
+        View.OnTouchListener touchCallback = new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch(event.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_MOVE:
+                            touchCell(androidGamePtr, (int)(event.getX()/4), (int)(event.getY()/4));
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            untouchCell(androidGamePtr);
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    return true;
+                }
+            };
+        
+        this.pv = new PixelzooView(this, surfaceCallback, touchCallback);
         setContentView(pv);
         pv.bringToFront();
         // pv.invalidate();
@@ -89,12 +110,21 @@ public class PixelzooActivity extends Activity {
     	// TODO: stop the game loop or something
     }
     
+    // Native methods
+    // JNI test methods
     public native String stringFromJNI();
     public native String runXmlTest();
+    public native void requestRedrawBoard();
     
+    // Initialization methods
     public native long createAndroidGame();
     public native void runAndroidGame(long androidGamePtr);
-    public native void requestRedrawBoard();
+    
+    // Tool methods
+    public native int getNumberOfTools(long ptr);
+    public native String getToolName(long ptr, int index);
+    public native void touchCell(long ptr, int x, int y);
+    public native void untouchCell(long ptr);
     
     public void javaCall() {
     	Log.d("PixelZooActivity", "hello world");
@@ -107,12 +137,13 @@ public class PixelzooActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d("PixelzooActivity", "Creating menu");
-        menu.add(Menu.NONE, Menu.NONE, Menu.NONE, "test tool");
+        
+        int numTools = getNumberOfTools(androidGamePtr);
+        Log.v("PixelzooActivity", "creating tools menu with " + numTools);
+        
+        for(int i = 0; i < numTools; ++i) {
+            menu.add(Menu.NONE, Menu.NONE, Menu.NONE, getToolName(androidGamePtr, i));
+        }
         return true;
     }
-    
-    // TODO: implement
-	public void drawTools(int x, int y, int color) {
-		
-	}
 }
