@@ -60,10 +60,6 @@ public class PixelzooView extends SurfaceView {
     private void myDraw(Canvas canvas) {
         canvas.drawBitmap(mSmallBitmap, matrix, null);
         
-        Paint p = new Paint();
-        p.setColor(0xFF000000 | (int)(0x01000000*Math.random()));
-        canvas.drawRect(0, 0, 4, 4, p);
-        
         Log.v("PixelzooView", "bitmap should be drawn...");
     }
     
