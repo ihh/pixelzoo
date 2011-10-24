@@ -57,7 +57,7 @@ void pzUpdateGame(pzGame pzg,int callsPerSecond,long long boardClockTimeLimit) {
   targetTicks = game->ticksPerSecond / (double) callsPerSecond;
   maxUpdateTimeInSeconds = MAX_PROPORTION_TIME_EVOLVING * targetTicks / game->ticksPerSecond;
   targetMicroticks = FloatToIntMillionths(targetTicks);
-  if (boardClockTimeLimit >= 0)
+  if (boardClockTimeLimit > 0)
     targetMicroticks = MIN (targetMicroticks, boardClockTimeLimit - game->board->microticks);
 
   if (targetMicroticks > 0)
