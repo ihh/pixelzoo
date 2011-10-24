@@ -20,6 +20,8 @@ JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, j
 
 JNIEXPORT jint Java_com_pixelzoo_PixelzooActivity_getNumberOfTools( JNIEnv* env, jobject thiz, jlong androidGamePtr );
 JNIEXPORT jstring Java_com_pixelzoo_PixelzooActivity_getToolName( JNIEnv* env, jobject thiz, jlong androidGamePtr, jint index );
+JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_selectTool( JNIEnv* env, jobject thiz, jlong androidGamePtr, jint index );
+JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_unselectTool( JNIEnv* env, jobject thiz, jlong androidGamePtr );
 
 JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_touchCell( JNIEnv* env, jobject thiz, jlong androidGamePtr, jint x, jint y );
 JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_untouchCell( JNIEnv* env, jobject thiz, jlong androidGamePtr );

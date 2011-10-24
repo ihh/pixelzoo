@@ -2,6 +2,7 @@ package com.pixelzoo;
 
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -123,6 +124,9 @@ public class PixelzooActivity extends Activity {
     // Tool methods
     public native int getNumberOfTools(long ptr);
     public native String getToolName(long ptr, int index);
+    public native void selectTool(long ptr, int index);
+    public native void unselectTool(long ptr);
+    
     public native void touchCell(long ptr, int x, int y);
     public native void untouchCell(long ptr);
     
@@ -142,7 +146,16 @@ public class PixelzooActivity extends Activity {
         Log.v("PixelzooActivity", "creating tools menu with " + numTools);
         
         for(int i = 0; i < numTools; ++i) {
-            menu.add(Menu.NONE, Menu.NONE, Menu.NONE, getToolName(androidGamePtr, i));
+            MenuItem item = menu.add(Menu.NONE, Menu.NONE, Menu.NONE, getToolName(androidGamePtr, i));
+            
+            final int temp = i;
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Log.v("PixelzooActivity", "Set tool to " + temp);
+                        selectTool(androidGamePtr, temp);
+                        return true;
+                    }
+                });
         }
         return true;
     }
