@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -17,7 +18,7 @@ public class PixelzooView extends SurfaceView {
 	    matrix = new Matrix();
 	    matrix.postScale(particleSize, particleSize);
 	}
-	int frameSkipTimer = 0;
+    int frameSkipTimer = 0;
     final int frameSkip = 10;
 	
 	private int maxXParticles = 0;
@@ -58,6 +59,12 @@ public class PixelzooView extends SurfaceView {
     
     private void myDraw(Canvas canvas) {
         canvas.drawBitmap(mSmallBitmap, matrix, null);
+        
+        Paint p = new Paint();
+        p.setColor(0xFF000000 | (int)(0x01000000*Math.random()));
+        canvas.drawRect(0, 0, 4, 4, p);
+        
+        Log.v("PixelzooView", "bitmap should be drawn...");
     }
     
     public void clearScreen() {
@@ -67,8 +74,8 @@ public class PixelzooView extends SurfaceView {
     public void drawBoard(int[] board) {
         // skip frames if slow
         // TODO: get information on when to skip frames from JNI; make this more similar to ZooGas
-        if(++frameSkipTimer == frameSkipTimer) {
-            frameSkipTimer %= frameSkipTimer;
+        if(++frameSkipTimer == frameSkip) {
+            frameSkipTimer %= frameSkip;
             mSmallBitmap.setPixels(board, 0, boardSize, 0, 0, boardSize, boardSize);
             
             repaint();
