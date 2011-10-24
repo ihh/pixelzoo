@@ -60,8 +60,7 @@ public class PixelzooActivity extends Activity {
         Log.d("PixelzooActivity", "Set PixelzooView");
         
         
-        // runAndroidGame();
-        // requestRedrawBoard();
+        androidGamePtr = createAndroidGame();
     }
     
     Thread jniThread;
@@ -70,7 +69,7 @@ public class PixelzooActivity extends Activity {
         // INFO/dalvikvm(289): Landroid/view/ViewRoot$CalledFromWrongThreadException;: Only the original thread that created a view hierarchy can touch its views.
         Thread jniThread = new Thread(new Runnable() {
 				public void run() {
-					runAndroidGame();					
+					runAndroidGame(androidGamePtr);					
 				}
         	});
         jniThread.setDaemon(true);
@@ -93,7 +92,8 @@ public class PixelzooActivity extends Activity {
     public native String stringFromJNI();
     public native String runXmlTest();
     
-    public native String runAndroidGame();
+    public native long createAndroidGame();
+    public native void runAndroidGame(long androidGamePtr);
     public native void requestRedrawBoard();
     
     public void javaCall() {

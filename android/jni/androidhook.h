@@ -12,7 +12,8 @@
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "libnav", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "libnav", __VA_ARGS__)
 
-JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz );
+JNIEXPORT jlong Java_com_pixelzoo_PixelzooActivity_createAndroidGame( JNIEnv* env, jobject thiz );
+JNIEXPORT void Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz, jlong androidGamePtr );
 
 // Asks androidgame to redraw the entire board
 JNIEXPORT jboolean Java_com_pixelzoo_PixelzooActivity_requestRedrawBoard(JNIEnv* env, jobject thiz);

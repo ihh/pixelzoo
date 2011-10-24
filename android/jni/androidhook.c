@@ -30,8 +30,8 @@
      return JNI_VERSION_1_2;
  }
 
-JNIEXPORT void
-Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz )
+JNIEXPORT jlong
+Java_com_pixelzoo_PixelzooActivity_createAndroidGame( JNIEnv* env, jobject thiz )
 {
 	int argc = 5;
 	char *argv[5];
@@ -41,15 +41,14 @@ Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz )
 	argv[3] = "-b";
 	argv[4] = "/sdcard/board.xml";
 
-	LOGV("STARTING GAME");
 	AndroidGame *androidGame = createAndroidGame(argc, argv, thiz);
-	startAndroidGame(androidGame);
-	LOGV("GAME ENDED");
+	return (jlong)((long)androidGame);
+}
 
-	// jmethodID mid = (*env)->GetMethodID(env, (*env)->GetObjectClass(env, thiz), "javaCall", "()V");
-	// (*env)->CallVoidMethod(env, thiz, mid);
-
-    // return (*env)->NewStringUTF(env, "Success from SDL game!");
+JNIEXPORT void
+Java_com_pixelzoo_PixelzooActivity_runAndroidGame( JNIEnv* env, jobject thiz, jlong androidGamePtr )
+{
+	startAndroidGame((AndroidGame*)((long)androidGamePtr));
 }
 
 // Asks androidgame to redraw the entire board
