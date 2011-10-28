@@ -49,9 +49,9 @@ int main( int argc, char *argv[] )
 	printf("Usage: %s <options>\n\n", argv[0]);
 	printf("options:\n");
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
+	printf("     -t : specify simulation time limit in microticks (mandatory).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
-	printf("     -t : specify simulation time limit in microticks (mandatory).\n");
 	printf(" -h, -? : print out command line options.\n\n");
 
 	FreeOptList(thisOpt); /* done with this list, free it */

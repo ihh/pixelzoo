@@ -70,9 +70,9 @@ int main( int argc, char *argv[] )
 	printf("Usage: %s <options>\n\n", argv[0]);
 	printf("options:\n");
 	printf("     -g : specify input XML file describing game/board (mandatory).\n");
+	printf("     -t : specify simulation time limit in microticks (optional).\n");
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
-	printf("     -t : specify simulation time limit in microticks (optional).\n");
 	printf("     -d : disable user input (optional).\n");
 	printf(" -h, -? : print out command line options.\n\n");
 
