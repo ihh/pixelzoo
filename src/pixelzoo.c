@@ -54,11 +54,16 @@ void pzUpdateGame(pzGame pzg,int callsPerSecond,long long boardClockTimeLimit) {
   Game* game;
   game = (Game*) pzg;
 
-  targetTicks = game->ticksPerSecond / (double) callsPerSecond;
-  maxUpdateTimeInSeconds = MAX_PROPORTION_TIME_EVOLVING * targetTicks / game->ticksPerSecond;
-  targetMicroticks = FloatToIntMillionths(targetTicks);
-  if (boardClockTimeLimit > 0)
-    targetMicroticks = MIN (targetMicroticks, boardClockTimeLimit - game->board->microticks);
+  if (callsPerSecond > 0) {
+    targetTicks = game->ticksPerSecond / (double) callsPerSecond;
+    maxUpdateTimeInSeconds = MAX_PROPORTION_TIME_EVOLVING * targetTicks / game->ticksPerSecond;
+    targetMicroticks = FloatToIntMillionths(targetTicks);
+    if (boardClockTimeLimit > 0)
+      targetMicroticks = MIN (targetMicroticks, boardClockTimeLimit - game->board->microticks);
+  } else {
+    maxUpdateTimeInSeconds = -1;
+    targetMicroticks = MAX (0, boardClockTimeLimit - game->board->microticks);
+  }
 
   if (targetMicroticks > 0)
     innerGameLoop (game, targetMicroticks, maxUpdateTimeInSeconds, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);

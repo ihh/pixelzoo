@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 // SYMBOLIC CONSTANTS
 //-----------------------------------------------------------------------------
-const int GAME_LOOP_CALL_RATE = 50;
+const int GAME_LOOP_CALL_RATE = 0;
 
 //-----------------------------------------------------------------------------
 // PROTOTYPES
@@ -82,7 +82,6 @@ int main( int argc, char *argv[] )
   }
   
   game = newTestGame (gameFilename, moveLogFilename != NULL);
-
   while( pzGameRunning(game) && (totalMicroticks == 0 || pzBoardClock(game) < totalMicroticks ) )
     pzUpdateGame (game, GAME_LOOP_CALL_RATE, totalMicroticks);
 
