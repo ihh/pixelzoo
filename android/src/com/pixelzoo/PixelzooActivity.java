@@ -61,7 +61,7 @@ public class PixelzooActivity extends Activity {
                     switch(event.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
                         case MotionEvent.ACTION_MOVE:
-                            touchCell(androidGamePtr, (int)(event.getX()/4), (int)(event.getY()/4));
+                            touchCell(androidGamePtr, (int)(event.getY()/4), (int)(event.getX()/4));
                             break;
                         case MotionEvent.ACTION_UP:
                             untouchCell(androidGamePtr);

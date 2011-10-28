@@ -59,8 +59,6 @@ public class PixelzooView extends SurfaceView {
     
     private void myDraw(Canvas canvas) {
         canvas.drawBitmap(mSmallBitmap, matrix, null);
-        
-        Log.v("PixelzooView", "bitmap should be drawn...");
     }
     
     public void clearScreen() {
@@ -75,7 +73,6 @@ public class PixelzooView extends SurfaceView {
             mSmallBitmap.setPixels(board, 0, boardSize, 0, 0, boardSize, boardSize);
             
             repaint();
-            Log.v("PixelzooView", "rendered board");
         }
     }
 
