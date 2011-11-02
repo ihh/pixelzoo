@@ -37,6 +37,8 @@ requires 'Catalyst::View::TT';
 
 requires 'XML::Twig';
 
+requires 'MooseX::NonMoose';
+
 catalyst;
 
 install_script glob('script/*.pl');
