@@ -130,6 +130,9 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, char *boardFilename, c
 
   androidGame->totalMicroticks = totalMicroticks;
 
+  /* malloc some space for rgbArray used for drawing to Android */
+  androidGame->rgbArray = pzNewCellRgbArray(androidGame->game);
+
   /* copy input filenames */
   if(boardFilename) {
       androidGame->boardFilename = (char *)malloc(sizeof(char) * (strlen(boardFilename) + 1));
@@ -158,6 +161,7 @@ AndroidGame* newAndroidGame(char *filename, jobject thiz, char *boardFilename, c
 //-----------------------------------------------------------------------------
 void deleteAndroidGame( AndroidGame* androidGame )
 {
+  pzDeleteCellRgbArray(androidGame->game, androidGame->rgbArray);
   pzDeleteGame(androidGame->game);
   free(androidGame->sdlColor);
   free(androidGame->moveLogFilename);

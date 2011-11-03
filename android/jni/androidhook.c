@@ -160,19 +160,19 @@ void drawBoard(AndroidGame* androidGame) {
 	// Initialize a int[][] in java (multi-dimensional arrays are object arrays)
 	// TODO: need to check if 1D array is appreciably faster than a 2D array
 	jintArray board = (jintArray)(*env)->NewIntArray(env, size * size);
-	int **rgbArray = pzNewCellRgbArray(androidGame->game);
+	// int **rgbArray = pzNewCellRgbArray(androidGame->game);
 
 	// This method doesn't return a valid format. 24bit should be converted to ARGB_8888 for android.
 	// pzReadCellRgbArray((pzGame)androidGame->game, rgbArray);
 	int x, y, pal;
 	for (x = 0; x < size; ++x)
 	  for (y = 0; y < size; ++y)
-	    rgbArray[x][y] = androidGame->sdlColor[pzGetCellPaletteIndex(androidGame->game, x, y)];
+	    androidGame->rgbArray[x][y] = androidGame->sdlColor[pzGetCellPaletteIndex(androidGame->game, x, y)];
 
 	for(int i=0; i < size; ++i) {
-		(*env)->SetIntArrayRegion(env, (jintArray)board, (jsize)(i * size), size, rgbArray[i]);
+		(*env)->SetIntArrayRegion(env, (jintArray)board, (jsize)(i * size), size, androidGame->rgbArray[i]);
 	}
-	pzDeleteCellRgbArray((pzGame)androidGame->game, rgbArray);
+	// pzDeleteCellRgbArray((pzGame)androidGame->game, rgbArray);
 
 	(*env)->CallVoidMethod(env, thiz, mid, board);
 

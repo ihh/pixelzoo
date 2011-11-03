@@ -28,6 +28,7 @@ typedef struct AndroidGame {
   char *moveLogFilename;
   char *boardFilename;
   Uint64 totalMicroticks;
+  int** rgbArray;
 
   jobject thiz; // TODO: refactor this to Activity
 } AndroidGame;
