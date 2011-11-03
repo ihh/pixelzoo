@@ -22,7 +22,7 @@ include $(MY_LOCAL_PATH)/hello-jni/Android.mk
 include $(MY_LOCAL_PATH)/Settings.mk # for SDL
 include $(MY_LOCAL_PATH)/SDL/Android.mk
 
-# include $(MY_LOCAL_PATH)/pixelzoo/Android.mk
+# include $(MY_LOCAL_PATH)/pixelzoo/Android.mk # asw12: Couldn't find a way to get this to work with androidhook. 
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
 

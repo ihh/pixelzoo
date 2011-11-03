@@ -20,8 +20,9 @@ public class PixelzooActivity extends Activity {
     	// Note that ndk does not automatically load dependencies!
     	System.loadLibrary("xml2");
     	System.loadLibrary("SDL");
-        System.loadLibrary("pixelzoo");
         System.loadLibrary("androidhook");
+        
+        // System.loadLibrary("pixelzoo"); // couldn't get this to compile separately with androidhook
     }
     
     PixelzooView pv;
