@@ -288,7 +288,7 @@ zoocompiler.pl - generate a PixelZoo XML grammar
 
 =head1 SYNOPSIS
 
-zoocompiler.pl [options] <.zg file>
+zoocompiler.pl [options]
 
  Options:
   -help               brief help message
