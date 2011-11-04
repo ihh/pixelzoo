@@ -10,7 +10,7 @@
    but is instead treated as a temporary variable (to facilitate swapping two cells, etc.)
  */
 typedef struct LocalOffset {
-  char x, y;
+  signed char x, y;
 } LocalOffset;
 
 #define TempOffset -128
