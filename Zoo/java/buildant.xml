@@ -3,7 +3,7 @@
 <project name="DTDDocAnt" default="main">
 
     <description>
-    PixelZoo XML documentation
+    PixelZoo Game XML documentation
     </description>
 
     <!-- Tell ant where to find the code of the DTDDoc task.
@@ -24,7 +24,7 @@
                 showFixmeTags="false"
                 sourceDir="../dtd"
                 destDir="../dtd/doc"
-                docTitle = "PixelZoo DTDDoc">
+                docTitle = "PixelZoo Game XML documentation">
             <include name="**/*.dtd"/>
             <exclude name="common/*.dtd"/>
         </DTDDoc>

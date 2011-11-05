@@ -1,3 +1,4 @@
+<!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
 <!ELEMENT trigger (goal,(type|hextype),pos+)>
