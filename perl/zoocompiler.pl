@@ -46,6 +46,8 @@ my $nest = $twig->twig_nest;
 $gram->validate_proto_xml ($nest);
 $gram->print ($nest);
 
+die "This program currently doesn't work, and you shouldn't even be using it.";
+
 __END__
 
 =head1 NAME
