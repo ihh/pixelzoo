@@ -16,6 +16,8 @@
 <!ELEMENT false EMPTY>
 <!ELEMENT maybe (prob)>
 <!ELEMENT time (min?,max?)>
+<!ELEMENT testtool (name,toolres)>
+<!ELEMENT toolres (min?,max?)>
 <!ELEMENT testexit (count,exitstate)>
 <!ELEMENT testgame (gamestate)>
 <!ELEMENT charge (toolname,reserve?)>

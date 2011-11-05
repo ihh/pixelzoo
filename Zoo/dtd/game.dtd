@@ -62,6 +62,10 @@ Each Goal expression operates on a given <i>area</i> of the Board
 <!-- A Goal that is true if the time on the Board clock (in microticks) is in the specified range. -->
 <!ELEMENT time (min?,max?)>
 
+<!-- A Goal that is true if the named Tool ("name") has the specified reserve ("toolres"). -->
+<!ELEMENT testtool (name,toolres)>
+<!ELEMENT toolres (min?,max?)>
+
 <!-- A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
  and the count of particles that has 'exited' the Board is in the specified range ("count"). -->
 <!ELEMENT testexit (count,exitstate)>
