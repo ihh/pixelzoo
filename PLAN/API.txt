@@ -157,3 +157,7 @@ The "game" dialect has these names compiled to integers.
 
 DTDs for both dialects can be found in Zoo/dtd/
 Documentation can be found in Zoo/dtd/doc/index.html
+
+A Perl script to compile "proto" into "game" will be forthcoming
+(perl/zoocompiler.pl), but --- for now -- the preferred way to
+generate game XML is to build it programmatically (perl/simplezoo.pl).
