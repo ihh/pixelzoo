@@ -3,6 +3,17 @@
 
       <grammar>
 
+      <particle>
+        <name>empty</name>
+        <type>0</type>
+        <rate>0</rate>
+        <vars>
+         <varsize><name>hue</name><size>6</size></varsize>
+         <varsize><name>sat</name><size>3</size></varsize>
+         <varsize><name>bri</name><size>3</size></varsize>
+        </vars>
+      </particle>
+
 	<particle>
 	  <name>drifter</name>
 	  <type>1</type>

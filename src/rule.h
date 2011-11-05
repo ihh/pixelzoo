@@ -19,10 +19,14 @@ typedef struct LocalOffset {
 
   (Lookup)
   matchRule[val]  or defaultRule, if no matchRule defined,
-  where val = ((cell[orig+src] & srcMask) >> rightShift)
+  where
+   val = ((cell[orig+src] & srcMask) >> rightShift)
 
   (Modify)
-  cell[orig+dest] = (cell[orig+dest] & (StateMask ^ destMask)) | (((writeVal) << leftShift) & destMask);
+  cell[orig+dest] = (cell[orig+dest] & (StateMask ^ destMask)) | (((newVal) << leftShift) & destMask);
+  where
+   val = ((cell[orig+src] & srcMask) >> rightShift)
+   newVal = val + offset
   then nextRule
 
   (Random)

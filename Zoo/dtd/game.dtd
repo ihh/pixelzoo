@@ -1,7 +1,11 @@
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
+<!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
+ with a particular type of particle. -->
 <!ELEMENT trigger (goal,(type|hextype),pos+)>
+
+<!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
 
 <!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
@@ -104,7 +108,9 @@ Always returns true. -->
 Always returns true. -->
 <!ELEMENT place (balloon?)>
 
-<!-- The co-ordinates of a Board cell. -->
+<!-- The co-ordinates of a Board cell.
+
+Generally specified relative to the current cell (e.g. the one whose update rule is being executed). -->
 <!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
@@ -119,10 +125,14 @@ Always returns true. -->
 <!ELEMENT wall (#PCDATA)>
 <!ELEMENT reps (#PCDATA)>
 
-<!-- Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
+<!-- Exit portal state.
+
+Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
 <!ELEMENT exitstate (#PCDATA)>
 
-<!-- Legal values: "GameOn", "GameWon", "GameLost" -->
+<!-- Game state.
+
+Legal values: "GameOn", "GameWon", "GameLost" -->
 <!ELEMENT gamestate (#PCDATA)>
 <!ELEMENT toolname (#PCDATA)>
 <!ELEMENT message (#PCDATA)>
@@ -288,7 +298,7 @@ The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>de
   (passing control to an update rule in that particle's dispatch table).
 </li></ul>
 
-The two internally-used rules are <b>goto</b> and <b>goal</b>:
+The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
 <ul><li>
  <b>goto</b>, used not to loop, but simply to save space,
   (passes control to a named subroutine, which never returns),
@@ -297,12 +307,39 @@ The two internally-used rules are <b>goto</b> and <b>goal</b>:
   (tests a Goal, if the Board has an associated Game).
 </li></ul>
  -->
-<!ELEMENT rule (switch|modify|deliver|random|overload|goal|goto)>
+<!ELEMENT rule (switch|modify|deliver|random|goal|goto)>
 
+<!-- Switch rule.
+
+First calculates
+<pre>
+var = ((cell[pos] & mask) >> rshift)
+</pre>
+
+where "pos" is a local offset. Then looks up the corresponding "case"
+for "var", and executes that rule. If no such "case" exists,
+executes the "default" rule. -->
 <!ELEMENT switch (pos?,mask?,rshift?,case*,default?)>
+
+<!-- An individual case in a switch rule. -->
 <!ELEMENT case ((state|hexstate)?,rule)>
+
+<!-- The default case in a switch rule. -->
 <!ELEMENT default (rule)>
 
+<!-- Modify rule.
+
+First does the following (pseudocode):
+<pre>
+  oldVar = ((cell[src] & srcmask) >> rshift);
+  newVar = oldVar + inc;
+  cell[dest] = (cell[dest] & (0xffffffffffffffff ^ destmask)) | (((newVar) << lshift) & destmask);
+</pre>
+
+This is equivalent to reading a Var from cell "src", adding "inc", and storing in a Var in cell "dest".
+("src" and "dest" are co-ordinate offsets to the cell whose rule is being executed.)
+
+After this, the (optional) "next" rule is executed. -->
 <!ELEMENT modify (src?,srcmask?,rshift?,(inc|hexinc)?,lshift?,destmask?,dest?,next?)>
 <!ELEMENT src (x?,y?)>
 <!ELEMENT dest (x?,y?)>
@@ -311,17 +348,23 @@ The two internally-used rules are <b>goto</b> and <b>goal</b>:
 <!ELEMENT lshift (#PCDATA)>
 <!ELEMENT next (rule)>
 
+<!-- Deliver rule.
+
+Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
 <!ELEMENT deliver (pos,msg)>
 <!ELEMENT msg (#PCDATA)>
 
+<!-- Goto rule.
+
+Executes a specified rule. -->
 <!ELEMENT goto (#PCDATA)>
 
+<!-- Random rule.
+
+Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule). -->
 <!ELEMENT random (prob?,pass?,fail?)>
 <!ELEMENT pass (rule)>
 <!ELEMENT fail (rule)>
 
-<!ELEMENT overload (slow,fast)>
-<!ELEMENT slow (rule)>
-<!ELEMENT fast (rule)>
-
+<!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>

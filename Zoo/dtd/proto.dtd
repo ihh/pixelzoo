@@ -1,32 +1,116 @@
+<!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
-<!ELEMENT trigger (goal,(type|hextype),pos+)>
+<!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
+ with a particular type of particle. -->
+<!ELEMENT trigger (goal,(type|hextype|gtype),pos+)>
+
+<!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
 
+<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
+ and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
+ in the XML tree represents a single expression node in this mini-language.
+
+A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.
+
+Each Goal expression operates on a given <i>area</i> of the Board
+ (i.e. a subset of the Board's cells). By default, this area is inherited
+ from the parent Goal expression, and the default area for the root Goal is the entire Board.
+ -->
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
+
+<!-- A Goal that restricts the child expression ("goal") to a given area,
+ specified as a list of cell co-ordinates. -->
 <!ELEMENT area (pos*,goal)>
+
+<!-- A Goal that tests if the parent area contains a specified number ("count")
+ of enclosures, made of a particular type of boundary cell ("wall").
+ Each enclosure must contain a specified number of cells ("points"),
+ and satisfy a particular child expression ("goal"). -->
 <!ELEMENT cage (wall+,goal,count?,points?)>
+
+<!-- A Goal that tests if the parent area contains a population of cells 
+ belonging to a specified set of types ("state" / "type"),
+ having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
+ a specified Shannon entropy ("entropy"). -->
 <!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype)+,mask?,count?,entropy?)>
+
+<!-- A Goal that is true if the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"). -->
 <!ELEMENT repeat (reps,goal)>
+
+<!-- A Goal that is false until the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"), and is thereafter always true.
+ This has the effect of caching the result of future tests of the child expression. -->
 <!ELEMENT cached (reps?,goal)>
+
+<!-- A Goal that is true if all of the child expressions are true. -->
 <!ELEMENT and (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if any of the child expressions are true. -->
 <!ELEMENT or (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if, and only if, the child expression is <b>not</b> true. -->
 <!ELEMENT not (goal)>
+
+<!-- A Goal that is always true. -->
 <!ELEMENT true EMPTY>
+
+<!-- A Goal that is always false. -->
 <!ELEMENT false EMPTY>
+
+<!-- A Goal that randomly returns true or false on each call, with a specified probability of truth ("prob"). -->
 <!ELEMENT maybe (prob)>
+
+<!-- A Goal that is true if the time on the Board clock (in microticks) is in the specified range. -->
 <!ELEMENT time (min?,max?)>
+
+<!-- A Goal that is true if the named Tool ("name") has the specified reserve ("toolres"). -->
 <!ELEMENT testtool (name,toolres)>
 <!ELEMENT toolres (min?,max?)>
+
+<!-- A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
+ and the count of particles that has 'exited' the Board is in the specified range ("count"). -->
 <!ELEMENT testexit (count,exitstate)>
+
+<!-- A Goal that is true if the Game is in the specified game state ("gamestate"). -->
 <!ELEMENT testgame (gamestate)>
+
+<!-- A Goal that recharges a given tool ("toolname") by a specified amount ("reserve").
+
+Always returns true. -->
 <!ELEMENT charge (toolname,reserve?)>
+
+<!-- A Goal that places the exit portal in a given portal state.
+
+Always returns true. -->
 <!ELEMENT setexit (exitstate)>
+
+<!-- A Goal that places the game in a given game state.
+
+Always returns true. -->
 <!ELEMENT setgame (gamestate)>
+
+<!-- A Goal that samples a point from the parent area and tries to use a Tool at that point.
+
+Returns true if the Tool's reserve level is used up after the Tool is used.
+(Note: these Tools live outside the usual player toolbox, and their reserve level is never replenished.) -->
 <!ELEMENT usetool (tool)>
+
+<!-- A Goal that prints a message on the output console.
+
+Always returns true. -->
 <!ELEMENT print (message)>
+
+<!-- A Goal that places a text balloon over the playing area.
+
+Always returns true. -->
 <!ELEMENT place (balloon?)>
 
+<!-- The co-ordinates of a Board cell.
+
+Generally specified relative to the current cell (e.g. the one whose update rule is being executed). -->
 <!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
@@ -40,7 +124,15 @@
 <!ELEMENT max (#PCDATA)>
 <!ELEMENT wall (#PCDATA)>
 <!ELEMENT reps (#PCDATA)>
+
+<!-- Exit portal state.
+
+Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
 <!ELEMENT exitstate (#PCDATA)>
+
+<!-- Game state.
+
+Legal values: "GameOn", "GameWon", "GameLost" -->
 <!ELEMENT gamestate (#PCDATA)>
 <!ELEMENT toolname (#PCDATA)>
 <!ELEMENT message (#PCDATA)>
@@ -48,6 +140,7 @@
 <!ELEMENT lazy EMPTY>
 <!ELEMENT cache EMPTY>
 
+<!-- A text balloon. -->
 <!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT ball (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT color (#PCDATA)>
@@ -61,6 +154,17 @@
 <!ELEMENT rate (#PCDATA)>
 <!ELEMENT persist EMPTY>
 
+
+<!-- A Tool.
+
+Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.
+
+Properties include spray rate ("spray") and diameter ("size"),
+initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
+and whether the Tool should initially be hidden ("hide").
+
+Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
+-->
 <!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|zgvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
@@ -70,13 +174,23 @@
 <!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|zgvars))>
 <!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|zgvars)*,(mask|tmask)?)>
 <!ELEMENT disallow (x,y)>
+
+<!-- A 64-bit decimal integer representing the state of a cell on the Board. -->
 <!ELEMENT state (#PCDATA)>
+
+<!-- A 64-bit hexadecimal integer representing the state of a cell on the Board. -->
 <!ELEMENT hexstate (#PCDATA)>
+
+<!-- The name of a particle type. -->
 <!ELEMENT gstate (#PCDATA)>
+<!-- The name of a particle type. -->
 <!ELEMENT gtype (#PCDATA)>
+<!-- The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the player. -->
 <!ELEMENT pstate (#PCDATA)>
+<!-- The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the board owner. -->
 <!ELEMENT ostate (#PCDATA)>
 
+<!-- The complete state of a particle, including type ("type") and vars ("setvar"). -->
 <!ELEMENT zgvars (type,setvar*)>
 
 <!ELEMENT name (#PCDATA)>
@@ -88,53 +202,184 @@
 <!ELEMENT tmask (#PCDATA)>
 <!ELEMENT hide EMPTY>
 
-<!ELEMENT exit ((type|hextype),pos+)>
+<!-- The exit portal for the Board, enabling Lemmings-style play.
+ The exit portal is initially in the "PortalWaiting" state.
+ When placed in the "PortalCounting" state (as a side-effect of a Goal expression),
+ the portal counts the number of times that particles of a given type ("type") are written to it.
+ (The actual write operations are intercepted, so the particles appear to drain from the Board.)
+ -->
+<!ELEMENT exit ((type|hextype|gtype),pos+)>
+
+<!-- A 16-bit decimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
 <!ELEMENT type (#PCDATA)>
+
+<!-- A 16-bit hexadecimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
 <!ELEMENT hextype (#PCDATA)>
 
+<!-- A Board is a square array of cells whose edge length ("size") must be a power of 2.
+
+The Board has a clock that is measured in <i>microticks</i> ("t"),
+a grammar of update rules ("grammar"),
+an optional move queue ("queue") and random number seed ("seed").
+
+Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
-<!ELEMENT grammar (particle+)>
+
+<!-- A grammar consists of a set of optional subroutines ("subrule")
+ and a set of particle definitions ("particle"). -->
+<!ELEMENT grammar (subrule*,particle+)>
+
+<!-- Initialize a particular cell on the Board. -->
 <!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
+
+<!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
+<!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
 <!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
+
+<!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
 
-<!ELEMENT particle (name,zvars?,zhue?,zsat?,zbri?,sync?,rate?,rule)>
+<!-- A subroutine particle Rule. -->
+<!ELEMENT subrule (name,rule)>
 
+<!-- An elementary particle in the game, identified by a unique 16-bit type ID ("type").
+Each particle has its own update rate ("rate") and rule ("rule"),
+formulae for determining the HSB color values ("zhue", "zsat" and "zbri"),
+and optionally a message dispatch table ("dispatch").
+
+Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths ("zvars").
+
+By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
+ -->
+<!ELEMENT particle (name,zvars?,zhue?,zsat?,zbri?,sync?,rate?,rule,dispatch*)>
+
+<!-- Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths. -->
 <!ELEMENT zvars (type?,varsize*)>
 <!ELEMENT varsize (name,size)>
 
+<!-- Affine formula (var*mul+add) for determining a particle's hue from one of its Vars. -->
 <!ELEMENT zhue (var?,mul?,add?)>
+<!-- Affine formula (var*mul+add) for determining a particle's color saturation from one of its Vars. -->
 <!ELEMENT zsat (var?,mul?,add?)>
+<!-- Affine formula (var*mul+add) for determining a particle's brightness from one of its Vars. -->
 <!ELEMENT zbri (var?,mul?,add?)>
 <!ELEMENT add (#PCDATA)>
 
+<!-- Synchronously updated particles. -->
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
 
+<!-- The name of a particle's variable field (a <i>Var</i>). -->
 <!ELEMENT var (#PCDATA)>
+<!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
+<!-- A hexadecimal multiplier. -->
 <!ELEMENT hexinc (#PCDATA)>
 
-<!ELEMENT rule (zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 
+<!-- A particle update rule. There are six types (of which only four are public),
+ plus four constructs that are provided by the compiler for convenience,
+ constituting an extremely minimal and predictable programming language for cellular automata.
+
+The four compiler constructs are <b>zbind</b>, <b>nop</b>, <b>zhuff</b>, and <b>ball</b>:
+<ul><li>
+ <b>zbind</b> temporarily associates a name in the compiler's namespace
+ with a neighboring cell location and performs a <b>switch</b> rule on the particle type at that location.
+</li><li>
+ <b>nop</b> does nothing (implemented by the compiler using a dummy <b>modify</b> rule).
+</li><li>
+ <b>zhuff</b> allows for a probability distribution over an arbitrary number of rules
+(implemented by the compiler using <b>random</b> rules and a Huffmann tree).
+</li><li>
+ <b>ball</b> is a shortcut for a <b>goal</b> rule that places a text balloon.
+</li></ul>
+
+The four public rules are <b>zswitch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
+<ul><li>
+ <b>zswitch</b>
+  (read a Var from any named local cell,
+   look up corresponding rule in a table,
+   execute that rule).
+</li><li>
+ <b>modify</b>, effectively a <i>load-add-store</i> instruction
+  (read a Var from any local cell,
+   add or subtract a certain amount,
+   store value in Var of any local cell).
+</li><li>
+ <b>random</b>, introducing stochasticity
+  (executes one of two child rules by flipping a biased coin).
+</li><li>
+ <b>deliver</b>, which sends a 64-bit <i>message</i> to a local cell
+  (passing control to an update rule in that particle's dispatch table).
+</li></ul>
+
+The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
+<ul><li>
+ <b>goto</b>, used not to loop, but simply to save space,
+  (passes control to a named subroutine, which never returns),
+</li><li>
+ <b>goal</b>, allowing a callback hook for in-game feedback and effects
+  (tests a Goal, if the Board has an associated Game).
+</li></ul>
+ -->
+<!ELEMENT rule (zbind|zswitch|modify|deliver|nop|random|zhuff|goal|goto|ball)>
+
+<!-- Bind rule.
+
+Associates a name ("loc") with a neighboring cell.
+Looks up the "case" corresponding to the type of that cell,
+and executes that case's rule. If no such "case" exists,
+executes the "default" rule. -->
 <!ELEMENT zbind (loc,x?,y?,case*,default?)>
+
+<!-- Switch rule.
+
+Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>zbind</b> rule.
+Looks up the "case" corresponding to the value of the var,
+and executes that case's rule. If no such "case" exists,
+executes the "default" rule. -->
 <!ELEMENT zswitch (loc?,var,case*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
-<!ELEMENT case (zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!-- An individual case in a switch rule. -->
+<!ELEMENT case (zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
 <!ATTLIST case state CDATA #IMPLIED>
 <!ATTLIST case type CDATA #IMPLIED>
 
-<!ELEMENT default (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!-- The default case in a switch rule. -->
+<!ELEMENT default (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
 
-<!ELEMENT modify (src?,(inc|zset)?,dest?,next?)>
+<!-- Modify rule.
+
+EITHER reads a Var from a neighboring cell ("src") and adds a specified offset ("inc") to obtain a write value,
+OR simply takes a specified value ("zset").
+The write value is then written to another (or the same) neighboring cell ("dest").
+
+"src" and "dest" must have been named by an outer <b>zbind</b> rule.
+
+After this, the (optional) "next" rule is executed. -->
+<!ELEMENT modify (src?,(inc|hexinc|zset)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
-<!ELEMENT next (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!ELEMENT next (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+
+<!-- Deliver rule.
+
+Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
+<!ELEMENT deliver (pos,msg)>
+<!ELEMENT msg (#PCDATA)>
 
 <!ELEMENT zset (type,setvar*)>
 <!ELEMENT setvar (name,value)>
@@ -142,16 +387,25 @@
 
 <!ELEMENT inc (#PCDATA)>
 
+<!-- A dummy rule that does nothing. -->
 <!ELEMENT nop EMPTY>
 
-<!ELEMENT random (prob?,pass?,fail?)>
-<!ELEMENT pass (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
-<!ELEMENT fail (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!-- Goto rule.
 
+Executes a specified rule. -->
+<!ELEMENT goto (#PCDATA)>
+
+<!-- Random rule.
+
+Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule). -->
+<!ELEMENT random (prob?,pass?,fail?)>
+<!ELEMENT pass (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+<!ELEMENT fail (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+
+<!-- A probability distribution over rules, implemented by the compiler as a Huffmann tree of <b>random</b> rules. -->
 <!ELEMENT zhuff (numeric+)>
-<!ELEMENT numeric (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!ELEMENT numeric (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
 <!ATTLIST numeric value CDATA #REQUIRED>
 
-<!ELEMENT overload (slow,fast)>
-<!ELEMENT slow (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
-<!ELEMENT fast (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!-- An entry in a particle's message dispatch table. -->
+<!ELEMENT dispatch (msg,rule)>

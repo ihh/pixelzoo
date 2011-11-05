@@ -7,7 +7,11 @@
 <p class='DTDSource'><b><code>game.dtd</code></b>: <a href='game.dtd.html'>Elements</a> - Entities - <a href='game.dtd.org.html'>Source</a> | <a href='intro.html'>Intro</a> - <a href='elementsIndex.html'>Index</a><br /><a href='index.html' target='_top'>FRAMES</a>&nbsp;/&nbsp;<a href='game.dtd.org.html' target='_top'>NO FRAMES</a></p><pre id='dtd_source'><span class="dtd_comment">&lt;!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">game</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">board</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">rate</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">tool</span><span class="dtd_plain">+,</span><span class="dtd_attribute_name">trigger</span><span class="dtd_plain">*,</span><span class="dtd_attribute_name">protect</span><span class="dtd_plain">*,</span><span class="dtd_attribute_name">exit</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">goal</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written</span>
+<span class="dtd_comment"> with a particular type of particle. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">trigger</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">goal</span><span class="dtd_plain">,(</span><span class="dtd_attribute_name">type</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">hextype</span><span class="dtd_plain">),</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">+)</span><span class="dtd_tag_symbols">&gt;</span>
+
+<span class="dtd_comment">&lt;!-- Write-protect a particular Board cell. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">protect</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">x</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">y</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
 <span class="dtd_comment">&lt;!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions</span>
@@ -110,7 +114,9 @@
 <span class="dtd_comment">Always returns true. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">place</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">balloon</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 
-<span class="dtd_comment">&lt;!-- The co-ordinates of a Board cell. --&gt;</span>
+<span class="dtd_comment">&lt;!-- The co-ordinates of a Board cell.</span>
+
+<span class="dtd_comment">Generally specified relative to the current cell (e.g. the one whose update rule is being executed). --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">pos</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">x</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">y</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">x</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">y</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
@@ -125,10 +131,14 @@
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">wall</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">reps</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
-<span class="dtd_comment">&lt;!-- Legal values: &quot;PortalWaiting&quot;, &quot;PortalCounting&quot;, &quot;PortalUnlocked&quot;, &quot;PortalDestroyed&quot; --&gt;</span>
+<span class="dtd_comment">&lt;!-- Exit portal state.</span>
+
+<span class="dtd_comment">Legal values: &quot;PortalWaiting&quot;, &quot;PortalCounting&quot;, &quot;PortalUnlocked&quot;, &quot;PortalDestroyed&quot; --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">exitstate</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
-<span class="dtd_comment">&lt;!-- Legal values: &quot;GameOn&quot;, &quot;GameWon&quot;, &quot;GameLost&quot; --&gt;</span>
+<span class="dtd_comment">&lt;!-- Game state.</span>
+
+<span class="dtd_comment">Legal values: &quot;GameOn&quot;, &quot;GameWon&quot;, &quot;GameLost&quot; --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">gamestate</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">toolname</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">message</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
@@ -294,7 +304,7 @@
 <span class="dtd_comment">  (passing control to an update rule in that particle's dispatch table).</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;/ul&gt;</span>
 
-<span class="dtd_comment">The two internally-used rules are &lt;b&gt;goto&lt;/b&gt; and &lt;b&gt;goal&lt;/b&gt;:</span>
+<span class="dtd_comment">The two private (internally-used) rules are &lt;b&gt;goto&lt;/b&gt; and &lt;b&gt;goal&lt;/b&gt;:</span>
 <span class="dtd_comment">&lt;ul&gt;&lt;li&gt;</span>
 <span class="dtd_comment"> &lt;b&gt;goto&lt;/b&gt;, used not to loop, but simply to save space,</span>
 <span class="dtd_comment">  (passes control to a named subroutine, which never returns),</span>
@@ -303,12 +313,39 @@
 <span class="dtd_comment">  (tests a Goal, if the Board has an associated Game).</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;/ul&gt;</span>
 <span class="dtd_comment"> --&gt;</span>
-<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">rule</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">switch</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">modify</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">random</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">overload</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">goal</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">goto</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
+<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">rule</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">switch</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">modify</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">random</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">goal</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">goto</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- Switch rule.</span>
+
+<span class="dtd_comment">First calculates</span>
+<span class="dtd_comment">&lt;pre&gt;</span>
+<span class="dtd_comment">var = ((cell[pos] &amp; mask) &gt;&gt; rshift)</span>
+<span class="dtd_comment">&lt;/pre&gt;</span>
+
+<span class="dtd_comment">where &quot;pos&quot; is a local offset. Then looks up the corresponding &quot;case&quot;</span>
+<span class="dtd_comment">for &quot;var&quot;, and executes that rule. If no such &quot;case&quot; exists,</span>
+<span class="dtd_comment">executes the &quot;default&quot; rule. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">switch</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">mask</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">rshift</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">case</span><span class="dtd_plain">*,</span><span class="dtd_attribute_name">default</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
+
+<span class="dtd_comment">&lt;!-- An individual case in a switch rule. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">case</span><span class="dtd_plain"> ((</span><span class="dtd_attribute_name">state</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">hexstate</span><span class="dtd_plain">)?,</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
+
+<span class="dtd_comment">&lt;!-- The default case in a switch rule. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">default</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- Modify rule.</span>
+
+<span class="dtd_comment">First does the following (pseudocode):</span>
+<span class="dtd_comment">&lt;pre&gt;</span>
+<span class="dtd_comment">  oldVar = ((cell[src] &amp; srcmask) &gt;&gt; rshift);</span>
+<span class="dtd_comment">  newVar = oldVar + inc;</span>
+<span class="dtd_comment">  cell[dest] = (cell[dest] &amp; (0xffffffffffffffff ^ destmask)) | (((newVar) &lt;&lt; lshift) &amp; destmask);</span>
+<span class="dtd_comment">&lt;/pre&gt;</span>
+
+<span class="dtd_comment">This is equivalent to reading a Var from cell &quot;src&quot;, adding &quot;inc&quot;, and storing in a Var in cell &quot;dest&quot;.</span>
+<span class="dtd_comment">(&quot;src&quot; and &quot;dest&quot; are co-ordinate offsets to the cell whose rule is being executed.)</span>
+
+<span class="dtd_comment">After this, the (optional) &quot;next&quot; rule is executed. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">modify</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">src</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">srcmask</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">rshift</span><span class="dtd_plain">?,(</span><span class="dtd_attribute_name">inc</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">hexinc</span><span class="dtd_plain">)?,</span><span class="dtd_attribute_name">lshift</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">destmask</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">dest</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">next</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">src</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">x</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">y</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">dest</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">x</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">y</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
@@ -317,19 +354,25 @@
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">lshift</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">next</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- Deliver rule.</span>
+
+<span class="dtd_comment">Delivers a 64-bit message (&quot;msg&quot;) to the dispatch table of a neighboring cell (&quot;pos&quot;). --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">msg</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">msg</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- Goto rule.</span>
+
+<span class="dtd_comment">Executes a specified rule. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">goto</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
+<span class="dtd_comment">&lt;!-- Random rule.</span>
+
+<span class="dtd_comment">Randomly executes either the &quot;pass&quot; or &quot;fail&quot; rule (with probability &quot;prob&quot; of it being the &quot;pass&quot; rule). --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">random</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">prob</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">pass</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">fail</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">pass</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">fail</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
-<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">overload</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">slow</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">fast</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
-<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">slow</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
-<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">fast</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
-
+<span class="dtd_comment">&lt;!-- An entry in a particle's message dispatch table. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">dispatch</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">msg</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 </pre>
 </body></html>

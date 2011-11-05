@@ -244,9 +244,9 @@ sub compiled_xml {
 
 # top-level method to generate, compile & print XML
 sub print {
-    my ($self) = @_;
+    my ($self, $compiled_proto_xml) = @_;
 
-    my $compiled_xml = $self->compiled_xml;
+    my $compiled_xml = $self->compiled_xml ($compiled_proto_xml);
 
     if (!defined $self->outfile) {
 	warn "Printing game XML...\n" if $self->verbose;
@@ -522,7 +522,7 @@ sub transform_hash {
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
-	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (.type, .tmask, etc)
+	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (gtype, tmask, etc)
 
 	# particle declaration
 	'particle' => sub {
@@ -647,7 +647,7 @@ sub transform_hash {
 	    $n = forceHash ($n);
 
 	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
-	    confess "In .modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
+	    confess "In modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
 	    $inc = $set if defined $set;
 
 	    # SOURCE
@@ -1008,7 +1008,7 @@ sub getShift {
 
 sub userState {
     my ($self, $type, $userID) = @_;
-    my $shift = $self->getShift($type,"type");
+    my $shift = $self->getShift($type,"id");
     my $state = $self->getType($type) << $shift;
     $state = $state | ($userID & ((1 << $shift) - 1));
     return $state;
