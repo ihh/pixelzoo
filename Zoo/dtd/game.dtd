@@ -4,40 +4,103 @@
 <!ELEMENT trigger (goal,(type|hextype),pos+)>
 <!ELEMENT protect (x,y)>
 
-<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions and creating "side effects" like rewards, hints, game events, and so forth. A Goal node in the XML tree represents a single expression node in this mini-language.
+<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
+ and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
+ in the XML tree represents a single expression node in this mini-language.
 
 A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.
 
-Each Goal expression operates on a given "area" of the Board (i.e. a subset of the Board's cells). By default, this area is inherited from the parent Goal expression, and the default area for the root Goal is the entire Board.
+Each Goal expression operates on a given <i>area</i> of the Board
+ (i.e. a subset of the Board's cells). By default, this area is inherited
+ from the parent Goal expression, and the default area for the root Goal is the entire Board.
  -->
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 
-<!-- A Goal that restricts the child expression (goal) to a given area, specified as a list of cell co-ordinates. -->
+<!-- A Goal that restricts the child expression ("goal") to a given area,
+ specified as a list of cell co-ordinates. -->
 <!ELEMENT area (pos*,goal)>
 
-<!-- A Goal that tests if the parent area contains a specified number (count) of enclosures, made of a particular type of boundary cell (wall). Each enclosure must contain a specified number of cells (points), and satisfy a particular child expression (goal). -->
+<!-- A Goal that tests if the parent area contains a specified number ("count")
+ of enclosures, made of a particular type of boundary cell ("wall").
+ Each enclosure must contain a specified number of cells ("points"),
+ and satisfy a particular child expression ("goal"). -->
 <!ELEMENT cage (wall+,goal,count?,points?)>
 
-<!-- A Goal that tests if the parent area contains a population of cells of a given type (state/type) -->
+<!-- A Goal that tests if the parent area contains a population of cells 
+ belonging to a specified set of types ("state" / "type"),
+ having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
+ a specified Shannon entropy ("entropy"). -->
 <!ELEMENT population (allowmask?,(state|hexstate|type|hextype)+,mask?,count?,entropy?)>
+
+<!-- A Goal that is true if the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"). -->
 <!ELEMENT repeat (reps,goal)>
+
+<!-- A Goal that is false until the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"), and is thereafter always true.
+ This has the effect of caching the result of future tests of the child expression. -->
 <!ELEMENT cached (reps?,goal)>
+
+<!-- A Goal that is true if all of the child expressions are true. -->
 <!ELEMENT and (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if any of the child expressions are true. -->
 <!ELEMENT or (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if, and only if, the child expression is <b>not</b> true. -->
 <!ELEMENT not (goal)>
+
+<!-- A Goal that is always true. -->
 <!ELEMENT true EMPTY>
+
+<!-- A Goal that is always false. -->
 <!ELEMENT false EMPTY>
+
+<!-- A Goal that randomly returns true or false on each call, with a specified probability of truth ("prob"). -->
 <!ELEMENT maybe (prob)>
+
+<!-- A Goal that is true if the time on the Board clock (in microticks) is in the specified range. -->
 <!ELEMENT time (min?,max?)>
+
+<!-- A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
+ and the count of particles that has 'exited' the Board is in the specified range ("count"). -->
 <!ELEMENT testexit (count,exitstate)>
-<!ELEMENT testgame (count,gamestate)>
+
+<!-- A Goal that is true if the Game is in the specified game state ("gamestate"). -->
+<!ELEMENT testgame (gamestate)>
+
+<!-- A Goal that recharges a given tool ("toolname") by a specified amount ("reserve").
+
+Always returns true. -->
 <!ELEMENT charge (toolname,reserve?)>
+
+<!-- A Goal that places the exit portal in a given portal state.
+
+Always returns true. -->
 <!ELEMENT setexit (exitstate)>
+
+<!-- A Goal that places the game in a given game state.
+
+Always returns true. -->
 <!ELEMENT setgame (gamestate)>
+
+<!-- A Goal that samples a point from the parent area and tries to use a Tool at that point.
+
+Returns true if the Tool's reserve level is used up after the Tool is used.
+(Note: these Tools live outside the usual player toolbox, and their reserve level is never replenished.) -->
 <!ELEMENT usetool (tool)>
+
+<!-- A Goal that prints a message on the output console.
+
+Always returns true. -->
 <!ELEMENT print (message)>
+
+<!-- A Goal that places a text balloon over the playing area.
+
+Always returns true. -->
 <!ELEMENT place (balloon?)>
 
+<!-- The co-ordinates of a Board cell. -->
 <!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
@@ -51,7 +114,11 @@ Each Goal expression operates on a given "area" of the Board (i.e. a subset of t
 <!ELEMENT max (#PCDATA)>
 <!ELEMENT wall (#PCDATA)>
 <!ELEMENT reps (#PCDATA)>
+
+<!-- Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
 <!ELEMENT exitstate (#PCDATA)>
+
+<!-- Legal values: "GameOn", "GameWon", "GameLost" -->
 <!ELEMENT gamestate (#PCDATA)>
 <!ELEMENT toolname (#PCDATA)>
 <!ELEMENT message (#PCDATA)>
@@ -59,6 +126,7 @@ Each Goal expression operates on a given "area" of the Board (i.e. a subset of t
 <!ELEMENT lazy EMPTY>
 <!ELEMENT cache EMPTY>
 
+<!-- A text balloon. -->
 <!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT color (#PCDATA)>
 <!ELEMENT hexcolor (#PCDATA)>
@@ -71,6 +139,16 @@ Each Goal expression operates on a given "area" of the Board (i.e. a subset of t
 <!ELEMENT rate (#PCDATA)>
 <!ELEMENT persist EMPTY>
 
+<!-- A Tool.
+
+Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.
+
+Properties include spray rate ("spray") and diameter ("size"),
+initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
+and whether the Tool should initially be hidden ("hide").
+
+Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
+-->
 <!ELEMENT tool (name,size,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
@@ -79,7 +157,12 @@ Each Goal expression operates on a given "area" of the Board (i.e. a subset of t
 <!ELEMENT pattern (pixel+)>
 <!ELEMENT pixel (x,y,(state|hexstate))>
 <!ELEMENT overwrite (disallow*,(state|hexstate)*,mask?)>
+<!ELEMENT disallow (x,y)>
+
+<!-- A 64-bit decimal integer representing the state of a cell on the Board. -->
 <!ELEMENT state (#PCDATA)>
+
+<!-- A 64-bit hexadecimal integer representing the state of a cell on the Board. -->
 <!ELEMENT hexstate (#PCDATA)>
 
 <!ELEMENT name (#PCDATA)>
@@ -90,36 +173,126 @@ Each Goal expression operates on a given "area" of the Board (i.e. a subset of t
 <!ELEMENT mask (#PCDATA)>
 <!ELEMENT hide EMPTY>
 
+<!-- The exit portal for the Board, enabling Lemmings-style play.
+ The exit portal is initially in the "PortalWaiting" state.
+ When placed in the "PortalCounting" state (as a side-effect of a Goal expression),
+ the portal counts the number of times that particles of a given type ("type") are written to it.
+ (The actual write operations are intercepted, so the particles appear to drain from the Board.)
+ -->
 <!ELEMENT exit ((type|hextype),pos+)>
+
+<!-- A 16-bit decimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
 <!ELEMENT type (#PCDATA)>
+
+<!-- A 16-bit hexadecimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
 <!ELEMENT hextype (#PCDATA)>
 
+<!-- A Board is a square array of cells whose edge length ("size") must be a power of 2.
+
+The Board has a clock that is measured in <i>microticks</i> ("t"),
+a grammar of update rules ("grammar"),
+an optional move queue ("queue") and random number seed ("seed").
+
+Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
+
+<!-- A grammar consists of a set of optional subroutines ("subrule")
+ and a set of particle definitions ("particle"). -->
 <!ELEMENT grammar (subrule*,particle+)>
+
+<!-- Initialize a particular cell on the Board. -->
 <!ELEMENT init (x,y,(state|hexstate|type|hextype))>
+
+<!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
+<!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
 <!ELEMENT move (t,x,y,(state|hexstate))>
+
+<!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
 
+<!-- A subroutine particle Rule. -->
 <!ELEMENT subrule (name,rule)>
 
+<!-- An elementary particle in the game, identified by a unique 16-bit type ID ("type").
+Each particle has its own update rate ("rate") and rule ("rule"),
+up to three color rules for rendering ("colrule"),
+and optionally a message dispatch table ("dispatch").
+
+Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths ("vars").
+
+By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
+ -->
 <!ELEMENT particle (name,(type|hextype),vars?,colrule*,sync?,rate?,rule,dispatch*)>
+
+<!-- Synchronously updated particles. -->
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
 
+<!-- A rule for computing the color of a particle. The formula is
+
+<pre>
+   hsb24 = (((state >> rshift) & mask) * mul) + inc
+</pre>
+
+where "hsb24" is a 24-bit HSB color value. -->
 <!ELEMENT colrule (mask?,rshift?,(mul|hexmul)?,(inc|hexinc)?)>
 <!ELEMENT rshift (#PCDATA)>
+<!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
+<!-- A hexadecimal multiplier. -->
 <!ELEMENT hexmul (#PCDATA)>
+<!-- A decimal offset. -->
 <!ELEMENT inc (#PCDATA)>
+<!-- A hexadecimal offset. -->
 <!ELEMENT hexinc (#PCDATA)>
 
+<!-- Variable (<i>Vars</i>) declarations. -->
 <!ELEMENT vars (varsize*)>
+<!-- A variable (<i>Vars</i>) declaration,
+ including the name ("name") and the number of bits the variable uses ("size"). -->
 <!ELEMENT varsize (name,size)>
 
+<!-- A particle update rule. There are six types (of which only four are public),
+ constituting an extremely minimal and predictable programming language for cellular automata.
+
+The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
+<ul><li>
+ <b>switch</b>
+  (read a Var from any local cell,
+   look up corresponding rule in a table,
+   execute that rule).
+</li><li>
+ <b>modify</b>, effectively a <i>load-add-store</i> instruction
+  (read a Var from any local cell,
+   add or subtract a certain amount,
+   store value in Var of any local cell).
+</li><li>
+ <b>random</b>, introducing stochasticity
+  (executes one of two child rules by flipping a biased coin).
+</li><li>
+ <b>deliver</b>, which sends a 64-bit <i>message</i> to a local cell
+  (passing control to an update rule in that particle's dispatch table).
+</li></ul>
+
+The two internally-used rules are <b>goto</b> and <b>goal</b>:
+<ul><li>
+ <b>goto</b>, used not to loop, but simply to save space,
+  (passes control to a named subroutine, which never returns),
+</li><li>
+ <b>goal</b>, allowing a callback hook for in-game feedback and effects
+  (tests a Goal, if the Board has an associated Game).
+</li></ul>
+ -->
 <!ELEMENT rule (switch|modify|deliver|random|overload|goal|goto)>
 
 <!ELEMENT switch (pos?,mask?,rshift?,case*,default?)>

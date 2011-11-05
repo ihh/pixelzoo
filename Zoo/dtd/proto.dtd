@@ -17,7 +17,7 @@
 <!ELEMENT maybe (prob)>
 <!ELEMENT time (min?,max?)>
 <!ELEMENT testexit (count,exitstate)>
-<!ELEMENT testgame (count,gamestate)>
+<!ELEMENT testgame (gamestate)>
 <!ELEMENT charge (toolname,reserve?)>
 <!ELEMENT setexit (exitstate)>
 <!ELEMENT setgame (gamestate)>
@@ -67,6 +67,7 @@
 <!ELEMENT pattern (pixel+)>
 <!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|zgvars))>
 <!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|zgvars)*,(mask|tmask)?)>
+<!ELEMENT disallow (x,y)>
 <!ELEMENT state (#PCDATA)>
 <!ELEMENT hexstate (#PCDATA)>
 <!ELEMENT gstate (#PCDATA)>
