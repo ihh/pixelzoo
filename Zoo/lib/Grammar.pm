@@ -431,13 +431,13 @@ sub forceHash {
 sub sanitize_proto {
     my ($self, $proto) = @_;
     my $old_trans = $self->trans;
-    $self->trans ({ 'switch' => switch_sanitizer('sane-switch','state',1),
-		    'bind' => switch_sanitizer('sane-bind','type',0),
+    $self->trans ({ 'switch' => switch_sanitizer('zswitch','state',1),
+		    'bind' => switch_sanitizer('zbind','type',0),
 		    'huff' => \&sanitize_huff,
-		    'gvars' => typevar_sanitizer('sane-gvars','setvar','value'),
-		    'vars' => typevar_sanitizer('sane-vars','varsize','size'),
-		    'set' => typevar_sanitizer('sane-set','setvar','value'),
-		    map (($_ => hsv_sanitizer("sane-$_")), qw(hue sat bri)),
+		    'gvars' => typevar_sanitizer('zgvars','setvar','value'),
+		    'vars' => typevar_sanitizer('zvars','varsize','size'),
+		    'set' => typevar_sanitizer('zset','setvar','value'),
+		    map (($_ => hsv_sanitizer("z$_")), qw(hue sat bri)),
 		  });
 
     my $sanitized_proto = $self->transform_value ($proto);
@@ -455,7 +455,7 @@ sub sanitize_huff {
 	my $v = shift @vars;
 	push @out, ('numeric' => [ '@value' => $k, @{$self->transform_value($v)} ]);
     }
-    return ('sane-huff' => \@out);
+    return ('zhuff' => \@out);
 }
 
 sub switch_sanitizer {

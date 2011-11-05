@@ -151,11 +151,11 @@ Child of <a href='#goal'>goal</a>
 <tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
 <tr><td><a href='#ostate'>ostate</a></td><td>Any number</td></tr>
 <tr><td><a href='#pstate'>pstate</a></td><td>Any number</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>Any number</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>Any number</td></tr>
 <tr><td><a href='#state'>state</a></td><td>Any number</td></tr>
 <tr><td><a href='#type'>type</a></td><td>Any number</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#allowmask'>allowmask</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>)+, <a href='#mask'>mask</a>?, <a href='#count'>count</a>?, <a href='#entropy'>entropy</a>?)</p><a name='repeat'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#allowmask'>allowmask</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>)+, <a href='#mask'>mask</a>?, <a href='#count'>count</a>?, <a href='#entropy'>entropy</a>?)</p><a name='repeat'></a>
 <br /><table class='elementTitle' summary="repeat"><tr><td class='leftElementTitle'>
 &lt;repeat&gt;</td><td class='rightElementTitle'>
 Child of <a href='#goal'>goal</a>
@@ -419,12 +419,12 @@ Child of <a href='#balloon'>balloon</a>, <a href='#trigger'>trigger</a>, <a href
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='x'></a>
 <br /><table class='elementTitle' summary="x"><tr><td class='leftElementTitle'>
 &lt;x&gt;</td><td class='rightElementTitle'>
-Child of <a href='#init'>init</a>, <a href='#spot'>spot</a>, <a href='#protect'>protect</a>, <a href='#pixel'>pixel</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#sane-bind'>sane-bind</a>, <a href='#center'>center</a>
+Child of <a href='#init'>init</a>, <a href='#spot'>spot</a>, <a href='#protect'>protect</a>, <a href='#pixel'>pixel</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#zbind'>zbind</a>, <a href='#center'>center</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='y'></a>
 <br /><table class='elementTitle' summary="y"><tr><td class='leftElementTitle'>
 &lt;y&gt;</td><td class='rightElementTitle'>
-Child of <a href='#init'>init</a>, <a href='#spot'>spot</a>, <a href='#protect'>protect</a>, <a href='#pixel'>pixel</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#sane-bind'>sane-bind</a>, <a href='#center'>center</a>
+Child of <a href='#init'>init</a>, <a href='#spot'>spot</a>, <a href='#protect'>protect</a>, <a href='#pixel'>pixel</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#zbind'>zbind</a>, <a href='#center'>center</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='points'></a>
 <br /><table class='elementTitle' summary="points"><tr><td class='leftElementTitle'>
@@ -658,12 +658,12 @@ Child of <a href='#game'>game</a>, <a href='#usetool'>usetool</a>
 <tr><td><a href='#pstate'>pstate</a></td><td>One or none</td></tr>
 <tr><td><a href='#recharge'>recharge</a></td><td>One or none</td></tr>
 <tr><td><a href='#reserve'>reserve</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>One or none</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>One or none</td></tr>
 <tr><td><a href='#size'>size</a></td><td>Only one</td></tr>
 <tr><td><a href='#spray'>spray</a></td><td>One or none</td></tr>
 <tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>, <a href='#brush'>brush</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a>)?, <a href='#overwrite'>overwrite</a>?, <a href='#spray'>spray</a>?, <a href='#reserve'>reserve</a>?, <a href='#recharge'>recharge</a>?, <a href='#maxreserve'>maxreserve</a>?, <a href='#hide'>hide</a>?)</p><a name='brush'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>, <a href='#brush'>brush</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a>)?, <a href='#overwrite'>overwrite</a>?, <a href='#spray'>spray</a>?, <a href='#reserve'>reserve</a>?, <a href='#recharge'>recharge</a>?, <a href='#maxreserve'>maxreserve</a>?, <a href='#hide'>hide</a>?)</p><a name='brush'></a>
 <br /><table class='elementTitle' summary="brush"><tr><td class='leftElementTitle'>
 &lt;brush&gt;</td><td class='rightElementTitle'>
 Child of <a href='#tool'>tool</a>
@@ -760,12 +760,12 @@ Child of <a href='#pattern'>pattern</a>
 <tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
 <tr><td><a href='#ostate'>ostate</a></td><td>One or none</td></tr>
 <tr><td><a href='#pstate'>pstate</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>One or none</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>One or none</td></tr>
 <tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
 <tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
 <tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a>))</p><a name='overwrite'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a>))</p><a name='overwrite'></a>
 <br /><table class='elementTitle' summary="overwrite"><tr><td class='leftElementTitle'>
 &lt;overwrite&gt;</td><td class='rightElementTitle'>
 Child of <a href='#tool'>tool</a>
@@ -783,11 +783,11 @@ Child of <a href='#tool'>tool</a>
 <tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
 <tr><td><a href='#ostate'>ostate</a></td><td>Any number</td></tr>
 <tr><td><a href='#pstate'>pstate</a></td><td>Any number</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>Any number</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>Any number</td></tr>
 <tr><td><a href='#state'>state</a></td><td>Any number</td></tr>
 <tr><td><a href='#tmask'>tmask</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(*, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a>)*, (<a href='#mask'>mask</a> | <a href='#tmask'>tmask</a>)?)</p><a name='state'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(*, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a>)*, (<a href='#mask'>mask</a> | <a href='#tmask'>tmask</a>)?)</p><a name='state'></a>
 <br /><table class='elementTitle' summary="state"><tr><td class='leftElementTitle'>
 &lt;state&gt;</td><td class='rightElementTitle'>
 Child of <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#pixel'>pixel</a>, <a href='#population'>population</a>, <a href='#move'>move</a>, <a href='#overwrite'>overwrite</a>
@@ -817,15 +817,15 @@ Child of <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#pixel'>pi
 &lt;ostate&gt;</td><td class='rightElementTitle'>
 Child of <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#pixel'>pixel</a>, <a href='#population'>population</a>, <a href='#move'>move</a>, <a href='#overwrite'>overwrite</a>
 </td></tr></table>
-<p>Sorry, no documentation.</p><a name='sane-gvars'></a>
-<br /><table class='elementTitle' summary="sane-gvars"><tr><td class='leftElementTitle'>
-&lt;sane-gvars&gt;</td><td class='rightElementTitle'>
+<p>Sorry, no documentation.</p><a name='zgvars'></a>
+<br /><table class='elementTitle' summary="zgvars"><tr><td class='leftElementTitle'>
+&lt;zgvars&gt;</td><td class='rightElementTitle'>
 Child of <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#pixel'>pixel</a>, <a href='#population'>population</a>, <a href='#move'>move</a>, <a href='#overwrite'>overwrite</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-gvars&gt;'s children">
+<td class='construct'><table summary="&lt;zgvars&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-gvars&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zgvars&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -893,7 +893,7 @@ Child of <a href='#game'>game</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>((<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#pos'>pos</a>+)</p><a name='type'></a>
 <br /><table class='elementTitle' summary="type"><tr><td class='leftElementTitle'>
 &lt;type&gt;</td><td class='rightElementTitle'>
-Child of <a href='#init'>init</a>, <a href='#sane-set'>sane-set</a>, <a href='#trigger'>trigger</a>, <a href='#sane-gvars'>sane-gvars</a>, <a href='#sane-vars'>sane-vars</a>, <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#move'>move</a>
+Child of <a href='#init'>init</a>, <a href='#zset'>zset</a>, <a href='#trigger'>trigger</a>, <a href='#zgvars'>zgvars</a>, <a href='#zvars'>zvars</a>, <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#move'>move</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='hextype'></a>
 <br /><table class='elementTitle' summary="hextype"><tr><td class='leftElementTitle'>
@@ -954,13 +954,13 @@ Child of <a href='#board'>board</a>
 <tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
 <tr><td><a href='#ostate'>ostate</a></td><td>One or none</td></tr>
 <tr><td><a href='#pstate'>pstate</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>One or none</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>One or none</td></tr>
 <tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
 <tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
 <tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
 <tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>))</p><a name='seed'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>))</p><a name='seed'></a>
 <br /><table class='elementTitle' summary="seed"><tr><td class='leftElementTitle'>
 &lt;seed&gt;</td><td class='rightElementTitle'>
 Child of <a href='#board'>board</a>
@@ -999,14 +999,14 @@ Child of <a href='#queue'>queue</a>
 <tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
 <tr><td><a href='#ostate'>ostate</a></td><td>One or none</td></tr>
 <tr><td><a href='#pstate'>pstate</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-gvars'>sane-gvars</a></td><td>One or none</td></tr>
+<tr><td><a href='#zgvars'>zgvars</a></td><td>One or none</td></tr>
 <tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
 <tr><td><a href='#t'>t</a></td><td>Only one</td></tr>
 <tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
 <tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
 <tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#t'>t</a>, <a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#sane-gvars'>sane-gvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>))</p><a name='t'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#t'>t</a>, <a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#gstate'>gstate</a> | <a href='#pstate'>pstate</a> | <a href='#ostate'>ostate</a> | <a href='#zgvars'>zgvars</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>))</p><a name='t'></a>
 <br /><table class='elementTitle' summary="t"><tr><td class='leftElementTitle'>
 &lt;t&gt;</td><td class='rightElementTitle'>
 Child of <a href='#board'>board</a>, <a href='#move'>move</a>
@@ -1027,21 +1027,21 @@ Child of <a href='#grammar'>grammar</a>
 <tbody><tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
 <tr><td><a href='#rate'>rate</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
-<tr><td><a href='#sane-bri'>sane-bri</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-hue'>sane-hue</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-sat'>sane-sat</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-vars'>sane-vars</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbri'>zbri</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhue'>zhue</a></td><td>One or none</td></tr>
+<tr><td><a href='#zsat'>zsat</a></td><td>One or none</td></tr>
+<tr><td><a href='#zvars'>zvars</a></td><td>One or none</td></tr>
 <tr><td><a href='#sync'>sync</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#sane-vars'>sane-vars</a>?, <a href='#sane-hue'>sane-hue</a>?, <a href='#sane-sat'>sane-sat</a>?, <a href='#sane-bri'>sane-bri</a>?, <a href='#sync'>sync</a>?, <a href='#rate'>rate</a>?, <a href='#rule'>rule</a>)</p><a name='sane-vars'></a>
-<br /><table class='elementTitle' summary="sane-vars"><tr><td class='leftElementTitle'>
-&lt;sane-vars&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#zvars'>zvars</a>?, <a href='#zhue'>zhue</a>?, <a href='#zsat'>zsat</a>?, <a href='#zbri'>zbri</a>?, <a href='#sync'>sync</a>?, <a href='#rate'>rate</a>?, <a href='#rule'>rule</a>)</p><a name='zvars'></a>
+<br /><table class='elementTitle' summary="zvars"><tr><td class='leftElementTitle'>
+&lt;zvars&gt;</td><td class='rightElementTitle'>
 Child of <a href='#particle'>particle</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-vars&gt;'s children">
+<td class='construct'><table summary="&lt;zvars&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-vars&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zvars&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1052,7 +1052,7 @@ Child of <a href='#particle'>particle</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#type'>type</a>?, <a href='#varsize'>varsize</a>*)</p><a name='varsize'></a>
 <br /><table class='elementTitle' summary="varsize"><tr><td class='leftElementTitle'>
 &lt;varsize&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-vars'>sane-vars</a>
+Child of <a href='#zvars'>zvars</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;varsize&gt;'s children">
@@ -1065,15 +1065,15 @@ Child of <a href='#sane-vars'>sane-vars</a>
 <tbody><tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
 <tr><td><a href='#size'>size</a></td><td>Only one</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>)</p><a name='sane-hue'></a>
-<br /><table class='elementTitle' summary="sane-hue"><tr><td class='leftElementTitle'>
-&lt;sane-hue&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>)</p><a name='zhue'></a>
+<br /><table class='elementTitle' summary="zhue"><tr><td class='leftElementTitle'>
+&lt;zhue&gt;</td><td class='rightElementTitle'>
 Child of <a href='#particle'>particle</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-hue&gt;'s children">
+<td class='construct'><table summary="&lt;zhue&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-hue&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zhue&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1082,15 +1082,15 @@ Child of <a href='#particle'>particle</a>
 <tr><td><a href='#mul'>mul</a></td><td>One or none</td></tr>
 <tr><td><a href='#var'>var</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='sane-sat'></a>
-<br /><table class='elementTitle' summary="sane-sat"><tr><td class='leftElementTitle'>
-&lt;sane-sat&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='zsat'></a>
+<br /><table class='elementTitle' summary="zsat"><tr><td class='leftElementTitle'>
+&lt;zsat&gt;</td><td class='rightElementTitle'>
 Child of <a href='#particle'>particle</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-sat&gt;'s children">
+<td class='construct'><table summary="&lt;zsat&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-sat&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zsat&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1099,15 +1099,15 @@ Child of <a href='#particle'>particle</a>
 <tr><td><a href='#mul'>mul</a></td><td>One or none</td></tr>
 <tr><td><a href='#var'>var</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='sane-bri'></a>
-<br /><table class='elementTitle' summary="sane-bri"><tr><td class='leftElementTitle'>
-&lt;sane-bri&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='zbri'></a>
+<br /><table class='elementTitle' summary="zbri"><tr><td class='leftElementTitle'>
+&lt;zbri&gt;</td><td class='rightElementTitle'>
 Child of <a href='#particle'>particle</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-bri&gt;'s children">
+<td class='construct'><table summary="&lt;zbri&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-bri&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zbri&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1119,7 +1119,7 @@ Child of <a href='#particle'>particle</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='add'></a>
 <br /><table class='elementTitle' summary="add"><tr><td class='leftElementTitle'>
 &lt;add&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-hue'>sane-hue</a>, <a href='#sane-bri'>sane-bri</a>, <a href='#sane-sat'>sane-sat</a>
+Child of <a href='#zhue'>zhue</a>, <a href='#zbri'>zbri</a>, <a href='#zsat'>zsat</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='sync'></a>
 <br /><table class='elementTitle' summary="sync"><tr><td class='leftElementTitle'>
@@ -1150,12 +1150,12 @@ Child of <a href='#sync'>sync</a>
 <p>Sorry, no documentation.</p><a name='var'></a>
 <br /><table class='elementTitle' summary="var"><tr><td class='leftElementTitle'>
 &lt;var&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-hue'>sane-hue</a>, <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bri'>sane-bri</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#sane-sat'>sane-sat</a>
+Child of <a href='#zhue'>zhue</a>, <a href='#zswitch'>zswitch</a>, <a href='#zbri'>zbri</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#zsat'>zsat</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='mul'></a>
 <br /><table class='elementTitle' summary="mul"><tr><td class='leftElementTitle'>
 &lt;mul&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-hue'>sane-hue</a>, <a href='#sane-bri'>sane-bri</a>, <a href='#sane-sat'>sane-sat</a>
+Child of <a href='#zhue'>zhue</a>, <a href='#zbri'>zbri</a>, <a href='#zsat'>zsat</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='hexinc'></a>
 <br /><table class='elementTitle' summary="hexinc"><tr><td class='leftElementTitle'>
@@ -1181,19 +1181,19 @@ Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fas
 <tr><td><a href='#nop'>nop</a></td><td>One or none</td></tr>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='sane-bind'></a>
-<br /><table class='elementTitle' summary="sane-bind"><tr><td class='leftElementTitle'>
-&lt;sane-bind&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='zbind'></a>
+<br /><table class='elementTitle' summary="zbind"><tr><td class='leftElementTitle'>
+&lt;zbind&gt;</td><td class='rightElementTitle'>
 Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fast'>fast</a>, <a href='#fail'>fail</a>, <a href='#default'>default</a>, <a href='#slow'>slow</a>, <a href='#rule'>rule</a>, <a href='#case'>case</a>, <a href='#next'>next</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-bind&gt;'s children">
+<td class='construct'><table summary="&lt;zbind&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-bind&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zbind&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1204,15 +1204,15 @@ Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fas
 <tr><td><a href='#x'>x</a></td><td>One or none</td></tr>
 <tr><td><a href='#y'>y</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#loc'>loc</a>, <a href='#x'>x</a>?, <a href='#y'>y</a>?, <a href='#case'>case</a>*, <a href='#default'>default</a>?)</p><a name='sane-switch'></a>
-<br /><table class='elementTitle' summary="sane-switch"><tr><td class='leftElementTitle'>
-&lt;sane-switch&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#loc'>loc</a>, <a href='#x'>x</a>?, <a href='#y'>y</a>?, <a href='#case'>case</a>*, <a href='#default'>default</a>?)</p><a name='zswitch'></a>
+<br /><table class='elementTitle' summary="zswitch"><tr><td class='leftElementTitle'>
+&lt;zswitch&gt;</td><td class='rightElementTitle'>
 Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fast'>fast</a>, <a href='#fail'>fail</a>, <a href='#default'>default</a>, <a href='#slow'>slow</a>, <a href='#rule'>rule</a>, <a href='#case'>case</a>, <a href='#next'>next</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-switch&gt;'s children">
+<td class='construct'><table summary="&lt;zswitch&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-switch&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zswitch&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1225,12 +1225,12 @@ Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fas
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#loc'>loc</a>?, <a href='#var'>var</a>, <a href='#case'>case</a>*, <a href='#default'>default</a>?)</p><a name='loc'></a>
 <br /><table class='elementTitle' summary="loc"><tr><td class='leftElementTitle'>
 &lt;loc&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-switch'>sane-switch</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#sane-bind'>sane-bind</a>
+Child of <a href='#zswitch'>zswitch</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#zbind'>zbind</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='case'></a>
 <br /><table class='elementTitle' summary="case"><tr><td class='leftElementTitle'>
 &lt;case&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bind'>sane-bind</a>
+Child of <a href='#zswitch'>zswitch</a>, <a href='#zbind'>zbind</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;case&gt;'s children">
@@ -1246,9 +1246,9 @@ Child of <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bind'>sane-bind<
 <tr><td><a href='#nop'>nop</a></td><td>One or none</td></tr>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td><td class='construct'><table  summary="&lt;case&gt;'s attributes"><tr>
 <th class='title' colspan='3'>&lt;case&gt;'s attributes</th>
 </tr>
@@ -1257,7 +1257,7 @@ Child of <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bind'>sane-bind<
 <th class='subtitle'>Name</th><th class='subtitle'>Values</th><th class='subtitle'>Default</th></tr>
 <tr><th colspan='3' height='1' class='ruler'></th></tr>
 <tr><td><a href='#case_state'>state</a></td><td></td><td></td></tr><tr><td><a href='#case_type'>type</a></td><td></td><td></td></tr></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='case_state'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='case_state'></a>
 <br /><table class='attributeTitle' summary="state"><tr><td class='leftAttributeTitle'>
 @state</td><td class='rightAttributeTitle'>
 Attribute of <a href='#case'>case</a>
@@ -1270,7 +1270,7 @@ Attribute of <a href='#case'>case</a>
 <p>Sorry, no documentation.</p><a name='default'></a>
 <br /><table class='elementTitle' summary="default"><tr><td class='leftElementTitle'>
 &lt;default&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bind'>sane-bind</a>
+Child of <a href='#zswitch'>zswitch</a>, <a href='#zbind'>zbind</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;default&gt;'s children">
@@ -1287,11 +1287,11 @@ Child of <a href='#sane-switch'>sane-switch</a>, <a href='#sane-bind'>sane-bind<
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='modify'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='modify'></a>
 <br /><table class='elementTitle' summary="modify"><tr><td class='leftElementTitle'>
 &lt;modify&gt;</td><td class='rightElementTitle'>
 Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fast'>fast</a>, <a href='#fail'>fail</a>, <a href='#default'>default</a>, <a href='#slow'>slow</a>, <a href='#rule'>rule</a>, <a href='#case'>case</a>, <a href='#next'>next</a>
@@ -1307,10 +1307,10 @@ Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fas
 <tbody><tr><td><a href='#dest'>dest</a></td><td>One or none</td></tr>
 <tr><td><a href='#inc'>inc</a></td><td>One or none</td></tr>
 <tr><td><a href='#next'>next</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-set'>sane-set</a></td><td>One or none</td></tr>
+<tr><td><a href='#zset'>zset</a></td><td>One or none</td></tr>
 <tr><td><a href='#src'>src</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#src'>src</a>?, (<a href='#inc'>inc</a> | <a href='#sane-set'>sane-set</a>)?, <a href='#dest'>dest</a>?, <a href='#next'>next</a>?)</p><a name='src'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#src'>src</a>?, (<a href='#inc'>inc</a> | <a href='#zset'>zset</a>)?, <a href='#dest'>dest</a>?, <a href='#next'>next</a>?)</p><a name='src'></a>
 <br /><table class='elementTitle' summary="src"><tr><td class='leftElementTitle'>
 &lt;src&gt;</td><td class='rightElementTitle'>
 Child of <a href='#modify'>modify</a>
@@ -1362,19 +1362,19 @@ Child of <a href='#modify'>modify</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='sane-set'></a>
-<br /><table class='elementTitle' summary="sane-set"><tr><td class='leftElementTitle'>
-&lt;sane-set&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='zset'></a>
+<br /><table class='elementTitle' summary="zset"><tr><td class='leftElementTitle'>
+&lt;zset&gt;</td><td class='rightElementTitle'>
 Child of <a href='#modify'>modify</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-set&gt;'s children">
+<td class='construct'><table summary="&lt;zset&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-set&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zset&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1385,7 +1385,7 @@ Child of <a href='#modify'>modify</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#type'>type</a>, <a href='#setvar'>setvar</a>*)</p><a name='setvar'></a>
 <br /><table class='elementTitle' summary="setvar"><tr><td class='leftElementTitle'>
 &lt;setvar&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-set'>sane-set</a>, <a href='#sane-gvars'>sane-gvars</a>
+Child of <a href='#zset'>zset</a>, <a href='#zgvars'>zgvars</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;setvar&gt;'s children">
@@ -1450,11 +1450,11 @@ Child of <a href='#random'>random</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='fail'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='fail'></a>
 <br /><table class='elementTitle' summary="fail"><tr><td class='leftElementTitle'>
 &lt;fail&gt;</td><td class='rightElementTitle'>
 Child of <a href='#random'>random</a>
@@ -1474,19 +1474,19 @@ Child of <a href='#random'>random</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='sane-huff'></a>
-<br /><table class='elementTitle' summary="sane-huff"><tr><td class='leftElementTitle'>
-&lt;sane-huff&gt;</td><td class='rightElementTitle'>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='zhuff'></a>
+<br /><table class='elementTitle' summary="zhuff"><tr><td class='leftElementTitle'>
+&lt;zhuff&gt;</td><td class='rightElementTitle'>
 Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fast'>fast</a>, <a href='#fail'>fail</a>, <a href='#default'>default</a>, <a href='#slow'>slow</a>, <a href='#rule'>rule</a>, <a href='#case'>case</a>, <a href='#next'>next</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
-<td class='construct'><table summary="&lt;sane-huff&gt;'s children">
+<td class='construct'><table summary="&lt;zhuff&gt;'s children">
 <thead>
-<tr><th class='title' colspan='2'>&lt;sane-huff&gt;'s children</th></tr>
+<tr><th class='title' colspan='2'>&lt;zhuff&gt;'s children</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
 <tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
 <tr><th colspan='2' height='1' class='ruler'></th></tr>
@@ -1496,7 +1496,7 @@ Child of <a href='#numeric'>numeric</a>, <a href='#pass'>pass</a>, <a href='#fas
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#numeric'>numeric</a>+)</p><a name='numeric'></a>
 <br /><table class='elementTitle' summary="numeric"><tr><td class='leftElementTitle'>
 &lt;numeric&gt;</td><td class='rightElementTitle'>
-Child of <a href='#sane-huff'>sane-huff</a>
+Child of <a href='#zhuff'>zhuff</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;numeric&gt;'s children">
@@ -1513,9 +1513,9 @@ Child of <a href='#sane-huff'>sane-huff</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td><td class='construct'><table  summary="&lt;numeric&gt;'s attributes"><tr>
 <th class='title' colspan='3'>&lt;numeric&gt;'s attributes</th>
 </tr>
@@ -1524,7 +1524,7 @@ Child of <a href='#sane-huff'>sane-huff</a>
 <th class='subtitle'>Name</th><th class='subtitle'>Values</th><th class='subtitle'>Default</th></tr>
 <tr><th colspan='3' height='1' class='ruler'></th></tr>
 <tr><td><a href='#numeric_value'>value</a></td><td></td><td></td></tr></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='numeric_value'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='numeric_value'></a>
 <br /><table class='attributeTitle' summary="value"><tr><td class='leftAttributeTitle'>
 @value</td><td class='rightAttributeTitle'>
 Attribute of <a href='#numeric'>numeric</a>
@@ -1565,11 +1565,11 @@ Child of <a href='#overload'>overload</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='fast'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='fast'></a>
 <br /><table class='elementTitle' summary="fast"><tr><td class='leftElementTitle'>
 &lt;fast&gt;</td><td class='rightElementTitle'>
 Child of <a href='#overload'>overload</a>
@@ -1589,8 +1589,8 @@ Child of <a href='#overload'>overload</a>
 <tr><td><a href='#overload'>overload</a></td><td>One or none</td></tr>
 <tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-bind'>sane-bind</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-huff'>sane-huff</a></td><td>One or none</td></tr>
-<tr><td><a href='#sane-switch'>sane-switch</a></td><td>One or none</td></tr>
+<tr><td><a href='#zbind'>zbind</a></td><td>One or none</td></tr>
+<tr><td><a href='#zhuff'>zhuff</a></td><td>One or none</td></tr>
+<tr><td><a href='#zswitch'>zswitch</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#sane-bind'>sane-bind</a> | <a href='#sane-switch'>sane-switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#sane-huff'>sane-huff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p></body></html>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#zbind'>zbind</a> | <a href='#zswitch'>zswitch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#zhuff'>zhuff</a> | <a href='#overload'>overload</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p></body></html>

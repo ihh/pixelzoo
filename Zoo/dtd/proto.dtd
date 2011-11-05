@@ -6,7 +6,7 @@
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
 <!ELEMENT area (pos*,goal)>
 <!ELEMENT cage (wall+,goal,count?,points?)>
-<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype)+,mask?,count?,entropy?)>
+<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype)+,mask?,count?,entropy?)>
 <!ELEMENT repeat (reps,goal)>
 <!ELEMENT cached (reps?,goal)>
 <!ELEMENT and (lazy?,cache?,goal+)>
@@ -59,14 +59,14 @@
 <!ELEMENT rate (#PCDATA)>
 <!ELEMENT persist EMPTY>
 
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|sane-gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|zgvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars))>
-<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|sane-gvars)*,(mask|tmask)?)>
+<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|zgvars))>
+<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|zgvars)*,(mask|tmask)?)>
 <!ELEMENT state (#PCDATA)>
 <!ELEMENT hexstate (#PCDATA)>
 <!ELEMENT gstate (#PCDATA)>
@@ -74,7 +74,7 @@
 <!ELEMENT pstate (#PCDATA)>
 <!ELEMENT ostate (#PCDATA)>
 
-<!ELEMENT sane-gvars (type,setvar*)>
+<!ELEMENT zgvars (type,setvar*)>
 
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT spray (#PCDATA)>
@@ -91,21 +91,21 @@
 
 <!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
 <!ELEMENT grammar (particle+)>
-<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
 <!ELEMENT seed (#PCDATA)>
 
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
 <!ELEMENT t (#PCDATA)>
 
-<!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
+<!ELEMENT particle (name,zvars?,zhue?,zsat?,zbri?,sync?,rate?,rule)>
 
-<!ELEMENT sane-vars (type?,varsize*)>
+<!ELEMENT zvars (type?,varsize*)>
 <!ELEMENT varsize (name,size)>
 
-<!ELEMENT sane-hue (var?,mul?,add?)>
-<!ELEMENT sane-sat (var?,mul?,add?)>
-<!ELEMENT sane-bri (var?,mul?,add?)>
+<!ELEMENT zhue (var?,mul?,add?)>
+<!ELEMENT zsat (var?,mul?,add?)>
+<!ELEMENT zbri (var?,mul?,add?)>
 <!ELEMENT add (#PCDATA)>
 
 <!ELEMENT sync (period?,phase?)>
@@ -116,24 +116,24 @@
 <!ELEMENT mul (#PCDATA)>
 <!ELEMENT hexinc (#PCDATA)>
 
-<!ELEMENT rule (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT rule (zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 
-<!ELEMENT sane-bind (loc,x?,y?,case*,default?)>
-<!ELEMENT sane-switch (loc?,var,case*,default?)>
+<!ELEMENT zbind (loc,x?,y?,case*,default?)>
+<!ELEMENT zswitch (loc?,var,case*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
-<!ELEMENT case (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT case (zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 <!ATTLIST case state CDATA #IMPLIED>
 <!ATTLIST case type CDATA #IMPLIED>
 
-<!ELEMENT default (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT default (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 
-<!ELEMENT modify (src?,(inc|sane-set)?,dest?,next?)>
+<!ELEMENT modify (src?,(inc|zset)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
-<!ELEMENT next (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT next (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 
-<!ELEMENT sane-set (type,setvar*)>
+<!ELEMENT zset (type,setvar*)>
 <!ELEMENT setvar (name,value)>
 <!ELEMENT value (#PCDATA)>
 
@@ -142,13 +142,13 @@
 <!ELEMENT nop EMPTY>
 
 <!ELEMENT random (prob?,pass?,fail?)>
-<!ELEMENT pass (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ELEMENT fail (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT pass (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!ELEMENT fail (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 
-<!ELEMENT sane-huff (numeric+)>
-<!ELEMENT numeric (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT zhuff (numeric+)>
+<!ELEMENT numeric (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
 <!ATTLIST numeric value CDATA #REQUIRED>
 
 <!ELEMENT overload (slow,fast)>
-<!ELEMENT slow (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ELEMENT fast (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT slow (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>
+<!ELEMENT fast (rule|zbind|zswitch|modify|nop|random|zhuff|overload|goal|ball)>

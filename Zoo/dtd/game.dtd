@@ -4,9 +4,21 @@
 <!ELEMENT trigger (goal,(type|hextype),pos+)>
 <!ELEMENT protect (x,y)>
 
+<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions and creating "side effects" like rewards, hints, game events, and so forth. A Goal node in the XML tree represents a single expression node in this mini-language.
+
+A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.
+
+Each Goal expression operates on a given "area" of the Board (i.e. a subset of the Board's cells). By default, this area is inherited from the parent Goal expression, and the default area for the root Goal is the entire Board.
+ -->
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
+
+<!-- A Goal that restricts the child expression (goal) to a given area, specified as a list of cell co-ordinates. -->
 <!ELEMENT area (pos*,goal)>
+
+<!-- A Goal that tests if the parent area contains a specified number (count) of enclosures, made of a particular type of boundary cell (wall). Each enclosure must contain a specified number of cells (points), and satisfy a particular child expression (goal). -->
 <!ELEMENT cage (wall+,goal,count?,points?)>
+
+<!-- A Goal that tests if the parent area contains a population of cells of a given type (state/type) -->
 <!ELEMENT population (allowmask?,(state|hexstate|type|hextype)+,mask?,count?,entropy?)>
 <!ELEMENT repeat (reps,goal)>
 <!ELEMENT cached (reps?,goal)>
