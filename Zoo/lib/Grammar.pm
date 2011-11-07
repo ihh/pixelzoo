@@ -84,6 +84,7 @@ sub newGrammar {
 	'gameDTD' => pixelzoo_dir('dtd/game.dtd'),
 	'protoDTD' => pixelzoo_dir('dtd/proto.dtd'),
 	'protofile' => undef,
+	'sane_protofile' => undef,
 	'outfile' => undef,
 
 # other helpers
@@ -166,6 +167,18 @@ sub validate_proto_xml {
     my ($self, $proto_xml) = @_;
     $proto_xml = $self->proto_xml unless defined $proto_xml;
 
+    if (defined $self->protofile) {
+	warn "Generating proto-game XML to save to text file...\n" if $self->verbose;
+
+	my $proto_xml_text = $self->generate_xml($proto_xml);
+
+	warn "Saving proto-game XML to file...\n" if $self->verbose;
+	local *PROTO;
+	open PROTO, '>' . $self->protofile;
+	print PROTO $proto_xml_text;
+	close PROTO;
+    }
+
     # "Sanitize" the proto-game XML, i.e. remove the quick-and-dirty shortcuts that don't translate well to XML
     # (such as using var names as hash keys).
     # Not sure this is the wisest idea if we do eventually plan to load XML back in...
@@ -182,20 +195,20 @@ sub validate_proto_xml {
 	warn "Data structure representing sanitized proto-game XML:\n", Data::Dumper->Dump($sanitized_proto);
     }
 
-    warn "Generating proto-game XML for validation...\n" if $self->verbose;
+    warn "Generating sanitized proto-game XML for validation...\n" if $self->verbose;
     my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
 
-    if (defined $self->protofile) {
-	warn "Saving proto-game XML to file...\n" if $self->verbose;
-	local *PROTO;
-	open PROTO, '>' . $self->protofile;
-	print PROTO $sanitized_proto_xml;
-	close PROTO;
+    if (defined $self->sane_protofile) {
+	warn "Saving sanitized proto-game XML to file...\n" if $self->verbose;
+	local *SANE;
+	open SANE, '>' . $self->sane_protofile;
+	print SANE $sanitized_proto_xml;
+	close SANE;
     }
 
-    warn "Validating proto-game XML...\n" if $self->verbose;
-    if (defined $self->protofile) {
-	$self->validate_xml_file ($self->protofile, $self->protoDTD);
+    warn "Validating sanitized proto-game XML...\n" if $self->verbose;
+    if (defined $self->sane_protofile) {
+	$self->validate_xml_file ($self->sane_protofile, $self->protoDTD);
     } else {
 	$self->validate_xml_string ($sanitized_proto_xml, $self->protoDTD);
     }
@@ -302,8 +315,12 @@ sub make_game {
 
 # parse_types: parse type declarations
 sub parse_types {
-    my ($self) = @_;
-    $self->parse_node ($self->xml->type);
+    my ($self, $proto_xml) = @_;
+    if (defined $proto_xml) {
+	$self->parse_node ($proto_xml);
+    } else {
+	$self->parse_node ($self->xml->type);
+    }
 }
 
 # transform_proto: take proto-XML input, parse type declarations, apply transformations
@@ -322,7 +339,7 @@ sub parse_node {
     } elsif (ref($node)) {
 	confess "Illegal reference type: $node";
     } else {
-	warn "Parsing $node";
+#	warn "Parsing $node";
     }
     while (@node) {
 	my $k = shift @node;

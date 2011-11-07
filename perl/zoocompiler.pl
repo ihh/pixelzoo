@@ -34,19 +34,19 @@ my $input = join ("", @input);
 my $twig = Twiggy->new();
 $twig->parse ($input);
 
+my @proto_nest = $twig->twig_nest;
+
 # compile
 my $gram = Grammar->newGrammar;
 $gram->verbose($verbose);
 $gram->debug($debug);
 $gram->xmllint($xmllint) if defined $xmllint;
 
-my $nest = $twig->twig_nest;
-#warn Data::Dumper->Dump($nest);
+$gram->parse_types (\@proto_nest);
 
-$gram->validate_proto_xml ($nest);
-$gram->print ($nest);
+my $compiled_nest = $gram->compiled_proto_xml (\@proto_nest);
 
-die "This program currently doesn't work, and you shouldn't even be using it.";
+$gram->print ($compiled_nest);
 
 __END__
 

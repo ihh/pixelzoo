@@ -6,7 +6,7 @@ use Pod::Usage;
 use XML::Twig;
 use Carp;
 
-use FindBin qw($Bin); 
+use FindBin qw($Bin);
 use lib "$Bin/../Zoo/lib";
 
 use Level;
@@ -17,9 +17,9 @@ my $help = 0;
 my $debug = 0;
 my $verbose = 0;
 my $xmllint;
-my ($proto, $out);
+my ($proto, $sane, $out);
 
-GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'out=s' => \$out, 'proto=s' => \$proto, 'xmllint=s' => \$xmllint) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'out=s' => \$out, 'proto=s' => \$proto, 'sane=s' => \$sane, 'xmllint=s' => \$xmllint) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -33,6 +33,7 @@ my $gram = Level->newLevel;
 $gram->verbose($verbose);
 $gram->debug($debug);
 $gram->protofile($proto) if defined $proto;
+$gram->sane_protofile($sane) if defined $sane;
 $gram->outfile($out) if defined $proto;
 $gram->xmllint($xmllint) if defined $xmllint;
 
@@ -294,6 +295,7 @@ zoocompiler.pl [options]
   -help               brief help message
   -man                full documentation
   -proto              file to save proto-XML
+  -sane               file to save "sanitized" proto-XML
   -out                file to save output XML (otherwise sent to stdout)
   -xmllint            path to xmllint
   -verbose            report progress

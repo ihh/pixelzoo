@@ -42,11 +42,15 @@ Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pa
 sub twig_nest {
     my ($self) = @_;
     my @child = $self->children;
-    return $self->tag unless @child;
-    if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
-	return ($self->tag => $child[0]->text);
+    my $tag = $self->tag;
+    if ($tag eq 'numeric') {
+	$tag = $self->{'att'}->{'value'};
     }
-    return ($self->tag => [map ($_->twig_nest, @child)]);
+    return ($tag => '') unless @child;
+    if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
+	return ($tag => $child[0]->text);
+    }
+    return ($tag => [map ($_->twig_nest, @child)]);
 }
 
 =head1 AUTHOR

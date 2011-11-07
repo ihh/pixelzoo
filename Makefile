@@ -101,7 +101,7 @@ $(LIBTARGET): $(OFILES)
 .SECONDARY:
 
 t/simple.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -verbose
+	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -sane t/sane.xml -out t/simple.xml -verbose
 
 xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -debug
