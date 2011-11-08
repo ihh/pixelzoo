@@ -30,7 +30,7 @@ LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
-XMLFILES := t/simple.xml
+XMLFILES := t/simple.copy.xml
 
 all: lib targets xml
 
@@ -100,8 +100,9 @@ $(LIBTARGET): $(OFILES)
 
 .SECONDARY:
 
-t/simple.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -sane t/sane.xml -out t/simple.xml -verbose
+t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
+	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -sane t/sane.xml -out $@ -verbose
+	diff t/simple.xml $@
 
 xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -debug
