@@ -84,7 +84,6 @@ sub newGrammar {
 	'gameDTD' => pixelzoo_dir('dtd/game.dtd'),
 	'protoDTD' => pixelzoo_dir('dtd/proto.dtd'),
 	'protofile' => undef,
-	'sane_protofile' => undef,
 	'outfile' => undef,
 
 # other helpers
@@ -105,7 +104,7 @@ sub newGrammar {
     bless $self, $class;
 
     $self->addType ('name' => $emptyType,
-		    'vars' => [ 'hue' => 6, 'saturation' => 3, 'brightness' => 3 ],
+		    'vars' => [ $self->var('hue') => 6, $self->var('saturation') => 3, $self->var('brightness') => 3 ],
 		    'hue' => [ 'var' => 'hue' ],
 		    'sat' => [ 'var' => 'saturation' ],
 		    'bri' => [ 'var' => 'brightness' ],
@@ -165,13 +164,13 @@ sub assembled_xml {
 # validate the proto-game XML
 sub validate_proto_xml {
     my ($self, $proto_xml) = @_;
+
     $proto_xml = $self->proto_xml unless defined $proto_xml;
 
+    warn "Generating proto-game XML text...\n" if $self->verbose;
+    my $proto_xml_text = $self->generate_xml($proto_xml);
+
     if (defined $self->protofile) {
-	warn "Generating proto-game XML to save to text file...\n" if $self->verbose;
-
-	my $proto_xml_text = $self->generate_xml($proto_xml);
-
 	warn "Saving proto-game XML to file...\n" if $self->verbose;
 	local *PROTO;
 	open PROTO, '>' . $self->protofile;
@@ -179,38 +178,15 @@ sub validate_proto_xml {
 	close PROTO;
     }
 
-    # "Sanitize" the proto-game XML, i.e. remove the quick-and-dirty shortcuts that don't translate well to XML
-    # (such as using var names as hash keys).
-    # Not sure this is the wisest idea if we do eventually plan to load XML back in...
-    # at minimum, we would need to write an inverse transformation to go the other way.
-    # We'd also need to avoid clashes between the unsanitized and sanitized tag names.
-    warn "Sanitizing proto-game XML...\n" if $self->verbose;
-    my $sanitized_proto = $self->sanitize_proto($proto_xml);
-
     if ($self->debug) {
 	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($proto_xml);
     }
 
-    if ($self->debug) {
-	warn "Data structure representing sanitized proto-game XML:\n", Data::Dumper->Dump($sanitized_proto);
-    }
-
-    warn "Generating sanitized proto-game XML for validation...\n" if $self->verbose;
-    my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
-
-    if (defined $self->sane_protofile) {
-	warn "Saving sanitized proto-game XML to file...\n" if $self->verbose;
-	local *SANE;
-	open SANE, '>' . $self->sane_protofile;
-	print SANE $sanitized_proto_xml;
-	close SANE;
-    }
-
-    warn "Validating sanitized proto-game XML...\n" if $self->verbose;
-    if (defined $self->sane_protofile) {
-	$self->validate_xml_file ($self->sane_protofile, $self->protoDTD);
+    warn "Validating proto-game XML...\n" if $self->verbose;
+    if (defined $self->protofile) {
+	$self->validate_xml_file ($self->protofile, $self->protoDTD);
     } else {
-	$self->validate_xml_string ($sanitized_proto_xml, $self->protoDTD);
+	$self->validate_xml_string ($proto_xml_text, $self->protoDTD);
     }
 }
 
@@ -443,86 +419,6 @@ sub forceHash {
     confess "Not a reference";
 }
 
-# helper to sanitize the proto-XML
-# hack: temporarily overrides the transformation functions used for the main XML tree transformation
-sub sanitize_proto {
-    my ($self, $proto) = @_;
-    my $old_trans = $self->trans;
-    $self->trans ({ 'switch' => switch_sanitizer('zswitch','state',1),
-		    'bind' => switch_sanitizer('zbind','type',0),
-		    'huff' => \&sanitize_huff,
-		    'gvars' => typevar_sanitizer('zgvars','setvar','value'),
-		    'vars' => typevar_sanitizer('zvars','varsize','size'),
-		    'set' => typevar_sanitizer('zset','setvar','value'),
-		    map (($_ => hsv_sanitizer("z$_")), qw(hue sat bri)),
-		  });
-
-    my $sanitized_proto = $self->transform_value ($proto);
-    $self->trans ($old_trans);  # restore the old transformations
-    return $sanitized_proto;
-}
-
-# helpers to perform, or make subroutines that perform, sanitization transformations
-sub sanitize_huff {
-    my ($self, $n) = @_;
-    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
-    my @out;
-    while (@vars) {
-	my $k = shift @vars;
-	my $v = shift @vars;
-	push @out, ('numeric' => [ '@value' => $k, @{$self->transform_value($v)} ]);
-    }
-    return ('zhuff' => \@out);
-}
-
-sub switch_sanitizer {
-    my ($switch_tag, $case_tag, $has_var) = @_;
-    return sub {
-	my ($self, $n) = @_;
-	$n = forceHash($n);
-	my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
-	my %case;
-	if (ref($case) eq 'HASH') { %case = %$case }
-	elsif (ref($case) eq 'ARRAY') { confess "Odd number of elements in (@$case)" if @$case % 2 != 0; %case = @$case }
-	else { confess "Not a hash or array ref" }
-	return ($switch_tag => [defined($locid) ? ('loc' => $locid) : (),
-				$has_var && defined($varid) ? ('var' => $varid) : (),
-				defined($case) ? (map (( 'case' => [ '@'.$case_tag => $_, @{$self->transform_value($case{$_})} ] ), keys %case) ) : (),
-				defined($default) ? ('default' => $self->transform_value($default)) : ()]);
-    };
-}
-
-sub typevar_sanitizer {
-    my ($vars_tag, $var_tag, $value_tag) = @_;
-    return sub {
-	    my ($self, $n) = @_;
-	    confess "Expected a {Type=>Value} hash/array reference" unless ref($n);
-	    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
-	    my @out;
-	    while (@vars) {
-		my $k = shift @vars;
-		my $v = shift @vars;
-		if ($k eq 'type') {
-		    push @out, ($k => $v);
-		} else {
-		    push @out, ($var_tag => { 'name' => $k, $value_tag => $v });
-		}
-	    }
-	    return ($vars_tag => \@out);
-    };
-}
-
-sub hsv_sanitizer {
-    my ($tag) = @_;
-    return sub {
-	    my ($self, $n) = @_;
-	    if (ref($n)) {
-		return ($tag => $n);
-	    }
-	    return ($tag => [ 'add' => $n ]);
-    };
-}
-
 # primary transformation functions
 sub transform_hash {
 
@@ -604,6 +500,7 @@ sub transform_hash {
 	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
 	    while (my ($name, $rule) = each %case_hash) {
+		$name = $self->fixTypeName($name);
 		$self->push_scope;
 		$self->scope->loctype->{$locid} = $name;
 		$transformed_case{$name} = $self->transform_value ($rule);
@@ -618,7 +515,7 @@ sub transform_hash {
 					     'rshift' => $self->typeshift,
 					     map (('case' => ['state' => $self->getType($_),
 							      @{$transformed_case{$_}}]),
-						  keys %case_hash),
+						  keys %transformed_case),
 					     defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -798,6 +695,7 @@ sub transform_hash {
 	    while (@n) {
 		my $prob = shift @n;
 		my $rule = shift @n;
+		$prob = $self->fixProb($prob);
 		push @node, { 'prob' => $prob, 'rule' => $self->transform_value($rule) };
 		$total += $prob;
 	    }
@@ -901,6 +799,7 @@ sub declare_type {
     while (@varname_varbits) {
 	my $varname = shift @varname_varbits;
 	my $varbits = shift @varname_varbits;
+	$varname =~ s/^val\@var=([^\@]+)$/$1/;
 	confess "In type $type, '$varname' is an illegal var name" if illegal_name($varname);
 	push @{$self->pvar->{$type}}, $varname;
 	$self->pvbits->{$type}->{$varname} = $varbits;
@@ -971,13 +870,14 @@ sub firstNonzeroTag {
     return undef;
 }
 
-# fully-qualified particle state: .state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
+# fully-qualified particle state: state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
 sub typeAndVars {
     my ($self, $n) = @_;
     $n = forceHash($n);
     my $type = $n->{'type'};
     my $state = $self->getType($type) << $self->getShift($type,"type");
     while (my ($var, $val) = each %$n) {
+	$var =~ s/^val\@var=([^\@]+)$/$1/;
 	if ($var ne 'type') {
 	    $state = $state | ($val << $self->getShift($type,$var));
 	}
@@ -992,6 +892,7 @@ sub getTypeAsHexState {
 
 sub getType {
     my ($self, $type) = @_;
+    $type = $self->fixTypeName($type);
     confess "Undefined type" unless defined $type;
     if ($type =~ /^\-?\d+$/) {
 	return $type;
@@ -1067,7 +968,7 @@ sub new_XML_element {
 	    my $v = shift @child;
 	    if ($k =~ s/^\@//) {
 		$t->set_att ($k => $v);
-	    } elsif ($k =~ /^([^\@+])\@/) {
+	    } elsif ($k =~ /^([^\@]+)\@/) {
 		my $new_k = $1;
 		my $elt = new_XML_element($new_k, $v);
 		while ($k =~ /\@([^=]+)=([^\@=]+)/g) {
@@ -1076,7 +977,7 @@ sub new_XML_element {
 		}
 		$elt->paste(last_child => $t);
 	    } elsif (Scalar::Util::looks_like_number($k)) {
-		my $elt = new_XML_element('numeric', $v);
+		my $elt = new_XML_element('p', $v);
 		$elt->set_att ('value' => $k);
 		$elt->paste(last_child => $t);
 	    } else {
@@ -1090,6 +991,39 @@ sub new_XML_element {
 
     return $t;
 }
+
+# helper to turn a particle type name into a form that new_XML_element will process into a <target value="name"> tag
+sub target {
+    my ($self, $name) = @_;
+    return 'target@value=' . $name;
+}
+
+# helper to turn a var name into a form that new_XML_element will process into a <val var="name"> tag
+sub var {
+    my ($self, $name) = @_;
+    return 'val@var=' . $name;
+}
+
+# helper to turn a probability into a form that new_XML_element will process into a <p value="name"> tag
+sub pvalue {
+    my ($self, $prob) = @_;
+    return 'p@value=' . $prob;
+}
+
+# helpers to reverse the above transformations
+sub fixTypeName {
+    my ($self, $type) = @_;
+    $type =~ s/^target\@value=([^\@]+)$/$1/;
+    return $type;
+}
+
+sub fixProb {
+    my ($self, $prob) = @_;
+    $prob =~ s/^p\@value=([^\@]+)$/$1/;
+    return $prob;
+}
+
+# misc helpers
 
 sub sortHash {
     my ($hashRef, @key_order) = @_;

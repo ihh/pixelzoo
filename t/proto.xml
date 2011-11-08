@@ -5,9 +5,9 @@
       <particle>
         <name>empty</name>
         <vars>
-          <hue>6</hue>
-          <saturation>3</saturation>
-          <brightness>3</brightness>
+          <val var="hue">6</val>
+          <val var="saturation">3</val>
+          <val var="brightness">3</val>
         </vars>
         <hue>
           <var>hue</var>
@@ -25,56 +25,62 @@
       </particle>
       <particle>
         <name>cement</name>
-        <hue>32</hue>
-        <sat>192</sat>
-        <bri>96</bri>
+        <hue>
+          <add>32</add>
+        </hue>
+        <sat>
+          <add>192</add>
+        </sat>
+        <bri>
+          <add>96</add>
+        </bri>
         <rate>0.1</rate>
         <rule>
           <huff>
-            <numeric value="0.001">
+            <p value="0.001">
               <modify>
                 <set>
                   <type>empty</type>
                 </set>
               </modify>
-            </numeric>
-            <numeric value="0.02">
+            </p>
+            <p value="0.02">
               <huff>
-                <numeric value="0.333333333333333">
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>wall</type>
-                      <hue>0</hue>
+                      <val var="hue">0</val>
                     </set>
                   </modify>
-                </numeric>
-                <numeric value="0.333333333333333">
+                </p>
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>wall</type>
-                      <hue>42</hue>
+                      <val var="hue">42</val>
                     </set>
                   </modify>
-                </numeric>
-                <numeric value="0.333333333333333">
+                </p>
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>wall</type>
-                      <hue>84</hue>
+                      <val var="hue">84</val>
                     </set>
                   </modify>
-                </numeric>
+                </p>
               </huff>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -90,12 +96,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -104,21 +110,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -134,12 +140,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -148,21 +154,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -178,12 +184,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -192,21 +198,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -222,12 +228,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -236,21 +242,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -266,12 +272,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -280,21 +286,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -310,12 +316,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -324,21 +330,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -354,12 +360,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -368,21 +374,21 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.122375">
+            </p>
+            <p value="0.122375">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.02">
+                      <p value="0.02">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -398,12 +404,12 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -412,25 +418,27 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
+            </p>
           </huff>
         </rule>
       </particle>
       <particle>
         <name>wall</name>
         <vars>
-          <hue>8</hue>
-          <decay>4</decay>
+          <val var="hue">8</val>
+          <val var="decay">4</val>
         </vars>
         <hue>
           <var>hue</var>
         </hue>
-        <sat>32</sat>
+        <sat>
+          <add>32</add>
+        </sat>
         <bri>
           <var>decay</var>
           <mul>-8</mul>
@@ -442,7 +450,7 @@
             <loc>o</loc>
             <var>decay</var>
             <case>
-              <numeric value="15">
+              <target value="15">
                 <modify>
                   <set>
                     <type>empty</type>
@@ -457,7 +465,7 @@
                     </rule>
                   </next>
                 </modify>
-              </numeric>
+              </target>
             </case>
             <default>
               <modify>
@@ -472,26 +480,32 @@
       </particle>
       <particle>
         <name>acid</name>
-        <hue>80</hue>
-        <sat>192</sat>
-        <bri>64</bri>
+        <hue>
+          <add>80</add>
+        </hue>
+        <sat>
+          <add>192</add>
+        </sat>
+        <bri>
+          <add>64</add>
+        </bri>
         <rate>0.1</rate>
         <rule>
           <huff>
-            <numeric value="0.03">
+            <p value="0.03">
               <modify>
                 <set>
                   <type>empty</type>
                 </set>
               </modify>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -507,11 +521,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -527,18 +541,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -554,11 +568,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -574,18 +588,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -601,11 +615,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -621,18 +635,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -648,11 +662,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -668,18 +682,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -695,11 +709,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -715,18 +729,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -742,11 +756,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -762,18 +776,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -789,11 +803,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -809,18 +823,18 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -836,11 +850,11 @@
                         </modify>
                       </next>
                     </modify>
-                  </empty>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.5">
+                    <p value="0.5">
                       <modify>
                         <set>
                           <type>empty</type>
@@ -856,26 +870,28 @@
                           </modify>
                         </next>
                       </modify>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </bind>
-            </numeric>
+            </p>
           </huff>
         </rule>
       </particle>
       <particle>
         <name>plant</name>
         <vars>
-          <gens_left>3</gens_left>
-          <branches>2</branches>
+          <val var="gens_left">3</val>
+          <val var="branches">2</val>
         </vars>
         <hue>
           <var>gens_left</var>
           <mul>8</mul>
           <add>82</add>
         </hue>
-        <sat>240</sat>
+        <sat>
+          <add>240</add>
+        </sat>
         <bri>
           <var>gens_left</var>
           <mul>-16</mul>
@@ -884,31 +900,31 @@
         <rate>0.01</rate>
         <rule>
           <huff>
-            <numeric value="0.0001">
+            <p value="0.0001">
               <modify>
                 <set>
                   <type>empty</type>
                 </set>
               </modify>
-            </numeric>
-            <numeric value="0.9999">
+            </p>
+            <p value="0.9999">
               <switch>
                 <loc>o</loc>
                 <var>gens_left</var>
                 <case>
-                  <numeric value="0">
+                  <target value="0">
                     <nop></nop>
-                  </numeric>
+                  </target>
                 </case>
                 <default>
                   <huff>
-                    <numeric value="0.25">
+                    <p value="0.25">
                       <bind>
                         <loc>nbr</loc>
                         <x>0</x>
                         <y>-1</y>
                         <case>
-                          <empty>
+                          <target value="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -921,7 +937,7 @@
                                   <loc>o</loc>
                                   <var>branches</var>
                                   <case>
-                                    <numeric value="3">
+                                    <target value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -933,11 +949,11 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </numeric>
+                                    </target>
                                   </case>
                                   <default>
                                     <huff>
-                                      <numeric value="0.8">
+                                      <p value="0.8">
                                         <modify>
                                           <src>
                                             <loc>nbr</loc>
@@ -949,8 +965,8 @@
                                             <var>gens_left</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
-                                      <numeric value="0.2">
+                                      </p>
+                                      <p value="0.2">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -962,23 +978,23 @@
                                             <var>branches</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
                                   </default>
                                 </switch>
                               </next>
                             </modify>
-                          </empty>
+                          </target>
                         </case>
                       </bind>
-                    </numeric>
-                    <numeric value="0.25">
+                    </p>
+                    <p value="0.25">
                       <bind>
                         <loc>nbr</loc>
                         <x>1</x>
                         <y>0</y>
                         <case>
-                          <empty>
+                          <target value="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -991,7 +1007,7 @@
                                   <loc>o</loc>
                                   <var>branches</var>
                                   <case>
-                                    <numeric value="3">
+                                    <target value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1003,11 +1019,11 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </numeric>
+                                    </target>
                                   </case>
                                   <default>
                                     <huff>
-                                      <numeric value="0.8">
+                                      <p value="0.8">
                                         <modify>
                                           <src>
                                             <loc>nbr</loc>
@@ -1019,8 +1035,8 @@
                                             <var>gens_left</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
-                                      <numeric value="0.2">
+                                      </p>
+                                      <p value="0.2">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -1032,23 +1048,23 @@
                                             <var>branches</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
                                   </default>
                                 </switch>
                               </next>
                             </modify>
-                          </empty>
+                          </target>
                         </case>
                       </bind>
-                    </numeric>
-                    <numeric value="0.25">
+                    </p>
+                    <p value="0.25">
                       <bind>
                         <loc>nbr</loc>
                         <x>0</x>
                         <y>1</y>
                         <case>
-                          <empty>
+                          <target value="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1061,7 +1077,7 @@
                                   <loc>o</loc>
                                   <var>branches</var>
                                   <case>
-                                    <numeric value="3">
+                                    <target value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1073,11 +1089,11 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </numeric>
+                                    </target>
                                   </case>
                                   <default>
                                     <huff>
-                                      <numeric value="0.8">
+                                      <p value="0.8">
                                         <modify>
                                           <src>
                                             <loc>nbr</loc>
@@ -1089,8 +1105,8 @@
                                             <var>gens_left</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
-                                      <numeric value="0.2">
+                                      </p>
+                                      <p value="0.2">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -1102,23 +1118,23 @@
                                             <var>branches</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
                                   </default>
                                 </switch>
                               </next>
                             </modify>
-                          </empty>
+                          </target>
                         </case>
                       </bind>
-                    </numeric>
-                    <numeric value="0.25">
+                    </p>
+                    <p value="0.25">
                       <bind>
                         <loc>nbr</loc>
                         <x>-1</x>
                         <y>0</y>
                         <case>
-                          <empty>
+                          <target value="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1131,7 +1147,7 @@
                                   <loc>o</loc>
                                   <var>branches</var>
                                   <case>
-                                    <numeric value="3">
+                                    <target value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1143,11 +1159,11 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </numeric>
+                                    </target>
                                   </case>
                                   <default>
                                     <huff>
-                                      <numeric value="0.8">
+                                      <p value="0.8">
                                         <modify>
                                           <src>
                                             <loc>nbr</loc>
@@ -1159,8 +1175,8 @@
                                             <var>gens_left</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
-                                      <numeric value="0.2">
+                                      </p>
+                                      <p value="0.2">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -1172,75 +1188,81 @@
                                             <var>branches</var>
                                           </dest>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
                                   </default>
                                 </switch>
                               </next>
                             </modify>
-                          </empty>
+                          </target>
                         </case>
                       </bind>
-                    </numeric>
+                    </p>
                   </huff>
                 </default>
               </switch>
-            </numeric>
+            </p>
           </huff>
         </rule>
       </particle>
       <particle>
         <name>seed</name>
-        <hue>32</hue>
-        <sat>192</sat>
-        <bri>96</bri>
+        <hue>
+          <add>32</add>
+        </hue>
+        <sat>
+          <add>192</add>
+        </sat>
+        <bri>
+          <add>96</add>
+        </bri>
         <rate>0.1</rate>
         <rule>
           <huff>
-            <numeric value="0.03">
+            <p value="0.03">
               <modify>
                 <set>
                   <type>empty</type>
                 </set>
               </modify>
-            </numeric>
-            <numeric value="0.0005">
+            </p>
+            <p value="0.0005">
               <huff>
-                <numeric value="0.333333333333333">
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>plant</type>
-                      <gens_left>1</gens_left>
+                      <val var="gens_left">1</val>
                     </set>
                   </modify>
-                </numeric>
-                <numeric value="0.333333333333333">
+                </p>
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>plant</type>
-                      <gens_left>3</gens_left>
+                      <val var="gens_left">3</val>
                     </set>
                   </modify>
-                </numeric>
-                <numeric value="0.333333333333333">
+                </p>
+                <p value="0.333333333333333">
                   <modify>
                     <set>
                       <type>plant</type>
-                      <gens_left>6</gens_left>
+                      <val var="gens_left">6</val>
                     </set>
                   </modify>
-                </numeric>
+                </p>
               </huff>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1256,53 +1278,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1318,53 +1340,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1380,53 +1402,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1442,53 +1464,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1504,53 +1526,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1566,53 +1588,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1628,53 +1650,53 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.1211875">
+            </p>
+            <p value="0.1211875">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <huff>
-                      <numeric value="0.05">
+                      <p value="0.05">
                         <modify>
                           <src>
                             <loc>o</loc>
@@ -1690,112 +1712,116 @@
                             </modify>
                           </next>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </empty>
-                  <wall>
+                  </target>
+                  <target value="wall">
                     <huff>
-                      <numeric value="1">
+                      <p value="1">
                         <huff>
-                          <numeric value="0.333333333333333">
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>1</gens_left>
+                                <val var="gens_left">1</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>3</gens_left>
+                                <val var="gens_left">3</val>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.333333333333333">
+                          </p>
+                          <p value="0.333333333333333">
                             <modify>
                               <set>
                                 <type>plant</type>
-                                <gens_left>6</gens_left>
+                                <val var="gens_left">6</val>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </numeric>
+                      </p>
                     </huff>
-                  </wall>
+                  </target>
                 </case>
               </bind>
-            </numeric>
+            </p>
           </huff>
         </rule>
       </particle>
       <particle>
         <name>cyclobs</name>
         <vars>
-          <species>2</species>
+          <val var="species">2</val>
         </vars>
         <hue>
           <var>species</var>
           <mul>42</mul>
           <add>10</add>
         </hue>
-        <sat>255</sat>
-        <bri>255</bri>
+        <sat>
+          <add>255</add>
+        </sat>
+        <bri>
+          <add>255</add>
+        </bri>
         <rate>0.08</rate>
         <rule>
           <switch>
             <loc>o</loc>
             <var>species</var>
             <case>
-              <numeric value="3">
+              <target value="3">
                 <huff>
-                  <numeric value="0.333333333333333">
+                  <p value="0.333333333333333">
                     <modify>
                       <inc>0</inc>
                       <dest>
                         <var>species</var>
                       </dest>
                     </modify>
-                  </numeric>
-                  <numeric value="0.333333333333333">
+                  </p>
+                  <p value="0.333333333333333">
                     <modify>
                       <inc>1</inc>
                       <dest>
                         <var>species</var>
                       </dest>
                     </modify>
-                  </numeric>
-                  <numeric value="0.333333333333333">
+                  </p>
+                  <p value="0.333333333333333">
                     <modify>
                       <inc>2</inc>
                       <dest>
                         <var>species</var>
                       </dest>
                     </modify>
-                  </numeric>
+                  </p>
                 </huff>
-              </numeric>
+              </target>
             </case>
             <default>
               <huff>
-                <numeric value="0.25">
+                <p value="0.25">
                   <bind>
                     <loc>nbr</loc>
                     <x>0</x>
                     <y>-1</y>
                     <case>
-                      <empty>
+                      <target value="empty">
                         <huff>
-                          <numeric value="0.005">
+                          <p value="0.005">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.205">
+                          </p>
+                          <p value="0.205">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1805,15 +1831,15 @@
                               </dest>
                               <next>
                                 <huff>
-                                  <numeric value="0.024390243902439">
+                                  <p value="0.024390243902439">
                                     <rule>
                                       <ball>
                                         <rate>0.001</rate>
                                         <text>breed</text>
                                       </ball>
                                     </rule>
-                                  </numeric>
-                                  <numeric value="0.975609756097561">
+                                  </p>
+                                  <p value="0.975609756097561">
                                     <modify>
                                       <set>
                                         <type>empty</type>
@@ -1827,21 +1853,21 @@
                                         </rule>
                                       </next>
                                     </modify>
-                                  </numeric>
+                                  </p>
                                 </huff>
                               </next>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </empty>
-                      <plant>
+                      </target>
+                      <target value="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <huff>
-                                <numeric value="1">
+                                <p value="1">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -1851,15 +1877,15 @@
                                     </dest>
                                     <next>
                                       <huff>
-                                        <numeric value="0.8">
+                                        <p value="0.8">
                                           <rule>
                                             <ball>
                                               <rate>0.001</rate>
                                               <text>spawn</text>
                                             </ball>
                                           </rule>
-                                        </numeric>
-                                        <numeric value="0.2">
+                                        </p>
+                                        <p value="0.2">
                                           <modify>
                                             <set>
                                               <type>empty</type>
@@ -1873,16 +1899,16 @@
                                               </rule>
                                             </next>
                                           </modify>
-                                        </numeric>
+                                        </p>
                                       </huff>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <huff>
-                                <numeric value="0.2">
+                                <p value="0.2">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -1898,25 +1924,28 @@
                                       </modify>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </plant>
-                      <cyclobs>
+                      </target>
+                      <target value="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="1">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -1926,15 +1955,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -1948,52 +1977,35 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="0">
+                                  </target>
+                                  <target value="0">
                                     <huff>
-                                      <numeric value="0.003">
+                                      <p value="0.003">
                                         <modify>
                                           <set>
                                             <type>empty</type>
                                           </set>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <nop></nop>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
-                                  <numeric value="0">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2003,15 +2015,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2025,27 +2037,52 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
+                                  </target>
+                                  <target value="1">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="0">
+                                    <nop></nop>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="2">
+                            </target>
+                            <target value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="0">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="1">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="0">
+                                    <huff>
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2055,15 +2092,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2077,49 +2114,38 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </cyclobs>
+                      </target>
                     </case>
                   </bind>
-                </numeric>
-                <numeric value="0.25">
+                </p>
+                <p value="0.25">
                   <bind>
                     <loc>nbr</loc>
                     <x>1</x>
                     <y>0</y>
                     <case>
-                      <empty>
+                      <target value="empty">
                         <huff>
-                          <numeric value="0.005">
+                          <p value="0.005">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.205">
+                          </p>
+                          <p value="0.205">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -2129,15 +2155,15 @@
                               </dest>
                               <next>
                                 <huff>
-                                  <numeric value="0.024390243902439">
+                                  <p value="0.024390243902439">
                                     <rule>
                                       <ball>
                                         <rate>0.001</rate>
                                         <text>breed</text>
                                       </ball>
                                     </rule>
-                                  </numeric>
-                                  <numeric value="0.975609756097561">
+                                  </p>
+                                  <p value="0.975609756097561">
                                     <modify>
                                       <set>
                                         <type>empty</type>
@@ -2151,21 +2177,21 @@
                                         </rule>
                                       </next>
                                     </modify>
-                                  </numeric>
+                                  </p>
                                 </huff>
                               </next>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </empty>
-                      <plant>
+                      </target>
+                      <target value="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <huff>
-                                <numeric value="1">
+                                <p value="1">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2175,15 +2201,15 @@
                                     </dest>
                                     <next>
                                       <huff>
-                                        <numeric value="0.8">
+                                        <p value="0.8">
                                           <rule>
                                             <ball>
                                               <rate>0.001</rate>
                                               <text>spawn</text>
                                             </ball>
                                           </rule>
-                                        </numeric>
-                                        <numeric value="0.2">
+                                        </p>
+                                        <p value="0.2">
                                           <modify>
                                             <set>
                                               <type>empty</type>
@@ -2197,16 +2223,16 @@
                                               </rule>
                                             </next>
                                           </modify>
-                                        </numeric>
+                                        </p>
                                       </huff>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <huff>
-                                <numeric value="0.2">
+                                <p value="0.2">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2222,25 +2248,28 @@
                                       </modify>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </plant>
-                      <cyclobs>
+                      </target>
+                      <target value="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="1">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2250,15 +2279,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2272,52 +2301,35 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="0">
+                                  </target>
+                                  <target value="0">
                                     <huff>
-                                      <numeric value="0.003">
+                                      <p value="0.003">
                                         <modify>
                                           <set>
                                             <type>empty</type>
                                           </set>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <nop></nop>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
-                                  <numeric value="0">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2327,15 +2339,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2349,27 +2361,52 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
+                                  </target>
+                                  <target value="1">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="0">
+                                    <nop></nop>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="2">
+                            </target>
+                            <target value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="0">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="1">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="0">
+                                    <huff>
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2379,15 +2416,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2401,49 +2438,38 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </cyclobs>
+                      </target>
                     </case>
                   </bind>
-                </numeric>
-                <numeric value="0.25">
+                </p>
+                <p value="0.25">
                   <bind>
                     <loc>nbr</loc>
                     <x>0</x>
                     <y>1</y>
                     <case>
-                      <empty>
+                      <target value="empty">
                         <huff>
-                          <numeric value="0.005">
+                          <p value="0.005">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.205">
+                          </p>
+                          <p value="0.205">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -2453,15 +2479,15 @@
                               </dest>
                               <next>
                                 <huff>
-                                  <numeric value="0.024390243902439">
+                                  <p value="0.024390243902439">
                                     <rule>
                                       <ball>
                                         <rate>0.001</rate>
                                         <text>breed</text>
                                       </ball>
                                     </rule>
-                                  </numeric>
-                                  <numeric value="0.975609756097561">
+                                  </p>
+                                  <p value="0.975609756097561">
                                     <modify>
                                       <set>
                                         <type>empty</type>
@@ -2475,21 +2501,21 @@
                                         </rule>
                                       </next>
                                     </modify>
-                                  </numeric>
+                                  </p>
                                 </huff>
                               </next>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </empty>
-                      <plant>
+                      </target>
+                      <target value="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <huff>
-                                <numeric value="1">
+                                <p value="1">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2499,15 +2525,15 @@
                                     </dest>
                                     <next>
                                       <huff>
-                                        <numeric value="0.8">
+                                        <p value="0.8">
                                           <rule>
                                             <ball>
                                               <rate>0.001</rate>
                                               <text>spawn</text>
                                             </ball>
                                           </rule>
-                                        </numeric>
-                                        <numeric value="0.2">
+                                        </p>
+                                        <p value="0.2">
                                           <modify>
                                             <set>
                                               <type>empty</type>
@@ -2521,16 +2547,16 @@
                                               </rule>
                                             </next>
                                           </modify>
-                                        </numeric>
+                                        </p>
                                       </huff>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <huff>
-                                <numeric value="0.2">
+                                <p value="0.2">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2546,25 +2572,28 @@
                                       </modify>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </plant>
-                      <cyclobs>
+                      </target>
+                      <target value="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="1">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2574,15 +2603,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2596,52 +2625,35 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="0">
+                                  </target>
+                                  <target value="0">
                                     <huff>
-                                      <numeric value="0.003">
+                                      <p value="0.003">
                                         <modify>
                                           <set>
                                             <type>empty</type>
                                           </set>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <nop></nop>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
-                                  <numeric value="0">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2651,15 +2663,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2673,27 +2685,52 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
+                                  </target>
+                                  <target value="1">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="0">
+                                    <nop></nop>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="2">
+                            </target>
+                            <target value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="0">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="1">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="0">
+                                    <huff>
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2703,15 +2740,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2725,49 +2762,38 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </cyclobs>
+                      </target>
                     </case>
                   </bind>
-                </numeric>
-                <numeric value="0.25">
+                </p>
+                <p value="0.25">
                   <bind>
                     <loc>nbr</loc>
                     <x>-1</x>
                     <y>0</y>
                     <case>
-                      <empty>
+                      <target value="empty">
                         <huff>
-                          <numeric value="0.005">
+                          <p value="0.005">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
-                          <numeric value="0.205">
+                          </p>
+                          <p value="0.205">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -2777,15 +2803,15 @@
                               </dest>
                               <next>
                                 <huff>
-                                  <numeric value="0.024390243902439">
+                                  <p value="0.024390243902439">
                                     <rule>
                                       <ball>
                                         <rate>0.001</rate>
                                         <text>breed</text>
                                       </ball>
                                     </rule>
-                                  </numeric>
-                                  <numeric value="0.975609756097561">
+                                  </p>
+                                  <p value="0.975609756097561">
                                     <modify>
                                       <set>
                                         <type>empty</type>
@@ -2799,21 +2825,21 @@
                                         </rule>
                                       </next>
                                     </modify>
-                                  </numeric>
+                                  </p>
                                 </huff>
                               </next>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
-                      </empty>
-                      <plant>
+                      </target>
+                      <target value="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <huff>
-                                <numeric value="1">
+                                <p value="1">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2823,15 +2849,15 @@
                                     </dest>
                                     <next>
                                       <huff>
-                                        <numeric value="0.8">
+                                        <p value="0.8">
                                           <rule>
                                             <ball>
                                               <rate>0.001</rate>
                                               <text>spawn</text>
                                             </ball>
                                           </rule>
-                                        </numeric>
-                                        <numeric value="0.2">
+                                        </p>
+                                        <p value="0.2">
                                           <modify>
                                             <set>
                                               <type>empty</type>
@@ -2845,16 +2871,16 @@
                                               </rule>
                                             </next>
                                           </modify>
-                                        </numeric>
+                                        </p>
                                       </huff>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <huff>
-                                <numeric value="0.2">
+                                <p value="0.2">
                                   <modify>
                                     <src>
                                       <loc>o</loc>
@@ -2870,25 +2896,28 @@
                                       </modify>
                                     </next>
                                   </modify>
-                                </numeric>
+                                </p>
                               </huff>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </plant>
-                      <cyclobs>
+                      </target>
+                      <target value="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
                           <case>
-                            <numeric value="0">
+                            <target value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="1">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2898,15 +2927,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2920,52 +2949,35 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="0">
+                                  </target>
+                                  <target value="0">
                                     <huff>
-                                      <numeric value="0.003">
+                                      <p value="0.003">
                                         <modify>
                                           <set>
                                             <type>empty</type>
                                           </set>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <nop></nop>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="1">
+                            </target>
+                            <target value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
-                                  <numeric value="0">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="1">
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -2975,15 +2987,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -2997,27 +3009,52 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
+                                  </target>
+                                  <target value="1">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="0">
+                                    <nop></nop>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
-                            <numeric value="2">
+                            </target>
+                            <target value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
                                 <case>
-                                  <numeric value="1">
-                                    <nop></nop>
-                                  </numeric>
-                                  <numeric value="0">
+                                  <target value="2">
                                     <huff>
-                                      <numeric value="1">
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </target>
+                                  <target value="1">
+                                    <nop></nop>
+                                  </target>
+                                  <target value="0">
+                                    <huff>
+                                      <p value="1">
                                         <modify>
                                           <src>
                                             <loc>o</loc>
@@ -3027,15 +3064,15 @@
                                           </dest>
                                           <next>
                                             <huff>
-                                              <numeric value="0.8">
+                                              <p value="0.8">
                                                 <rule>
                                                   <ball>
                                                     <rate>0.001</rate>
                                                     <text>0wn</text>
                                                   </ball>
                                                 </rule>
-                                              </numeric>
-                                              <numeric value="0.2">
+                                              </p>
+                                              <p value="0.2">
                                                 <modify>
                                                   <set>
                                                     <type>empty</type>
@@ -3049,33 +3086,22 @@
                                                     </rule>
                                                   </next>
                                                 </modify>
-                                              </numeric>
+                                              </p>
                                             </huff>
                                           </next>
                                         </modify>
-                                      </numeric>
+                                      </p>
                                     </huff>
-                                  </numeric>
-                                  <numeric value="2">
-                                    <huff>
-                                      <numeric value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </numeric>
-                                    </huff>
-                                  </numeric>
+                                  </target>
                                 </case>
                               </switch>
-                            </numeric>
+                            </target>
                           </case>
                         </switch>
-                      </cyclobs>
+                      </target>
                     </case>
                   </bind>
-                </numeric>
+                </p>
               </huff>
             </default>
           </switch>
@@ -3083,26 +3109,32 @@
       </particle>
       <particle>
         <name>perfume</name>
-        <hue>192</hue>
-        <sat>192</sat>
-        <bri>96</bri>
+        <hue>
+          <add>192</add>
+        </hue>
+        <sat>
+          <add>192</add>
+        </sat>
+        <bri>
+          <add>96</add>
+        </bri>
         <rate>0.6</rate>
         <rule>
           <huff>
-            <numeric value="0.03">
+            <p value="0.03">
               <modify>
                 <set>
                   <type>empty</type>
                 </set>
               </modify>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3112,20 +3144,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3134,19 +3166,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3156,20 +3188,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3178,19 +3210,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3200,20 +3232,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3222,19 +3254,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3244,20 +3276,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3266,19 +3298,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3288,20 +3320,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3310,19 +3342,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3332,20 +3364,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3354,19 +3386,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3376,20 +3408,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3398,19 +3430,19 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
-            <numeric value="0.12125">
+            </p>
+            <p value="0.12125">
               <bind>
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
                 <case>
-                  <empty>
+                  <target value="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3420,20 +3452,20 @@
                       </dest>
                       <next>
                         <huff>
-                          <numeric value="0.97">
+                          <p value="0.97">
                             <modify>
                               <set>
                                 <type>empty</type>
                               </set>
                             </modify>
-                          </numeric>
+                          </p>
                         </huff>
                       </next>
                     </modify>
-                  </empty>
-                  <cyclobs>
+                  </target>
+                  <target value="cyclobs">
                     <huff>
-                      <numeric value="0.5">
+                      <p value="0.5">
                         <modify>
                           <src>
                             <loc>nbr</loc>
@@ -3442,12 +3474,12 @@
                             <loc>o</loc>
                           </dest>
                         </modify>
-                      </numeric>
+                      </p>
                     </huff>
-                  </cyclobs>
+                  </target>
                 </case>
               </bind>
-            </numeric>
+            </p>
           </huff>
         </rule>
       </particle>
@@ -4037,7 +4069,7 @@
     <size>8</size>
     <gvars>
       <type>cyclobs</type>
-      <species>3</species>
+      <val var="species">3</val>
     </gvars>
     <overwrite>
       <gstate>empty</gstate>

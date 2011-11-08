@@ -101,11 +101,12 @@ $(LIBTARGET): $(OFILES)
 .SECONDARY:
 
 t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -sane t/sane.xml -out $@ -verbose
-	diff t/simple.xml $@
+	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out $@ -verbose
+	diff t/proto.xml t/proto.copy.xml
+	diff t/simple.xml t/simple.copy.xml
 
 xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.xml -out t/simple.xml -debug
+	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out t/simple.copy.xml -debug
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj

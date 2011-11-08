@@ -43,13 +43,17 @@ attributes.
 
 =cut
 
+my %default_tag_attr_hash = ( 'p' => 'value',
+			      'target' => 'value',
+			      'val' => 'var');
 sub twig_nest {
     my ($self, $tag_attr_ref) = @_;
-    $tag_attr_ref = { 'numeric' => 'value' } unless defined $tag_attr_ref;   # temporarily hardwired hack
+    $tag_attr_ref = \%default_tag_attr_hash unless defined $tag_attr_ref;   # temporarily hardwired hack
     my $tag = $self->tag;
     my @child = $self->children;
     if (defined($tag_attr_ref) && exists $tag_attr_ref->{$tag}) {
-	$tag = $self->{'att'}->{$tag_attr_ref->{$tag}};
+	my $attr = $tag_attr_ref->{$tag};
+	$tag .= '@' . $attr . '=' . $self->{'att'}->{$attr};
     }
     return ($tag => '') unless @child;
     if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {

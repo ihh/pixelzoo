@@ -186,7 +186,7 @@ sub bindDirs {
     $loc = $self->neighbor unless defined $loc;
     confess "Not an ARRAY" unless ref($dirs) eq 'ARRAY';
     my $prob = $totalProb / @$dirs;
-    return map (($prob => ['bind' => ['loc' => $loc,
+    return map (($self->pvalue($prob) => ['bind' => ['loc' => $loc,
 				       'x' => $self->dir->{$_}->x,
 				       'y' => $self->dir->{$_}->y,
 				       defined($cases) ? ('case' => $cases) : (),
@@ -194,7 +194,7 @@ sub bindDirs {
 		@$dirs);
 }
 
-sub bindMoore {
+sub bindNeumann {
     my ($self, $totalProb, $cases, $default, $loc) = @_;
     return $self->bindDirs ([qw(n e s w)], $totalProb, $cases, $default, $loc);
 }
@@ -204,22 +204,22 @@ sub bindBishop {
     return $self->bindDirs ([qw(nw ne se sw)], $totalProb, $cases, $default, $loc);
 }
 
-sub bindNeumann {
+sub bindMoore {
     my ($self, $totalProb, $cases, $default, $loc) = @_;
     return $self->bindDirs ([qw(n ne e se s sw w nw)], $totalProb, $cases, $default, $loc);
 }
 
 sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindDirs (1, $cases, $default, $loc)]] }
-sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
-sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
 sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
+sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
+sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
 
 sub moveOrSpawnTo {
     my ($self, $spawnProb, $loc, $afterMove, $afterSpawn) = @_;
     $loc = $self->neighbor unless defined $loc;
     return $self->copyTo ($self->neighbor,
-			  ['huff' => [defined($afterSpawn) ? ($spawnProb => $afterSpawn) : (),
-				      (1-$spawnProb) => $self->suicide ($afterMove)]]);
+			  ['huff' => [defined($afterSpawn) ? ($self->pvalue($spawnProb) => $afterSpawn) : (),
+				      $self->pvalue(1-$spawnProb) => $self->suicide ($afterMove)]]);
 }
 
 sub moveTo {

@@ -34,7 +34,7 @@ Each Goal expression operates on a given <i>area</i> of the Board
  belonging to a specified set of types ("state" / "type"),
  having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
  a specified Shannon entropy ("entropy"). -->
-<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype)+,mask?,count?,entropy?)>
+<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype)+,mask?,count?,entropy?)>
 
 <!-- A Goal that is true if the child expression ("goal") has evaluated true
  consecutively for a specified number of times ("reps"). -->
@@ -165,14 +165,14 @@ and whether the Tool should initially be hidden ("hide").
 
 Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
 -->
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|zgvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|zgvars))>
-<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|zgvars)*,(mask|tmask)?)>
+<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|gvars))>
+<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|gvars)*,(mask|tmask)?)>
 <!ELEMENT disallow (x,y)>
 
 <!-- A 64-bit decimal integer representing the state of a cell on the Board. -->
@@ -190,8 +190,8 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
 <!-- The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the board owner. -->
 <!ELEMENT ostate (#PCDATA)>
 
-<!-- The complete state of a particle, including type ("type") and vars ("setvar"). -->
-<!ELEMENT zgvars (type,setvar*)>
+<!-- The complete state of a particle, including type ("type") and var values ("val"). -->
+<!ELEMENT gvars (type,val*)>
 
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT spray (#PCDATA)>
@@ -234,14 +234,14 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!ELEMENT grammar (subrule*,particle+)>
 
 <!-- Initialize a particular cell on the Board. -->
-<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
+<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype))>
 
 <!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
 <!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|zgvars|type|hextype|gtype))>
+<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype))>
 
 <!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
@@ -251,29 +251,28 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 
 <!-- An elementary particle in the game, identified by a unique 16-bit type ID ("type").
 Each particle has its own update rate ("rate") and rule ("rule"),
-formulae for determining the HSB color values ("zhue", "zsat" and "zbri"),
+formulae for determining the HSB color values ("hue", "sat" and "bri"),
 and optionally a message dispatch table ("dispatch").
 
 Any given instance of a particle has 48 additional bits of instance-specific state.
 These 48 bits are conventionally split amongst a series of <i>Vars</i>:
-named bit-fields of different widths ("zvars").
+named bit-fields of different widths ("vars").
 
 By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
  -->
-<!ELEMENT particle (name,zvars?,zhue?,zsat?,zbri?,sync?,rate?,rule,dispatch*)>
+<!ELEMENT particle (name,vars?,hue?,sat?,bri?,sync?,rate?,rule,dispatch*)>
 
 <!-- Any given instance of a particle has 48 additional bits of instance-specific state.
 These 48 bits are conventionally split amongst a series of <i>Vars</i>:
 named bit-fields of different widths. -->
-<!ELEMENT zvars (type?,varsize*)>
-<!ELEMENT varsize (name,size)>
+<!ELEMENT vars (type?,val*)>
 
 <!-- Affine formula (var*mul+add) for determining a particle's hue from one of its Vars. -->
-<!ELEMENT zhue (var?,mul?,add?)>
+<!ELEMENT hue (var?,mul?,add?)>
 <!-- Affine formula (var*mul+add) for determining a particle's color saturation from one of its Vars. -->
-<!ELEMENT zsat (var?,mul?,add?)>
+<!ELEMENT sat (var?,mul?,add?)>
 <!-- Affine formula (var*mul+add) for determining a particle's brightness from one of its Vars. -->
-<!ELEMENT zbri (var?,mul?,add?)>
+<!ELEMENT bri (var?,mul?,add?)>
 <!ELEMENT add (#PCDATA)>
 
 <!-- Synchronously updated particles. -->
@@ -293,22 +292,22 @@ named bit-fields of different widths. -->
  plus four constructs that are provided by the compiler for convenience,
  constituting an extremely minimal and predictable programming language for cellular automata.
 
-The four compiler constructs are <b>zbind</b>, <b>nop</b>, <b>zhuff</b>, and <b>ball</b>:
+The four compiler constructs are <b>bind</b>, <b>nop</b>, <b>huff</b>, and <b>ball</b>:
 <ul><li>
- <b>zbind</b> temporarily associates a name in the compiler's namespace
+ <b>bind</b> temporarily associates a name in the compiler's namespace
  with a neighboring cell location and performs a <b>switch</b> rule on the particle type at that location.
 </li><li>
  <b>nop</b> does nothing (implemented by the compiler using a dummy <b>modify</b> rule).
 </li><li>
- <b>zhuff</b> allows for a probability distribution over an arbitrary number of rules
+ <b>huff</b> allows for a probability distribution over an arbitrary number of rules
 (implemented by the compiler using <b>random</b> rules and a Huffmann tree).
 </li><li>
  <b>ball</b> is a shortcut for a <b>goal</b> rule that places a text balloon.
 </li></ul>
 
-The four public rules are <b>zswitch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
+The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
 <ul><li>
- <b>zswitch</b>
+ <b>switch</b>
   (read a Var from any named local cell,
    look up corresponding rule in a table,
    execute that rule).
@@ -334,7 +333,7 @@ The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
   (tests a Goal, if the Board has an associated Game).
 </li></ul>
  -->
-<!ELEMENT rule (zbind|zswitch|modify|deliver|nop|random|zhuff|goal|goto|ball)>
+<!ELEMENT rule (bind|switch|modify|deliver|nop|random|huff|goal|goto|ball)>
 
 <!-- Bind rule.
 
@@ -342,38 +341,39 @@ Associates a name ("loc") with a neighboring cell.
 Looks up the "case" corresponding to the type of that cell,
 and executes that case's rule. If no such "case" exists,
 executes the "default" rule. -->
-<!ELEMENT zbind (loc,x?,y?,case*,default?)>
+<!ELEMENT bind (loc,x?,y?,case*,default?)>
 
 <!-- Switch rule.
 
-Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>zbind</b> rule.
+Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule.
 Looks up the "case" corresponding to the value of the var,
 and executes that case's rule. If no such "case" exists,
 executes the "default" rule. -->
-<!ELEMENT zswitch (loc?,var,case*,default?)>
+<!ELEMENT switch (loc?,var,case*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
 <!-- An individual case in a switch rule. -->
-<!ELEMENT case (zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
-<!ATTLIST case state CDATA #IMPLIED>
-<!ATTLIST case type CDATA #IMPLIED>
+<!ELEMENT case (target*)>
+<!ELEMENT target (bind|switch|modify|nop|random|huff|goal|ball)>
+<!ATTLIST target value CDATA #REQUIRED>
 
 <!-- The default case in a switch rule. -->
-<!ELEMENT default (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+<!ELEMENT default (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
 <!-- Modify rule.
 
-EITHER reads a Var from a neighboring cell ("src") and adds a specified offset ("inc") to obtain a write value,
-OR simply takes a specified value ("zset").
-The write value is then written to another (or the same) neighboring cell ("dest").
+EITHER reads a Var from a source cell ("src"),
+ adds a specified offset ("inc")
+ and writes it to a destination cell ("dest"),
+OR sets type and all Vars of the destination cell to the specified values ("set").
 
-"src" and "dest" must have been named by an outer <b>zbind</b> rule.
+"src" and "dest" must have been named by an outer <b>bind</b> rule.
 
 After this, the (optional) "next" rule is executed. -->
-<!ELEMENT modify (src?,(inc|hexinc|zset)?,dest?,next?)>
+<!ELEMENT modify (src?,(inc|hexinc|set)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
-<!ELEMENT next (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+<!ELEMENT next (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
 <!-- Deliver rule.
 
@@ -381,9 +381,9 @@ Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("
 <!ELEMENT deliver (pos,msg)>
 <!ELEMENT msg (#PCDATA)>
 
-<!ELEMENT zset (type,setvar*)>
-<!ELEMENT setvar (name,value)>
-<!ELEMENT value (#PCDATA)>
+<!ELEMENT set (type,val*)>
+<!ELEMENT val (#PCDATA)>
+<!ATTLIST val var CDATA #REQUIRED>
 
 <!ELEMENT inc (#PCDATA)>
 
@@ -399,13 +399,13 @@ Executes a specified rule. -->
 
 Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule). -->
 <!ELEMENT random (prob?,pass?,fail?)>
-<!ELEMENT pass (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
-<!ELEMENT fail (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
+<!ELEMENT pass (rule|bind|switch|modify|nop|random|huff|goal|ball)>
+<!ELEMENT fail (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
 <!-- A probability distribution over rules, implemented by the compiler as a Huffmann tree of <b>random</b> rules. -->
-<!ELEMENT zhuff (numeric+)>
-<!ELEMENT numeric (rule|zbind|zswitch|modify|nop|random|zhuff|goal|ball)>
-<!ATTLIST numeric value CDATA #REQUIRED>
+<!ELEMENT huff (p+)>
+<!ELEMENT p (rule|bind|switch|modify|nop|random|huff|goal|ball)>
+<!ATTLIST p value CDATA #REQUIRED>
 
 <!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>

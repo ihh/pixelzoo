@@ -6,18 +6,18 @@
         <name>empty</name>
         <type>0</type>
         <colrule>
-          <mask>fc0</mask>
-          <rshift>6</rshift>
-          <hexmul>10000</hexmul>
-        </colrule>
-        <colrule>
-          <mask>38</mask>
+          <mask>1f8</mask>
           <rshift>3</rshift>
-          <hexmul>100</hexmul>
+          <hexmul>10000</hexmul>
         </colrule>
         <colrule>
           <mask>7</mask>
           <rshift>0</rshift>
+          <hexmul>100</hexmul>
+        </colrule>
+        <colrule>
+          <mask>e00</mask>
+          <rshift>9</rshift>
           <hexmul>1</hexmul>
         </colrule>
         <rate>0</rate>
@@ -903,7 +903,7 @@
             <mask>f00</mask>
             <rshift>8</rshift>
             <case>
-              <state>15</state>
+              <state>target@value=15</state>
               <rule>
                 <modify>
                   <src>
@@ -1907,8 +1907,8 @@
         <name>plant</name>
         <type>4</type>
         <colrule>
-          <mask>7</mask>
-          <rshift>0</rshift>
+          <mask>1c</mask>
+          <rshift>2</rshift>
           <hexmul>80000</hexmul>
           <hexinc>520000</hexinc>
         </colrule>
@@ -1917,8 +1917,8 @@
           <hexinc>f000</hexinc>
         </colrule>
         <colrule>
-          <mask>7</mask>
-          <rshift>0</rshift>
+          <mask>1c</mask>
+          <rshift>2</rshift>
           <hexmul>fffffffffffffff0</hexmul>
           <hexinc>90</hexinc>
         </colrule>
@@ -1952,10 +1952,10 @@
                     <x>0</x>
                     <y>0</y>
                   </pos>
-                  <mask>7</mask>
-                  <rshift>0</rshift>
+                  <mask>1c</mask>
+                  <rshift>2</rshift>
                   <case>
-                    <state>0</state>
+                    <state>target@value=0</state>
                     <rule>
                       <modify>
                         <destmask>0</destmask>
@@ -2003,21 +2003,21 @@
                                                   <x>0</x>
                                                   <y>0</y>
                                                 </pos>
-                                                <mask>18</mask>
-                                                <rshift>3</rshift>
+                                                <mask>3</mask>
+                                                <rshift>0</rshift>
                                                 <case>
-                                                  <state>3</state>
+                                                  <state>target@value=3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
                                                         <x>0</x>
                                                         <y>1</y>
                                                       </src>
-                                                      <srcmask>7</srcmask>
-                                                      <rshift>0</rshift>
+                                                      <srcmask>1c</srcmask>
+                                                      <rshift>2</rshift>
                                                       <hexinc>ffffffffffffffff</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>7</destmask>
+                                                      <lshift>2</lshift>
+                                                      <destmask>1c</destmask>
                                                       <dest>
                                                         <x>0</x>
                                                         <y>1</y>
@@ -2036,11 +2036,11 @@
                                                               <x>0</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>18</srcmask>
-                                                            <rshift>3</rshift>
+                                                            <srcmask>3</srcmask>
+                                                            <rshift>0</rshift>
                                                             <hexinc>1</hexinc>
-                                                            <lshift>3</lshift>
-                                                            <destmask>18</destmask>
+                                                            <lshift>0</lshift>
+                                                            <destmask>3</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>0</y>
@@ -2055,11 +2055,11 @@
                                                               <x>0</x>
                                                               <y>1</y>
                                                             </src>
-                                                            <srcmask>7</srcmask>
-                                                            <rshift>0</rshift>
+                                                            <srcmask>1c</srcmask>
+                                                            <rshift>2</rshift>
                                                             <hexinc>ffffffffffffffff</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>7</destmask>
+                                                            <lshift>2</lshift>
+                                                            <destmask>1c</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>1</y>
@@ -2112,21 +2112,21 @@
                                                   <x>0</x>
                                                   <y>0</y>
                                                 </pos>
-                                                <mask>18</mask>
-                                                <rshift>3</rshift>
+                                                <mask>3</mask>
+                                                <rshift>0</rshift>
                                                 <case>
-                                                  <state>3</state>
+                                                  <state>target@value=3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
                                                         <x>-1</x>
                                                         <y>0</y>
                                                       </src>
-                                                      <srcmask>7</srcmask>
-                                                      <rshift>0</rshift>
+                                                      <srcmask>1c</srcmask>
+                                                      <rshift>2</rshift>
                                                       <hexinc>ffffffffffffffff</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>7</destmask>
+                                                      <lshift>2</lshift>
+                                                      <destmask>1c</destmask>
                                                       <dest>
                                                         <x>-1</x>
                                                         <y>0</y>
@@ -2145,11 +2145,11 @@
                                                               <x>0</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>18</srcmask>
-                                                            <rshift>3</rshift>
+                                                            <srcmask>3</srcmask>
+                                                            <rshift>0</rshift>
                                                             <hexinc>1</hexinc>
-                                                            <lshift>3</lshift>
-                                                            <destmask>18</destmask>
+                                                            <lshift>0</lshift>
+                                                            <destmask>3</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>0</y>
@@ -2164,11 +2164,11 @@
                                                               <x>-1</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>7</srcmask>
-                                                            <rshift>0</rshift>
+                                                            <srcmask>1c</srcmask>
+                                                            <rshift>2</rshift>
                                                             <hexinc>ffffffffffffffff</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>7</destmask>
+                                                            <lshift>2</lshift>
+                                                            <destmask>1c</destmask>
                                                             <dest>
                                                               <x>-1</x>
                                                               <y>0</y>
@@ -2228,21 +2228,21 @@
                                                   <x>0</x>
                                                   <y>0</y>
                                                 </pos>
-                                                <mask>18</mask>
-                                                <rshift>3</rshift>
+                                                <mask>3</mask>
+                                                <rshift>0</rshift>
                                                 <case>
-                                                  <state>3</state>
+                                                  <state>target@value=3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
                                                         <x>0</x>
                                                         <y>-1</y>
                                                       </src>
-                                                      <srcmask>7</srcmask>
-                                                      <rshift>0</rshift>
+                                                      <srcmask>1c</srcmask>
+                                                      <rshift>2</rshift>
                                                       <hexinc>ffffffffffffffff</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>7</destmask>
+                                                      <lshift>2</lshift>
+                                                      <destmask>1c</destmask>
                                                       <dest>
                                                         <x>0</x>
                                                         <y>-1</y>
@@ -2261,11 +2261,11 @@
                                                               <x>0</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>18</srcmask>
-                                                            <rshift>3</rshift>
+                                                            <srcmask>3</srcmask>
+                                                            <rshift>0</rshift>
                                                             <hexinc>1</hexinc>
-                                                            <lshift>3</lshift>
-                                                            <destmask>18</destmask>
+                                                            <lshift>0</lshift>
+                                                            <destmask>3</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>0</y>
@@ -2280,11 +2280,11 @@
                                                               <x>0</x>
                                                               <y>-1</y>
                                                             </src>
-                                                            <srcmask>7</srcmask>
-                                                            <rshift>0</rshift>
+                                                            <srcmask>1c</srcmask>
+                                                            <rshift>2</rshift>
                                                             <hexinc>ffffffffffffffff</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>7</destmask>
+                                                            <lshift>2</lshift>
+                                                            <destmask>1c</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>-1</y>
@@ -2337,21 +2337,21 @@
                                                   <x>0</x>
                                                   <y>0</y>
                                                 </pos>
-                                                <mask>18</mask>
-                                                <rshift>3</rshift>
+                                                <mask>3</mask>
+                                                <rshift>0</rshift>
                                                 <case>
-                                                  <state>3</state>
+                                                  <state>target@value=3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
                                                         <x>1</x>
                                                         <y>0</y>
                                                       </src>
-                                                      <srcmask>7</srcmask>
-                                                      <rshift>0</rshift>
+                                                      <srcmask>1c</srcmask>
+                                                      <rshift>2</rshift>
                                                       <hexinc>ffffffffffffffff</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>7</destmask>
+                                                      <lshift>2</lshift>
+                                                      <destmask>1c</destmask>
                                                       <dest>
                                                         <x>1</x>
                                                         <y>0</y>
@@ -2370,11 +2370,11 @@
                                                               <x>0</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>18</srcmask>
-                                                            <rshift>3</rshift>
+                                                            <srcmask>3</srcmask>
+                                                            <rshift>0</rshift>
                                                             <hexinc>1</hexinc>
-                                                            <lshift>3</lshift>
-                                                            <destmask>18</destmask>
+                                                            <lshift>0</lshift>
+                                                            <destmask>3</destmask>
                                                             <dest>
                                                               <x>0</x>
                                                               <y>0</y>
@@ -2389,11 +2389,11 @@
                                                               <x>1</x>
                                                               <y>0</y>
                                                             </src>
-                                                            <srcmask>7</srcmask>
-                                                            <rshift>0</rshift>
+                                                            <srcmask>1c</srcmask>
+                                                            <rshift>2</rshift>
                                                             <hexinc>ffffffffffffffff</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>7</destmask>
+                                                            <lshift>2</lshift>
+                                                            <destmask>1c</destmask>
                                                             <dest>
                                                               <x>1</x>
                                                               <y>0</y>
@@ -2475,7 +2475,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -2498,7 +2498,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2517,7 +2517,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2612,7 +2612,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -2635,7 +2635,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2654,7 +2654,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2756,7 +2756,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -2779,7 +2779,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2798,7 +2798,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2893,7 +2893,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -2916,7 +2916,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -2935,7 +2935,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3044,7 +3044,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -3067,7 +3067,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3086,7 +3086,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3181,7 +3181,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -3204,7 +3204,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3223,7 +3223,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3325,7 +3325,7 @@
                                           </src>
                                           <srcmask>0</srcmask>
                                           <rshift>0</rshift>
-                                          <hexinc>4000000000006</hexinc>
+                                          <hexinc>4000000000018</hexinc>
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
@@ -3348,7 +3348,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000001</hexinc>
+                                                <hexinc>4000000000004</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3367,7 +3367,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000003</hexinc>
+                                                <hexinc>400000000000c</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3460,7 +3460,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000006</hexinc>
+                                                <hexinc>4000000000018</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3483,7 +3483,7 @@
                                                       </src>
                                                       <srcmask>0</srcmask>
                                                       <rshift>0</rshift>
-                                                      <hexinc>4000000000001</hexinc>
+                                                      <hexinc>4000000000004</hexinc>
                                                       <lshift>0</lshift>
                                                       <destmask>ffffffffffffffff</destmask>
                                                       <dest>
@@ -3502,7 +3502,7 @@
                                                       </src>
                                                       <srcmask>0</srcmask>
                                                       <rshift>0</rshift>
-                                                      <hexinc>4000000000003</hexinc>
+                                                      <hexinc>400000000000c</hexinc>
                                                       <lshift>0</lshift>
                                                       <destmask>ffffffffffffffff</destmask>
                                                       <dest>
@@ -3563,7 +3563,7 @@
                                                 </src>
                                                 <srcmask>0</srcmask>
                                                 <rshift>0</rshift>
-                                                <hexinc>4000000000006</hexinc>
+                                                <hexinc>4000000000018</hexinc>
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
@@ -3586,7 +3586,7 @@
                                                       </src>
                                                       <srcmask>0</srcmask>
                                                       <rshift>0</rshift>
-                                                      <hexinc>4000000000001</hexinc>
+                                                      <hexinc>4000000000004</hexinc>
                                                       <lshift>0</lshift>
                                                       <destmask>ffffffffffffffff</destmask>
                                                       <dest>
@@ -3605,7 +3605,7 @@
                                                       </src>
                                                       <srcmask>0</srcmask>
                                                       <rshift>0</rshift>
-                                                      <hexinc>4000000000003</hexinc>
+                                                      <hexinc>400000000000c</hexinc>
                                                       <lshift>0</lshift>
                                                       <destmask>ffffffffffffffff</destmask>
                                                       <dest>
@@ -3716,7 +3716,7 @@
             <mask>3</mask>
             <rshift>0</rshift>
             <case>
-              <state>3</state>
+              <state>target@value=3</state>
               <rule>
                 <random>
                   <prob>0.333333333333333</prob>
@@ -3812,10 +3812,10 @@
                                       <x>0</x>
                                       <y>1</y>
                                     </pos>
-                                    <mask>7</mask>
-                                    <rshift>0</rshift>
+                                    <mask>1c</mask>
+                                    <rshift>2</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -3868,7 +3868,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>0</state>
+                                      <state>target@value=0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -3987,7 +3987,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -3997,7 +3997,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4031,134 +4031,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
-                                            <rule>
-                                              <modify>
-                                                <src>
-                                                  <x>0</x>
-                                                  <y>0</y>
-                                                </src>
-                                                <srcmask>ffffffffffffffff</srcmask>
-                                                <rshift>0</rshift>
-                                                <hexinc>0</hexinc>
-                                                <lshift>0</lshift>
-                                                <destmask>ffffffffffffffff</destmask>
-                                                <dest>
-                                                  <x>0</x>
-                                                  <y>1</y>
-                                                </dest>
-                                                <next>
-                                                  <rule>
-                                                    <random>
-                                                      <prob>0.2</prob>
-                                                      <pass>
-                                                        <rule>
-                                                          <modify>
-                                                            <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </src>
-                                                            <srcmask>0</srcmask>
-                                                            <rshift>0</rshift>
-                                                            <hexinc>0</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>ffffffffffffffff</destmask>
-                                                            <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </dest>
-                                                            <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
-                                                            </next>
-                                                          </modify>
-                                                        </rule>
-                                                      </pass>
-                                                      <fail>
-                                                        <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
-                                                        </rule>
-                                                      </fail>
-                                                    </random>
-                                                  </rule>
-                                                </next>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                        </switch>
-                                      </rule>
-                                    </case>
-                                    <case>
-                                      <state>0</state>
-                                      <rule>
-                                        <switch>
-                                          <pos>
-                                            <x>0</x>
-                                            <y>1</y>
-                                          </pos>
-                                          <mask>3</mask>
-                                          <rshift>0</rshift>
-                                          <case>
-                                            <state>1</state>
+                                            <state>target@value=0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4264,41 +4137,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <random>
-                                                <prob>0.003</prob>
-                                                <pass>
-                                                  <rule>
-                                                    <modify>
-                                                      <src>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </src>
-                                                      <srcmask>0</srcmask>
-                                                      <rshift>0</rshift>
-                                                      <hexinc>0</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>ffffffffffffffff</destmask>
-                                                      <dest>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </dest>
-                                                    </modify>
-                                                  </rule>
-                                                </pass>
-                                                <fail>
-                                                  <rule>
-                                                    <modify>
-                                                      <destmask>0</destmask>
-                                                    </modify>
-                                                  </rule>
-                                                </fail>
-                                              </random>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -4309,7 +4148,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>2</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4319,15 +4158,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>0</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4433,7 +4264,15 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>2</state>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4464,6 +4303,167 @@
                                                   </rule>
                                                 </fail>
                                               </random>
+                                            </rule>
+                                          </case>
+                                        </switch>
+                                      </rule>
+                                    </case>
+                                    <case>
+                                      <state>target@value=0</state>
+                                      <rule>
+                                        <switch>
+                                          <pos>
+                                            <x>0</x>
+                                            <y>1</y>
+                                          </pos>
+                                          <mask>3</mask>
+                                          <rshift>0</rshift>
+                                          <case>
+                                            <state>target@value=2</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <random>
+                                                <prob>0.003</prob>
+                                                <pass>
+                                                  <rule>
+                                                    <modify>
+                                                      <src>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </src>
+                                                      <srcmask>0</srcmask>
+                                                      <rshift>0</rshift>
+                                                      <hexinc>0</hexinc>
+                                                      <lshift>0</lshift>
+                                                      <destmask>ffffffffffffffff</destmask>
+                                                      <dest>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </dest>
+                                                    </modify>
+                                                  </rule>
+                                                </pass>
+                                                <fail>
+                                                  <rule>
+                                                    <modify>
+                                                      <destmask>0</destmask>
+                                                    </modify>
+                                                  </rule>
+                                                </fail>
+                                              </random>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
+                                            <rule>
+                                              <modify>
+                                                <src>
+                                                  <x>0</x>
+                                                  <y>0</y>
+                                                </src>
+                                                <srcmask>ffffffffffffffff</srcmask>
+                                                <rshift>0</rshift>
+                                                <hexinc>0</hexinc>
+                                                <lshift>0</lshift>
+                                                <destmask>ffffffffffffffff</destmask>
+                                                <dest>
+                                                  <x>0</x>
+                                                  <y>1</y>
+                                                </dest>
+                                                <next>
+                                                  <rule>
+                                                    <random>
+                                                      <prob>0.2</prob>
+                                                      <pass>
+                                                        <rule>
+                                                          <modify>
+                                                            <src>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </src>
+                                                            <srcmask>0</srcmask>
+                                                            <rshift>0</rshift>
+                                                            <hexinc>0</hexinc>
+                                                            <lshift>0</lshift>
+                                                            <destmask>ffffffffffffffff</destmask>
+                                                            <dest>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </dest>
+                                                            <next>
+                                                              <rule>
+                                                                <goal>
+                                                                  <and>
+                                                                    <lazy></lazy>
+                                                                    <goal>
+                                                                      <and>
+                                                                        <lazy></lazy>
+                                                                        <goal>
+                                                                          <maybe>
+                                                                            <prob>0.001</prob>
+                                                                          </maybe>
+                                                                        </goal>
+                                                                        <goal>
+                                                                          <place>
+                                                                            <balloon>
+                                                                              <rate>0.001</rate>
+                                                                              <text>prey</text>
+                                                                            </balloon>
+                                                                          </place>
+                                                                        </goal>
+                                                                      </and>
+                                                                    </goal>
+                                                                    <goal>
+                                                                      <false></false>
+                                                                    </goal>
+                                                                  </and>
+                                                                </goal>
+                                                              </rule>
+                                                            </next>
+                                                          </modify>
+                                                        </rule>
+                                                      </pass>
+                                                      <fail>
+                                                        <rule>
+                                                          <goal>
+                                                            <and>
+                                                              <lazy></lazy>
+                                                              <goal>
+                                                                <and>
+                                                                  <lazy></lazy>
+                                                                  <goal>
+                                                                    <maybe>
+                                                                      <prob>0.001</prob>
+                                                                    </maybe>
+                                                                  </goal>
+                                                                  <goal>
+                                                                    <place>
+                                                                      <balloon>
+                                                                        <rate>0.001</rate>
+                                                                        <text>0wn</text>
+                                                                      </balloon>
+                                                                    </place>
+                                                                  </goal>
+                                                                </and>
+                                                              </goal>
+                                                              <goal>
+                                                                <false></false>
+                                                              </goal>
+                                                            </and>
+                                                          </goal>
+                                                        </rule>
+                                                      </fail>
+                                                    </random>
+                                                  </rule>
+                                                </next>
+                                              </modify>
                                             </rule>
                                           </case>
                                         </switch>
@@ -4638,10 +4638,10 @@
                                       <x>-1</x>
                                       <y>0</y>
                                     </pos>
-                                    <mask>7</mask>
-                                    <rshift>0</rshift>
+                                    <mask>1c</mask>
+                                    <rshift>2</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -4694,7 +4694,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>0</state>
+                                      <state>target@value=0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -4813,7 +4813,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4823,7 +4823,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4857,134 +4857,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
-                                            <rule>
-                                              <modify>
-                                                <src>
-                                                  <x>0</x>
-                                                  <y>0</y>
-                                                </src>
-                                                <srcmask>ffffffffffffffff</srcmask>
-                                                <rshift>0</rshift>
-                                                <hexinc>0</hexinc>
-                                                <lshift>0</lshift>
-                                                <destmask>ffffffffffffffff</destmask>
-                                                <dest>
-                                                  <x>-1</x>
-                                                  <y>0</y>
-                                                </dest>
-                                                <next>
-                                                  <rule>
-                                                    <random>
-                                                      <prob>0.2</prob>
-                                                      <pass>
-                                                        <rule>
-                                                          <modify>
-                                                            <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </src>
-                                                            <srcmask>0</srcmask>
-                                                            <rshift>0</rshift>
-                                                            <hexinc>0</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>ffffffffffffffff</destmask>
-                                                            <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </dest>
-                                                            <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
-                                                            </next>
-                                                          </modify>
-                                                        </rule>
-                                                      </pass>
-                                                      <fail>
-                                                        <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
-                                                        </rule>
-                                                      </fail>
-                                                    </random>
-                                                  </rule>
-                                                </next>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                        </switch>
-                                      </rule>
-                                    </case>
-                                    <case>
-                                      <state>0</state>
-                                      <rule>
-                                        <switch>
-                                          <pos>
-                                            <x>-1</x>
-                                            <y>0</y>
-                                          </pos>
-                                          <mask>3</mask>
-                                          <rshift>0</rshift>
-                                          <case>
-                                            <state>1</state>
+                                            <state>target@value=0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5090,41 +4963,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <random>
-                                                <prob>0.003</prob>
-                                                <pass>
-                                                  <rule>
-                                                    <modify>
-                                                      <src>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </src>
-                                                      <srcmask>0</srcmask>
-                                                      <rshift>0</rshift>
-                                                      <hexinc>0</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>ffffffffffffffff</destmask>
-                                                      <dest>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </dest>
-                                                    </modify>
-                                                  </rule>
-                                                </pass>
-                                                <fail>
-                                                  <rule>
-                                                    <modify>
-                                                      <destmask>0</destmask>
-                                                    </modify>
-                                                  </rule>
-                                                </fail>
-                                              </random>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5135,7 +4974,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>2</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5145,15 +4984,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>0</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5259,7 +5090,15 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>2</state>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -5290,6 +5129,167 @@
                                                   </rule>
                                                 </fail>
                                               </random>
+                                            </rule>
+                                          </case>
+                                        </switch>
+                                      </rule>
+                                    </case>
+                                    <case>
+                                      <state>target@value=0</state>
+                                      <rule>
+                                        <switch>
+                                          <pos>
+                                            <x>-1</x>
+                                            <y>0</y>
+                                          </pos>
+                                          <mask>3</mask>
+                                          <rshift>0</rshift>
+                                          <case>
+                                            <state>target@value=2</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <random>
+                                                <prob>0.003</prob>
+                                                <pass>
+                                                  <rule>
+                                                    <modify>
+                                                      <src>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </src>
+                                                      <srcmask>0</srcmask>
+                                                      <rshift>0</rshift>
+                                                      <hexinc>0</hexinc>
+                                                      <lshift>0</lshift>
+                                                      <destmask>ffffffffffffffff</destmask>
+                                                      <dest>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </dest>
+                                                    </modify>
+                                                  </rule>
+                                                </pass>
+                                                <fail>
+                                                  <rule>
+                                                    <modify>
+                                                      <destmask>0</destmask>
+                                                    </modify>
+                                                  </rule>
+                                                </fail>
+                                              </random>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
+                                            <rule>
+                                              <modify>
+                                                <src>
+                                                  <x>0</x>
+                                                  <y>0</y>
+                                                </src>
+                                                <srcmask>ffffffffffffffff</srcmask>
+                                                <rshift>0</rshift>
+                                                <hexinc>0</hexinc>
+                                                <lshift>0</lshift>
+                                                <destmask>ffffffffffffffff</destmask>
+                                                <dest>
+                                                  <x>-1</x>
+                                                  <y>0</y>
+                                                </dest>
+                                                <next>
+                                                  <rule>
+                                                    <random>
+                                                      <prob>0.2</prob>
+                                                      <pass>
+                                                        <rule>
+                                                          <modify>
+                                                            <src>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </src>
+                                                            <srcmask>0</srcmask>
+                                                            <rshift>0</rshift>
+                                                            <hexinc>0</hexinc>
+                                                            <lshift>0</lshift>
+                                                            <destmask>ffffffffffffffff</destmask>
+                                                            <dest>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </dest>
+                                                            <next>
+                                                              <rule>
+                                                                <goal>
+                                                                  <and>
+                                                                    <lazy></lazy>
+                                                                    <goal>
+                                                                      <and>
+                                                                        <lazy></lazy>
+                                                                        <goal>
+                                                                          <maybe>
+                                                                            <prob>0.001</prob>
+                                                                          </maybe>
+                                                                        </goal>
+                                                                        <goal>
+                                                                          <place>
+                                                                            <balloon>
+                                                                              <rate>0.001</rate>
+                                                                              <text>prey</text>
+                                                                            </balloon>
+                                                                          </place>
+                                                                        </goal>
+                                                                      </and>
+                                                                    </goal>
+                                                                    <goal>
+                                                                      <false></false>
+                                                                    </goal>
+                                                                  </and>
+                                                                </goal>
+                                                              </rule>
+                                                            </next>
+                                                          </modify>
+                                                        </rule>
+                                                      </pass>
+                                                      <fail>
+                                                        <rule>
+                                                          <goal>
+                                                            <and>
+                                                              <lazy></lazy>
+                                                              <goal>
+                                                                <and>
+                                                                  <lazy></lazy>
+                                                                  <goal>
+                                                                    <maybe>
+                                                                      <prob>0.001</prob>
+                                                                    </maybe>
+                                                                  </goal>
+                                                                  <goal>
+                                                                    <place>
+                                                                      <balloon>
+                                                                        <rate>0.001</rate>
+                                                                        <text>0wn</text>
+                                                                      </balloon>
+                                                                    </place>
+                                                                  </goal>
+                                                                </and>
+                                                              </goal>
+                                                              <goal>
+                                                                <false></false>
+                                                              </goal>
+                                                            </and>
+                                                          </goal>
+                                                        </rule>
+                                                      </fail>
+                                                    </random>
+                                                  </rule>
+                                                </next>
+                                              </modify>
                                             </rule>
                                           </case>
                                         </switch>
@@ -5471,10 +5471,10 @@
                                       <x>0</x>
                                       <y>-1</y>
                                     </pos>
-                                    <mask>7</mask>
-                                    <rshift>0</rshift>
+                                    <mask>1c</mask>
+                                    <rshift>2</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -5527,7 +5527,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>0</state>
+                                      <state>target@value=0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -5646,7 +5646,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5656,7 +5656,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -5690,134 +5690,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
-                                            <rule>
-                                              <modify>
-                                                <src>
-                                                  <x>0</x>
-                                                  <y>0</y>
-                                                </src>
-                                                <srcmask>ffffffffffffffff</srcmask>
-                                                <rshift>0</rshift>
-                                                <hexinc>0</hexinc>
-                                                <lshift>0</lshift>
-                                                <destmask>ffffffffffffffff</destmask>
-                                                <dest>
-                                                  <x>0</x>
-                                                  <y>-1</y>
-                                                </dest>
-                                                <next>
-                                                  <rule>
-                                                    <random>
-                                                      <prob>0.2</prob>
-                                                      <pass>
-                                                        <rule>
-                                                          <modify>
-                                                            <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </src>
-                                                            <srcmask>0</srcmask>
-                                                            <rshift>0</rshift>
-                                                            <hexinc>0</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>ffffffffffffffff</destmask>
-                                                            <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </dest>
-                                                            <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
-                                                            </next>
-                                                          </modify>
-                                                        </rule>
-                                                      </pass>
-                                                      <fail>
-                                                        <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
-                                                        </rule>
-                                                      </fail>
-                                                    </random>
-                                                  </rule>
-                                                </next>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                        </switch>
-                                      </rule>
-                                    </case>
-                                    <case>
-                                      <state>0</state>
-                                      <rule>
-                                        <switch>
-                                          <pos>
-                                            <x>0</x>
-                                            <y>-1</y>
-                                          </pos>
-                                          <mask>3</mask>
-                                          <rshift>0</rshift>
-                                          <case>
-                                            <state>1</state>
+                                            <state>target@value=0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5923,41 +5796,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <random>
-                                                <prob>0.003</prob>
-                                                <pass>
-                                                  <rule>
-                                                    <modify>
-                                                      <src>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </src>
-                                                      <srcmask>0</srcmask>
-                                                      <rshift>0</rshift>
-                                                      <hexinc>0</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>ffffffffffffffff</destmask>
-                                                      <dest>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </dest>
-                                                    </modify>
-                                                  </rule>
-                                                </pass>
-                                                <fail>
-                                                  <rule>
-                                                    <modify>
-                                                      <destmask>0</destmask>
-                                                    </modify>
-                                                  </rule>
-                                                </fail>
-                                              </random>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5968,7 +5807,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>2</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5978,15 +5817,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>0</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6092,7 +5923,15 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>2</state>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6123,6 +5962,167 @@
                                                   </rule>
                                                 </fail>
                                               </random>
+                                            </rule>
+                                          </case>
+                                        </switch>
+                                      </rule>
+                                    </case>
+                                    <case>
+                                      <state>target@value=0</state>
+                                      <rule>
+                                        <switch>
+                                          <pos>
+                                            <x>0</x>
+                                            <y>-1</y>
+                                          </pos>
+                                          <mask>3</mask>
+                                          <rshift>0</rshift>
+                                          <case>
+                                            <state>target@value=2</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <random>
+                                                <prob>0.003</prob>
+                                                <pass>
+                                                  <rule>
+                                                    <modify>
+                                                      <src>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </src>
+                                                      <srcmask>0</srcmask>
+                                                      <rshift>0</rshift>
+                                                      <hexinc>0</hexinc>
+                                                      <lshift>0</lshift>
+                                                      <destmask>ffffffffffffffff</destmask>
+                                                      <dest>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </dest>
+                                                    </modify>
+                                                  </rule>
+                                                </pass>
+                                                <fail>
+                                                  <rule>
+                                                    <modify>
+                                                      <destmask>0</destmask>
+                                                    </modify>
+                                                  </rule>
+                                                </fail>
+                                              </random>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
+                                            <rule>
+                                              <modify>
+                                                <src>
+                                                  <x>0</x>
+                                                  <y>0</y>
+                                                </src>
+                                                <srcmask>ffffffffffffffff</srcmask>
+                                                <rshift>0</rshift>
+                                                <hexinc>0</hexinc>
+                                                <lshift>0</lshift>
+                                                <destmask>ffffffffffffffff</destmask>
+                                                <dest>
+                                                  <x>0</x>
+                                                  <y>-1</y>
+                                                </dest>
+                                                <next>
+                                                  <rule>
+                                                    <random>
+                                                      <prob>0.2</prob>
+                                                      <pass>
+                                                        <rule>
+                                                          <modify>
+                                                            <src>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </src>
+                                                            <srcmask>0</srcmask>
+                                                            <rshift>0</rshift>
+                                                            <hexinc>0</hexinc>
+                                                            <lshift>0</lshift>
+                                                            <destmask>ffffffffffffffff</destmask>
+                                                            <dest>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </dest>
+                                                            <next>
+                                                              <rule>
+                                                                <goal>
+                                                                  <and>
+                                                                    <lazy></lazy>
+                                                                    <goal>
+                                                                      <and>
+                                                                        <lazy></lazy>
+                                                                        <goal>
+                                                                          <maybe>
+                                                                            <prob>0.001</prob>
+                                                                          </maybe>
+                                                                        </goal>
+                                                                        <goal>
+                                                                          <place>
+                                                                            <balloon>
+                                                                              <rate>0.001</rate>
+                                                                              <text>prey</text>
+                                                                            </balloon>
+                                                                          </place>
+                                                                        </goal>
+                                                                      </and>
+                                                                    </goal>
+                                                                    <goal>
+                                                                      <false></false>
+                                                                    </goal>
+                                                                  </and>
+                                                                </goal>
+                                                              </rule>
+                                                            </next>
+                                                          </modify>
+                                                        </rule>
+                                                      </pass>
+                                                      <fail>
+                                                        <rule>
+                                                          <goal>
+                                                            <and>
+                                                              <lazy></lazy>
+                                                              <goal>
+                                                                <and>
+                                                                  <lazy></lazy>
+                                                                  <goal>
+                                                                    <maybe>
+                                                                      <prob>0.001</prob>
+                                                                    </maybe>
+                                                                  </goal>
+                                                                  <goal>
+                                                                    <place>
+                                                                      <balloon>
+                                                                        <rate>0.001</rate>
+                                                                        <text>0wn</text>
+                                                                      </balloon>
+                                                                    </place>
+                                                                  </goal>
+                                                                </and>
+                                                              </goal>
+                                                              <goal>
+                                                                <false></false>
+                                                              </goal>
+                                                            </and>
+                                                          </goal>
+                                                        </rule>
+                                                      </fail>
+                                                    </random>
+                                                  </rule>
+                                                </next>
+                                              </modify>
                                             </rule>
                                           </case>
                                         </switch>
@@ -6297,10 +6297,10 @@
                                       <x>1</x>
                                       <y>0</y>
                                     </pos>
-                                    <mask>7</mask>
-                                    <rshift>0</rshift>
+                                    <mask>1c</mask>
+                                    <rshift>2</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -6353,7 +6353,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>0</state>
+                                      <state>target@value=0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -6472,7 +6472,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>1</state>
+                                      <state>target@value=2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -6482,7 +6482,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6516,134 +6516,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
-                                            <rule>
-                                              <modify>
-                                                <src>
-                                                  <x>0</x>
-                                                  <y>0</y>
-                                                </src>
-                                                <srcmask>ffffffffffffffff</srcmask>
-                                                <rshift>0</rshift>
-                                                <hexinc>0</hexinc>
-                                                <lshift>0</lshift>
-                                                <destmask>ffffffffffffffff</destmask>
-                                                <dest>
-                                                  <x>1</x>
-                                                  <y>0</y>
-                                                </dest>
-                                                <next>
-                                                  <rule>
-                                                    <random>
-                                                      <prob>0.2</prob>
-                                                      <pass>
-                                                        <rule>
-                                                          <modify>
-                                                            <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </src>
-                                                            <srcmask>0</srcmask>
-                                                            <rshift>0</rshift>
-                                                            <hexinc>0</hexinc>
-                                                            <lshift>0</lshift>
-                                                            <destmask>ffffffffffffffff</destmask>
-                                                            <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
-                                                            </dest>
-                                                            <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
-                                                            </next>
-                                                          </modify>
-                                                        </rule>
-                                                      </pass>
-                                                      <fail>
-                                                        <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
-                                                        </rule>
-                                                      </fail>
-                                                    </random>
-                                                  </rule>
-                                                </next>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                        </switch>
-                                      </rule>
-                                    </case>
-                                    <case>
-                                      <state>0</state>
-                                      <rule>
-                                        <switch>
-                                          <pos>
-                                            <x>1</x>
-                                            <y>0</y>
-                                          </pos>
-                                          <mask>3</mask>
-                                          <rshift>0</rshift>
-                                          <case>
-                                            <state>1</state>
+                                            <state>target@value=0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6749,41 +6622,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>0</state>
-                                            <rule>
-                                              <random>
-                                                <prob>0.003</prob>
-                                                <pass>
-                                                  <rule>
-                                                    <modify>
-                                                      <src>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </src>
-                                                      <srcmask>0</srcmask>
-                                                      <rshift>0</rshift>
-                                                      <hexinc>0</hexinc>
-                                                      <lshift>0</lshift>
-                                                      <destmask>ffffffffffffffff</destmask>
-                                                      <dest>
-                                                        <x>0</x>
-                                                        <y>0</y>
-                                                      </dest>
-                                                    </modify>
-                                                  </rule>
-                                                </pass>
-                                                <fail>
-                                                  <rule>
-                                                    <modify>
-                                                      <destmask>0</destmask>
-                                                    </modify>
-                                                  </rule>
-                                                </fail>
-                                              </random>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>2</state>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -6794,7 +6633,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>2</state>
+                                      <state>target@value=1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -6804,15 +6643,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>1</state>
-                                            <rule>
-                                              <modify>
-                                                <destmask>0</destmask>
-                                              </modify>
-                                            </rule>
-                                          </case>
-                                          <case>
-                                            <state>0</state>
+                                            <state>target@value=2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6918,7 +6749,15 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>2</state>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6949,6 +6788,167 @@
                                                   </rule>
                                                 </fail>
                                               </random>
+                                            </rule>
+                                          </case>
+                                        </switch>
+                                      </rule>
+                                    </case>
+                                    <case>
+                                      <state>target@value=0</state>
+                                      <rule>
+                                        <switch>
+                                          <pos>
+                                            <x>1</x>
+                                            <y>0</y>
+                                          </pos>
+                                          <mask>3</mask>
+                                          <rshift>0</rshift>
+                                          <case>
+                                            <state>target@value=2</state>
+                                            <rule>
+                                              <modify>
+                                                <destmask>0</destmask>
+                                              </modify>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=0</state>
+                                            <rule>
+                                              <random>
+                                                <prob>0.003</prob>
+                                                <pass>
+                                                  <rule>
+                                                    <modify>
+                                                      <src>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </src>
+                                                      <srcmask>0</srcmask>
+                                                      <rshift>0</rshift>
+                                                      <hexinc>0</hexinc>
+                                                      <lshift>0</lshift>
+                                                      <destmask>ffffffffffffffff</destmask>
+                                                      <dest>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                      </dest>
+                                                    </modify>
+                                                  </rule>
+                                                </pass>
+                                                <fail>
+                                                  <rule>
+                                                    <modify>
+                                                      <destmask>0</destmask>
+                                                    </modify>
+                                                  </rule>
+                                                </fail>
+                                              </random>
+                                            </rule>
+                                          </case>
+                                          <case>
+                                            <state>target@value=1</state>
+                                            <rule>
+                                              <modify>
+                                                <src>
+                                                  <x>0</x>
+                                                  <y>0</y>
+                                                </src>
+                                                <srcmask>ffffffffffffffff</srcmask>
+                                                <rshift>0</rshift>
+                                                <hexinc>0</hexinc>
+                                                <lshift>0</lshift>
+                                                <destmask>ffffffffffffffff</destmask>
+                                                <dest>
+                                                  <x>1</x>
+                                                  <y>0</y>
+                                                </dest>
+                                                <next>
+                                                  <rule>
+                                                    <random>
+                                                      <prob>0.2</prob>
+                                                      <pass>
+                                                        <rule>
+                                                          <modify>
+                                                            <src>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </src>
+                                                            <srcmask>0</srcmask>
+                                                            <rshift>0</rshift>
+                                                            <hexinc>0</hexinc>
+                                                            <lshift>0</lshift>
+                                                            <destmask>ffffffffffffffff</destmask>
+                                                            <dest>
+                                                              <x>0</x>
+                                                              <y>0</y>
+                                                            </dest>
+                                                            <next>
+                                                              <rule>
+                                                                <goal>
+                                                                  <and>
+                                                                    <lazy></lazy>
+                                                                    <goal>
+                                                                      <and>
+                                                                        <lazy></lazy>
+                                                                        <goal>
+                                                                          <maybe>
+                                                                            <prob>0.001</prob>
+                                                                          </maybe>
+                                                                        </goal>
+                                                                        <goal>
+                                                                          <place>
+                                                                            <balloon>
+                                                                              <rate>0.001</rate>
+                                                                              <text>prey</text>
+                                                                            </balloon>
+                                                                          </place>
+                                                                        </goal>
+                                                                      </and>
+                                                                    </goal>
+                                                                    <goal>
+                                                                      <false></false>
+                                                                    </goal>
+                                                                  </and>
+                                                                </goal>
+                                                              </rule>
+                                                            </next>
+                                                          </modify>
+                                                        </rule>
+                                                      </pass>
+                                                      <fail>
+                                                        <rule>
+                                                          <goal>
+                                                            <and>
+                                                              <lazy></lazy>
+                                                              <goal>
+                                                                <and>
+                                                                  <lazy></lazy>
+                                                                  <goal>
+                                                                    <maybe>
+                                                                      <prob>0.001</prob>
+                                                                    </maybe>
+                                                                  </goal>
+                                                                  <goal>
+                                                                    <place>
+                                                                      <balloon>
+                                                                        <rate>0.001</rate>
+                                                                        <text>0wn</text>
+                                                                      </balloon>
+                                                                    </place>
+                                                                  </goal>
+                                                                </and>
+                                                              </goal>
+                                                              <goal>
+                                                                <false></false>
+                                                              </goal>
+                                                            </and>
+                                                          </goal>
+                                                        </rule>
+                                                      </fail>
+                                                    </random>
+                                                  </rule>
+                                                </next>
+                                              </modify>
                                             </rule>
                                           </case>
                                         </switch>
