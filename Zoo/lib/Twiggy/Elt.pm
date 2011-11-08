@@ -37,16 +37,25 @@ sub children {
 
 Converts an L<XML::Twig> into a tree of nested anonymous arrays of tag=>value pairs.
 
+The single argument, if present, is a reference to a hash of (tag,attribute) pairs:
+any tags in the keyset of this hash will be substituted with the value of their corresponding
+attributes.
+
 =cut
 
 sub twig_nest {
-    my ($self) = @_;
+    my ($self, $tag_attr_ref) = @_;
+    $tag_attr_ref = { 'numeric' => 'value' } unless defined $tag_attr_ref;   # temporarily hardwired hack
+    my $tag = $self->tag;
     my @child = $self->children;
-    return $self->tag unless @child;
-    if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
-	return ($self->tag => $child[0]->text);
+    if (defined($tag_attr_ref) && exists $tag_attr_ref->{$tag}) {
+	$tag = $self->{'att'}->{$tag_attr_ref->{$tag}};
     }
-    return ($self->tag => [map ($_->twig_nest, @child)]);
+    return $tag unless @child;
+    if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
+	return ($tag => $child[0]->text);
+    }
+    return ($tag => [map ($_->twig_nest, @child)]);
 }
 
 =head1 AUTHOR

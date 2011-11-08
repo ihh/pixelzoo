@@ -1050,6 +1050,14 @@ sub new_XML_element {
 	    my $v = shift @child;
 	    if ($k =~ s/^\@//) {
 		$t->set_att ($k => $v);
+	    } elsif ($k =~ /^([^\@+])\@/) {
+		my $new_k = $1;
+		my $elt = new_XML_element($new_k, $v);
+		while ($k =~ /\@([^=]+)=([^\@=]+)/g) {
+		    my ($attr, $val) = ($1, $2);
+		    $elt->set_att ($attr, $val);
+		}
+		$elt->paste(last_child => $t);
 	    } elsif (Scalar::Util::looks_like_number($k)) {
 		my $elt = new_XML_element('numeric', $v);
 		$elt->set_att ('value' => $k);
