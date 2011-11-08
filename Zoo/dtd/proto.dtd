@@ -367,7 +367,7 @@ executes the "default" rule. -->
 <!--
 @attr value The name of the type being matched (for bind rules), or the value of the var (for switch rules).
 -->
-<!ATTLIST target value PCDATA #REQUIRED>
+<!ATTLIST target value CDATA #REQUIRED>
 
 <!-- The default case in a switch rule. -->
 <!ELEMENT default (rule|bind|switch|modify|nop|random|huff|goal|ball)>
@@ -406,7 +406,7 @@ Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("
 <!--
 @attr var The name of the var.
 -->
-<!ATTLIST val var PCDATA #REQUIRED>
+<!ATTLIST val var CDATA #REQUIRED>
 
 <!ELEMENT inc (#PCDATA)>
 
@@ -433,7 +433,7 @@ Randomly executes either the "pass" or "fail" rule (with probability "prob" of i
 <!--
 @attr value The probability of this outcome.
 -->
-<!ATTLIST p value PCDATA #REQUIRED>
+<!ATTLIST p value CDATA #REQUIRED>
 
 <!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>
