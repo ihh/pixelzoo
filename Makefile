@@ -114,6 +114,7 @@ xml-valid-test:
 
 xml-build-test: $(XMLTESTFILES)
 
+# Build a simple world using the Perl API.
 t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out $@ -verbose
 	diff t/proto.xml t/proto.copy.xml

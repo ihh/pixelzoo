@@ -6,7 +6,10 @@
 </head><body>
 <p class='DTDSource'><b><code>game.dtd</code></b>: <a href='game.dtd.html'>Elements</a> - Entities - <a href='game.dtd.org.html'>Source</a> | <a href='intro.html'>Intro</a> - <a href='elementsIndex.html'>Index</a><br /><a href='index.html' target='_top'>FRAMES</a>&nbsp;/&nbsp;<a href='game.dtd.org.html' target='_top'>NO FRAMES</a></p><pre id='dtd_source'><span class="dtd_comment">&lt;!--</span>
 <span class="dtd_comment">This DTD defines the &quot;game&quot; dialect for the PixelZoo XML game format,</span>
-<span class="dtd_comment">wherein all particle types and variables (&lt;i&gt;vars&lt;/i&gt;) are referred to by number.</span>
+<span class="dtd_comment">wherein all game objects (e.g. neighborhood locations, particle types, variables)</span>
+<span class="dtd_comment">are described directly as integers (cell co-ordinates, IDs, masks, and so forth).</span>
+
+<span class="dtd_comment">This is a very low-level dialect. It is the format understood by the C board engine.</span>
 
 <span class="dtd_comment">This dialect is obtained by compiling files in the &quot;proto&quot; dialect, using the zoocompiler.pl program.</span>
 <span class="dtd_comment">--&gt;</span>

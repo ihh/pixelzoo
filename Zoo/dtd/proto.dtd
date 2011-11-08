@@ -1,8 +1,11 @@
 <!--
 This DTD defines the "proto" dialect for the PixelZoo XML game format,
-wherein all particle types and variables (<i>vars</i>) are referred to by name.
+wherein locations, particle types and variables (<i>vars</i>) are referred to by names.
 
-This dialect can be compiled to the "game" dialect, using the zoocompiler.pl program.
+The intention of this dialect is to offer a slightly higher layer of abstraction
+than is offered by the raw numerical format of the "game" format.
+
+This (slightly) higher-level dialect can be compiled down to the "game" dialect, using the zoocompiler.pl program.
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->

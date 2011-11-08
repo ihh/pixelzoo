@@ -6,9 +6,12 @@
 </head><body>
 <p class='DTDSource'><b><code>proto.dtd</code></b>: <a href='proto.dtd.html'>Elements</a> - Entities - <a href='proto.dtd.org.html'>Source</a> | <a href='intro.html'>Intro</a> - <a href='elementsIndex.html'>Index</a><br /><a href='index.html' target='_top'>FRAMES</a>&nbsp;/&nbsp;<a href='proto.dtd.org.html' target='_top'>NO FRAMES</a></p><pre id='dtd_source'><span class="dtd_comment">&lt;!--</span>
 <span class="dtd_comment">This DTD defines the &quot;proto&quot; dialect for the PixelZoo XML game format,</span>
-<span class="dtd_comment">wherein all particle types and variables (&lt;i&gt;vars&lt;/i&gt;) are referred to by name.</span>
+<span class="dtd_comment">wherein locations, particle types and variables (&lt;i&gt;vars&lt;/i&gt;) are referred to by names.</span>
 
-<span class="dtd_comment">This dialect can be compiled to the &quot;game&quot; dialect, using the zoocompiler.pl program.</span>
+<span class="dtd_comment">The intention of this dialect is to offer a slightly higher layer of abstraction</span>
+<span class="dtd_comment">than is offered by the raw numerical format of the &quot;game&quot; format.</span>
+
+<span class="dtd_comment">This (slightly) higher-level dialect can be compiled down to the &quot;game&quot; dialect, using the zoocompiler.pl program.</span>
 <span class="dtd_comment">--&gt;</span>
 
 <span class="dtd_comment">&lt;!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. --&gt;</span>
