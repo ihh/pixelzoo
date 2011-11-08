@@ -515,7 +515,7 @@ sub transform_hash {
 					     'rshift' => $self->typeshift,
 					     map (('case' => ['state' => $self->getType($_),
 							      @{$transformed_case{$_}}]),
-						  keys %transformed_case),
+						  sort keys %transformed_case),
 					     defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -550,7 +550,7 @@ sub transform_hash {
 					      'rshift' => $self->getShift($loctype,$varid),
 					      map (('case' => ['state' => $_,
 							       @{$transformed_case{$_}}]),
-						   keys %transformed_case),
+						   sort keys %transformed_case),
 					      defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
