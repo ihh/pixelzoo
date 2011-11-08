@@ -1,3 +1,10 @@
+<!--
+This DTD defines the "proto" dialect for the PixelZoo XML game format,
+wherein all particle types and variables (<i>vars</i>) are referred to by name.
+
+This dialect can be compiled to the "game" dialect, using the zoocompiler.pl program.
+-->
+
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
@@ -352,24 +359,35 @@ executes the "default" rule. -->
 <!ELEMENT switch (loc?,var,case*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
-<!-- An individual case in a switch rule. -->
+<!-- The cases in a switch or bind rule. -->
 <!ELEMENT case (target*)>
+
+<!-- An individual case in a switch or bind rule. -->
 <!ELEMENT target (bind|switch|modify|nop|random|huff|goal|ball)>
-<!ATTLIST target value CDATA #REQUIRED>
+<!--
+@attr value The name of the type being matched (for bind rules), or the value of the var (for switch rules).
+-->
+<!ATTLIST target value PCDATA #REQUIRED>
 
 <!-- The default case in a switch rule. -->
 <!ELEMENT default (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
 <!-- Modify rule.
 
-EITHER reads a Var from a source cell ("src"),
- adds a specified offset ("inc")
- and writes it to a destination cell ("dest"),
-OR sets type and all Vars of the destination cell to the specified values ("set").
+Writes a value to a destination cell ("dest").
+The precise behavior depends on the child tags; there are two possible options:
+<ol><li>
+A Var is read from a source cell ("src"),
+ a specified offset ("inc") is added,
+ and the resulting value is written to a specific Var of the destination cell.
+</li><li>
+ The type and all Vars of the destination cell are set to the specified values ("set").
+</li></ol>
 
-"src" and "dest" must have been named by an outer <b>bind</b> rule.
+The "dest" and (if specified) "src" cells are referred to by name,
+and must have first been bound by an outer <b>bind</b> rule.
 
-After this, the (optional) "next" rule is executed. -->
+After writing to the destination cells, the (optional) "next" rule is executed. -->
 <!ELEMENT modify (src?,(inc|hexinc|set)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
@@ -382,8 +400,13 @@ Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("
 <!ELEMENT msg (#PCDATA)>
 
 <!ELEMENT set (type,val*)>
+
+<!-- Value of an individual var. -->
 <!ELEMENT val (#PCDATA)>
-<!ATTLIST val var CDATA #REQUIRED>
+<!--
+@attr var The name of the var.
+-->
+<!ATTLIST val var PCDATA #REQUIRED>
 
 <!ELEMENT inc (#PCDATA)>
 
@@ -404,8 +427,13 @@ Randomly executes either the "pass" or "fail" rule (with probability "prob" of i
 
 <!-- A probability distribution over rules, implemented by the compiler as a Huffmann tree of <b>random</b> rules. -->
 <!ELEMENT huff (p+)>
+
+<!-- An individual probabilistic outcome in a "huff" rule. -->
 <!ELEMENT p (rule|bind|switch|modify|nop|random|huff|goal|ball)>
-<!ATTLIST p value CDATA #REQUIRED>
+<!--
+@attr value The probability of this outcome.
+-->
+<!ATTLIST p value PCDATA #REQUIRED>
 
 <!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>

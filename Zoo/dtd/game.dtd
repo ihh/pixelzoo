@@ -1,3 +1,10 @@
+<!--
+This DTD defines the "game" dialect for the PixelZoo XML game format,
+wherein all particle types and variables (<i>vars</i>) are referred to by number.
+
+This dialect is obtained by compiling files in the "proto" dialect, using the zoocompiler.pl program.
+-->
+
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
