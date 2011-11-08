@@ -62,7 +62,7 @@ void sampleQuadLeaf(QuadTree* quad, RandomNumberGenerator* rng, int* x_ret, int*
   node = 0;
   *x_ret = *y_ret = 0;
   for (lev = 0; lev < quad->K; ++lev) {
-    prob = rngRandomProb(rng) * quad->quadRate[node];
+    prob = rngRandomProb(rng) * quad->quadRate[node] / PowerOfTwoClosestToOneMillion;
     whichChild = 0;
     while (1) {
       childNode = quadChildIndex(node, lev, whichChild);
