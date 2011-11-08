@@ -352,7 +352,10 @@
 
 <span class="dtd_comment">Associates a name (&quot;loc&quot;) with a neighboring cell.</span>
 <span class="dtd_comment">Looks in the &quot;bcase&quot; block for the &quot;bmatch&quot; corresponding to the type of that cell,</span>
-<span class="dtd_comment">and executes the specified rule. If no such &quot;bmatch&quot; exists, executes the &quot;default&quot; rule. --&gt;</span>
+<span class="dtd_comment">and executes the specified rule. If no such &quot;bmatch&quot; exists, executes the &quot;default&quot; rule.</span>
+
+<span class="dtd_comment">Note: the special name &lt;i&gt;orig&lt;/i&gt; is automagically defined for the cell at (0,0),</span>
+<span class="dtd_comment">i.e. the cell where the rule is triggered.  --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">bind</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">loc</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">x</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">y</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">bcase</span><span class="dtd_plain">*,</span><span class="dtd_attribute_name">default</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 
 <span class="dtd_comment">&lt;!-- The cases in a bind rule. --&gt;</span>
@@ -367,9 +370,13 @@
 
 <span class="dtd_comment">&lt;!-- Switch rule.</span>
 
-<span class="dtd_comment">Reads the var for a neighboring cell whose name (&quot;loc&quot;) has already been assigned by an outer &lt;b&gt;bind&lt;/b&gt; rule.</span>
+<span class="dtd_comment">Reads the var for a neighboring cell whose name (&quot;loc&quot;) has already been assigned by an outer &lt;b&gt;bind&lt;/b&gt; rule</span>
+<span class="dtd_comment">(or is equal to &lt;i&gt;orig&lt;/i&gt;).</span>
 <span class="dtd_comment">Looks in the &quot;scase&quot; block for the &quot;smatch&quot; clause corresponding to the value of the var,</span>
-<span class="dtd_comment">and executes the corresponding rule. If no such &quot;smatch&quot; exists, executes the &quot;default&quot; rule. --&gt;</span>
+<span class="dtd_comment">and executes the corresponding rule. If no such &quot;smatch&quot; exists, executes the &quot;default&quot; rule.</span>
+
+<span class="dtd_comment">Note: the special location name &lt;i&gt;orig&lt;/i&gt; is automagically defined for the cell at (0,0),</span>
+<span class="dtd_comment">i.e. the cell where the rule is triggered.  --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">switch</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">loc</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">var</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">scase</span><span class="dtd_plain">*,</span><span class="dtd_attribute_name">default</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">loc</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
@@ -398,8 +405,10 @@
 <span class="dtd_comment"> The type and all Vars of the destination cell are set to the specified values (&quot;set&quot;).</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;/ol&gt;</span>
 
-<span class="dtd_comment">The &quot;dest&quot; and (if specified) &quot;src&quot; cells are referred to by name,</span>
-<span class="dtd_comment">and must have first been bound by an outer &lt;b&gt;bind&lt;/b&gt; rule.</span>
+<span class="dtd_comment">The &quot;dest&quot; and (if specified) &quot;src&quot; cells are referred to by name.</span>
+<span class="dtd_comment">They must either have been previously bound by an outer &lt;b&gt;bind&lt;/b&gt; rule,</span>
+<span class="dtd_comment">or must be the special location name &lt;i&gt;orig&lt;/i&gt; which is automagically defined for the cell at (0,0),</span>
+<span class="dtd_comment">i.e. the cell where the rule is triggered.</span>
 
 <span class="dtd_comment">After writing to the destination cells, the (optional) &quot;next&quot; rule is executed. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">modify</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">src</span><span class="dtd_plain">?,(</span><span class="dtd_attribute_name">inc</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">hexinc</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">set</span><span class="dtd_plain">)?,</span><span class="dtd_attribute_name">dest</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">next</span><span class="dtd_plain">?)</span><span class="dtd_tag_symbols">&gt;</span>

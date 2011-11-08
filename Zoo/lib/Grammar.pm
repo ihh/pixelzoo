@@ -25,7 +25,7 @@ use Twiggy;
 sub newGrammar {
     my ($class) = @_;
     my $emptyType = 'empty';
-    my $orig = 'o';
+    my $orig = 'orig';
     my $self = { 
 
 # constants

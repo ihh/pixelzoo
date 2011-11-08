@@ -122,3 +122,7 @@ xmltest:
 	@test -e bin || mkdir bin
 	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
 	bin/xmltest t/testgame.xml
+
+# Documentation
+doc:
+	cd Zoo/dtd; make

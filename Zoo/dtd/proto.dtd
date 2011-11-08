@@ -346,7 +346,10 @@ The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
 
 Associates a name ("loc") with a neighboring cell.
 Looks in the "bcase" block for the "bmatch" corresponding to the type of that cell,
-and executes the specified rule. If no such "bmatch" exists, executes the "default" rule. -->
+and executes the specified rule. If no such "bmatch" exists, executes the "default" rule.
+
+Note: the special name <i>orig</i> is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.  -->
 <!ELEMENT bind (loc,x?,y?,bcase*,default?)>
 
 <!-- The cases in a bind rule. -->
@@ -361,9 +364,13 @@ and executes the specified rule. If no such "bmatch" exists, executes the "defau
 
 <!-- Switch rule.
 
-Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule.
+Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule
+(or is equal to <i>orig</i>).
 Looks in the "scase" block for the "smatch" clause corresponding to the value of the var,
-and executes the corresponding rule. If no such "smatch" exists, executes the "default" rule. -->
+and executes the corresponding rule. If no such "smatch" exists, executes the "default" rule.
+
+Note: the special location name <i>orig</i> is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.  -->
 <!ELEMENT switch (loc?,var,scase*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
@@ -392,8 +399,10 @@ A Var is read from a source cell ("src"),
  The type and all Vars of the destination cell are set to the specified values ("set").
 </li></ol>
 
-The "dest" and (if specified) "src" cells are referred to by name,
-and must have first been bound by an outer <b>bind</b> rule.
+The "dest" and (if specified) "src" cells are referred to by name.
+They must either have been previously bound by an outer <b>bind</b> rule,
+or must be the special location name <i>orig</i> which is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.
 
 After writing to the destination cells, the (optional) "next" rule is executed. -->
 <!ELEMENT modify (src?,(inc|hexinc|set)?,dest?,next?)>

@@ -231,7 +231,7 @@ sub moveTo {
 sub copyTo {
     my ($self, $loc, $next) = @_;
     $loc = $self->neighbor unless defined $loc;
-    return $self->copyFromTo ('o', $loc, $next);
+    return $self->copyFromTo ($self->origin, $loc, $next);
 }
 
 sub copyFromTo {

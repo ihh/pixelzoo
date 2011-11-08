@@ -83,7 +83,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -107,7 +107,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -127,7 +127,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -151,7 +151,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -171,7 +171,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -195,7 +195,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -215,7 +215,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -239,7 +239,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -259,7 +259,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -283,7 +283,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -303,7 +303,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -327,7 +327,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -347,7 +347,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -371,7 +371,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -391,7 +391,7 @@
                       <p value="0.02">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -415,7 +415,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -447,7 +447,7 @@
         <rate>0.0002</rate>
         <rule>
           <switch>
-            <loc>o</loc>
+            <loc>orig</loc>
             <var>decay</var>
             <scase>
               <smatch value="15">
@@ -508,7 +508,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -555,7 +555,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -602,7 +602,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -649,7 +649,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -696,7 +696,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -743,7 +743,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -790,7 +790,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -837,7 +837,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -909,7 +909,7 @@
             </p>
             <p value="0.9999">
               <switch>
-                <loc>o</loc>
+                <loc>orig</loc>
                 <var>gens_left</var>
                 <scase>
                   <smatch value="0">
@@ -927,14 +927,14 @@
                           <bmatch type="empty">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
                               </dest>
                               <next>
                                 <switch>
-                                  <loc>o</loc>
+                                  <loc>orig</loc>
                                   <var>branches</var>
                                   <scase>
                                     <smatch value="3">
@@ -969,12 +969,12 @@
                                       <p value="0.2">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </src>
                                           <inc>1</inc>
                                           <dest>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </dest>
                                         </modify>
@@ -997,14 +997,14 @@
                           <bmatch type="empty">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
                               </dest>
                               <next>
                                 <switch>
-                                  <loc>o</loc>
+                                  <loc>orig</loc>
                                   <var>branches</var>
                                   <scase>
                                     <smatch value="3">
@@ -1039,12 +1039,12 @@
                                       <p value="0.2">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </src>
                                           <inc>1</inc>
                                           <dest>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </dest>
                                         </modify>
@@ -1067,14 +1067,14 @@
                           <bmatch type="empty">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
                               </dest>
                               <next>
                                 <switch>
-                                  <loc>o</loc>
+                                  <loc>orig</loc>
                                   <var>branches</var>
                                   <scase>
                                     <smatch value="3">
@@ -1109,12 +1109,12 @@
                                       <p value="0.2">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </src>
                                           <inc>1</inc>
                                           <dest>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </dest>
                                         </modify>
@@ -1137,14 +1137,14 @@
                           <bmatch type="empty">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
                               </dest>
                               <next>
                                 <switch>
-                                  <loc>o</loc>
+                                  <loc>orig</loc>
                                   <var>branches</var>
                                   <scase>
                                     <smatch value="3">
@@ -1179,12 +1179,12 @@
                                       <p value="0.2">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </src>
                                           <inc>1</inc>
                                           <dest>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                             <var>branches</var>
                                           </dest>
                                         </modify>
@@ -1265,7 +1265,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1327,7 +1327,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1389,7 +1389,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1451,7 +1451,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1513,7 +1513,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1575,7 +1575,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1637,7 +1637,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1699,7 +1699,7 @@
                       <p value="0.05">
                         <modify>
                           <src>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </src>
                           <dest>
                             <loc>nbr</loc>
@@ -1772,7 +1772,7 @@
         <rate>0.08</rate>
         <rule>
           <switch>
-            <loc>o</loc>
+            <loc>orig</loc>
             <var>species</var>
             <scase>
               <smatch value="3">
@@ -1824,7 +1824,7 @@
                           <p value="0.205">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
@@ -1870,7 +1870,7 @@
                                 <p value="1">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -1911,7 +1911,7 @@
                                 <p value="0.2">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -1932,7 +1932,7 @@
                       </bmatch>
                       <bmatch type="cyclobs">
                         <switch>
-                          <loc>o</loc>
+                          <loc>orig</loc>
                           <var>species</var>
                           <scase>
                             <smatch value="0">
@@ -1959,7 +1959,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2011,7 +2011,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2071,7 +2071,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2148,7 +2148,7 @@
                           <p value="0.205">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
@@ -2194,7 +2194,7 @@
                                 <p value="1">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2235,7 +2235,7 @@
                                 <p value="0.2">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2256,7 +2256,7 @@
                       </bmatch>
                       <bmatch type="cyclobs">
                         <switch>
-                          <loc>o</loc>
+                          <loc>orig</loc>
                           <var>species</var>
                           <scase>
                             <smatch value="0">
@@ -2283,7 +2283,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2335,7 +2335,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2395,7 +2395,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2472,7 +2472,7 @@
                           <p value="0.205">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
@@ -2518,7 +2518,7 @@
                                 <p value="1">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2559,7 +2559,7 @@
                                 <p value="0.2">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2580,7 +2580,7 @@
                       </bmatch>
                       <bmatch type="cyclobs">
                         <switch>
-                          <loc>o</loc>
+                          <loc>orig</loc>
                           <var>species</var>
                           <scase>
                             <smatch value="0">
@@ -2607,7 +2607,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2659,7 +2659,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2719,7 +2719,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2796,7 +2796,7 @@
                           <p value="0.205">
                             <modify>
                               <src>
-                                <loc>o</loc>
+                                <loc>orig</loc>
                               </src>
                               <dest>
                                 <loc>nbr</loc>
@@ -2842,7 +2842,7 @@
                                 <p value="1">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2883,7 +2883,7 @@
                                 <p value="0.2">
                                   <modify>
                                     <src>
-                                      <loc>o</loc>
+                                      <loc>orig</loc>
                                     </src>
                                     <dest>
                                       <loc>nbr</loc>
@@ -2904,7 +2904,7 @@
                       </bmatch>
                       <bmatch type="cyclobs">
                         <switch>
-                          <loc>o</loc>
+                          <loc>orig</loc>
                           <var>species</var>
                           <scase>
                             <smatch value="0">
@@ -2931,7 +2931,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -2983,7 +2983,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -3043,7 +3043,7 @@
                                       <p value="1">
                                         <modify>
                                           <src>
-                                            <loc>o</loc>
+                                            <loc>orig</loc>
                                           </src>
                                           <dest>
                                             <loc>nbr</loc>
@@ -3137,7 +3137,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3163,7 +3163,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3181,7 +3181,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3207,7 +3207,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3225,7 +3225,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3251,7 +3251,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3269,7 +3269,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3295,7 +3295,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3313,7 +3313,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3339,7 +3339,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3357,7 +3357,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3383,7 +3383,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3401,7 +3401,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3427,7 +3427,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
@@ -3445,7 +3445,7 @@
                   <bmatch type="empty">
                     <modify>
                       <src>
-                        <loc>o</loc>
+                        <loc>orig</loc>
                       </src>
                       <dest>
                         <loc>nbr</loc>
@@ -3471,7 +3471,7 @@
                             <loc>nbr</loc>
                           </src>
                           <dest>
-                            <loc>o</loc>
+                            <loc>orig</loc>
                           </dest>
                         </modify>
                       </p>
