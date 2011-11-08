@@ -51,7 +51,7 @@ sub twig_nest {
     if (defined($tag_attr_ref) && exists $tag_attr_ref->{$tag}) {
 	$tag = $self->{'att'}->{$tag_attr_ref->{$tag}};
     }
-    return $tag unless @child;
+    return ($tag => '') unless @child;
     if (@child == 1 && ($child[0]->is_cdata || $child[0]->is_pcdata)) {
 	return ($tag => $child[0]->text);
     }
