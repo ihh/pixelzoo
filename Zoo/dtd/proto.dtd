@@ -345,31 +345,39 @@ The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
 <!-- Bind rule.
 
 Associates a name ("loc") with a neighboring cell.
-Looks up the "case" corresponding to the type of that cell,
-and executes that case's rule. If no such "case" exists,
-executes the "default" rule. -->
-<!ELEMENT bind (loc,x?,y?,case*,default?)>
+Looks in the "bcase" block for the "bmatch" corresponding to the type of that cell,
+and executes the specified rule. If no such "bmatch" exists, executes the "default" rule. -->
+<!ELEMENT bind (loc,x?,y?,bcase*,default?)>
+
+<!-- The cases in a bind rule. -->
+<!ELEMENT bcase (bmatch*)>
+
+<!-- An individual case in a bind rule. -->
+<!ELEMENT bmatch (bind|switch|modify|nop|random|huff|goal|ball)>
+<!--
+@attr type The name of the type being matched in a bind rule.
+-->
+<!ATTLIST bmatch type CDATA #REQUIRED>
 
 <!-- Switch rule.
 
 Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule.
-Looks up the "case" corresponding to the value of the var,
-and executes that case's rule. If no such "case" exists,
-executes the "default" rule. -->
-<!ELEMENT switch (loc?,var,case*,default?)>
+Looks in the "scase" block for the "smatch" clause corresponding to the value of the var,
+and executes the corresponding rule. If no such "smatch" exists, executes the "default" rule. -->
+<!ELEMENT switch (loc?,var,scase*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
-<!-- The cases in a switch or bind rule. -->
-<!ELEMENT case (target*)>
+<!-- The cases in a switch rule. -->
+<!ELEMENT scase (smatch*)>
 
-<!-- An individual case in a switch or bind rule. -->
-<!ELEMENT target (bind|switch|modify|nop|random|huff|goal|ball)>
+<!-- An individual case in a switch rule. -->
+<!ELEMENT smatch (bind|switch|modify|nop|random|huff|goal|ball)>
 <!--
-@attr value The name of the type being matched (for bind rules), or the value of the var (for switch rules).
+@attr value The value of the var being matched in a switch rule.
 -->
-<!ATTLIST target value CDATA #REQUIRED>
+<!ATTLIST smatch value CDATA #REQUIRED>
 
-<!-- The default case in a switch rule. -->
+<!-- The default case in a switch or bind rule. -->
 <!ELEMENT default (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
 <!-- Modify rule.

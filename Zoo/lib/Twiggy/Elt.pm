@@ -44,7 +44,8 @@ attributes.
 =cut
 
 my %default_tag_attr_hash = ( 'p' => 'value',
-			      'target' => 'value',
+			      'bmatch' => 'type',
+			      'smatch' => 'value',
 			      'val' => 'var');
 sub twig_nest {
     my ($self, $tag_attr_ref) = @_;

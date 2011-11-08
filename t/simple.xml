@@ -903,7 +903,7 @@
             <mask>f00</mask>
             <rshift>8</rshift>
             <case>
-              <state>target@value=15</state>
+              <state>15</state>
               <rule>
                 <modify>
                   <src>
@@ -1955,7 +1955,7 @@
                   <mask>1c</mask>
                   <rshift>2</rshift>
                   <case>
-                    <state>target@value=0</state>
+                    <state>0</state>
                     <rule>
                       <modify>
                         <destmask>0</destmask>
@@ -2006,7 +2006,7 @@
                                                 <mask>3</mask>
                                                 <rshift>0</rshift>
                                                 <case>
-                                                  <state>target@value=3</state>
+                                                  <state>3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
@@ -2115,7 +2115,7 @@
                                                 <mask>3</mask>
                                                 <rshift>0</rshift>
                                                 <case>
-                                                  <state>target@value=3</state>
+                                                  <state>3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
@@ -2231,7 +2231,7 @@
                                                 <mask>3</mask>
                                                 <rshift>0</rshift>
                                                 <case>
-                                                  <state>target@value=3</state>
+                                                  <state>3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
@@ -2340,7 +2340,7 @@
                                                 <mask>3</mask>
                                                 <rshift>0</rshift>
                                                 <case>
-                                                  <state>target@value=3</state>
+                                                  <state>3</state>
                                                   <rule>
                                                     <modify>
                                                       <src>
@@ -3716,7 +3716,7 @@
             <mask>3</mask>
             <rshift>0</rshift>
             <case>
-              <state>target@value=3</state>
+              <state>3</state>
               <rule>
                 <random>
                   <prob>0.333333333333333</prob>
@@ -3815,7 +3815,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -3825,7 +3825,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -3859,7 +3859,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -3965,7 +3965,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -3976,7 +3976,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -3986,7 +3986,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -3994,7 +3994,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4028,7 +4028,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4137,7 +4137,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=2</state>
+                                      <state>2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4147,7 +4147,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4253,7 +4253,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -4261,7 +4261,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4457,7 +4457,7 @@
                                     <mask>1c</mask>
                                     <rshift>2</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -4563,7 +4563,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -4641,7 +4641,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4651,7 +4651,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4685,7 +4685,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4791,7 +4791,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -4802,7 +4802,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4812,7 +4812,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -4820,7 +4820,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -4854,7 +4854,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -4963,7 +4963,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=2</state>
+                                      <state>2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -4973,7 +4973,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5079,7 +5079,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5087,7 +5087,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -5283,7 +5283,7 @@
                                     <mask>1c</mask>
                                     <rshift>2</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -5389,7 +5389,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -5474,7 +5474,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5484,7 +5484,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -5518,7 +5518,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5624,7 +5624,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5635,7 +5635,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5645,7 +5645,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5653,7 +5653,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -5687,7 +5687,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5796,7 +5796,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=2</state>
+                                      <state>2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -5806,7 +5806,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -5912,7 +5912,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -5920,7 +5920,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6116,7 +6116,7 @@
                                     <mask>1c</mask>
                                     <rshift>2</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -6222,7 +6222,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>
@@ -6300,7 +6300,7 @@
                                     <mask>3</mask>
                                     <rshift>0</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -6310,7 +6310,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6344,7 +6344,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6450,7 +6450,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -6461,7 +6461,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -6471,7 +6471,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -6479,7 +6479,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6513,7 +6513,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6622,7 +6622,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=2</state>
+                                      <state>2</state>
                                       <rule>
                                         <switch>
                                           <pos>
@@ -6632,7 +6632,7 @@
                                           <mask>3</mask>
                                           <rshift>0</rshift>
                                           <case>
-                                            <state>target@value=0</state>
+                                            <state>0</state>
                                             <rule>
                                               <modify>
                                                 <src>
@@ -6738,7 +6738,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=1</state>
+                                            <state>1</state>
                                             <rule>
                                               <modify>
                                                 <destmask>0</destmask>
@@ -6746,7 +6746,7 @@
                                             </rule>
                                           </case>
                                           <case>
-                                            <state>target@value=2</state>
+                                            <state>2</state>
                                             <rule>
                                               <random>
                                                 <prob>0.003</prob>
@@ -6942,7 +6942,7 @@
                                     <mask>1c</mask>
                                     <rshift>2</rshift>
                                     <case>
-                                      <state>target@value=0</state>
+                                      <state>0</state>
                                       <rule>
                                         <modify>
                                           <src>
@@ -7048,7 +7048,7 @@
                                       </rule>
                                     </case>
                                     <case>
-                                      <state>target@value=1</state>
+                                      <state>1</state>
                                       <rule>
                                         <random>
                                           <prob>0.2</prob>

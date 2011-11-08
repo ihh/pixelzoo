@@ -189,7 +189,7 @@ sub bindDirs {
     return map (($self->pvalue($prob) => ['bind' => ['loc' => $loc,
 				       'x' => $self->dir->{$_}->x,
 				       'y' => $self->dir->{$_}->y,
-				       defined($cases) ? ('case' => $cases) : (),
+				       defined($cases) ? ('bcase' => $cases) : (),
 				       defined($default) ? ('default' => $default) : ()]]),
 		@$dirs);
 }

@@ -74,8 +74,8 @@ sub make_spray_tool {
 		    'rule' => ['huff' => [$cementDrain => $gram->suicide,
 					  $cementSet => $setSub,
 					  $gram->bindMoore (1 - $cementSet - $cementDrain,
-							    [$gram->target($gram->empty) => ['huff' => [$cementStep => $gram->moveTo]],
-							     $gram->target($stickType) => [ 'huff' => [$cementStick => $stickSub]]])]]);
+							    [$gram->bmatch($gram->empty) => ['huff' => [$cementStep => $gram->moveTo]],
+							     $gram->bmatch($stickType) => [ 'huff' => [$cementStick => $stickSub]]])]]);
     
     # cement tool
     $gram->addTool ('name' => "$cementName spray",
@@ -98,7 +98,7 @@ $gram->addType ('name' => 'wall',
 		'rate' => $wallRate,
 		'rule' => ['switch' => ['loc' => $gram->origin,
 					'var' => 'decay',
-					'case' => [ $gram->target($wallMaxDecay) => $gram->suicide ($gram->balloon ("decay", 'rate' => .01, 'hexcolor' => "20ffff"))],
+					'scase' => [ $gram->smatch($wallMaxDecay) => $gram->suicide ($gram->balloon ("decay", 'rate' => .01, 'hexcolor' => "20ffff"))],
 					'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
 								     'inc' => 1 ]]]]);
 
@@ -112,7 +112,7 @@ $gram->addType ('name' => 'acid',
 		'rate' => $acidRate,
 		'rule' => ['huff' => [$acidDrain => $gram->suicide,
 				       $gram->bindMoore (1 - $acidDrain,
-							 [$gram->target($gram->empty) => $gram->moveTo],
+							 [$gram->bmatch($gram->empty) => $gram->moveTo],
 							 ['huff' => [ $acidBurn => $gram->homicide ($gram->suicide) ] ])]]);
 
 # acid tool
@@ -138,13 +138,13 @@ $gram->addType ('name' => 'plant',
 		'rule' => ['huff' => [$plant{'die'} => $gram->suicide,
 				      (1 - $plant{'die'}) => ['switch' => ['loc' => $gram->origin,
 									   'var' => 'gens_left',
-									   'case' => { $gram->target('0') => $gram->nop },
+									   'scase' => { $gram->smatch('0') => $gram->nop },
 									   'default' => $gram->huffNeumann
-									   ({ $gram->target($gram->empty) => $gram->copyTo
+									   ({ $gram->bmatch($gram->empty) => $gram->copyTo
 										  ($gram->neighbor,
 										   ['switch' => ['loc' => $gram->origin,
 												 'var' => 'branches',
-												 'case' => { $gram->target($plant{'max_branches'}) => $no_branch },
+												 'scase' => { $gram->smatch($plant{'max_branches'}) => $no_branch },
 												 'default' => ['huff' => [(1-$plant{'branch'}) => $no_branch,
 															  $plant{'branch'} => ['modify' => ['src' => ['loc' => $gram->origin, 'var' => 'branches'],
 																			    'inc' => +1,
@@ -173,7 +173,7 @@ sub make_species_switch {
     for my $orig (0..2) {
 	my $prey = ($orig + 1) % 3;
 	for my $nbr (0..2) {
-	    $sw{$orig}->{$gram->target($nbr)} =
+	    $sw{$orig}->{$gram->smatch($nbr)} =
 		($nbr == $orig)
 		? $selfRule
 		: (($nbr == $prey)
@@ -183,9 +183,9 @@ sub make_species_switch {
     }
     return ('switch' => ['loc' => $gram->origin,
 			 'var' => 'species',
-			 'case' => [map (( $gram->target($_) => ['switch' => ['loc' => $gram->neighbor,
+			 'scase' => [map (( $gram->smatch($_) => ['switch' => ['loc' => $gram->neighbor,
 									      'var' => 'species',
-									      'case' => [%{$sw{$_}}]]] ),
+									      'scase' => [%{$sw{$_}}]]] ),
 					 0..2)]]);
 }
 
@@ -221,25 +221,25 @@ $gram->addType ('name' => $rps{'name'},
 		'rule' =>
 		['switch' => ['loc' => $gram->origin,
 			      'var' => 'species',
-			      'case' => [$gram->target(3) => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
+			      'scase' => [$gram->smatch(3) => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
 												    'dest' => ['var' => 'species']]]),
 							       0..2)]]],
 			      'default' => ['huff' => [ $gram->bindNeumann
 							(1,
-							 [ $gram->target($gram->empty) => ['huff' => [$rps{'die'} => $gram->suicide,
+							 [ $gram->bmatch($gram->empty) => ['huff' => [$rps{'die'} => $gram->suicide,
 												      $stepOrBreed => $gram->moveOrSpawnTo ($rps{'breed'} / $stepOrBreed,
 															     $gram->neighbor,
 															     $gram->balloon("step",'rate'=>$rps{'text'}),
 															     $gram->balloon("breed",'rate'=>$rps{'text'}))]],
-							   $gram->target($rps{'food'}) => ['switch' => ['loc' => $gram->neighbor,
+							   $gram->bmatch($rps{'food'}) => ['switch' => ['loc' => $gram->neighbor,
 													'var' => $rps{'food_unripeness_var'},
-													'case' => { $gram->target(0) => [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
+													'scase' => { $gram->smatch(0) => [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
 																							     $gram->neighbor,
 																							     $gram->balloon("eat",'rate'=>$rps{'text'}),
 																							     $gram->balloon("spawn",'rate'=>$rps{'text'})) ] ],
-												     $gram->target(1) => [ 'huff' => [ $rps{'eat'} => $gram->moveTo ] ] }]],
+												     $gram->smatch(1) => [ 'huff' => [ $rps{'eat'} => $gram->moveTo ] ] }]],
 							   
-							   $gram->target($rps{'name'}) => [ make_species_switch
+							   $gram->bmatch($rps{'name'}) => [ make_species_switch
 									     ($gram,
 									      [ 'huff' => [ $rps{'choke'} => $gram->suicide ] ],
 									      [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
@@ -265,8 +265,8 @@ $gram->addType ('name' => 'perfume',
 		'rate' => $perfumeRate,
 		'rule' => ['huff' => [$perfumeDrain => $gram->suicide,
 				      $gram->bindMoore (1 - $perfumeDrain,
-							  [$gram->target($gram->empty) => $gram->moveOrSpawnTo ($perfumeBillow),
-							   $gram->target($rps{'name'}) => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
+							  [$gram->bmatch($gram->empty) => $gram->moveOrSpawnTo ($perfumeBillow),
+							   $gram->bmatch($rps{'name'}) => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
 
 # perfume tool
 $gram->addTool ('name' => 'Perfume spray',

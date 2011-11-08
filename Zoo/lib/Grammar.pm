@@ -480,7 +480,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
-	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
+	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y bcase default));
 	    $case = {} unless defined $case;
 
 	    if (defined($self->scope->loctype->{$locid})) {
@@ -525,7 +525,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
-	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
+	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var scase default));
 	    $locid = $self->origin unless defined $locid;
 	    $case = {} unless defined $case;
 
@@ -541,6 +541,7 @@ sub transform_hash {
 	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
 	    while (my ($name, $rule) = each %case_hash) {
+		$name = $self->fixVarValue($name);
 		$transformed_case{$name} = $self->transform_value ($rule);
 	    }
 	    my $transformed_default = defined($default) ? $self->transform_value($default) : undef;
@@ -892,7 +893,6 @@ sub getTypeAsHexState {
 
 sub getType {
     my ($self, $type) = @_;
-    $type = $self->fixTypeName($type);
     confess "Undefined type" unless defined $type;
     if ($type =~ /^\-?\d+$/) {
 	return $type;
@@ -992,19 +992,25 @@ sub new_XML_element {
     return $t;
 }
 
-# helper to turn a particle type name into a form that new_XML_element will process into a <target value="name"> tag
-sub target {
+# helper to turn a particle type name into a form that new_XML_element will process into a <bmatch type="..."> tag
+sub bmatch {
     my ($self, $name) = @_;
-    return 'target@value=' . $name;
+    return 'bmatch@type=' . $name;
 }
 
-# helper to turn a var name into a form that new_XML_element will process into a <val var="name"> tag
+# helper to turn a var value into a form that new_XML_element will process into a <smatch value="..."> tag
+sub smatch {
+    my ($self, $val) = @_;
+    return 'smatch@value=' . $val;
+}
+
+# helper to turn a var name into a form that new_XML_element will process into a <val var="..."> tag
 sub var {
     my ($self, $name) = @_;
     return 'val@var=' . $name;
 }
 
-# helper to turn a probability into a form that new_XML_element will process into a <p value="name"> tag
+# helper to turn a probability into a form that new_XML_element will process into a <p value="..."> tag
 sub pvalue {
     my ($self, $prob) = @_;
     return 'p@value=' . $prob;
@@ -1013,8 +1019,14 @@ sub pvalue {
 # helpers to reverse the above transformations
 sub fixTypeName {
     my ($self, $type) = @_;
-    $type =~ s/^target\@value=([^\@]+)$/$1/;
+    $type =~ s/^bmatch\@type=([^\@]+)$/$1/;
     return $type;
+}
+
+sub fixVarValue {
+    my ($self, $val) = @_;
+    $val =~ s/^smatch\@value=([^\@]+)$/$1/;
+    return $val;
 }
 
 sub fixProb {

@@ -77,8 +77,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -98,8 +98,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -112,8 +112,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -121,8 +121,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -142,8 +142,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -156,8 +156,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -165,8 +165,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -186,8 +186,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -200,8 +200,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -209,8 +209,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -230,8 +230,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -244,8 +244,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -253,8 +253,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -274,8 +274,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -288,8 +288,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -297,8 +297,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -318,8 +318,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -332,8 +332,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -341,8 +341,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -362,8 +362,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -376,8 +376,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.122375">
@@ -385,8 +385,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.02">
                         <modify>
@@ -406,8 +406,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <modify>
@@ -420,8 +420,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
           </huff>
@@ -449,8 +449,8 @@
           <switch>
             <loc>o</loc>
             <var>decay</var>
-            <case>
-              <target value="15">
+            <scase>
+              <smatch value="15">
                 <modify>
                   <set>
                     <type>empty</type>
@@ -465,8 +465,8 @@
                     </rule>
                   </next>
                 </modify>
-              </target>
-            </case>
+              </smatch>
+            </scase>
             <default>
               <modify>
                 <src>
@@ -504,8 +504,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -521,8 +521,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -551,8 +551,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -568,8 +568,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -598,8 +598,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -615,8 +615,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -645,8 +645,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -662,8 +662,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -692,8 +692,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -709,8 +709,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -739,8 +739,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -756,8 +756,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -786,8 +786,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -803,8 +803,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -833,8 +833,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -850,8 +850,8 @@
                         </modify>
                       </next>
                     </modify>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
                 <default>
                   <huff>
                     <p value="0.5">
@@ -911,11 +911,11 @@
               <switch>
                 <loc>o</loc>
                 <var>gens_left</var>
-                <case>
-                  <target value="0">
+                <scase>
+                  <smatch value="0">
                     <nop></nop>
-                  </target>
-                </case>
+                  </smatch>
+                </scase>
                 <default>
                   <huff>
                     <p value="0.25">
@@ -923,8 +923,8 @@
                         <loc>nbr</loc>
                         <x>0</x>
                         <y>-1</y>
-                        <case>
-                          <target value="empty">
+                        <bcase>
+                          <bmatch type="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -936,8 +936,8 @@
                                 <switch>
                                   <loc>o</loc>
                                   <var>branches</var>
-                                  <case>
-                                    <target value="3">
+                                  <scase>
+                                    <smatch value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -949,8 +949,8 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </target>
-                                  </case>
+                                    </smatch>
+                                  </scase>
                                   <default>
                                     <huff>
                                       <p value="0.8">
@@ -984,8 +984,8 @@
                                 </switch>
                               </next>
                             </modify>
-                          </target>
-                        </case>
+                          </bmatch>
+                        </bcase>
                       </bind>
                     </p>
                     <p value="0.25">
@@ -993,8 +993,8 @@
                         <loc>nbr</loc>
                         <x>1</x>
                         <y>0</y>
-                        <case>
-                          <target value="empty">
+                        <bcase>
+                          <bmatch type="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1006,8 +1006,8 @@
                                 <switch>
                                   <loc>o</loc>
                                   <var>branches</var>
-                                  <case>
-                                    <target value="3">
+                                  <scase>
+                                    <smatch value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1019,8 +1019,8 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </target>
-                                  </case>
+                                    </smatch>
+                                  </scase>
                                   <default>
                                     <huff>
                                       <p value="0.8">
@@ -1054,8 +1054,8 @@
                                 </switch>
                               </next>
                             </modify>
-                          </target>
-                        </case>
+                          </bmatch>
+                        </bcase>
                       </bind>
                     </p>
                     <p value="0.25">
@@ -1063,8 +1063,8 @@
                         <loc>nbr</loc>
                         <x>0</x>
                         <y>1</y>
-                        <case>
-                          <target value="empty">
+                        <bcase>
+                          <bmatch type="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1076,8 +1076,8 @@
                                 <switch>
                                   <loc>o</loc>
                                   <var>branches</var>
-                                  <case>
-                                    <target value="3">
+                                  <scase>
+                                    <smatch value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1089,8 +1089,8 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </target>
-                                  </case>
+                                    </smatch>
+                                  </scase>
                                   <default>
                                     <huff>
                                       <p value="0.8">
@@ -1124,8 +1124,8 @@
                                 </switch>
                               </next>
                             </modify>
-                          </target>
-                        </case>
+                          </bmatch>
+                        </bcase>
                       </bind>
                     </p>
                     <p value="0.25">
@@ -1133,8 +1133,8 @@
                         <loc>nbr</loc>
                         <x>-1</x>
                         <y>0</y>
-                        <case>
-                          <target value="empty">
+                        <bcase>
+                          <bmatch type="empty">
                             <modify>
                               <src>
                                 <loc>o</loc>
@@ -1146,8 +1146,8 @@
                                 <switch>
                                   <loc>o</loc>
                                   <var>branches</var>
-                                  <case>
-                                    <target value="3">
+                                  <scase>
+                                    <smatch value="3">
                                       <modify>
                                         <src>
                                           <loc>nbr</loc>
@@ -1159,8 +1159,8 @@
                                           <var>gens_left</var>
                                         </dest>
                                       </modify>
-                                    </target>
-                                  </case>
+                                    </smatch>
+                                  </scase>
                                   <default>
                                     <huff>
                                       <p value="0.8">
@@ -1194,8 +1194,8 @@
                                 </switch>
                               </next>
                             </modify>
-                          </target>
-                        </case>
+                          </bmatch>
+                        </bcase>
                       </bind>
                     </p>
                   </huff>
@@ -1259,8 +1259,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1280,8 +1280,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1312,8 +1312,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1321,8 +1321,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1342,8 +1342,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1374,8 +1374,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1383,8 +1383,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1404,8 +1404,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1436,8 +1436,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1445,8 +1445,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1466,8 +1466,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1498,8 +1498,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1507,8 +1507,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1528,8 +1528,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1560,8 +1560,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1569,8 +1569,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1590,8 +1590,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1622,8 +1622,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1631,8 +1631,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1652,8 +1652,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1684,8 +1684,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.1211875">
@@ -1693,8 +1693,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <huff>
                       <p value="0.05">
                         <modify>
@@ -1714,8 +1714,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                  <target value="wall">
+                  </bmatch>
+                  <bmatch type="wall">
                     <huff>
                       <p value="1">
                         <huff>
@@ -1746,8 +1746,8 @@
                         </huff>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
           </huff>
@@ -1774,8 +1774,8 @@
           <switch>
             <loc>o</loc>
             <var>species</var>
-            <case>
-              <target value="3">
+            <scase>
+              <smatch value="3">
                 <huff>
                   <p value="0.333333333333333">
                     <modify>
@@ -1802,8 +1802,8 @@
                     </modify>
                   </p>
                 </huff>
-              </target>
-            </case>
+              </smatch>
+            </scase>
             <default>
               <huff>
                 <p value="0.25">
@@ -1811,8 +1811,8 @@
                     <loc>nbr</loc>
                     <x>0</x>
                     <y>-1</y>
-                    <case>
-                      <target value="empty">
+                    <bcase>
+                      <bmatch type="empty">
                         <huff>
                           <p value="0.005">
                             <modify>
@@ -1859,13 +1859,13 @@
                             </modify>
                           </p>
                         </huff>
-                      </target>
-                      <target value="plant">
+                      </bmatch>
+                      <bmatch type="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <huff>
                                 <p value="1">
                                   <modify>
@@ -1905,8 +1905,8 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <huff>
                                 <p value="0.2">
                                   <modify>
@@ -1926,24 +1926,35 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                      <target value="cyclobs">
+                      </bmatch>
+                      <bmatch type="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="2">
                                     <nop></nop>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -1983,27 +1994,19 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <nop></nop>
+                                  </smatch>
+                                  <smatch value="2">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2043,8 +2046,8 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="0.003">
                                         <modify>
@@ -2054,33 +2057,16 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <nop></nop>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="2">
+                            </smatch>
+                            <smatch value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                  <target value="1">
-                                    <nop></nop>
-                                  </target>
-                                  <target value="0">
+                                <scase>
+                                  <smatch value="0">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2120,14 +2106,28 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                  <smatch value="2">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="1">
+                                    <nop></nop>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                    </case>
+                      </bmatch>
+                    </bcase>
                   </bind>
                 </p>
                 <p value="0.25">
@@ -2135,8 +2135,8 @@
                     <loc>nbr</loc>
                     <x>1</x>
                     <y>0</y>
-                    <case>
-                      <target value="empty">
+                    <bcase>
+                      <bmatch type="empty">
                         <huff>
                           <p value="0.005">
                             <modify>
@@ -2183,13 +2183,13 @@
                             </modify>
                           </p>
                         </huff>
-                      </target>
-                      <target value="plant">
+                      </bmatch>
+                      <bmatch type="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <huff>
                                 <p value="1">
                                   <modify>
@@ -2229,8 +2229,8 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <huff>
                                 <p value="0.2">
                                   <modify>
@@ -2250,24 +2250,35 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                      <target value="cyclobs">
+                      </bmatch>
+                      <bmatch type="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="2">
                                     <nop></nop>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2307,27 +2318,19 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <nop></nop>
+                                  </smatch>
+                                  <smatch value="2">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2367,8 +2370,8 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="0.003">
                                         <modify>
@@ -2378,33 +2381,16 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <nop></nop>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="2">
+                            </smatch>
+                            <smatch value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                  <target value="1">
-                                    <nop></nop>
-                                  </target>
-                                  <target value="0">
+                                <scase>
+                                  <smatch value="0">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2444,14 +2430,28 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                  <smatch value="2">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="1">
+                                    <nop></nop>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                    </case>
+                      </bmatch>
+                    </bcase>
                   </bind>
                 </p>
                 <p value="0.25">
@@ -2459,8 +2459,8 @@
                     <loc>nbr</loc>
                     <x>0</x>
                     <y>1</y>
-                    <case>
-                      <target value="empty">
+                    <bcase>
+                      <bmatch type="empty">
                         <huff>
                           <p value="0.005">
                             <modify>
@@ -2507,13 +2507,13 @@
                             </modify>
                           </p>
                         </huff>
-                      </target>
-                      <target value="plant">
+                      </bmatch>
+                      <bmatch type="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <huff>
                                 <p value="1">
                                   <modify>
@@ -2553,8 +2553,8 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <huff>
                                 <p value="0.2">
                                   <modify>
@@ -2574,24 +2574,35 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                      <target value="cyclobs">
+                      </bmatch>
+                      <bmatch type="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="2">
                                     <nop></nop>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2631,27 +2642,19 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <nop></nop>
+                                  </smatch>
+                                  <smatch value="2">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2691,8 +2694,8 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="0.003">
                                         <modify>
@@ -2702,33 +2705,16 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <nop></nop>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="2">
+                            </smatch>
+                            <smatch value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                  <target value="1">
-                                    <nop></nop>
-                                  </target>
-                                  <target value="0">
+                                <scase>
+                                  <smatch value="0">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2768,14 +2754,28 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                  <smatch value="2">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="1">
+                                    <nop></nop>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                    </case>
+                      </bmatch>
+                    </bcase>
                   </bind>
                 </p>
                 <p value="0.25">
@@ -2783,8 +2783,8 @@
                     <loc>nbr</loc>
                     <x>-1</x>
                     <y>0</y>
-                    <case>
-                      <target value="empty">
+                    <bcase>
+                      <bmatch type="empty">
                         <huff>
                           <p value="0.005">
                             <modify>
@@ -2831,13 +2831,13 @@
                             </modify>
                           </p>
                         </huff>
-                      </target>
-                      <target value="plant">
+                      </bmatch>
+                      <bmatch type="plant">
                         <switch>
                           <loc>nbr</loc>
                           <var>gens_left</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <huff>
                                 <p value="1">
                                   <modify>
@@ -2877,8 +2877,8 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <huff>
                                 <p value="0.2">
                                   <modify>
@@ -2898,24 +2898,35 @@
                                   </modify>
                                 </p>
                               </huff>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                      <target value="cyclobs">
+                      </bmatch>
+                      <bmatch type="cyclobs">
                         <switch>
                           <loc>o</loc>
                           <var>species</var>
-                          <case>
-                            <target value="0">
+                          <scase>
+                            <smatch value="0">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="2">
                                     <nop></nop>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -2955,27 +2966,19 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="1">
+                            </smatch>
+                            <smatch value="1">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
+                                <scase>
+                                  <smatch value="0">
+                                    <nop></nop>
+                                  </smatch>
+                                  <smatch value="2">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -3015,8 +3018,8 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="1">
+                                  </smatch>
+                                  <smatch value="1">
                                     <huff>
                                       <p value="0.003">
                                         <modify>
@@ -3026,33 +3029,16 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                  <target value="0">
-                                    <nop></nop>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                            <target value="2">
+                            </smatch>
+                            <smatch value="2">
                               <switch>
                                 <loc>nbr</loc>
                                 <var>species</var>
-                                <case>
-                                  <target value="2">
-                                    <huff>
-                                      <p value="0.003">
-                                        <modify>
-                                          <set>
-                                            <type>empty</type>
-                                          </set>
-                                        </modify>
-                                      </p>
-                                    </huff>
-                                  </target>
-                                  <target value="1">
-                                    <nop></nop>
-                                  </target>
-                                  <target value="0">
+                                <scase>
+                                  <smatch value="0">
                                     <huff>
                                       <p value="1">
                                         <modify>
@@ -3092,14 +3078,28 @@
                                         </modify>
                                       </p>
                                     </huff>
-                                  </target>
-                                </case>
+                                  </smatch>
+                                  <smatch value="2">
+                                    <huff>
+                                      <p value="0.003">
+                                        <modify>
+                                          <set>
+                                            <type>empty</type>
+                                          </set>
+                                        </modify>
+                                      </p>
+                                    </huff>
+                                  </smatch>
+                                  <smatch value="1">
+                                    <nop></nop>
+                                  </smatch>
+                                </scase>
                               </switch>
-                            </target>
-                          </case>
+                            </smatch>
+                          </scase>
                         </switch>
-                      </target>
-                    </case>
+                      </bmatch>
+                    </bcase>
                   </bind>
                 </p>
               </huff>
@@ -3133,8 +3133,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3154,8 +3154,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3168,8 +3168,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3177,8 +3177,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3198,8 +3198,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3212,8 +3212,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3221,8 +3221,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3242,8 +3242,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3256,8 +3256,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3265,8 +3265,8 @@
                 <loc>nbr</loc>
                 <x>1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3286,8 +3286,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3300,8 +3300,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3309,8 +3309,8 @@
                 <loc>nbr</loc>
                 <x>0</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3330,8 +3330,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3344,8 +3344,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3353,8 +3353,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3374,8 +3374,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3388,8 +3388,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3397,8 +3397,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>0</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3418,8 +3418,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3432,8 +3432,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
             <p value="0.12125">
@@ -3441,8 +3441,8 @@
                 <loc>nbr</loc>
                 <x>-1</x>
                 <y>-1</y>
-                <case>
-                  <target value="empty">
+                <bcase>
+                  <bmatch type="empty">
                     <modify>
                       <src>
                         <loc>o</loc>
@@ -3462,8 +3462,8 @@
                         </huff>
                       </next>
                     </modify>
-                  </target>
-                  <target value="cyclobs">
+                  </bmatch>
+                  <bmatch type="cyclobs">
                     <huff>
                       <p value="0.5">
                         <modify>
@@ -3476,8 +3476,8 @@
                         </modify>
                       </p>
                     </huff>
-                  </target>
-                </case>
+                  </bmatch>
+                </bcase>
               </bind>
             </p>
           </huff>
