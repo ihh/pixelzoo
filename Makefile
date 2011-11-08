@@ -30,17 +30,17 @@ LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
-XMLFILES := t/simple.copy.xml
+XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
-all: lib targets xml
+all: lib targets
 
-test: all eloise-sdl-test xml-valid-test
+test: all eloise-pztest xml-valid-test xml-build-test
 
 clean:
-	rm -rf obj/* bin/* lib/* *~ *.dSYM
+	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES)
 
 cleanxml:
-	rm $(XMLFILES)
+	rm $(XMLTESTFILES)
 
 sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -r t/revcomp.xml
@@ -84,7 +84,7 @@ xml-valid-test:
 
 targets: $(XFILES)
 
-xml: $(XMLFILES)
+xml-build-test: $(XMLTESTFILES)
 
 lib: $(LIBTARGET)
 
@@ -104,6 +104,10 @@ t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out $@ -verbose
 	diff t/proto.xml t/proto.copy.xml
 	diff t/simple.xml t/simple.copy.xml
+
+t/compiled.copy.xml: t/proto.xml
+	$(PERL) perl/zoocompiler.pl $< >$@
+	diff t/compiled.xml t/compiled.copy.xml
 
 xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out t/simple.copy.xml -debug
