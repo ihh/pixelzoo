@@ -34,8 +34,6 @@ XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
 all: lib targets
 
-test: all eloise-pztest xml-valid-test xml-build-test
-
 clean:
 	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES)
 
@@ -47,6 +45,38 @@ sdl: targets
 
 timed-sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -r t/revcomp.xml -t 5000000000
+
+# Targets
+
+targets: $(XFILES)
+
+lib: $(LIBTARGET)
+
+bin/%:  tsrc/%.c $(LIBTARGET)
+	@test -e bin || mkdir bin
+	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -L$(LIBDIR) -l$(LIBNAME) -o $@ tsrc/$*.c
+
+obj/%.o: src/%.c
+	@test -e obj || mkdir obj
+	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
+
+$(LIBTARGET): $(OFILES)
+	@test -e lib || mkdir lib
+	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES)
+
+.SUFFIXES :
+
+.SECONDARY:
+
+
+test: all xmltest eloise-pztest xml-valid-test xml-build-test
+
+# The following target builds and runs a simple XML reader, without any other SDL or pixelzoo targets
+# It can be used to test libxml2 on a new platform.
+xmltest:
+	@test -e bin || mkdir bin
+	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
+	bin/xmltest t/testgame.xml
 
 # Simple replay test, constructed as follows:
 #
@@ -80,48 +110,21 @@ xml-valid-test:
 	$(XMLLINT) --dtdvalid Zoo/dtd/game.dtd --noout t/testgame.xml
 	$(XMLLINT) --dtdvalid Zoo/dtd/proto.dtd --noout t/proto.xml
 
-# Targets
-
-targets: $(XFILES)
+# XML generation tests
 
 xml-build-test: $(XMLTESTFILES)
-
-lib: $(LIBTARGET)
-
-bin/%:  tsrc/%.c $(LIBTARGET)
-	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -L$(LIBDIR) -l$(LIBNAME) -o $@ tsrc/$*.c
-
-$(LIBTARGET): $(OFILES)
-	@test -e lib || mkdir lib
-	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES)
-
-.SUFFIXES :
-
-.SECONDARY:
 
 t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out $@ -verbose
 	diff t/proto.xml t/proto.copy.xml
 	diff t/simple.xml t/simple.copy.xml
 
-t/compiled.copy.xml: t/proto.xml
-	$(PERL) perl/zoocompiler.pl $< >$@
-	diff t/compiled.xml t/compiled.copy.xml
-
 xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
 	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out t/simple.copy.xml -debug
 
-obj/%.o: src/%.c
-	@test -e obj || mkdir obj
-	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
-
-# The following target builds and runs a simple XML reader, without any other SDL or pixelzoo targets
-# It can be used to test libxml2 on a new platform.
-xmltest:
-	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
-	bin/xmltest t/testgame.xml
+t/compiled.copy.xml: t/proto.xml
+	$(PERL) perl/zoocompiler.pl $< >$@
+	diff t/compiled.xml t/compiled.copy.xml
 
 # Documentation
 doc:
