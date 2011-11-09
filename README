@@ -14,14 +14,14 @@ libxml2 (MIT license, included by default with the iPhone SDK)
 http://xmlsoft.org/
 
 
-SDL client: C file in tsrc/sdltest.c
+SDL client: C code in tsrc/sdltest.c
 ----------
 
 Requires Simple DirectMedia Layer (SDL).
 http://www.libsdl.org/
 
 
-iOS client: Objective-C and Xcode IDE files in xcode/pixelzoo/
+iOS client: Objective-C code and Xcode IDE files in xcode/pixelzoo/
 ----------
 
 Requires Xcode IDE and iOS development framework.
