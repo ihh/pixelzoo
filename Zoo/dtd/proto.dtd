@@ -282,7 +282,7 @@ named bit-fields of different widths. -->
 <!ELEMENT var (#PCDATA)>
 <!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
-<!-- A hexadecimal multiplier. -->
+<!-- A hexadecimal increment. -->
 <!ELEMENT hexinc (#PCDATA)>
 
 
@@ -416,6 +416,7 @@ Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("
 -->
 <!ATTLIST val var CDATA #REQUIRED>
 
+<!-- A decimal increment. -->
 <!ELEMENT inc (#PCDATA)>
 
 <!-- A dummy rule that does nothing. -->
