@@ -10,7 +10,7 @@ Dependencies
 Core client engine: C code in src/, compiles into lib/
 ------------------
 
-libxml2 (MIT license, included by default with the iPhone SDK)
+Requires libxml2 (MIT license, included by default with the iPhone SDK)
 http://xmlsoft.org/
 
 
@@ -41,6 +41,6 @@ http://developer.android.com/sdk/ndk/
 Server: Perl code in Zoo/
 ------
 
-Perl Catalyst, and a few other modules.
+Requires Perl Catalyst framework, and a few other modules.
 Do 'cd Zoo; perl Makefile.PL; make' to install other dependencies from CPAN.
 http://www.catalystframework.org/
