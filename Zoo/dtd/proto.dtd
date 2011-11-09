@@ -46,9 +46,9 @@ Each Goal expression operates on a given <i>area</i> of the Board
 
 <!-- A Goal that tests if the parent area contains a population of cells 
  belonging to a specified set of types ("state" / "type"),
- having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
+ having a specified number ("count"), and having, when masked with a given bitmask ("vmask"),
  a specified Shannon entropy ("entropy"). -->
-<!ELEMENT population (allowmask?,(gstate|pstate|ostate|gvars|gtype)+,mask?,count?,entropy?)>
+<!ELEMENT population ((gstate|pstate|ostate|gvars|gtype)+,vmask?,count?,entropy?)>
 
 <!-- A Goal that is true if the child expression ("goal") has evaluated true
  consecutively for a specified number of times ("reps"). -->
@@ -130,7 +130,6 @@ Generally specified relative to the current cell (e.g. the one whose update rule
 <!ELEMENT y (#PCDATA)>
 
 <!ELEMENT points (min?,max?)>
-<!ELEMENT allowmask (#PCDATA)>
 <!ELEMENT count (min?,max?)>
 <!ELEMENT entropy (min?,max?)>
 
@@ -186,7 +185,7 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
 <!ELEMENT pixel (x,y,(gstate|pstate|ostate|gvars))>
-<!ELEMENT overwrite (disallow*,(gstate|pstate|ostate|gvars)*,(mask|tmask)?)>
+<!ELEMENT overwrite (disallow*,(gstate|pstate|ostate|gvars)*,vmask?)>
 <!ELEMENT disallow (x,y)>
 
 <!-- The name of a type of particle (a "type"). -->
@@ -206,8 +205,8 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
 <!ELEMENT reserve (#PCDATA)>
 <!ELEMENT recharge (#PCDATA)>
 <!ELEMENT maxreserve (#PCDATA)>
-<!ELEMENT mask (#PCDATA)>
-<!ELEMENT tmask (#PCDATA)>
+<!-- The mask for a given named type and variable. -->
+<!ELEMENT vmask (type,var)>
 <!ELEMENT hide EMPTY>
 
 <!-- The exit portal for the Board, enabling Lemmings-style play.
