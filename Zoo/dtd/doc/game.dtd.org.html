@@ -373,8 +373,11 @@
 <span class="dtd_comment">&lt;!-- Deliver rule.</span>
 
 <span class="dtd_comment">Delivers a 64-bit message (&quot;msg&quot;) to the dispatch table of a neighboring cell (&quot;pos&quot;). --&gt;</span>
-<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">msg</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
+<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">,(</span><span class="dtd_attribute_name">msg</span><span class="dtd_plain">|</span><span class="dtd_attribute_name">hexmsg</span><span class="dtd_plain">))</span><span class="dtd_tag_symbols">&gt;</span>
+<span class="dtd_comment">&lt;!-- A 64-bit decimal integer message. --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">msg</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
+<span class="dtd_comment">&lt;!-- A 64-bit hexadecimal integer message. --&gt;</span>
+<span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">hexmsg</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
 <span class="dtd_comment">&lt;!-- Goto rule.</span>
 

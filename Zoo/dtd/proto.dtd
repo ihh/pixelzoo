@@ -6,6 +6,10 @@ The intention of this dialect is to offer a slightly higher layer of abstraction
 than is offered by the raw numerical format of the "game" format.
 
 This (slightly) higher-level dialect can be compiled down to the "game" dialect, using the zoocompiler.pl program.
+
+Some features that are implemented in the core game engine (read-only variables, inter-particle messaging),
+which are accessible from the low-level dialect,
+are not yet exposed at this higher level (zoocompiler does not define a namespace for them).
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
@@ -256,10 +260,13 @@ Any given instance of a particle has 48 additional bits of instance-specific sta
 These 48 bits are conventionally split amongst a series of <i>Vars</i>:
 named bit-fields of different widths ("vars").
 
+By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
+
 Currently there is no mechanism to access the read-only vars,
 although the game DTD does allow for these.
+Also, the message dispatch table is not really useable,
+since the 64-bit "messages" are not yet compiled from a string namespace.
 
-By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
  -->
 <!ELEMENT particle (name,vars?,hue?,sat?,bri?,sync?,rate?,rule,dispatch*)>
 
@@ -410,9 +417,11 @@ After writing to the destination cells, the (optional) "next" rule is executed. 
 <!-- Deliver rule.
 
 Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
-<!ELEMENT deliver (pos,msg)>
-<!-- A 64-bit integer message. Note that messages are not currently compiled from strings -->
+<!ELEMENT deliver (pos,(msg|hexmsg))>
+<!-- A 64-bit decimal integer message. Note that messages are not currently compiled from strings. -->
 <!ELEMENT msg (#PCDATA)>
+<!-- A 64-bit hexadecimal integer message. Note that messages are not currently compiled from strings. -->
+<!ELEMENT hexmsg (#PCDATA)>
 
 <!ELEMENT set (type,val*)>
 

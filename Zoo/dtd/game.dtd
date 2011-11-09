@@ -367,8 +367,11 @@ After this, the (optional) "next" rule is executed. -->
 <!-- Deliver rule.
 
 Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
-<!ELEMENT deliver (pos,msg)>
+<!ELEMENT deliver (pos,(msg|hexmsg))>
+<!-- A 64-bit decimal integer message. -->
 <!ELEMENT msg (#PCDATA)>
+<!-- A 64-bit hexadecimal integer message. -->
+<!ELEMENT hexmsg (#PCDATA)>
 
 <!-- Goto rule.
 
