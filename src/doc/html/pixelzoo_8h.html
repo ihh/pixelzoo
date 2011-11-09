@@ -149,7 +149,7 @@ Functions</h2></td></tr>
 <div class="memdoc">
 <p>The conversion factor from board clock units ("microticks") to expected updates per cell; equal to 2^20 </p>
 
-<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00097">97</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
+<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00103">103</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
 
 </div>
 </div>
@@ -182,7 +182,7 @@ Functions</h2></td></tr>
 <div class="memdoc">
 <p>Pointer to a data structure describing a text balloon. Client can display these for in-game feedback. </p>
 
-<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00024">24</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
+<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00027">27</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
 
 </div>
 </div>
@@ -198,7 +198,7 @@ Functions</h2></td></tr>
 <div class="memdoc">
 <p>Pointer to an instance of the PixelZoo game machine, including board, tools, goals, etc. </p>
 
-<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00016">16</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
+<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00017">17</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +214,7 @@ Functions</h2></td></tr>
 <div class="memdoc">
 <p>Pointer to a data structure describing a tool that the player can use to paint on the board. </p>
 
-<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00020">20</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
+<p>Definition at line <a class="el" href="pixelzoo_8h_source.html#l00022">22</a> of file <a class="el" href="pixelzoo_8h_source.html">pixelzoo.h</a>.</p>
 
 </div>
 </div>
@@ -316,7 +316,7 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Tests whether the board is still evolving.</p>
-<p>NB it is possible for the board to be evolving but the player unable to do anything. </p>
+<p>NB it is possible for the board to be evolving but the player unable to do anything except watch it (e.g. if the game is in the GameLost state). </p>
 
 </div>
 </div>
@@ -783,7 +783,9 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Index of tool currently selected </p>
+<p>Find out which tool is currently selected.</p>
+<p>Change this via <a class="el" href="pixelzoo_8h.html#aa32d88c25c801f87edc6d13f1c2520c8">pzSelectTool()</a> and <a class="el" href="pixelzoo_8h.html#a0a55ac159b1a08b09d920ffbd45eb031">pzUnselectTool()</a>.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Index of currently-selected tool, or -1 if none is selected. </dd></dl>
 
 </div>
 </div>
@@ -811,7 +813,14 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Get data structure describing one of the tools that is available to the player </p>
+<p>Get a descriptor for a tool available to the player. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">toolNum</td><td>The index of the tool to get </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A tool descriptor </dd></dl>
 
 </div>
 </div>
@@ -829,7 +838,7 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>Name of a particular tool </p>
+<p>Name of a particular tool. </p>
 
 </div>
 </div>
@@ -876,7 +885,8 @@ Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>24-bit RGB color for a particular tool </p>
+<p>Color of a particular tool </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A 24-bit RGB color </dd></dl>
 
 </div>
 </div>
@@ -1189,7 +1199,7 @@ Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 8 2011 16:41:31 for pixelzoo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 8 2011 17:09:03 for pixelzoo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

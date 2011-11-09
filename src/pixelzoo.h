@@ -76,7 +76,8 @@ void pzStartGame(pzGame);
 /**
  Tests whether the board is still evolving.
 
- NB it is possible for the board to be evolving but the player unable to do anything.
+ NB it is possible for the board to be evolving but the player unable to do anything except watch it
+ (e.g. if the game is in the GameLost state).
  */
 int pzGameRunning(pzGame);
 
@@ -162,19 +163,30 @@ void pzUntouchCell(pzGame);
 int pzGetNumberOfTools(pzGame);
 
 /**
- Index of tool currently selected */
+ Find out which tool is currently selected.
+
+ Change this via pzSelectTool() and pzUnselectTool().
+
+ @return Index of currently-selected tool, or -1 if none is selected.
+ */
 int pzGetSelectedToolNumber(pzGame);  /* returns -1 if no tool selected. Change via pzSelectTool() and pzUnselectTool() */
 
 /**
- Get data structure describing one of the tools that is available to the player */
+ Get a descriptor for a tool available to the player.
+ @param toolNum The index of the tool to get
+ @return A tool descriptor
+ */
 pzTool pzGetToolByNumber(pzGame,int toolNum);  /* use the returned pzTool for subsequent access to the tool */
 
 /**
- 24-bit RGB color for a particular tool */
+ Color of a particular tool
+ @return A 24-bit RGB color
+ */
 int pzGetToolRgb(pzGame,pzTool);  /* returns 24-bit RGB */
 
 /**
- Name of a particular tool */
+ Name of a particular tool.
+ */
 const char* pzGetToolName(pzTool);
 
 /**
