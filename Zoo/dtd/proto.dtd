@@ -256,6 +256,9 @@ Any given instance of a particle has 48 additional bits of instance-specific sta
 These 48 bits are conventionally split amongst a series of <i>Vars</i>:
 named bit-fields of different widths ("vars").
 
+Currently there is no mechanism to access the read-only vars,
+although the game DTD does allow for these.
+
 By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
  -->
 <!ELEMENT particle (name,vars?,hue?,sat?,bri?,sync?,rate?,rule,dispatch*)>
@@ -287,18 +290,21 @@ named bit-fields of different widths. -->
 
 
 <!-- A particle update rule. There are six types (of which only four are public),
- plus four constructs that are provided by the compiler for convenience,
- constituting an extremely minimal and predictable programming language for cellular automata.
+ plus four public constructs that are provided by the compiler for convenience,
+ constituting an extremely minimal and predictable programming language for
+ state machines on arrays (i.e. cellular automata).
 
 The four compiler constructs are <b>bind</b>, <b>nop</b>, <b>huff</b>, and <b>ball</b>:
 <ul><li>
- <b>bind</b> temporarily associates a name in the compiler's namespace
+ <b>bind</b> associates a name in the compiler's namespace
  with a neighboring cell location and performs a <b>switch</b> rule on the particle type at that location.
+ The binding scope is local, in the sense that only descendants of this rule are allowed to
+ refer to the named cell or its internal variables.
 </li><li>
  <b>nop</b> does nothing (implemented by the compiler using a dummy <b>modify</b> rule).
 </li><li>
  <b>huff</b> allows for a probability distribution over an arbitrary number of rules
-(implemented by the compiler using <b>random</b> rules and a Huffmann tree).
+ (implemented by the compiler using a Huffmann tree of coin-flip <b>random</b> rules).
 </li><li>
  <b>ball</b> is a shortcut for a <b>goal</b> rule that places a text balloon.
 </li></ul>
@@ -405,6 +411,7 @@ After writing to the destination cells, the (optional) "next" rule is executed. 
 
 Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
 <!ELEMENT deliver (pos,msg)>
+<!-- A 64-bit integer message. Note that messages are not currently compiled from strings -->
 <!ELEMENT msg (#PCDATA)>
 
 <!ELEMENT set (type,val*)>

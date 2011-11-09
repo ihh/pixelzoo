@@ -67,7 +67,7 @@ Child of <a href='#game'>game</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='goal'></a>
 <br /><table class='elementTitle' summary="goal"><tr><td class='leftElementTitle'>
 &lt;goal&gt;</td><td class='rightElementTitle'>
-Child of <a href='#game'>game</a>, <a href='#or'>or</a>, <a href='#rule'>rule</a>, <a href='#cached'>cached</a>, <a href='#not'>not</a>, <a href='#area'>area</a>, <a href='#repeat'>repeat</a>, <a href='#trigger'>trigger</a>, <a href='#and'>and</a>, <a href='#cage'>cage</a>
+Child of <a href='#area'>area</a>, <a href='#game'>game</a>, <a href='#or'>or</a>, <a href='#trigger'>trigger</a>, <a href='#cage'>cage</a>, <a href='#rule'>rule</a>, <a href='#repeat'>repeat</a>, <a href='#and'>and</a>, <a href='#cached'>cached</a>, <a href='#not'>not</a>
 </td></tr></table>
 <p>PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
 and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
@@ -450,7 +450,7 @@ Child of <a href='#goal'>goal</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#balloon'>balloon</a>?)</p><a name='pos'></a>
 <br /><table class='elementTitle' summary="pos"><tr><td class='leftElementTitle'>
 &lt;pos&gt;</td><td class='rightElementTitle'>
-Child of <a href='#exit'>exit</a>, <a href='#balloon'>balloon</a>, <a href='#area'>area</a>, <a href='#trigger'>trigger</a>, <a href='#deliver'>deliver</a>, <a href='#switch'>switch</a>
+Child of <a href='#deliver'>deliver</a>, <a href='#area'>area</a>, <a href='#trigger'>trigger</a>, <a href='#exit'>exit</a>, <a href='#balloon'>balloon</a>, <a href='#switch'>switch</a>
 </td></tr></table>
 <p>The co-ordinates of a Board cell.</p><p>Generally specified relative to the current cell (e.g. the one whose update rule is being executed).</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;pos&gt;'s children">
@@ -466,12 +466,12 @@ Child of <a href='#exit'>exit</a>, <a href='#balloon'>balloon</a>, <a href='#are
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='x'></a>
 <br /><table class='elementTitle' summary="x"><tr><td class='leftElementTitle'>
 &lt;x&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#init'>init</a>, <a href='#dest'>dest</a>, <a href='#move'>move</a>, <a href='#center'>center</a>, <a href='#src'>src</a>, <a href='#protect'>protect</a>, <a href='#spot'>spot</a>, <a href='#disallow'>disallow</a>, <a href='#pos'>pos</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#center'>center</a>, <a href='#init'>init</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#protect'>protect</a>, <a href='#pos'>pos</a>, <a href='#disallow'>disallow</a>, <a href='#spot'>spot</a>, <a href='#move'>move</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='y'></a>
 <br /><table class='elementTitle' summary="y"><tr><td class='leftElementTitle'>
 &lt;y&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#init'>init</a>, <a href='#dest'>dest</a>, <a href='#move'>move</a>, <a href='#center'>center</a>, <a href='#src'>src</a>, <a href='#protect'>protect</a>, <a href='#spot'>spot</a>, <a href='#disallow'>disallow</a>, <a href='#pos'>pos</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#center'>center</a>, <a href='#init'>init</a>, <a href='#src'>src</a>, <a href='#dest'>dest</a>, <a href='#protect'>protect</a>, <a href='#pos'>pos</a>, <a href='#disallow'>disallow</a>, <a href='#spot'>spot</a>, <a href='#move'>move</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='points'></a>
 <br /><table class='elementTitle' summary="points"><tr><td class='leftElementTitle'>
@@ -529,12 +529,12 @@ Child of <a href='#population'>population</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='min'></a>
 <br /><table class='elementTitle' summary="min"><tr><td class='leftElementTitle'>
 &lt;min&gt;</td><td class='rightElementTitle'>
-Child of <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#toolres'>toolres</a>, <a href='#count'>count</a>, <a href='#points'>points</a>
+Child of <a href='#time'>time</a>, <a href='#toolres'>toolres</a>, <a href='#entropy'>entropy</a>, <a href='#count'>count</a>, <a href='#points'>points</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='max'></a>
 <br /><table class='elementTitle' summary="max"><tr><td class='leftElementTitle'>
 &lt;max&gt;</td><td class='rightElementTitle'>
-Child of <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#toolres'>toolres</a>, <a href='#count'>count</a>, <a href='#points'>points</a>
+Child of <a href='#time'>time</a>, <a href='#toolres'>toolres</a>, <a href='#entropy'>entropy</a>, <a href='#count'>count</a>, <a href='#points'>points</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='wall'></a>
 <br /><table class='elementTitle' summary="wall"><tr><td class='leftElementTitle'>
@@ -544,12 +544,12 @@ Child of <a href='#cage'>cage</a>
 <p>Sorry, no documentation.</p><a name='reps'></a>
 <br /><table class='elementTitle' summary="reps"><tr><td class='leftElementTitle'>
 &lt;reps&gt;</td><td class='rightElementTitle'>
-Child of <a href='#cached'>cached</a>, <a href='#repeat'>repeat</a>
+Child of <a href='#repeat'>repeat</a>, <a href='#cached'>cached</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='exitstate'></a>
 <br /><table class='elementTitle' summary="exitstate"><tr><td class='leftElementTitle'>
 &lt;exitstate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#setexit'>setexit</a>, <a href='#testexit'>testexit</a>
+Child of <a href='#testexit'>testexit</a>, <a href='#setexit'>setexit</a>
 </td></tr></table>
 <p>Exit portal state.</p><p>Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed"</p><a name='gamestate'></a>
 <br /><table class='elementTitle' summary="gamestate"><tr><td class='leftElementTitle'>
@@ -569,7 +569,7 @@ Child of <a href='#print'>print</a>
 <p>Sorry, no documentation.</p><a name='prob'></a>
 <br /><table class='elementTitle' summary="prob"><tr><td class='leftElementTitle'>
 &lt;prob&gt;</td><td class='rightElementTitle'>
-Child of <a href='#maybe'>maybe</a>, <a href='#random'>random</a>
+Child of <a href='#random'>random</a>, <a href='#maybe'>maybe</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='lazy'></a>
 <br /><table class='elementTitle' summary="lazy"><tr><td class='leftElementTitle'>
@@ -818,17 +818,17 @@ Child of <a href='#overwrite'>overwrite</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='state'></a>
 <br /><table class='elementTitle' summary="state"><tr><td class='leftElementTitle'>
 &lt;state&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#init'>init</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#tool'>tool</a>, <a href='#case'>case</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#readonly'>readonly</a>, <a href='#overwrite'>overwrite</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#case'>case</a>, <a href='#tool'>tool</a>, <a href='#move'>move</a>
 </td></tr></table>
 <p>A 64-bit decimal integer representing the state of a cell on the Board.</p><a name='hexstate'></a>
 <br /><table class='elementTitle' summary="hexstate"><tr><td class='leftElementTitle'>
 &lt;hexstate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#init'>init</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#tool'>tool</a>, <a href='#case'>case</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#readonly'>readonly</a>, <a href='#overwrite'>overwrite</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#case'>case</a>, <a href='#tool'>tool</a>, <a href='#move'>move</a>
 </td></tr></table>
 <p>A 64-bit hexadecimal integer representing the state of a cell on the Board.</p><a name='name'></a>
 <br /><table class='elementTitle' summary="name"><tr><td class='leftElementTitle'>
 &lt;name&gt;</td><td class='rightElementTitle'>
-Child of <a href='#testtool'>testtool</a>, <a href='#varsize'>varsize</a>, <a href='#tool'>tool</a>, <a href='#subrule'>subrule</a>, <a href='#particle'>particle</a>
+Child of <a href='#subrule'>subrule</a>, <a href='#varsize'>varsize</a>, <a href='#tool'>tool</a>, <a href='#testtool'>testtool</a>, <a href='#particle'>particle</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='spray'></a>
 <br /><table class='elementTitle' summary="spray"><tr><td class='leftElementTitle'>
@@ -884,14 +884,14 @@ the portal counts the number of times that particles of a given type ("type") ar
 <span class='inTextTitle'>Element's model:</span><p class='model'>((<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#pos'>pos</a>+)</p><a name='type'></a>
 <br /><table class='elementTitle' summary="type"><tr><td class='leftElementTitle'>
 &lt;type&gt;</td><td class='rightElementTitle'>
-Child of <a href='#init'>init</a>, <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#trigger'>trigger</a>, <a href='#particle'>particle</a>
+Child of <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#trigger'>trigger</a>, <a href='#exit'>exit</a>, <a href='#particle'>particle</a>
 </td></tr></table>
 <p>A 16-bit decimal integer representing the type of a cell on the Board
 (equal to the upper 16 bits of the state).
 Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc.</p><a name='hextype'></a>
 <br /><table class='elementTitle' summary="hextype"><tr><td class='leftElementTitle'>
 &lt;hextype&gt;</td><td class='rightElementTitle'>
-Child of <a href='#init'>init</a>, <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#trigger'>trigger</a>, <a href='#particle'>particle</a>
+Child of <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#trigger'>trigger</a>, <a href='#exit'>exit</a>, <a href='#particle'>particle</a>
 </td></tr></table>
 <p>A 16-bit hexadecimal integer representing the type of a cell on the Board
 (equal to the upper 16 bits of the state).
@@ -1037,12 +1037,35 @@ named bit-fields of different widths ("vars").</p><p>By default, particles are u
 <tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
 <tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
 <tr><td><a href='#rate'>rate</a></td><td>One or none</td></tr>
+<tr><td><a href='#readonly'>readonly</a></td><td>Any number</td></tr>
 <tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
 <tr><td><a href='#sync'>sync</a></td><td>One or none</td></tr>
 <tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
 <tr><td><a href='#vars'>vars</a></td><td>One or none</td></tr>
 </tbody></table></td></tr></table></blockquote>
-<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, (<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#vars'>vars</a>?, <a href='#colrule'>colrule</a>*, <a href='#sync'>sync</a>?, <a href='#rate'>rate</a>?, <a href='#rule'>rule</a>, <a href='#dispatch'>dispatch</a>*)</p><a name='sync'></a>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, (<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#vars'>vars</a>?, <a href='#readonly'>readonly</a>*, <a href='#colrule'>colrule</a>*, <a href='#sync'>sync</a>?, <a href='#rate'>rate</a>?, <a href='#rule'>rule</a>, <a href='#dispatch'>dispatch</a>*)</p><a name='readonly'></a>
+<br /><table class='elementTitle' summary="readonly"><tr><td class='leftElementTitle'>
+&lt;readonly&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Read-only variables. Any particle can have an unlimited number of these.</p><p>They are stored in 64-bit chunks and can effectively be accessed as higher bits of the particle's state.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;readonly&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;readonly&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#index'>index</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#index'>index</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>))</p><a name='index'></a>
+<br /><table class='elementTitle' summary="index"><tr><td class='leftElementTitle'>
+&lt;index&gt;</td><td class='rightElementTitle'>
+Child of <a href='#readonly'>readonly</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='sync'></a>
 <br /><table class='elementTitle' summary="sync"><tr><td class='leftElementTitle'>
 &lt;sync&gt;</td><td class='rightElementTitle'>
 Child of <a href='#particle'>particle</a>
@@ -1150,7 +1173,7 @@ including the name ("name") and the number of bits the variable uses ("size").</
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>)</p><a name='rule'></a>
 <br /><table class='elementTitle' summary="rule"><tr><td class='leftElementTitle'>
 &lt;rule&gt;</td><td class='rightElementTitle'>
-Child of <a href='#dispatch'>dispatch</a>, <a href='#subrule'>subrule</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>, <a href='#particle'>particle</a>, <a href='#case'>case</a>, <a href='#next'>next</a>, <a href='#default'>default</a>
+Child of <a href='#pass'>pass</a>, <a href='#dispatch'>dispatch</a>, <a href='#subrule'>subrule</a>, <a href='#next'>next</a>, <a href='#case'>case</a>, <a href='#fail'>fail</a>, <a href='#particle'>particle</a>, <a href='#default'>default</a>
 </td></tr></table>
 <p>A particle update rule. There are six types (of which only four are public),
 constituting an extremely minimal and predictable programming language for cellular automata.</p><p>The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
@@ -1358,7 +1381,7 @@ Child of <a href='#rule'>rule</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pos'>pos</a>, <a href='#msg'>msg</a>)</p><a name='msg'></a>
 <br /><table class='elementTitle' summary="msg"><tr><td class='leftElementTitle'>
 &lt;msg&gt;</td><td class='rightElementTitle'>
-Child of <a href='#dispatch'>dispatch</a>, <a href='#deliver'>deliver</a>
+Child of <a href='#deliver'>deliver</a>, <a href='#dispatch'>dispatch</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='goto'></a>
 <br /><table class='elementTitle' summary="goto"><tr><td class='leftElementTitle'>

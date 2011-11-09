@@ -262,6 +262,9 @@
 <span class="dtd_comment">These 48 bits are conventionally split amongst a series of &lt;i&gt;Vars&lt;/i&gt;:</span>
 <span class="dtd_comment">named bit-fields of different widths (&quot;vars&quot;).</span>
 
+<span class="dtd_comment">Currently there is no mechanism to access the read-only vars,</span>
+<span class="dtd_comment">although the game DTD does allow for these.</span>
+
 <span class="dtd_comment">By default, particles are updated asynchronously and randomly, but they optionally may be synchronized (&quot;sync&quot;).</span>
 <span class="dtd_comment"> --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">particle</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">name</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">vars</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">hue</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">sat</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">bri</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">sync</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">rate</span><span class="dtd_plain">?,</span><span class="dtd_attribute_name">rule</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">dispatch</span><span class="dtd_plain">*)</span><span class="dtd_tag_symbols">&gt;</span>
@@ -293,18 +296,21 @@
 
 
 <span class="dtd_comment">&lt;!-- A particle update rule. There are six types (of which only four are public),</span>
-<span class="dtd_comment"> plus four constructs that are provided by the compiler for convenience,</span>
-<span class="dtd_comment"> constituting an extremely minimal and predictable programming language for cellular automata.</span>
+<span class="dtd_comment"> plus four public constructs that are provided by the compiler for convenience,</span>
+<span class="dtd_comment"> constituting an extremely minimal and predictable programming language for</span>
+<span class="dtd_comment"> state machines on arrays (i.e. cellular automata).</span>
 
 <span class="dtd_comment">The four compiler constructs are &lt;b&gt;bind&lt;/b&gt;, &lt;b&gt;nop&lt;/b&gt;, &lt;b&gt;huff&lt;/b&gt;, and &lt;b&gt;ball&lt;/b&gt;:</span>
 <span class="dtd_comment">&lt;ul&gt;&lt;li&gt;</span>
-<span class="dtd_comment"> &lt;b&gt;bind&lt;/b&gt; temporarily associates a name in the compiler's namespace</span>
+<span class="dtd_comment"> &lt;b&gt;bind&lt;/b&gt; associates a name in the compiler's namespace</span>
 <span class="dtd_comment"> with a neighboring cell location and performs a &lt;b&gt;switch&lt;/b&gt; rule on the particle type at that location.</span>
+<span class="dtd_comment"> The binding scope is local, in the sense that only descendants of this rule are allowed to</span>
+<span class="dtd_comment"> refer to the named cell or its internal variables.</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;li&gt;</span>
 <span class="dtd_comment"> &lt;b&gt;nop&lt;/b&gt; does nothing (implemented by the compiler using a dummy &lt;b&gt;modify&lt;/b&gt; rule).</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;li&gt;</span>
 <span class="dtd_comment"> &lt;b&gt;huff&lt;/b&gt; allows for a probability distribution over an arbitrary number of rules</span>
-<span class="dtd_comment">(implemented by the compiler using &lt;b&gt;random&lt;/b&gt; rules and a Huffmann tree).</span>
+<span class="dtd_comment"> (implemented by the compiler using a Huffmann tree of coin-flip &lt;b&gt;random&lt;/b&gt; rules).</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;li&gt;</span>
 <span class="dtd_comment"> &lt;b&gt;ball&lt;/b&gt; is a shortcut for a &lt;b&gt;goal&lt;/b&gt; rule that places a text balloon.</span>
 <span class="dtd_comment">&lt;/li&gt;&lt;/ul&gt;</span>
@@ -411,6 +417,7 @@
 
 <span class="dtd_comment">Delivers a 64-bit message (&quot;msg&quot;) to the dispatch table of a neighboring cell (&quot;pos&quot;). --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">deliver</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">pos</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">msg</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
+<span class="dtd_comment">&lt;!-- A 64-bit integer message. Note that messages are not currently compiled from strings --&gt;</span>
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">msg</span><span class="dtd_plain"> (</span><span class="dtd_keyword">#PCDATA</span><span class="dtd_plain">)</span><span class="dtd_tag_symbols">&gt;</span>
 
 <span class="dtd_tag_symbols">&lt;!</span><span class="dtd_tag_name">ELEMENT</span><span class="dtd_plain"> </span><span class="dtd_attribute_name">set</span><span class="dtd_plain"> (</span><span class="dtd_attribute_name">type</span><span class="dtd_plain">,</span><span class="dtd_attribute_name">val</span><span class="dtd_plain">*)</span><span class="dtd_tag_symbols">&gt;</span>
