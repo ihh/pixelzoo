@@ -10,16 +10,16 @@ Core client: C code in src/, compiles into lib/
 libxml2 (MIT license, included by default with the iPhone SDK)
 
 
-Xcode client: Objective-C and Xcode IDE files in xcode/pixelzoo/
-------------
+iOS client: Objective-C and Xcode IDE files in xcode/pixelzoo/
+----------
 
-Requires Xcode and iOS development framework.
+Requires Xcode IDE and iOS development framework.
 
 
 Android client: Java/C code and Eclipse IDE files in android/
 --------------
 
-Requires Eclipse and Android SDK/NDK.
+Requires Eclipse IDE and Android SDK/NDK.
 
 
 Server: Perl code in Zoo/
