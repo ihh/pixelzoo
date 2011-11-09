@@ -37,9 +37,13 @@ http://developer.android.com/sdk/
 http://developer.android.com/sdk/ndk/
 
 
-Server: Perl code in Zoo/
+Server: Perl code in perl/ and Zoo/
 ------
 
-Requires Perl Catalyst framework, and a few other modules.
+The game XML compiler, perl/zoocompiler.pl, requires various modules from CPAN,
+notably XML::Twig and Moose.
+http://www.cpan.org/
+
+The server framework in Zoo/ requires Perl Catalyst, and a few other modules.
 Do 'cd Zoo; perl Makefile.PL; make' to install other dependencies from CPAN.
 http://www.catalystframework.org/

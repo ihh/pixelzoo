@@ -6,7 +6,7 @@
 <h1>PixelZoo documentation</h1>
 
 <p>
-Things we have pretty minimal documentation for:
+Existing (minimal) documentation:
 <ul>
 
  <li> <a href="../README">README</a> file (top-level; mostly just lists dependencies)
@@ -40,13 +40,26 @@ Things we have pretty minimal documentation for:
 </p>
 
 <p>
-Things it would be nice to have <em>any</em> documentation for:
+Things it would be nice to have more documentation for:
 <ul>
 <li> Tests
  <ul>
   <li> <a href="../Makefile">Makefile</a> - "make test" should run without errors </li>
   <li> test <a href="../tsrc/">source</a> and <a href="../t/">data</a> directories </li>
  </ul>
+ </li>
+<li> Perl server code
+ <ul>
+  <li> <a href="../Zoo">Zoo/</a> Catalyst web application (see <a href="../PLAN/Server.txt">PLAN/Server.txt</a>) </li>
+  <li> <a href="../perl/zoocompiler.pl">perl/zoocompiler.pl</a> game XML compiler (has inline help) </li>
+  <li> Modules in <a href="../Zoo/lib/">Zoo/lib</a> (lightly perldoc'd)
+   <ul>
+   <li> <a href="../Zoo/lib/Grammar.pm">Grammar.pm</a> </li>
+   <li> <a href="../Zoo/lib/Level.pm">Level.pm</a> </li>
+   <li> <a href="../Zoo/lib/Twiggy.pm">Twiggy.pm</a> (extension of XML::Twig) </li>
+   </ul>
+  </li>
+  </ul>
  </li>
 <li> Example clients with user interfaces on various platforms
  <ul>
