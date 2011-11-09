@@ -5,9 +5,9 @@
       <particle>
         <name>empty</name>
         <vars>
-          <val var="hue">6</val>
-          <val var="saturation">3</val>
           <val var="brightness">3</val>
+          <val var="saturation">3</val>
+          <val var="hue">6</val>
         </vars>
         <hue>
           <var>hue</var>
@@ -3487,547 +3487,1092 @@
     <init>
       <x>-5</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>-2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-5</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>-2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-4</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>-1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-3</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>-3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>-1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-2</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>-3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>-1</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>-4</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>-3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>4</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>0</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>-3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>1</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>-3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>-1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>3</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>2</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>-5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>-2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>-1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>1</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>2</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>3</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>-4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>-2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>0</y>
-      <hexstate>7</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">0</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>4</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>-3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>-2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>-1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
     <init>
       <x>5</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <gvars>
+        <type>empty</type>
+        <val var="hue">0</val>
+        <val var="saturation">7</val>
+        <val var="brightness">7</val>
+      </gvars>
     </init>
   </board>
   <rate>240</rate>
@@ -4090,7 +4635,7 @@
     <recharge>100</recharge>
   </tool>
   <exit>
-    <type>empty</type>
+    <gtype>empty</gtype>
     <pos>
       <x>-5</x>
       <y>-3</y>
@@ -4595,7 +5140,7 @@ Guide guests safely to the Exit.
                     </spot>
                   </intensity>
                 </brush>
-                <hexstate>0000000000000</hexstate>
+                <gstate>empty</gstate>
                 <spray>1</spray>
                 <reserve>0</reserve>
                 <recharge>0</recharge>

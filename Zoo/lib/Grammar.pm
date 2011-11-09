@@ -104,7 +104,7 @@ sub newGrammar {
     bless $self, $class;
 
     $self->addType ('name' => $emptyType,
-		    'vars' => [ $self->var('hue') => 6, $self->var('saturation') => 3, $self->var('brightness') => 3 ],
+		    'vars' => [ $self->var('brightness') => 3, $self->var('saturation') => 3, $self->var('hue') => 6 ],
 		    'hue' => [ 'var' => 'hue' ],
 		    'sat' => [ 'var' => 'saturation' ],
 		    'bri' => [ 'var' => 'brightness' ],
@@ -322,7 +322,12 @@ sub parse_node {
 	my $v = shift @node;
 	if ($k eq 'particle') {
 	    my $vhash = forceHash($v);
-	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'vars'}) ? %{forceHash($vhash->{'vars'})} : ());
+	    $self->declare_type ($vhash->{'name'},
+				 defined($vhash->{'vars'})
+				 ? ( ref($vhash->{'vars'}) eq 'HASH'
+				     ? %{$vhash->{'vars'}}
+				     : @{$vhash->{'vars'}} )
+				 : ());
 	} else {
 	    $self->parse_node ($v);
 	}
@@ -872,15 +877,24 @@ sub firstNonzeroTag {
 }
 
 # fully-qualified particle state: state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
+my %typeAndVars_log;
 sub typeAndVars {
     my ($self, $n) = @_;
     $n = forceHash($n);
     my $type = $n->{'type'};
     my $state = $self->getType($type) << $self->getShift($type,"type");
+    my @desc = ("type=$type");
     while (my ($var, $val) = each %$n) {
 	$var =~ s/^val\@var=([^\@]+)$/$1/;
 	if ($var ne 'type') {
 	    $state = $state | ($val << $self->getShift($type,$var));
+	    push @desc, "$var=$val";
+	}
+    }
+    if ($self->verbose) {
+	my $log_msg = "State (@desc) compiled to " . hexv($state) . "\n";
+	unless ($typeAndVars_log{$log_msg}++) {
+	    warn $log_msg;
 	}
     }
     return $state;

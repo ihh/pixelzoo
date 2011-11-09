@@ -13,7 +13,7 @@ This (slightly) higher-level dialect can be compiled down to the "game" dialect,
 
 <!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
  with a particular type of particle. -->
-<!ELEMENT trigger (goal,(type|hextype|gtype),pos+)>
+<!ELEMENT trigger (goal,gtype,pos+)>
 
 <!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
@@ -44,7 +44,7 @@ Each Goal expression operates on a given <i>area</i> of the Board
  belonging to a specified set of types ("state" / "type"),
  having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
  a specified Shannon entropy ("entropy"). -->
-<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype)+,mask?,count?,entropy?)>
+<!ELEMENT population (allowmask?,(gstate|pstate|ostate|gvars|gtype)+,mask?,count?,entropy?)>
 
 <!-- A Goal that is true if the child expression ("goal") has evaluated true
  consecutively for a specified number of times ("reps"). -->
@@ -175,29 +175,23 @@ and whether the Tool should initially be hidden ("hide").
 
 Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
 -->
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(gstate|pstate|ostate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|gvars))>
-<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|gvars)*,(mask|tmask)?)>
+<!ELEMENT pixel (x,y,(gstate|pstate|ostate|gvars))>
+<!ELEMENT overwrite (disallow*,(gstate|pstate|ostate|gvars)*,(mask|tmask)?)>
 <!ELEMENT disallow (x,y)>
 
-<!-- A 64-bit decimal integer representing the state of a cell on the Board. -->
-<!ELEMENT state (#PCDATA)>
-
-<!-- A 64-bit hexadecimal integer representing the state of a cell on the Board. -->
-<!ELEMENT hexstate (#PCDATA)>
-
-<!-- The name of a particle type. -->
+<!-- The name of a type of particle (a "type"). -->
 <!ELEMENT gstate (#PCDATA)>
-<!-- The name of a particle type. -->
+<!-- The name of a type of particle (a "type"). -->
 <!ELEMENT gtype (#PCDATA)>
-<!-- The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the player. -->
+<!-- The name of a type of particle. This particle type must have a special var named "id" which will be set equal to the user ID of the player. -->
 <!ELEMENT pstate (#PCDATA)>
-<!-- The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the board owner. -->
+<!-- The name of a type of particle. This particle type must have a special var named "id" which will be set equal to the user ID of the board owner. -->
 <!ELEMENT ostate (#PCDATA)>
 
 <!-- The complete state of a particle, including type ("type") and var values ("val"). -->
@@ -218,17 +212,11 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
  the portal counts the number of times that particles of a given type ("type") are written to it.
  (The actual write operations are intercepted, so the particles appear to drain from the Board.)
  -->
-<!ELEMENT exit ((type|hextype|gtype),pos+)>
+<!ELEMENT exit (gtype,pos+)>
 
-<!-- A 16-bit decimal integer representing the type of a cell on the Board
-(equal to the upper 16 bits of the state).
+<!-- A string representing the type of a cell on the Board.
 Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
 <!ELEMENT type (#PCDATA)>
-
-<!-- A 16-bit hexadecimal integer representing the type of a cell on the Board
-(equal to the upper 16 bits of the state).
-Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
-<!ELEMENT hextype (#PCDATA)>
 
 <!-- A Board is a square array of cells whose edge length ("size") must be a power of 2.
 
@@ -244,14 +232,14 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!ELEMENT grammar (subrule*,particle+)>
 
 <!-- Initialize a particular cell on the Board. -->
-<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype))>
+<!ELEMENT init (x,y,(gstate|pstate|ostate|gvars|gtype))>
 
 <!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
 <!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|gvars|type|hextype|gtype))>
+<!ELEMENT move (t,x,y,(gstate|pstate|ostate|gvars|gtype))>
 
 <!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
@@ -259,7 +247,7 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!-- A subroutine particle Rule. -->
 <!ELEMENT subrule (name,rule)>
 
-<!-- An elementary particle in the game, identified by a unique 16-bit type ID ("type").
+<!-- An elementary particle in the game, identified by a unique string ID ("type").
 Each particle has its own update rate ("rate") and rule ("rule"),
 formulae for determining the HSB color values ("hue", "sat" and "bri"),
 and optionally a message dispatch table ("dispatch").

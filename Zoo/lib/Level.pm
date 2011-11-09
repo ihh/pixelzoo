@@ -25,7 +25,7 @@ sub newLevel {
     %$self = (%$self,
 	      # stubs for make_game to build a game
 	      'entrancePort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "rate" => 1, "width" => 1, "height" => 1, "type" => $emptyType),
-	      'exitPort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6, "type" => $emptyType),
+	      'exitPort' => AutoHash->new ("pos" => { "x" => 0, "y" => 0 }, "count" => 0, "radius" => 6, "gtype" => $emptyType),
 
 	      # helpers
 	      'neighbor' => 'nbr',
@@ -62,14 +62,17 @@ sub prep_exit {
 	for (my $y = -$exitRadius; $y <= $exitRadius; ++$y) {
 	    my $r = sqrt($x*$x+$y*$y);
 	    if ($r < $exitRadius) {
-		my $col = $self->palette->{'white'};  # white
+		my $sat = 0;  # white
 		if ($r < $exitRadius/3 || $r > $exitRadius*2/3) {
-		    $col = $self->palette->{'red'};  # red
+		    $sat = 7;  # red (or whatever color the hue is set to)
 		}
 		my $ex = $exitx + $x;
 		my $ey = $exity + $y;
 		push @exitLoc, "pos" => ["x" => $ex, "y" => $ey] if $ex!=$exitx || $ey!=$exity;  # don't count the centre twice
-		push @exitInit, "init" => ["x" => $ex, "y" => $ey, "hexstate" => hexv($col)];
+		push @exitInit, "init" => ["x" => $ex, "y" => $ey, "gvars" => ["type" => "empty",
+									       'val@var=hue' => 0,  # red
+									       'val@var=saturation' => $sat,
+									       'val@var=brightness' => 7]];
 	    }
 	}
     }
@@ -79,7 +82,7 @@ sub prep_exit {
 sub make_exit {
     my ($self) = @_;
     my ($exitLoc, $exitInit) = $self->prep_exit;
-    return ("exit" => [sortHash ($self->exitPort, qw(type hextype)), @$exitLoc]);
+    return ("exit" => [sortHash ($self->exitPort, qw(gtype)), @$exitLoc]);
 }
 
 sub make_exit_init {
@@ -117,7 +120,7 @@ sub make_goal {
 											   "size" => minPowerOfTwo (max ($self->entrancePort->width, $self->entrancePort->height)),
 											   "brush" => ["center" => ["x" => int($self->entrancePort->width/2), "y" => int($self->entrancePort->height/2)],
 												       "intensity" => $self->make_entrance_brush],
-											   "hexstate" => $self->getTypeAsHexState($self->entrancePort->type),
+											   "gstate" => $self->entrancePort->type,
 											   "spray" => 1,
 											   "reserve" => $self->entrancePort->count,
 											   "recharge" => 0]]]]],
