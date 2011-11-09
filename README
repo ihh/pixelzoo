@@ -1,7 +1,7 @@
 PixelZoo:
 A client-server architecture for cellular automata simulations.
 
-See index.html file for developer documentation.
+See doc/index.html file for developer documentation.
 
 
 Dependencies
@@ -35,7 +35,6 @@ Requires Eclipse IDE and Android SDK/NDK.
 http://www.eclipse.org/
 http://developer.android.com/sdk/
 http://developer.android.com/sdk/ndk/
-
 
 
 Server: Perl code in Zoo/
