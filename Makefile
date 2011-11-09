@@ -128,5 +128,10 @@ t/compiled.copy.xml: t/proto.xml
 	diff t/compiled.xml t/compiled.copy.xml
 
 # Documentation
-doc:
+doc: dtddoc-doc doxygen-doc
+
+doxygen-doc:
+	cd src; doxygen
+
+dtddoc-doc:
 	cd Zoo/dtd; make

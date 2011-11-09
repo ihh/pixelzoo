@@ -68,7 +68,7 @@ Child of <a href='#game'>game</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='goal'></a>
 <br /><table class='elementTitle' summary="goal"><tr><td class='leftElementTitle'>
 &lt;goal&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#trigger'>trigger</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#repeat'>repeat</a>, <a href='#and'>and</a>, <a href='#pass'>pass</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#not'>not</a>, <a href='#area'>area</a>, <a href='#rule'>rule</a>, <a href='#or'>or</a>, <a href='#cage'>cage</a>, <a href='#game'>game</a>, <a href='#cached'>cached</a>
+Child of <a href='#game'>game</a>, <a href='#pass'>pass</a>, <a href='#not'>not</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#cached'>cached</a>, <a href='#area'>area</a>, <a href='#or'>or</a>, <a href='#cage'>cage</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#default'>default</a>, <a href='#smatch'>smatch</a>, <a href='#and'>and</a>, <a href='#repeat'>repeat</a>, <a href='#trigger'>trigger</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
 and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
@@ -456,7 +456,7 @@ Child of <a href='#goal'>goal</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#balloon'>balloon</a>?)</p><a name='pos'></a>
 <br /><table class='elementTitle' summary="pos"><tr><td class='leftElementTitle'>
 &lt;pos&gt;</td><td class='rightElementTitle'>
-Child of <a href='#deliver'>deliver</a>, <a href='#area'>area</a>, <a href='#exit'>exit</a>, <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>, <a href='#trigger'>trigger</a>
+Child of <a href='#deliver'>deliver</a>, <a href='#balloon'>balloon</a>, <a href='#area'>area</a>, <a href='#ball'>ball</a>, <a href='#exit'>exit</a>, <a href='#trigger'>trigger</a>
 </td></tr></table>
 <p>The co-ordinates of a Board cell.</p><p>Generally specified relative to the current cell (e.g. the one whose update rule is being executed).</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;pos&gt;'s children">
@@ -472,12 +472,12 @@ Child of <a href='#deliver'>deliver</a>, <a href='#area'>area</a>, <a href='#exi
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='x'></a>
 <br /><table class='elementTitle' summary="x"><tr><td class='leftElementTitle'>
 &lt;x&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#spot'>spot</a>, <a href='#pos'>pos</a>, <a href='#disallow'>disallow</a>, <a href='#move'>move</a>, <a href='#init'>init</a>, <a href='#bind'>bind</a>, <a href='#protect'>protect</a>, <a href='#center'>center</a>
+Child of <a href='#bind'>bind</a>, <a href='#pixel'>pixel</a>, <a href='#spot'>spot</a>, <a href='#center'>center</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#disallow'>disallow</a>, <a href='#init'>init</a>, <a href='#protect'>protect</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='y'></a>
 <br /><table class='elementTitle' summary="y"><tr><td class='leftElementTitle'>
 &lt;y&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#spot'>spot</a>, <a href='#pos'>pos</a>, <a href='#disallow'>disallow</a>, <a href='#move'>move</a>, <a href='#init'>init</a>, <a href='#bind'>bind</a>, <a href='#protect'>protect</a>, <a href='#center'>center</a>
+Child of <a href='#bind'>bind</a>, <a href='#pixel'>pixel</a>, <a href='#spot'>spot</a>, <a href='#center'>center</a>, <a href='#pos'>pos</a>, <a href='#move'>move</a>, <a href='#disallow'>disallow</a>, <a href='#init'>init</a>, <a href='#protect'>protect</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='points'></a>
 <br /><table class='elementTitle' summary="points"><tr><td class='leftElementTitle'>
@@ -503,7 +503,7 @@ Child of <a href='#population'>population</a>
 <p>Sorry, no documentation.</p><a name='count'></a>
 <br /><table class='elementTitle' summary="count"><tr><td class='leftElementTitle'>
 &lt;count&gt;</td><td class='rightElementTitle'>
-Child of <a href='#population'>population</a>, <a href='#testexit'>testexit</a>, <a href='#cage'>cage</a>
+Child of <a href='#testexit'>testexit</a>, <a href='#cage'>cage</a>, <a href='#population'>population</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;count&gt;'s children">
@@ -535,12 +535,12 @@ Child of <a href='#population'>population</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='min'></a>
 <br /><table class='elementTitle' summary="min"><tr><td class='leftElementTitle'>
 &lt;min&gt;</td><td class='rightElementTitle'>
-Child of <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#points'>points</a>, <a href='#count'>count</a>, <a href='#toolres'>toolres</a>
+Child of <a href='#count'>count</a>, <a href='#points'>points</a>, <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#toolres'>toolres</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='max'></a>
 <br /><table class='elementTitle' summary="max"><tr><td class='leftElementTitle'>
 &lt;max&gt;</td><td class='rightElementTitle'>
-Child of <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#points'>points</a>, <a href='#count'>count</a>, <a href='#toolres'>toolres</a>
+Child of <a href='#count'>count</a>, <a href='#points'>points</a>, <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#toolres'>toolres</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='wall'></a>
 <br /><table class='elementTitle' summary="wall"><tr><td class='leftElementTitle'>
@@ -560,7 +560,7 @@ Child of <a href='#setexit'>setexit</a>, <a href='#testexit'>testexit</a>
 <p>Exit portal state.</p><p>Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed"</p><a name='gamestate'></a>
 <br /><table class='elementTitle' summary="gamestate"><tr><td class='leftElementTitle'>
 &lt;gamestate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#setgame'>setgame</a>, <a href='#testgame'>testgame</a>
+Child of <a href='#testgame'>testgame</a>, <a href='#setgame'>setgame</a>
 </td></tr></table>
 <p>Game state.</p><p>Legal values: "GameOn", "GameWon", "GameLost"</p><a name='toolname'></a>
 <br /><table class='elementTitle' summary="toolname"><tr><td class='leftElementTitle'>
@@ -580,12 +580,12 @@ Child of <a href='#maybe'>maybe</a>, <a href='#random'>random</a>
 <p>Sorry, no documentation.</p><a name='lazy'></a>
 <br /><table class='elementTitle' summary="lazy"><tr><td class='leftElementTitle'>
 &lt;lazy/&gt;</td><td class='rightElementTitle'>
-Child of <a href='#or'>or</a>, <a href='#and'>and</a>
+Child of <a href='#and'>and</a>, <a href='#or'>or</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='cache'></a>
 <br /><table class='elementTitle' summary="cache"><tr><td class='leftElementTitle'>
 &lt;cache/&gt;</td><td class='rightElementTitle'>
-Child of <a href='#or'>or</a>, <a href='#and'>and</a>
+Child of <a href='#and'>and</a>, <a href='#or'>or</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='balloon'></a>
 <br /><table class='elementTitle' summary="balloon"><tr><td class='leftElementTitle'>
@@ -615,7 +615,7 @@ Child of <a href='#place'>place</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rate'>rate</a>?, <a href='#pos'>pos</a>?, (<a href='#color'>color</a> | <a href='#hexcolor'>hexcolor</a>)?, <a href='#text'>text</a>, <a href='#size'>size</a>?, <a href='#ttl'>ttl</a>?, <a href='#rise'>rise</a>?, <a href='#zoom'>zoom</a>?, <a href='#fade'>fade</a>?, <a href='#persist'>persist</a>?)</p><a name='ball'></a>
 <br /><table class='elementTitle' summary="ball"><tr><td class='leftElementTitle'>
 &lt;ball&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;ball&gt;'s children">
@@ -655,7 +655,7 @@ Child of <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>
 <p>Sorry, no documentation.</p><a name='size'></a>
 <br /><table class='elementTitle' summary="size"><tr><td class='leftElementTitle'>
 &lt;size&gt;</td><td class='rightElementTitle'>
-Child of <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>, <a href='#board'>board</a>, <a href='#tool'>tool</a>
+Child of <a href='#balloon'>balloon</a>, <a href='#tool'>tool</a>, <a href='#ball'>ball</a>, <a href='#board'>board</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='ttl'></a>
 <br /><table class='elementTitle' summary="ttl"><tr><td class='leftElementTitle'>
@@ -680,7 +680,7 @@ Child of <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>
 <p>Sorry, no documentation.</p><a name='rate'></a>
 <br /><table class='elementTitle' summary="rate"><tr><td class='leftElementTitle'>
 &lt;rate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#spot'>spot</a>, <a href='#particle'>particle</a>, <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>, <a href='#game'>game</a>
+Child of <a href='#game'>game</a>, <a href='#spot'>spot</a>, <a href='#balloon'>balloon</a>, <a href='#particle'>particle</a>, <a href='#ball'>ball</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='persist'></a>
 <br /><table class='elementTitle' summary="persist"><tr><td class='leftElementTitle'>
@@ -690,7 +690,7 @@ Child of <a href='#balloon'>balloon</a>, <a href='#ball'>ball</a>
 <p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='tool'></a>
 <br /><table class='elementTitle' summary="tool"><tr><td class='leftElementTitle'>
 &lt;tool&gt;</td><td class='rightElementTitle'>
-Child of <a href='#usetool'>usetool</a>, <a href='#game'>game</a>
+Child of <a href='#game'>game</a>, <a href='#usetool'>usetool</a>
 </td></tr></table>
 <p>A Tool.</p><p>Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.</p><p>Properties include spray rate ("spray") and diameter ("size"),
 initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
@@ -862,17 +862,17 @@ Child of <a href='#overwrite'>overwrite</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='state'></a>
 <br /><table class='elementTitle' summary="state"><tr><td class='leftElementTitle'>
 &lt;state&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>A 64-bit decimal integer representing the state of a cell on the Board.</p><a name='hexstate'></a>
 <br /><table class='elementTitle' summary="hexstate"><tr><td class='leftElementTitle'>
 &lt;hexstate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>A 64-bit hexadecimal integer representing the state of a cell on the Board.</p><a name='gstate'></a>
 <br /><table class='elementTitle' summary="gstate"><tr><td class='leftElementTitle'>
 &lt;gstate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>The name of a particle type.</p><a name='gtype'></a>
 <br /><table class='elementTitle' summary="gtype"><tr><td class='leftElementTitle'>
@@ -882,17 +882,17 @@ Child of <a href='#move'>move</a>, <a href='#population'>population</a>, <a href
 <p>The name of a particle type.</p><a name='pstate'></a>
 <br /><table class='elementTitle' summary="pstate"><tr><td class='leftElementTitle'>
 &lt;pstate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the player.</p><a name='ostate'></a>
 <br /><table class='elementTitle' summary="ostate"><tr><td class='leftElementTitle'>
 &lt;ostate&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>The name of a particle type. The particle is assumed to have a special var named "id" which will be set equal to the user ID of the board owner.</p><a name='gvars'></a>
 <br /><table class='elementTitle' summary="gvars"><tr><td class='leftElementTitle'>
 &lt;gvars&gt;</td><td class='rightElementTitle'>
-Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#population'>population</a>, <a href='#init'>init</a>, <a href='#tool'>tool</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>, <a href='#move'>move</a>, <a href='#tool'>tool</a>, <a href='#population'>population</a>, <a href='#init'>init</a>
 </td></tr></table>
 <p>The complete state of a particle, including type ("type") and var values ("val").</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;gvars&gt;'s children">
@@ -908,7 +908,7 @@ Child of <a href='#pixel'>pixel</a>, <a href='#move'>move</a>, <a href='#populat
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#type'>type</a>, <a href='#val'>val</a>*)</p><a name='name'></a>
 <br /><table class='elementTitle' summary="name"><tr><td class='leftElementTitle'>
 &lt;name&gt;</td><td class='rightElementTitle'>
-Child of <a href='#particle'>particle</a>, <a href='#tool'>tool</a>, <a href='#subrule'>subrule</a>, <a href='#testtool'>testtool</a>
+Child of <a href='#testtool'>testtool</a>, <a href='#subrule'>subrule</a>, <a href='#particle'>particle</a>, <a href='#tool'>tool</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='spray'></a>
 <br /><table class='elementTitle' summary="spray"><tr><td class='leftElementTitle'>
@@ -918,7 +918,7 @@ Child of <a href='#tool'>tool</a>
 <p>Sorry, no documentation.</p><a name='reserve'></a>
 <br /><table class='elementTitle' summary="reserve"><tr><td class='leftElementTitle'>
 &lt;reserve&gt;</td><td class='rightElementTitle'>
-Child of <a href='#tool'>tool</a>, <a href='#charge'>charge</a>
+Child of <a href='#charge'>charge</a>, <a href='#tool'>tool</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='recharge'></a>
 <br /><table class='elementTitle' summary="recharge"><tr><td class='leftElementTitle'>
@@ -933,7 +933,7 @@ Child of <a href='#tool'>tool</a>
 <p>Sorry, no documentation.</p><a name='mask'></a>
 <br /><table class='elementTitle' summary="mask"><tr><td class='leftElementTitle'>
 &lt;mask&gt;</td><td class='rightElementTitle'>
-Child of <a href='#population'>population</a>, <a href='#overwrite'>overwrite</a>
+Child of <a href='#overwrite'>overwrite</a>, <a href='#population'>population</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='tmask'></a>
 <br /><table class='elementTitle' summary="tmask"><tr><td class='leftElementTitle'>
@@ -970,7 +970,7 @@ the portal counts the number of times that particles of a given type ("type") ar
 <span class='inTextTitle'>Element's model:</span><p class='model'>((<a href='#type'>type</a> | <a href='#hextype'>hextype</a> | <a href='#gtype'>gtype</a>), <a href='#pos'>pos</a>+)</p><a name='type'></a>
 <br /><table class='elementTitle' summary="type"><tr><td class='leftElementTitle'>
 &lt;type&gt;</td><td class='rightElementTitle'>
-Child of <a href='#set'>set</a>, <a href='#move'>move</a>, <a href='#gvars'>gvars</a>, <a href='#population'>population</a>, <a href='#exit'>exit</a>, <a href='#init'>init</a>, <a href='#vars'>vars</a>, <a href='#trigger'>trigger</a>
+Child of <a href='#vars'>vars</a>, <a href='#gvars'>gvars</a>, <a href='#move'>move</a>, <a href='#set'>set</a>, <a href='#population'>population</a>, <a href='#exit'>exit</a>, <a href='#init'>init</a>, <a href='#trigger'>trigger</a>
 </td></tr></table>
 <p>A 16-bit decimal integer representing the type of a cell on the Board
 (equal to the upper 16 bits of the state).
@@ -1212,7 +1212,7 @@ Child of <a href='#particle'>particle</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#var'>var</a>?, <a href='#mul'>mul</a>?, <a href='#add'>add</a>?)</p><a name='add'></a>
 <br /><table class='elementTitle' summary="add"><tr><td class='leftElementTitle'>
 &lt;add&gt;</td><td class='rightElementTitle'>
-Child of <a href='#bri'>bri</a>, <a href='#hue'>hue</a>, <a href='#sat'>sat</a>
+Child of <a href='#hue'>hue</a>, <a href='#sat'>sat</a>, <a href='#bri'>bri</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='sync'></a>
 <br /><table class='elementTitle' summary="sync"><tr><td class='leftElementTitle'>
@@ -1243,12 +1243,12 @@ Child of <a href='#sync'>sync</a>
 <p>Sorry, no documentation.</p><a name='var'></a>
 <br /><table class='elementTitle' summary="var"><tr><td class='leftElementTitle'>
 &lt;var&gt;</td><td class='rightElementTitle'>
-Child of <a href='#bri'>bri</a>, <a href='#dest'>dest</a>, <a href='#switch'>switch</a>, <a href='#src'>src</a>, <a href='#hue'>hue</a>, <a href='#sat'>sat</a>
+Child of <a href='#switch'>switch</a>, <a href='#hue'>hue</a>, <a href='#dest'>dest</a>, <a href='#sat'>sat</a>, <a href='#src'>src</a>, <a href='#bri'>bri</a>
 </td></tr></table>
 <p>The name of a particle's variable field (a <i>Var</i>).</p><a name='mul'></a>
 <br /><table class='elementTitle' summary="mul"><tr><td class='leftElementTitle'>
 &lt;mul&gt;</td><td class='rightElementTitle'>
-Child of <a href='#bri'>bri</a>, <a href='#hue'>hue</a>, <a href='#sat'>sat</a>
+Child of <a href='#hue'>hue</a>, <a href='#sat'>sat</a>, <a href='#bri'>bri</a>
 </td></tr></table>
 <p>A decimal multiplier.</p><a name='hexinc'></a>
 <br /><table class='elementTitle' summary="hexinc"><tr><td class='leftElementTitle'>
@@ -1258,7 +1258,7 @@ Child of <a href='#modify'>modify</a>
 <p>A hexadecimal multiplier.</p><a name='rule'></a>
 <br /><table class='elementTitle' summary="rule"><tr><td class='leftElementTitle'>
 &lt;rule&gt;</td><td class='rightElementTitle'>
-Child of <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#particle'>particle</a>, <a href='#next'>next</a>, <a href='#subrule'>subrule</a>, <a href='#fail'>fail</a>, <a href='#dispatch'>dispatch</a>, <a href='#pass'>pass</a>
+Child of <a href='#dispatch'>dispatch</a>, <a href='#pass'>pass</a>, <a href='#subrule'>subrule</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#particle'>particle</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>A particle update rule. There are six types (of which only four are public),
 plus four constructs that are provided by the compiler for convenience,
@@ -1319,7 +1319,7 @@ store value in Var of any local cell).
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#bind'>bind</a> | <a href='#switch'>switch</a> | <a href='#modify'>modify</a> | <a href='#deliver'>deliver</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#huff'>huff</a> | <a href='#goal'>goal</a> | <a href='#goto'>goto</a> | <a href='#ball'>ball</a>)</p><a name='bind'></a>
 <br /><table class='elementTitle' summary="bind"><tr><td class='leftElementTitle'>
 &lt;bind&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>Bind rule.</p><p>Associates a name ("loc") with a neighboring cell.
 Looks in the "bcase" block for the "bmatch" corresponding to the type of that cell,
@@ -1390,7 +1390,7 @@ Attribute of <a href='#bmatch'>bmatch</a>
 <p>The name of the type being matched in a bind rule.</p><p><span class='inTextTitle'>Required</span></p><a name='switch'></a>
 <br /><table class='elementTitle' summary="switch"><tr><td class='leftElementTitle'>
 &lt;switch&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>Switch rule.</p><p>Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule
 (or is equal to <i>orig</i>).
@@ -1412,7 +1412,7 @@ i.e. the cell where the rule is triggered.</p><blockquote><table summary='elemen
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#loc'>loc</a>?, <a href='#var'>var</a>, <a href='#scase'>scase</a>*, <a href='#default'>default</a>?)</p><a name='loc'></a>
 <br /><table class='elementTitle' summary="loc"><tr><td class='leftElementTitle'>
 &lt;loc&gt;</td><td class='rightElementTitle'>
-Child of <a href='#dest'>dest</a>, <a href='#switch'>switch</a>, <a href='#src'>src</a>, <a href='#bind'>bind</a>
+Child of <a href='#bind'>bind</a>, <a href='#switch'>switch</a>, <a href='#dest'>dest</a>, <a href='#src'>src</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='scase'></a>
 <br /><table class='elementTitle' summary="scase"><tr><td class='leftElementTitle'>
@@ -1466,7 +1466,7 @@ Attribute of <a href='#smatch'>smatch</a>
 <p>The value of the var being matched in a switch rule.</p><p><span class='inTextTitle'>Required</span></p><a name='default'></a>
 <br /><table class='elementTitle' summary="default"><tr><td class='leftElementTitle'>
 &lt;default&gt;</td><td class='rightElementTitle'>
-Child of <a href='#switch'>switch</a>, <a href='#bind'>bind</a>
+Child of <a href='#bind'>bind</a>, <a href='#switch'>switch</a>
 </td></tr></table>
 <p>The default case in a switch or bind rule.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;default&gt;'s children">
@@ -1489,7 +1489,7 @@ Child of <a href='#switch'>switch</a>, <a href='#bind'>bind</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#bind'>bind</a> | <a href='#switch'>switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#huff'>huff</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='modify'></a>
 <br /><table class='elementTitle' summary="modify"><tr><td class='leftElementTitle'>
 &lt;modify&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>Modify rule.</p><p>Writes a value to a destination cell ("dest").
 The precise behavior depends on the child tags; there are two possible options:
@@ -1591,7 +1591,7 @@ Child of <a href='#rule'>rule</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pos'>pos</a>, <a href='#msg'>msg</a>)</p><a name='msg'></a>
 <br /><table class='elementTitle' summary="msg"><tr><td class='leftElementTitle'>
 &lt;msg&gt;</td><td class='rightElementTitle'>
-Child of <a href='#deliver'>deliver</a>, <a href='#dispatch'>dispatch</a>
+Child of <a href='#dispatch'>dispatch</a>, <a href='#deliver'>deliver</a>
 </td></tr></table>
 <p>Sorry, no documentation.</p><a name='set'></a>
 <br /><table class='elementTitle' summary="set"><tr><td class='leftElementTitle'>
@@ -1612,7 +1612,7 @@ Child of <a href='#modify'>modify</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#type'>type</a>, <a href='#val'>val</a>*)</p><a name='val'></a>
 <br /><table class='elementTitle' summary="val"><tr><td class='leftElementTitle'>
 &lt;val&gt;</td><td class='rightElementTitle'>
-Child of <a href='#set'>set</a>, <a href='#gvars'>gvars</a>, <a href='#vars'>vars</a>
+Child of <a href='#vars'>vars</a>, <a href='#gvars'>gvars</a>, <a href='#set'>set</a>
 </td></tr></table>
 <p>Value of an individual var.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table  summary="&lt;val&gt;'s attributes"><tr>
@@ -1636,7 +1636,7 @@ Child of <a href='#modify'>modify</a>
 <p>Sorry, no documentation.</p><a name='nop'></a>
 <br /><table class='elementTitle' summary="nop"><tr><td class='leftElementTitle'>
 &lt;nop/&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>A dummy rule that does nothing.</p><p class='emptyTagNote'>This element is always empty.</p><a name='goto'></a>
 <br /><table class='elementTitle' summary="goto"><tr><td class='leftElementTitle'>
@@ -1646,7 +1646,7 @@ Child of <a href='#rule'>rule</a>
 <p>Goto rule.</p><p>Executes a specified rule.</p><a name='random'></a>
 <br /><table class='elementTitle' summary="random"><tr><td class='leftElementTitle'>
 &lt;random&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>Random rule.</p><p>Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule).</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;random&gt;'s children">
@@ -1709,7 +1709,7 @@ Child of <a href='#random'>random</a>
 <span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a> | <a href='#bind'>bind</a> | <a href='#switch'>switch</a> | <a href='#modify'>modify</a> | <a href='#nop'>nop</a> | <a href='#random'>random</a> | <a href='#huff'>huff</a> | <a href='#goal'>goal</a> | <a href='#ball'>ball</a>)</p><a name='huff'></a>
 <br /><table class='elementTitle' summary="huff"><tr><td class='leftElementTitle'>
 &lt;huff&gt;</td><td class='rightElementTitle'>
-Child of <a href='#smatch'>smatch</a>, <a href='#p'>p</a>, <a href='#default'>default</a>, <a href='#bmatch'>bmatch</a>, <a href='#rule'>rule</a>, <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#pass'>pass</a>
+Child of <a href='#pass'>pass</a>, <a href='#default'>default</a>, <a href='#fail'>fail</a>, <a href='#rule'>rule</a>, <a href='#smatch'>smatch</a>, <a href='#bmatch'>bmatch</a>, <a href='#next'>next</a>, <a href='#p'>p</a>
 </td></tr></table>
 <p>A probability distribution over rules, implemented by the compiler as a Huffmann tree of <b>random</b> rules.</p><blockquote><table summary='element info'><tr>
 <td class='construct'><table summary="&lt;huff&gt;'s children">
