@@ -45,10 +45,10 @@ Each Goal expression operates on a given <i>area</i> of the Board
 <!ELEMENT cage (wall+,goal,count?,points?)>
 
 <!-- A Goal that tests if the parent area contains a population of cells 
- belonging to a specified set of types ("state" / "type"),
+ belonging to a specified set of types ("gstate" / "pstate" / "ostate"),
  having a specified number ("count"), and having, when masked with a given bitmask ("vmask"),
  a specified Shannon entropy ("entropy"). -->
-<!ELEMENT population ((gstate|pstate|ostate|gvars|gtype)+,vmask?,count?,entropy?)>
+<!ELEMENT population ((gstate|pstate|ostate)+,vmask?,count?,entropy?)>
 
 <!-- A Goal that is true if the child expression ("goal") has evaluated true
  consecutively for a specified number of times ("reps"). -->
