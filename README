@@ -12,6 +12,12 @@ PixelZoo is a project-in-progress to build an open source multiplayer
 turn-based game using fast two-dimensional stochastic Cellular
 Automata (CA).
 
+The graphics aesthetic is experimental and minimal. Particles in the
+game are just colored pixels. There is some textual feedback: particle
+names, "speech balloons", an output console. The design goal is that
+particles are characterized by the player largely according to their
+behavior as microscopic agents.
+
 The CA's state machines are programmed using a minimal rule language
 with only a few elements: integer variables, addition, a C-like
 "switch", UNIX-like signals ("messages"). This makes it very easy to
@@ -23,10 +29,10 @@ enough to implement models from physics, chemistry and biology, e.g.
 - diffusion-limited-aggregation and crystal growth
 - chemical kinetics, the Belousov–Zhabotinsky reaction
 - the two-dimensional Ising model of magnetic spin arrays
-- the Susceptible-Infected-Recovered (SIR) model of epidemiology
 - mesoscale dynamics of polymers and entangled polymer melts
+- the Susceptible-Infected-Recovered (SIR) model of epidemiology
 - neutral drift models in population genetics and ecology
-- forest fires, ants, bacteria, traffic, etc etc etc
+- forest fires, ants, bacteria, traffic, crowds, etc.
 
 In the single-player (tutorial) version of the game, the player
 attempts to solve various puzzles and challenges (e.g. "maintain an
