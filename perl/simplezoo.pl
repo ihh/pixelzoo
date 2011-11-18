@@ -9,7 +9,7 @@ use Carp;
 use FindBin qw($Bin);
 use lib "$Bin/../Zoo/lib";
 
-use Level;
+use Level::Simple;
 
 # parse options
 my $man = 0;
@@ -19,7 +19,8 @@ my $verbose = 0;
 my $xmllint;
 my ($proto, $out);
 
-GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug, 'out=s' => \$out, 'proto=s' => \$proto, 'xmllint=s' => \$xmllint) or pod2usage(2);
+GetOptions('help|?' => \$help, man => \$man, verbose => \$verbose, debug => \$debug,
+	   'out=s' => \$out, 'proto=s' => \$proto, 'xmllint=s' => \$xmllint) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -29,7 +30,7 @@ $verbose = 1 if $debug;
 
 
 # test
-my $gram = Level->newLevel;
+my $gram = Level::Simple->newLevel;
 $gram->verbose($verbose);
 $gram->debug($debug);
 $gram->protofile($proto) if defined $proto;
@@ -51,41 +52,8 @@ my %cement = ('name' => 'cement',
 	      'setsvar' => 'hue',
 	      'setsvals' => [0,42,84]);
 
-make_spray_tool(%cement);
+$gram->make_spray_tool(%cement);
 
-sub make_spray_tool {
-    my %cement = @_;
-
-    my ($cementName, $cementRate, $cementStep, $cementDrain, $cementStick, $cementSet, $stickType, $copyFlag, $setType, $wallVar, $wallVals)
-	= map ($cement{$_}, qw(name rate step drain stick set sticksto copies setsto setsvar setsvals));
-
-    # cement type
-    my $setSub = ['huff' => [ map ((1/@$wallVals => [ 'modify' => [ 'set' => [ 'type' => $setType, $gram->var($wallVar) => $_ ] ] ]),
-				   @$wallVals) ]];
-    my $stickSub = $copyFlag
-	? ['modify' => [ 'src' => [ 'loc' => $gram->neighbor ], 'dest' => [ 'loc' => $gram->origin ] ] ]
-	: $setSub;
-
-    $gram->addType ('name' => $cementName,
-		    'hue' => ['add' => 32],
-		    'sat' => ['add' => 192],
-		    'bri' => ['add' => 96],
-		    'rate' => $cementRate,
-		    'rule' => ['huff' => [$cementDrain => $gram->suicide,
-					  $cementSet => $setSub,
-					  $gram->bindMoore (1 - $cementSet - $cementDrain,
-							    [$gram->bmatch($gram->empty) => ['huff' => [$cementStep => $gram->moveTo]],
-							     $gram->bmatch($stickType) => [ 'huff' => [$cementStick => $stickSub]]])]]);
-    
-    # cement tool
-    $gram->addTool ('name' => "$cementName spray",
-		    'size' => 2,
-		    'gstate' => $cementName,
-		    'reserve' => 1000,
-		    'recharge' => 100,
-		    'spray' => 1000,
-		    'overwrite' => [ 'gstate' => 'empty' ]);
-}
 
 # wall
 my ($wallRate, $wallMaxDecay) = (.0002,
@@ -98,9 +66,12 @@ $gram->addType ('name' => 'wall',
 		'rate' => $wallRate,
 		'rule' => ['switch' => ['loc' => $gram->origin,
 					'var' => 'decay',
-					'scase' => [ $gram->smatch($wallMaxDecay) => $gram->suicide ($gram->balloon ("decay", 'rate' => .01, 'hexcolor' => "20ffff"))],
-					'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
-								     'inc' => 1 ]]]]);
+					'scase' =>
+					[ $gram->smatch($wallMaxDecay) => 
+					  $gram->suicide
+					   ($gram->balloon ("decay", 'rate' => .01, 'hexcolor' => "20ffff"))],
+    'default' => [ 'modify' => [ 'src' => [ 'var' => 'decay' ],
+    'inc' => 1 ]]]]);
 
 
 # acid
@@ -110,10 +81,12 @@ $gram->addType ('name' => 'acid',
 		'sat' => ['add' => 192],
 		'bri' => ['add' => 64],
 		'rate' => $acidRate,
-		'rule' => ['huff' => [$acidDrain => $gram->suicide,
-				       $gram->bindMoore (1 - $acidDrain,
-							 [$gram->bmatch($gram->empty) => $gram->moveTo],
-							 ['huff' => [ $acidBurn => $gram->homicide ($gram->suicide) ] ])]]);
+		'rule' => ['huff' =>
+			   [$acidDrain => $gram->suicide,
+			    $gram->bindMoore (1 - $acidDrain,
+					      [$gram->bmatch($gram->empty) => $gram->moveTo],
+    ['huff' => 
+[ $acidBurn => $gram->homicide ($gram->suicide) ] ])]]);
 
 # acid tool
 $gram->addTool ('name' => 'Acid spray',
@@ -135,20 +108,30 @@ $gram->addType ('name' => 'plant',
 		'sat' => ['add' => 240],
 		'bri' =>  ['var' => 'gens_left', 'mul' => -16, 'add' => 144],
 		'rate' => $plant{rate},
-		'rule' => ['huff' => [$plant{'die'} => $gram->suicide,
-				      (1 - $plant{'die'}) => ['switch' => ['loc' => $gram->origin,
-									   'var' => 'gens_left',
-									   'scase' => { $gram->smatch('0') => $gram->nop },
-									   'default' => $gram->huffNeumann
-									   ({ $gram->bmatch($gram->empty) => $gram->copyTo
-										  ($gram->neighbor,
-										   ['switch' => ['loc' => $gram->origin,
-												 'var' => 'branches',
-												 'scase' => { $gram->smatch($plant{'max_branches'}) => $no_branch },
-												 'default' => ['huff' => [(1-$plant{'branch'}) => $no_branch,
-															  $plant{'branch'} => ['modify' => ['src' => ['loc' => $gram->origin, 'var' => 'branches'],
-																			    'inc' => +1,
-																			    'dest' => ['loc' => $gram->origin, 'var' => 'branches' ]]] ]]]]) }) ] ] ] ] );
+		'rule' => ['huff' => 
+[$plant{'die'} => $gram->suicide,
+ (1 - $plant{'die'}) =>
+ ['switch' =>
+  ['loc' => $gram->origin,
+   'var' => 'gens_left',
+   'scase' => { $gram->smatch('0') =>
+		    $gram->nop },
+   'default' => $gram->huffNeumann
+   ({ $gram->bmatch($gram->empty) =>
+	  $gram->copyTo
+	  ($gram->neighbor,
+	   ['switch' => ['loc' => $gram->origin,
+			 'var' => 'branches',
+			 'scase' => { $gram->smatch($plant{'max_branches'}) =>
+					  $no_branch },
+			 'default' => ['huff' =>
+				       [(1-$plant{'branch'}) => $no_branch,
+					$plant{'branch'} =>
+					['modify' =>
+					 ['src' => 
+					  ['loc' => $gram->origin, 'var' => 'branches'],
+					  'inc' => +1,
+					  'dest' => ['loc' => $gram->origin, 'var' => 'branches' ]]] ]]]]) }) ] ] ] ] );
 
 my %seed = ('name' => 'seed',
 	    'rate' => .1,
@@ -162,13 +145,16 @@ my %seed = ('name' => 'seed',
 	    'setsvar' => 'gens_left',
 	    'setsvals' => [1,3,6]);
 
-make_spray_tool(%seed);
+$gram->make_spray_tool(%seed);
 
 
 # rock-paper-scissors animal
 sub make_species_switch {
     my ($gram, $selfRule, $predatorRule, $preyRule) = @_;
-    ($selfRule, $predatorRule, $preyRule) = map (defined($_) ? (ref($_) ? $_ : []) : $gram->nop, $selfRule, $predatorRule, $preyRule);
+    ($selfRule, $predatorRule, $preyRule) = map (defined($_)
+						 ? (ref($_) ? $_ : [])
+						 : $gram->nop,
+						 $selfRule, $predatorRule, $preyRule);
     my %sw;
     for my $orig (0..2) {
 	my $prey = ($orig + 1) % 3;
@@ -183,10 +169,11 @@ sub make_species_switch {
     }
     return ('switch' => ['loc' => $gram->origin,
 			 'var' => 'species',
-			 'scase' => [map (( $gram->smatch($_) => ['switch' => ['loc' => $gram->neighbor,
-									      'var' => 'species',
-									      'scase' => [%{$sw{$_}}]]] ),
-					 0..2)]]);
+			 'scase' => [map (( $gram->smatch($_) =>
+					    ['switch' => ['loc' => $gram->neighbor,
+							  'var' => 'species',
+							  'scase' => [%{$sw{$_}}]]] ),
+					  0..2)]]);
 }
 
 my %rps = ('name' => 'cyclobs',
@@ -253,9 +240,9 @@ $gram->addType
 						  $gram->neighbor,
 						  $gram->balloon("eat",'rate'=>$rps{'text'}),
 						  $gram->balloon("spawn",'rate'=>$rps{'text'})) ] ],
-					       $gram->smatch(1) =>
-					       [ 'huff' =>
-						 [ $rps{'eat'} => $gram->moveTo ] ] }]],
+						 $gram->smatch(1) =>
+						 [ 'huff' =>
+						   [ $rps{'eat'} => $gram->moveTo ] ] }]],
 			 
 			 $gram->bmatch($rps{'name'}) =>
 			 [ make_species_switch
