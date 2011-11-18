@@ -1,11 +1,33 @@
-PixelZoo:
-A client-server architecture for cellular automata simulations.
+PixelZoo
+========
 
-See doc/index.html file for developer documentation.
+A client-server architecture for 2D cellular automata simulations.
+(See doc/index.html file for developer documentation.)
+
+
+Introduction
+============
+
+PixelZoo is a project-in-progress to build an open source multiplayer
+turn-based game using fast two-dimensional stochastic cellular
+automata.
+
+Mostly completed parts include:
+- an XML schema for describing state-machine rules and level goals
+- a core ANSI C library that runs games and verifies moves
+- Perl modules for generating and compiling levels
+- tests and (some) documentation
+
+Work in progress includes:
+- a RESTful multiplayer game server, based on Perl Catalyst
+- clients for iOS, Android and Simple DirectMedia Layer (SDL)
 
 
 Dependencies
 ============
+
+Depending on what you want to build, you will need some other stuff
+installed.
 
 Core client engine: C code in src/, compiles into lib/
 ------------------
