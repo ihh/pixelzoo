@@ -9,8 +9,28 @@ Introduction
 ============
 
 PixelZoo is a project-in-progress to build an open source multiplayer
-turn-based game using fast two-dimensional stochastic cellular
-automata.
+turn-based game using fast two-dimensional stochastic Cellular
+Automata (CA).
+
+The CA's state machines are programmed using a minimal rule language
+with only a few elements: integer variables, addition, a C-like
+"switch", UNIX-like signals ("messages"). This makes it very easy to
+analyze the programs (i.e. predict their CPU usage), while being rich
+enough to implement models from physics, chemistry and biology, e.g.
+
+- simple models of ideal gases
+- Brownian motion and Brownian superprocesses
+- diffusion-limited-aggregation and crystal growth
+- chemical kinetics, the Belousov–Zhabotinsky reaction
+- the two-dimensional Ising model of magnetic spin arrays
+- the Susceptible-Infected-Recovered (SIR) model of epidemiology
+- mesoscale dynamics of polymers and entangled polymer melts
+- neutral drift models in population genetics and ecology
+- forest fires, ants, bacteria, traffic, etc etc etc
+
+
+State of the project
+====================
 
 Mostly completed parts include:
 - an XML schema for describing state-machine rules and level goals
