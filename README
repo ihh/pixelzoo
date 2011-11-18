@@ -28,9 +28,22 @@ enough to implement models from physics, chemistry and biology, e.g.
 - neutral drift models in population genetics and ecology
 - forest fires, ants, bacteria, traffic, etc etc etc
 
+In the single-player (tutorial) version of the game, the player
+attempts to solve various puzzles and challenges (e.g. "maintain an
+ecology of >N different species for time >T, in the face of various
+natural disasters").
+
+In the multi-player version, which is turn-based, players compete for
+control of self-contained playing boards ("worlds"). Players can also
+create their own (self-replicating) CA programs, adding an element
+somewhat like the game "Core Wars", but with an in-game economy
+(because programs can be bought or traded).
+
 
 State of the project
 ====================
+
+We said it was a work-in-progress, didn't we?
 
 Mostly completed parts include:
 - an XML schema for describing state-machine rules and level goals
