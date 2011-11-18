@@ -35,9 +35,8 @@ natural disasters").
 
 In the multi-player version, which is turn-based, players compete for
 control of self-contained playing boards ("worlds"). Players can also
-create their own (self-replicating) CA programs, adding an element
-somewhat like the game "Core Wars", but with an in-game economy
-(because programs can be bought or traded).
+create their own (self-replicating) CA programs, and trade these
+in-game.
 
 
 State of the project
