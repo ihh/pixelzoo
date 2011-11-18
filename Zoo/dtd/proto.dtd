@@ -1,36 +1,135 @@
+<!--
+This DTD defines the "proto" dialect for the PixelZoo XML game format,
+wherein locations, particle types and variables (<i>vars</i>) are referred to by names.
+
+The intention of this dialect is to offer a slightly higher layer of abstraction
+than is offered by the raw numerical format of the "game" format.
+
+This (slightly) higher-level dialect can be compiled down to the "game" dialect, using the zoocompiler.pl program.
+
+Some features that are implemented in the core game engine (read-only variables, inter-particle messaging),
+which are accessible from the low-level dialect,
+are not yet exposed at this higher level (zoocompiler does not define a namespace for them).
+-->
+
+<!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
 
-<!ELEMENT trigger (goal,(type|hextype),pos+)>
+<!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
+ with a particular type of particle. -->
+<!ELEMENT trigger (goal,gtype,pos+)>
+
+<!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
 
+<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
+ and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
+ in the XML tree represents a single expression node in this mini-language.
+
+A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.
+
+Each Goal expression operates on a given <i>area</i> of the Board
+ (i.e. a subset of the Board's cells). By default, this area is inherited
+ from the parent Goal expression, and the default area for the root Goal is the entire Board.
+ -->
 <!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
+
+<!-- A Goal that restricts the child expression ("goal") to a given area,
+ specified as a list of cell co-ordinates. -->
 <!ELEMENT area (pos*,goal)>
+
+<!-- A Goal that tests if the parent area contains a specified number ("count")
+ of enclosures, made of a particular type of boundary cell ("wall").
+ Each enclosure must contain a specified number of cells ("points"),
+ and satisfy a particular child expression ("goal"). -->
 <!ELEMENT cage (wall+,goal,count?,points?)>
-<!ELEMENT population (allowmask?,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype)+,mask?,count?,entropy?)>
+
+<!-- A Goal that tests if the parent area contains a population of cells 
+ belonging to a specified set of types ("gstate" / "pstate" / "ostate"),
+ having a specified number ("count"), and having, when masked with a given bitmask ("vmask"),
+ a specified Shannon entropy ("entropy"). -->
+<!ELEMENT population ((gstate|pstate|ostate)+,vmask?,count?,entropy?)>
+
+<!-- A Goal that is true if the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"). -->
 <!ELEMENT repeat (reps,goal)>
+
+<!-- A Goal that is false until the child expression ("goal") has evaluated true
+ consecutively for a specified number of times ("reps"), and is thereafter always true.
+ This has the effect of caching the result of future tests of the child expression. -->
 <!ELEMENT cached (reps?,goal)>
+
+<!-- A Goal that is true if all of the child expressions are true. -->
 <!ELEMENT and (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if any of the child expressions are true. -->
 <!ELEMENT or (lazy?,cache?,goal+)>
+
+<!-- A Goal that is true if, and only if, the child expression is <b>not</b> true. -->
 <!ELEMENT not (goal)>
+
+<!-- A Goal that is always true. -->
 <!ELEMENT true EMPTY>
+
+<!-- A Goal that is always false. -->
 <!ELEMENT false EMPTY>
+
+<!-- A Goal that randomly returns true or false on each call, with a specified probability of truth ("prob"). -->
 <!ELEMENT maybe (prob)>
+
+<!-- A Goal that is true if the time on the Board clock (in microticks) is in the specified range. -->
 <!ELEMENT time (min?,max?)>
+
+<!-- A Goal that is true if the named Tool ("name") has the specified reserve ("toolres"). -->
+<!ELEMENT testtool (name,toolres)>
+<!ELEMENT toolres (min?,max?)>
+
+<!-- A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
+ and the count of particles that has 'exited' the Board is in the specified range ("count"). -->
 <!ELEMENT testexit (count,exitstate)>
-<!ELEMENT testgame (count,gamestate)>
+
+<!-- A Goal that is true if the Game is in the specified game state ("gamestate"). -->
+<!ELEMENT testgame (gamestate)>
+
+<!-- A Goal that recharges a given tool ("toolname") by a specified amount ("reserve").
+
+Always returns true. -->
 <!ELEMENT charge (toolname,reserve?)>
+
+<!-- A Goal that places the exit portal in a given portal state.
+
+Always returns true. -->
 <!ELEMENT setexit (exitstate)>
+
+<!-- A Goal that places the game in a given game state.
+
+Always returns true. -->
 <!ELEMENT setgame (gamestate)>
+
+<!-- A Goal that samples a point from the parent area and tries to use a Tool at that point.
+
+Returns true if the Tool's reserve level is used up after the Tool is used.
+(Note: these Tools live outside the usual player toolbox, and their reserve level is never replenished.) -->
 <!ELEMENT usetool (tool)>
+
+<!-- A Goal that prints a message on the output console.
+
+Always returns true. -->
 <!ELEMENT print (message)>
+
+<!-- A Goal that places a text balloon over the playing area.
+
+Always returns true. -->
 <!ELEMENT place (balloon?)>
 
+<!-- The co-ordinates of a Board cell.
+
+Generally specified relative to the current cell (e.g. the one whose update rule is being executed). -->
 <!ELEMENT pos (x?,y?)>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
 
 <!ELEMENT points (min?,max?)>
-<!ELEMENT allowmask (#PCDATA)>
 <!ELEMENT count (min?,max?)>
 <!ELEMENT entropy (min?,max?)>
 
@@ -38,7 +137,15 @@
 <!ELEMENT max (#PCDATA)>
 <!ELEMENT wall (#PCDATA)>
 <!ELEMENT reps (#PCDATA)>
+
+<!-- Exit portal state.
+
+Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
 <!ELEMENT exitstate (#PCDATA)>
+
+<!-- Game state.
+
+Legal values: "GameOn", "GameWon", "GameLost" -->
 <!ELEMENT gamestate (#PCDATA)>
 <!ELEMENT toolname (#PCDATA)>
 <!ELEMENT message (#PCDATA)>
@@ -46,6 +153,7 @@
 <!ELEMENT lazy EMPTY>
 <!ELEMENT cache EMPTY>
 
+<!-- A text balloon. -->
 <!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT ball (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
 <!ELEMENT color (#PCDATA)>
@@ -59,96 +167,297 @@
 <!ELEMENT rate (#PCDATA)>
 <!ELEMENT persist EMPTY>
 
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|pstate|ostate|sane-gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+
+<!-- A Tool.
+
+Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.
+
+Properties include spray rate ("spray") and diameter ("size"),
+initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
+and whether the Tool should initially be hidden ("hide").
+
+Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
+-->
+<!ELEMENT tool (name,size,brush?,(gstate|pstate|ostate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars))>
-<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|pstate|ostate|sane-gvars)*,(mask|tmask)?)>
-<!ELEMENT state (#PCDATA)>
-<!ELEMENT hexstate (#PCDATA)>
+<!ELEMENT pixel (x,y,(gstate|pstate|ostate|gvars))>
+<!ELEMENT overwrite (disallow*,(gstate|pstate|ostate|gvars)*,vmask?)>
+<!ELEMENT disallow (x,y)>
+
+<!-- The name of a type of particle (a "type"). -->
 <!ELEMENT gstate (#PCDATA)>
+<!-- The name of a type of particle (a "type"). -->
 <!ELEMENT gtype (#PCDATA)>
+<!-- The name of a type of particle. This particle type must have a special var named "id" which will be set equal to the user ID of the player. -->
 <!ELEMENT pstate (#PCDATA)>
+<!-- The name of a type of particle. This particle type must have a special var named "id" which will be set equal to the user ID of the board owner. -->
 <!ELEMENT ostate (#PCDATA)>
 
-<!ELEMENT sane-gvars (type,setvar*)>
+<!-- The complete state of a particle, including type ("type") and var values ("val"). -->
+<!ELEMENT gvars (type,val*)>
 
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT spray (#PCDATA)>
 <!ELEMENT reserve (#PCDATA)>
 <!ELEMENT recharge (#PCDATA)>
 <!ELEMENT maxreserve (#PCDATA)>
-<!ELEMENT mask (#PCDATA)>
-<!ELEMENT tmask (#PCDATA)>
+<!-- The mask for a given named type and variable. -->
+<!ELEMENT vmask (type,var)>
 <!ELEMENT hide EMPTY>
 
-<!ELEMENT exit ((type|hextype),pos+)>
-<!ELEMENT type (#PCDATA)>
-<!ELEMENT hextype (#PCDATA)>
+<!-- The exit portal for the Board, enabling Lemmings-style play.
+ The exit portal is initially in the "PortalWaiting" state.
+ When placed in the "PortalCounting" state (as a side-effect of a Goal expression),
+ the portal counts the number of times that particles of a given type ("type") are written to it.
+ (The actual write operations are intercepted, so the particles appear to drain from the Board.)
+ -->
+<!ELEMENT exit (gtype,pos+)>
 
+<!-- A string representing the type of a cell on the Board.
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc. -->
+<!ELEMENT type (#PCDATA)>
+
+<!-- A Board is a square array of cells whose edge length ("size") must be a power of 2.
+
+The Board has a clock that is measured in <i>microticks</i> ("t"),
+a grammar of update rules ("grammar"),
+an optional move queue ("queue") and random number seed ("seed").
+
+Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
-<!ELEMENT grammar (particle+)>
-<!ELEMENT init (x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
+
+<!-- A grammar consists of a set of optional subroutines ("subrule")
+ and a set of particle definitions ("particle"). -->
+<!ELEMENT grammar (subrule*,particle+)>
+
+<!-- Initialize a particular cell on the Board. -->
+<!ELEMENT init (x,y,(gstate|pstate|ostate|gvars|gtype))>
+
+<!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
+<!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate|gstate|pstate|ostate|sane-gvars|type|hextype|gtype))>
+<!ELEMENT move (t,x,y,(gstate|pstate|ostate|gvars|gtype))>
+
+<!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
 
-<!ELEMENT particle (name,sane-vars?,sane-hue?,sane-sat?,sane-bri?,sync?,rate?,rule)>
+<!-- A subroutine particle Rule. -->
+<!ELEMENT subrule (name,rule)>
 
-<!ELEMENT sane-vars (type?,varsize*)>
-<!ELEMENT varsize (name,size)>
+<!-- An elementary particle in the game, identified by a unique string ID ("type").
+Each particle has its own update rate ("rate") and rule ("rule"),
+formulae for determining the HSB color values ("hue", "sat" and "bri"),
+and optionally a message dispatch table ("dispatch").
 
-<!ELEMENT sane-hue (var?,mul?,add?)>
-<!ELEMENT sane-sat (var?,mul?,add?)>
-<!ELEMENT sane-bri (var?,mul?,add?)>
+Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths ("vars").
+
+By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
+
+Currently there is no mechanism to access the read-only vars,
+although the game DTD does allow for these.
+Also, the message dispatch table is not really useable,
+since the 64-bit "messages" are not yet compiled from a string namespace.
+
+ -->
+<!ELEMENT particle (name,vars?,hue?,sat?,bri?,sync?,rate?,rule,dispatch*)>
+
+<!-- Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths. -->
+<!ELEMENT vars (type?,val*)>
+
+<!-- Affine formula (var*mul+add) for determining a particle's hue from one of its Vars. -->
+<!ELEMENT hue (var?,mul?,add?)>
+<!-- Affine formula (var*mul+add) for determining a particle's color saturation from one of its Vars. -->
+<!ELEMENT sat (var?,mul?,add?)>
+<!-- Affine formula (var*mul+add) for determining a particle's brightness from one of its Vars. -->
+<!ELEMENT bri (var?,mul?,add?)>
 <!ELEMENT add (#PCDATA)>
 
+<!-- Synchronously updated particles. -->
 <!ELEMENT sync (period?,phase?)>
 <!ELEMENT period (#PCDATA)>
 <!ELEMENT phase (#PCDATA)>
 
+<!-- The name of a particle's variable field (a <i>Var</i>). -->
 <!ELEMENT var (#PCDATA)>
+<!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
+<!-- A hexadecimal increment. -->
 <!ELEMENT hexinc (#PCDATA)>
 
-<!ELEMENT rule (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
 
-<!ELEMENT sane-bind (loc,x?,y?,case*,default?)>
-<!ELEMENT sane-switch (loc?,var,case*,default?)>
+<!-- A particle update rule. There are six types (of which only four are public),
+ plus four public constructs that are provided by the compiler for convenience,
+ constituting an extremely minimal and predictable programming language for
+ state machines on arrays (i.e. cellular automata).
+
+The four compiler constructs are <b>bind</b>, <b>nop</b>, <b>huff</b>, and <b>ball</b>:
+<ul><li>
+ <b>bind</b> associates a name in the compiler's namespace
+ with a neighboring cell location and performs a <b>switch</b> rule on the particle type at that location.
+ The binding scope is local, in the sense that only descendants of this rule are allowed to
+ refer to the named cell or its internal variables.
+</li><li>
+ <b>nop</b> does nothing (implemented by the compiler using a dummy <b>modify</b> rule).
+</li><li>
+ <b>huff</b> allows for a probability distribution over an arbitrary number of rules
+ (implemented by the compiler using a Huffmann tree of coin-flip <b>random</b> rules).
+</li><li>
+ <b>ball</b> is a shortcut for a <b>goal</b> rule that places a text balloon.
+</li></ul>
+
+The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
+<ul><li>
+ <b>switch</b>
+  (read a Var from any named local cell,
+   look up corresponding rule in a table,
+   execute that rule).
+</li><li>
+ <b>modify</b>, effectively a <i>load-add-store</i> instruction
+  (read a Var from any local cell,
+   add or subtract a certain amount,
+   store value in Var of any local cell).
+</li><li>
+ <b>random</b>, introducing stochasticity
+  (executes one of two child rules by flipping a biased coin).
+</li><li>
+ <b>deliver</b>, which sends a 64-bit <i>message</i> to a local cell
+  (passing control to an update rule in that particle's dispatch table).
+</li></ul>
+
+The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
+<ul><li>
+ <b>goto</b>, used not to loop, but simply to save space,
+  (passes control to a named subroutine, which never returns),
+</li><li>
+ <b>goal</b>, allowing a callback hook for in-game feedback and effects
+  (tests a Goal, if the Board has an associated Game).
+</li></ul>
+ -->
+<!ELEMENT rule (bind|switch|modify|deliver|nop|random|huff|goal|goto|ball)>
+
+<!-- Bind rule.
+
+Associates a name ("loc") with a neighboring cell.
+Looks in the "bcase" block for the "bmatch" corresponding to the type of that cell,
+and executes the specified rule. If no such "bmatch" exists, executes the "default" rule.
+
+Note: the special name <i>orig</i> is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.  -->
+<!ELEMENT bind (loc,x?,y?,bcase*,default?)>
+
+<!-- The cases in a bind rule. -->
+<!ELEMENT bcase (bmatch*)>
+
+<!-- An individual case in a bind rule. -->
+<!ELEMENT bmatch (bind|switch|modify|nop|random|huff|goal|ball)>
+<!--
+@attr type The name of the type being matched in a bind rule.
+-->
+<!ATTLIST bmatch type CDATA #REQUIRED>
+
+<!-- Switch rule.
+
+Reads the var for a neighboring cell whose name ("loc") has already been assigned by an outer <b>bind</b> rule
+(or is equal to <i>orig</i>).
+Looks in the "scase" block for the "smatch" clause corresponding to the value of the var,
+and executes the corresponding rule. If no such "smatch" exists, executes the "default" rule.
+
+Note: the special location name <i>orig</i> is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.  -->
+<!ELEMENT switch (loc?,var,scase*,default?)>
 <!ELEMENT loc (#PCDATA)>
 
-<!ELEMENT case (sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ATTLIST case state CDATA #IMPLIED>
-<!ATTLIST case type CDATA #IMPLIED>
+<!-- The cases in a switch rule. -->
+<!ELEMENT scase (smatch*)>
 
-<!ELEMENT default (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!-- An individual case in a switch rule. -->
+<!ELEMENT smatch (bind|switch|modify|nop|random|huff|goal|ball)>
+<!--
+@attr value The value of the var being matched in a switch rule.
+-->
+<!ATTLIST smatch value CDATA #REQUIRED>
 
-<!ELEMENT modify (src?,(inc|sane-set)?,dest?,next?)>
+<!-- The default case in a switch or bind rule. -->
+<!ELEMENT default (rule|bind|switch|modify|nop|random|huff|goal|ball)>
+
+<!-- Modify rule.
+
+Writes a value to a destination cell ("dest").
+The precise behavior depends on the child tags; there are two possible options:
+<ol><li>
+A Var is read from a source cell ("src"),
+ a specified offset ("inc") is added,
+ and the resulting value is written to a specific Var of the destination cell.
+</li><li>
+ The type and all Vars of the destination cell are set to the specified values ("set").
+</li></ol>
+
+The "dest" and (if specified) "src" cells are referred to by name.
+They must either have been previously bound by an outer <b>bind</b> rule,
+or must be the special location name <i>orig</i> which is automagically defined for the cell at (0,0),
+i.e. the cell where the rule is triggered.
+
+After writing to the destination cells, the (optional) "next" rule is executed. -->
+<!ELEMENT modify (src?,(inc|hexinc|set)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
-<!ELEMENT next (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT next (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
-<!ELEMENT sane-set (type,setvar*)>
-<!ELEMENT setvar (name,value)>
-<!ELEMENT value (#PCDATA)>
+<!-- Deliver rule.
 
+Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
+<!ELEMENT deliver (pos,(msg|hexmsg))>
+<!-- A 64-bit decimal integer message. Note that messages are not currently compiled from strings. -->
+<!ELEMENT msg (#PCDATA)>
+<!-- A 64-bit hexadecimal integer message. Note that messages are not currently compiled from strings. -->
+<!ELEMENT hexmsg (#PCDATA)>
+
+<!ELEMENT set (type,val*)>
+
+<!-- Value of an individual var. -->
+<!ELEMENT val (#PCDATA)>
+<!--
+@attr var The name of the var.
+-->
+<!ATTLIST val var CDATA #REQUIRED>
+
+<!-- A decimal increment. -->
 <!ELEMENT inc (#PCDATA)>
 
+<!-- A dummy rule that does nothing. -->
 <!ELEMENT nop EMPTY>
 
+<!-- Goto rule.
+
+Executes a specified rule. -->
+<!ELEMENT goto (#PCDATA)>
+
+<!-- Random rule.
+
+Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule). -->
 <!ELEMENT random (prob?,pass?,fail?)>
-<!ELEMENT pass (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ELEMENT fail (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!ELEMENT pass (rule|bind|switch|modify|nop|random|huff|goal|ball)>
+<!ELEMENT fail (rule|bind|switch|modify|nop|random|huff|goal|ball)>
 
-<!ELEMENT sane-huff (numeric+)>
-<!ELEMENT numeric (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ATTLIST numeric value CDATA #REQUIRED>
+<!-- A probability distribution over rules, implemented by the compiler as a Huffmann tree of <b>random</b> rules. -->
+<!ELEMENT huff (p+)>
 
-<!ELEMENT overload (slow,fast)>
-<!ELEMENT slow (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
-<!ELEMENT fast (rule|sane-bind|sane-switch|modify|nop|random|sane-huff|overload|goal|ball)>
+<!-- An individual probabilistic outcome in a "huff" rule. -->
+<!ELEMENT p (rule|bind|switch|modify|nop|random|huff|goal|ball)>
+<!--
+@attr value The probability of this outcome.
+-->
+<!ATTLIST p value CDATA #REQUIRED>
+
+<!-- An entry in a particle's message dispatch table. -->
+<!ELEMENT dispatch (msg,rule)>

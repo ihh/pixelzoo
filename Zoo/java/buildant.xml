@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<project name="DTDDocAnt" default="main">
+
+    <description>
+    PixelZoo Game XML documentation
+    </description>
+
+    <!-- Tell ant where to find the code of the DTDDoc task.
+         You may have to change this if the two jars are not in your
+         path. -->
+
+    <taskdef name="DTDDoc"
+             classname="DTDDoc.DTDDocTask"
+             classpath="DTDDoc.jar"/>
+
+    <!-- Execute DTDDoc -->
+
+    <target name="main">
+
+        <!-- First, generate our own examples. -->
+		
+        <DTDDoc showHiddenTags="false"
+                showFixmeTags="false"
+                sourceDir="../dtd"
+                destDir="../dtd/doc"
+                docTitle = "PixelZoo Game XML documentation">
+            <include name="**/*.dtd"/>
+            <exclude name="common/*.dtd"/>
+        </DTDDoc>
+
+    </target>
+
+
+
+</project>

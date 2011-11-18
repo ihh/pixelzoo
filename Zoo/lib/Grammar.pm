@@ -25,7 +25,7 @@ use Twiggy;
 sub newGrammar {
     my ($class) = @_;
     my $emptyType = 'empty';
-    my $orig = 'o';
+    my $orig = 'orig';
     my $self = { 
 
 # constants
@@ -104,7 +104,7 @@ sub newGrammar {
     bless $self, $class;
 
     $self->addType ('name' => $emptyType,
-		    'vars' => [ 'hue' => 6, 'saturation' => 3, 'brightness' => 3 ],
+		    'vars' => [ $self->var('brightness') => 3, $self->var('saturation') => 3, $self->var('hue') => 6 ],
 		    'hue' => [ 'var' => 'hue' ],
 		    'sat' => [ 'var' => 'saturation' ],
 		    'bri' => [ 'var' => 'brightness' ],
@@ -164,40 +164,29 @@ sub assembled_xml {
 # validate the proto-game XML
 sub validate_proto_xml {
     my ($self, $proto_xml) = @_;
+
     $proto_xml = $self->proto_xml unless defined $proto_xml;
 
-    # "Sanitize" the proto-game XML, i.e. remove the quick-and-dirty shortcuts that don't translate well to XML
-    # (such as using var names as hash keys).
-    # Not sure this is the wisest idea if we do eventually plan to load XML back in...
-    # at minimum, we would need to write an inverse transformation to go the other way.
-    # We'd also need to avoid clashes between the unsanitized and sanitized tag names.
-    warn "Sanitizing proto-game XML...\n" if $self->verbose;
-    my $sanitized_proto = $self->sanitize_proto($proto_xml);
-
-    if ($self->debug) {
-	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($proto_xml);
-    }
-
-    if ($self->debug) {
-	warn "Data structure representing sanitized proto-game XML:\n", Data::Dumper->Dump($sanitized_proto);
-    }
-
-    warn "Generating proto-game XML for validation...\n" if $self->verbose;
-    my $sanitized_proto_xml = $self->generate_xml($sanitized_proto);
+    warn "Generating proto-game XML text...\n" if $self->verbose;
+    my $proto_xml_text = $self->generate_xml($proto_xml);
 
     if (defined $self->protofile) {
 	warn "Saving proto-game XML to file...\n" if $self->verbose;
 	local *PROTO;
 	open PROTO, '>' . $self->protofile;
-	print PROTO $sanitized_proto_xml;
+	print PROTO $proto_xml_text;
 	close PROTO;
+    }
+
+    if ($self->debug) {
+	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($proto_xml);
     }
 
     warn "Validating proto-game XML...\n" if $self->verbose;
     if (defined $self->protofile) {
 	$self->validate_xml_file ($self->protofile, $self->protoDTD);
     } else {
-	$self->validate_xml_string ($sanitized_proto_xml, $self->protoDTD);
+	$self->validate_xml_string ($proto_xml_text, $self->protoDTD);
     }
 }
 
@@ -244,9 +233,9 @@ sub compiled_xml {
 
 # top-level method to generate, compile & print XML
 sub print {
-    my ($self) = @_;
+    my ($self, $compiled_proto_xml) = @_;
 
-    my $compiled_xml = $self->compiled_xml;
+    my $compiled_xml = $self->compiled_xml ($compiled_proto_xml);
 
     if (!defined $self->outfile) {
 	warn "Printing game XML...\n" if $self->verbose;
@@ -302,8 +291,12 @@ sub make_game {
 
 # parse_types: parse type declarations
 sub parse_types {
-    my ($self) = @_;
-    $self->parse_node ($self->xml->type);
+    my ($self, $proto_xml) = @_;
+    if (defined $proto_xml) {
+	$self->parse_node ($proto_xml);
+    } else {
+	$self->parse_node ($self->xml->type);
+    }
 }
 
 # transform_proto: take proto-XML input, parse type declarations, apply transformations
@@ -322,14 +315,19 @@ sub parse_node {
     } elsif (ref($node)) {
 	confess "Illegal reference type: $node";
     } else {
-	warn "Parsing $node";
+#	warn "Parsing $node";
     }
     while (@node) {
 	my $k = shift @node;
 	my $v = shift @node;
 	if ($k eq 'particle') {
 	    my $vhash = forceHash($v);
-	    $self->declare_type ($vhash->{'name'}, defined($vhash->{'vars'}) ? %{forceHash($vhash->{'vars'})} : ());
+	    $self->declare_type ($vhash->{'name'},
+				 defined($vhash->{'vars'})
+				 ? ( ref($vhash->{'vars'}) eq 'HASH'
+				     ? %{$vhash->{'vars'}}
+				     : @{$vhash->{'vars'}} )
+				 : ());
 	} else {
 	    $self->parse_node ($v);
 	}
@@ -426,86 +424,6 @@ sub forceHash {
     confess "Not a reference";
 }
 
-# helper to sanitize the proto-XML
-# hack: temporarily overrides the transformation functions used for the main XML tree transformation
-sub sanitize_proto {
-    my ($self, $proto) = @_;
-    my $old_trans = $self->trans;
-    $self->trans ({ 'switch' => switch_sanitizer('sane-switch','state',1),
-		    'bind' => switch_sanitizer('sane-bind','type',0),
-		    'huff' => \&sanitize_huff,
-		    'gvars' => typevar_sanitizer('sane-gvars','setvar','value'),
-		    'vars' => typevar_sanitizer('sane-vars','varsize','size'),
-		    'set' => typevar_sanitizer('sane-set','setvar','value'),
-		    map (($_ => hsv_sanitizer("sane-$_")), qw(hue sat bri)),
-		  });
-
-    my $sanitized_proto = $self->transform_value ($proto);
-    $self->trans ($old_trans);  # restore the old transformations
-    return $sanitized_proto;
-}
-
-# helpers to perform, or make subroutines that perform, sanitization transformations
-sub sanitize_huff {
-    my ($self, $n) = @_;
-    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
-    my @out;
-    while (@vars) {
-	my $k = shift @vars;
-	my $v = shift @vars;
-	push @out, ('numeric' => [ '@value' => $k, @{$self->transform_value($v)} ]);
-    }
-    return ('sane-huff' => \@out);
-}
-
-sub switch_sanitizer {
-    my ($switch_tag, $case_tag, $has_var) = @_;
-    return sub {
-	my ($self, $n) = @_;
-	$n = forceHash($n);
-	my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
-	my %case;
-	if (ref($case) eq 'HASH') { %case = %$case }
-	elsif (ref($case) eq 'ARRAY') { confess "Odd number of elements in (@$case)" if @$case % 2 != 0; %case = @$case }
-	else { confess "Not a hash or array ref" }
-	return ($switch_tag => [defined($locid) ? ('loc' => $locid) : (),
-				$has_var && defined($varid) ? ('var' => $varid) : (),
-				defined($case) ? (map (( 'case' => [ '@'.$case_tag => $_, @{$self->transform_value($case{$_})} ] ), keys %case) ) : (),
-				defined($default) ? ('default' => $self->transform_value($default)) : ()]);
-    };
-}
-
-sub typevar_sanitizer {
-    my ($vars_tag, $var_tag, $value_tag) = @_;
-    return sub {
-	    my ($self, $n) = @_;
-	    confess "Expected a {Type=>Value} hash/array reference" unless ref($n);
-	    my @vars = ref($n) eq 'HASH' ? %$n : @$n;
-	    my @out;
-	    while (@vars) {
-		my $k = shift @vars;
-		my $v = shift @vars;
-		if ($k eq 'type') {
-		    push @out, ($k => $v);
-		} else {
-		    push @out, ($var_tag => { 'name' => $k, $value_tag => $v });
-		}
-	    }
-	    return ($vars_tag => \@out);
-    };
-}
-
-sub hsv_sanitizer {
-    my ($tag) = @_;
-    return sub {
-	    my ($self, $n) = @_;
-	    if (ref($n)) {
-		return ($tag => $n);
-	    }
-	    return ($tag => [ 'add' => $n ]);
-    };
-}
-
 # primary transformation functions
 sub transform_hash {
 
@@ -522,7 +440,7 @@ sub transform_hash {
 
 	# now come the cunning transformations...
 	# recursive transformations (for rules) that call transform_list or transform_value on their subtrees
-	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (.type, .tmask, etc)
+	# aided & abetted by expansion into further-expanded (but simpler) macros of the above form (gtype, tmask, etc)
 
 	# particle declaration
 	'particle' => sub {
@@ -567,7 +485,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
-	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y case default));
+	    my ($locid, $x, $y, $case, $default) = map ($n->{$_}, qw(loc x y bcase default));
 	    $case = {} unless defined $case;
 
 	    if (defined($self->scope->loctype->{$locid})) {
@@ -587,6 +505,7 @@ sub transform_hash {
 	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
 	    while (my ($name, $rule) = each %case_hash) {
+		$name = $self->fixTypeName($name);
 		$self->push_scope;
 		$self->scope->loctype->{$locid} = $name;
 		$transformed_case{$name} = $self->transform_value ($rule);
@@ -601,7 +520,7 @@ sub transform_hash {
 					     'rshift' => $self->typeshift,
 					     map (('case' => ['state' => $self->getType($_),
 							      @{$transformed_case{$_}}]),
-						  keys %case_hash),
+						  sort keys %transformed_case),
 					     defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -611,7 +530,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash($n);
 
-	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var case default));
+	    my ($locid, $varid, $case, $default) = map ($n->{$_}, qw(loc var scase default));
 	    $locid = $self->origin unless defined $locid;
 	    $case = {} unless defined $case;
 
@@ -627,6 +546,7 @@ sub transform_hash {
 	    my %case_hash = %{forceHash($case)};
 	    my %transformed_case;
 	    while (my ($name, $rule) = each %case_hash) {
+		$name = $self->fixVarValue($name);
 		$transformed_case{$name} = $self->transform_value ($rule);
 	    }
 	    my $transformed_default = defined($default) ? $self->transform_value($default) : undef;
@@ -636,7 +556,7 @@ sub transform_hash {
 					      'rshift' => $self->getShift($loctype,$varid),
 					      map (('case' => ['state' => $_,
 							       @{$transformed_case{$_}}]),
-						   keys %transformed_case),
+						   sort keys %transformed_case),
 					      defined($default) ? ('default' => $transformed_default) : () ] ] );
 	},
 
@@ -647,7 +567,7 @@ sub transform_hash {
 	    $n = forceHash ($n);
 
 	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
-	    confess "In .modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
+	    confess "In modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
 	    $inc = $set if defined $set;
 
 	    # SOURCE
@@ -781,6 +701,7 @@ sub transform_hash {
 	    while (@n) {
 		my $prob = shift @n;
 		my $rule = shift @n;
+		$prob = $self->fixProb($prob);
 		push @node, { 'prob' => $prob, 'rule' => $self->transform_value($rule) };
 		$total += $prob;
 	    }
@@ -884,6 +805,7 @@ sub declare_type {
     while (@varname_varbits) {
 	my $varname = shift @varname_varbits;
 	my $varbits = shift @varname_varbits;
+	$varname =~ s/^val\@var=([^\@]+)$/$1/;
 	confess "In type $type, '$varname' is an illegal var name" if illegal_name($varname);
 	push @{$self->pvar->{$type}}, $varname;
 	$self->pvbits->{$type}->{$varname} = $varbits;
@@ -954,15 +876,25 @@ sub firstNonzeroTag {
     return undef;
 }
 
-# fully-qualified particle state: .state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
+# fully-qualified particle state: state => { '@tag' => tag, 'type' => name, 'varname1' => val1, 'varname2' => val2, ... }
+my %typeAndVars_log;
 sub typeAndVars {
     my ($self, $n) = @_;
     $n = forceHash($n);
     my $type = $n->{'type'};
     my $state = $self->getType($type) << $self->getShift($type,"type");
+    my @desc = ("type=$type");
     while (my ($var, $val) = each %$n) {
+	$var =~ s/^val\@var=([^\@]+)$/$1/;
 	if ($var ne 'type') {
 	    $state = $state | ($val << $self->getShift($type,$var));
+	    push @desc, "$var=$val";
+	}
+    }
+    if ($self->verbose) {
+	my $log_msg = "State (@desc) compiled to " . hexv($state) . "\n";
+	unless ($typeAndVars_log{$log_msg}++) {
+	    warn $log_msg;
 	}
     }
     return $state;
@@ -1008,7 +940,7 @@ sub getShift {
 
 sub userState {
     my ($self, $type, $userID) = @_;
-    my $shift = $self->getShift($type,"type");
+    my $shift = $self->getShift($type,"id");
     my $state = $self->getType($type) << $shift;
     $state = $state | ($userID & ((1 << $shift) - 1));
     return $state;
@@ -1050,8 +982,16 @@ sub new_XML_element {
 	    my $v = shift @child;
 	    if ($k =~ s/^\@//) {
 		$t->set_att ($k => $v);
+	    } elsif ($k =~ /^([^\@]+)\@/) {
+		my $new_k = $1;
+		my $elt = new_XML_element($new_k, $v);
+		while ($k =~ /\@([^=]+)=([^\@=]+)/g) {
+		    my ($attr, $val) = ($1, $2);
+		    $elt->set_att ($attr, $val);
+		}
+		$elt->paste(last_child => $t);
 	    } elsif (Scalar::Util::looks_like_number($k)) {
-		my $elt = new_XML_element('numeric', $v);
+		my $elt = new_XML_element('p', $v);
 		$elt->set_att ('value' => $k);
 		$elt->paste(last_child => $t);
 	    } else {
@@ -1065,6 +1005,51 @@ sub new_XML_element {
 
     return $t;
 }
+
+# helper to turn a particle type name into a form that new_XML_element will process into a <bmatch type="..."> tag
+sub bmatch {
+    my ($self, $name) = @_;
+    return 'bmatch@type=' . $name;
+}
+
+# helper to turn a var value into a form that new_XML_element will process into a <smatch value="..."> tag
+sub smatch {
+    my ($self, $val) = @_;
+    return 'smatch@value=' . $val;
+}
+
+# helper to turn a var name into a form that new_XML_element will process into a <val var="..."> tag
+sub var {
+    my ($self, $name) = @_;
+    return 'val@var=' . $name;
+}
+
+# helper to turn a probability into a form that new_XML_element will process into a <p value="..."> tag
+sub pvalue {
+    my ($self, $prob) = @_;
+    return 'p@value=' . $prob;
+}
+
+# helpers to reverse the above transformations
+sub fixTypeName {
+    my ($self, $type) = @_;
+    $type =~ s/^bmatch\@type=([^\@]+)$/$1/;
+    return $type;
+}
+
+sub fixVarValue {
+    my ($self, $val) = @_;
+    $val =~ s/^smatch\@value=([^\@]+)$/$1/;
+    return $val;
+}
+
+sub fixProb {
+    my ($self, $prob) = @_;
+    $prob =~ s/^p\@value=([^\@]+)$/$1/;
+    return $prob;
+}
+
+# misc helpers
 
 sub sortHash {
     my ($hashRef, @key_order) = @_;

@@ -1,5 +1,49 @@
-Libraries
----------
+PixelZoo:
+A client-server architecture for cellular automata simulations.
 
-libxml2 (MIT license, included by default with the iPhone SDK)
+See doc/index.html file for developer documentation.
 
+
+Dependencies
+============
+
+Core client engine: C code in src/, compiles into lib/
+------------------
+
+Requires libxml2 (MIT license, included by default with the iPhone SDK)
+http://xmlsoft.org/
+
+
+SDL client: C code in tsrc/sdltest.c
+----------
+
+Requires Simple DirectMedia Layer (SDL).
+http://www.libsdl.org/
+
+
+iOS client: Objective-C code and Xcode IDE files in xcode/pixelzoo/
+----------
+
+Requires Xcode IDE and iOS development framework.
+http://developer.apple.com/xcode/
+
+
+Android client: Java/C code and Eclipse IDE files in android/
+--------------
+
+Requires Eclipse IDE and Android SDK/NDK.
+http://www.eclipse.org/
+http://developer.android.com/sdk/
+http://developer.android.com/sdk/ndk/
+
+
+Server: Perl code in perl/ and Zoo/
+------
+
+The game XML compiler, perl/zoocompiler.pl, requires various modules from CPAN,
+notably XML::Twig and Moose.
+http://www.cpan.org/
+
+The server framework in Zoo/ requires Perl Catalyst, and a few other modules.
+Do 'cd Zoo; perl Makefile.PL; make' to install other dependencies from CPAN.
+http://www.catalystframework.org/

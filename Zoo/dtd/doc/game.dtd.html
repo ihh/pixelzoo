@@ -1,0 +1,1460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head>
+<meta http-equiv='CONTENT-TYPE' content='text/html; charset=UTF-8' />
+<link rel='StyleSheet' href='DTDDocStyle.css' type='text/css' media='screen' />
+<title>game.dtd</title>
+</head><body>
+<p class='DTDSource'><b><code>game.dtd</code></b>: <a href='game.dtd.html'>Elements</a> - Entities - <a href='game.dtd.org.html'>Source</a> | <a href='intro.html'>Intro</a> - <a href='elementsIndex.html'>Index</a><br /><a href='index.html' target='_top'>FRAMES</a>&nbsp;/&nbsp;<a href='game.dtd.html' target='_top'>NO FRAMES</a></p><h1>game.dtd</h1>
+<p>This DTD defines the "game" dialect for the PixelZoo XML game format,
+wherein all game objects (e.g. neighborhood locations, particle types, variables)
+are described directly as integers (cell co-ordinates, IDs, masks, and so forth).</p><p>This is a very low-level dialect. It is the format understood by the C board engine.</p><p>This dialect is obtained by compiling files in the "proto" dialect, using the zoocompiler.pl program.</p><br />
+<a name='game'></a>
+<br /><table class='elementTitle' summary="game"><tr><td class='leftElementTitle'>
+&lt;game&gt;</td><td class='rightElementTitle'>
+Root element
+</td></tr></table>
+<p>An element representing a PixelZoo Game, including the Board, the Tools, and the Goals.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;game&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;game&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#board'>board</a></td><td>Only one</td></tr>
+<tr><td><a href='#exit'>exit</a></td><td>Only one</td></tr>
+<tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#protect'>protect</a></td><td>Any number</td></tr>
+<tr><td><a href='#rate'>rate</a></td><td>Only one</td></tr>
+<tr><td><a href='#tool'>tool</a></td><td>At least one</td></tr>
+<tr><td><a href='#trigger'>trigger</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#board'>board</a>, <a href='#rate'>rate</a>, <a href='#tool'>tool</a>+, <a href='#trigger'>trigger</a>*, <a href='#protect'>protect</a>*, <a href='#exit'>exit</a>, <a href='#goal'>goal</a>)</p><a name='trigger'></a>
+<br /><table class='elementTitle' summary="trigger"><tr><td class='leftElementTitle'>
+&lt;trigger&gt;</td><td class='rightElementTitle'>
+Child of <a href='#game'>game</a>
+</td></tr></table>
+<p>A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
+with a particular type of particle.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;trigger&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;trigger&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>At least one</td></tr>
+<tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#goal'>goal</a>, (<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#pos'>pos</a>+)</p><a name='protect'></a>
+<br /><table class='elementTitle' summary="protect"><tr><td class='leftElementTitle'>
+&lt;protect&gt;</td><td class='rightElementTitle'>
+Child of <a href='#game'>game</a>
+</td></tr></table>
+<p>Write-protect a particular Board cell.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;protect&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;protect&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='goal'></a>
+<br /><table class='elementTitle' summary="goal"><tr><td class='leftElementTitle'>
+&lt;goal&gt;</td><td class='rightElementTitle'>
+Child of <a href='#not'>not</a>, <a href='#game'>game</a>, <a href='#or'>or</a>, <a href='#and'>and</a>, <a href='#cached'>cached</a>, <a href='#rule'>rule</a>, <a href='#area'>area</a>, <a href='#repeat'>repeat</a>, <a href='#cage'>cage</a>, <a href='#trigger'>trigger</a>
+</td></tr></table>
+<p>PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
+and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
+in the XML tree represents a single expression node in this mini-language.</p><p>A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.</p><p>Each Goal expression operates on a given <i>area</i> of the Board
+(i.e. a subset of the Board's cells). By default, this area is inherited
+from the parent Goal expression, and the default area for the root Goal is the entire Board.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;goal&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;goal&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#and'>and</a></td><td>One or none</td></tr>
+<tr><td><a href='#area'>area</a></td><td>One or none</td></tr>
+<tr><td><a href='#cached'>cached</a></td><td>One or none</td></tr>
+<tr><td><a href='#cage'>cage</a></td><td>One or none</td></tr>
+<tr><td><a href='#charge'>charge</a></td><td>One or none</td></tr>
+<tr><td><a href='#false'>false</a></td><td>One or none</td></tr>
+<tr><td><a href='#maybe'>maybe</a></td><td>One or none</td></tr>
+<tr><td><a href='#not'>not</a></td><td>One or none</td></tr>
+<tr><td><a href='#or'>or</a></td><td>One or none</td></tr>
+<tr><td><a href='#place'>place</a></td><td>One or none</td></tr>
+<tr><td><a href='#population'>population</a></td><td>One or none</td></tr>
+<tr><td><a href='#print'>print</a></td><td>One or none</td></tr>
+<tr><td><a href='#repeat'>repeat</a></td><td>One or none</td></tr>
+<tr><td><a href='#setexit'>setexit</a></td><td>One or none</td></tr>
+<tr><td><a href='#setgame'>setgame</a></td><td>One or none</td></tr>
+<tr><td><a href='#testexit'>testexit</a></td><td>One or none</td></tr>
+<tr><td><a href='#testgame'>testgame</a></td><td>One or none</td></tr>
+<tr><td><a href='#testtool'>testtool</a></td><td>One or none</td></tr>
+<tr><td><a href='#time'>time</a></td><td>One or none</td></tr>
+<tr><td><a href='#true'>true</a></td><td>One or none</td></tr>
+<tr><td><a href='#usetool'>usetool</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#area'>area</a> | <a href='#cage'>cage</a> | <a href='#population'>population</a> | <a href='#repeat'>repeat</a> | <a href='#cached'>cached</a> | <a href='#and'>and</a> | <a href='#or'>or</a> | <a href='#not'>not</a> | <a href='#true'>true</a> | <a href='#false'>false</a> | <a href='#maybe'>maybe</a> | <a href='#time'>time</a> | <a href='#testtool'>testtool</a> | <a href='#testexit'>testexit</a> | <a href='#testgame'>testgame</a> | <a href='#charge'>charge</a> | <a href='#setexit'>setexit</a> | <a href='#setgame'>setgame</a> | <a href='#usetool'>usetool</a> | <a href='#print'>print</a> | <a href='#place'>place</a>)</p><a name='area'></a>
+<br /><table class='elementTitle' summary="area"><tr><td class='leftElementTitle'>
+&lt;area&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that restricts the child expression ("goal") to a given area,
+specified as a list of cell co-ordinates.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;area&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;area&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pos'>pos</a>*, <a href='#goal'>goal</a>)</p><a name='cage'></a>
+<br /><table class='elementTitle' summary="cage"><tr><td class='leftElementTitle'>
+&lt;cage&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that tests if the parent area contains a specified number ("count")
+of enclosures, made of a particular type of boundary cell ("wall").
+Each enclosure must contain a specified number of cells ("points"),
+and satisfy a particular child expression ("goal").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;cage&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;cage&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#count'>count</a></td><td>One or none</td></tr>
+<tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#points'>points</a></td><td>One or none</td></tr>
+<tr><td><a href='#wall'>wall</a></td><td>At least one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#wall'>wall</a>+, <a href='#goal'>goal</a>, <a href='#count'>count</a>?, <a href='#points'>points</a>?)</p><a name='population'></a>
+<br /><table class='elementTitle' summary="population"><tr><td class='leftElementTitle'>
+&lt;population&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that tests if the parent area contains a population of cells
+belonging to a specified set of types ("state" / "type"),
+having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
+a specified Shannon entropy ("entropy").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;population&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;population&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#allowmask'>allowmask</a></td><td>One or none</td></tr>
+<tr><td><a href='#count'>count</a></td><td>One or none</td></tr>
+<tr><td><a href='#entropy'>entropy</a></td><td>One or none</td></tr>
+<tr><td><a href='#hexstate'>hexstate</a></td><td>Any number</td></tr>
+<tr><td><a href='#hextype'>hextype</a></td><td>Any number</td></tr>
+<tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>Any number</td></tr>
+<tr><td><a href='#type'>type</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#allowmask'>allowmask</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a>)+, <a href='#mask'>mask</a>?, <a href='#count'>count</a>?, <a href='#entropy'>entropy</a>?)</p><a name='repeat'></a>
+<br /><table class='elementTitle' summary="repeat"><tr><td class='leftElementTitle'>
+&lt;repeat&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if the child expression ("goal") has evaluated true
+consecutively for a specified number of times ("reps").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;repeat&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;repeat&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#reps'>reps</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#reps'>reps</a>, <a href='#goal'>goal</a>)</p><a name='cached'></a>
+<br /><table class='elementTitle' summary="cached"><tr><td class='leftElementTitle'>
+&lt;cached&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is false until the child expression ("goal") has evaluated true
+consecutively for a specified number of times ("reps"), and is thereafter always true.
+This has the effect of caching the result of future tests of the child expression.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;cached&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;cached&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+<tr><td><a href='#reps'>reps</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#reps'>reps</a>?, <a href='#goal'>goal</a>)</p><a name='and'></a>
+<br /><table class='elementTitle' summary="and"><tr><td class='leftElementTitle'>
+&lt;and&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if all of the child expressions are true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;and&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;and&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#cache'>cache</a></td><td>One or none</td></tr>
+<tr><td><a href='#goal'>goal</a></td><td>At least one</td></tr>
+<tr><td><a href='#lazy'>lazy</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#lazy'>lazy</a>?, <a href='#cache'>cache</a>?, <a href='#goal'>goal</a>+)</p><a name='or'></a>
+<br /><table class='elementTitle' summary="or"><tr><td class='leftElementTitle'>
+&lt;or&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if any of the child expressions are true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;or&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;or&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#cache'>cache</a></td><td>One or none</td></tr>
+<tr><td><a href='#goal'>goal</a></td><td>At least one</td></tr>
+<tr><td><a href='#lazy'>lazy</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#lazy'>lazy</a>?, <a href='#cache'>cache</a>?, <a href='#goal'>goal</a>+)</p><a name='not'></a>
+<br /><table class='elementTitle' summary="not"><tr><td class='leftElementTitle'>
+&lt;not&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if, and only if, the child expression is <b>not</b> true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;not&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;not&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#goal'>goal</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#goal'>goal</a>)</p><a name='true'></a>
+<br /><table class='elementTitle' summary="true"><tr><td class='leftElementTitle'>
+&lt;true/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is always true.</p><p class='emptyTagNote'>This element is always empty.</p><a name='false'></a>
+<br /><table class='elementTitle' summary="false"><tr><td class='leftElementTitle'>
+&lt;false/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is always false.</p><p class='emptyTagNote'>This element is always empty.</p><a name='maybe'></a>
+<br /><table class='elementTitle' summary="maybe"><tr><td class='leftElementTitle'>
+&lt;maybe&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that randomly returns true or false on each call, with a specified probability of truth ("prob").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;maybe&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;maybe&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#prob'>prob</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#prob'>prob</a>)</p><a name='time'></a>
+<br /><table class='elementTitle' summary="time"><tr><td class='leftElementTitle'>
+&lt;time&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if the time on the Board clock (in microticks) is in the specified range.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;time&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;time&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#max'>max</a></td><td>One or none</td></tr>
+<tr><td><a href='#min'>min</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='testtool'></a>
+<br /><table class='elementTitle' summary="testtool"><tr><td class='leftElementTitle'>
+&lt;testtool&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if the named Tool ("name") has the specified reserve ("toolres").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;testtool&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;testtool&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
+<tr><td><a href='#toolres'>toolres</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#toolres'>toolres</a>)</p><a name='toolres'></a>
+<br /><table class='elementTitle' summary="toolres"><tr><td class='leftElementTitle'>
+&lt;toolres&gt;</td><td class='rightElementTitle'>
+Child of <a href='#testtool'>testtool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;toolres&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;toolres&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#max'>max</a></td><td>One or none</td></tr>
+<tr><td><a href='#min'>min</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='testexit'></a>
+<br /><table class='elementTitle' summary="testexit"><tr><td class='leftElementTitle'>
+&lt;testexit&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
+and the count of particles that has 'exited' the Board is in the specified range ("count").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;testexit&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;testexit&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#count'>count</a></td><td>Only one</td></tr>
+<tr><td><a href='#exitstate'>exitstate</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#count'>count</a>, <a href='#exitstate'>exitstate</a>)</p><a name='testgame'></a>
+<br /><table class='elementTitle' summary="testgame"><tr><td class='leftElementTitle'>
+&lt;testgame&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that is true if the Game is in the specified game state ("gamestate").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;testgame&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;testgame&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#gamestate'>gamestate</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#gamestate'>gamestate</a>)</p><a name='charge'></a>
+<br /><table class='elementTitle' summary="charge"><tr><td class='leftElementTitle'>
+&lt;charge&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that recharges a given tool ("toolname") by a specified amount ("reserve").</p><p>Always returns true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;charge&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;charge&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#reserve'>reserve</a></td><td>One or none</td></tr>
+<tr><td><a href='#toolname'>toolname</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#toolname'>toolname</a>, <a href='#reserve'>reserve</a>?)</p><a name='setexit'></a>
+<br /><table class='elementTitle' summary="setexit"><tr><td class='leftElementTitle'>
+&lt;setexit&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that places the exit portal in a given portal state.</p><p>Always returns true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;setexit&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;setexit&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#exitstate'>exitstate</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#exitstate'>exitstate</a>)</p><a name='setgame'></a>
+<br /><table class='elementTitle' summary="setgame"><tr><td class='leftElementTitle'>
+&lt;setgame&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that places the game in a given game state.</p><p>Always returns true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;setgame&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;setgame&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#gamestate'>gamestate</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#gamestate'>gamestate</a>)</p><a name='usetool'></a>
+<br /><table class='elementTitle' summary="usetool"><tr><td class='leftElementTitle'>
+&lt;usetool&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that samples a point from the parent area and tries to use a Tool at that point.</p><p>Returns true if the Tool's reserve level is used up after the Tool is used.
+(Note: these Tools live outside the usual player toolbox, and their reserve level is never replenished.)</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;usetool&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;usetool&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#tool'>tool</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#tool'>tool</a>)</p><a name='print'></a>
+<br /><table class='elementTitle' summary="print"><tr><td class='leftElementTitle'>
+&lt;print&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that prints a message on the output console.</p><p>Always returns true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;print&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;print&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#message'>message</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#message'>message</a>)</p><a name='place'></a>
+<br /><table class='elementTitle' summary="place"><tr><td class='leftElementTitle'>
+&lt;place&gt;</td><td class='rightElementTitle'>
+Child of <a href='#goal'>goal</a>
+</td></tr></table>
+<p>A Goal that places a text balloon over the playing area.</p><p>Always returns true.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;place&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;place&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#balloon'>balloon</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#balloon'>balloon</a>?)</p><a name='pos'></a>
+<br /><table class='elementTitle' summary="pos"><tr><td class='leftElementTitle'>
+&lt;pos&gt;</td><td class='rightElementTitle'>
+Child of <a href='#exit'>exit</a>, <a href='#deliver'>deliver</a>, <a href='#switch'>switch</a>, <a href='#area'>area</a>, <a href='#balloon'>balloon</a>, <a href='#trigger'>trigger</a>
+</td></tr></table>
+<p>The co-ordinates of a Board cell.</p><p>Generally specified relative to the current cell (e.g. the one whose update rule is being executed).</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;pos&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;pos&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>One or none</td></tr>
+<tr><td><a href='#y'>y</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='x'></a>
+<br /><table class='elementTitle' summary="x"><tr><td class='leftElementTitle'>
+&lt;x&gt;</td><td class='rightElementTitle'>
+Child of <a href='#spot'>spot</a>, <a href='#move'>move</a>, <a href='#dest'>dest</a>, <a href='#disallow'>disallow</a>, <a href='#center'>center</a>, <a href='#protect'>protect</a>, <a href='#pos'>pos</a>, <a href='#src'>src</a>, <a href='#init'>init</a>, <a href='#pixel'>pixel</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='y'></a>
+<br /><table class='elementTitle' summary="y"><tr><td class='leftElementTitle'>
+&lt;y&gt;</td><td class='rightElementTitle'>
+Child of <a href='#spot'>spot</a>, <a href='#move'>move</a>, <a href='#dest'>dest</a>, <a href='#disallow'>disallow</a>, <a href='#center'>center</a>, <a href='#protect'>protect</a>, <a href='#pos'>pos</a>, <a href='#src'>src</a>, <a href='#init'>init</a>, <a href='#pixel'>pixel</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='points'></a>
+<br /><table class='elementTitle' summary="points"><tr><td class='leftElementTitle'>
+&lt;points&gt;</td><td class='rightElementTitle'>
+Child of <a href='#cage'>cage</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;points&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;points&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#max'>max</a></td><td>One or none</td></tr>
+<tr><td><a href='#min'>min</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='allowmask'></a>
+<br /><table class='elementTitle' summary="allowmask"><tr><td class='leftElementTitle'>
+&lt;allowmask&gt;</td><td class='rightElementTitle'>
+Child of <a href='#population'>population</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='count'></a>
+<br /><table class='elementTitle' summary="count"><tr><td class='leftElementTitle'>
+&lt;count&gt;</td><td class='rightElementTitle'>
+Child of <a href='#testexit'>testexit</a>, <a href='#population'>population</a>, <a href='#cage'>cage</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;count&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;count&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#max'>max</a></td><td>One or none</td></tr>
+<tr><td><a href='#min'>min</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='entropy'></a>
+<br /><table class='elementTitle' summary="entropy"><tr><td class='leftElementTitle'>
+&lt;entropy&gt;</td><td class='rightElementTitle'>
+Child of <a href='#population'>population</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;entropy&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;entropy&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#max'>max</a></td><td>One or none</td></tr>
+<tr><td><a href='#min'>min</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#min'>min</a>?, <a href='#max'>max</a>?)</p><a name='min'></a>
+<br /><table class='elementTitle' summary="min"><tr><td class='leftElementTitle'>
+&lt;min&gt;</td><td class='rightElementTitle'>
+Child of <a href='#toolres'>toolres</a>, <a href='#points'>points</a>, <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#count'>count</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='max'></a>
+<br /><table class='elementTitle' summary="max"><tr><td class='leftElementTitle'>
+&lt;max&gt;</td><td class='rightElementTitle'>
+Child of <a href='#toolres'>toolres</a>, <a href='#points'>points</a>, <a href='#entropy'>entropy</a>, <a href='#time'>time</a>, <a href='#count'>count</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='wall'></a>
+<br /><table class='elementTitle' summary="wall"><tr><td class='leftElementTitle'>
+&lt;wall&gt;</td><td class='rightElementTitle'>
+Child of <a href='#cage'>cage</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='reps'></a>
+<br /><table class='elementTitle' summary="reps"><tr><td class='leftElementTitle'>
+&lt;reps&gt;</td><td class='rightElementTitle'>
+Child of <a href='#cached'>cached</a>, <a href='#repeat'>repeat</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='exitstate'></a>
+<br /><table class='elementTitle' summary="exitstate"><tr><td class='leftElementTitle'>
+&lt;exitstate&gt;</td><td class='rightElementTitle'>
+Child of <a href='#setexit'>setexit</a>, <a href='#testexit'>testexit</a>
+</td></tr></table>
+<p>Exit portal state.</p><p>Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed"</p><a name='gamestate'></a>
+<br /><table class='elementTitle' summary="gamestate"><tr><td class='leftElementTitle'>
+&lt;gamestate&gt;</td><td class='rightElementTitle'>
+Child of <a href='#setgame'>setgame</a>, <a href='#testgame'>testgame</a>
+</td></tr></table>
+<p>Game state.</p><p>Legal values: "GameOn", "GameWon", "GameLost"</p><a name='toolname'></a>
+<br /><table class='elementTitle' summary="toolname"><tr><td class='leftElementTitle'>
+&lt;toolname&gt;</td><td class='rightElementTitle'>
+Child of <a href='#charge'>charge</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='message'></a>
+<br /><table class='elementTitle' summary="message"><tr><td class='leftElementTitle'>
+&lt;message&gt;</td><td class='rightElementTitle'>
+Child of <a href='#print'>print</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='prob'></a>
+<br /><table class='elementTitle' summary="prob"><tr><td class='leftElementTitle'>
+&lt;prob&gt;</td><td class='rightElementTitle'>
+Child of <a href='#maybe'>maybe</a>, <a href='#random'>random</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='lazy'></a>
+<br /><table class='elementTitle' summary="lazy"><tr><td class='leftElementTitle'>
+&lt;lazy/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#or'>or</a>, <a href='#and'>and</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='cache'></a>
+<br /><table class='elementTitle' summary="cache"><tr><td class='leftElementTitle'>
+&lt;cache/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#or'>or</a>, <a href='#and'>and</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='balloon'></a>
+<br /><table class='elementTitle' summary="balloon"><tr><td class='leftElementTitle'>
+&lt;balloon&gt;</td><td class='rightElementTitle'>
+Child of <a href='#place'>place</a>
+</td></tr></table>
+<p>A text balloon.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;balloon&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;balloon&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#color'>color</a></td><td>One or none</td></tr>
+<tr><td><a href='#fade'>fade</a></td><td>One or none</td></tr>
+<tr><td><a href='#hexcolor'>hexcolor</a></td><td>One or none</td></tr>
+<tr><td><a href='#persist'>persist</a></td><td>One or none</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>One or none</td></tr>
+<tr><td><a href='#rate'>rate</a></td><td>One or none</td></tr>
+<tr><td><a href='#rise'>rise</a></td><td>One or none</td></tr>
+<tr><td><a href='#size'>size</a></td><td>One or none</td></tr>
+<tr><td><a href='#text'>text</a></td><td>Only one</td></tr>
+<tr><td><a href='#ttl'>ttl</a></td><td>One or none</td></tr>
+<tr><td><a href='#zoom'>zoom</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rate'>rate</a>?, <a href='#pos'>pos</a>?, (<a href='#color'>color</a> | <a href='#hexcolor'>hexcolor</a>)?, <a href='#text'>text</a>, <a href='#size'>size</a>?, <a href='#ttl'>ttl</a>?, <a href='#rise'>rise</a>?, <a href='#zoom'>zoom</a>?, <a href='#fade'>fade</a>?, <a href='#persist'>persist</a>?)</p><a name='color'></a>
+<br /><table class='elementTitle' summary="color"><tr><td class='leftElementTitle'>
+&lt;color&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='hexcolor'></a>
+<br /><table class='elementTitle' summary="hexcolor"><tr><td class='leftElementTitle'>
+&lt;hexcolor&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='text'></a>
+<br /><table class='elementTitle' summary="text"><tr><td class='leftElementTitle'>
+&lt;text&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='size'></a>
+<br /><table class='elementTitle' summary="size"><tr><td class='leftElementTitle'>
+&lt;size&gt;</td><td class='rightElementTitle'>
+Child of <a href='#board'>board</a>, <a href='#balloon'>balloon</a>, <a href='#tool'>tool</a>, <a href='#varsize'>varsize</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='ttl'></a>
+<br /><table class='elementTitle' summary="ttl"><tr><td class='leftElementTitle'>
+&lt;ttl&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='rise'></a>
+<br /><table class='elementTitle' summary="rise"><tr><td class='leftElementTitle'>
+&lt;rise&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='zoom'></a>
+<br /><table class='elementTitle' summary="zoom"><tr><td class='leftElementTitle'>
+&lt;zoom&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='fade'></a>
+<br /><table class='elementTitle' summary="fade"><tr><td class='leftElementTitle'>
+&lt;fade&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='rate'></a>
+<br /><table class='elementTitle' summary="rate"><tr><td class='leftElementTitle'>
+&lt;rate&gt;</td><td class='rightElementTitle'>
+Child of <a href='#spot'>spot</a>, <a href='#game'>game</a>, <a href='#balloon'>balloon</a>, <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='persist'></a>
+<br /><table class='elementTitle' summary="persist"><tr><td class='leftElementTitle'>
+&lt;persist/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#balloon'>balloon</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='tool'></a>
+<br /><table class='elementTitle' summary="tool"><tr><td class='leftElementTitle'>
+&lt;tool&gt;</td><td class='rightElementTitle'>
+Child of <a href='#game'>game</a>, <a href='#usetool'>usetool</a>
+</td></tr></table>
+<p>A Tool.</p><p>Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.</p><p>Properties include spray rate ("spray") and diameter ("size"),
+initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
+and whether the Tool should initially be hidden ("hide").</p><p>Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;tool&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;tool&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#brush'>brush</a></td><td>One or none</td></tr>
+<tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#hide'>hide</a></td><td>One or none</td></tr>
+<tr><td><a href='#maxreserve'>maxreserve</a></td><td>One or none</td></tr>
+<tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
+<tr><td><a href='#overwrite'>overwrite</a></td><td>One or none</td></tr>
+<tr><td><a href='#recharge'>recharge</a></td><td>One or none</td></tr>
+<tr><td><a href='#reserve'>reserve</a></td><td>One or none</td></tr>
+<tr><td><a href='#size'>size</a></td><td>Only one</td></tr>
+<tr><td><a href='#spray'>spray</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>, <a href='#brush'>brush</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>)?, <a href='#overwrite'>overwrite</a>?, <a href='#spray'>spray</a>?, <a href='#reserve'>reserve</a>?, <a href='#recharge'>recharge</a>?, <a href='#maxreserve'>maxreserve</a>?, <a href='#hide'>hide</a>?)</p><a name='brush'></a>
+<br /><table class='elementTitle' summary="brush"><tr><td class='leftElementTitle'>
+&lt;brush&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;brush&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;brush&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#center'>center</a></td><td>One or none</td></tr>
+<tr><td><a href='#intensity'>intensity</a></td><td>One or none</td></tr>
+<tr><td><a href='#pattern'>pattern</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#center'>center</a>?, <a href='#intensity'>intensity</a>?, <a href='#pattern'>pattern</a>?)</p><a name='center'></a>
+<br /><table class='elementTitle' summary="center"><tr><td class='leftElementTitle'>
+&lt;center&gt;</td><td class='rightElementTitle'>
+Child of <a href='#brush'>brush</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;center&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;center&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='intensity'></a>
+<br /><table class='elementTitle' summary="intensity"><tr><td class='leftElementTitle'>
+&lt;intensity&gt;</td><td class='rightElementTitle'>
+Child of <a href='#brush'>brush</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;intensity&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;intensity&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#spot'>spot</a></td><td>At least one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#spot'>spot</a>+)</p><a name='spot'></a>
+<br /><table class='elementTitle' summary="spot"><tr><td class='leftElementTitle'>
+&lt;spot&gt;</td><td class='rightElementTitle'>
+Child of <a href='#intensity'>intensity</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;spot&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;spot&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#rate'>rate</a></td><td>One or none</td></tr>
+<tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, <a href='#rate'>rate</a>?)</p><a name='pattern'></a>
+<br /><table class='elementTitle' summary="pattern"><tr><td class='leftElementTitle'>
+&lt;pattern&gt;</td><td class='rightElementTitle'>
+Child of <a href='#brush'>brush</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;pattern&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;pattern&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#pixel'>pixel</a></td><td>At least one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pixel'>pixel</a>+)</p><a name='pixel'></a>
+<br /><table class='elementTitle' summary="pixel"><tr><td class='leftElementTitle'>
+&lt;pixel&gt;</td><td class='rightElementTitle'>
+Child of <a href='#pattern'>pattern</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;pixel&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;pixel&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+<tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>))</p><a name='overwrite'></a>
+<br /><table class='elementTitle' summary="overwrite"><tr><td class='leftElementTitle'>
+&lt;overwrite&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;overwrite&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;overwrite&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#disallow'>disallow</a></td><td>Any number</td></tr>
+<tr><td><a href='#hexstate'>hexstate</a></td><td>Any number</td></tr>
+<tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#disallow'>disallow</a>*, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>)*, <a href='#mask'>mask</a>?)</p><a name='disallow'></a>
+<br /><table class='elementTitle' summary="disallow"><tr><td class='leftElementTitle'>
+&lt;disallow&gt;</td><td class='rightElementTitle'>
+Child of <a href='#overwrite'>overwrite</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;disallow&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;disallow&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>)</p><a name='state'></a>
+<br /><table class='elementTitle' summary="state"><tr><td class='leftElementTitle'>
+&lt;state&gt;</td><td class='rightElementTitle'>
+Child of <a href='#move'>move</a>, <a href='#case'>case</a>, <a href='#readonly'>readonly</a>, <a href='#population'>population</a>, <a href='#tool'>tool</a>, <a href='#init'>init</a>, <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>
+</td></tr></table>
+<p>A 64-bit decimal integer representing the state of a cell on the Board.</p><a name='hexstate'></a>
+<br /><table class='elementTitle' summary="hexstate"><tr><td class='leftElementTitle'>
+&lt;hexstate&gt;</td><td class='rightElementTitle'>
+Child of <a href='#move'>move</a>, <a href='#case'>case</a>, <a href='#readonly'>readonly</a>, <a href='#population'>population</a>, <a href='#tool'>tool</a>, <a href='#init'>init</a>, <a href='#pixel'>pixel</a>, <a href='#overwrite'>overwrite</a>
+</td></tr></table>
+<p>A 64-bit hexadecimal integer representing the state of a cell on the Board.</p><a name='name'></a>
+<br /><table class='elementTitle' summary="name"><tr><td class='leftElementTitle'>
+&lt;name&gt;</td><td class='rightElementTitle'>
+Child of <a href='#testtool'>testtool</a>, <a href='#tool'>tool</a>, <a href='#varsize'>varsize</a>, <a href='#subrule'>subrule</a>, <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='spray'></a>
+<br /><table class='elementTitle' summary="spray"><tr><td class='leftElementTitle'>
+&lt;spray&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='reserve'></a>
+<br /><table class='elementTitle' summary="reserve"><tr><td class='leftElementTitle'>
+&lt;reserve&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>, <a href='#charge'>charge</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='recharge'></a>
+<br /><table class='elementTitle' summary="recharge"><tr><td class='leftElementTitle'>
+&lt;recharge&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='maxreserve'></a>
+<br /><table class='elementTitle' summary="maxreserve"><tr><td class='leftElementTitle'>
+&lt;maxreserve&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='mask'></a>
+<br /><table class='elementTitle' summary="mask"><tr><td class='leftElementTitle'>
+&lt;mask&gt;</td><td class='rightElementTitle'>
+Child of <a href='#switch'>switch</a>, <a href='#colrule'>colrule</a>, <a href='#population'>population</a>, <a href='#overwrite'>overwrite</a>
+</td></tr></table>
+<p>A 64-bit hexadecimal mask.</p><a name='hide'></a>
+<br /><table class='elementTitle' summary="hide"><tr><td class='leftElementTitle'>
+&lt;hide/&gt;</td><td class='rightElementTitle'>
+Child of <a href='#tool'>tool</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><p class='emptyTagNote'>This element is always empty.</p><a name='exit'></a>
+<br /><table class='elementTitle' summary="exit"><tr><td class='leftElementTitle'>
+&lt;exit&gt;</td><td class='rightElementTitle'>
+Child of <a href='#game'>game</a>
+</td></tr></table>
+<p>The exit portal for the Board, enabling Lemmings-style play.
+The exit portal is initially in the "PortalWaiting" state.
+When placed in the "PortalCounting" state (as a side-effect of a Goal expression),
+the portal counts the number of times that particles of a given type ("type") are written to it.
+(The actual write operations are intercepted, so the particles appear to drain from the Board.)</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;exit&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;exit&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>At least one</td></tr>
+<tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>((<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#pos'>pos</a>+)</p><a name='type'></a>
+<br /><table class='elementTitle' summary="type"><tr><td class='leftElementTitle'>
+&lt;type&gt;</td><td class='rightElementTitle'>
+Child of <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#particle'>particle</a>, <a href='#init'>init</a>, <a href='#trigger'>trigger</a>
+</td></tr></table>
+<p>A 16-bit decimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc.</p><a name='hextype'></a>
+<br /><table class='elementTitle' summary="hextype"><tr><td class='leftElementTitle'>
+&lt;hextype&gt;</td><td class='rightElementTitle'>
+Child of <a href='#exit'>exit</a>, <a href='#population'>population</a>, <a href='#particle'>particle</a>, <a href='#init'>init</a>, <a href='#trigger'>trigger</a>
+</td></tr></table>
+<p>A 16-bit hexadecimal integer representing the type of a cell on the Board
+(equal to the upper 16 bits of the state).
+Determines the type of the cell, i.e. its color, its name, the rate and manner in which it is updated, etc.</p><a name='board'></a>
+<br /><table class='elementTitle' summary="board"><tr><td class='leftElementTitle'>
+&lt;board&gt;</td><td class='rightElementTitle'>
+Child of <a href='#game'>game</a>
+</td></tr></table>
+<p>A Board is a square array of cells whose edge length ("size") must be a power of 2.</p><p>The Board has a clock that is measured in <i>microticks</i> ("t"),
+a grammar of update rules ("grammar"),
+an optional move queue ("queue") and random number seed ("seed").</p><p>Cells are empty (zero) by default, unless specifically initialized ("init").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;board&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;board&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#grammar'>grammar</a></td><td>Only one</td></tr>
+<tr><td><a href='#init'>init</a></td><td>Any number</td></tr>
+<tr><td><a href='#queue'>queue</a></td><td>One or none</td></tr>
+<tr><td><a href='#seed'>seed</a></td><td>One or none</td></tr>
+<tr><td><a href='#size'>size</a></td><td>Only one</td></tr>
+<tr><td><a href='#t'>t</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#size'>size</a>, <a href='#t'>t</a>?, <a href='#grammar'>grammar</a>, <a href='#init'>init</a>*, <a href='#queue'>queue</a>?, <a href='#seed'>seed</a>?)</p><a name='grammar'></a>
+<br /><table class='elementTitle' summary="grammar"><tr><td class='leftElementTitle'>
+&lt;grammar&gt;</td><td class='rightElementTitle'>
+Child of <a href='#board'>board</a>
+</td></tr></table>
+<p>A grammar consists of a set of optional subroutines ("subrule")
+and a set of particle definitions ("particle").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;grammar&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;grammar&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#particle'>particle</a></td><td>At least one</td></tr>
+<tr><td><a href='#subrule'>subrule</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#subrule'>subrule</a>*, <a href='#particle'>particle</a>+)</p><a name='init'></a>
+<br /><table class='elementTitle' summary="init"><tr><td class='leftElementTitle'>
+&lt;init&gt;</td><td class='rightElementTitle'>
+Child of <a href='#board'>board</a>
+</td></tr></table>
+<p>Initialize a particular cell on the Board.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;init&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;init&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+<tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
+<tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a> | <a href='#type'>type</a> | <a href='#hextype'>hextype</a>))</p><a name='seed'></a>
+<br /><table class='elementTitle' summary="seed"><tr><td class='leftElementTitle'>
+&lt;seed&gt;</td><td class='rightElementTitle'>
+Child of <a href='#board'>board</a>
+</td></tr></table>
+<p>Seed the random number generator.</p><a name='queue'></a>
+<br /><table class='elementTitle' summary="queue"><tr><td class='leftElementTitle'>
+&lt;queue&gt;</td><td class='rightElementTitle'>
+Child of <a href='#board'>board</a>
+</td></tr></table>
+<p>The move queue (for replaying moves).</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;queue&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;queue&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#move'>move</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#move'>move</a>*)</p><a name='move'></a>
+<br /><table class='elementTitle' summary="move"><tr><td class='leftElementTitle'>
+&lt;move&gt;</td><td class='rightElementTitle'>
+Child of <a href='#queue'>queue</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;move&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;move&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+<tr><td><a href='#t'>t</a></td><td>Only one</td></tr>
+<tr><td><a href='#x'>x</a></td><td>Only one</td></tr>
+<tr><td><a href='#y'>y</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#t'>t</a>, <a href='#x'>x</a>, <a href='#y'>y</a>, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>))</p><a name='t'></a>
+<br /><table class='elementTitle' summary="t"><tr><td class='leftElementTitle'>
+&lt;t&gt;</td><td class='rightElementTitle'>
+Child of <a href='#move'>move</a>, <a href='#board'>board</a>
+</td></tr></table>
+<p>A time on the Board clock. Measured in microticks.</p><a name='subrule'></a>
+<br /><table class='elementTitle' summary="subrule"><tr><td class='leftElementTitle'>
+&lt;subrule&gt;</td><td class='rightElementTitle'>
+Child of <a href='#grammar'>grammar</a>
+</td></tr></table>
+<p>A subroutine particle Rule.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;subrule&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;subrule&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
+<tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#rule'>rule</a>)</p><a name='particle'></a>
+<br /><table class='elementTitle' summary="particle"><tr><td class='leftElementTitle'>
+&lt;particle&gt;</td><td class='rightElementTitle'>
+Child of <a href='#grammar'>grammar</a>
+</td></tr></table>
+<p>An elementary particle in the game, identified by a unique 16-bit type ID ("type").
+Each particle has its own update rate ("rate") and rule ("rule"),
+up to three color rules for rendering ("colrule"),
+and optionally a message dispatch table ("dispatch").</p><p>Any given instance of a particle has 48 additional bits of instance-specific state.
+These 48 bits are conventionally split amongst a series of <i>Vars</i>:
+named bit-fields of different widths ("vars").</p><p>By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;particle&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;particle&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#colrule'>colrule</a></td><td>Any number</td></tr>
+<tr><td><a href='#dispatch'>dispatch</a></td><td>Any number</td></tr>
+<tr><td><a href='#hextype'>hextype</a></td><td>One or none</td></tr>
+<tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
+<tr><td><a href='#rate'>rate</a></td><td>One or none</td></tr>
+<tr><td><a href='#readonly'>readonly</a></td><td>Any number</td></tr>
+<tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+<tr><td><a href='#sync'>sync</a></td><td>One or none</td></tr>
+<tr><td><a href='#type'>type</a></td><td>One or none</td></tr>
+<tr><td><a href='#vars'>vars</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, (<a href='#type'>type</a> | <a href='#hextype'>hextype</a>), <a href='#vars'>vars</a>?, <a href='#readonly'>readonly</a>*, <a href='#colrule'>colrule</a>*, <a href='#sync'>sync</a>?, <a href='#rate'>rate</a>?, <a href='#rule'>rule</a>, <a href='#dispatch'>dispatch</a>*)</p><a name='readonly'></a>
+<br /><table class='elementTitle' summary="readonly"><tr><td class='leftElementTitle'>
+&lt;readonly&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Read-only variables. Any particle can have an unlimited number of these.</p><p>They are stored in 64-bit chunks and can effectively be accessed as higher bits of the particle's state.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;readonly&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;readonly&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#index'>index</a></td><td>One or none</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#index'>index</a>?, (<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>))</p><a name='index'></a>
+<br /><table class='elementTitle' summary="index"><tr><td class='leftElementTitle'>
+&lt;index&gt;</td><td class='rightElementTitle'>
+Child of <a href='#readonly'>readonly</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='sync'></a>
+<br /><table class='elementTitle' summary="sync"><tr><td class='leftElementTitle'>
+&lt;sync&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Synchronously updated particles.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;sync&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;sync&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#period'>period</a></td><td>One or none</td></tr>
+<tr><td><a href='#phase'>phase</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#period'>period</a>?, <a href='#phase'>phase</a>?)</p><a name='period'></a>
+<br /><table class='elementTitle' summary="period"><tr><td class='leftElementTitle'>
+&lt;period&gt;</td><td class='rightElementTitle'>
+Child of <a href='#sync'>sync</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='phase'></a>
+<br /><table class='elementTitle' summary="phase"><tr><td class='leftElementTitle'>
+&lt;phase&gt;</td><td class='rightElementTitle'>
+Child of <a href='#sync'>sync</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='colrule'></a>
+<br /><table class='elementTitle' summary="colrule"><tr><td class='leftElementTitle'>
+&lt;colrule&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>A rule for computing the color of a particle. The formula is</p><p></p><pre>
+   hsb24 = (((state >> rshift) & mask) * mul) + inc
+</pre><p></p><p>where "hsb24" is a 24-bit HSB color value.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;colrule&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;colrule&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexinc'>hexinc</a></td><td>One or none</td></tr>
+<tr><td><a href='#hexmul'>hexmul</a></td><td>One or none</td></tr>
+<tr><td><a href='#inc'>inc</a></td><td>One or none</td></tr>
+<tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
+<tr><td><a href='#mul'>mul</a></td><td>One or none</td></tr>
+<tr><td><a href='#rshift'>rshift</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#mask'>mask</a>?, <a href='#rshift'>rshift</a>?, (<a href='#mul'>mul</a> | <a href='#hexmul'>hexmul</a>)?, (<a href='#inc'>inc</a> | <a href='#hexinc'>hexinc</a>)?)</p><a name='rshift'></a>
+<br /><table class='elementTitle' summary="rshift"><tr><td class='leftElementTitle'>
+&lt;rshift&gt;</td><td class='rightElementTitle'>
+Child of <a href='#switch'>switch</a>, <a href='#colrule'>colrule</a>, <a href='#modify'>modify</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='mul'></a>
+<br /><table class='elementTitle' summary="mul"><tr><td class='leftElementTitle'>
+&lt;mul&gt;</td><td class='rightElementTitle'>
+Child of <a href='#colrule'>colrule</a>
+</td></tr></table>
+<p>A decimal multiplier.</p><a name='hexmul'></a>
+<br /><table class='elementTitle' summary="hexmul"><tr><td class='leftElementTitle'>
+&lt;hexmul&gt;</td><td class='rightElementTitle'>
+Child of <a href='#colrule'>colrule</a>
+</td></tr></table>
+<p>A hexadecimal multiplier.</p><a name='inc'></a>
+<br /><table class='elementTitle' summary="inc"><tr><td class='leftElementTitle'>
+&lt;inc&gt;</td><td class='rightElementTitle'>
+Child of <a href='#colrule'>colrule</a>, <a href='#modify'>modify</a>
+</td></tr></table>
+<p>A decimal offset.</p><a name='hexinc'></a>
+<br /><table class='elementTitle' summary="hexinc"><tr><td class='leftElementTitle'>
+&lt;hexinc&gt;</td><td class='rightElementTitle'>
+Child of <a href='#colrule'>colrule</a>, <a href='#modify'>modify</a>
+</td></tr></table>
+<p>A hexadecimal offset.</p><a name='vars'></a>
+<br /><table class='elementTitle' summary="vars"><tr><td class='leftElementTitle'>
+&lt;vars&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>Variable (<i>Vars</i>) declarations.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;vars&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;vars&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#varsize'>varsize</a></td><td>Any number</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#varsize'>varsize</a>*)</p><a name='varsize'></a>
+<br /><table class='elementTitle' summary="varsize"><tr><td class='leftElementTitle'>
+&lt;varsize&gt;</td><td class='rightElementTitle'>
+Child of <a href='#vars'>vars</a>
+</td></tr></table>
+<p>A variable (<i>Vars</i>) declaration,
+including the name ("name") and the number of bits the variable uses ("size").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;varsize&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;varsize&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#name'>name</a></td><td>Only one</td></tr>
+<tr><td><a href='#size'>size</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#name'>name</a>, <a href='#size'>size</a>)</p><a name='rule'></a>
+<br /><table class='elementTitle' summary="rule"><tr><td class='leftElementTitle'>
+&lt;rule&gt;</td><td class='rightElementTitle'>
+Child of <a href='#next'>next</a>, <a href='#fail'>fail</a>, <a href='#default'>default</a>, <a href='#case'>case</a>, <a href='#dispatch'>dispatch</a>, <a href='#subrule'>subrule</a>, <a href='#particle'>particle</a>, <a href='#pass'>pass</a>
+</td></tr></table>
+<p>A particle update rule. There are six types (of which only four are public),
+constituting an extremely minimal and predictable programming language for cellular automata.</p><p>The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>deliver</b>:
+<ul><li>
+<b>switch</b>
+(read a Var from any local cell,
+look up corresponding rule in a table,
+execute that rule).
+</li><li>
+<b>modify</b>, effectively a <i>load-add-store</i> instruction
+(read a Var from any local cell,
+add or subtract a certain amount,
+store value in Var of any local cell).
+</li><li>
+<b>random</b>, introducing stochasticity
+(executes one of two child rules by flipping a biased coin).
+</li><li>
+<b>deliver</b>, which sends a 64-bit <i>message</i> to a local cell
+(passing control to an update rule in that particle's dispatch table).
+</li></ul></p><p>The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
+<ul><li>
+<b>goto</b>, used not to loop, but simply to save space,
+(passes control to a named subroutine, which never returns),
+</li><li>
+<b>goal</b>, allowing a callback hook for in-game feedback and effects
+(tests a Goal, if the Board has an associated Game).
+</li></ul></p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;rule&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;rule&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#deliver'>deliver</a></td><td>One or none</td></tr>
+<tr><td><a href='#goal'>goal</a></td><td>One or none</td></tr>
+<tr><td><a href='#goto'>goto</a></td><td>One or none</td></tr>
+<tr><td><a href='#modify'>modify</a></td><td>One or none</td></tr>
+<tr><td><a href='#random'>random</a></td><td>One or none</td></tr>
+<tr><td><a href='#switch'>switch</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#switch'>switch</a> | <a href='#modify'>modify</a> | <a href='#deliver'>deliver</a> | <a href='#random'>random</a> | <a href='#goal'>goal</a> | <a href='#goto'>goto</a>)</p><a name='switch'></a>
+<br /><table class='elementTitle' summary="switch"><tr><td class='leftElementTitle'>
+&lt;switch&gt;</td><td class='rightElementTitle'>
+Child of <a href='#rule'>rule</a>
+</td></tr></table>
+<p>Switch rule.</p><p>First calculates
+</p><pre>
+var = ((cell[pos] & mask) >> rshift)
+</pre><p></p><p>where "pos" is a local offset. Then looks up the corresponding "case"
+for "var", and executes that rule. If no such "case" exists,
+executes the "default" rule.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;switch&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;switch&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#case'>case</a></td><td>Any number</td></tr>
+<tr><td><a href='#default'>default</a></td><td>One or none</td></tr>
+<tr><td><a href='#mask'>mask</a></td><td>One or none</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>One or none</td></tr>
+<tr><td><a href='#rshift'>rshift</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pos'>pos</a>?, <a href='#mask'>mask</a>?, <a href='#rshift'>rshift</a>?, <a href='#case'>case</a>*, <a href='#default'>default</a>?)</p><a name='case'></a>
+<br /><table class='elementTitle' summary="case"><tr><td class='leftElementTitle'>
+&lt;case&gt;</td><td class='rightElementTitle'>
+Child of <a href='#switch'>switch</a>
+</td></tr></table>
+<p>An individual case in a switch rule.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;case&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;case&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexstate'>hexstate</a></td><td>One or none</td></tr>
+<tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+<tr><td><a href='#state'>state</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>((<a href='#state'>state</a> | <a href='#hexstate'>hexstate</a>)?, <a href='#rule'>rule</a>)</p><a name='default'></a>
+<br /><table class='elementTitle' summary="default"><tr><td class='leftElementTitle'>
+&lt;default&gt;</td><td class='rightElementTitle'>
+Child of <a href='#switch'>switch</a>
+</td></tr></table>
+<p>The default case in a switch rule.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;default&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;default&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a>)</p><a name='modify'></a>
+<br /><table class='elementTitle' summary="modify"><tr><td class='leftElementTitle'>
+&lt;modify&gt;</td><td class='rightElementTitle'>
+Child of <a href='#rule'>rule</a>
+</td></tr></table>
+<p>Modify rule.</p><p>First does the following (pseudocode):
+</p><pre>
+  oldVar = ((cell[src] & srcmask) >> rshift);
+  newVar = oldVar + inc;
+  cell[dest] = (cell[dest] & (0xffffffffffffffff ^ destmask)) | (((newVar) << lshift) & destmask);
+</pre><p></p><p>This is equivalent to reading a Var from cell "src", adding "inc", and storing in a Var in cell "dest".
+("src" and "dest" are co-ordinate offsets to the cell whose rule is being executed.)</p><p>After this, the (optional) "next" rule is executed.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;modify&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;modify&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#dest'>dest</a></td><td>One or none</td></tr>
+<tr><td><a href='#destmask'>destmask</a></td><td>One or none</td></tr>
+<tr><td><a href='#hexinc'>hexinc</a></td><td>One or none</td></tr>
+<tr><td><a href='#inc'>inc</a></td><td>One or none</td></tr>
+<tr><td><a href='#lshift'>lshift</a></td><td>One or none</td></tr>
+<tr><td><a href='#next'>next</a></td><td>One or none</td></tr>
+<tr><td><a href='#rshift'>rshift</a></td><td>One or none</td></tr>
+<tr><td><a href='#src'>src</a></td><td>One or none</td></tr>
+<tr><td><a href='#srcmask'>srcmask</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#src'>src</a>?, <a href='#srcmask'>srcmask</a>?, <a href='#rshift'>rshift</a>?, (<a href='#inc'>inc</a> | <a href='#hexinc'>hexinc</a>)?, <a href='#lshift'>lshift</a>?, <a href='#destmask'>destmask</a>?, <a href='#dest'>dest</a>?, <a href='#next'>next</a>?)</p><a name='src'></a>
+<br /><table class='elementTitle' summary="src"><tr><td class='leftElementTitle'>
+&lt;src&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;src&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;src&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>One or none</td></tr>
+<tr><td><a href='#y'>y</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='dest'></a>
+<br /><table class='elementTitle' summary="dest"><tr><td class='leftElementTitle'>
+&lt;dest&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;dest&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;dest&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#x'>x</a></td><td>One or none</td></tr>
+<tr><td><a href='#y'>y</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#x'>x</a>?, <a href='#y'>y</a>?)</p><a name='srcmask'></a>
+<br /><table class='elementTitle' summary="srcmask"><tr><td class='leftElementTitle'>
+&lt;srcmask&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>A 64-bit hexadecimal mask.</p><a name='destmask'></a>
+<br /><table class='elementTitle' summary="destmask"><tr><td class='leftElementTitle'>
+&lt;destmask&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>A 64-bit hexadecimal mask.</p><a name='lshift'></a>
+<br /><table class='elementTitle' summary="lshift"><tr><td class='leftElementTitle'>
+&lt;lshift&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><a name='next'></a>
+<br /><table class='elementTitle' summary="next"><tr><td class='leftElementTitle'>
+&lt;next&gt;</td><td class='rightElementTitle'>
+Child of <a href='#modify'>modify</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;next&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;next&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a>)</p><a name='deliver'></a>
+<br /><table class='elementTitle' summary="deliver"><tr><td class='leftElementTitle'>
+&lt;deliver&gt;</td><td class='rightElementTitle'>
+Child of <a href='#rule'>rule</a>
+</td></tr></table>
+<p>Deliver rule.</p><p>Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos").</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;deliver&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;deliver&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#hexmsg'>hexmsg</a></td><td>One or none</td></tr>
+<tr><td><a href='#msg'>msg</a></td><td>One or none</td></tr>
+<tr><td><a href='#pos'>pos</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#pos'>pos</a>, (<a href='#msg'>msg</a> | <a href='#hexmsg'>hexmsg</a>))</p><a name='msg'></a>
+<br /><table class='elementTitle' summary="msg"><tr><td class='leftElementTitle'>
+&lt;msg&gt;</td><td class='rightElementTitle'>
+Child of <a href='#deliver'>deliver</a>, <a href='#dispatch'>dispatch</a>
+</td></tr></table>
+<p>A 64-bit decimal integer message.</p><a name='hexmsg'></a>
+<br /><table class='elementTitle' summary="hexmsg"><tr><td class='leftElementTitle'>
+&lt;hexmsg&gt;</td><td class='rightElementTitle'>
+Child of <a href='#deliver'>deliver</a>
+</td></tr></table>
+<p>A 64-bit hexadecimal integer message.</p><a name='goto'></a>
+<br /><table class='elementTitle' summary="goto"><tr><td class='leftElementTitle'>
+&lt;goto&gt;</td><td class='rightElementTitle'>
+Child of <a href='#rule'>rule</a>
+</td></tr></table>
+<p>Goto rule.</p><p>Executes a specified rule.</p><a name='random'></a>
+<br /><table class='elementTitle' summary="random"><tr><td class='leftElementTitle'>
+&lt;random&gt;</td><td class='rightElementTitle'>
+Child of <a href='#rule'>rule</a>
+</td></tr></table>
+<p>Random rule.</p><p>Randomly executes either the "pass" or "fail" rule (with probability "prob" of it being the "pass" rule).</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;random&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;random&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#fail'>fail</a></td><td>One or none</td></tr>
+<tr><td><a href='#pass'>pass</a></td><td>One or none</td></tr>
+<tr><td><a href='#prob'>prob</a></td><td>One or none</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#prob'>prob</a>?, <a href='#pass'>pass</a>?, <a href='#fail'>fail</a>?)</p><a name='pass'></a>
+<br /><table class='elementTitle' summary="pass"><tr><td class='leftElementTitle'>
+&lt;pass&gt;</td><td class='rightElementTitle'>
+Child of <a href='#random'>random</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;pass&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;pass&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a>)</p><a name='fail'></a>
+<br /><table class='elementTitle' summary="fail"><tr><td class='leftElementTitle'>
+&lt;fail&gt;</td><td class='rightElementTitle'>
+Child of <a href='#random'>random</a>
+</td></tr></table>
+<p>Sorry, no documentation.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;fail&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;fail&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#rule'>rule</a>)</p><a name='dispatch'></a>
+<br /><table class='elementTitle' summary="dispatch"><tr><td class='leftElementTitle'>
+&lt;dispatch&gt;</td><td class='rightElementTitle'>
+Child of <a href='#particle'>particle</a>
+</td></tr></table>
+<p>An entry in a particle's message dispatch table.</p><blockquote><table summary='element info'><tr>
+<td class='construct'><table summary="&lt;dispatch&gt;'s children">
+<thead>
+<tr><th class='title' colspan='2'>&lt;dispatch&gt;'s children</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+<tr><th class='subtitle'>Name</th><th class='subtitle'>Cardinality</th></tr>
+<tr><th colspan='2' height='1' class='ruler'></th></tr>
+</thead>
+<tbody><tr><td><a href='#msg'>msg</a></td><td>Only one</td></tr>
+<tr><td><a href='#rule'>rule</a></td><td>Only one</td></tr>
+</tbody></table></td></tr></table></blockquote>
+<span class='inTextTitle'>Element's model:</span><p class='model'>(<a href='#msg'>msg</a>, <a href='#rule'>rule</a>)</p></body></html>

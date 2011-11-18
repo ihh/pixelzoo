@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>PixelZoo documentation</title>
+</head>
+<body>
+<h1>PixelZoo documentation</h1>
+
+<p>
+Existing (minimal) documentation:
+<ul>
+
+ <li> <a href="../README">README</a> file (top-level; mostly just lists dependencies)
+ </li>
+
+ <li> The <a href="../PLAN/">PLAN</a> directory: general notes &amp; planning
+
+  <ul>
+  <li>  <a href="../PLAN/API.txt">API.txt</a> (overview of the machine and its APIs)
+  </li>
+
+  <li>  <a href="../PLAN/MultiplayerGameDesign.txt">MultiplayerGameDesign.txt</a> (sketch of planned multiplayer game design)
+  </li>
+
+  <li>  <a href="../PLAN/Client.txt">Client.txt</a> (sketch of planned client menu system)
+  </li>
+
+  <li>  <a href="../PLAN/Server.txt">Server.txt</a> (sketch of planned RESTful server architecture)
+  </li>
+
+  </ul>
+ </li>
+
+ <li>  <a href="../src/doc/html/pixelzoo_8h.html">C client API documentation</a> (doxygen)
+ </li>
+
+ <li>  <a href="../Zoo/dtd/doc/index.html">XML DTD schemas</a> (DTDDoc) and example files:
+  <ul>
+   <li> <a href="../t/proto.xml">simple example</a> in <a href="../Zoo/dtd/doc/proto.dtd.html">proto</a> dialect </li>
+   <li> <a href="../t/simple.xml">simple example</a> in <a href="../Zoo/dtd/doc/game.dtd.html">game</a> dialect </li>
+   <li> <a href="../t/testgame.xml">sync/async demo</a> in <a href="../Zoo/dtd/doc/game.dtd.html">game</a> dialect </li>
+  </ul>
+ </li>
+
+</ul>
+</p>
+
+<p>
+Things it would be nice to have more documentation for:
+<ul>
+<li> Tests
+ <ul>
+  <li> <a href="../Makefile">Makefile</a> - "make test" should run without errors </li>
+  <li> test <a href="../tsrc/">source</a> (tsrc/) and <a href="../t/">data</a> (t/) directories </li>
+ </ul>
+ </li>
+<li> Perl server code
+ <ul>
+  <li> <a href="../Zoo">Zoo/</a> Catalyst web application (see <a href="../PLAN/Server.txt">PLAN/Server.txt</a>)
+   <ul> <li> <a href="../Zoo/sql/zoo.sql">zoo.sql</a>, <a href="../Zoo/sql/test.sql">test.sql</a> - data model </li></ul></li>
+  <li> <a href="../perl/zoocompiler.pl">perl/zoocompiler.pl</a> game XML compiler (has inline help)
+   <ul> <li> <a href="../perl/simplezoo.pl">perl/simplezoo.pl</a> which generates the "simple example" </li> </ul> </li>
+  <li> Modules in <a href="../Zoo/lib/">Zoo/lib</a> (POD docs in source files; currently no static HTML)
+   <ul>
+   <li> <a href="../Zoo/lib/Grammar.pm">Grammar.pm</a>
+    <ul> <li> <a href="../Zoo/lib/Level.pm">Level.pm</a> </li> </ul> </li>
+   <li> <a href="../Zoo/lib/Twiggy.pm">Twiggy.pm</a>  (extension of XML::Twig)
+    <ul> <li> <a href="../Zoo/lib/Twiggy/Elt.pm">Twiggy/Elt.pm</a> (extension of XML::Twig::Elt) </li> </ul> </li>
+   </ul>
+  </li>
+  </ul>
+ </li>
+<li> Example clients with user interfaces on various platforms
+ <ul>
+  <li> <a href="../tsrc/sdlgame.c">SDL client</a> </li>
+  <li> <a href="../tsrc/pztest.c">command-line client</a> (replays only) </li>
+  <li> <a href="../xcode/pixelzoo/">iOS client</a> </li>
+  <li> <a href="../android/">Android client</a> </li>
+ </ul>
+</li>
+</ul>
+</p>
+
+</body>
+</html>

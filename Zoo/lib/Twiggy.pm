@@ -55,12 +55,16 @@ sub twig_nest {
 
 Returns a list of particles named by a given L<XML::Twig> tree.
 
+More specifically: fetches the content of all the <type> elements, and all the <bmatch type="..."> attributes.
+
 =cut
 
 sub particle_names {
     my ($self) = @_;
-    my %particle_hash = map (($_->text => 1),
-			     $self->descendants('type'));
+    my %particle_hash = ( map (($_->text => 1),
+			       $self->descendants('type')),
+			  map (($_->{'att'}->{'type'} => 1),
+			       $self->descendants('bmatch')) );
     return sort keys %particle_hash;
 }
 
