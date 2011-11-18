@@ -55,6 +55,8 @@ sub twig_nest {
 
 Returns a list of particles named by a given L<XML::Twig> tree.
 
+More specifically: fetches the content of all the <type> elements, and all the <bmatch type="..."> attributes.
+
 =cut
 
 sub particle_names {

@@ -212,40 +212,62 @@ my %rps = ('name' => 'cyclobs',
 
 my $stepOrBreed = $rps{'breed'} + $rps{'step'};
 my $eatOrConvert = $rps{'convert'} + $rps{'eat'};
-$gram->addType ('name' => $rps{'name'},
-		'vars' => [ $gram->var('species') => 2 ],
-		'hue' => [ 'var' => 'species', 'mul' => 42, 'add' => 10 ],
-		'sat' => ['add' => 255],
-		'bri' => ['add' => 255],
-		'rate' => $rps{'rate'},
-		'rule' =>
-		['switch' => ['loc' => $gram->origin,
-			      'var' => 'species',
-			      'scase' => [$gram->smatch(3) => ['huff' => [map ((1/3 => ['modify' => ['inc' => $_,
-												    'dest' => ['var' => 'species']]]),
-							       0..2)]]],
-			      'default' => ['huff' => [ $gram->bindNeumann
-							(1,
-							 [ $gram->bmatch($gram->empty) => ['huff' => [$rps{'die'} => $gram->suicide,
-												      $stepOrBreed => $gram->moveOrSpawnTo ($rps{'breed'} / $stepOrBreed,
-															     $gram->neighbor,
-															     $gram->balloon("step",'rate'=>$rps{'text'}),
-															     $gram->balloon("breed",'rate'=>$rps{'text'}))]],
-							   $gram->bmatch($rps{'food'}) => ['switch' => ['loc' => $gram->neighbor,
-													'var' => $rps{'food_unripeness_var'},
-													'scase' => { $gram->smatch(0) => [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
-																							     $gram->neighbor,
-																							     $gram->balloon("eat",'rate'=>$rps{'text'}),
-																							     $gram->balloon("spawn",'rate'=>$rps{'text'})) ] ],
-												     $gram->smatch(1) => [ 'huff' => [ $rps{'eat'} => $gram->moveTo ] ] }]],
-							   
-							   $gram->bmatch($rps{'name'}) => [ make_species_switch
-									     ($gram,
-									      [ 'huff' => [ $rps{'choke'} => $gram->suicide ] ],
-									      [ 'huff' => [ $eatOrConvert => $gram->moveOrSpawnTo ($rps{'convert'} / $eatOrConvert,
-																   $gram->neighbor,
-																   $gram->balloon("prey",'rate'=>$rps{'text'}),
-																   $gram->balloon("0wn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
+$gram->addType
+    ('name' => $rps{'name'},
+     'vars' => [ $gram->var('species') => 2 ],
+     'hue' => [ 'var' => 'species', 'mul' => 42, 'add' => 10 ],
+     'sat' => ['add' => 255],
+     'bri' => ['add' => 255],
+     'rate' => $rps{'rate'},
+     'rule' =>
+     ['switch' => ['loc' => $gram->origin,
+		   'var' => 'species',
+		   'scase' => [$gram->smatch(3) =>
+			       ['huff' =>
+				[map ((1/3 =>
+				       ['modify' =>
+					['inc' => $_,
+					 'dest' => ['var' => 'species']]]),
+				      0..2)]]],
+		   'default' =>
+		   ['huff' =>
+		    [ $gram->bindNeumann
+		      (1,
+		       [ $gram->bmatch($gram->empty) =>
+			 ['huff' =>
+			  [$rps{'die'} => $gram->suicide,
+			   $stepOrBreed =>
+			   $gram->moveOrSpawnTo ($rps{'breed'} / $stepOrBreed,
+						 $gram->neighbor,
+						 $gram->balloon("step",'rate'=>$rps{'text'}),
+						 $gram->balloon("breed",'rate'=>$rps{'text'}))]],
+			 $gram->bmatch($rps{'food'}) =>
+			 ['switch' => ['loc' => $gram->neighbor,
+				       'var' => $rps{'food_unripeness_var'},
+				       'scase' =>
+				       { $gram->smatch(0) =>
+					     [ 'huff' =>
+					       [ $eatOrConvert =>
+						 $gram->moveOrSpawnTo
+						 ($rps{'convert'} / $eatOrConvert,
+						  $gram->neighbor,
+						  $gram->balloon("eat",'rate'=>$rps{'text'}),
+						  $gram->balloon("spawn",'rate'=>$rps{'text'})) ] ],
+					       $gram->smatch(1) =>
+					       [ 'huff' =>
+						 [ $rps{'eat'} => $gram->moveTo ] ] }]],
+			 
+			 $gram->bmatch($rps{'name'}) =>
+			 [ make_species_switch
+			   ($gram,
+			    [ 'huff' => 
+			      [ $rps{'choke'} => $gram->suicide ] ],
+			    [ 'huff' => 
+			      [ $eatOrConvert => $gram->moveOrSpawnTo
+				($rps{'convert'} / $eatOrConvert,
+				 $gram->neighbor,
+				 $gram->balloon("prey",'rate'=>$rps{'text'}),
+				 $gram->balloon("0wn",'rate'=>$rps{'text'})) ]]) ] ])]]]]);
 
 # rps animal tool
 $gram->addTool ('name' => $rps{'name'},
@@ -263,10 +285,14 @@ $gram->addType ('name' => 'perfume',
 		'sat' => ['add' => 192],
 		'bri' => ['add' => 96],
 		'rate' => $perfumeRate,
-		'rule' => ['huff' => [$perfumeDrain => $gram->suicide,
-				      $gram->bindMoore (1 - $perfumeDrain,
-							  [$gram->bmatch($gram->empty) => $gram->moveOrSpawnTo ($perfumeBillow),
-							   $gram->bmatch($rps{'name'}) => ['huff' => [ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
+		'rule' => ['huff' => 
+[$perfumeDrain => $gram->suicide,
+ $gram->bindMoore (1 - $perfumeDrain,
+		   [$gram->bmatch($gram->empty) => 
+		    $gram->moveOrSpawnTo ($perfumeBillow),
+		    $gram->bmatch($rps{'name'}) => 
+['huff' => 
+[ $perfumeInduce => $gram->copyFromTo ($gram->neighbor, $gram->origin) ] ] ])]]);
 
 # perfume tool
 $gram->addTool ('name' => 'Perfume spray',
