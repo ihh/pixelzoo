@@ -140,6 +140,118 @@ $gram->addTool ('name' => 'Perfume spray',
 		'spray' => 2500,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
+# polymers
+# outline of program:
+# if (l_bond)
+#  verify_or_die (l_dir, r_dir)
+#  if (r_bond)
+#   verify_or_die (r_dir, l_dir)
+#   random_lr_step
+#  else
+#   random_l_step
+# else
+#  random_r_step
+
+my @moore_dir2xy = ([-1,-1], [-1,0], [-1,+1], [0,-1], [0,+1], [+1,-1], [+1,0], [+1,+1]);
+sub moore_xy2dir {
+    my ($xy) = @_;
+    my ($x, $y) = @$xy;
+    for (my $dir = 0; $dir < @moore_dir2xy; ++$dir) {
+	if ($moore_dir2xy[$dir]->[0] == $x && $moore_dir2xy[$dir]->[1] == $y) {
+	    return $dir;
+	}
+    }
+    die "Can't turn ($x,$y) into a Moore direction index";
+}
+
+sub test_moore_neighbors {
+    my ($xy1, $xy2) = @_;
+    my ($x1, $y1, $x2, $y2) = (@$xy1, @$xy2);
+    return abs($x1-$x2) <= 1 && abs($y1-$y2) <= 1 && !($x1 == $x2 && $y1 == $y2);
+}
+
+sub delta_dir {
+    my ($xy1, $xy2) = @_;
+    my ($x1, $y1, $x2, $y2) = (@$xy1, @$xy2);
+    return moore_xy2dir ([$x2 - $x1, $y2 - $y1]);
+}
+
+sub make_xy {
+    my ($xy) = @_;
+    my ($x, $y) = @$xy;
+    return ('x' => $x, 'y' => $y);
+}
+
+sub set_neighbor_dir {
+    my ($nbr_loc, $nbr_dir_var, $nbr_pos, $step_pos, $next) = @_;
+    return [ 'modify' =>
+	     [ 'dest' => [ 'loc' => $nbr_loc,
+			   'var' => $nbr_dir_var ],
+	       'set' => delta_dir ($nbr_pos, $step_pos),
+	       'next' => $next ]];
+}
+
+sub set_lpos_rdir {
+    my ($nbr_pos, $step_pos, $next) = @_;
+    return set_neighbor_dir ('l_pos', 'r_dir', $nbr_pos, $step_pos, $next);
+}
+
+sub set_rpos_ldir {
+    my ($nbr_pos, $step_pos, $next) = @_;
+    return set_neighbor_dir ('r_pos', 'l_dir', $nbr_pos, $step_pos, $next);
+}
+
+sub poly_type_and_vars {
+    my ($type, $ldir, $rdir) = @_;
+    return [ 'type' => $type,
+	     defined($ldir)
+	     ? ('l_bond' => 1, 'l_dir' => $ldir)
+	     : ('l_bond' => 0),
+	     defined($rdir)
+	     ? ('r_bond' => 1, 'r_dir' => $rdir)
+	     : ('r_bond' => 0) ];
+}
+
+sub random_lr_step {
+    my ($type, $ldir, $rdir) = @_;
+    my ($lpos, $rpos) = @moore_dir2xy[$ldir,$rdir];
+    my @potentials = grep (test_moore_neighbors ($lpos, $_) && test_moore_neighbors ($rpos, $_), @moore_dir2xy);
+    my @step = map (['bind' =>
+		     [ 'loc' => 'step_pos',
+		       make_xy ($_),
+		       'bcase' =>
+		       [$gram->bmatch ($gram->empty) =>
+			set_lpos_rdir
+			($lpos, $_,
+			 set_rpos_ldir
+			 ($rpos, $_,
+			  [ 'modify' =>
+			    [ 'dest' => [ 'loc' => 'step_pos' ],
+			      'set' => poly_type_and_vars ($type,
+							   delta_dir ($_, $lpos),
+							   delta_dir ($_, $rpos)),
+			      'next' => $gram->suicide ]]))]]],
+		    @potentials);
+}
+
+my ($polyName, $polySeedName, $polyRate) = ('polymer', 'polymer_seed', .1);
+$gram->addType ('name' => $polyName,
+		'vars' => [ $gram->var('l_bond') => 1, $gram->var('l_dir') => 3, $gram->var('r_bond') => 1, $gram->var('r_dir') => 3 ],
+		'hue' => ['add' => 20],
+		'sat' => ['add' => 255],
+		'bri' => ['add' => 255],
+		'rate' => $polyRate,
+		'rule' => [$gram->nop]);
+
+# polymer tool
+$gram->addTool ('name' => 'Polymer spray',
+		'size' => 4,
+		'gstate' => $polySeedName,
+		'reserve' => 1000,
+		'recharge' => 100,
+		'spray' => 2500,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
 # print
 $gram->print;
 
@@ -147,11 +259,11 @@ $gram->print;
 __END__
 
 =head1 NAME
-simplezoo.pl - generate a PixelZoo XML grammar
+polyzoo.pl - generate a PixelZoo XML grammar
 
 =head1 SYNOPSIS
 
-simplezoo.pl [options]
+polyzoo.pl [options]
 
  Options:
   -help               brief help message
