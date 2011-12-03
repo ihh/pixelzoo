@@ -180,8 +180,61 @@ sub make_goal {
 }
 
 
+# rule builders
+# TODO: write POD documentation for these methods
 
-# addType helpers
+# basic rules
+sub nopRule {
+    my ($self) = @_;
+    return $self->nop;
+}
+
+sub setRule {
+    my ($self, $loc, $var, $value, $next) = @_;
+    return [ 'modify' =>
+	     [ 'dest' => [ defined($loc) ? ('loc' => $loc) : (),
+			   defined($var) ? ('var' => $var) : () ],
+	       'set' => $value,
+	       defined($next) ? ('next' => $next) : () ]];
+}
+
+sub incRule {
+    my ($self, $src_loc, $src_var, $dest_loc, $dest_var, $inc, $next) = @_;
+    return [ 'modify' =>
+	     [ 'src' => [ defined($src_loc) ? ('loc' => $src_loc) : (),
+			  defined($src_var) ? ('var' => $src_var) : () ],
+	       'dest' => [ defined($dest_loc) ? ('loc' => $dest_loc) : (),
+			   defined($dest_var) ? ('var' => $dest_var) : () ],
+	       'inc' => $inc,
+	       defined($next) ? ('next' => $next) : () ]];
+}
+
+sub switchRule {
+    my ($self, $loc, $var, $case_hash_ref, $default) = @_;
+    return [ 'switch' =>
+	     [ 'loc' => $loc,
+	       'var' => $var,
+	       'scase' => [ map (($self->smatch($_) => $case_hash_ref->{$_}), keys %$case_hash_ref) ],
+	       defined($default) ? ('default' => $default) : () ]];
+}
+
+sub bindRule {
+    my ($self, $loc, $x, $y, $case_hash_ref, $default) = @_;
+    return [ 'bind' =>
+	     [ 'loc' => $loc,
+	       'x' => $x,
+	       'y' => $y,
+	       'bcase' => [ map (($self->bmatch($_) => $case_hash_ref->{$_}), keys %$case_hash_ref) ],
+	       defined($default) ? ('default' => $default) : () ]];
+}
+
+sub uniformHuffRule {
+    my (@opt) = @_;
+    my $p = 1 / @opt;
+    return ['huff' => [ map (($p => $_), @opt) ]];
+}
+
+# macro expansions over compass directions
 sub bindDirs {
     my ($self, $dirs, $totalProb, $cases, $default, $loc, $guard) = @_;
     die "Too many arguments" if defined($guard);

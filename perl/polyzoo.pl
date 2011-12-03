@@ -150,7 +150,49 @@ $gram->addTool ('name' => 'Perfume spray',
 #  else
 #   random_l_step
 # else
-#  random_r_step
+#  if (r_bond)
+#   verify_or_die (r_dir, l_dir)
+#   random_r_step
+# else
+#  random_step
+
+sub verify_or_die_l {
+    my ($gram, $type, $next) = @_;
+    return verify_or_die ($gram, $type, 'l_bond', 'l_dir', 'l_nbr', 'r_bond', 'r_dir', $next);
+}
+
+sub verify_or_die_r {
+    my ($gram, $type, $next) = @_;
+    return verify_or_die ($gram, $type, 'r_bond', 'r_dir', 'r_nbr', 'l_bond', 'l_dir', $next);
+}
+
+sub poly_rule {
+    my ($gram, $type) = @_;
+    return $gram->switchRule
+	(undef, 'l_bond',
+	 { 1 => verify_or_die_l
+	       ($gram, $type,
+		sub {
+		    my ($l_dir) = @_;
+		    $gram->switchRule
+			(undef, 'r_bond',
+			 { 1 => verify_or_die_r
+			       ($gram, $type,
+				sub {
+				    my ($r_dir) = @_;
+				    random_lr_step ($gram, $type, $l_dir, $r_dir);
+				}),
+			   0 => random_l_step ($gram, $type, $l_dir) })}),
+	   0 => $gram->switchRule
+	       (undef, 'r_bond',
+		{1 => verify_or_die_r
+		     ($gram, $type,
+		      sub {
+			  my ($r_dir) = @_;
+			  random_r_step ($gram, $type, $r_dir);
+		      }),
+		 0 => $gram->suicide }) });
+}
 
 my @moore_dir2xy = ([-1,-1], [-1,0], [-1,+1], [0,-1], [0,+1], [+1,-1], [+1,0], [+1,+1]);
 sub moore_xy2dir {
@@ -176,29 +218,20 @@ sub delta_dir {
     return moore_xy2dir ([$x2 - $x1, $y2 - $y1]);
 }
 
-sub make_xy {
-    my ($xy) = @_;
-    my ($x, $y) = @$xy;
-    return ('x' => $x, 'y' => $y);
-}
-
 sub set_neighbor_dir {
-    my ($nbr_loc, $nbr_dir_var, $nbr_pos, $step_pos, $next) = @_;
-    return [ 'modify' =>
-	     [ 'dest' => [ 'loc' => $nbr_loc,
-			   'var' => $nbr_dir_var ],
-	       'set' => delta_dir ($nbr_pos, $step_pos),
-	       'next' => $next ]];
+    my ($gram, $nbr_loc, $nbr_dir_var, $nbr_pos, $step_pos, $next) = @_;
+    my $new_nbr_dir = delta_dir ($nbr_pos, $step_pos);
+    return $gram->setRule ($nbr_loc, $nbr_dir_var, $new_nbr_dir, $next);
 }
 
 sub set_lpos_rdir {
-    my ($nbr_pos, $step_pos, $next) = @_;
-    return set_neighbor_dir ('l_pos', 'r_dir', $nbr_pos, $step_pos, $next);
+    my ($gram, $nbr_pos, $step_pos, $next) = @_;
+    return set_neighbor_dir ($gram, 'l_nbr', 'r_dir', $nbr_pos, $step_pos, $next);
 }
 
 sub set_rpos_ldir {
-    my ($nbr_pos, $step_pos, $next) = @_;
-    return set_neighbor_dir ('r_pos', 'l_dir', $nbr_pos, $step_pos, $next);
+    my ($gram, $nbr_pos, $step_pos, $next) = @_;
+    return set_neighbor_dir ($gram, 'r_nbr', 'l_dir', $nbr_pos, $step_pos, $next);
 }
 
 sub poly_type_and_vars {
@@ -213,40 +246,109 @@ sub poly_type_and_vars {
 }
 
 sub random_lr_step {
-    my ($type, $ldir, $rdir) = @_;
+    my ($gram, $type, $ldir, $rdir) = @_;
     my ($lpos, $rpos) = @moore_dir2xy[$ldir,$rdir];
     my @potentials = grep (test_moore_neighbors ($lpos, $_) && test_moore_neighbors ($rpos, $_), @moore_dir2xy);
-    my @step = map (['bind' =>
-		     [ 'loc' => 'step_pos',
-		       make_xy ($_),
-		       'bcase' =>
-		       [$gram->bmatch ($gram->empty) =>
-			set_lpos_rdir
-			($lpos, $_,
-			 set_rpos_ldir
-			 ($rpos, $_,
-			  [ 'modify' =>
-			    [ 'dest' => [ 'loc' => 'step_pos' ],
-			      'set' => poly_type_and_vars ($type,
-							   delta_dir ($_, $lpos),
-							   delta_dir ($_, $rpos)),
-			      'next' => $gram->suicide ]]))]]],
+    my @step = map ($gram->bindRule
+		    ('step_pos',
+		     @$_,
+		     { $gram->empty =>
+			   set_lpos_rdir
+			   ($gram, $lpos, $_,
+			    set_rpos_ldir
+			    ($gram, $rpos, $_,
+			     $gram->setRule
+			     ('step_pos',
+			      undef,
+			      poly_type_and_vars ($type,
+						  delta_dir ($_, $lpos),
+						  delta_dir ($_, $rpos)),
+			      $gram->suicide))) }),
 		    @potentials);
+    return $gram->uniformHuffRule (@step);
 }
 
-my ($polyName, $polySeedName, $polyRate) = ('polymer', 'polymer_seed', .1);
+sub random_l_step {
+    my ($gram, $type, $ldir) = @_;
+    my $lpos = $moore_dir2xy[$ldir];
+    my @potentials = grep (test_moore_neighbors ($lpos, $_), @moore_dir2xy);
+    my @step = map ($gram->bindRule
+		    ('step_pos',
+		     @$_,
+		     { $gram->empty =>
+			   set_lpos_rdir
+			   ($gram, $lpos, $_,
+			    $gram->setRule
+			    ('step_pos',
+			     undef,
+			     poly_type_and_vars ($type,
+						 delta_dir ($_, $lpos),
+						 undef),
+			     $gram->suicide)) }),
+		    @potentials);
+    return $gram->uniformHuffRule (@step);
+}
+
+sub random_r_step {
+    my ($gram, $type, $rdir) = @_;
+    my $rpos = $moore_dir2xy[$rdir];
+    my @potentials = grep (test_moore_neighbors ($rpos, $_), @moore_dir2xy);
+    my @step = map ($gram->bindRule
+		    ('step_pos',
+		     @$_,
+		     { $gram->empty =>
+			   set_rpos_ldir
+			   ($gram, $rpos, $_,
+			    $gram->setRule
+			    ('step_pos',
+			     undef,
+			     poly_type_and_vars ($type,
+						 undef,
+						 delta_dir ($_, $rpos)),
+			     $gram->suicide)) }),
+		    @potentials);
+    return $gram->uniformHuffRule (@step);
+}
+
+sub verify_or_die {
+    my ($gram, $type, $bond_var, $dir_var, $nbr_loc, $nbr_bond_var, $nbr_dir_var, $next_sub) = @_;
+    return $gram->switchRule (undef, $dir_var, map (($_ =>
+						     verify_pos_or_die
+						     ($gram, $type, $bond_var, $moore_dir2xy[$_], $nbr_loc, $nbr_bond_var, $nbr_dir_var, &$next_sub($_))),
+						    0..$#moore_dir2xy));
+}
+
+sub verify_pos_or_die {
+    my ($gram, $type, $bond_var, $nbr_pos, $nbr_loc, $nbr_bond_var, $nbr_dir_var, $next) = @_;
+    my $unbond = $gram->setRule ($nbr_loc, $bond_var, 0);
+    return $gram->bindRule
+	($nbr_loc,
+	 @$nbr_pos,
+	 { $type =>
+	       $gram->switchRule ($nbr_loc,
+				  $nbr_bond_var,
+				  { 0 => $unbond,
+				    1 => $gram->switchRule
+					($nbr_loc,
+					 $nbr_dir_var,
+					 { delta_dir ($nbr_pos, [0,0]) => $next },
+					 $unbond) }) },
+	 $unbond);
+}
+
+my ($polyName, $polyRate) = ('polymer', .1);
 $gram->addType ('name' => $polyName,
 		'vars' => [ $gram->var('l_bond') => 1, $gram->var('l_dir') => 3, $gram->var('r_bond') => 1, $gram->var('r_dir') => 3 ],
 		'hue' => ['add' => 20],
 		'sat' => ['add' => 255],
 		'bri' => ['add' => 255],
 		'rate' => $polyRate,
-		'rule' => [$gram->nop]);
+		'rule' => $gram->nop);
 
 # polymer tool
 $gram->addTool ('name' => 'Polymer spray',
 		'size' => 4,
-		'gstate' => $polySeedName,
+		'gstate' => $polyName,
 		'reserve' => 1000,
 		'recharge' => 100,
 		'spray' => 2500,

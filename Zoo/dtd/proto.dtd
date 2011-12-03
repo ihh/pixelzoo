@@ -353,7 +353,7 @@ and executes the specified rule. If no such "bmatch" exists, executes the "defau
 
 Note: the special name <i>orig</i> is automagically defined for the cell at (0,0),
 i.e. the cell where the rule is triggered.  -->
-<!ELEMENT bind (loc,x?,y?,bcase*,default?)>
+<!ELEMENT bind (loc,x?,y?,bcase?,default?)>
 
 <!-- The cases in a bind rule. -->
 <!ELEMENT bcase (bmatch*)>
@@ -374,7 +374,7 @@ and executes the corresponding rule. If no such "smatch" exists, executes the "d
 
 Note: the special location name <i>orig</i> is automagically defined for the cell at (0,0),
 i.e. the cell where the rule is triggered.  -->
-<!ELEMENT switch (loc?,var,scase*,default?)>
+<!ELEMENT switch (loc?,var,scase?,default?)>
 <!ELEMENT loc (#PCDATA)>
 
 <!-- The cases in a switch rule. -->
