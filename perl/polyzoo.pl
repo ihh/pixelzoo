@@ -156,16 +156,6 @@ $gram->addTool ('name' => 'Perfume spray',
 # else
 #  random_step
 
-sub verify_or_die_l {
-    my ($gram, $type, $next) = @_;
-    return verify_or_die ($gram, $type, 'l_bond', 'l_dir', 'l_nbr', 'r_bond', 'r_dir', $next);
-}
-
-sub verify_or_die_r {
-    my ($gram, $type, $next) = @_;
-    return verify_or_die ($gram, $type, 'r_bond', 'r_dir', 'r_nbr', 'l_bond', 'l_dir', $next);
-}
-
 sub poly_rule {
     my ($gram, $type) = @_;
     return $gram->switchRule
@@ -310,12 +300,22 @@ sub random_r_step {
     return $gram->uniformHuffRule (@step);
 }
 
+sub verify_or_die_l {
+    my ($gram, $type, $next) = @_;
+    return verify_or_die ($gram, $type, 'l_bond', 'l_dir', 'l_nbr', 'r_bond', 'r_dir', $next);
+}
+
+sub verify_or_die_r {
+    my ($gram, $type, $next) = @_;
+    return verify_or_die ($gram, $type, 'r_bond', 'r_dir', 'r_nbr', 'l_bond', 'l_dir', $next);
+}
+
 sub verify_or_die {
     my ($gram, $type, $bond_var, $dir_var, $nbr_loc, $nbr_bond_var, $nbr_dir_var, $next_sub) = @_;
-    return $gram->switchRule (undef, $dir_var, map (($_ =>
+    return $gram->switchRule (undef, $dir_var, { map (($_ =>
 						     verify_pos_or_die
 						     ($gram, $type, $bond_var, $moore_dir2xy[$_], $nbr_loc, $nbr_bond_var, $nbr_dir_var, &$next_sub($_))),
-						    0..$#moore_dir2xy));
+						    0..$#moore_dir2xy) });
 }
 
 sub verify_pos_or_die {
@@ -343,7 +343,7 @@ $gram->addType ('name' => $polyName,
 		'sat' => ['add' => 255],
 		'bri' => ['add' => 255],
 		'rate' => $polyRate,
-		'rule' => $gram->nop);
+		'rule' => poly_rule ($gram, $polyName));
 
 # polymer tool
 $gram->addTool ('name' => 'Polymer spray',

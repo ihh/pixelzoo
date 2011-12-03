@@ -211,6 +211,7 @@ sub incRule {
 
 sub switchRule {
     my ($self, $loc, $var, $case_hash_ref, $default) = @_;
+    confess "Not a hashref" unless ref($case_hash_ref) && ref($case_hash_ref) eq 'HASH';
     return [ 'switch' =>
 	     [ 'loc' => $loc,
 	       'var' => $var,
@@ -220,6 +221,7 @@ sub switchRule {
 
 sub bindRule {
     my ($self, $loc, $x, $y, $case_hash_ref, $default) = @_;
+    confess "Not a hashref" unless ref($case_hash_ref) && ref($case_hash_ref) eq 'HASH';
     return [ 'bind' =>
 	     [ 'loc' => $loc,
 	       'x' => $x,
@@ -229,7 +231,8 @@ sub bindRule {
 }
 
 sub uniformHuffRule {
-    my (@opt) = @_;
+    my ($self, @opt) = @_;
+    return $self->nopRule unless @opt;
     my $p = 1 / @opt;
     return ['huff' => [ map (($p => $_), @opt) ]];
 }
