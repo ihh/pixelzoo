@@ -320,7 +320,7 @@ sub verify_or_die {
 
 sub verify_pos_or_die {
     my ($gram, $type, $bond_var, $nbr_pos, $nbr_loc, $nbr_bond_var, $nbr_dir_var, $next) = @_;
-    my $unbond = $gram->setRule ($nbr_loc, $bond_var, 0);
+    my $unbond = $gram->setRule (undef, $bond_var, 0);
     return $gram->bindRule
 	($nbr_loc,
 	 @$nbr_pos,
