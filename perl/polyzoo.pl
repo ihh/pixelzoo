@@ -140,25 +140,61 @@ $gram->addTool ('name' => 'Perfume spray',
 		'spray' => 2500,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
-# polymers
+# polymer cage builders
 # outline of program:
-# if (l_bond)
-#  verify_or_die (l_dir, r_dir)
-#  if (r_bond)
-#   verify_or_die (r_dir, l_dir)
-#   random_lr_step
-#  else
-#   random_l_step
-# else
-#  if (r_bond)
-#   verify_or_die (r_dir, l_dir)
-#   random_r_step
-# else
-#  random_step
+# switch (state)
+#  case 0: (paused)
+#   nop
+#  case 1: (init)
+#   set orig.steps = orig.edge_len
+#   set orig.edges = 4
+#   set orig.tail_state = 0 (paused)
+#   set orig.state = 2 (build)
+#  case 2: (build)
+#   switch (orig.r_dir)  (loop over cases)
+#    if (steps = 0)
+#     if (edges = 0)
+#      bind (r_pos = neighborhood[r_dir])
+#       case polymer:  (connect the loop)
+#        switch (r_pos.state)
+#         case 0: (paused)
+#          set r_pos.state = 3 (active)
+#          set r_pos.l_bond = 1
+#          set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+#          set orig.r_bond = 1
+#    else (edges > 0)
+#     set orig.r_dir = orig.r_dir + 2  (turn right 90 degrees)
+#     set orig.steps = orig.edge_len
+#   else (steps > 0)
+#    bind (r_pos = neighborhood[r_dir])
+#     case empty:
+#      set r_pos = orig
+#      set orig.state = orig.tail_state
+#      set orig.r_bond = 1
+#      set r_pos.l_bond = 1
+#      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+#      set r_pos.tail_state = 3 (active)
+#      decrement r_pos.steps
+#  case 3: (active)
+#   if (l_bond)
+#    verify_or_die (l_dir, r_dir)
+#    if (r_bond)
+#     verify_or_die (r_dir, l_dir)
+#     random_lr_step
+#    else
+#     random_l_step
+#   else
+#    if (r_bond)
+#     verify_or_die (r_dir, l_dir)
+#     random_r_step
+#   else
+#    random_step
 
 sub poly_rule {
     my ($gram, $type) = @_;
-    return $gram->switchRule
+    return
+
+ $gram->switchRule
 	(undef, 'l_bond',
 	 { 1 => verify_or_die_l
 	       ($gram, $type,
