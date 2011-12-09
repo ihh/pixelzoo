@@ -513,7 +513,7 @@ $gram->addType ('name' => $polyName,
 # polymer tool
 $gram->addTool ('name' => 'Polymer spray',
 		'size' => 4,
-		'gstate' => $polyName,
+		'gvars' => [ 'type' => $polyName, $gram->var('edge_len') => 10, $gram->var('state') => 1 ],
 		'reserve' => 1000,
 		'recharge' => 100,
 		'spray' => 2500,
