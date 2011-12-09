@@ -566,9 +566,11 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
-	    my ($src, $dest, $set, $inc, $next) = map ($n->{$_}, qw(src dest set inc next));
+	    my ($src, $dest, $set, $setv, $inc, $next) = map ($n->{$_}, qw(src dest set setv inc next));
 	    confess "In modify: can't specify 'set' together with 'src' or 'inc'" if defined($set) && (defined($src) || defined($inc));
+	    confess "In modify: can't specify 'setv' together with 'set', 'src' or 'inc'" if defined($setv) && (defined($set) || defined($src) || defined($inc));
 	    $inc = $set if defined $set;
+	    $inc = $setv if defined $setv;
 
 	    # SOURCE
 	    # check whether src specified

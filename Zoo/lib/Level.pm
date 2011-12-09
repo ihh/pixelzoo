@@ -192,9 +192,9 @@ sub nopRule {
 sub setRule {
     my ($self, $loc, $var, $value, $next) = @_;
     return [ 'modify' =>
-	     [ 'dest' => [ defined($loc) ? ('loc' => $loc) : (),
+	     [ ref($value) ? ('set' => $value) : ('setv' => $value),
+	       'dest' => [ defined($loc) ? ('loc' => $loc) : (),
 			   defined($var) ? ('var' => $var) : () ],
-	       'set' => $value,
 	       defined($next) ? ('next' => $next) : () ]];
 }
 
@@ -203,9 +203,9 @@ sub incRule {
     return [ 'modify' =>
 	     [ 'src' => [ defined($src_loc) ? ('loc' => $src_loc) : (),
 			  defined($src_var) ? ('var' => $src_var) : () ],
+	       defined($inc) ? ('inc' => $inc) : (),
 	       'dest' => [ defined($dest_loc) ? ('loc' => $dest_loc) : (),
 			   defined($dest_var) ? ('var' => $dest_var) : () ],
-	       'inc' => $inc,
 	       defined($next) ? ('next' => $next) : () ]];
 }
 

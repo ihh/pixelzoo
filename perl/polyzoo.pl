@@ -142,25 +142,29 @@ $gram->addTool ('name' => 'Perfume spray',
 
 # polymer cage builders
 # outline of program:
+
 # switch (state)
 #  case 0: (paused)
 #   nop
+
 #  case 1: (init)
 #   set orig.steps = orig.edge_len
 #   set orig.edges = 4
 #   set orig.tail_state = 0 (paused)
 #   set orig.state = 2 (build)
+
 #  case 2: (build)
-#   switch (orig.r_dir)  (loop over cases)
+#   switch (orig.r_dir)  (loop over neighborhood)
 #    if (steps = 0)
 #     if (edges = 0)
 #      bind (r_pos = neighborhood[r_dir])
-#       case polymer:  (connect the loop)
+#       case polymer:  (connect the ends)
 #        switch (r_pos.state)
 #         case 0: (paused)
 #          set r_pos.state = 3 (active)
 #          set r_pos.l_bond = 1
 #          set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+#          set orig.state = 3 (active)
 #          set orig.r_bond = 1
 #    else (edges > 0)
 #     set orig.r_dir = orig.r_dir + 2  (turn right 90 degrees)
@@ -175,26 +179,32 @@ $gram->addTool ('name' => 'Perfume spray',
 #      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
 #      set r_pos.tail_state = 3 (active)
 #      decrement r_pos.steps
+
 #  case 3: (active)
-#   if (l_bond)
-#    verify_or_die (l_dir, r_dir)
-#    if (r_bond)
-#     verify_or_die (r_dir, l_dir)
-#     random_lr_step
-#    else
-#     random_l_step
+#   poly_rule
+
+# where...
+# poly_rule:
+#  if (l_bond)
+#   verify_or_die (l_dir, r_dir)
+#   if (r_bond)
+#    verify_or_die (r_dir, l_dir)
+#    random_lr_step
 #   else
-#    if (r_bond)
-#     verify_or_die (r_dir, l_dir)
-#     random_r_step
-#   else
-#    random_step
+#    random_l_step
+#  else
+#   if (r_bond)
+#    verify_or_die (r_dir, l_dir)
+#    random_r_step
+#  else
+#   random_step
+
+my @moore_dir2xy = ([-1,-1], [-1,0], [-1,+1], [0,-1], [0,+1], [+1,-1], [+1,0], [+1,+1]);
 
 sub poly_rule {
     my ($gram, $type) = @_;
     return
-
- $gram->switchRule
+	$gram->switchRule
 	(undef, 'l_bond',
 	 { 1 => verify_or_die_l
 	       ($gram, $type,
@@ -220,7 +230,117 @@ sub poly_rule {
 		 0 => $gram->suicide }) });
 }
 
-my @moore_dir2xy = ([-1,-1], [-1,0], [-1,+1], [0,-1], [0,+1], [+1,-1], [+1,0], [+1,+1]);
+sub poly_build_rule {
+    my ($gram, $type) = @_;
+
+    return
+# switch (state)
+	$gram->switchRule
+	('orig', 'state',
+#  case 0: (paused)
+#   nop
+	 { 0 => $gram->nopRule,
+
+#  case 1: (init)
+	   1 =>
+#   set orig.steps = orig.edge_len
+	       $gram->incRule
+	       ('orig', 'edge_len', 'orig', 'steps', 0,
+#   set orig.edges = 4
+		$gram->setRule
+		('orig', 'edges', 4,
+#   set orig.tail_state = 0 (paused)
+		 $gram->setRule
+		 ('orig', 'tail_state', 0,
+#   set orig.state = 2 (build)
+		  $gram->setRule
+		  ('orig', 'state', 2)))),
+
+#  case 2: (build)
+		  2 =>
+#   switch (orig.r_dir)
+		  $gram->switchRule
+		  ('orig', 'r_dir',
+# (loop over neighborhood)
+		   { map (($_ =>
+#    if (steps = 0)
+			   $gram->switchRule
+			   ('orig', 'steps',
+			    { 0 =>
+#     if (edges = 0)
+				  $gram->switchRule
+				  ('orig', 'edges',
+				   { 0 =>
+#      bind (r_pos = neighborhood[r_dir])
+					 $gram->bindRule
+					 ('r_pos', @{$moore_dir2xy[$_]},
+#       case polymer:  (connect the ends)
+					  { $type =>
+#        switch (r_pos.state)
+						$gram->switchRule
+						('r_pos', 'state',
+#         case 0: (paused)
+						 { 0 =>
+#          set r_pos.state = 3 (active)
+						       $gram->setRule
+						       ('r_pos', 'state', 3,
+#          set r_pos.l_bond = 1
+							$gram->setRule
+							('r_pos', 'l_bond', 1,
+#          set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+							 $gram->incRule
+							 ('orig', 'r_dir', 'r_pos', 'l_dir', 4,
+#          set orig.state = 3 (active)
+							  $gram->setRule
+							  ('orig', 'state', 3,
+#          set orig.r_bond = 1
+							   $gram->setRule
+							   ('orig', 'r_bond', 1)))))})})},
+
+#    else (edges > 0)
+#     set orig.r_dir = orig.r_dir + 2  (turn right 90 degrees)
+				   $gram->incRule
+				   ('orig', 'r_dir', 'orig', 'r_dir', 2,
+#     set orig.steps = orig.edge_len
+				    $gram->incRule
+				    ('orig', 'edge_len', 'orig', 'steps', 0)))},
+
+#   else (steps > 0)
+#    bind (r_pos = neighborhood[r_dir])
+			    $gram->bindRule
+			    ('r_pos', @{$moore_dir2xy[$_]},
+#     case empty:
+			     { 'empty' =>
+#      set r_pos = orig
+				   $gram->copyTo
+				   ('r_pos',
+#      set orig.state = orig.tail_state
+				    $gram->incRule
+				    ('orig', 'tail_state', 'orig', 'state', 0,
+#      set orig.r_bond = 1
+				     $gram->setRule
+				     ('orig', 'r_bond', 1,
+#      set r_pos.l_bond = 1
+				      $gram->setRule
+				      ('orig', 'l_bond', 1,
+#      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+				       $gram->incRule
+				       ('orig', 'r_dir', 'r_pos', 'l_dir', 4,
+#      set r_pos.tail_state = 3 (active)
+					$gram->setRule
+					('r_pos', 'tail_state', 3,
+#      decrement r_pos.steps
+					 $gram->incRule
+					 ('r_pos', 'steps', 'r_pos', 'steps', -1)))))))}))),
+
+# (end loop over neighborhood)
+			  0..$#moore_dir2xy)}),
+	 
+#  case 3: (active)
+#   poly_rule
+			   3 => poly_rule ($gram, $type) });
+}
+
 sub moore_xy2dir {
     my ($xy) = @_;
     my ($x, $y) = @$xy;
@@ -261,14 +381,15 @@ sub set_rpos_ldir {
 }
 
 sub poly_type_and_vars {
-    my ($type, $ldir, $rdir) = @_;
+    my ($gram, $type, $ldir, $rdir) = @_;
     return [ 'type' => $type,
+	     $gram->var('state') => 3,
 	     defined($ldir)
-	     ? ('l_bond' => 1, 'l_dir' => $ldir)
-	     : ('l_bond' => 0),
+	     ? ($gram->var('l_bond') => 1, $gram->var('l_dir') => $ldir)
+	     : ($gram->var('l_bond') => 0),
 	     defined($rdir)
-	     ? ('r_bond' => 1, 'r_dir' => $rdir)
-	     : ('r_bond' => 0) ];
+	     ? ($gram->var('r_bond') => 1, $gram->var('r_dir') => $rdir)
+	     : ($gram->var('r_bond') => 0) ];
 }
 
 sub random_lr_step {
@@ -286,7 +407,7 @@ sub random_lr_step {
 			     $gram->setRule
 			     ('step_pos',
 			      undef,
-			      poly_type_and_vars ($type,
+			      poly_type_and_vars ($gram, $type,
 						  delta_dir ($_, $lpos),
 						  delta_dir ($_, $rpos)),
 			      $gram->suicide))) }),
@@ -307,7 +428,7 @@ sub random_l_step {
 			    $gram->setRule
 			    ('step_pos',
 			     undef,
-			     poly_type_and_vars ($type,
+			     poly_type_and_vars ($gram, $type,
 						 delta_dir ($_, $lpos),
 						 undef),
 			     $gram->suicide)) }),
@@ -328,7 +449,7 @@ sub random_r_step {
 			    $gram->setRule
 			    ('step_pos',
 			     undef,
-			     poly_type_and_vars ($type,
+			     poly_type_and_vars ($gram, $type,
 						 undef,
 						 delta_dir ($_, $rpos)),
 			     $gram->suicide)) }),
@@ -374,12 +495,20 @@ sub verify_pos_or_die {
 
 my ($polyName, $polyRate) = ('polymer', .1);
 $gram->addType ('name' => $polyName,
-		'vars' => [ $gram->var('l_bond') => 1, $gram->var('l_dir') => 3, $gram->var('r_bond') => 1, $gram->var('r_dir') => 3 ],
+		'vars' => [ $gram->var('l_bond') => 1,
+			    $gram->var('l_dir') => 3,
+			    $gram->var('r_bond') => 1,
+			    $gram->var('r_dir') => 3,
+			    $gram->var('state') => 2,
+			    $gram->var('tail_state') => 2,
+			    $gram->var('edge_len') => 6,
+			    $gram->var('edges') => 2,
+			    $gram->var('steps') => 6 ],
 		'hue' => ['add' => 20],
 		'sat' => ['add' => 255],
 		'bri' => ['add' => 255],
 		'rate' => $polyRate,
-		'rule' => poly_rule ($gram, $polyName));
+		'rule' => poly_build_rule ($gram, $polyName));
 
 # polymer tool
 $gram->addTool ('name' => 'Polymer spray',

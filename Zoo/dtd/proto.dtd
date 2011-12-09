@@ -408,7 +408,7 @@ or must be the special location name <i>orig</i> which is automagically defined 
 i.e. the cell where the rule is triggered.
 
 After writing to the destination cells, the (optional) "next" rule is executed. -->
-<!ELEMENT modify (src?,(inc|hexinc|set)?,dest?,next?)>
+<!ELEMENT modify (src?,(inc|hexinc|set|setv)?,dest?,next?)>
 <!ELEMENT src (loc?,var?)>
 <!ELEMENT dest (loc?,var?)>
 <!ELEMENT next (rule|bind|switch|modify|nop|random|huff|goal|ball)>
@@ -423,6 +423,7 @@ Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("
 <!ELEMENT hexmsg (#PCDATA)>
 
 <!ELEMENT set (type,val*)>
+<!ELEMENT setv (#PCDATA)>
 
 <!-- Value of an individual var. -->
 <!ELEMENT val (#PCDATA)>
