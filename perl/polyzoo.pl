@@ -67,6 +67,7 @@ $gram->xmllint($xmllint) if defined $xmllint;
 #    else (edges > 0)
 #     set orig.r_dir = orig.r_dir + 2  (turn right 90 degrees)
 #     set orig.steps = orig.edge_len
+#     set orig.edges = orig.edges - 1
 #   else (steps > 0)
 #    bind (r_pos = neighborhood[r_dir])
 #     case empty:
@@ -201,7 +202,10 @@ sub poly_build_rule {
 				   ('orig', 'r_dir', 'orig', 'r_dir', 2,
 #     set orig.steps = orig.edge_len
 				    $gram->incRule
-				    ('orig', 'edge_len', 'orig', 'steps', 0)))},
+				    ('orig', 'edge_len', 'orig', 'steps', 0,
+#     set orig.edges = orig.edges - 1
+				     $gram->incRule
+				     ('orig', 'edges', 'orig', 'edges', -1))))},
 
 #   else (steps > 0)
 #    bind (r_pos = neighborhood[r_dir])
