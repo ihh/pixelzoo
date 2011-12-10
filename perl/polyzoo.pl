@@ -38,108 +38,6 @@ $gram->protofile($proto) if defined $proto;
 $gram->outfile($out) if defined $proto;
 $gram->xmllint($xmllint) if defined $xmllint;
 
-# add some stuff
-
-# cement
-my %cement = ('name' => 'cement',
-	      'rate' => .1,
-	      'step' => .02,
-	      'drain' => .001,
-	      'stick' => 1,
-	      'sticksto' => 'wall',
-	      'copies' => 1,
-	      'set' => .02,
-	      'setsto' => 'wall',
-	      'setsvar' => 'hue',
-	      'setsvals' => [0,42,84]);
-
-$gram->make_spray_tool(%cement);
-
-
-# wall
-my ($wallRate, $wallMaxDecay) = (.0002, 15);
-$gram->make_wall ($wallRate, $wallMaxDecay);
-
-# acid
-my ($acidRate, $acidDrain, $acidBurn) = (.1, .03, .5);
-$gram->make_acid($acidRate, $acidDrain, $acidBurn);
-
-# acid tool
-$gram->addTool ('name' => 'Acid spray',
-		'size' => 16,
-		'gstate' => 'acid',
-		'reserve' => 1000,
-		'recharge' => 100,
-		'spray' => 2,
-		'overwrite' => [ 'gstate' => 'empty' ]);
-
-# plant
-my %plant = ('rate' => .01, 'branch' => .2, 'die' => .0001, 'max_branches' => 3);
-$gram->make_plant (%plant);
-
-# seed
-my %seed = ('name' => 'seed',
-	    'rate' => .1,
-	    'step' => .05,
-	    'drain' => .03,
-	    'stick' => 1,
-	    'sticksto' => 'wall',
-	    'copies' => 0,
-	    'set' => .0005,
-	    'setsto' => 'plant',
-	    'setsvar' => 'gens_left',
-	    'setsvals' => [1,3,6]);
-
-$gram->make_spray_tool(%seed);
-
-
-# rock-paper-scissors animal
-
-my %rps = ('name' => 'cyclobs',
-	   'rate' => .08,
-	   'food' => 'plant',
-	   'food_unripeness_var' => 'gens_left',
-
-	   # if next to empty space...
-	   'step' => .2,
-	   'breed' => .005,
-	   'die' => .005,
-
-	   # if next to same species...
-	   'choke' => .003,
-
-	   # if next to prey species, or food...
-	   'eat' => .2,
-	   'convert' => .8,
-
-	   # text feedback rates
-	   'text' => .001,
-	   'log' => 1);
-
-$gram->make_rps_animal (%rps);
-
-# rps animal tool
-$gram->addTool ('name' => $rps{'name'},
-		'size' => 8,
-		'gvars' => [ 'type' => $rps{'name'}, $gram->var('species') => 3 ],
-		'reserve' => 5,
-		'recharge' => 100,
-		'spray' => 100,
-		'overwrite' => [ 'gstate' => 'empty' ]);
-
-# perfume
-my ($animalName, $perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce) = ($rps{'name'}, .6, .03, .03, .5);
-$gram->make_perfume ($animalName, $perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce);
-
-# perfume tool
-$gram->addTool ('name' => 'Perfume spray',
-		'size' => 4,
-		'gstate' => 'perfume',
-		'reserve' => 1000,
-		'recharge' => 100,
-		'spray' => 2500,
-		'overwrite' => [ 'gstate' => 'empty' ]);
-
 # polymer cage builders
 # outline of program:
 
@@ -199,7 +97,7 @@ $gram->addTool ('name' => 'Perfume spray',
 #  else
 #   random_step
 
-my @moore_dir2xy = ([-1,-1], [-1,0], [-1,+1], [0,-1], [0,+1], [+1,-1], [+1,0], [+1,+1]);
+my @moore_dir2xy = map ([$gram->dir->{$_}->x, $gram->dir->{$_}->y], qw(n ne e se s sw w nw));
 
 sub poly_rule {
     my ($gram, $type) = @_;
@@ -513,11 +411,117 @@ $gram->addType ('name' => $polyName,
 # polymer tool
 $gram->addTool ('name' => 'Polymer spray',
 		'size' => 4,
-		'gvars' => [ 'type' => $polyName, $gram->var('edge_len') => 10, $gram->var('state') => 1 ],
+		'gvars' => [ 'type' => $polyName, $gram->var('r_dir') => 2, $gram->var('edge_len') => 10, $gram->var('state') => 1 ],
+		'reserve' => 1,
+		'recharge' => 100,
+		'spray' => 2500,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
+
+
+
+# add the simpletest stuff
+
+# cement
+my %cement = ('name' => 'cement',
+	      'rate' => .1,
+	      'step' => .02,
+	      'drain' => .001,
+	      'stick' => 1,
+	      'sticksto' => 'wall',
+	      'copies' => 1,
+	      'set' => .02,
+	      'setsto' => 'wall',
+	      'setsvar' => 'hue',
+	      'setsvals' => [0,42,84]);
+
+$gram->make_spray_tool(%cement);
+
+
+# wall
+my ($wallRate, $wallMaxDecay) = (.0002, 15);
+$gram->make_wall ($wallRate, $wallMaxDecay);
+
+# acid
+my ($acidRate, $acidDrain, $acidBurn) = (.1, .03, .5);
+$gram->make_acid($acidRate, $acidDrain, $acidBurn);
+
+# acid tool
+$gram->addTool ('name' => 'Acid spray',
+		'size' => 16,
+		'gstate' => 'acid',
+		'reserve' => 1000,
+		'recharge' => 100,
+		'spray' => 2,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
+# plant
+my %plant = ('rate' => .01, 'branch' => .2, 'die' => .0001, 'max_branches' => 3);
+$gram->make_plant (%plant);
+
+# seed
+my %seed = ('name' => 'seed',
+	    'rate' => .1,
+	    'step' => .05,
+	    'drain' => .03,
+	    'stick' => 1,
+	    'sticksto' => 'wall',
+	    'copies' => 0,
+	    'set' => .0005,
+	    'setsto' => 'plant',
+	    'setsvar' => 'gens_left',
+	    'setsvals' => [1,3,6]);
+
+$gram->make_spray_tool(%seed);
+
+
+# rock-paper-scissors animal
+
+my %rps = ('name' => 'cyclobs',
+	   'rate' => .08,
+	   'food' => 'plant',
+	   'food_unripeness_var' => 'gens_left',
+
+	   # if next to empty space...
+	   'step' => .2,
+	   'breed' => .005,
+	   'die' => .005,
+
+	   # if next to same species...
+	   'choke' => .003,
+
+	   # if next to prey species, or food...
+	   'eat' => .2,
+	   'convert' => .8,
+
+	   # text feedback rates
+	   'text' => .001,
+	   'log' => 1);
+
+$gram->make_rps_animal (%rps);
+
+# rps animal tool
+$gram->addTool ('name' => $rps{'name'},
+		'size' => 8,
+		'gvars' => [ 'type' => $rps{'name'}, $gram->var('species') => 3 ],
+		'reserve' => 5,
+		'recharge' => 100,
+		'spray' => 100,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
+# perfume
+my ($animalName, $perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce) = ($rps{'name'}, .6, .03, .03, .5);
+$gram->make_perfume ($animalName, $perfumeRate, $perfumeDrain, $perfumeBillow, $perfumeInduce);
+
+# perfume tool
+$gram->addTool ('name' => 'Perfume spray',
+		'size' => 4,
+		'gstate' => 'perfume',
 		'reserve' => 1000,
 		'recharge' => 100,
 		'spray' => 2500,
 		'overwrite' => [ 'gstate' => 'empty' ]);
+
 
 # print
 $gram->print;

@@ -127,6 +127,14 @@ t/compiled.copy.xml: t/proto.xml
 	$(PERL) perl/zoocompiler.pl $< >$@
 	diff t/compiled.xml t/compiled.copy.xml
 
+
+# Polymers
+t/poly.xml: perl/polyzoo.pl
+	perl/polyzoo.pl >$@
+
+polysdl: t/poly.xml
+	bin/sdlgame -g $<
+
 # Documentation
 doc: dtddoc-doc doxygen-doc
 
