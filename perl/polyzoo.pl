@@ -38,6 +38,7 @@ $gram->protofile($proto) if defined $proto;
 $gram->outfile($out) if defined $proto;
 $gram->xmllint($xmllint) if defined $xmllint;
 
+
 # polymer cage builders
 # outline of program:
 
@@ -47,7 +48,7 @@ $gram->xmllint($xmllint) if defined $xmllint;
 
 #  case 1: (init)
 #   set orig.steps = orig.edge_len
-#   set orig.edges = 4
+#   set orig.edges = 3
 #   set orig.tail_state = 0 (paused)
 #   set orig.state = 2 (build)
 
@@ -68,6 +69,8 @@ $gram->xmllint($xmllint) if defined $xmllint;
 #     set orig.r_dir = orig.r_dir + 2  (turn right 90 degrees)
 #     set orig.steps = orig.edge_len
 #     set orig.edges = orig.edges - 1
+#     if (orig.edges = 0)
+#      set orig.steps = orig.steps - 1
 #   else (steps > 0)
 #    bind (r_pos = neighborhood[r_dir])
 #     case empty:
@@ -145,9 +148,9 @@ sub poly_build_rule {
 #   set orig.steps = orig.edge_len
 	       $gram->incRule
 	       ('orig', 'edge_len', 'orig', 'steps', 0,
-#   set orig.edges = 4
+#   set orig.edges = 3
 		$gram->setRule
-		('orig', 'edges', 4,
+		('orig', 'edges', 3,
 #   set orig.tail_state = 0 (paused)
 		 $gram->setRule
 		 ('orig', 'tail_state', 0,
@@ -205,7 +208,14 @@ sub poly_build_rule {
 				    ('orig', 'edge_len', 'orig', 'steps', 0,
 #     set orig.edges = orig.edges - 1
 				     $gram->incRule
-				     ('orig', 'edges', 'orig', 'edges', -1))))},
+				     ('orig', 'edges', 'orig', 'edges', -1,
+#     if (orig.edges = 0)
+				      $gram->switchRule
+				      ('orig', 'edges',
+				       { 0 =>
+#      set orig.steps = orig.steps - 1
+					     $gram->incRule
+					     ('orig', 'steps', 'orig', 'steps', -1)})))))},
 
 #   else (steps > 0)
 #    bind (r_pos = neighborhood[r_dir])
@@ -224,7 +234,7 @@ sub poly_build_rule {
 				     ('orig', 'r_bond', 1,
 #      set r_pos.l_bond = 1
 				      $gram->setRule
-				      ('orig', 'l_bond', 1,
+				      ('r_pos', 'l_bond', 1,
 #      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
 				       $gram->incRule
 				       ('orig', 'r_dir', 'r_pos', 'l_dir', 4,
