@@ -62,7 +62,7 @@ $gram->xmllint($xmllint) if defined $xmllint;
 #         case 0: (paused)
 #          set r_pos.state = 3 (active)
 #          set r_pos.l_bond = 1
-#          set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+#          set r_pos.l_dir = [direction from r_pos to orig]
 #          set orig.state = 3 (active)
 #          set orig.r_bond = 1
 #    else (edges > 0)
@@ -78,7 +78,7 @@ $gram->xmllint($xmllint) if defined $xmllint;
 #      set orig.state = orig.tail_state
 #      set orig.r_bond = 1
 #      set r_pos.l_bond = 1
-#      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
+#      set r_pos.l_dir = [direction from r_pos to orig]
 #      set r_pos.tail_state = 3 (active)
 #      decrement r_pos.steps
 
@@ -102,6 +102,7 @@ $gram->xmllint($xmllint) if defined $xmllint;
 #   random_step
 
 my @moore_dir2xy = map ([$gram->dir->{$_}->x, $gram->dir->{$_}->y], qw(n ne e se s sw w nw));
+#@moore_dir2xy = map ([$gram->dir->{$_}->x, $gram->dir->{$_}->y], qw(n e s w));
 
 sub poly_rule {
     my ($gram, $type) = @_;
@@ -189,9 +190,9 @@ sub poly_build_rule {
 #          set r_pos.l_bond = 1
 							$gram->setRule
 							('r_pos', 'l_bond', 1,
-#          set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
-							 $gram->incRule
-							 ('orig', 'r_dir', 'r_pos', 'l_dir', 4,
+#          set r_pos.l_dir = [direction from r_pos to orig]
+							 $gram->setRule
+							 ('r_pos', 'l_dir', delta_dir($moore_dir2xy[$_],[0,0]),
 #          set orig.state = 3 (active)
 							  $gram->setRule
 							  ('orig', 'state', 3,
@@ -235,9 +236,9 @@ sub poly_build_rule {
 #      set r_pos.l_bond = 1
 				      $gram->setRule
 				      ('r_pos', 'l_bond', 1,
-#      set r_pos.l_dir = orig.r_dir + 4  (mutual bond directions)
-				       $gram->incRule
-				       ('orig', 'r_dir', 'r_pos', 'l_dir', 4,
+#      set r_pos.l_dir = [direction from r_pos to orig]
+				       $gram->setRule
+				       ('r_pos', 'l_dir', delta_dir($moore_dir2xy[$_],[0,0]),
 #      set r_pos.tail_state = 3 (active)
 					$gram->setRule
 					('r_pos', 'tail_state', 3,
@@ -261,7 +262,7 @@ sub moore_xy2dir {
 	    return $dir;
 	}
     }
-    die "Can't turn ($x,$y) into a Moore direction index";
+    confess "Can't turn ($x,$y) into a Moore direction index";
 }
 
 sub test_moore_neighbors {
