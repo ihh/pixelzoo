@@ -230,11 +230,23 @@ sub bindRule {
 	       defined($default) ? ('default' => $default) : () ]];
 }
 
+sub probRule {
+    my ($self, $p, $heads, $tails) = @_;
+    return $self->huffRule ($p, $heads, 1-$p, $tails);
+}
+
+sub huffRule {
+    my ($self, @dist) = @_;
+    confess "Bad distribution (@dist)" unless @dist % 2 == 0;
+    return $self->nopRule unless @dist;
+    return ['huff' => \@dist];
+}
+
 sub uniformHuffRule {
     my ($self, @opt) = @_;
     return $self->nopRule unless @opt;
     my $p = 1 / @opt;
-    return ['huff' => [ map (($p => $_), @opt) ]];
+    return $self->huffRule (map (($p => (defined($_) ? $_ : $self->nopRule)), @opt));
 }
 
 # macro expansions over compass directions
@@ -298,6 +310,22 @@ sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self
 sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
 sub huffBishop { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindBishop (1, $cases, $default, $loc)]] }
 sub huffMoore { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindMoore (1, $cases, $default, $loc)]] }
+
+# bindFwd
+# $dir_var_name: index into $dir2xy_ref
+# $next_sub: subroutine reference
+#  argument: the direction index
+#  return: two-element list (\%bind_case_hash, $default_rule)
+# $default: the rule to use if the direction variable is outside the allowed range (can be omitted)
+sub bindFwd {
+    my ($self, $dir_var_name, $dir2xy_ref, $next_sub, $default) = @_;
+    return $self->switchRule
+	('orig', $dir_var_name,
+	 defined($next_sub)
+	 ? { map (($_ => $self->bindRule ('fwd', @{$dir2xy_ref->[$_]}, &$next_sub($_))), 0..$#$dir2xy_ref) }
+	 : { },
+	 $default);
+}
 
 sub moveOrSpawnTo {
     my ($self, $spawnProb, $loc, $afterMove, $afterSpawn) = @_;

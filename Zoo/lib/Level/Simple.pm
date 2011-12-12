@@ -238,7 +238,6 @@ sub make_perfume {
 }
 
 
-
 # polymer cage builders
 # outline of program:
 
@@ -649,5 +648,33 @@ sub add_polymer_loop_builder {
 		    'rule' => poly_build_rule ($gram, $bond_xy, $step_xy, $edges, $turn_angle, $name));
 }
 
+sub add_guest {
+    my ($gram, $name, $rate, $step_xy, $turn_angle, $typical_run_length) = @_;
+    my $dir_bits = ceiling_bits (@$step_xy + 0);
+
+    my $turn = $gram->uniformHuffRule
+	(map ($gram->incRule
+	      ('orig', 'dir', 'orig', 'dir', $_),
+	      $turn_angle, -$turn_angle));
+
+    $gram->addType ('name' => $name,
+		    'vars' => [ $gram->var('dir') => $dir_bits ],
+		    'hue' => ['add' => 30],
+		    'sat' => ['add' => 255],
+		    'bri' => ['add' => 255],
+		    'rate' => $rate,
+		    'rule' => $gram->probRule
+		    (1 / $typical_run_length,
+		     $turn,
+		     $gram->bindFwd
+		     ('dir',
+		      $step_xy,
+		      sub {
+			  my ($dir) = @_;
+			  return
+			      ({ 'empty' => $gram->moveTo('fwd') },
+			       $turn);
+		      })));
+}
 
 1;

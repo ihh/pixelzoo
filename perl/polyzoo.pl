@@ -52,6 +52,18 @@ $gram->addTool ('name' => 'Polymer spray',
 		'spray' => 2500,
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
+# guest
+my ($guest_name, $guest_rate, $guest_run_length) = ("guest", .1, 20);
+$gram->add_guest ($guest_name, $guest_rate, $gram->neumann_xy, 1, $guest_run_length);
+
+$gram->addTool ('name' => $guest_name,
+		'size' => 8,
+		'gstate' => $guest_name,
+		'reserve' => 5,
+		'recharge' => 100,
+		'spray' => 100,
+		'overwrite' => [ 'gstate' => 'empty' ]);
+
 # add the simpletest stuff
 
 # cement
