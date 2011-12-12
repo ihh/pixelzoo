@@ -672,7 +672,8 @@ sub add_guest {
 		      sub {
 			  my ($dir) = @_;
 			  return
-			      ({ 'empty' => $gram->moveTo('fwd') },
+			      ({ 'empty' => $gram->moveTo ('fwd'),
+				 $name => $gram->incRule ('fwd', 'dir', 'orig', 'dir', 0) },
 			       $turn);
 		      })));
 }
