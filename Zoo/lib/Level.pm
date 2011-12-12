@@ -253,20 +253,46 @@ sub bindDirs {
 		@$dirs);
 }
 
+my @neumann_dirs = qw(n e s w);
 sub bindNeumann {
     my ($self, $totalProb, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(n e s w)], $totalProb, $cases, $default, $loc);
+    return $self->bindDirs (\@neumann_dirs, $totalProb, $cases, $default, $loc);
 }
 
+sub dirs_to_xy {
+    my ($self, @dirs) = @_;
+    return [map ([@{$self->dir->{$_}}{qw(x y)}], @dirs)];
+}
+
+sub neumann_xy {
+    my ($self) = @_;
+    return $self->dirs_to_xy (@neumann_dirs);
+}
+sub neumann_right_angle { 1 }
+
+my @bishop_dirs = qw(nw ne se sw);
 sub bindBishop {
     my ($self, $totalProb, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(nw ne se sw)], $totalProb, $cases, $default, $loc);
+    return $self->bindDirs (\@bishop_dirs, $totalProb, $cases, $default, $loc);
 }
 
+sub bishop_xy {
+    my ($self) = @_;
+    return $self->dirs_to_xy (@bishop_dirs);
+}
+sub bishop_right_angle { 1 }
+
+my @moore_dirs = qw(n ne e se s sw w nw);
 sub bindMoore {
     my ($self, $totalProb, $cases, $default, $loc) = @_;
-    return $self->bindDirs ([qw(n ne e se s sw w nw)], $totalProb, $cases, $default, $loc);
+    return $self->bindDirs (\@moore_dirs, $totalProb, $cases, $default, $loc);
 }
+
+sub moore_xy {
+    my ($self) = @_;
+    return $self->dirs_to_xy (@moore_dirs);
+}
+sub moore_right_angle { 2 }
 
 sub huffDirs { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindDirs (1, $cases, $default, $loc)]] }
 sub huffNeumann { my ($self, $cases, $default, $loc) = @_; return ['huff' => [$self->bindNeumann (1, $cases, $default, $loc)]] }
