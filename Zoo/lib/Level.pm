@@ -232,7 +232,7 @@ sub bindRule {
 
 sub probRule {
     my ($self, $p, $heads, $tails) = @_;
-    return $self->huffRule ($p, $heads, 1-$p, $tails);
+    return $self->huffRule ($p, $heads, 1-$p, defined($tails) ? $tails : $self->nopRule);
 }
 
 sub huffRule {

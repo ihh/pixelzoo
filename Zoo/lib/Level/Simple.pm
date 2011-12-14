@@ -649,7 +649,7 @@ sub add_polymer_loop_builder {
 }
 
 sub add_guest {
-    my ($gram, $name, $rate, $step_xy, $turn_angle, $typical_run_length) = @_;
+    my ($gram, $name, $rate, $step_xy, $turn_angle, $typical_run_length, $typical_stagger_time, $turn_prob) = @_;
     my $dir_bits = ceiling_bits (@$step_xy + 0);
 
     my $turn = $gram->uniformHuffRule
@@ -657,25 +657,42 @@ sub add_guest {
 	      ('orig', 'dir', 'orig', 'dir', $_),
 	      $turn_angle, -$turn_angle));
 
+    my $end_stagger_prob = 1 / $typical_stagger_time;
+
     $gram->addType ('name' => $name,
-		    'vars' => [ $gram->var('dir') => $dir_bits ],
+		    'vars' => [ $gram->var('dir') => $dir_bits, $gram->var('state') => 1 ],
 		    'hue' => ['add' => 30],
 		    'sat' => ['add' => 255],
 		    'bri' => ['add' => 255],
 		    'rate' => $rate,
-		    'rule' => $gram->probRule
-		    (1 / $typical_run_length,
-		     $turn,
-		     $gram->bindFwd
-		     ('dir',
-		      $step_xy,
-		      sub {
-			  my ($dir) = @_;
-			  return
-			      ({ 'empty' => $gram->moveTo ('fwd'),
-				 $name => $gram->incRule ('fwd', 'dir', 'orig', 'dir', 0) },
-			       $turn);
-		      })));
+		    'rule' => $gram->switchRule
+		    ('orig', 'state',
+		     { # State 0: stagger (Brownian motion, possibly ending in a turn)
+			 0 => $gram->huffRule
+			   ($gram->bindNeumann
+			    (1 - $end_stagger_prob,
+			     { 'empty' => $gram->moveTo ('nbr'),
+			       $name => $gram->incRule ('nbr', 'dir', 'orig', 'dir', 0,
+							$gram->setRule ('orig', 'state', 1)) }),
+			    $end_stagger_prob =>
+			    $gram->setRule
+			    ('orig', 'state', 1,
+			     $gram->probRule
+			     ($turn_prob, $turn))),
+		     # State 1: continue forward
+			 1 => $gram->probRule
+			     (1 / $typical_run_length,
+			      $turn,
+			      $gram->bindFwd
+			      ('dir',
+			       $step_xy,
+			       sub {
+				   my ($dir) = @_;
+				   return
+				       ({ 'empty' => $gram->moveTo ('fwd'),
+					  $name => $gram->incRule ('fwd', 'dir', 'orig', 'dir', 0) },
+					$gram->setRule ('orig', 'state', 0));
+			       }))}));
 }
 
 1;

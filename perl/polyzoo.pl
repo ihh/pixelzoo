@@ -53,8 +53,8 @@ $gram->addTool ('name' => 'Polymer spray',
 		'overwrite' => [ 'gstate' => 'empty' ]);
 
 # guest
-my ($guest_name, $guest_rate, $guest_run_length) = ("guest", .1, 32);
-$gram->add_guest ($guest_name, $guest_rate, $gram->neumann_xy, 1, $guest_run_length);
+my ($guest_name, $guest_rate, $guest_run_length, $guest_stagger_steps, $guest_turn_prob) = ("guest", .1, 32, 6, .5);
+$gram->add_guest ($guest_name, $guest_rate, $gram->neumann_xy, 1, $guest_run_length, $guest_stagger_steps, $guest_turn_prob);
 
 $gram->addTool ('name' => $guest_name,
 		'size' => 8,
