@@ -8,11 +8,32 @@ PKGCONFIG = pkg-config
 SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
 SDL_LDFLAGS := $(shell $(SDLCONFIG) --libs) -L/usr/X11R6/lib -lXi
 
+
 # Use of pkg-config can be commented out & replaced with hardwired gcc args, to combat MacPorts libxml flakiness -IH 5/4/2011
 XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
 XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
-#XML_CFLAGS  := -I/usr/include/libxml2
-#XML_LDFLAGS := -L/usr/lib -lxml2 -lpthread -lz -lm
+
+
+# Hardwired libxml2 cc/link args for Mac:
+# XML_CFLAGS  := -I/usr/include/libxml2
+# XML_LDFLAGS := -L/usr/lib -lxml2 -lpthread -lz -lm
+
+
+# Hardwired libxml2 cc/link args for local copy of libxml2 source tree:
+# XML_CFLAGS  := -Iext/libxml2-2.9.0/include
+# XML_LDFLAGS := -Lext/libxml2-2.9.0 -lxml2 -lpthread -lz -lm
+
+# Uncomment and build this target to create local copy of libxml2 source tree:
+# ext:
+# 	mkdir $@
+# 	cd $@; \
+# 	wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0.tar.gz; \
+# 	tar xvzf libxml2-2.9.0.tar.gz; \
+# 	cd libxml2-2.9.0; \
+# 	./configure --without-threads; \
+# 	make
+
+
 
 CC          := gcc
 AR          := ar
@@ -32,7 +53,7 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 
 XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
-all: lib targets
+all: libtargets targets
 
 clean:
 	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES)
@@ -50,7 +71,7 @@ timed-sdl: targets
 
 targets: $(XFILES)
 
-lib: $(LIBTARGET)
+libtargets: $(LIBTARGET)
 
 bin/%:  tsrc/%.c $(LIBTARGET)
 	@test -e bin || mkdir bin
