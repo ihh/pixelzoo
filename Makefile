@@ -23,7 +23,7 @@ XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
 # XML_CFLAGS  := -Iext/libxml2-2.9.0/include
 # XML_LDFLAGS := -Lext/libxml2-2.9.0 -lxml2 -lpthread -lz -lm
 
-# Uncomment and build this target to create local copy of libxml2 source tree:
+# Uncomment and build this target ("make ext") to create local copy of libxml2 source tree:
 # ext:
 # 	mkdir $@
 # 	cd $@; \
