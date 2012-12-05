@@ -8,7 +8,7 @@ A client-server architecture for 2D cellular automata simulations.
 Introduction
 ============
 
-PixelZoo is a project-in-progress to build an open source multiplayer
+PixelZoo is a project-in-progress to build a multiplayer
 turn-based game using fast two-dimensional stochastic Cellular
 Automata (CA).
 
