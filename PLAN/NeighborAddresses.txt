@@ -2,10 +2,14 @@ Fix perl/polyzoo.pl DTD validation bug(s)
 Update Zoo/dtd/{game,proto}.dtd
  <!ELEMENT neighbor (loc,x?,y?)>  ... location ID ('loc') is a string in both proto.dtd and game.dtd
 Add new AddressRule/AddressRuleParams (rule.{h,c}) ... location ID is a non-negative integer (add a 'StringVector neighborName' to Board; xmlboard.c will maintain dictionary of location strings->integers)
+ ... AddressRuleParams allows absolute assignments (east=(+1,0)) and symbolic assignments (fwd=east)
+ ... Add new <global> neighborhood declarations to top level of board XML
 Add 'int neighborAddressBufferSize' count to Board (board.{h,c}), initially 0, set by addParticleToBoard to (maxLocationID + 1)
-Add 'struct CellAddress { int x, y }' to Board
-Add 'CellAddress* neighborAddress' buffer to Board, set by allocateBoardNeighborAddressBuffer(), freed by deleteBoard()
-Modify attemptRule (board.{h,c}) to store neighbor address bindings in neighborAddress[], and use these in Lookup/Modify/Deliver rules
+Add 'map<int,LocalOffset*> neighborAddress' buffer to Board
+Modify attemptRule (board.{h,c}) to record neighbor address bindings in neighborAddress[], and use these in Lookup/Modify/Deliver rules
+ ... addresses can never be changed once bound - they are constant
+ ... reset neighborAddress[] to global declarations (by shallow copy) when attemptRule() is first called, and whenever a Deliver rule is applied
+ ... custom destructor that takes two neighborAddress maps (where #2 was shallow-copied from #1) & deletes elements from #2 that aren't in #1
 Update XML parsers (existing syntax = shorthand for new syntax) of...
  <switch>, <modify>, <deliver> in game.dtd (involves hacking C XML parsers in xmlboard.c)
   ...XML parser should disallow references to locations that were not set by an outer rule
@@ -14,3 +18,4 @@ Update XML parsers (existing syntax = shorthand for new syntax) of...
  <bind>, <switch>, <modify>, <deliver> in proto.dtd (involves hacking Perl)
   ...all rules must output new-style locations
 Add a new test (diffusion particle)
+Add new GosubRule/GosubRuleParams (rule.{h,c},board.{h,c},xmlboard.{h,c}) ... allows implementation of Moore neighborhood, polymer neighborhoods, etc, as subroutines
