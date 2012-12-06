@@ -1,0 +1,15 @@
+Fix perl/polyzoo.pl DTD validation bug(s)
+Update Zoo/dtd/{game,proto}.dtd
+ <!ELEMENT neighbor (loc,x?,y?)>  ... location ID ('loc') is a string in both proto.dtd and game.dtd
+Add new AddressRule/AddressRuleParams (rule.{h,c}) ... location ID is a non-negative integer (add a 'StringVector neighborName' to Board; xmlboard.c will maintain dictionary of location strings->integers)
+Add 'int neighborAddressBufferSize' count to Board (board.{h,c}), initially 0, set by addParticleToBoard to (maxLocationID + 1)
+Add 'struct CellAddress { int x, y }' to Board
+Add 'CellAddress* neighborAddress' buffer to Board, set by allocateBoardNeighborAddressBuffer(), freed by deleteBoard()
+Modify attemptRule (board.{h,c}) to store neighbor address bindings in neighborAddress[], and use these in Lookup/Modify/Deliver rules
+Update XML parsers (existing syntax = shorthand for new syntax) of...
+ <switch>, <modify>, <deliver> in game.dtd (involves hacking C XML parsers in xmlboard.c)
+  ...XML parser should disallow references to locations that were not set by an outer rule
+  ...this means that newRuleFromXmlNode (etc), in xmlboard.c, needs to pass back a set of location IDs (strings) referenced by all descendant rules in that subtree, as well as the location string->int dictionary
+ <bind>, <switch>, <modify>, <deliver> in proto.dtd (involves hacking Perl)
+Add a new test (diffusion particle)
+
