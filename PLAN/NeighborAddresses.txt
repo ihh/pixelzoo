@@ -10,6 +10,7 @@ Update XML parsers (existing syntax = shorthand for new syntax) of...
  <switch>, <modify>, <deliver> in game.dtd (involves hacking C XML parsers in xmlboard.c)
   ...XML parser should disallow references to locations that were not set by an outer rule
   ...this means that newRuleFromXmlNode (etc), in xmlboard.c, needs to pass back a set of location IDs (strings) referenced by all descendant rules in that subtree, as well as the location string->int dictionary
+  ...old-style locations (src,dest,pos) should be DISALLOWED, so at least one test needs to be updated (t/simple.xml) maybe by wrapping it with some compass-direction bindings (n,e,s,w)
  <bind>, <switch>, <modify>, <deliver> in proto.dtd (involves hacking Perl)
+  ...all rules must output new-style locations
 Add a new test (diffusion particle)
-
