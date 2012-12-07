@@ -1,4 +1,13 @@
 Fix perl/polyzoo.pl DTD validation bug(s)
+
+The main arguments AGAINST implementing some kind of "addressable neighborhood" as described here:
+ ... code won't be perfectly replicated in all cells of the neighborhood anyway (e.g. polymer diffusion)
+ ... it's trying to make a programming language out of minimal assembly language by sneaking through the backdoor and it's becoming a horrible mess
+
+On balance - stick with the current setup. Focus language development efforts on a nice little XML-spewing language that sits upstream. (OCaml with TyXML or xmlm?)
+
+Here's the old (abandoned) plan, for reference...
+
 Update Zoo/dtd/{game,proto}.dtd
  <!ELEMENT neighbor (loc,x?,y?)>  ... location ID ('loc') is a string in both proto.dtd and game.dtd
 Add new AddressRule/AddressRuleParams (rule.{h,c}) ... location ID is a non-negative integer (add a 'StringVector neighborName' to Board; xmlboard.c will maintain dictionary of location strings->integers)
