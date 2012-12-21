@@ -102,7 +102,11 @@ int main( int argc, char *argv[] )
     pzAbort ("Game file not specified");
   }
   
+  printf ("Loading XML game file...\n");
+
   sdlGame = newSDLGame (gameFilename, moveLogFilename != NULL);
+
+  printf ("Game file successfully loaded.\n\nPress up-arrow to cycle through available tools.\n(Any further text beyond this point comes from the game file.)\n======================================================================\n\n");
 
   while( pzGameRunning(sdlGame->game) && (totalMicroticks == 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
     {
