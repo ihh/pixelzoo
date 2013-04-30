@@ -102,7 +102,11 @@ int main( int argc, char *argv[] )
     pzAbort ("Game file not specified");
   }
   
+  printf ("Loading XML game file...\n");
+
   sdlGame = newSDLGame (gameFilename, moveLogFilename != NULL);
+
+  printf ("Game file successfully loaded.\n\nPress up- and down-arrow to cycle through tools, or 't' to list all available tools.\n(Any further text beyond this point comes from the game file.)\n======================================================================\n\n");
 
   while( pzGameRunning(sdlGame->game) && (totalMicroticks == 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
     {
@@ -145,15 +149,15 @@ int main( int argc, char *argv[] )
 		  toolNum = (pzGetSelectedToolNumber(sdlGame->game) + 1) % tools;
 		  pzSelectTool (sdlGame->game, toolNum);
 		  pzt = pzGetToolByNumber(sdlGame->game,toolNum);
-		  printf ("Selected tool: %s   Reserve: %g\n", pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
+		  printf ("Selected tool (#%d): %s   Reserve: %g\n", toolNum + 1, pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
 		  break;
 
 		case SDLK_DOWN:
 		  tools = pzGetNumberOfTools(sdlGame->game);
-		  toolNum = (pzGetSelectedToolNumber(sdlGame->game) + 1) % tools;
+		  toolNum = (pzGetSelectedToolNumber(sdlGame->game) + tools - 1) % tools;
 		  pzSelectTool (sdlGame->game, toolNum);
 		  pzt = pzGetToolByNumber(sdlGame->game,toolNum);
-		  printf ("Selected tool: %s   Reserve: %g\n", pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
+		  printf ("Selected tool (#%d): %s   Reserve: %g\n", toolNum + 1, pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
 		  break;
 
 		default:

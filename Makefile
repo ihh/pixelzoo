@@ -6,7 +6,7 @@ SDLCONFIG = sdl-config
 PKGCONFIG = pkg-config
 
 SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
-SDL_LDFLAGS := $(shell $(SDLCONFIG) --libs) -L/usr/X11R6/lib -lXi
+SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs) -L/usr/X11R6/lib -lXi
 
 # Former libxml2 dependency:
 # XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
@@ -32,7 +32,7 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 
 XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
-all: lib targets
+all: libtargets targets
 
 clean:
 	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES)
@@ -50,7 +50,7 @@ timed-sdl: targets
 
 targets: $(XFILES)
 
-lib: $(LIBTARGET)
+libtargets: $(LIBTARGET)
 
 bin/%:  tsrc/%.c $(LIBTARGET)
 	@test -e bin || mkdir bin
@@ -70,13 +70,6 @@ $(LIBTARGET): $(OFILES)
 
 
 test: all xmltest eloise-pztest xml-valid-test xml-build-test
-
-# The following target builds and runs a simple XML reader, without any other SDL or pixelzoo targets
-# It can be used to test libxml2 on a new platform.
-xmltest:
-	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(XML_CFLAGS) -lc $(XML_LDFLAGS) -o bin/xmltest tsrc/xmltest.c
-	bin/xmltest t/testgame.xml
 
 # Simple replay test, constructed as follows:
 #
