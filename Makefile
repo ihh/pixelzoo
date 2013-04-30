@@ -8,17 +8,17 @@ PKGCONFIG = pkg-config
 SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
 SDL_LDFLAGS := $(shell $(SDLCONFIG) --libs) -L/usr/X11R6/lib -lXi
 
-# Use of pkg-config can be commented out & replaced with hardwired gcc args, to combat MacPorts libxml flakiness -IH 5/4/2011
-XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
-XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
-#XML_CFLAGS  := -I/usr/include/libxml2
-#XML_LDFLAGS := -L/usr/lib -lxml2 -lpthread -lz -lm
+# Former libxml2 dependency:
+# XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
+# XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
+XML_CFLAGS  := 
+XML_LDFLAGS :=
 
 CC          := gcc
 AR          := ar
 COPTS       := -g -Wall
 CFLAGS      := $(XML_CFLAGS) $(SDL_CFLAGS) -Isrc
-ANSI        := -ansi
+ANSI        := -ansi -std=c99
 LIBS        := -lc $(XML_LDFLAGS) $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
 

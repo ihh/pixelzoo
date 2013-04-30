@@ -100,7 +100,7 @@ xmlNode* getNodeByName (xmlNode* node, char* name) {
 }
 
 xmlChar* getNodeContent (xmlNode* node) {
-  return node->children->content;
+  return (xmlChar*) node->children->content;
 }
 
 xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
@@ -115,13 +115,13 @@ xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag) {
     fprintf (stderr, "Missing children for tag: %s\n", tag);
     Abort("XML parse error");
   }
-  return node->children->content;
+  return (xmlChar*) node->children->content;
 }
 
 xmlChar* getAttrByName (xmlNode* node, char* name) {
   xmlAttr* attr;
   for (attr = node->properties; attr; attr = attr->next)
     if (strcmp ((const char*) attr->name, name) == 0)
-      return attr->children->content;
+      return (xmlChar*) attr->children->content;
   return (xmlChar*) NULL;
 }

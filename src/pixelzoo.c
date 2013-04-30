@@ -4,6 +4,7 @@
 #include "pzutil.h"
 #include "xmlgame.h"
 #include "xmlmove.h"
+#include "xmlparser.h"
 
 #define MAX_PROPORTION_TIME_EVOLVING .9  /* so that gameLoop doesn't eat 100% of the time between updates */
 
@@ -308,9 +309,7 @@ int pzGetBalloonTextRgb(pzGame pzg,pzBalloon pzb) {
 double pzGetBalloonOpacity(pzBalloon pzb) { return ((Balloon*)pzb)->opacity; }
 
 const char* pzSaveMoveAsXmlString(pzGame pzg) {
-  xmlBufferPtr buf;
   xmlTextWriterPtr writer;
-  int rc;
   const char* str;
   Game* game;
   game = (Game*) pzg;
@@ -318,45 +317,26 @@ const char* pzSaveMoveAsXmlString(pzGame pzg) {
   str = NULL;
   if (game->board->moveLog)
     {
-      buf = xmlBufferCreate();
-      if (buf) {
-	writer = xmlNewTextWriterMemory(buf, 0);
-	if (writer)
-	  if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
-	    writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
-	    rc = xmlTextWriterEndDocument(writer);
-	    if (rc >= 0) {
-	      str = SafeCalloc (xmlBufferLength(buf) + 1, sizeof(char));
-	      strcpy ((char*) str, (char*) buf->content);
-	    }
-	  }
-	xmlBufferFree (buf);
+      writer = newXmlTextWriter();
+      if (writer) {
+	writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+	str = (const char*) deleteXmlTextWriterLeavingText (writer);
       }
     }
   return str;
 }
 
 const char* pzSaveBoardAsXmlString(pzGame pzg) {
-  xmlBufferPtr buf;
   xmlTextWriterPtr writer;
-  int rc;
   const char* str;
   Game* game;
   game = (Game*) pzg;
   str = NULL;
   boardReleaseRandomNumbers (game->board);
-  buf = xmlBufferCreate();
-  if (buf) {
-    writer = xmlNewTextWriterMemory(buf, 0);
-    if (xmlTextWriterStartDocument (writer, NULL, NULL, NULL) >= 0) {
-      writeBoard (game->board, writer, 1);
-      rc = xmlTextWriterEndDocument(writer);
-      if (rc >= 0) {
-	str = SafeCalloc (buf->use + 1, sizeof(char));
-	strcpy ((char*) str, (char*) buf->content);
-      }
-    }
-    xmlBufferFree (buf);
+  writer = newXmlTextWriter();
+  if (writer) {
+    writeBoard (game->board, writer, 1);
+    str = (const char*) deleteXmlTextWriterLeavingText (writer);
   }
   return str;
 }

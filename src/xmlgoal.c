@@ -1,4 +1,5 @@
 #include <string.h>
+#include "xmlparser.h"
 #include "xmlgoal.h"
 #include "xmlboard.h"
 #include "xmlutil.h"

@@ -12,7 +12,7 @@ GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *node);
 Game* newGameFromXmlFile (const char* filename) {
   xmlDoc* doc;
   Game* game = NULL;
-  doc = xmlReadFile (filename, NULL, 0);
+  doc = xmlTreeFromFile (filename);
   Assert (doc != NULL, "XML file not found");
   if (doc)
     game = newGameFromXmlDocument (doc);
@@ -22,7 +22,7 @@ Game* newGameFromXmlFile (const char* filename) {
 Game* newGameFromXmlString (const char* string) {
   xmlDoc* doc;
   Game* game = NULL;
-  doc = xmlReadMemory (string, strlen(string), "noname.xml", NULL, 0);
+  doc = xmlTreeFromString (string);
   Assert (doc != NULL, "XML string not parsed");
   game = newGameFromXmlDocument (doc);
   return game;
@@ -44,9 +44,9 @@ Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separate
 Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* boardString) {
   xmlDoc *doc, *boardDoc;
   Game* game = NULL;
-  doc = xmlReadMemory (gameString, strlen(gameString), "noname.xml", NULL, 0);
+  doc = xmlTreeFromString (gameString);
   Assert (doc != NULL, "Game XML string not parsed");
-  boardDoc = xmlReadMemory (boardString, strlen(boardString), "noname.xml", NULL, 0);
+  boardDoc = xmlTreeFromString (boardString);
   Assert (boardDoc != NULL, "Board XML string not parsed");
   game = newGameFromXmlDocumentWithSeparateBoard (doc, boardDoc);
   return game;

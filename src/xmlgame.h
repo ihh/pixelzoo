@@ -1,8 +1,8 @@
 #ifndef XMLGAME_INCLUDED
 #define XMLGAME_INCLUDED
 
-#include <libxml/tree.h>
 #include "game.h"
+#include "xmlparser.h"
 
 /* XML node names */
 #define XMLZOO_GAME       "game"

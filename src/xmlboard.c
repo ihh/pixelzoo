@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "xmlparser.h"
 #include "xmlboard.h"
 #include "xmlutil.h"
 #include "xmlgoal.h"
@@ -76,7 +77,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
 Board* newBoardFromXmlFile (void *game, const char* filename) {
   xmlDoc* doc;
   Board* board = NULL;
-  doc = xmlReadFile (filename, NULL, 0);
+  doc = xmlTreeFromFile (filename);
   if (doc)
     board = newBoardFromXmlDocument (game, doc);
   return board;
@@ -85,7 +86,7 @@ Board* newBoardFromXmlFile (void *game, const char* filename) {
 Board* newBoardFromXmlString (void *game, const char* string) {
   xmlDoc* doc;
   Board* board = NULL;
-  doc = xmlReadMemory (string, strlen(string), "noname.xml", NULL, 0);
+  doc = xmlTreeFromString (string);
   if (doc)
     board = newBoardFromXmlDocument (game, doc);
   return board;

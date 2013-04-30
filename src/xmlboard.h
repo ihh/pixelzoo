@@ -1,10 +1,8 @@
 #ifndef XMLBOARD_INCLUDED
 #define XMLBOARD_INCLUDED
 
-#include <libxml/tree.h>
-#include <libxml/xmlwriter.h>
-
 #include "board.h"
+#include "xmlparser.h"
 
 /* XML node names */
 #define XMLZOO_BOARD       "board"

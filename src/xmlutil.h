@@ -2,7 +2,8 @@
 #define XMLUTIL_INCLUDED
 
 #include <string.h>
-#include <libxml/tree.h>
+#include "xmlparser.h"
+#include "xmlutil.h"
 
 /* This header file is "private" to the PixelZoo XML adapter.
    It should not be #include'd from public .h files.

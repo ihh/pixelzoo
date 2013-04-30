@@ -2,7 +2,6 @@
 #define XMLMOVE_INCLUDED
 
 #include <stdio.h>
-#include <libxml/xmlwriter.h>
 
 #include "move.h"
 #include "xmlboard.h"
