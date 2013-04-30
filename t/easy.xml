@@ -1,0 +1,5 @@
+<test>
+ <something>blah</something>
+ <also><this></this></also>
+ <attributes are="a pain" all=theTime></attributes>
+</test>
