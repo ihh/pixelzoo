@@ -164,3 +164,7 @@ doxygen-doc:
 
 dtddoc-doc:
 	cd Zoo/dtd; make
+
+
+# emscripten notes
+# cd ext/libxml2-2.9.0; /usr/local/src/emscripten/emconfigure ./configure --without-c14n --without-catalog --without-debug --without-docbook --without-ftp --without-html --without-http --without-iconv --without-iso8859x --without-pattern --without-push --without-python --without-reader --without-regexps --without-sax1 --without-schemas --without-schematron --without-threads --without-xinclude --without-xpath --without-xptr --without-modules --without-zlib --without-lzma
