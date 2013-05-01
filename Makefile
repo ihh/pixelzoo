@@ -136,3 +136,7 @@ doxygen-doc:
 
 dtddoc-doc:
 	cd Zoo/dtd; make
+
+# emscripten
+bin/pztest.js:
+	/usr/local/src/emscripten/emmake make -f Makefile.em
