@@ -74,15 +74,6 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   return board;
 }
 
-Board* newBoardFromXmlFile (void *game, const char* filename) {
-  xmlDoc* doc;
-  Board* board = NULL;
-  doc = xmlTreeFromFile (filename);
-  if (doc)
-    board = newBoardFromXmlDocument (game, doc);
-  return board;
-}
-
 Board* newBoardFromXmlString (void *game, const char* string) {
   xmlDoc* doc;
   Board* board = NULL;

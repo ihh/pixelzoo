@@ -63,7 +63,6 @@
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
 Board* newBoardFromXmlRoot (void *game, xmlNode *root);
-Board* newBoardFromXmlFile (void *game, const char* filename);
 Board* newBoardFromXmlString (void *game, const char* string);
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */

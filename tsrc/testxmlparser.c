@@ -1,6 +1,7 @@
 #include "util.h"
 #include "xmlutil.h"
 #include "xmlparser.h"
+#include "fileio.h"
 
 int main (int argc, char **argv) {
   const char *s, *t;

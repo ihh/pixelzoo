@@ -39,58 +39,6 @@ unsigned long long hexToUnsignedLongLong( const char *ca ) {
   return ig;
 }
 
-/* file I/O */
-const char* readStringFromFile (const char* filename) {
-  FILE* fp;
-  long size;
-  char* buf;
-  int success;
-  buf = NULL;
-  if (filename) {
-    success = 0;
-    fp = fopen(filename, "r");
-    if (fp) {
-      fseek(fp, 0, SEEK_END);
-      size = ftell(fp);
-      fseek(fp, 0, SEEK_SET);
-      buf = SafeMalloc(size + 1);
-      if (fread (buf, size, 1, fp)) {
-	success = 1;
-	buf[size] = '\0';
-      }
-      fclose(fp);
-    }
-    if (!success) {
-      fprintf (stderr, "Couldn't read file '%s'\n", filename);
-      exit(1);
-    }
-  }
-  return buf;
-}
-
-void writeStringToFile (const char* filename, const char* contents) {
-  FILE* fp;
-  int success;
-  if (filename) {
-    fp = fopen(filename, "w");
-    if (fp) {
-      if (contents)
-	if (fwrite (contents, strlen(contents), 1, fp))
-	  success = 1;
-      fclose(fp);
-    }
-    if (!success) {
-      fprintf (stderr, "Couldn't write file '%s'\n", filename);
-      exit(1);
-    }
-  }
-}
-
-void writeStringToFileAndDelete (const char* filename, const char* contents) {
-  writeStringToFile (filename, contents);
-  SafeFree ((void*) contents);
-}
-
 /* private builder methods */
 xmlNode* getNodeByName (xmlNode* node, char* name) {
   for (; node; node = node->next)

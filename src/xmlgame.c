@@ -9,16 +9,6 @@
 GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *node);
 
 /* method defs */
-Game* newGameFromXmlFile (const char* filename) {
-  xmlDoc* doc;
-  Game* game = NULL;
-  doc = xmlTreeFromFile (filename);
-  Assert (doc != NULL, "XML file not found");
-  if (doc)
-    game = newGameFromXmlDocument (doc);
-  return game;
-}
-
 Game* newGameFromXmlString (const char* string) {
   xmlDoc* doc;
   Game* game = NULL;

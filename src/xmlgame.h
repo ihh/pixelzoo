@@ -27,7 +27,6 @@
 /* methods */
 Game* newGameFromXmlDocument (xmlDoc *doc);
 Game* newGameFromXmlRoot (xmlNode *root);
-Game* newGameFromXmlFile (const char* filename);
 Game* newGameFromXmlString (const char* string);
 
 Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separateBoardDoc);

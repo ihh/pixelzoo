@@ -154,15 +154,6 @@ xmlNode* xmlTreeFromString (const char* s) {
   return newXmlNodeFromTagBlock (&s);
 }
 
-xmlNode* xmlTreeFromFile (const char* filename) {
-  const char* s;
-  xmlNode* node;
-  s = readStringFromFile (filename);
-  node = xmlTreeFromString (s);
-  SafeFree ((char*) s);
-  return node;
-}
-
 void deleteXmlTree (xmlNode* root) {
   xmlNode *child;
   for (child = root->children; child; child = child->next)

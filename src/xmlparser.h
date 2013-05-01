@@ -32,7 +32,6 @@ xmlNode* newXmlNode (xmlElementType type, const char* nameStart, const char* nam
 void deleteXmlTree (xmlNode* root);
 
 xmlNode* xmlTreeFromString (const char* str);
-xmlNode* xmlTreeFromFile (const char* filanem);
 const char* xmlTreeToString (const xmlNode* node);
 
 xmlTextWriterPtr newXmlTextWriter();

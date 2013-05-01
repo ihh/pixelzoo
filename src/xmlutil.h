@@ -9,11 +9,6 @@
    It should not be #include'd from public .h files.
  */
 
-/* functions to read/write files */
-const char* readStringFromFile (const char* filename);  /* caller must free the string */
-void writeStringToFile (const char* filename, const char* contents);
-void writeStringToFileAndDelete (const char* filename, const char* contents);
-
 /* functions to convert decimal/hexadecimal strings to 64-bit ints.
    basically the 64-bit versions of atoi() and strtoi()
  */
