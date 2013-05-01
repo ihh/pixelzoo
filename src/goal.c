@@ -4,6 +4,11 @@
 #include "tool.h"
 #include "game.h"
 
+/* uncomment the #define to log all board writes to stderr */
+/*
+#define DEBUG
+*/
+
 /* private function prototypes */
 int testEntropyGoal (Goal* goal, Board *board);
 int testEnclosuresGoal (Goal* goal, Board *board);
@@ -447,7 +452,9 @@ int testGoalMet (Goal* goal, void *voidGame) {
 
   case PrintMessagePseudoGoal:
     printToGameConsole (game, (char*) goal->context, PaletteWhite, 1.);
-    printf ("%s\n", (char*) goal->context);
+#ifdef DEBUG
+    fprintf (stderr, "%s\n", (char*) goal->context);
+#endif /* DEBUG */
     return 1;
 
   case PlaceBalloonPseudoGoal:

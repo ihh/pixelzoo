@@ -5,6 +5,11 @@
 #include "notify.h"
 #include "tool.h"
 
+/* uncomment the #define to log all board writes to stderr */
+/*
+#define DEBUG
+*/
+
 /* buffer size for log messages */
 #define LOG_BUFFER_SIZE 256
 
@@ -167,7 +172,9 @@ State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, Sta
       ++game->theExit.soFar;
       sprintf (exitPortalLogBuf, "%d %s%s reached the exit!", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s have" : " has");
       printToGameConsole (game, exitPortalLogBuf, PaletteWhite, 1.);
-      printf ("%s\n", exitPortalLogBuf);
+#ifdef DEBUG
+      fprintf (stderr, "%s\n", exitPortalLogBuf);
+#endif /* DEBUG */
     }
   }
   return readBoardStateUnguarded(board,x,y);

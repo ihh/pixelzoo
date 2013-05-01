@@ -10,9 +10,8 @@
 #include "mersenne.h"
 
 /* uncomment the #define to log all board writes to stderr */
-#undef BOARD_DEBUG
 /*
-#define BOARD_DEBUG
+#define DEBUG
 */
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
@@ -99,9 +98,9 @@ void replayBoardMove (Board* board) {
   board->sampledNextAsyncEventTime = 0;
   board->sampledNextSyncEventTime = 0;
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
   fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 
   writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);  /* auto-increments updateCount */
   (void) MoveListShift (board->moveQueue);
@@ -151,9 +150,9 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) 
   if (!board->syncWrite[i])
     board->sync[i] = state;
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
   fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 
 }
 
@@ -163,9 +162,9 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State sta
   board->sync[i] = state;
   board->syncWrite[i] = 1;
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
   fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 
 }
 
@@ -479,9 +478,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
       fprintf (stderr, "Synchronizing board\n");
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 
       syncBoard (board);
       ++board->updateCount;
@@ -499,9 +498,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
       fprintf (stderr, "Updating synchronized cell at (%d,%d)\n", x, y);
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 			
       evolveBoardCellSync (board, x, y);
       ++cellUpdates;
@@ -519,9 +518,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
       fprintf (stderr, "Updating asynchronous cell at (%d,%d)\n", x, y);
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
@@ -537,9 +536,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
     } else {  /* reached target time */
 
-#ifdef BOARD_DEBUG
+#ifdef DEBUG
       fprintf (stderr, "Reached target time\n");
-#endif /* BOARD_DEBUG */
+#endif /* DEBUG */
 
       board->microticks = microticksAtTarget;
       break;

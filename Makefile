@@ -16,7 +16,7 @@ ANSI        := -ansi -std=c99
 LIBS        := -lc $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
 
-TARGETS   := test_red_black_tree sdlgame pztest
+TARGETS   := test_red_black_tree sdlgame pztest hardcoded-eloise-pztest
 LIBDIR    := lib
 LIBNAME   := pixelzoo
 LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
@@ -88,6 +88,9 @@ eloise-pztest: targets
 	bin/pztest $(ELOISE_TEST_ARGS)
 	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
 	diff t/eloise_board.xml t/eloise_copy_board.xml
+
+hardcoded-eloise-pztest: targets
+	time bin/hardcoded-eloise-pztest
 
 eloise: eloise-sdl-test eloise-pztest
 
