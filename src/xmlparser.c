@@ -9,6 +9,9 @@
 #define XML_WRITE_BUFFER_INITIAL_SIZE 1024
 
 void writeXmlNode (xmlTextWriterPtr writer, const xmlNode* node);
+xmlNode* newXmlNodeFromTagBlock (const char** s);
+void xmlTextWriterVWriteFormat (xmlTextWriterPtr writer, const char* fmt, va_list argptr);
+void xmlTextWriterWriteFormat (xmlTextWriterPtr writer, const char* fmt, ...);
 
 xmlNode* newXmlNodeFromTagBlock (const char** s) {
   xmlNode *node, *child, *firstChild, *firstProp, *lastChild, *lastProp;

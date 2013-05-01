@@ -53,7 +53,7 @@ $gram->addTool ('name' => "$cementName spray",
 		'reserve' => 1000,
 		'recharge' => 100,
 		'spray' => 1000,
-		'overwrite' => [ 'gstate' => 'empty' ]);
+		'overwrite' => [ 'gstate' => $gram->empty ]);
 }
 
 sub make_wall {
@@ -419,7 +419,7 @@ sub poly_build_rule {
 			    $gram->bindRule
 			    ('r_pos', @{$bond_dir2xy->[$_]},
 #     case empty:
-			     { 'empty' =>
+			     { $gram->empty =>
 #      set r_pos = orig
 				   $gram->copyTo
 				   ('r_pos',
@@ -671,9 +671,9 @@ sub add_guest {
 			 0 => $gram->huffRule
 			   ($gram->bindNeumann
 			    (1 - $end_stagger_prob,
-			     { 'empty' => $gram->moveTo ('nbr'),
-			       $name => $gram->incRule ('nbr', 'dir', 'orig', 'dir', 0,
-							$gram->setRule ('orig', 'state', 1)) }),
+			     [ $gram->bmatch($gram->empty) => $gram->moveTo ('nbr'),
+			       $gram->bmatch($name) => $gram->incRule ('nbr', 'dir', 'orig', 'dir', 0,
+								       $gram->setRule ('orig', 'state', 1)) ]),
 			    $end_stagger_prob =>
 			    $gram->setRule
 			    ('orig', 'state', 1,
@@ -689,7 +689,7 @@ sub add_guest {
 			       sub {
 				   my ($dir) = @_;
 				   return
-				       ({ 'empty' => $gram->moveTo ('fwd'),
+				       ({ $gram->empty => $gram->moveTo ('fwd'),
 					  $name => $gram->incRule ('fwd', 'dir', 'orig', 'dir', 0) },
 					$gram->setRule ('orig', 'state', 0));
 			       }))}));
