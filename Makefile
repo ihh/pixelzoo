@@ -11,7 +11,7 @@ SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs) -L/usr/X11R6/lib -lXi
 CC          := gcc
 AR          := ar
 COPTS       := -g -Wall
-CFLAGS      := $(SDL_CFLAGS) -Isrc
+CFLAGS      := $(SDL_CFLAGS) -Isrc -Itsrc
 ANSI        := -ansi -std=c99
 LIBS        := -lc $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
@@ -149,5 +149,10 @@ README.html: README.md
 	perl -e 'use Text::Markdown "markdown";print markdown(join("",<>))' $< >$@
 
 # emscripten
-bin/pztest.js:
-	/usr/local/src/emscripten/emmake make -f Makefile.em
+em: em-test
+
+em-all:
+	/usr/local/src/emscripten/emmake make -f Makefile.em all
+
+em-test: test
+	/usr/local/src/emscripten/emmake make -f Makefile.em test
