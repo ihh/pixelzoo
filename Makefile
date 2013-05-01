@@ -156,3 +156,6 @@ em-all:
 
 em-test: test
 	/usr/local/src/emscripten/emmake make -f Makefile.em test
+
+em-html:
+	/usr/local/src/emscripten/emmake make -f Makefile.em html
