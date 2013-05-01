@@ -335,7 +335,7 @@ const char* pzSaveBoardAsXmlString(pzGame pzg) {
   boardReleaseRandomNumbers (game->board);
   writer = newXmlTextWriter();
   if (writer) {
-    writeBoard (game->board, writer, 1);
+    writeBoardXml (game->board, writer, 1);
     str = (const char*) deleteXmlTextWriterLeavingText (writer);
   }
   return str;

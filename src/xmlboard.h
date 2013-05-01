@@ -66,8 +66,9 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root);
 Board* newBoardFromXmlFile (void *game, const char* filename);
 Board* newBoardFromXmlString (void *game, const char* string);
 
-void writeBoard (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
-void writeTypes (Board* board, xmlTextWriterPtr writer);
-void writeGVars (Board* board, State s, xmlTextWriterPtr writer);
+void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
+void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
+void writeTypesXml (Board* board, xmlTextWriterPtr writer);
+void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
 #endif /* XMLBOARD_INCLUDED */

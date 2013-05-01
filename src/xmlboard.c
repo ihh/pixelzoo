@@ -293,9 +293,8 @@ void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *
   }
 }
 
-void writeBoard (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
-  int x, y, i;
-  State s;
+void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
+  int x, y;
   char *rngState;
 
   Assert (board->rngReleased, "writeBoard: random number generator not released. You need to call boardReleaseRandomNumbers");
@@ -309,28 +308,34 @@ void writeBoard (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
   SafeFree(rngState);
 
   if (!reverseCompile)
-    writeTypes (board, writer);
+    writeTypesXml (board, writer);
 
   for (x = 0; x < board->size; ++x)
-    for (y = 0; y < board->size; ++y) {
-      i = boardIndex (board->size, x, y);
-      s = board->cell[i];
-      if (s) {
-	xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_INIT);  /* begin init */
-	xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_X, "%d", x);
-	xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Y, "%d", y);
-	if (reverseCompile)
-	  writeGVars (board, s, writer);
-	else
-	  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXSTATE, "%llx", s);
-	xmlTextWriterFullEndElement (writer);  /* end init */
-      }
-    }
+    for (y = 0; y < board->size; ++y)
+      writeCellXml (board, writer, x, y, reverseCompile);
 
   xmlTextWriterFullEndElement (writer);  /* end board */
 }
 
-void writeTypes (Board* board, xmlTextWriterPtr writer) {
+void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int reverseCompile) {
+  int i;
+  State s;
+
+  i = boardIndex (board->size, x, y);
+  s = board->cell[i];
+  if (s) {
+    xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_INIT);  /* begin init */
+    xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_X, "%d", x);
+    xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Y, "%d", y);
+    if (reverseCompile)
+      writeGVarsXml (board, s, writer);
+    else
+      xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXSTATE, "%llx", s);
+    xmlTextWriterFullEndElement (writer);  /* end init */
+  }
+}
+
+void writeTypesXml (Board* board, xmlTextWriterPtr writer) {
   State t;
   ListNode *node;
   VarsDescriptor *vd;
@@ -356,7 +361,7 @@ void writeTypes (Board* board, xmlTextWriterPtr writer) {
   xmlTextWriterFullEndElement (writer);  /* end grammar */
 }
 
-void writeGVars (Board* board, State s, xmlTextWriterPtr writer) {
+void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
   State t, varVal;
   ListNode *node;
   VarsDescriptor *vd;
