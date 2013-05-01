@@ -51,12 +51,14 @@ State of the project
 We said it was a work-in-progress, didn't we?
 
 Mostly completed parts include:
+
 - an XML schema for describing state-machine rules and level goals
 - a core ANSI C library that runs games and verifies moves
 - Perl modules for generating and compiling levels
 - tests and (some) documentation
 
 Work in progress includes:
+
 - a RESTful multiplayer game server, based on Perl Catalyst
 - clients for iOS, Android and Simple DirectMedia Layer (SDL)
 
@@ -67,38 +69,48 @@ Dependencies
 Depending on what you want to build, you will need some other stuff
 installed.
 
-Core client engine: C code in src/, compiles into lib/
+Core client engine
 ------------------
 
-Requires libxml2 (MIT license, included by default with the iPhone SDK)
-http://xmlsoft.org/
+C code in src/, compiles into lib/
 
 
-SDL client: C code in tsrc/sdltest.c
+SDL client
 ----------
+
+C code in tsrc/sdltest.c
 
 Requires Simple DirectMedia Layer (SDL).
-http://www.libsdl.org/
+
+- http://www.libsdl.org/
 
 
-iOS client: Objective-C code and Xcode IDE files in xcode/pixelzoo/
+iOS client
 ----------
 
+Objective-C code and Xcode IDE files in xcode/pixelzoo/
+
 Requires Xcode IDE and iOS development framework.
-http://developer.apple.com/xcode/
+
+- http://developer.apple.com/xcode/
 
 
-Android client: Java/C code and Eclipse IDE files in android/
+Android client
 --------------
 
+Java/C code and Eclipse IDE files in android/
+
 Requires Eclipse IDE and Android SDK/NDK.
-http://www.eclipse.org/
-http://developer.android.com/sdk/
-http://developer.android.com/sdk/ndk/
+
+- http://www.eclipse.org/
+- http://developer.android.com/sdk/
+- http://developer.android.com/sdk/ndk/
 
 
-Server: Perl code in perl/ and Zoo/
+Server
 ------
+
+Perl code in perl/ and Zoo/
 
 The game XML compiler, perl/zoocompiler.pl, requires various modules from CPAN,
 notably XML::Twig and Moose.

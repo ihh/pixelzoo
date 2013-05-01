@@ -8,18 +8,12 @@ PKGCONFIG = pkg-config
 SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
 SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs) -L/usr/X11R6/lib -lXi
 
-# Former libxml2 dependency:
-# XML_CFLAGS  := $(shell $(PKGCONFIG) --cflags libxml-2.0)
-# XML_LDFLAGS := $(shell $(PKGCONFIG) --libs libxml-2.0)
-XML_CFLAGS  := 
-XML_LDFLAGS :=
-
 CC          := gcc
 AR          := ar
 COPTS       := -g -Wall
-CFLAGS      := $(XML_CFLAGS) $(SDL_CFLAGS) -Isrc
+CFLAGS      := $(SDL_CFLAGS) -Isrc
 ANSI        := -ansi -std=c99
-LIBS        := -lc $(XML_LDFLAGS) $(SDL_LDFLAGS)
+LIBS        := -lc $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
 
 TARGETS   := test_red_black_tree sdlgame pztest
