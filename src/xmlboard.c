@@ -153,7 +153,7 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
 
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->rightShift = OPTCHILDINT(node,RSHIFT,0);
-  colorRule->mask = OPTCHILDHEX(node,MASK,(unsigned long long)VarsMask);
+  colorRule->mask = OPTCHILDHEX(node,MASK,VarsMask);
   colorRule->multiplier = OPTCHILDINT(node,DECMUL,OPTCHILDHEX(node,HEXMUL,1));
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }

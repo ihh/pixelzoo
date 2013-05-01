@@ -130,7 +130,7 @@ void initializePalette (Palette* palette);
   where hsb24 is a 24-bit HSB value (0x00HHSSBB in hex)
 */
 typedef struct ColorRule {
-  unsigned long mask, offset;
+  unsigned long long mask, offset;
   int multiplier;
   unsigned char rightShift;
 } ColorRule;
