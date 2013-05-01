@@ -131,6 +131,9 @@ doxygen-doc:
 dtddoc-doc:
 	cd Zoo/dtd; make
 
+README.html: README.md
+	perl -e 'use Text::Markdown "markdown";print markdown(join("",<>))' $< >$@
+
 # emscripten
 bin/pztest.js:
 	/usr/local/src/emscripten/emmake make -f Makefile.em

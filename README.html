@@ -1,0 +1,123 @@
+<h1>PixelZoo</h1>
+
+<p>A client-server architecture for 2D cellular automata simulations.
+(See doc/index.html file for developer documentation.)</p>
+
+<h1>Introduction</h1>
+
+<p>PixelZoo is a project-in-progress to build multiplayer
+turn-based games using fast two-dimensional stochastic Cellular
+Automata (CA).</p>
+
+<p>The graphics aesthetic is experimental and minimal. Particles in the
+game are just colored pixels. There is some textual feedback: particle
+names, "speech balloons", an output console. The design goal is that
+particles are characterized by the player largely according to their
+behavior as microscopic agents.</p>
+
+<p>The CA's state machines are programmed using a minimal rule language
+with only a few elements: integer variables, addition, a C-like
+"switch", UNIX-like signals ("messages"). This makes it very easy to
+analyze the programs (i.e. predict their CPU usage), while being rich
+enough to implement models from physics, chemistry and biology, e.g.</p>
+
+<ul>
+<li>simple models of ideal gases</li>
+<li>Brownian motion and Brownian superprocesses</li>
+<li>diffusion-limited-aggregation and crystal growth</li>
+<li>chemical kinetics, the Belousov–Zhabotinsky reaction</li>
+<li>the two-dimensional Ising model of magnetic spin arrays</li>
+<li>mesoscale dynamics of polymers and entangled polymer melts</li>
+<li>the Susceptible-Infected-Recovered (SIR) model of epidemiology</li>
+<li>neutral drift models in population genetics and ecology</li>
+<li>forest fires, ants, bacteria, traffic, crowds, etc.</li>
+</ul>
+
+<p>In the single-player (tutorial) version of the game, the player
+attempts to solve various puzzles and challenges (e.g. "maintain an
+ecology of >N different species for time >T, in the face of various
+natural disasters").</p>
+
+<p>In the multi-player version, which is turn-based, players compete for
+control of self-contained playing boards ("worlds"). Players can also
+create their own (self-replicating) CA programs, and trade these
+in-game.</p>
+
+<h1>State of the project</h1>
+
+<p>We said it was a work-in-progress, didn't we?</p>
+
+<p>Mostly completed parts include:</p>
+
+<ul>
+<li>an XML schema for describing state-machine rules and level goals</li>
+<li>a core ANSI C library that runs games and verifies moves</li>
+<li>Perl modules for generating and compiling levels</li>
+<li>tests and (some) documentation</li>
+</ul>
+
+<p>Work in progress includes:</p>
+
+<ul>
+<li>a RESTful multiplayer game server, based on Perl Catalyst</li>
+<li>clients for iOS, Android and Simple DirectMedia Layer (SDL)</li>
+</ul>
+
+<h1>Dependencies</h1>
+
+<p>Depending on what you want to build, you will need some other stuff
+installed.</p>
+
+<h2>Core client engine</h2>
+
+<p>C code in src/, compiles into lib/</p>
+
+<h2>SDL client</h2>
+
+<p>C code in tsrc/sdltest.c</p>
+
+<p>Requires Simple DirectMedia Layer (SDL).</p>
+
+<ul>
+<li>http://www.libsdl.org/</li>
+</ul>
+
+<h2>iOS client</h2>
+
+<p>Objective-C code and Xcode IDE files in xcode/pixelzoo/</p>
+
+<p>Requires Xcode IDE and iOS development framework.</p>
+
+<ul>
+<li>http://developer.apple.com/xcode/</li>
+</ul>
+
+<h2>Android client</h2>
+
+<p>Java/C code and Eclipse IDE files in android/</p>
+
+<p>Requires Eclipse IDE and Android SDK/NDK.</p>
+
+<ul>
+<li>http://www.eclipse.org/</li>
+<li>http://developer.android.com/sdk/</li>
+<li>http://developer.android.com/sdk/ndk/</li>
+</ul>
+
+<h2>Server</h2>
+
+<p>Perl code in perl/ and Zoo/</p>
+
+<p>The game XML compiler, perl/zoocompiler.pl, requires various modules from CPAN,
+notably XML::Twig and Moose.</p>
+
+<ul>
+<li>http://www.cpan.org/</li>
+</ul>
+
+<p>The server framework in Zoo/ requires Perl Catalyst, and a few other modules.
+Do 'cd Zoo; perl Makefile.PL; make' to install other dependencies from CPAN.</p>
+
+<ul>
+<li>http://www.catalystframework.org/</li>
+</ul>
