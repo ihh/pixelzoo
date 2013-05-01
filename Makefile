@@ -63,7 +63,18 @@ $(LIBTARGET): $(OFILES)
 .SECONDARY:
 
 
-test: all xmltest eloise-pztest xml-valid-test xml-build-test
+# Test collections
+
+test: replay-test
+
+all-tests: replay-test sdl-test compiler-test
+
+replay-test: eloise-pztest hardcoded-eloise-pztest
+
+sdl-test: eloise-sdl-test
+
+compiler-test: xml-valid-test xml-build-test
+
 
 # Simple replay test, constructed as follows:
 #
