@@ -159,3 +159,6 @@ em-test: test
 
 em-html:
 	/usr/local/src/emscripten/emmake make -f Makefile.em html
+
+em-lib:
+	/usr/local/src/emscripten/emmake make -f Makefile.em jslib
