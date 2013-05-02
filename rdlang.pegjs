@@ -48,7 +48,7 @@ sync_property
  = "sync" / "async"
 
 rule
- = symbol dir? spc+ symbol_or_wild dir? spc* "->" symbol_or_macro dir? spc+ symbol_or_macro dir? spc* rate? caption? ";"
+ = symbol dir? spc+ symbol_or_wild dir? spc* "->" symbol_or_macro dir? spc+ symbol_or_macro dir? spc* rate? cosmetics? ";"
 
 symbol_or_null = symbol / "_"
 
@@ -70,7 +70,22 @@ nonnegative_real
  = [0-9]+
  / [0-9]* "." [0-9]+
 
-caption = "[" [^\]]* "]" spc*
+cosmetics
+ = "{" spc* cosmetic_property_list spc* "}" spc*
+
+cosmetic_property_list
+ = cosmetic_property spc* "," spc* cosmetic_property_list
+ / cosmetic_property
+
+cosmetic_property
+ = icon_property
+ / caption
+
+caption
+ = "caption" string_value
+
+string_value
+ = spc* ":" spc* "[" [^\]] "]"
 
 tool_decl
  = "tool" spc* "{" spc* tool_property_list spc* "}" spc* ";" spc*
