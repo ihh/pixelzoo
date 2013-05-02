@@ -11,7 +11,7 @@ spc
   = [ \t\n\r]
 
 particle_decl
- = "type" spc+ symbol spc* "{" spc* member_list spc* "}" spc*
+ = "type" spc+ symbol spc* "{" spc* member_list spc* "}" spc* ";"
 
 symbol
  = [A-Za-z_] [0-9A-Za-z_]*
@@ -25,9 +25,9 @@ member
  / handler_subroutine_decl
 
 member_variable_decl
- = symbol spc* ":" spc* bitfield_width
+ = symbol spc* ":" spc* power_of_two
 
-bitfield_width
+power_of_two
  = positive_integer
 
 positive_integer
@@ -66,7 +66,7 @@ assignment_or_increment_expr
  / "--" spc* ass_inc_lhs
 
 ass_inc_lhs
- = member_identifier
+ = local_member_identifier
  / symbol
 
 local_member_identifier
@@ -76,8 +76,19 @@ local_member_identifier
 location_identifier
  = "@" symbol spc*
 
+location_expr
+ = location_identifier
+ / "[" spc* integer spc* "," spc* integer spc* "]" spc*
+
+integer
+ = positive_integer
+ / sign spc* positive_integer
+ / "0"
+
+sign = "+" / "-"
+
 bind_statement
- = "bind" spc* "(" spc* location_identifier ")" spc* "{" spc* bind_case_block spc* "}" spc*
+ = "bind" spc* "(" spc* location_identifier "=" spc* location_expr ")" spc* "{" spc* bind_case_block spc* "}" spc*
 
 bind_case_block
  = "case" spc+ symbol spc* ":" spc* code? spc* break bind_case_block?
