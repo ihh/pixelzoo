@@ -6,6 +6,8 @@ body
  / rule spc* body?
  / tool_decl spc* body?
  / goal_decl spc* body?
+ / size_decl spc* body?
+ / init_block spc* body?
  / spc* body?
 
 spc
@@ -105,6 +107,9 @@ init_list
 init
  = "[" spc* nonnegative_integer spc* "," spc* nonnegative_integer spc* "," spc* symbol spc* "]"
 
-goal
- = "time" spc+ positive_integer symbol_value
- / "kill" spc+ symbol symbol_value
+goal_decl
+ = "time" spc+ positive_integer symbol_value spc* ";" spc*
+ / "kill" spc+ symbol symbol_value spc* ";" spc*
+
+size_decl
+ = "size" spc* "[" spc* positive_integer spc* "," spc* positive_integer spc* "]" spc* ";" spc*
