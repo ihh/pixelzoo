@@ -1,5 +1,7 @@
 INCS    := -Isrc -Itsrc
 ANSI    := -ansi -std=c99
+#EMFLAGS := - -s ASM_JS=1 -O2
+EMFLAGS :=
 
 CFILES  := $(filter-out src/fileio.c, $(wildcard src/*.c))
 HFILES  := $(filter-out src/fileio.h, $(wildcard src/*.h))
@@ -17,10 +19,10 @@ hardcoded-eloise-pztest: bin/hardcoded-eloise-pztest.js
 	open $<
 
 bin/%.js: tsrc/%.c $(CFILES) $(HFILES)
-	$(CC) $(INCS) $(ANSI) $(CFILES) tsrc/$*.c -o $@
+	$(CC) $(EMFLAGS) $(INCS) $(ANSI) $(CFILES) tsrc/$*.c -o $@
 
 bin/%.html: tsrc/%.c $(CFILES) $(HFILES)
-	$(CC) $(INCS) $(ANSI) $(CFILES) tsrc/$*.c -o $@
+	$(CC) $(EMFLAGS) $(INCS) $(ANSI) $(CFILES) tsrc/$*.c -o $@
 
 .SUFFIXES :
 
