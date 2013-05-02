@@ -14,11 +14,7 @@ particle_decl
  = "type" spc+ symbol spc* "{" spc* member_list spc* "}" spc*
 
 symbol
-  = [A-Za-z_] [0-9A-Za-z_]*
-
-member_identifier
- = symbol spc* "." spc* symbol
- / symbol
+ = [A-Za-z_] [0-9A-Za-z_]*
 
 member_list
  = member spc* "," spc* member_list
@@ -46,20 +42,62 @@ message
 label
  = symbol spc* ":" spc* code
 
+delimited_code
+ = assignment_or_increment_statement* code
+
 code
- = subroutine_decl
- / bind_statement
+ = bind_statement
  / switch_statement
  / goto_statement
- / message
- / assignment_or_increment
- / "{" spc* assignment_or_increment* code "}"
+ / addressed_message
+ / assignment_or_increment_statement
+ / "{" spc* delimited_code "}"
 
-assignment_or_increment
- = member_identifier spc* "=" spc* positive_integer spc*
- / member_identifier spc* "+=" spc* positive_integer spc*
- / member_identifier spc* "-=" spc* positive_integer spc*
- / member_identifier spc* "++" spc*
- / member_identifier spc* "--" spc*
- / "++" spc* member_identifier spc*
- / "--" spc* member_identifier spc*
+assignment_or_increment_statement
+ = assignment_or_increment_expr spc* ";" spc* 
+
+assignment_or_increment_expr
+ = ass_inc_lhs spc* "=" spc* positive_integer
+ / ass_inc_lhs spc* "+=" spc* positive_integer
+ / ass_inc_lhs spc* "-=" spc* positive_integer
+ / ass_inc_lhs spc* "++"
+ / ass_inc_lhs spc* "--"
+ / "++" spc* ass_inc_lhs
+ / "--" spc* ass_inc_lhs
+
+ass_inc_lhs
+ = member_identifier
+ / symbol
+
+local_member_identifier
+ = location_identifier "." spc* symbol
+ / symbol
+
+location_identifier
+ = "@" symbol spc*
+
+bind_statement
+ = "bind" spc* "(" spc* location_identifier ")" spc* "{" spc* bind_case_block spc* "}" spc*
+
+bind_case_block
+ = "case" spc+ symbol spc* ":" spc* code? spc* break bind_case_block?
+ / default_clause
+
+default_clause
+ = "default" spc* ":" spc* code? spc* break
+
+break
+ = "break" spc* ";" spc*
+
+switch_statement
+ = "switch" spc* "(" spc* local_member_identifier spc* ")" spc* "{" spc* switch_case_block spc* "}" spc*
+
+switch_case_block
+ = "case" spc+ integer spc* ":" spc* code? spc* break switch_case_block?
+ / default_clause
+
+goto_statement
+ = "goto" spc+ symbol spc* ";" spc*
+
+addressed_message
+ = location_identifier message ";" spc*
