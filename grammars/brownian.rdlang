@@ -1,0 +1,9 @@
+R = 1;
+type drifter { icon: mad-scientist, moore, isometric, async };
+type wall { icon: padlock };
+tool { type: wall };
+drifter _ -> _ $s : R;
+size [32,32];
+init { [16,16,drifter] };
+timeout 60: survived;
+extinct drifter: died;
