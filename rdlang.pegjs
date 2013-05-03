@@ -2,13 +2,17 @@ start
  = body
 
 body
- = particle_decl spc* body?
- / rule spc* body?
- / tool_decl spc* body?
- / goal_decl spc* body?
- / size_decl spc* body?
- / init_block spc* body?
+ = statement spc* body?
  / spc* body?
+
+statement
+ = particle_decl
+ / rule
+ / param_decl
+ / tool_decl
+ / goal_decl
+ / size_decl
+ / init_block
 
 spc
   = [ \t\n\r]
@@ -48,7 +52,19 @@ sync_property
  = "sync" / "async"
 
 rule
- = symbol dir? spc+ symbol_or_wild dir? spc* "->" symbol_or_macro dir? spc+ symbol_or_macro dir? spc* rate? cosmetics? ";"
+ = lhs_source spc+ lhs_target spc* "->" rhs_source spc+ rhs_target spc* rate_clause? spc* ";"
+
+lhs_source
+ = symbol dir?
+
+lhs_target
+ = symbol_or_wild dir?
+
+rhs_source
+ = symbol_or_macro dir?
+
+rhs_target
+ = symbol_or_macro dir?
 
 symbol_or_null = symbol / "_"
 
@@ -64,20 +80,37 @@ dir
 
 relative_dir = "fl" / "fr" / "bl" / "br" / "f" / "b" / "l" / "r"
 
-rate = "(" spc* nonnegative_real spc* ")" spc*
+rate_clause
+ = ":" spc* sum_expr? side_effects?
+
+sum_expr
+  = product_expr spc* "+" spc* sum_expr
+  / product_expr
+
+product_expr
+  = primary_expr spc* ("*" | "/") spc* product_expr
+  / primary_expr
+
+primary_expr
+  = nonnegative_real
+  / symbol
+  / "(" spc* sum_expr spc* ")"
+
+rate_expr
+ = nonnegative_real
 
 nonnegative_real
  = [0-9]+
  / [0-9]* "." [0-9]+
 
-cosmetics
- = "{" spc* cosmetic_property_list spc* "}" spc*
+side_effects
+ = "{" spc* side_effect_list spc* "}" spc*
 
-cosmetic_property_list
- = cosmetic_property spc* "," spc* cosmetic_property_list
- / cosmetic_property
+side_effect_list
+ = side_effect spc* "," spc* side_effect_list
+ / side_effect
 
-cosmetic_property
+side_effect
  = icon_property
  / caption
 
@@ -86,6 +119,9 @@ caption
 
 string_value
  = spc* ":" spc* "[" [^\]] "]"
+
+param_decl
+ = symbol spc* "=" spc* sum_expr spc* ";"
 
 tool_decl
  = "tool" spc* "{" spc* tool_property_list spc* "}" spc* ";" spc*
