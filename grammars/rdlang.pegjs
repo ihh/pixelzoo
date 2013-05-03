@@ -1,9 +1,9 @@
 start
- = body
+ = spc* body
 
 body
- = statement spc* body?
- / spc+ body?
+ = statement spc* body
+ / statement
 
 statement
  = particle_decl
@@ -49,7 +49,7 @@ sync_property
  = "sync" / "async"
 
 rule
- = lhs_source spc+ lhs_target spc* "->" spc* rhs_source spc+ rhs_target spc* rate_clause? spc* ";"
+ = lhs_source spc+ lhs_target spc* lhs_qualifier? spc* "->" spc* rhs_source spc+ rhs_target spc* rate_clause? spc* ";"
 
 lhs_source
  = symbol dir?
@@ -58,18 +58,19 @@ lhs_target
  = symbol_or_wild dir?
 
 rhs_source
- = symbol_or_macro dir?
+ = symbol_or_lhs_macro dir?
 
 rhs_target
- = symbol_or_macro dir?
+ = symbol_or_lhs_macro dir?
 
 symbol_or_null = symbol / "_"
 
 symbol_or_wild = symbol_or_null / "*"
 
-symbol_or_macro = symbol_or_null / "$" macro
+symbol_or_lhs_macro = symbol_or_null / lhs_macro
 
-macro = "s" / "t"
+lhs_macro = "$" ("s" / "t")
+rhs_macro = "$" ("S" / "T")
 
 dir
  = "." compass_dir
@@ -80,7 +81,7 @@ compass_dir = "nw" / "ne" / "se" / "sw" / "n" / "e" / "s" / "w"
 relative_dir = "fl" / "fr" / "bl" / "br" / "f" / "b" / "l" / "r"
 
 rate_clause
- = ":" spc* sum_expr? side_effects?
+ = ":" spc* sum_expr
 
 sum_expr
   = product_expr spc* "+" spc* sum_expr
@@ -101,17 +102,6 @@ rate_expr
 nonnegative_real
  = [0-9]+
  / [0-9]* "." [0-9]+
-
-side_effects
- = "{" spc* side_effect_list spc* "}" spc*
-
-side_effect_list
- = side_effect spc* "," spc* side_effect_list
- / side_effect
-
-side_effect
- = icon_property
- / caption
 
 caption
  = "caption" string_value
