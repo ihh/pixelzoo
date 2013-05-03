@@ -49,7 +49,7 @@ sync_property
  = "sync" / "async"
 
 rule
- = lhs_source spc+ lhs_target spc* lhs_qualifier? spc* "->" spc* rhs_source spc+ rhs_target spc* rate_clause? spc* ";"
+ = lhs_source spc+ lhs_target spc* "->" spc* rhs_source spc+ rhs_target spc* rate_clause? spc* ";"
 
 lhs_source
  = symbol dir?
