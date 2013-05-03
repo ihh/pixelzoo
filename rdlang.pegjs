@@ -88,7 +88,7 @@ sum_expr
   / product_expr
 
 product_expr
-  = primary_expr spc* ("*" | "/") spc* product_expr
+  = primary_expr spc* ("*" / "/") spc* product_expr
   / primary_expr
 
 primary_expr
