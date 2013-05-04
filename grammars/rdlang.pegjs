@@ -74,6 +74,7 @@ lhs_macro = "$s" / "$t"
 dir
  = "." compass_dir
  / "." relative_dir
+ / ".*"
 
 compass_dir = "nw" / "ne" / "se" / "sw" / "n" / "e" / "s" / "w"
 
