@@ -103,9 +103,6 @@ nonnegative_real
  = [0-9]+
  / [0-9]* "." [0-9]+
 
-caption
- = "caption" string_value
-
 string_value
  = spc* ":" spc* "[" [^\]] "]"
 
