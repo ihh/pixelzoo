@@ -103,9 +103,6 @@ nonnegative_real
  = [0-9]+
  / [0-9]* "." [0-9]+
 
-string_value
- = spc* ":" spc* "[" [^\]] "]"
-
 param_decl
  = symbol spc* "=" spc* sum_expr spc* ";"
 
