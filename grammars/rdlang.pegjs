@@ -69,8 +69,7 @@ symbol_or_wild = symbol_or_null / "*"
 
 symbol_or_lhs_macro = symbol_or_null / lhs_macro
 
-lhs_macro = "$" ("s" / "t")
-rhs_macro = "$" ("S" / "T")
+lhs_macro = "$s" / "$t"
 
 dir
  = "." compass_dir
