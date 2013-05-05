@@ -115,7 +115,7 @@ tool_property_list
 
 tool_property
  = "type" symbol_value
- / "intensity" numeric_value
+ / "rate" numeric_value
  / "radius" numeric_value
  / "reserve" numeric_value
  / "recharge" numeric_value
