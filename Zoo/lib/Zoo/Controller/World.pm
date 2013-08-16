@@ -176,10 +176,11 @@ sub assemble {
     $c->stash->{particles} = \@particles;
 
     # grammar
-    my $gram = Grammar->newGrammar;
+    my $gram = Grammar->newMinimalGrammar;
+    $gram->verbose(1);
 
     for my $particle (@{$c->stash->{particles}}) {
-#	warn "Adding type ", $particle->nest;
+	warn "Adding type ", $particle->nest;
 	$gram->addType ($particle->nest);
     }
 

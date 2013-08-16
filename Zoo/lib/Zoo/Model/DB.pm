@@ -97,12 +97,12 @@ sub descendant_particles {
 	%particle_name_hash = (%particle_name_hash, map (($_ => 1), @names));
     }
     my @particle_names = keys %particle_name_hash;
-    warn "looking for particles (@particle_names)";
+#    warn "looking for particles (@particle_names)";
     my @particles = $self->particles_by_name (@particle_names);
-    warn "particles (@particles)";
+#    warn "particles (@particles)";
     warn "Some named particles not found" if @particles < @particle_names;
     my @descendants = map ($_->descendants, @particles);
-    warn "descendants (@descendants)";
+#    warn "descendants (@descendants)";
     my %descendant_hash = map (($_->name => $_), @particles, @descendants);
     return values %descendant_hash;
 }

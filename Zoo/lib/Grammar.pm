@@ -22,9 +22,8 @@ use Twiggy;
 
 
 # game data structures
-sub newGrammar {
+sub newMinimalGrammar {
     my ($class) = @_;
-    my $emptyType = 'empty';
     my $orig = 'orig';
     my $self = { 
 
@@ -87,7 +86,6 @@ sub newGrammar {
 	'outfile' => undef,
 
 # other helpers
-	'empty' => $emptyType,
 	'origin' => $orig,
 	'dir' => AutoHash->new ('n' => AutoHash->new ( 'x' => 0,  'y' => -1 ),
 				'e' => AutoHash->new ( 'x' => +1, 'y' => 0 ),
@@ -103,6 +101,14 @@ sub newGrammar {
 
     bless $self, $class;
 
+    return $self;
+}
+
+sub newGrammar {
+    my ($class) = @_;
+    my $self = $class->newMinimalGrammar();
+    my $emptyType = 'empty';
+    $self->{'empty'} = $emptyType;
     $self->addType ('name' => $emptyType,
 		    'vars' => [ $self->var('brightness') => 3, $self->var('saturation') => 3, $self->var('hue') => 6 ],
 		    'hue' => [ 'var' => 'hue' ],
@@ -110,7 +116,6 @@ sub newGrammar {
 		    'bri' => [ 'var' => 'brightness' ],
 		    'rate' => 0,
 		    'rule' => ['nop']);
-
     return $self;
 }
 
