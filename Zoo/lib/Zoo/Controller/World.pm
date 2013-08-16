@@ -160,6 +160,7 @@ sub assemble {
     $c->stash->{tools} = \@tools;
 
     my @tool_twig = map ($_->twig, @tools);
+#    warn map($_->sprint,@tool_twig);
 
     # What we should do here is loop over the following call to descendant_particles,
     # popping tools until the number of particles is less than a configurable limit (<64k)
