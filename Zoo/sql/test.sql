@@ -5,7 +5,7 @@ insert into world values (1, 'earth', 1, 128, 0, 1000, 2000, '<board><size>128</
 
 insert into world values (2, 'mars', 1, 128, 0, 1000, 2000, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>', '<game><goal><!-- owner --></goal></game>', '<game><goal><!-- guest --></goal></game>', '<game><goal><!-- voyeur -->Hello voyeur!</goal></game>');
 
-insert into lock values (1, 1, 1, 3000, 4000, 'proto', 'compiled', 'turn');
+insert into lock values (1, 1, 1, 3000, 4000, 5000, 'proto', 'compiled', 'turn');
 
 insert into tool values ('cement spray (fine)', 1, '<tool><name>cement spray (fine)</name><size>2</size><gstate>cement</gstate><overwrite><gstate>empty</gstate></overwrite><spray>1000</spray><reserve>1000</reserve><recharge>100</recharge></tool>');
 insert into tool values ('cement spray (medium)', 1, '<tool><name>cement spray (medium)</name><size>4</size><gstate>cement</gstate><overwrite><gstate>empty</gstate></overwrite><spray>1000</spray><reserve>1000</reserve><recharge>100</recharge></tool>');

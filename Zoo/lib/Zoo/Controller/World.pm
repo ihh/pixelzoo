@@ -281,6 +281,11 @@ sub lock_end_POST {
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
     if (defined $lock) {
+	# Eventual logic here should be as follows:
+	# If a previous lock exists, with owner_id == current_user_id and delete_time <= current_time, then delete it
+	# If a previous lock exists, with owner_id == current_user_id and expiry_time <= current_time < delete_time, then return 409 (Conflict)
+	# If a previous lock exists, with current_time < expiry_time, then return 409 (Conflict)
+
 	$c->response->status(423);
 	$c->detach();
     } else {
@@ -312,15 +317,17 @@ Check that there is exactly one Lock for this World, and that the path contains 
 sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
     my ( $self, $c, $lock_id ) = @_;
 
+    # Eventual logic here should be as follows:
+    # If the specified lock exists, with delete_time <= current_time, then delete it and return 404 (Not Found)
+    # If the specified lock exists, with expiry_time <= current_time < delete_time, then return 404 (Not Found)
+    # If the specified lock exists, with current_time < expiry_time, then return it
+
     my $lock = $c->stash->{lock};
     unless (defined($lock) && $lock->id == $lock_id) {
 	$c->stash( error_msg => "Lock $lock_id not found in world " . $c->stash->{world}->id );
 	$c->response->status(404);
 	$c->detach();
     }
-
-    # TODO: check if the lock deletion time has passed; if so, delete it
-    # (deletion time > expiry time; deletion is when the player gets to make another turn)
 }
 
 sub lock_id_end :Chained('lock_id') :PathPart('') :Args(0) :ActionClass('REST') { }

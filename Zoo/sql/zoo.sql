@@ -76,6 +76,7 @@ CREATE TABLE lock (
 	owner_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the UserID of the lock owner
 	create_time INTEGER,  -- lock creation time (UNIX timestamp)
 	expiry_time INTEGER,  -- lock expiration time (UNIX timestamp)
+	delete_time INTEGER,  -- lock deletion time (UNIX timestamp)
 	proto_xml TEXT,  -- temporary assembled Game
 	compiled_xml TEXT,  -- temporary compiled Game
 	turn_xml TEXT  -- the lock owner's turn
