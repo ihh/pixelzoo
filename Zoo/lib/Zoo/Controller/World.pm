@@ -178,7 +178,7 @@ sub assemble {
     my $gram = Grammar->newGrammar;
 
     for my $particle (@{$c->stash->{particles}}) {
-	warn "Adding type ", $particle->nest;
+#	warn "Adding type ", $particle->nest;
 	$gram->addType ($particle->nest);
     }
 
@@ -203,7 +203,7 @@ sub assemble {
 
     # stash grammar
     $c->stash->{grammar} = $gram;
-    warn Dumper($gram->xml->type);
+#    warn Dumper($gram->xml->type);
 }
 
 =head2 view
@@ -287,18 +287,16 @@ sub lock_end_POST {
 	my $lock_twig = Twiggy->new();
 	$lock_twig->parse ($c->request->body);
 	my @tool_names = map ($_->text, $lock_twig->root->first_child("toolbox")->children("name"));
-	warn "Tools:\n", map (" $_\n", @tool_names);
+#	warn "Tools:\n", map (" $_\n", @tool_names);
 	# Assemble the board XML
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
 	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
-	my $proto_xml = $c->stash->{grammar}->proto_xml;
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
 	# TODO: add the lock to the database
 	my $create_time = time();
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
 	    create_time => $create_time,
-	    proto_xml => $proto_xml,
 	    compiled_xml => $compiled_xml });
     }
 }

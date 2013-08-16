@@ -10,7 +10,7 @@ World controller
 ----------------
 
 GET world/list  -->    200 Success + WorldStatus list (may be empty, but will contain <count>)
-GET world/list/RecordsPerPage/page/RecordsPerPage  -->    200 Success + WorldStatus list, 416 Requested Range Not Satisfiable
+GET world/list/FirstIndex/LastIndex  -->    200 Success + WorldStatus list, 416 Requested Range Not Satisfiable
 
 GET world/WorldID/  -->  303 to GET world/WorldID/status
 
@@ -43,14 +43,14 @@ Store controller
 ----------------
 
 GET store/type/list  -->    200 Success + Type list (may be empty, but will contain <count>)
-GET store/type/list/RecordsPerPage/page/PageNumber  -->    200 Success + Type list, 416 Requested Range Not Satisfiable
+GET store/type/list/FirstIndex/LastIndex  -->    200 Success + Type list, 416 Requested Range Not Satisfiable
 
 POST store/type (Type)  -->  201 Created (success), 403 Forbidden (no coder privileges), 402 Payment Required, 413 Request Entity Too Large
 GET store/type/TypeName  -->  200 Success + Type, 404 Not Found
 DELETE store/type/TypeName  -->  204 No Content (success), 403 Forbidden
 
 GET store/tool/list  -->    200 Success + Tool list (may be empty, but will contain <count>)
-GET store/tool/list/RecordsPerPage/page/PageNumber  -->    200 Success + Tool list, 416 Requested Range Not Satisfiable
+GET store/tool/list/FirstIndex/LastIndex  -->    200 Success + Tool list, 416 Requested Range Not Satisfiable
 
 POST store/tool (Tool)  -->  201 Created (success), 403 Forbidden (no maker privileges), 402 Payment Required, 413 Request Entity Too Large
 GET store/tool/ToolName  -->  200 Success + Tool, 404 Not Found
