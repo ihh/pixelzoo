@@ -71,7 +71,7 @@ CREATE TABLE world (
 	);
 
 CREATE TABLE lock (
-	lock_id INTEGER PRIMARY KEY,   -- the LockID
+	lock_id INTEGER PRIMARY KEY AUTOINCREMENT,   -- the LockID
 	world_id INTEGER REFERENCES world(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the WorldID
 	owner_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,   -- the UserID of the lock owner
 	create_time INTEGER,  -- lock creation time (UNIX timestamp)

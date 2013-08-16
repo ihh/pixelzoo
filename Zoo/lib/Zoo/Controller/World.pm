@@ -1,4 +1,5 @@
 package Zoo::Controller::World;
+use Data::Dumper;
 use Moose;
 use Twiggy;
 use Level;
@@ -167,6 +168,8 @@ sub assemble {
     # ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
 
     # particles
+#    print "particles: ", map (join (" ", map ($_->text, $_->descendants("gstate"))) . "\n", @tool_twig);
+#    print "particles: ", map (join (" ", $_->particle_names) . "\n", @tool_twig);
     my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
     $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
     $c->stash->{particles} = \@particles;
@@ -175,6 +178,7 @@ sub assemble {
     my $gram = Grammar->newGrammar;
 
     for my $particle (@{$c->stash->{particles}}) {
+	warn "Adding type ", $particle->nest;
 	$gram->addType ($particle->nest);
     }
 
@@ -199,6 +203,7 @@ sub assemble {
 
     # stash grammar
     $c->stash->{grammar} = $gram;
+    warn Dumper($gram->xml->type);
 }
 
 =head2 view
@@ -278,7 +283,23 @@ sub lock_end_POST {
 	$c->detach();
     } else {
 	# create the lock...
-	warn $c->request->data;
+	# First, get the tool names from the POST'ed lock XML
+	my $lock_twig = Twiggy->new();
+	$lock_twig->parse ($c->request->body);
+	my @tool_names = map ($_->text, $lock_twig->root->first_child("toolbox")->children("name"));
+	warn "Tools:\n", map (" $_\n", @tool_names);
+	# Assemble the board XML
+	# For now, use voyeur rules (until more owner/guest logic is implemented)
+	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
+	my $proto_xml = $c->stash->{grammar}->proto_xml;
+	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
+	# TODO: add the lock to the database
+	my $create_time = time();
+	my $lock = $c->model('DB::Lock')->create({
+	    world_id => $c->stash->{world}->id,
+	    create_time => $create_time,
+	    proto_xml => $proto_xml,
+	    compiled_xml => $compiled_xml });
     }
 }
 

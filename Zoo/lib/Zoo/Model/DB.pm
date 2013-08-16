@@ -92,7 +92,9 @@ sub descendant_particles {
     my ($self, @twig) = @_;
     my %particle_name_hash;
     for my $twig (@twig) {
-	%particle_name_hash = (%particle_name_hash, map (($_ => 1), $twig->particle_names));
+	my @names = $twig->particle_names;
+	warn "@names";
+	%particle_name_hash = (%particle_name_hash, map (($_ => 1), @names));
     }
     my @particles = $self->particles_by_name (keys %particle_name_hash);
     my @descendants = map ($_->descendants, @particles);

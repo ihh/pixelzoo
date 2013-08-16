@@ -1,0 +1,16 @@
+<!--
+ Test lock-posting as follows:
+curl -X POST -H "Content-Type:application/xml" -d @t/lock.xml http://localhost:3000/world/2/lock
+ -->
+<lock>
+ <toolbox>
+    <name>cement spray (fine)</name>
+    <name>cement spray (medium)</name>
+    <name>cement spray (coarse)</name>
+    <name>acid spray (small)</name>
+    <name>acid spray (large)</name>
+    <name>seed spray</name>
+    <name>cyclobs</name>
+    <name>perfume spray</name>
+ </toolbox>
+</lock>

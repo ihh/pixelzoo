@@ -462,3 +462,9 @@ Randomly executes either the "pass" or "fail" rule (with probability "prob" of i
 
 <!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>
+
+
+<!-- Lock -->
+<!ELEMENT lock (toolbox)>
+<!ELEMENT toolbox (name+)>
+
