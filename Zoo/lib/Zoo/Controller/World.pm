@@ -64,6 +64,7 @@ sub world_id :Chained('/') :PathPart('world') :CaptureArgs(1) {
     }
 
     $c->stash->{world} = $world;
+    $c->stash->{world_id} = $world_id;
 }
 
 sub world_id_end :Chained('world_id') :PathPart('') :Args(0) :ActionClass('REST') { }
@@ -255,8 +256,23 @@ sub lock :Chained('world_id') :PathPart('lock') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     my $world = $c->stash->{world};
+    my $world_id = $c->stash->{world_id};
+
     my @lock = $world->locks;
 
+    # Eventually, instead of $world->locks, this should be:
+    #  $current_time = time();
+    #  SELECT * FROM lock WHERE world_id = $world_id AND expiry_time > $current_time;
+    #  ...or equivalent DBIx::Class::ResultSet::search(...)
+
+    # And eventually after that, a version with authentication:
+    #  $current_time = time();
+    #  $current_user_id = current_user_id();   # for some definition of this method
+    #  SELECT * FROM lock WHERE world_id = $world_id AND expiry_time > $current_time OR (delete_time > $current_time AND owner_id = $current_user_id);
+
+    # Could also add a cleanup rule:
+    #  DELETE FROM lock WHERE delete_time <= $current_time;
+    
     $c->stash->{lock} = @lock == 1 ? $lock[0] : undef;
 }
 
@@ -281,11 +297,6 @@ sub lock_end_POST {
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
     if (defined $lock) {
-	# Eventual logic here should be as follows:
-	# If a previous lock exists, with owner_id == current_user_id and delete_time <= current_time, then delete it
-	# If a previous lock exists, with owner_id == current_user_id and expiry_time <= current_time < delete_time, then return 409 (Conflict)
-	# If a previous lock exists, with current_time < expiry_time, then return 409 (Conflict)
-
 	$c->response->status(423);
 	$c->detach();
     } else {
@@ -299,12 +310,14 @@ sub lock_end_POST {
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
 	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
-	# TODO: add the lock to the database
+	# add the lock to the database
 	my $create_time = time();
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
 	    create_time => $create_time,
+	    # TODO: more fields here
 	    compiled_xml => $compiled_xml });
+	# TODO: stash simple success template? Or redirect to lock_view_compiled?
     }
 }
 
@@ -316,11 +329,6 @@ Check that there is exactly one Lock for this World, and that the path contains 
 
 sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
     my ( $self, $c, $lock_id ) = @_;
-
-    # Eventual logic here should be as follows:
-    # If the specified lock exists, with delete_time <= current_time, then delete it and return 404 (Not Found)
-    # If the specified lock exists, with expiry_time <= current_time < delete_time, then return 404 (Not Found)
-    # If the specified lock exists, with current_time < expiry_time, then return it
 
     my $lock = $c->stash->{lock};
     unless (defined($lock) && $lock->id == $lock_id) {
@@ -366,6 +374,33 @@ sub lock_view_compiled_GET {
     my ( $self, $c ) = @_;
     my $lock = $c->stash->{lock};
     $c->stash->{compiled_xml} = $lock->compiled_xml;
+}
+
+
+=head2 turn
+
+Post a turn.
+
+=cut
+
+sub turn :Chained('world_id') :PathPart('turn') :CaptureArgs(0) {
+    my ( $self, $c ) = @_;
+
+    my $world = $c->stash->{world};
+    my $world_id = $c->stash->{world_id};
+
+    # TODO: write me
+}
+
+sub turn_end :Chained('turn') :PathPart('') :Args(0) :ActionClass('REST') { }
+
+sub turn_end_POST {
+    my ( $self, $c ) = @_;
+    my $world = $c->stash->{world};
+
+    # TODO: write me
+    # Update the state of the board
+    # Delete the lock
 }
 
 

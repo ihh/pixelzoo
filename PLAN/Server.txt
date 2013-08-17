@@ -25,7 +25,7 @@ GET world/WorldID/view  -->            200 Success + Proto (assembles Board with
 GET world/WorldID/view/compiled  -->   200 Success + Game (assembles & compiles Board with voyeur Game wrapper and no Tools), 404 Not Found (bad WorldID), 408 Request Timeout
 
 GET world/WorldID/lock  -->  internally redirect to "GET world/WorldID/lock/LockID", 404 Not Found
-POST world/WorldID/lock (ToolName*)  -->  201 Created + Lock (HTTP headers: "Location: world/WorldID//lock/LockID"), 404 Not Found (bad WorldID), 408 Request Timeout (assembly fail), 409 Conflict (someone else's lock, or too soon since last lock)
+POST world/WorldID/lock (ToolName*)  -->  201 Created + Lock (HTTP headers: "Location: world/WorldID//lock/LockID"), 404 Not Found (bad WorldID), 408 Request Timeout (assembly fail), 423 Locked (someone else's lock, or too soon since last lock)
 
 GET world/WorldID/lock/LockID  -->  200 Success + Lock (HTTP headers: "Expires"=expiration time, "Last-Modified"=creation time), 404 Not Found
 DELETE world/WorldID/lock/LockID  -->  204 No Content (success), 404 Not Found (bad WorldID or LockID), 410 Gone (lock expired)
