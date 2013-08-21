@@ -64,6 +64,8 @@ CREATE TABLE world (
 	board_time INTEGER,   -- number of "microticks" on the board clock
 	last_modified_time INTEGER,  -- time board was last modified (UNIX timestamp)
 	last_stolen_time INTEGER,  -- time world's ownership was last changed (UNIX timestamp)
+	lock_expiry_delay INTEGER,  -- number of seconds that locking grants control of the board
+	lock_delete_delay INTEGER,  -- minimum number of seconds between locks
 	board_xml TEXT,  -- current state of the Board
 	owner_game_xml TEXT,  -- Game headers for owner's turn
 	guest_game_xml TEXT,  -- Game headers for guest's turn

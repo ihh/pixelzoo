@@ -1,0 +1,1 @@
+rm zoo.db; cat sql/zoo.sql | sqlite3 zoo.db; cat sql/test.sql | sqlite3 zoo.db

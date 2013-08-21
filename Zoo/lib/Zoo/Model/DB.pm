@@ -56,6 +56,23 @@ sub world_by_id {
     return $world;
 }
 
+
+=head2 world_active_lock
+
+Get a L<Zoo::Schema::Result::Lock> object, for a given L<Zoo::Schema::Result::World> object.
+
+=cut
+
+sub world_active_lock {
+    my ($self, $world) = @_;
+#    $self->storage->debug(1);
+    my $current_time = time();
+    my @locks = $self->resultset('Lock')->search({'world_id' => $world->id,
+						  'expiry_time' => { '>' => $current_time }});
+    return @locks ? $locks[$#locks] : undef;
+}
+
+
 =head2 particles_by_name
 
 Get a list of L<Zoo::Schema::Result::Particle> objects, given a list of their name identifiers.

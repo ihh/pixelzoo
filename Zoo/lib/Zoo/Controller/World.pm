@@ -258,22 +258,9 @@ sub lock :Chained('world_id') :PathPart('lock') :CaptureArgs(0) {
     my $world = $c->stash->{world};
     my $world_id = $c->stash->{world_id};
 
-    my @lock = $world->locks;
+    my $lock = $c->model('DB')->world_active_lock($world);   # eventually, world_active_lock should check userid too
 
-    # Eventually, instead of $world->locks, this should be:
-    #  $current_time = time();
-    #  SELECT * FROM lock WHERE world_id = $world_id AND expiry_time > $current_time;
-    #  ...or equivalent DBIx::Class::ResultSet::search(...)
-
-    # And eventually after that, a version with authentication:
-    #  $current_time = time();
-    #  $current_user_id = current_user_id();   # for some definition of this method
-    #  SELECT * FROM lock WHERE world_id = $world_id AND expiry_time > $current_time OR (delete_time > $current_time AND owner_id = $current_user_id);
-
-    # Could also add a cleanup rule:
-    #  DELETE FROM lock WHERE delete_time <= $current_time;
-    
-    $c->stash->{lock} = @lock == 1 ? $lock[0] : undef;
+    $c->stash->{lock} = $lock;
 }
 
 sub lock_end :Chained('lock') :PathPart('') :Args(0) :ActionClass('REST') { }
@@ -312,12 +299,23 @@ sub lock_end_POST {
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
 	# add the lock to the database
 	my $create_time = time();
+	my $expiry_time = $create_time + $world->lock_expiry_delay;
+	my $delete_time = $create_time + $world->lock_delete_delay;
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
 	    create_time => $create_time,
-	    # TODO: more fields here
+	    expiry_time => $expiry_time,
+	    delete_time => $delete_time,
+	    # TODO: proto_xml field
 	    compiled_xml => $compiled_xml });
-	# TODO: stash simple success template? Or redirect to lock_view_compiled?
+	# return lock info
+	$c->stash->{template} = 'world/lock.tt2';
+	$c->stash->{lock} = $lock;
+	$c->response->status(200);
+	$c->response->content_type('text/xml; charset=utf-8');  # not sure why View::XML::process doesn't catch this
+	# TODO: fix this.
+	# Still not properly working; status code returns correctly, but view does not render.
+	# Instead we get the message "Cannot find a Content-Type supported by your client."
     }
 }
 
@@ -390,6 +388,9 @@ sub turn :Chained('world_id') :PathPart('turn') :CaptureArgs(0) {
     my $world_id = $c->stash->{world_id};
 
     # TODO: write me
+
+    # TODO: add a cleanup rule
+    #  DELETE FROM lock WHERE delete_time <= $current_time;
 }
 
 sub turn_end :Chained('turn') :PathPart('') :Args(0) :ActionClass('REST') { }

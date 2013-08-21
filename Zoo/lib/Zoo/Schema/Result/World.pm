@@ -60,6 +60,16 @@ __PACKAGE__->table("world");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 lock_expiry_delay
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 lock_delete_delay
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 board_xml
 
   data_type: 'text'
@@ -96,6 +106,10 @@ __PACKAGE__->add_columns(
   "last_modified_time",
   { data_type => "integer", is_nullable => 1 },
   "last_stolen_time",
+  { data_type => "integer", is_nullable => 1 },
+  "lock_expiry_delay",
+  { data_type => "integer", is_nullable => 1 },
+  "lock_delete_delay",
   { data_type => "integer", is_nullable => 1 },
   "board_xml",
   { data_type => "text", is_nullable => 1 },
@@ -146,8 +160,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 12:59:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FTMn8O3LbDl6hU+LeZZhMA
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-08-21 10:51:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EQCmQQ1QQgMXhFad47W3SQ
 
 =head1 METHODS
 

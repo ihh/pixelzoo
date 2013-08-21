@@ -1,0 +1,1 @@
+perl script/zoo_create.pl model DB DBIC::Schema Zoo::Schema create=static dbi:SQLite:zoo.db on_connect_do="PRAGMA foreign_keys = ON"
