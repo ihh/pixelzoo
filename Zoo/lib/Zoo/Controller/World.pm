@@ -250,20 +250,30 @@ sub view_compiled_GET {
 
 =head2 lock
 
-Get the Lock(s) for the World.
+Actions relating to the Lock(s) for the World.
 
 =cut
 
 sub lock :Chained('world_id') :PathPart('lock') :CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
+    $self->stash_lock($c);
+}
+
+
+=head2 stash_lock
+
+Get the user's Lock for the World, if any.
+
+=cut
+
+sub stash_lock {
+    my ($self, $c) = @_;
     my $world = $c->stash->{world};
-    my $world_id = $c->stash->{world_id};
-
     my $lock = $c->model('DB')->world_active_lock($world);   # eventually, world_active_lock should check userid too
-
     $c->stash->{lock} = $lock;
 }
+
 
 sub lock_end :Chained('lock') :PathPart('') :Args(0) :ActionClass('REST') { }
 
@@ -299,7 +309,7 @@ sub lock_end_POST {
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
 	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
-	my $get_proto_xml = $c->stash->{grammar}->get_assembled_xml_stash;
+	my $proto_xml = &{$c->stash->{grammar}->get_assembled_xml_stash}();
 	# add the lock to the database
 	my $create_time = time();
 	my $expiry_time = $create_time + $world->lock_expiry_delay;
@@ -311,7 +321,7 @@ sub lock_end_POST {
 	    create_time => $create_time,
 	    expiry_time => $expiry_time,
 	    delete_time => $delete_time,
-	    proto_xml => &{$get_proto_xml}(),
+	    proto_xml => $proto_xml,
 	    compiled_xml => $compiled_xml });
 	# return lock info
 	$c->stash->{template} = 'world/lock.tt2';
@@ -382,27 +392,35 @@ Post a turn.
 
 =cut
 
-sub turn :Chained('world_id') :PathPart('turn') :CaptureArgs(0) {
-    my ( $self, $c ) = @_;
-
-    my $world = $c->stash->{world};
-    my $world_id = $c->stash->{world_id};
-
-    # TODO: write me
-
-    # TODO: add a cleanup rule
-    #  DELETE FROM lock WHERE delete_time <= $current_time;
-}
+sub turn :Chained('world_id') :PathPart('turn') :CaptureArgs(0) { }
 
 sub turn_end :Chained('turn') :PathPart('') :Args(0) :ActionClass('REST') { }
 
 sub turn_end_POST {
     my ( $self, $c ) = @_;
-    my $world = $c->stash->{world};
 
-    # TODO: write me
-    # Update the state of the board
-    # Delete the lock
+    # Delete all out-of-date locks
+    $c->model('DB')->delete_locks();
+
+    # Get the current lock, if any
+    $self->stash_lock($c);
+
+    my $world = $c->stash->{world};
+    my $lock = $c->stash->{lock};
+
+    if (defined $lock) {
+
+	my $current_time = time();
+
+	# Update the state of the board
+	$world->board_xml ($c->request->body);
+	$world->last_modified_time ($current_time);
+	# TODO: update board_time
+	# TODO: test if board owner has changed, update owner_id
+
+	# Change the lock expiration date to now
+	$lock->expiry_time ($current_time);
+    }
 }
 
 

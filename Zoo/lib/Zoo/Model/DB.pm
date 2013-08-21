@@ -73,6 +73,21 @@ sub world_active_lock {
 }
 
 
+=head2 delete_locks
+
+Delete all locks that can be deleted.
+
+=cut
+
+sub delete_locks {
+    my ($self) = @_;
+#    $self->storage->debug(1);
+    my $current_time = time();
+    my $lock_rs = $self->resultset('Lock')->search_rs({'delete_time' => { '<=' => $current_time }});
+    $lock_rs->delete();
+}
+
+
 =head2 particles_by_name
 
 Get a list of L<Zoo::Schema::Result::Particle> objects, given a list of their name identifiers.
