@@ -200,6 +200,8 @@ sub compiled_proto_xml {
     $proto_xml = $self->proto_xml unless defined $proto_xml;
 
     $self->validate_proto_xml ($proto_xml);
+    $self->{'proto_xml_stash'} = $proto_xml;
+    $self->{'get_assembled_xml_stash'} = sub { $self->generate_xml ($proto_xml) };
 
     warn "Compiling proto-game XML...\n" if $self->verbose;
     my $transformed_proto = $self->transform_proto ($proto_xml);

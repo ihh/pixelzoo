@@ -7,6 +7,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
+__PACKAGE__->config(default => 'text/xml');
+
 =head1 NAME
 
 Zoo::Controller::World - Catalyst Controller
@@ -177,7 +179,7 @@ sub assemble {
     $c->stash->{particles} = \@particles;
 
     # grammar
-    my $gram = Grammar->newMinimalGrammar;
+    my $gram = Grammar->newMinimalGrammar;   # using newMinimalGrammar avoids creating a default 'empty' particle type
     $gram->verbose(1);
 
     for my $particle (@{$c->stash->{particles}}) {
@@ -297,25 +299,24 @@ sub lock_end_POST {
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
 	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
+	my $get_proto_xml = $c->stash->{grammar}->get_assembled_xml_stash;
 	# add the lock to the database
 	my $create_time = time();
 	my $expiry_time = $create_time + $world->lock_expiry_delay;
 	my $delete_time = $create_time + $world->lock_delete_delay;
+	my $user_id = 1;    # HACK: TODO: use Catalyst::Plugin::Authentication to get proper user IDs
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
+	    owner_id => $user_id,
 	    create_time => $create_time,
 	    expiry_time => $expiry_time,
 	    delete_time => $delete_time,
-	    # TODO: proto_xml field
+	    proto_xml => &{$get_proto_xml}(),
 	    compiled_xml => $compiled_xml });
 	# return lock info
 	$c->stash->{template} = 'world/lock.tt2';
 	$c->stash->{lock} = $lock;
-	$c->response->status(200);
-	$c->response->content_type('text/xml; charset=utf-8');  # not sure why View::XML::process doesn't catch this
-	# TODO: fix this.
-	# Still not properly working; status code returns correctly, but view does not render.
-	# Instead we get the message "Cannot find a Content-Type supported by your client."
+	$self->status_created ($c, location => ($c->req->uri->as_string . '/' . $lock->lock_id), entity => {});  # dummy entity, since we're not serializing it (using TT instead)
     }
 }
 
