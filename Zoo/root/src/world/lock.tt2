@@ -1,8 +1,10 @@
 <lock>
   <id>[% lock.id %]</id>
-  <world><id>[% world.id %]</id></world>
   <owner>
     <id>[% lock.owner_id %]</id>
     <name>[% lock.owner.username %]</name></owner>
   <expires>[% lock.expiry_time %]</expires>
+  <world>
+    <id>[% world.id %]</id>
+    [% lock.compiled_xml %] </world>
 </lock>
