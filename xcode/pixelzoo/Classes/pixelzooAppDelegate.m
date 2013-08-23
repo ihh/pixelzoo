@@ -7,6 +7,7 @@
 
 #import "pixelzooAppDelegate.h"
 #import "pixelzooViewController.h"
+#import "pixelzooWorldTableViewController.h"
 
 @implementation pixelzooAppDelegate
 
@@ -47,6 +48,9 @@
 
     
     [window addSubview:viewController.view];
+
+    [window addSubview:worldTableViewController.tableView];
+
     [window makeKeyAndVisible];
 	
 	return YES;
