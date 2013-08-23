@@ -39,6 +39,11 @@
 		28BDF9E512CBE53800173B45 /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28BDF9D312CBE53800173B45 /* xymap.c */; };
 		28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28BDFA4712CBEEB400173B45 /* testgame.xml */; };
 		28C4E4F812D8549B006680C1 /* balloon.c in Sources */ = {isa = PBXBuildFile; fileRef = 28C4E4F612D8549B006680C1 /* balloon.c */; };
+		28C97BA717C6EC6500CCE3AD /* pixelzooWorldTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BA517C6EC6500CCE3AD /* pixelzooWorldTableViewController.m */; };
+		28C97BA817C6EC6500CCE3AD /* pixelzooWorldTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28C97BA617C6EC6500CCE3AD /* pixelzooWorldTableViewController.xib */; };
+		28C97BAC17C6EEA200CCE3AD /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BAB17C6EEA200CCE3AD /* GDataXMLNode.m */; };
+		28C97BAE17C6F04000CCE3AD /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C97BAD17C6F04000CCE3AD /* libxml2.dylib */; };
+		28C97BB217C6FAC500CCE3AD /* pixelzoo.c in Sources */ = {isa = PBXBuildFile; fileRef = 28C97BAF17C6FAC500CCE3AD /* pixelzoo.c */; };
 		28D740DE12CF221200D402B8 /* xmlgoal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28D740DC12CF221200D402B8 /* xmlgoal.c */; };
 		28D7ACF80DDB3853001CB0EB /* pixelzooViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */; };
 		28DF177F12EFB5AD00B398DA /* rule.c in Sources */ = {isa = PBXBuildFile; fileRef = 28DF177D12EFB5AD00B398DA /* rule.c */; };
@@ -105,6 +110,15 @@
 		28BDFA4712CBEEB400173B45 /* testgame.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = testgame.xml; path = ../../t/testgame.xml; sourceTree = SOURCE_ROOT; };
 		28C4E4F612D8549B006680C1 /* balloon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = balloon.c; path = ../../src/balloon.c; sourceTree = SOURCE_ROOT; };
 		28C4E4F712D8549B006680C1 /* balloon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = balloon.h; path = ../../src/balloon.h; sourceTree = SOURCE_ROOT; };
+		28C97BA417C6EC6500CCE3AD /* pixelzooWorldTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooWorldTableViewController.h; sourceTree = "<group>"; };
+		28C97BA517C6EC6500CCE3AD /* pixelzooWorldTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pixelzooWorldTableViewController.m; sourceTree = "<group>"; };
+		28C97BA617C6EC6500CCE3AD /* pixelzooWorldTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = pixelzooWorldTableViewController.xib; sourceTree = "<group>"; };
+		28C97BAA17C6EEA200CCE3AD /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		28C97BAB17C6EEA200CCE3AD /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		28C97BAD17C6F04000CCE3AD /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		28C97BAF17C6FAC500CCE3AD /* pixelzoo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pixelzoo.c; path = ../../src/pixelzoo.c; sourceTree = "<group>"; };
+		28C97BB017C6FAC500CCE3AD /* pixelzoo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pixelzoo.h; path = ../../src/pixelzoo.h; sourceTree = "<group>"; };
+		28C97BB117C6FAC500CCE3AD /* pzutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pzutil.h; path = ../../src/pzutil.h; sourceTree = "<group>"; };
 		28D740DC12CF221200D402B8 /* xmlgoal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgoal.c; path = ../../src/xmlgoal.c; sourceTree = SOURCE_ROOT; };
 		28D740DD12CF221200D402B8 /* xmlgoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgoal.h; path = ../../src/xmlgoal.h; sourceTree = SOURCE_ROOT; };
 		28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooViewController.h; sourceTree = "<group>"; };
@@ -127,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28C97BAE17C6F04000CCE3AD /* libxml2.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -139,8 +154,13 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				28C97BAA17C6EEA200CCE3AD /* GDataXMLNode.h */,
+				28C97BAB17C6EEA200CCE3AD /* GDataXMLNode.m */,
 				1D3623240D0F684500981E51 /* pixelzooAppDelegate.h */,
 				1D3623250D0F684500981E51 /* pixelzooAppDelegate.m */,
+				28C97BA417C6EC6500CCE3AD /* pixelzooWorldTableViewController.h */,
+				28C97BA517C6EC6500CCE3AD /* pixelzooWorldTableViewController.m */,
+				28C97BA617C6EC6500CCE3AD /* pixelzooWorldTableViewController.xib */,
 				28D7ACF60DDB3853001CB0EB /* pixelzooViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* pixelzooViewController.m */,
 				2800A65E12CBFF99002BC1FC /* pixelzooView.h */,
@@ -160,8 +180,6 @@
 		28BDF9A312CBE51100173B45 /* PixelZoo sources */ = {
 			isa = PBXGroup;
 			children = (
-				282AE0B217C6A22000E56320 /* xmlparser.c */,
-				282AE0B317C6A22000E56320 /* xmlparser.h */,
 				28C4E4F612D8549B006680C1 /* balloon.c */,
 				28C4E4F712D8549B006680C1 /* balloon.h */,
 				284466D512E77588002D8581 /* bintree.c */,
@@ -173,6 +191,9 @@
 				28BDF9B612CBE53800173B45 /* game.c */,
 				28BDF9B712CBE53800173B45 /* game.h */,
 				280F1C9812CF1A4A00C8FA38 /* goal.c */,
+				28C97BAF17C6FAC500CCE3AD /* pixelzoo.c */,
+				28C97BB017C6FAC500CCE3AD /* pixelzoo.h */,
+				28C97BB117C6FAC500CCE3AD /* pzutil.h */,
 				280F1C9912CF1A4A00C8FA38 /* goal.h */,
 				28BDF9B812CBE53800173B45 /* list.c */,
 				28BDF9B912CBE53800173B45 /* list.h */,
@@ -211,6 +232,8 @@
 				28D740DD12CF221200D402B8 /* xmlgoal.h */,
 				28EE91651374C078001CB8E8 /* xmlmove.c */,
 				28EE91661374C078001CB8E8 /* xmlmove.h */,
+				282AE0B217C6A22000E56320 /* xmlparser.c */,
+				282AE0B317C6A22000E56320 /* xmlparser.h */,
 				28BDF9D112CBE53800173B45 /* xmlutil.c */,
 				28BDF9D212CBE53800173B45 /* xmlutil.h */,
 				28BDF9D312CBE53800173B45 /* xymap.c */,
@@ -222,6 +245,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				28C97BAD17C6F04000CCE3AD /* libxml2.dylib */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -320,6 +344,7 @@
 				2899E5220DE3E06400AC0155 /* pixelzooViewController.xib in Resources */,
 				28BDFA4812CBEEB400173B45 /* testgame.xml in Resources */,
 				28A4EDE112DBC2FF006EB5EC /* simple.xml in Resources */,
+				28C97BA817C6EC6500CCE3AD /* pixelzooWorldTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +403,9 @@
 				28EE91671374C078001CB8E8 /* xmlmove.c in Sources */,
 				280CB3CE1379CD9300AD247C /* vars.c in Sources */,
 				282AE0B417C6A22000E56320 /* xmlparser.c in Sources */,
+				28C97BA717C6EC6500CCE3AD /* pixelzooWorldTableViewController.m in Sources */,
+				28C97BAC17C6EEA200CCE3AD /* GDataXMLNode.m in Sources */,
+				28C97BB217C6FAC500CCE3AD /* pixelzoo.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
