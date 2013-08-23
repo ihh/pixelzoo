@@ -19,7 +19,6 @@
     // Override point for customization after app launch    
     
     // Basic idea:
-    // refactor pixelzooViewController to #include pixelzoo.h instead of xmlgame.h
     //     pixelzooWorldTableViewController *worldTableViewController;
     //     #define UrlPrefix http://localhost:3000/
     // get world list from http://localhost:3000/world
@@ -39,6 +38,7 @@
     // if successful, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
     // create pixelzooViewController, initialize from <game> element, add to superview
     //     [superview addSubview:viewController.view];
+    // refactor pixelzooViewController to #include pixelzoo.h instead of xmlgame.h
     // update pixelzooViewController: add another NSTimer for lock expiration, change "restart" to "quit"
     // when done, call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
     //     [viewController removeFromSuperview];
