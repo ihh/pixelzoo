@@ -19,6 +19,7 @@
     // Override point for customization after app launch    
     
     // Basic idea:
+    // refactor pixelzooViewController to #include pixelzoo.h instead of xmlgame.h
     //     pixelzooWorldTableViewController *worldTableViewController;
     //     #define UrlPrefix http://localhost:3000/
     // get world list from http://localhost:3000/world

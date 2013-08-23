@@ -9,10 +9,7 @@
 
 @class pixelzooViewController;
 
-@interface pixelzooAppDelegate : NSObject <UIApplicationDelegate> {
-    UIWindow *window;
-    pixelzooViewController *viewController;
-}
+@interface pixelzooAppDelegate : NSObject <UIApplicationDelegate>
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet pixelzooViewController *viewController;
