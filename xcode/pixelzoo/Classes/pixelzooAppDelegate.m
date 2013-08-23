@@ -12,6 +12,7 @@
 
 @synthesize window;
 @synthesize viewController;
+@synthesize worldTableViewController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
@@ -20,7 +21,7 @@
     
     // Basic idea:
     //     pixelzooWorldTableViewController *worldTableViewController;
-    //     #define UrlPrefix http://localhost:3000/
+    // Use SERVER_URL_PREFIX instead of localhost:3000/world...
     // get world list from http://localhost:3000/world
     // e.g. GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
     // parse using GDataXMLDocument, use xpath to extract list of <world>...</world> elements as NSArray
