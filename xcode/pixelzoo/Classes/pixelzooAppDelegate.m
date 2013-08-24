@@ -42,9 +42,14 @@
         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:data 
                                                                options:0 error:&error];
 
-        NSLog(@"%@", doc.rootElement);
+        NSArray *worlds = [doc nodesForXPath:@"//world-list/world" error:nil];
 
-        // add this to pixelzooWorldTableViewController as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
+        // little debug logging
+        for (GDataXMLNode* node in worlds)
+            NSLog(@"%@", node);
+
+        // put worlds NSArray in pixelzooWorldTableViewController
+        // as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
 
         // add the TableViewController to the view
         [window addSubview:worldTableViewController.tableView];
@@ -60,7 +65,6 @@
     // if successful, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
     // create pixelzooViewController, initialize from <game> element, add to superview
     //     [superview addSubview:viewController.view];
-    // refactor pixelzooViewController to #include pixelzoo.h instead of xmlgame.h
     // update pixelzooViewController: add another NSTimer for lock expiration, change "restart" to "quit"
     // when done, call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
     //     [viewController removeFromSuperview];
