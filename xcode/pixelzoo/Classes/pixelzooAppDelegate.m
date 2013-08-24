@@ -50,7 +50,8 @@
 
         // put worlds NSArray in pixelzooWorldTableViewController
         // as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
-
+        self.worldTableViewController.worldArray = worlds;
+        
         // add the TableViewController to the view
         [window addSubview:worldTableViewController.tableView];
 
@@ -72,7 +73,7 @@
 
     }
     
-    [window addSubview:viewController.view];
+//    [window addSubview:viewController.view];
 
     [window makeKeyAndVisible];
 	

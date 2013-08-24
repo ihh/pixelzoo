@@ -10,4 +10,6 @@
 
 @interface pixelzooWorldTableViewController : UITableViewController
 
+@property (nonatomic, retain) NSArray *worldArray;
+
 @end

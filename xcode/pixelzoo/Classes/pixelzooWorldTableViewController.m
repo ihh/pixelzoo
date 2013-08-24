@@ -7,8 +7,11 @@
 //
 
 #import "pixelzooWorldTableViewController.h"
+#import "GDataXMLNode.h"
 
 @implementation pixelzooWorldTableViewController
+
+@synthesize worldArray;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -77,16 +80,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    NSLog(@"Rows: %@",self.worldArray.count);
+    return self.worldArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -99,6 +101,14 @@
     }
     
     // Configure the cell...
+    
+    GDataXMLNode *worldNode = [self.worldArray objectAtIndex:indexPath.row];
+    GDataXMLElement *nameElement = [worldNode elementWithName:@"world"];
+    cell.textLabel.text = [nameElement stringValue];
+    
+    NSLog(@"World %@",worldNode);
+    NSLog(@"Name %@",nameElement);
+    NSLog(@"cell.textLabel.text %@",cell.textLabel.text);
     
     return cell;
 }
