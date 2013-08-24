@@ -9,7 +9,7 @@
 #define pixelzoo_pixelzooDefs_h
 
 // PixelZoo server
-#define SERVER_URL_PREFIX http://localhost:3000/
+#define SERVER_URL_PREFIX "http://localhost:3000"
 
 // PixelZoo game constants
 // #define GAME_XML_FILENAME "testgame"

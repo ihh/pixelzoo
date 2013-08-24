@@ -122,6 +122,10 @@ Equivalent to a call to pzGetCellPaletteIndex() followed by a call to pzGetPalet
 @return A 24-bit RGB value */
 int PZEXPORT pzGetCellRgb(pzGame,int x,int y);
 
+#define pzGetRgbRed(Color)   (((Color) >> 16) & 0xff)
+#define pzGetRgbGreen(Color) (((Color) >> 8) & 0xff)
+#define pzGetRgbBlue(Color)  ((Color) & 0xff)
+
 /**
 The color of a cell.
 @return the board's internal palette index; see pzGetPaletteRgb() */
@@ -220,6 +224,10 @@ int PZEXPORT pzGetNumberOfConsoleLines(pzGame);
 /**
  Get a line from the output text console */
 const char* PZEXPORT pzGetConsoleText(pzGame,int lineNum);
+
+/**
+ Print a line to the output text console */
+void PZEXPORT pzPrintConsoleText(pzGame,char* text);
 
 
 /* Floating text balloons, over the board */

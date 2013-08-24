@@ -8,29 +8,25 @@
 #import <UIKit/UIKit.h>
 
 // PixelZoo includes
-#include "xmlgame.h"
+#include "pixelzoo.h"
 #include "pixelzooDefs.h"
+
+typedef struct XYCoord { int x, y; } XYCoord;
 
 // Game data
 @interface pixelzooViewController : UIViewController {
-	// PixelZoo game
-//	Game *game;
-//	CGPoint viewOrigin;
-//	CGFloat cellSize;  // pixels per cell
-	
 	// timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 	
 	// UI
 	int panning, zooming; // , examining;
-//	XYCoord examCoord;
 	CGFloat cellSizeAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfPan;  // used when panning
 }
 
-@property(readonly) Game *game;
+@property(readonly) pzGame *game;
 @property(readonly) CGPoint viewOrigin;
 @property(readonly) int examining;
 @property(readonly) XYCoord examCoord;

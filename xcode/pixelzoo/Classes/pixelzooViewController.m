@@ -42,7 +42,7 @@
 	if (gameXMLData) {  
 		// initialize the game  
 		NSString *gameXMLString = [[NSString alloc] initWithData:gameXMLData encoding:NSUTF8StringEncoding];
-		game = newGameFromXmlString([gameXMLString UTF8String]);
+		game = pzNewGameFromXmlString([gameXMLString UTF8String], false);
 		[gameXMLString release];
 	} else {
 		NSLog(@"Couldn't find game XML file");
@@ -55,7 +55,7 @@
 
 -(void)deleteGame {
 	if (game)
-		deleteGame(game);
+		pzDeleteGame(game);
 	game = NULL;
 }
 
@@ -109,7 +109,7 @@
     evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
 
 	// start the Game
-	gameStart (game);
+	pzStartGame(game);
 }
 
 -(void)stopTimers
@@ -122,11 +122,7 @@
 /* Board updates */
 - (void)callGameLoop
 {   
-	double targetTicks = game->ticksPerSecond / GAMELOOP_CALLS_PER_SECOND;
-	double actualTicks, elapsedTime;
-	int64_Microticks actualMicroticks;
-	int cellUpdates;
-	gameLoop (game, targetTicks, MAX_PROPORTION_TIME_EVOLVING, &actualMicroticks, &actualTicks, &cellUpdates, &elapsedTime);
+    pzUpdateGame(game,GAMELOOP_CALLS_PER_SECOND,0);
 }
 
 
@@ -147,7 +143,7 @@
 
 // bigBoardRect method - returns the rectangle that the full board would occupy
 - (CGRect) bigBoardRect {
-	CGFloat boardSize = self->game->board->size * [self cellSize];
+	CGFloat boardSize = pzGetBoardSize(self->game) * [self cellSize];
 	return CGRectMake(-viewOrigin.x, -viewOrigin.y, boardSize, boardSize);
 }
 
@@ -161,7 +157,7 @@
 // consoleBoardRect method - returns the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
 - (CGRect) consoleBoardRect {
 	CGFloat magCellSize = [self magCellSize];
-	CGFloat consoleBoardSize = self->game->board->size * magCellSize;
+	CGFloat consoleBoardSize = pzGetBoardSize(self->game) * magCellSize;
 	CGPoint cmid = [self consoleCentroid];
 	// want origin + magCellSize*examCoord = consoleCentroid
 	return CGRectMake (cmid.x - magCellSize * (.5 + (double) examCoord.x),
@@ -177,7 +173,7 @@
 
 // toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
 - (CGRect) toolboxRect {
-	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (numberOfToolsVisible(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
+	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 }
 
 // consoleRect method - returns the drawing/clipping rectangle of text console
@@ -197,7 +193,7 @@
 	
 	CGFloat tw = TOOLBAR_WIDTH;
 	CGFloat tx = width - tw; 
-	CGFloat th = MIN (tw, height / (numberOfToolsVisible(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
+	CGFloat th = MIN (tw, height / (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 	
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);	
 }
@@ -218,54 +214,46 @@
 			int x = (currentPoint.x + viewOrigin.x) / cellSize;
 			int y = (currentPoint.y + viewOrigin.y) / cellSize;
 			
-			if (game->selectedTool == NULL) {
+			if (pzGetSelectedToolNumber(game) < 0) {
 				examCoord.x = x;
 				examCoord.y = y;
 
 				examining = 1;
-				game->toolActive = 0;
+				pzUntouchCell(game);
 
 			} else {
-				game->toolPos.x = x;
-				game->toolPos.y = y;
-
-				if (!game->toolActive)
-					game->lastToolPos = game->toolPos;
-			
-				game->toolActive = 1;
+				pzTouchCell(game,x,y);
 			}
 			
 		} else if (CGRectContainsPoint(toolboxRect, currentPoint)) {
-			game->toolActive = 0;
+			pzUntouchCell(game);
 			if (CGRectContainsPoint (toolboxRect, currentPoint)) {
 				int nTool = 0;
 				CGRect moveToolRect = [self toolRect:(nTool++)];
 				// examine
 				if (CGRectContainsPoint(moveToolRect, currentPoint)) {
-					game->selectedTool = NULL;
+					pzUnselectTool(game);
 				} else {
 					// Game tools
-					int foundTool = 0;
-					for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
-						Tool *tool = toolNode->value;
-						if (!tool->hidden) {
-							CGRect toolRect = [self toolRect:(nTool++)];
+                    int nTools = pzGetNumberOfTools(game);
+					int foundTool = false;
+                    for (int nTool = 0; nTool < nTools; ++nTool) {
+							CGRect toolRect = [self toolRect:(nTool+1)];
 							if (CGRectContainsPoint(toolRect, currentPoint)) {
-								game->selectedTool = tool;
-								foundTool = 1;
+								pzSelectTool(game, nTool);
+								foundTool = true;
 								break;
 							}
-						}
-					}
+                    }
 					if (!foundTool) {
 						// reset level
 						if (touch.tapCount == 3) {
-							printToGameConsole(game, "Resetting level", PaletteWhite, 1);
+							pzPrintConsoleText(game, "Resetting level");
 							[self stopTimers];
 							[self reloadGame];
 							[self startTimers];
 						} else {
-							printToGameConsole(game, "Tap three times to restart", PaletteWhite, 1);
+							pzPrintConsoleText(game, "Tap three times to restart");
 						}
 					}
 				}
@@ -287,13 +275,12 @@
 			int x = (currentPoint.x + viewOrigin.x) / (double) cellSize;
 			int y = (currentPoint.y + viewOrigin.y) / (double) cellSize;
 
-			if (game->selectedTool == NULL) {
+			if (pzGetSelectedToolNumber(game) < 0) {
 				examCoord.x = x;
 				examCoord.y = y;
 				
 			} else {
-				game->toolPos.x = x;
-				game->toolPos.y = y;
+                pzTouchCell(game, x, y);
 			}
 		}
 	}
@@ -301,7 +288,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-	game->toolActive = 0;
+	pzUntouchCell(game);
 	examining = panning = zooming = 0;
 }
 
@@ -325,7 +312,7 @@
 		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfPan.y - trans.y, mvo.y));
 		
 		panning = 1;
-		game->toolActive = 0;
+		pzUntouchCell(game);
 	} else {
 		panning = 0;
 	}
@@ -352,7 +339,7 @@
 		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfZoom.y * scale, mvo.y));
 		
 		zooming = 1;
-		game->toolActive = 0;
+		pzUntouchCell(game);
 	} else {
 		zooming = 0;
 	}
@@ -362,7 +349,7 @@
 - (CGFloat) minCellSize {
 	CGRect boardRect = [self boardRect];
 	CGFloat minDim = MIN (boardRect.size.width, boardRect.size.height);
-	double minSize = minDim / (CGFloat) self->game->board->size;
+	double minSize = minDim / (CGFloat) pzGetBoardSize(self->game);
 //	CGFloat maxDim = MAX (boardRect.size.width, boardRect.size.height);
 //	double minSize = maxDim / (CGFloat) self->game->board->size;
 //	int minIntSize = ceil((double) minSize);
@@ -377,7 +364,7 @@
 - (CGPoint) maxViewOrigin {
 	CGPoint mvo;
 	CGFloat cs = [self cellSize];
-	CGFloat boardSize = cs * self->game->board->size;
+	CGFloat boardSize = cs * pzGetBoardSize(self->game);;
 	CGRect boardRect = [self boardRect];
 	mvo.x = MAX (0, boardSize - boardRect.size.width);
 	mvo.y = MAX (0, boardSize - boardRect.size.height);

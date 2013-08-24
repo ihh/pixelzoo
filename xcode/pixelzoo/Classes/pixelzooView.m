@@ -34,8 +34,8 @@
 	++redraws;
 	
 	// get controller info
-	Game *game = [controller game];
-	int boardSize = game->board->size;
+	pzGame *game = [controller game];
+	int boardSize = pzGetBoardSize(game);
 	CGFloat cellSize = [controller cellSize];
 	CGRect boardRect = [controller boardRect];
 	CGRect bigBoardRect = [controller bigBoardRect];
@@ -56,7 +56,7 @@
 											  kCGImageAlphaNoneSkipLast);
 		
 		CGColorSpaceRelease(colorSpace);
-		Assert (bitmapData != NULL, "Couldn't alloc bitmapData");
+		pzAssert (bitmapData != NULL, "Couldn't alloc bitmapData");
 	}
 	
 	// Get the graphics context and clear it
@@ -78,11 +78,10 @@
 	unsigned char *bitmapWritePtr = bitmapData;
 	for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically 
 		for (int x = 0; x < boardSize; ++x) {
-			PaletteIndex cellColorIndex = readBoardColor(game->board, x, y);
-			RGB *rgb = &game->board->palette.rgb[cellColorIndex];
-			*(bitmapWritePtr++) = rgb->r;
-			*(bitmapWritePtr++) = rgb->g;
-			*(bitmapWritePtr++) = rgb->b;
+			int rgb = pzGetCellRgb(game, x, y);
+			*(bitmapWritePtr++) = pzGetRgbRed(rgb);
+			*(bitmapWritePtr++) = pzGetRgbGreen(rgb);
+			*(bitmapWritePtr++) = pzGetRgbBlue(rgb);
 			++bitmapWritePtr;
 		}
 	}
@@ -102,18 +101,14 @@
 	CGContextRestoreGState (ctx);
 	
 	// redraw tools
-	int nTool = 0;
-	[self renderTool:(nTool++) withContext:ctx withColor:NULL withReserve:1 withName:EXAMINE_TOOL_NAME asSelected:(game->selectedTool == NULL)];
-	for (ListNode *toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
-		Tool *tool = toolNode->value;
-		if (!tool->hidden) {
-			State toolState = tool->defaultBrushState;
-			PaletteIndex toolColorIndex = getParticleColor (game->board->byType[StateType(toolState)], toolState);
-			RGB *rgb = &game->board->palette.rgb[toolColorIndex];
-			[self renderTool:(nTool++) withContext:ctx withColor:rgb withReserve:(tool->reserve / tool->maxReserve) withName:tool->name asSelected:(tool == game->selectedTool)];
-		}
-	}
-	[self renderTool:(nTool++) withContext:ctx withColor:NULL withReserve:1 withName:RESET_TOOL_NAME asSelected:0];
+	[self renderTool:0 withContext:ctx withColor:0 withReserve:1 withName:EXAMINE_TOOL_NAME asSelected:(pzGetSelectedToolNumber(game)<0)];
+    int nTools = pzGetNumberOfTools(game);
+    for (int nTool = 0; nTool < nTools; ++nTool) {
+        pzTool tool = pzGetToolByNumber(game,nTool);
+        int rgb = pzGetToolRgb(game,tool);
+        [self renderTool:(nTool+1) withContext:ctx withColor:rgb withReserve:pzGetToolReserveLevel(tool) withName:((char*)pzGetToolName(tool)) asSelected:(nTool == pzGetSelectedToolNumber(game))];
+    }
+	[self renderTool:(nTools+1) withContext:ctx withColor:0 withReserve:1 withName:RESET_TOOL_NAME asSelected:0];
 
 	// redraw console
 	CGContextSaveGState (ctx);
@@ -123,13 +118,15 @@
 	} else {
 		CGFloat cy = [self frame].size.height - 1;
 		CGFloat fade = 1;
-		for (int cl = ConsoleLines; cl > 0 && cy >= boardRect.size.height; --cl) {
-			int ci = (cl + game->consoleLastLineIndex) % ConsoleLines;
-			if (game->consoleText[ci]) {
+        int lines = pzGetNumberOfConsoleLines(game);
+		for (int cl = lines; cl > 0 && cy >= boardRect.size.height; --cl) {
+			int ci = (cl + lines - 1) % lines;
+            char* ctext = (char*) pzGetConsoleText(game,ci);
+			if (ctext) {
 				// measure text
-				CGFloat charsize = game->consoleSize[ci] * CONSOLE_FONT_SIZE;
+				CGFloat charsize = CONSOLE_FONT_SIZE;  // ignores game->consoleSize[ci]
 				UIFont *font = [UIFont fontWithName:fontName size:charsize];
-				CGSize textSize = [self measureText:game->consoleText[ci] withFont:font withSpacing:CONSOLE_FONT_SPACING];
+				CGSize textSize = [self measureText:ctext withFont:font withSpacing:CONSOLE_FONT_SPACING];
 				
 				CGFloat ch = textSize.height;
 				CGContextSelectFont (ctx,
@@ -139,10 +136,10 @@
 				CGContextSetCharacterSpacing (ctx, CONSOLE_FONT_SPACING);
 				CGContextSetTextDrawingMode (ctx, kCGTextFill);
 				
-				RGB *rgb = &game->board->palette.rgb[game->consoleColor[ci]];
+				int rgb = 0;  // ignores game->consoleColor[ci]
 				[self setFill:rgb withContext:ctx withFactor:fade withOpacity:1 asInverse:0];
 				// print
-				CGContextShowTextAtPoint (ctx, 0, cy + [font descender], game->consoleText[ci], strlen(game->consoleText[ci]));			
+				CGContextShowTextAtPoint (ctx, 0, cy + [font descender], ctext, strlen(ctext));			
 				// next line
 				fade *= CONSOLE_FONT_FADE;
 				cy -= ch;
@@ -154,28 +151,35 @@
 	// redraw speech balloons
 	CGContextSaveGState (ctx);
 	CGContextClipToRect (ctx, boardRect);
-	for (void **ptr = game->board->balloon->begin; ptr != game->board->balloon->end; ++ptr) {
-		Balloon *b = (Balloon*) *ptr;
-		int len = strlen(b->text);
-		RGB *rgb = &game->board->palette.rgb[b->color];
-
+    int balloons = pzGetNumberOfBalloons(game); 
+	for (int balloon = 0; balloon < balloons; ++balloon) {
+		pzBalloon b = pzGetBalloonByNumber(game,balloon);
+        char* text = (char*) pzGetBalloonText(b);
+		int len = strlen(text);
+		int rgb = pzGetBalloonTextRgb(game,b);
+        double x = pzGetBalloonXpos(b);
+        double y = pzGetBalloonYpos(b);
+        double csz = pzGetBalloonCharSize(b);
+        double csp = pzGetBalloonCharSpacing(b);
+        double opacity = pzGetBalloonOpacity(b);
+        
 		// compute font size
 		CGFloat
-		charsize = b->size * BALLOON_FONT_SIZE * cellSize / INITIAL_PIXELS_PER_CELL,
-			charspacing = b->z;
+		charsize = csz * BALLOON_FONT_SIZE * cellSize / INITIAL_PIXELS_PER_CELL,
+			charspacing = csp;
 
 		// measure text
 		UIFont *font = [UIFont fontWithName:fontName size:charsize];
-		CGSize textSize = [self measureText:b->text withFont:font withSpacing:charspacing];
+		CGSize textSize = [self measureText:text withFont:font withSpacing:charspacing];
 		
 		// calculate coords to center text on point
 		CGPoint viewOrigin = [controller viewOrigin];
 		CGFloat
-			xpos = (cellSize * (CGFloat) b->x) - textSize.width / 2 - viewOrigin.x,
-			ypos = (cellSize * (CGFloat) b->y) + textSize.height / 2 - viewOrigin.y;
+			xpos = (cellSize * (CGFloat) x) - textSize.width / 2 - viewOrigin.x,
+			ypos = (cellSize * (CGFloat) y) + textSize.height / 2 - viewOrigin.y;
 		
 		// print balloon
-		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:(b->opacity * BALLOON_BACKGROUND_OPACITY) asInverse:1];
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:(opacity * BALLOON_BACKGROUND_OPACITY) asInverse:1];
 		CGContextFillRect(ctx, CGRectMake(xpos, ypos - textSize.height, textSize.width, textSize.height));
 
 		// print text
@@ -187,29 +191,19 @@
 		CGContextSetCharacterSpacing (ctx, charspacing);
 		CGContextSetTextDrawingMode (ctx, kCGTextFill);
 
-		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:b->opacity asInverse:0];
-		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], b->text, len);
+		[self setFill:rgb withContext:ctx withFactor:1 withOpacity:opacity asInverse:0];
+		CGContextShowTextAtPoint (ctx, xpos, ypos + [font descender], text, len);
 	}
 	CGContextRestoreGState (ctx);
 
 	// redraw name of currently touched pixel, if "examine" tool is being used
 	if ([controller examining]) {
 		XYCoord pos = [controller examCoord];
-		State examState = readBoardState (game->board, pos.x, pos.y);
-		Particle *particle = game->board->byType[StateType(examState)];
-		PaletteIndex examColorIndex = particle ? getParticleColor (particle, examState) : PaletteWhite;
-		RGB *rgb = &game->board->palette.rgb[examColorIndex];
 		UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
-		char *text = particle ? particle->name : EXAMINE_EMPTY_TEXT;
+        char* text = (char*) pzGetCellName(game,pos.x,pos.y);
+		int rgb = pzGetCellNameRgb(game,pos.x,pos.y);
+		if (!text) text = EXAMINE_EMPTY_TEXT;
 
-		Vars examVars = examState & VarsMask;
-		char debugText[512];
-		if (particle)
-			sprintf (debugText, "%s(%d)/%llx", text, particle ? particle->count : 0, examVars);
-		else
-			sprintf (debugText, "%s/%llx", text, examVars);
-		text = debugText;
-		
 		CGSize textSize = [self measureText:text withFont:font withSpacing:EXAMINE_FONT_SPACING];
 		CGContextSelectFont (ctx,
 							 GAME_FONT,
@@ -298,7 +292,7 @@
 
 // helpers
 
-- (void) renderTool:(int)nTool withContext:(CGContextRef)ctx withColor:(RGB*)rgb withReserve:(CGFloat)reserve withName:(char*)name asSelected:(BOOL)selectFlag {
+- (void) renderTool:(int)nTool withContext:(CGContextRef)ctx withColor:(int)rgb withReserve:(CGFloat)reserve withName:(char*)name asSelected:(BOOL)selectFlag {
 	NSString *fontName = [[NSString alloc] initWithUTF8String:GAME_FONT];
 	UIFont *font = [UIFont fontWithName:fontName size:TOOL_FONT_SIZE];
 	[fontName release];
@@ -343,12 +337,12 @@
 	return 1-x;
 }
 
-- (void) setStroke:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+- (void) setStroke:(int)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
 	CGFloat r = 0, g = 0, b = 0;
 	if (rgb) {
-		r = fade*(CGFloat)rgb->r/255;
-		g = fade*(CGFloat)rgb->g/255;
-		b = fade*(CGFloat)rgb->b/255;
+		r = fade*((CGFloat)pzGetRgbRed(rgb))/255;
+		g = fade*((CGFloat)pzGetRgbBlue(rgb))/255;
+		b = fade*((CGFloat)pzGetRgbBlue(rgb))/255;
 	}
 	CGFloat invr = [self myInverse:r], invg = [self myInverse:g], invb = [self myInverse:b];
 	if (inverseFlag) {
@@ -358,12 +352,12 @@
 	}
 }
 
-- (void) setFill:(RGB*)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
+- (void) setFill:(int)rgb withContext:(CGContextRef)ctx withFactor:(CGFloat)fade withOpacity:(CGFloat)opacity asInverse:(BOOL)inverseFlag {
 	CGFloat r = 0, g = 0, b = 0;
 	if (rgb) {
-		r = fade*(CGFloat)rgb->r/255;
-		g = fade*(CGFloat)rgb->g/255;
-		b = fade*(CGFloat)rgb->b/255;
+		r = fade*((CGFloat)pzGetRgbRed(rgb))/255;
+		g = fade*((CGFloat)pzGetRgbBlue(rgb))/255;
+		b = fade*((CGFloat)pzGetRgbBlue(rgb))/255;
 	}
 	CGFloat invr = [self myInverse:r], invg = [self myInverse:g], invb = [self myInverse:b];
 	if (inverseFlag) {

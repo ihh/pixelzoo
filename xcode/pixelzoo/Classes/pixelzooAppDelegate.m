@@ -8,6 +8,7 @@
 #import "pixelzooAppDelegate.h"
 #import "pixelzooViewController.h"
 #import "pixelzooWorldTableViewController.h"
+#import "GDataXMLNode.h"
 
 @implementation pixelzooAppDelegate
 
@@ -21,14 +22,32 @@
     // Override point for customization after app launch    
     
     // Basic idea:
-    //     pixelzooWorldTableViewController *worldTableViewController;
     // Use SERVER_URL_PREFIX instead of localhost:3000/world...
     // get world list from http://localhost:3000/world
     // e.g. GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    // parse using GDataXMLDocument, use xpath to extract list of <world>...</world> elements as NSArray
-    // e.g. http://www.raywenderlich.com/725/xml-tutorial-for-ios-how-to-read-and-write-xml-documents-with-gdataxml
-    // add this to pixelzooWorldTableViewController as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
-    //     [window addSubview:worldTableViewController.view]
+
+    // Send a synchronous request
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",@SERVER_URL_PREFIX,@"world/list"]]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        // parse data using GDataXMLDocument, use xpath to extract list of <world>...</world> elements as NSArray
+        // e.g. http://www.raywenderlich.com/725/xml-tutorial-for-ios-how-to-read-and-write-xml-documents-with-gdataxml
+
+        GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:data 
+                                                               options:0 error:&error];
+
+        NSLog(@"%@", doc.rootElement);
+
+        // add this to pixelzooWorldTableViewController as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
+
+        // add the TableViewController to the view
+        [window addSubview:worldTableViewController.tableView];
 
     // override pixelzooWorldTableViewController.didSelectRowAtIndexPath
     // https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html
@@ -37,6 +56,7 @@
     // extract WorldID from GDataXMLNode (using xpath?)
 
     // POST a lock to http://localhost:3000/world/WorldID/lock
+    // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
     // if successful, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
     // create pixelzooViewController, initialize from <game> element, add to superview
     //     [superview addSubview:viewController.view];
@@ -46,10 +66,9 @@
     //     [viewController removeFromSuperview];
     //     [viewController release];
 
+    }
     
     [window addSubview:viewController.view];
-
-    [window addSubview:worldTableViewController.tableView];
 
     [window makeKeyAndVisible];
 	

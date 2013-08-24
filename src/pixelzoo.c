@@ -353,3 +353,7 @@ int pzGetPaletteRgb(pzGame pzg,int paletteIndex) {
 
 void pzAbort(char* error) { Abort(error); }
 void pzAssert(int assertion, char* error) { Assert(assertion,error); }
+
+void pzPrintConsoleText (pzGame game, char* text) {
+  printToGameConsole (game, text, PaletteWhite, 1);
+}
