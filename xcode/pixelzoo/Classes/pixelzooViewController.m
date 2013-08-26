@@ -12,9 +12,9 @@
 @implementation pixelzooViewController
 
 @synthesize game;
-@synthesize viewOrigin;
-@synthesize examCoord;
 @synthesize examining;
+@synthesize examCoord;
+@synthesize viewOrigin;
 @synthesize cellSize;
 
 /*

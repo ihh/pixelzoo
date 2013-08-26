@@ -14,20 +14,30 @@ typedef struct XYCoord { int x, y; } XYCoord;
 
 // Game data
 @interface pixelzooViewController : UIViewController {
-	// timers
+@public
+    // the game
+    pzGame* game;
+	
+    // rendering
+    CGFloat cellSize;
+
+    // timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 	
 	// UI
-	int panning, zooming; // , examining;
+	int panning, zooming, examining;
+    XYCoord examCoord;
+
+@protected
 	CGFloat cellSizeAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfPan;  // used when panning
 }
 
 @property(readonly) pzGame *game;
-@property(readonly) CGPoint viewOrigin;
 @property(readonly) int examining;
+@property(readonly) CGPoint viewOrigin;
 @property(readonly) XYCoord examCoord;
 @property(readonly) CGFloat cellSize;
 

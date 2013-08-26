@@ -7,6 +7,7 @@
 //
 
 #import "pixelzooWorldTableViewController.h"
+#import "pixelzooViewController.h"
 #import "pixelzooDefs.h"
 #import "GDataXMLNode.h"
 
@@ -110,6 +111,7 @@
     GDataXMLElement *nameElement = [names objectAtIndex:0];
 
     cell.textLabel.text = [nameElement stringValue];
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
     return cell;
 }
@@ -157,6 +159,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Create and push another view controller.
+    pixelzooViewController* viewController = [[pixelzooViewController alloc] init];
+    [self.navigationController pushViewController:viewController animated:YES];
+    
     // extract WorldID from GDataXMLNode (using xpath)
     int row = indexPath.row;
     GDataXMLNode *worldNode = [self.worldArray objectAtIndex:row];
@@ -191,7 +197,7 @@
                                              returningResponse:&response
                                                       error:&error];
     NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
-    
+
     // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
     if (error == nil && [httpResponse statusCode] == 201)  // 201 CREATED
     {
@@ -203,28 +209,21 @@
         GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
         NSString *gameString = [gameElement stringValue];
         
-        // create pixelzooViewController, initialize from <game> element, add to superview
-        //     [superview addSubview:viewController.view];
+        // initialize viewController from <game> element, start game
+
+        // TODO (updates to pixelzooViewController):
+        // implement pixelzooViewController.loadFromString method
+
+        // add another NSTimer for lock expiration, change "restart" to "quit"
         
-        // Navigation logic may go here. Create and push another view controller.
-        /*
-         <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-         // ...
-         // Pass the selected object to the new view controller.
-         [self.navigationController pushViewController:detailViewController animated:YES];
-         [detailViewController release];
-         */
+        // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
+        // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
+        // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
+        
     }
 
-    // updates to pixelzooViewController:
-    // add another NSTimer for lock expiration, change "restart" to "quit"
+    [viewController release];
 
-    // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
-    // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
-    // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    //     [viewController removeFromSuperview];
-    //     [viewController release];
-    
 }
 
 @end
