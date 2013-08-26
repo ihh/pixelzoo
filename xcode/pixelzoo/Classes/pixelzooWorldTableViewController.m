@@ -87,8 +87,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    NSLog(@"Rows: %@",self.worldArray.count);
-    return self.worldArray.count;
+    NSInteger rows = [self.worldArray count];
+    NSLog(@"Rows: %d",rows);
+    return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -102,13 +103,12 @@
     
     // Configure the cell...
     
-    GDataXMLNode *worldNode = [self.worldArray objectAtIndex:indexPath.row];
-    GDataXMLElement *nameElement = [worldNode elementWithName:@"world"];
+    int row = indexPath.row;
+    GDataXMLNode *worldNode = [self.worldArray objectAtIndex:row];
+    NSArray *names = [worldNode nodesForXPath:@"name" error:nil];
+    GDataXMLElement *nameElement = [names objectAtIndex:0];
+
     cell.textLabel.text = [nameElement stringValue];
-    
-    NSLog(@"World %@",worldNode);
-    NSLog(@"Name %@",nameElement);
-    NSLog(@"cell.textLabel.text %@",cell.textLabel.text);
     
     return cell;
 }

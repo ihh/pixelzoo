@@ -8,8 +8,7 @@
 #import <UIKit/UIKit.h>
 
 // PixelZoo includes
-#include "pixelzoo.h"
-#include "pixelzooDefs.h"
+#import "pixelzoo.h"
 
 typedef struct XYCoord { int x, y; } XYCoord;
 

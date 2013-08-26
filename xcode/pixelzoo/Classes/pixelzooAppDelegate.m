@@ -8,6 +8,7 @@
 #import "pixelzooAppDelegate.h"
 #import "pixelzooViewController.h"
 #import "pixelzooWorldTableViewController.h"
+#import "pixelzooDefs.h"
 #import "GDataXMLNode.h"
 
 @implementation pixelzooAppDelegate
@@ -20,6 +21,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after app launch    
+    
+    UIWindow* w = [[UIWindow alloc] init];
+    self.window = w;
+    [w release];
+    
+    pixelzooWorldTableViewController* wtvc = [[pixelzooWorldTableViewController alloc] init];
+    self.worldTableViewController = wtvc;
+    [wtvc release];
     
     // Basic idea:
     // Use SERVER_URL_PREFIX instead of localhost:3000/world...
@@ -50,7 +59,8 @@
 
         // put worlds NSArray in pixelzooWorldTableViewController
         // as per http://blog.teamtreehouse.com/introduction-to-the-ios-uitableviewcontroller
-        self.worldTableViewController.worldArray = worlds;
+        worldTableViewController.worldArray = worlds;
+        [worlds release];
         
         // add the TableViewController to the view
         [window addSubview:worldTableViewController.tableView];
@@ -83,6 +93,7 @@
 
 - (void)dealloc {
     [viewController release];
+    [worldTableViewController release];
     [window release];
     [super dealloc];
 }

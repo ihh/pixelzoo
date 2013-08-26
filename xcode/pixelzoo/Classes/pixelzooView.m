@@ -6,6 +6,7 @@
 //
 
 #import "pixelzooView.h"
+#import "pixelzooDefs.h"
 
 
 @implementation pixelzooView

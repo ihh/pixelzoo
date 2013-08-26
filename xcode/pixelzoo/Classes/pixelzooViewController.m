@@ -7,6 +7,7 @@
 
 #import "pixelzooViewController.h"
 #import "pixelzooView.h"
+#import "pixelzooDefs.h"
 
 @implementation pixelzooViewController
 
@@ -24,7 +25,7 @@
  }
  return self;
  }
- */
+*/
 
 /*
  // Override to allow orientations other than the default portrait orientation.
