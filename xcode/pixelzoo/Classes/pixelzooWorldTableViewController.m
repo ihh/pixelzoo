@@ -7,6 +7,7 @@
 //
 
 #import "pixelzooWorldTableViewController.h"
+#import "pixelzooDefs.h"
 #import "GDataXMLNode.h"
 
 @implementation pixelzooWorldTableViewController
@@ -156,29 +157,71 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+    // extract WorldID from GDataXMLNode (using xpath)
+    int row = indexPath.row;
+    GDataXMLNode *worldNode = [self.worldArray objectAtIndex:row];
 
-    
-    // override pixelzooWorldTableViewController.didSelectRowAtIndexPath
-    // https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html
-    
-    // the following all occurs within pixelzooWorldTableViewController
-    // extract WorldID from GDataXMLNode (using xpath?)
+    NSArray *ids = [worldNode nodesForXPath:@"id" error:nil];
+    GDataXMLElement *idElement = [ids objectAtIndex:0];
+    NSString *idText = [idElement stringValue];
     
     // POST a lock to http://localhost:3000/world/WorldID/lock
     // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    // if successful, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
-    // create pixelzooViewController, initialize from <game> element, add to superview
-    //     [superview addSubview:viewController.view];
-    // update pixelzooViewController: add another NSTimer for lock expiration, change "restart" to "quit"
-    // when done, call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
+    // Create the request.
+    NSMutableURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/lock",@SERVER_URL_PREFIX,idText]]];
+    
+    // Specify that it will be a POST request
+    request.HTTPMethod = @"POST";
+    
+    // set header fields
+    [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    // Convert data and set request's HTTPBody property
+    NSArray *toolsArray = [worldNode nodesForXPath:@"tools" error:nil];
+    GDataXMLElement *toolsElement = [toolsArray objectAtIndex:0];
+    NSString *toolsString = [toolsElement stringValue];
+
+    NSData *requestBodyData = [toolsString dataUsingEncoding:NSUTF8StringEncoding];
+    request.HTTPBody = requestBodyData;
+    
+    // Create url connection and fire request
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    NSData *lockData = [NSURLConnection sendSynchronousRequest:request
+                                             returningResponse:&response
+                                                      error:&error];
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+    
+    // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
+    if (error == nil && [httpResponse statusCode] == 201)  // 201 CREATED
+    {
+        // parse data using GDataXMLDocument, use xpath to extract <game>...</game> element
+        GDataXMLDocument *lockDoc = [[GDataXMLDocument alloc] initWithData:lockData 
+                                                               options:0 error:&error];
+        
+        NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/game" error:nil];
+        GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
+        NSString *gameString = [gameElement stringValue];
+        
+        // create pixelzooViewController, initialize from <game> element, add to superview
+        //     [superview addSubview:viewController.view];
+        
+        // Navigation logic may go here. Create and push another view controller.
+        /*
+         <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+         // ...
+         // Pass the selected object to the new view controller.
+         [self.navigationController pushViewController:detailViewController animated:YES];
+         [detailViewController release];
+         */
+    }
+
+    // updates to pixelzooViewController:
+    // add another NSTimer for lock expiration, change "restart" to "quit"
+
+    // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
+    // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
+    // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
     //     [viewController removeFromSuperview];
     //     [viewController release];
     
