@@ -15,18 +15,22 @@ void writeBoardAndEndGoalXml (Game* game, xmlTextWriterPtr writer, int reverseCo
 
 In src/xmlgame.c:
 In newGameFromXmlRootWithSeparateBoard(...)
-   xmlNode *endGoalNode;
+   xmlNode *endGoalParentNode, *endGoalNode;
 /*...*/
-   endGoalNode = CHILD (gameNode, ENDGOAL);
-   if (endGoalNode)
+   endGoalParentNode = CHILD (gameNode, ENDGOAL);
+   if (endGoalParentNode && (endGoalNode = CHILD (endGoalParentNode, GOAL)))
      game->endGoal = newGoalFromXmlNode (endGoalNode, game);
 
 New function writeBoardAndEndGoalXml(...)
 void writeBoardAndEndGoalXml (Game* game, xmlTextWriterPtr writer, int reverseCompile) {
   xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);  /* begin game element */
-  writeBoardXml (game->board, writer, reverseCompile);
-  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_ENDGOAL, "%d", testGoalMet(game->endGoal,game));
-  xmlTextWriterFullEndElement (writer);  /* end game element */
+  writeBoardXml (game->board, writer, reverseCompile);  /* board element */
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_ENDGOAL);  /* begin endgoal element */
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GOAL);  /* begin goal element */
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) (testGoalMet(game->endGoal,game) ? XMLZOO_TRUE_GOAL : XMLZOO_FALSE_GOAL), "");  /* empty true or false element */
+  xmlTextWriterFullEndElement (writer);  /* end of goal element */
+  xmlTextWriterFullEndElement (writer);  /* end of endgoal element */
+  xmlTextWriterFullEndElement (writer);  /* end of game element */
 }
 
 
@@ -37,13 +41,13 @@ New wrapper, pzSaveBoardAndEndGoalAsXmlString(pzGame), for writeBoardAndEndGoalX
 In Zoo/dtd/proto.dtd:
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endgoal)>
 <!-- end-of-turn goal restricted to a population count, for now -->
-<!ELEMENT endgoal (population)>
+<!ELEMENT endgoal (goal)>
 
 
 In Zoo/dtd/game.dtd:
 <!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endgoal)>
 <!-- end-of-turn goal restricted to a population count, for now -->
-<!ELEMENT endgoal (population)>
+<!ELEMENT endgoal (goal)>
 
 
 In Zoo/lib/Zoo/Controller/World.pm:
@@ -53,11 +57,14 @@ Change this...
 to this...
 	my $turn_twig = Twiggy->new();
 	$turn_twig->parse ($c->request->body);
-	$world->board_xml ($turn_twig->root->first_child("board")->text);  # is this right? need to check
-	if (0 + $turn_twig->root->first_child("endgoal")->text) {  # need to check all this...
+	$world->board_xml ($turn_twig->root->first_child("game")->first_child("board")->text);  # is this right? need to check
+	if ($turn_twig->root->first_child("game")->first_child("endgoal")->first_child("goal")->has_child("true")) {  # need to check all this, maybe break it down a bit...
 	   # change ownership....
 	}
 
 In assemble()
 $gram->playerID(...)
 $gram->ownerID(...)
+
+Update t/eloise_board.xml to include <endgoal><goal><true></true></goal></endgoal>
+Pass eloise-pz-test and eloise-sdl-test
