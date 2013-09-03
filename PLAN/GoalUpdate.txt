@@ -1,0 +1,63 @@
+In src/game.h:
+In struct Game
+ Goal *endGoal;   /* tested once only, at the end of a turn */
+
+
+In src/game.c:
+In newGame()
+ goal->endGoal = NULL;
+
+
+In src/xmlgame.h:
+#define XMLZOO_ENDGOAL "endgoal"
+void writeBoardAndEndGoalXml (Game* game, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
+
+
+In src/xmlgame.c:
+In newGameFromXmlRootWithSeparateBoard(...)
+   xmlNode *endGoalNode;
+/*...*/
+   endGoalNode = CHILD (gameNode, ENDGOAL);
+   if (endGoalNode)
+     game->endGoal = newGoalFromXmlNode (endGoalNode, game);
+
+New function writeBoardAndEndGoalXml(...)
+void writeBoardAndEndGoalXml (Game* game, xmlTextWriterPtr writer, int reverseCompile) {
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);  /* begin game element */
+  writeBoardXml (game->board, writer, reverseCompile);
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_ENDGOAL, "%d", testGoalMet(game->endGoal,game));
+  xmlTextWriterFullEndElement (writer);  /* end game element */
+}
+
+
+In src/pixelzoo.[ch]:
+New wrapper, pzSaveBoardAndEndGoalAsXmlString(pzGame), for writeBoardAndEndGoalXml() in xmlgame.[ch]
+
+
+In Zoo/dtd/proto.dtd:
+<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endgoal)>
+<!-- end-of-turn goal restricted to a population count, for now -->
+<!ELEMENT endgoal (population)>
+
+
+In Zoo/dtd/game.dtd:
+<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endgoal)>
+<!-- end-of-turn goal restricted to a population count, for now -->
+<!ELEMENT endgoal (population)>
+
+
+In Zoo/lib/Zoo/Controller/World.pm:
+In turn_end_POST()
+Change this...
+	$world->board_xml ($c->request->body);
+to this...
+	my $turn_twig = Twiggy->new();
+	$turn_twig->parse ($c->request->body);
+	$world->board_xml ($turn_twig->root->first_child("board")->text);  # is this right? need to check
+	if (0 + $turn_twig->root->first_child("endgoal")->text) {  # need to check all this...
+	   # change ownership....
+	}
+
+In assemble()
+$gram->playerID(...)
+$gram->ownerID(...)
