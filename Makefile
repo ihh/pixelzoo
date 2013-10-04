@@ -134,7 +134,7 @@ t/compiled.copy.xml: t/proto.xml
 t/poly.xml: perl/polyzoo.pl
 	perl/polyzoo.pl >$@
 
-polysdl: t/poly.xml
+polysdl: t/poly.xml bin/sdlgame
 	bin/sdlgame -g $<
 
 # Documentation
