@@ -18,7 +18,6 @@
 		2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27117FFB6DB00093CEC /* Default-568h@2x.png */; };
 		2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */; };
 		2818E27817FFB6DB00093CEC /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27617FFB6DB00093CEC /* MainStoryboard_iPad.storyboard */; };
-		2818E27B17FFB6DB00093CEC /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E27A17FFB6DB00093CEC /* PZViewController.m */; };
 		2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28217FFBACB00093CEC /* PZWorldsViewController.m */; };
 		2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28517FFBB7500093CEC /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2818E28817FFBC3100093CEC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E28717FFBC3100093CEC /* libxml2.dylib */; };
@@ -69,8 +68,6 @@
 		2818E27117FFB6DB00093CEC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2818E27417FFB6DB00093CEC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		2818E27717FFB6DB00093CEC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		2818E27917FFB6DB00093CEC /* PZViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
-		2818E27A17FFB6DB00093CEC /* PZViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
 		2818E28117FFBACB00093CEC /* PZWorldsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldsViewController.h; sourceTree = "<group>"; };
 		2818E28217FFBACB00093CEC /* PZWorldsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldsViewController.m; sourceTree = "<group>"; };
 		2818E28417FFBB7500093CEC /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -136,7 +133,7 @@
 		2818E2C317FFBD7500093CEC /* xymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xymap.h; path = ../../../src/xymap.h; sourceTree = "<group>"; };
 		2818E2E017FFBDD400093CEC /* xmlparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlparser.c; path = ../../../src/xmlparser.c; sourceTree = "<group>"; };
 		2818E2E117FFBDD400093CEC /* xmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlparser.h; path = ../../../src/xmlparser.h; sourceTree = "<group>"; };
-		2818E2E317FFBF2A00093CEC /* pixelzooDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelzooDefs.h; sourceTree = "<group>"; };
+		2818E2E317FFBF2A00093CEC /* PZDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZDefs.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +156,7 @@
 			children = (
 				2818E28717FFBC3100093CEC /* libxml2.dylib */,
 				2818E26117FFB6DB00093CEC /* PixelZoo */,
+				2818E28917FFBCFD00093CEC /* PixelZoo core */,
 				2818E25A17FFB6DB00093CEC /* Frameworks */,
 				2818E25917FFB6DB00093CEC /* Products */,
 			);
@@ -190,13 +188,10 @@
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
 				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
-				2818E2E317FFBF2A00093CEC /* pixelzooDefs.h */,
+				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
 				2818E28117FFBACB00093CEC /* PZWorldsViewController.h */,
 				2818E28217FFBACB00093CEC /* PZWorldsViewController.m */,
 				2818E27617FFB6DB00093CEC /* MainStoryboard_iPad.storyboard */,
-				2818E27917FFB6DB00093CEC /* PZViewController.h */,
-				2818E27A17FFB6DB00093CEC /* PZViewController.m */,
-				2818E28917FFBCFD00093CEC /* PixelZoo core */,
 				2818E26217FFB6DB00093CEC /* Supporting Files */,
 			);
 			path = PixelZoo;
@@ -281,6 +276,7 @@
 				2818E2C317FFBD7500093CEC /* xymap.h */,
 			);
 			name = "PixelZoo core";
+			path = PixelZoo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,7 +349,6 @@
 			files = (
 				2818E26817FFB6DB00093CEC /* main.m in Sources */,
 				2818E26C17FFB6DB00093CEC /* PZAppDelegate.m in Sources */,
-				2818E27B17FFB6DB00093CEC /* PZViewController.m in Sources */,
 				2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */,
 				2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */,
 				2818E2C417FFBD7500093CEC /* balloon.c in Sources */,

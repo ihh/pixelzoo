@@ -8,15 +8,42 @@
 
 #import "PZAppDelegate.h"
 
+#import "PZDefs.h"
+#import "GDataXMLNode.h"
+
 @implementation PZAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
 
-    PZWorldsViewController* worldsViewController = (PZWorldsViewController*) self.window.rootViewController;
-
+    UINavigationController *navigationController = (UINavigationController*) self.window.rootViewController;
+    PZWorldsViewController* worldsViewController = (PZWorldsViewController*) [[navigationController viewControllers] objectAtIndex:0];
     
+    // get world list
+    
+    // Send a synchronous request
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/list",@SERVER_URL_PREFIX]]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        // parse data using GDataXMLDocument, use xpath to extract list of <world>...</world> elements as NSArray
+        
+        GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:data
+                                                               options:0 error:&error];
+        
+        worldsViewController.doc = doc;
+
+        NSArray *worlds = [doc nodesForXPath:@"//world-list/world" error:nil];
+        
+        // put worlds NSArray in PZWorldTableViewController
+        worldsViewController.worlds = worlds;
+    }
     
     return YES;
 }
