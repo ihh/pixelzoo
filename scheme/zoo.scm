@@ -2,6 +2,7 @@
 
 (use-syntax (ice-9 syncase))
 
+;; (bindloc "north" '(0 -1) (type "empty" "foo") (type "wall" "bar") (default "whatever"))
 (define bindloc
   (lambda args
   (let* ((loc (car args))
