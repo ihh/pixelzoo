@@ -7,7 +7,9 @@
 //
 
 #import "PZWorldsViewController.h"
+#import "PZWorldDescriptor.h"
 #import "GDataXMLNode.h"
+#import "PZViewController.h"
 
 @interface PZWorldsViewController ()
 
@@ -65,11 +67,8 @@
 
     // Configure the cell...
     
-    GDataXMLNode *worldNode = [self.worlds objectAtIndex:indexPath.row];
-    NSArray *names = [worldNode nodesForXPath:@"name" error:nil];
-    GDataXMLElement *nameElement = [names objectAtIndex:0];
-    
-    cell.textLabel.text = [nameElement stringValue];
+    PZWorldDescriptor *worldDescriptor = [self.worlds objectAtIndex:indexPath.row];
+    cell.textLabel.text = [worldDescriptor name];
     
     return cell;
 }
@@ -114,6 +113,16 @@
 */
 
 #pragma mark - Table view delegate
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"showWorldDetail"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        PZViewController *destViewController = segue.destinationViewController;
+        destViewController.worldDescriptor = [self.worlds objectAtIndex:indexPath.row];
+    }
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

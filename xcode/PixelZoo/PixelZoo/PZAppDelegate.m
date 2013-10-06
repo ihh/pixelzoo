@@ -7,9 +7,9 @@
 //
 
 #import "PZAppDelegate.h"
-
 #import "PZDefs.h"
 #import "GDataXMLNode.h"
+#import "PZWorldDescriptor.h"
 
 @implementation PZAppDelegate
 
@@ -39,10 +39,13 @@
         
         worldsViewController.doc = doc;
 
-        NSArray *worlds = [doc nodesForXPath:@"//world-list/world" error:nil];
+        NSArray *worldNodes = [doc nodesForXPath:@"//world-list/world" error:nil];
+        NSMutableArray *worldDescriptors = [[NSMutableArray alloc] init];
+        for (int i = 0; i < [worldNodes count]; ++i)
+            [worldDescriptors addObject:[[PZWorldDescriptor alloc] initWithNode:[worldNodes objectAtIndex:i]]];
         
         // put worlds NSArray in PZWorldTableViewController
-        worldsViewController.worlds = worlds;
+        worldsViewController.worlds = worldDescriptors;
     }
     
     return YES;

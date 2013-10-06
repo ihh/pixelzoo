@@ -24,7 +24,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="knq-Pt-noi" kind="push" id="FM2-YP-EDC"/>
+                                    <segue destination="knq-Pt-noi" kind="push" identifier="showWorldDetail" id="FM2-YP-EDC"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -42,13 +42,39 @@
         <!--View Controller-->
         <scene sceneID="5Ov-zH-88a">
             <objects>
-                <viewController id="knq-Pt-noi" sceneMemberID="viewController">
+                <viewController id="knq-Pt-noi" customClass="PZViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5NN-2Q-qTd">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hyd-lq-RKB" customClass="PZView">
+                                <rect key="frame" x="-5" y="0.0" width="325" height="468"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QU3-zC-1xV">
+                                <rect key="frame" x="7" y="483" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="hyd-lq-RKB" secondAttribute="bottom" constant="36" id="Ig0-Ek-M5d"/>
+                            <constraint firstItem="hyd-lq-RKB" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" type="default" id="TtZ-Wm-gQX"/>
+                            <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" constant="7" id="dBK-Re-3JV"/>
+                            <constraint firstAttribute="bottom" secondItem="QU3-zC-1xV" secondAttribute="bottom" type="default" id="ivv-JT-Fqi"/>
+                            <constraint firstItem="hyd-lq-RKB" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" constant="-5" id="w7a-cU-Yrq"/>
+                            <constraint firstAttribute="trailing" secondItem="hyd-lq-RKB" secondAttribute="trailing" type="default" id="zTh-hS-TRA"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>
+                    <connections>
+                        <outlet property="worldLabel" destination="QU3-zC-1xV" id="nwg-1j-CP9"/>
+                        <outlet property="worldView" destination="hyd-lq-RKB" id="UIj-C6-KAw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-bE-azu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

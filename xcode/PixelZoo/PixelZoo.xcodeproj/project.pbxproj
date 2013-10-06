@@ -49,8 +49,9 @@
 		2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C017FFBD7500093CEC /* xmlutil.c */; };
 		2818E2DF17FFBD7500093CEC /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C217FFBD7500093CEC /* xymap.c */; };
 		2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2E017FFBDD400093CEC /* xmlparser.c */; };
-		2851063A1801E23400AA3254 /* PZView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106371801E23400AA3254 /* PZView.m */; };
-		2851063B1801E23400AA3254 /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106391801E23400AA3254 /* PZViewController.m */; };
+		285106411801E9DC00AA3254 /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZViewController.m */; };
+		285106441801ECAE00AA3254 /* PZView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZView.m */; };
+		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,10 +135,12 @@
 		2818E2E017FFBDD400093CEC /* xmlparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlparser.c; path = ../../../src/xmlparser.c; sourceTree = "<group>"; };
 		2818E2E117FFBDD400093CEC /* xmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlparser.h; path = ../../../src/xmlparser.h; sourceTree = "<group>"; };
 		2818E2E317FFBF2A00093CEC /* PZDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZDefs.h; sourceTree = "<group>"; };
-		285106361801E23400AA3254 /* PZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZView.h; sourceTree = "<group>"; };
-		285106371801E23400AA3254 /* PZView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZView.m; sourceTree = "<group>"; };
-		285106381801E23400AA3254 /* PZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
-		285106391801E23400AA3254 /* PZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
+		2851063F1801E9DC00AA3254 /* PZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
+		285106401801E9DC00AA3254 /* PZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
+		285106421801ECAE00AA3254 /* PZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZView.h; sourceTree = "<group>"; };
+		285106431801ECAE00AA3254 /* PZView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZView.m; sourceTree = "<group>"; };
+		285106451801F1B900AA3254 /* PZWorldDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldDescriptor.h; sourceTree = "<group>"; };
+		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,11 +194,13 @@
 				2818E28517FFBB7500093CEC /* GDataXMLNode.m */,
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
+				285106451801F1B900AA3254 /* PZWorldDescriptor.h */,
+				285106461801F1B900AA3254 /* PZWorldDescriptor.m */,
 				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
-				285106361801E23400AA3254 /* PZView.h */,
-				285106371801E23400AA3254 /* PZView.m */,
-				285106381801E23400AA3254 /* PZViewController.h */,
-				285106391801E23400AA3254 /* PZViewController.m */,
+				285106421801ECAE00AA3254 /* PZView.h */,
+				285106431801ECAE00AA3254 /* PZView.m */,
+				2851063F1801E9DC00AA3254 /* PZViewController.h */,
+				285106401801E9DC00AA3254 /* PZViewController.m */,
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
 				2818E28117FFBACB00093CEC /* PZWorldsViewController.h */,
 				2818E28217FFBACB00093CEC /* PZWorldsViewController.m */,
@@ -369,20 +374,21 @@
 				2818E2CD17FFBD7500093CEC /* notify.c in Sources */,
 				2818E2CE17FFBD7500093CEC /* optlist.c in Sources */,
 				2818E2CF17FFBD7500093CEC /* particle.c in Sources */,
-				2851063A1801E23400AA3254 /* PZView.m in Sources */,
 				2818E2D017FFBD7500093CEC /* pixelzoo.c in Sources */,
+				285106441801ECAE00AA3254 /* PZView.m in Sources */,
 				2818E2D117FFBD7500093CEC /* quadtree.c in Sources */,
 				2818E2D217FFBD7500093CEC /* rbtree.c in Sources */,
 				2818E2D317FFBD7500093CEC /* rule.c in Sources */,
 				2818E2D417FFBD7500093CEC /* statemap.c in Sources */,
 				2818E2D517FFBD7500093CEC /* stringmap.c in Sources */,
+				285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */,
 				2818E2D617FFBD7500093CEC /* tool.c in Sources */,
 				2818E2D717FFBD7500093CEC /* util.c in Sources */,
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
 				2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */,
-				2851063B1801E23400AA3254 /* PZViewController.m in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
+				285106411801E9DC00AA3254 /* PZViewController.m in Sources */,
 				2818E2DC17FFBD7500093CEC /* xmlgoal.c in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */,
