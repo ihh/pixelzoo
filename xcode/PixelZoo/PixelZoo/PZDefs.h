@@ -5,8 +5,8 @@
 //  Created by Ian Holmes on 8/22/13.
 //
 
-#ifndef pixelzoo_pixelzooDefs_h
-#define pixelzoo_pixelzooDefs_h
+#ifndef pixelzoo_PZDefs_h
+#define pixelzoo_PZDefs_h
 
 // PixelZoo server
 #define SERVER_URL_PREFIX "http://localhost:3000"

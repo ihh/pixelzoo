@@ -17,7 +17,6 @@
 		2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2818E26F17FFB6DB00093CEC /* Default@2x.png */; };
 		2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27117FFB6DB00093CEC /* Default-568h@2x.png */; };
 		2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */; };
-		2818E27817FFB6DB00093CEC /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2818E27617FFB6DB00093CEC /* MainStoryboard_iPad.storyboard */; };
 		2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28217FFBACB00093CEC /* PZWorldsViewController.m */; };
 		2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28517FFBB7500093CEC /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2818E28817FFBC3100093CEC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E28717FFBC3100093CEC /* libxml2.dylib */; };
@@ -50,6 +49,8 @@
 		2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C017FFBD7500093CEC /* xmlutil.c */; };
 		2818E2DF17FFBD7500093CEC /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C217FFBD7500093CEC /* xymap.c */; };
 		2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2E017FFBDD400093CEC /* xmlparser.c */; };
+		2851063A1801E23400AA3254 /* PZView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106371801E23400AA3254 /* PZView.m */; };
+		2851063B1801E23400AA3254 /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106391801E23400AA3254 /* PZViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,7 +68,6 @@
 		2818E26F17FFB6DB00093CEC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		2818E27117FFB6DB00093CEC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2818E27417FFB6DB00093CEC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		2818E27717FFB6DB00093CEC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		2818E28117FFBACB00093CEC /* PZWorldsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldsViewController.h; sourceTree = "<group>"; };
 		2818E28217FFBACB00093CEC /* PZWorldsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldsViewController.m; sourceTree = "<group>"; };
 		2818E28417FFBB7500093CEC /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -134,6 +134,10 @@
 		2818E2E017FFBDD400093CEC /* xmlparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlparser.c; path = ../../../src/xmlparser.c; sourceTree = "<group>"; };
 		2818E2E117FFBDD400093CEC /* xmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlparser.h; path = ../../../src/xmlparser.h; sourceTree = "<group>"; };
 		2818E2E317FFBF2A00093CEC /* PZDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZDefs.h; sourceTree = "<group>"; };
+		285106361801E23400AA3254 /* PZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZView.h; sourceTree = "<group>"; };
+		285106371801E23400AA3254 /* PZView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZView.m; sourceTree = "<group>"; };
+		285106381801E23400AA3254 /* PZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
+		285106391801E23400AA3254 /* PZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,10 +192,13 @@
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
 				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
+				285106361801E23400AA3254 /* PZView.h */,
+				285106371801E23400AA3254 /* PZView.m */,
+				285106381801E23400AA3254 /* PZViewController.h */,
+				285106391801E23400AA3254 /* PZViewController.m */,
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
 				2818E28117FFBACB00093CEC /* PZWorldsViewController.h */,
 				2818E28217FFBACB00093CEC /* PZWorldsViewController.m */,
-				2818E27617FFB6DB00093CEC /* MainStoryboard_iPad.storyboard */,
 				2818E26217FFB6DB00093CEC /* Supporting Files */,
 			);
 			path = PixelZoo;
@@ -336,7 +343,6 @@
 				2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */,
 				2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */,
 				2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */,
-				2818E27817FFB6DB00093CEC /* MainStoryboard_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +369,7 @@
 				2818E2CD17FFBD7500093CEC /* notify.c in Sources */,
 				2818E2CE17FFBD7500093CEC /* optlist.c in Sources */,
 				2818E2CF17FFBD7500093CEC /* particle.c in Sources */,
+				2851063A1801E23400AA3254 /* PZView.m in Sources */,
 				2818E2D017FFBD7500093CEC /* pixelzoo.c in Sources */,
 				2818E2D117FFBD7500093CEC /* quadtree.c in Sources */,
 				2818E2D217FFBD7500093CEC /* rbtree.c in Sources */,
@@ -374,6 +381,7 @@
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
 				2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */,
+				2851063B1801E23400AA3254 /* PZViewController.m in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
 				2818E2DC17FFBD7500093CEC /* xmlgoal.c in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
@@ -400,14 +408,6 @@
 				2818E27417FFB6DB00093CEC /* en */,
 			);
 			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		2818E27617FFB6DB00093CEC /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2818E27717FFB6DB00093CEC /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -516,6 +516,7 @@
 				2818E28017FFB6DB00093CEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
