@@ -152,7 +152,7 @@
 - (void)triggerRedraw
 {
     //	NSLog(@"triggerRedraw");
-	[self.view setNeedsDisplay];
+	[self.worldView setNeedsDisplay];
 }
 
 
