@@ -182,6 +182,11 @@ sub assemble {
     my $gram = Grammar->newMinimalGrammar;   # using newMinimalGrammar avoids creating a default 'empty' particle type
     $gram->verbose(1);
 
+    # set player & owner IDs...
+    # $gram->playerID(...);
+    # $gram->ownerID(...);
+
+    # particles
     for my $particle (@{$c->stash->{particles}}) {
 	warn "Adding type ", $particle->nest;
 	$gram->addType ($particle->nest);
@@ -416,6 +421,12 @@ sub turn_end_POST {
 	my $current_time = time();
 
 	# Update the state of the board
+	my $turn_twig = Twiggy->new();
+	$turn_twig->parse ($c->request->body);
+	$world->board_xml ($turn_twig->root->first_child("game")->first_child("board")->text);  # is this right? need to check
+	if ($turn_twig->root->first_child("game")->first_child("endgoal")->first_child("goal")->has_child("true")) {  # need to check all this, maybe break it down a bit...
+	   # TODO: change ownership....
+	}
 	$world->board_xml ($c->request->body);
 	$world->last_modified_time ($current_time);
 	# TODO: update board_time

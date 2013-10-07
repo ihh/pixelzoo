@@ -19,7 +19,7 @@ BinTree* newBinTree (int size) {
   tmp = size;
   for (bin->K = 0; tmp > 1; ) {
     if ((tmp & 1) != 0) {
-      Abort ("While building bin tree: dataset is not a power of 2");
+      Abort ("While building bin tree: dataset size is not a power of 2");
     }
     tmp = tmp >> 1;
     ++bin->K;

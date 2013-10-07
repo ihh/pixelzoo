@@ -23,6 +23,7 @@
 #define XMLZOO_RECHARGE   "recharge"
 #define XMLZOO_MAXRESERVE "maxreserve"
 #define XMLZOO_TRIGGER    "trigger"
+#define XMLZOO_ENDTURN    "endturn"
 
 /* methods */
 Game* newGameFromXmlDocument (xmlDoc *doc);
@@ -34,5 +35,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameRoot, xmlNode *separateB
 Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* separateBoardString);
 
 Tool* newToolFromXmlNode (xmlNode *node);
+
+void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
 
 #endif /* XMLGAME_INCLUDED */

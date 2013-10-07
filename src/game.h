@@ -61,7 +61,10 @@ typedef struct Game {
 		   GameQuit = 3      /* board has stopped; no way out of this state (player hits quit) */
   } gameState;
 
-  /* main Goal */
+  /* this Goal is tested at the end of a player's turn */
+  Goal *endGoal;   /* tested once only, at the end of a turn */
+
+  /* this Goal is tested while the game is ongoing */
   Goal *goal;    /* results of testing this Goal are discarded; use PseudoGoal's to drive game state */
 
   /* exit portal */

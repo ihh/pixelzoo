@@ -341,6 +341,21 @@ const char* pzSaveBoardAsXmlString(pzGame pzg) {
   return str;
 }
 
+const char* pzSaveBoardAndEndGoalStatusAsXmlString(pzGame pzg) {
+  xmlTextWriterPtr writer;
+  const char* str;
+  Game* game;
+  game = (Game*) pzg;
+  str = NULL;
+  boardReleaseRandomNumbers (game->board);
+  writer = newXmlTextWriter();
+  if (writer) {
+    writeBoardAndEndGoalStatusXml (game, writer, 1);
+    str = (const char*) deleteXmlTextWriterLeavingText (writer);
+  }
+  return str;
+}
+
 int pzGetPaletteSize(pzGame pzg) { return PaletteSize; }
 
 int pzGetPaletteRgb(pzGame pzg,int paletteIndex) {

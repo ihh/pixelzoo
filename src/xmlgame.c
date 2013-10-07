@@ -50,6 +50,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   Game *game;
   xmlNode *exitNode, *goalNode, *node;
   Tool *tool, *selectedTool;
+  xmlNode *endGoalParentNode, *endGoalNode;
 
   game = newGame();
   game->board = newBoardFromXmlRoot ((void*)game, separateBoardRoot);
@@ -74,14 +75,21 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->writeProtectWatcher);
 
   exitNode = CHILD(gameNode,EXIT);
-  for (node = exitNode->children; node; node = node->next)
-    if (MATCHES(node,POS))
-      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
-  game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(exitNode,HEXTYPE));
+  if (exitNode) {
+    for (node = exitNode->children; node; node = node->next)
+      if (MATCHES(node,POS))
+	registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
+    game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(exitNode,HEXTYPE));
+  } else
+    game->theExit.type = PortalDestroyed;
 
   goalNode = CHILD (gameNode, GOAL);
   if (goalNode)
     game->goal = newGoalFromXmlNode (goalNode, game);
+
+  endGoalParentNode = CHILD (gameNode, ENDTURN);
+  if (endGoalParentNode && (endGoalNode = CHILD (endGoalParentNode, GOAL)))
+    game->endGoal = newGoalFromXmlNode (endGoalNode, game);
 
   return game;
 }
@@ -148,4 +156,15 @@ GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *triggerNode) {
     if (MATCHES(node,POS))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), trigger->watcher);
   return trigger;
+}
+
+void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile) {
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);  /* begin game element */
+  writeBoardXml (game->board, writer, reverseCompile);  /* board element */
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_ENDTURN);  /* begin endturn element */
+  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GOAL);  /* begin goal element */
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) (testGoalMet(game->endGoal,game) ? XMLZOO_TRUE_GOAL : XMLZOO_FALSE_GOAL), "");  /* empty true or false element */
+  xmlTextWriterFullEndElement (writer);  /* end of goal element */
+  xmlTextWriterFullEndElement (writer);  /* end of endgoal element */
+  xmlTextWriterFullEndElement (writer);  /* end of game element */
 }

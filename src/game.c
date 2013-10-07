@@ -38,6 +38,7 @@ Game* newGame() {
 
   game->gameState = GameOn;
   game->goal = NULL;
+  game->endGoal = NULL;
 
   game->trigger = newList (AbortCopyFunction, deleteGoalTrigger, NullPrintFunction);
   game->writeProtectWatcher = newCellWatcher (writeProtectIntercept, (void*) game, NULL, NullDestroyFunction);

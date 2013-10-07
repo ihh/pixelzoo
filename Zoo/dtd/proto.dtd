@@ -13,7 +13,7 @@ are not yet exposed at this higher level (zoocompiler does not define a namespac
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal)>
+<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endgoal)>
 
 <!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
  with a particular type of particle. -->
@@ -21,6 +21,9 @@ are not yet exposed at this higher level (zoocompiler does not define a namespac
 
 <!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
+
+<!-- end-of-turn goal -->
+<!ELEMENT endturn (goal)>
 
 <!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
  and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node

@@ -53,7 +53,10 @@
     
 	// clear gesture flags
 	panning = examining = zooming = 0;
-	
+
+	// initial cell size
+    cellSize = INITIAL_PIXELS_PER_CELL;
+    
 	// start triggerRedraw & callGameLoop timers
 	[self startTimers];
 }

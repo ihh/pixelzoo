@@ -287,6 +287,13 @@ const char* PZEXPORT pzSaveMoveAsXmlString(pzGame);  /* use to upload moves */
 const char* PZEXPORT pzSaveBoardAsXmlString(pzGame);  /* use to save game state; restore with pzNewGameAndBoardFromXmlStrings */
 
 
+/**
+ Convert the current board state, including the result of testing the end-of-turn goal, to an XML string.
+
+ @return A string that must be free'd */
+const char* PZEXPORT pzSaveBoardAndEndGoalStatusAsXmlString(pzGame);
+
+
 /* Wrappers to general utility functions */
 
 /**
