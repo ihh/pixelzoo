@@ -48,7 +48,7 @@
 #define BOARD_BORDER_OPACITY .5
 
 #define EXTRA_TOOLS_AT_TOP 1  /* Examine tool */
-#define EXTRA_TOOLS_AT_BOTTOM 1  /* Reset level */
+#define EXTRA_TOOLS_AT_BOTTOM 0
 
 #define EXAMINE_TOOL_NAME "Examine"
 #define EXAMINE_EMPTY_TEXT "nothing"

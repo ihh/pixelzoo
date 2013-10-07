@@ -17,5 +17,6 @@
 
 - (NSString*)name;
 - (NSString*)identifier;
+- (NSString*)tools;
 
 @end

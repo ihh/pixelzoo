@@ -31,4 +31,11 @@
     return [idElement stringValue];
 }
 
+- (NSString*)tools {
+    NSArray *toolsArray = [worldNode nodesForXPath:@"tools" error:nil];
+    if ([toolsArray count] == 0) return [[NSString alloc] init];
+    GDataXMLElement *toolsElement = [toolsArray objectAtIndex:0];
+    return [toolsElement stringValue];
+}
+
 @end

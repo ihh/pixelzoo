@@ -301,9 +301,12 @@ sub lock_end_POST {
     } else {
 	# create the lock...
 	# First, get the tool names from the POST'ed lock XML
-	my $lock_twig = Twiggy->new();
-	$lock_twig->parse ($c->request->body);
-	my @tool_names = map ($_->text, $lock_twig->root->first_child("toolbox")->children("name"));
+	my @tool_names;
+	if ($c->request->content_length) {
+	    my $lock_twig = Twiggy->new();
+	    $lock_twig->parse ($c->request->body);
+	    @tool_names = map ($_->text, $lock_twig->root->first_child("toolbox")->children("name"));
+	}
 #	warn "Tools:\n", map (" $_\n", @tool_names);
 	# Assemble the board XML
 	# For now, use voyeur rules (until more owner/guest logic is implemented)

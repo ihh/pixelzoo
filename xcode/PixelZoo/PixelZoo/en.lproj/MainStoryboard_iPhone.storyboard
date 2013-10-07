@@ -47,11 +47,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hyd-lq-RKB" customClass="PZView">
-                                <rect key="frame" x="-5" y="0.0" width="325" height="468"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QU3-zC-1xV">
                                 <rect key="frame" x="7" y="483" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -59,21 +54,26 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="484"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="hyd-lq-RKB" secondAttribute="bottom" constant="36" id="Ig0-Ek-M5d"/>
-                            <constraint firstItem="hyd-lq-RKB" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" type="default" id="TtZ-Wm-gQX"/>
+                            <constraint firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="8sQ-jY-l1W"/>
+                            <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="Daw-On-tYp"/>
+                            <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" type="default" id="Pru-hC-JZC"/>
                             <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" constant="7" id="dBK-Re-3JV"/>
                             <constraint firstAttribute="bottom" secondItem="QU3-zC-1xV" secondAttribute="bottom" type="default" id="ivv-JT-Fqi"/>
-                            <constraint firstItem="hyd-lq-RKB" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" constant="-5" id="w7a-cU-Yrq"/>
-                            <constraint firstAttribute="trailing" secondItem="hyd-lq-RKB" secondAttribute="trailing" type="default" id="zTh-hS-TRA"/>
+                            <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="meC-Kn-tis"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>
                     <connections>
                         <outlet property="worldLabel" destination="QU3-zC-1xV" id="nwg-1j-CP9"/>
-                        <outlet property="worldView" destination="hyd-lq-RKB" id="UIj-C6-KAw"/>
+                        <outlet property="worldView" destination="RMw-5J-9NT" id="TET-oq-b5I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-bE-azu" userLabel="First Responder" sceneMemberID="firstResponder"/>
