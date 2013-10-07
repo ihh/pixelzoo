@@ -104,10 +104,12 @@ sub newMinimalGrammar {
     return $self;
 }
 
+sub defaultEmptyType { return "empty" }
+
 sub newGrammar {
     my ($class) = @_;
     my $self = $class->newMinimalGrammar();
-    my $emptyType = 'empty';
+    my $emptyType = defaultEmptyType();
     $self->{'empty'} = $emptyType;
     $self->addType ('name' => $emptyType,
 		    'vars' => [ $self->var('brightness') => 3, $self->var('saturation') => 3, $self->var('hue') => 6 ],
