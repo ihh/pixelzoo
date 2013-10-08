@@ -1,65 +1,28 @@
-Menu system
+Refactor to use NSURLSession instead of NSURLConnection
+http://hayageek.com/ios-nsurlsession-example/
+http://blogs.captechconsulting.com/blog/nicholas-cipollina/ios-7-tutorial-series-nsurlsession
+http://www.shinobicontrols.com/blog/posts/2013/09/20/ios7-day-by-day-day-1-nsurlsession
 
-LogInOrCreate (menu)
-1. Log in   --> LogIn
-2. Create account  --> CreateUser
+Add world info -> tool selection -> lock screens (connected by segues) between Worlds menu & game screen
+Add a lock timeout countdown to lock & game screens
+POST turn when done
 
-LogIn (form)
-Username? (textbox)
-Password? (textbox)
-POST user/status
- Correct? --> MainMenu
- Incorrect? --> LogIn
+Add a main menu + dummy login, logout & registration dialogs to client
 
-CreateUser (form)
-Username? (textbox)
-Password? (textbox)
-GET user/login/NAME/PASS
- OK? --> MainMenu
- Not OK? --> CreateUser
+Add authentication to server; add login, logout & registration controllers
+http://search.cpan.org/~ether/Catalyst-Manual-5.9007/lib/Catalyst/Manual/Tutorial/05_Authentication.pod
+http://www.catalystframework.org/calendar/2011/15
+http://www.catalystframework.org/calendar/2007/5
 
+Hook up login, logout & registration dialogs
+https://developer.apple.com/library/ios/documentation/cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html
+https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html
 
-MainMenu (menu)
-1. Play  --> Game
-2. Solo worlds  --> TutorialWorldList
-3. Online worlds  --> WorldList
-4. Logout  --> GET user/logout --> LogInOrCreate
+Add some real multiplayer game logic (player particles/tools, a test board that can be stolen)
 
+Modify world/list controller & Worlds menu to show worlds that you control, plus neighbors of those worlds, plus worlds you created
+Automatically create one new world per player, at registration time
 
-WorldList (entrance point)
-(Set PageNumber = 1)
-(fall through to WorldListGet)
+Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
+Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
-WorldListGet (menu)
-GET world/list/10/PageNumber
- Success --> WorldListSelect
- 416 Requested Range Not Satisfiable --> WorldList
- Other error? pause 1-3 seconds, goto WorldListGet
-
-WorldListSelect
-[1-10]. (world_name, owner_name, last_move_time, lock_status)
- Select world --> POST world/ID/lock
-  Success? --> GameMenu
-  423 Locked? --> GameLockedError
-  409 Conflict? --> TooSoonError
-  Other error? --> GenericError
-11. Next page  --> ++PageNumber (mod count); goto WorldListGet
-12. Previous page  --> --PageNumber (mod count); goto WorldListGet
-13. Back to main menu  --> MainMenu
-
-
-GameLockedError (dialog)
-"Sorry, someone else's turn"
-OK --> WorldList
-
-TooSoonError (dialog)
-"Sorry, your last turn was too recent"
-OK --> WorldList
-
-GenericError (dialog)
-"Sorry, an error occurred; try again shortly"
-OK --> WorldList
-
-GameMenu
-1. Play game
-2. End turn
