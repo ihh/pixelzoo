@@ -7,7 +7,7 @@
 
 /* uncomment the #define to log all board writes to stderr */
 /*
-#define DEBUG
+#define PIXELZOO_DEBUG
 */
 
 /* buffer size for log messages */
@@ -173,9 +173,9 @@ State exitPortalIntercept (CellWatcher *watcher, Board *board, int x, int y, Sta
       ++game->theExit.soFar;
       sprintf (exitPortalLogBuf, "%d %s%s reached the exit!", game->theExit.soFar, game->board->byType[game->theExit.type]->name, game->theExit.soFar > 1 ? "s have" : " has");
       printToGameConsole (game, exitPortalLogBuf, PaletteWhite, 1.);
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
       fprintf (stderr, "%s\n", exitPortalLogBuf);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
     }
   }
   return readBoardStateUnguarded(board,x,y);

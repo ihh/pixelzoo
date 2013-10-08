@@ -47,27 +47,27 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZView">
+                                <rect key="frame" x="0.0" y="100" width="320" height="404"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QU3-zC-1xV">
-                                <rect key="frame" x="7" y="483" width="42" height="21"/>
+                                <rect key="frame" x="0.0" y="71" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="484"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="8sQ-jY-l1W"/>
-                            <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="Daw-On-tYp"/>
-                            <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" type="default" id="Pru-hC-JZC"/>
-                            <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" constant="7" id="dBK-Re-3JV"/>
-                            <constraint firstAttribute="bottom" secondItem="QU3-zC-1xV" secondAttribute="bottom" type="default" id="ivv-JT-Fqi"/>
-                            <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="meC-Kn-tis"/>
+                            <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" type="default" id="CGa-AC-6JA"/>
+                            <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="KZe-6f-snI"/>
+                            <constraint firstItem="QU3-zC-1xV" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" constant="71" id="YBS-gv-Ido"/>
+                            <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="RMw-5J-9NT" secondAttribute="leading" type="default" id="cr0-O8-4vV"/>
+                            <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="QU3-zC-1xV" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ueW-N5-eHL"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>

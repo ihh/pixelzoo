@@ -156,36 +156,36 @@
 }
 
 
-// boardRect method - returns the clipping rectangle of the board
+// boardRect method - returns the clipping rectangle of the board, in worldView coords
 - (CGRect) boardRect {
-	CGFloat boardWidth = self.view.frame.size.width - TOOLBAR_WIDTH;
-	CGFloat boardHeight = self.view.frame.size.height - CONSOLE_HEIGHT;
+	CGFloat boardWidth = self.worldView.frame.size.width - TOOLBAR_WIDTH;
+	CGFloat boardHeight = self.worldView.frame.size.height - CONSOLE_HEIGHT;
 	return CGRectMake(0, 0, boardWidth, boardHeight);
 }
 
-// bigBoardRect method - returns the rectangle that the full board would occupy
+// bigBoardRect method - returns the rectangle that the full board would occupy, in worldView coords
 - (CGRect) bigBoardRect {
 	CGFloat boardSize = pzGetBoardSize(self->game) * [self cellSize];
 	return CGRectMake(-viewOrigin.x, -viewOrigin.y, boardSize, boardSize);
 }
 
-// consoleCentroid method - returns the center point of the console
+// consoleCentroid method - returns the center point of the console, in worldView coords
 - (CGPoint)consoleCentroid {
 	CGRect cr = [self consoleRect];
 	return CGPointMake (cr.origin.x + cr.size.width / 2,
-						cr.origin.y + cr.size.height / 2);
+                        cr.origin.y + cr.size.height / 2)  ;
 }
 
-// consoleBoardRect method - returns the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
+// consoleBoardRect method - returns (in worldView coords) the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
 - (CGRect) consoleBoardRect {
 	CGFloat magCellSize = [self magCellSize];
 	CGFloat consoleBoardSize = pzGetBoardSize(self->game) * magCellSize;
 	CGPoint cmid = [self consoleCentroid];
 	// want origin + magCellSize*examCoord = consoleCentroid
 	return CGRectMake (cmid.x - magCellSize * (.5 + (double) examCoord.x),
-					   cmid.y - magCellSize * (.5 + (double) examCoord.y),
-					   consoleBoardSize,
-					   consoleBoardSize);
+                       cmid.y - magCellSize * (.5 + (double) examCoord.y),
+                       consoleBoardSize,
+                       consoleBoardSize);
 }
 
 // magCellSize method - returns the size of a cell in the magnified console window.
@@ -195,12 +195,12 @@
 
 // toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
 - (CGRect) toolboxRect {
-	return CGRectMake(self.view.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
+	return CGRectMake(worldView.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 }
 
 // consoleRect method - returns the drawing/clipping rectangle of text console
 - (CGRect) consoleRect {
-	return CGRectMake(0, self.view.frame.size.height - CONSOLE_HEIGHT, self.view.frame.size.width - TOOLBAR_WIDTH, CONSOLE_HEIGHT);
+	return CGRectMake(0, worldView.frame.size.height - CONSOLE_HEIGHT, worldView.frame.size.width - TOOLBAR_WIDTH, CONSOLE_HEIGHT);
 }
 
 // toolRect method - returns the drawing rectangle of tool with given index
@@ -210,13 +210,13 @@
 
 // toolRect method - returns the drawing sub-rectangle of tool, suitable for showing reserve level
 - (CGRect)toolPartialRect:(int)nTool startingAt:(CGFloat)startFraction endingAt:(CGFloat)endFraction {
-	CGFloat width = self.view.frame.size.width;
-	CGFloat height = self.view.frame.size.height;
+	CGFloat width = worldView.frame.size.width;
+	CGFloat height = worldView.frame.size.height;
 	
 	CGFloat tw = TOOLBAR_WIDTH;
 	CGFloat tx = width - tw;
 	CGFloat th = MIN (tw, height / (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
-	
+
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);
 }
 
@@ -227,7 +227,7 @@
 	if ([touches count] == 1 && !panning && !zooming) {
 		UITouch *touch = [touches anyObject];
 		
-		CGPoint currentPoint = [touch locationInView:self.view];
+		CGPoint currentPoint = [touch locationInView:self.worldView];
         
 		CGRect boardRect = [self boardRect];
 		CGRect toolboxRect = [self toolboxRect];
@@ -278,7 +278,7 @@
 	// single-touch
 	if ([touches count] == 1 && !panning && !zooming) {
 		UITouch *touch = [touches anyObject];
-		CGPoint currentPoint = [touch locationInView:self.view];
+		CGPoint currentPoint = [touch locationInView:self.worldView];
 		
 		CGRect boardRect = [self boardRect];
         

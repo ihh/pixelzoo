@@ -11,7 +11,7 @@
 
 /* uncomment the #define to log all board writes to stderr */
 /*
-#define DEBUG
+#define PIXELZOO_DEBUG
 */
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
@@ -98,9 +98,9 @@ void replayBoardMove (Board* board) {
   board->sampledNextAsyncEventTime = 0;
   board->sampledNextSyncEventTime = 0;
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
   fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 
   writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);  /* auto-increments updateCount */
   (void) MoveListShift (board->moveQueue);
@@ -150,9 +150,9 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) 
   if (!board->syncWrite[i])
     board->sync[i] = state;
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
   fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 
 }
 
@@ -162,9 +162,9 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State sta
   board->sync[i] = state;
   board->syncWrite[i] = 1;
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
   fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 
 }
 
@@ -478,9 +478,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
       fprintf (stderr, "Synchronizing board\n");
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 
       syncBoard (board);
       ++board->updateCount;
@@ -498,9 +498,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
       fprintf (stderr, "Updating synchronized cell at (%d,%d)\n", x, y);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 			
       evolveBoardCellSync (board, x, y);
       ++cellUpdates;
@@ -518,9 +518,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
       fprintf (stderr, "Updating asynchronous cell at (%d,%d)\n", x, y);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 			
       evolveBoardCell (board, x, y);
       ++cellUpdates;
@@ -536,9 +536,9 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
     } else {  /* reached target time */
 
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
       fprintf (stderr, "Reached target time\n");
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
 
       board->microticks = microticksAtTarget;
       break;

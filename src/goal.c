@@ -6,7 +6,7 @@
 
 /* uncomment the #define to log all board writes to stderr */
 /*
-#define DEBUG
+#define PIXELZOO_DEBUG
 */
 
 /* private function prototypes */
@@ -452,9 +452,9 @@ int testGoalMet (Goal* goal, void *voidGame) {
 
   case PrintMessagePseudoGoal:
     printToGameConsole (game, (char*) goal->context, PaletteWhite, 1.);
-#ifdef DEBUG
+#ifdef PIXELZOO_DEBUG
     fprintf (stderr, "%s\n", (char*) goal->context);
-#endif /* DEBUG */
+#endif /* PIXELZOO_DEBUG */
     return 1;
 
   case PlaceBalloonPseudoGoal:
