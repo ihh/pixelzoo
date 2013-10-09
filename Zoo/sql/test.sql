@@ -1,9 +1,11 @@
 
 insert into user values (1, 'yam', 'pass', 100);
 
-insert into world values (1, 'earth', 1, 128, 0, 1000, 2000, 60, 120, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>', '<game><goal><true/><!-- owner --></goal></game>', '<game><goal><true/><!-- guest --></goal></game>', '<game><goal><true/><!-- voyeur -->Hello voyeur!</goal></game>');
+insert into world_meta values (1, 128, 1, 1, 60, 120, '<game><goal><true/><!-- owner --></goal></game>', '<game><goal><true/><!-- guest --></goal></game>', '<game><goal><true/><!-- voyeur -->Hello voyeur!</goal></game>');
 
-insert into world values (2, 'mars', 1, 128, 0, 1000, 2000, 60, 120, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>', '<game><goal><true/><!-- owner --></goal></game>', '<game><goal><true/><!-- guest --></goal></game>', '<game><goal><true/><!-- voyeur -->Hello voyeur!</goal></game>');
+insert into world values (1, 'earth', 1, 1, 0, 1000, 2000, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>');
+
+insert into world values (2, 'mars', 1, 1, 0, 1000, 2000, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>');
 
 insert into lock values (1, 1, 1, 3000, 4000, 5000, 'proto', 'compiled', 'turn');
 

@@ -49,15 +49,16 @@ __PACKAGE__->table("world");
   data_type: 'text'
   is_nullable: 1
 
-=head2 owner_id
+=head2 meta_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 board_size
+=head2 owner_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 board_time
@@ -75,32 +76,7 @@ __PACKAGE__->table("world");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 lock_expiry_delay
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 lock_delete_delay
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 board_xml
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 owner_game_xml
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 guest_game_xml
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 voyeur_game_xml
 
   data_type: 'text'
   is_nullable: 1
@@ -112,27 +88,17 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "text", is_nullable => 1 },
+  "meta_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "owner_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "board_size",
-  { data_type => "integer", is_nullable => 1 },
   "board_time",
   { data_type => "integer", is_nullable => 1 },
   "last_modified_time",
   { data_type => "integer", is_nullable => 1 },
   "last_stolen_time",
   { data_type => "integer", is_nullable => 1 },
-  "lock_expiry_delay",
-  { data_type => "integer", is_nullable => 1 },
-  "lock_delete_delay",
-  { data_type => "integer", is_nullable => 1 },
   "board_xml",
-  { data_type => "text", is_nullable => 1 },
-  "owner_game_xml",
-  { data_type => "text", is_nullable => 1 },
-  "guest_game_xml",
-  { data_type => "text", is_nullable => 1 },
-  "voyeur_game_xml",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -165,6 +131,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 meta_rel
+
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::WorldMeta>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "meta_rel",
+  "Zoo::Schema::Result::WorldMeta",
+  { id => "meta_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
 =head2 owner
 
 Type: belongs_to
@@ -186,8 +172,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t/bf3Q+GRbBibtLBv16Q3Q
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 15:04:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gXEPwPdlWvivwAoLCOPS3g
 
 =head1 METHODS
 
@@ -213,7 +199,7 @@ Returned type: L<Twiggy>
 sub voyeur_game {
     my ($self) = @_;
     my $twig = Twiggy->new();
-    $twig->parse ($self->voyeur_game_xml);
+    $twig->parse ($self->meta_rel->voyeur_game_xml);
     return $twig;
 }
 
@@ -226,7 +212,7 @@ Returned type: L<Twiggy>
 sub owner_game {
     my ($self) = @_;
     my $twig = Twiggy->new();
-    $twig->parse ($self->owner_game_xml);
+    $twig->parse ($self->meta_rel->owner_game_xml);
     return $twig;
 }
 
@@ -239,7 +225,7 @@ Returned type: L<Twiggy>
 sub guest_game {
     my ($self) = @_;
     my $twig = Twiggy->new();
-    $twig->parse ($self->guest_game_xml);
+    $twig->parse ($self->meta_rel->guest_game_xml);
     return $twig;
 }
 

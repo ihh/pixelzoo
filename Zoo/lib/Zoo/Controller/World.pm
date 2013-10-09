@@ -122,7 +122,7 @@ sub owner :Chained('game') :PathPart('owner') :Args(0) :ActionClass('REST') { }
 
 sub owner_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{game_xml} = $c->stash->{world}->owner_game_xml;
+    $c->stash->{game_xml} = $c->stash->{world}->meta_rel->owner_game_xml;
 }
 
 =head2 guest
@@ -133,7 +133,7 @@ sub guest :Chained('game') :PathPart('guest') :Args(0) :ActionClass('REST') { }
 
 sub guest_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{game_xml} = $c->stash->{world}->guest_game_xml;
+    $c->stash->{game_xml} = $c->stash->{world}->meta_rel->guest_game_xml;
 }
 
 =head2 voyeur
@@ -144,7 +144,7 @@ sub voyeur :Chained('game') :PathPart('voyeur') :Args(0) :ActionClass('REST') { 
 
 sub voyeur_GET {
     my ( $self, $c ) = @_;
-    $c->stash->{game_xml} = $c->stash->{world}->voyeur_game_xml;
+    $c->stash->{game_xml} = $c->stash->{world}->meta_rel->voyeur_game_xml;
 }
 
 
@@ -193,7 +193,7 @@ sub assemble {
     }
 
     # board size
-    $gram->boardSize($c->stash->{world}->board_size);
+    $gram->boardSize($c->stash->{world}->meta_rel->board_size);
 
     # misc tags
     for my $board_tag (qw(init seed)) {

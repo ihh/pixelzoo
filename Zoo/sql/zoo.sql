@@ -18,7 +18,7 @@ CREATE TABLE particle (
 CREATE TABLE tool (
         id integer PRIMARY KEY,
 	name varchar(255),  -- the name of this Tool
-	toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
 	);
@@ -63,20 +63,27 @@ CREATE TABLE inventory (
 	PRIMARY KEY (user_id, particle_id)
 	);
 
-CREATE TABLE world (
-	id INTEGER PRIMARY KEY,   -- the WorldID
-	name TEXT,  -- the name of the world
-	owner_id INTEGER REFERENCES user(id) ON DELETE SET NULL ON UPDATE SET NULL,   -- the UserID of the world owner
+CREATE TABLE world_meta (
+	id INTEGER PRIMARY KEY,   -- the WorldMetaID
 	board_size INTEGER,   -- size of the board
-	board_time INTEGER,   -- number of "microticks" on the board clock
-	last_modified_time INTEGER,  -- time board was last modified (UNIX timestamp)
-	last_stolen_time INTEGER,  -- time world's ownership was last changed (UNIX timestamp)
+	owner_toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
+	guest_toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
 	lock_expiry_delay INTEGER,  -- number of seconds that locking grants control of the board
 	lock_delete_delay INTEGER,  -- minimum number of seconds between locks
-	board_xml TEXT,  -- current state of the Board
 	owner_game_xml TEXT,  -- Game headers for owner's turn
 	guest_game_xml TEXT,  -- Game headers for guest's turn
 	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
+	);
+
+CREATE TABLE world (
+	id INTEGER PRIMARY KEY,   -- the WorldID
+	name TEXT,  -- the name of the world
+	meta_id INTEGER REFERENCES world_meta(id) ON DELETE SET NULL ON UPDATE SET NULL,
+	owner_id INTEGER REFERENCES user(id) ON DELETE SET NULL ON UPDATE SET NULL,   -- the UserID of the world owner
+	board_time INTEGER,   -- number of "microticks" on the board clock
+	last_modified_time INTEGER,  -- time board was last modified (UNIX timestamp)
+	last_stolen_time INTEGER,  -- time world's ownership was last changed (UNIX timestamp)
+	board_xml TEXT  -- current state of the Board
 	);
 
 CREATE TABLE lock (

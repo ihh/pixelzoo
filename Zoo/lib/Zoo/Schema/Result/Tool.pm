@@ -38,11 +38,23 @@ __PACKAGE__->table("tool");
 
 =head1 ACCESSORS
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 name
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 255
+
+=head2 toolbox_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
 
 =head2 creator_id
 
@@ -58,8 +70,12 @@ __PACKAGE__->table("tool");
 =cut
 
 __PACKAGE__->add_columns(
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "toolbox_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "creator_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "xml",
@@ -70,13 +86,13 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</name>
+=item * L</id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("name");
+__PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
@@ -100,9 +116,29 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 toolbox
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ELm6bnv9E2gxEgBKfd3g5w
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::Toolbox>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "toolbox",
+  "Zoo::Schema::Result::Toolbox",
+  { id => "toolbox_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 15:04:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LQTBpfUSnsfmBN08eCCV2w
 
 =head1 METHODS
 
