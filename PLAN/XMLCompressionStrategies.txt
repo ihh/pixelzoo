@@ -1,0 +1,14 @@
+A few strategies for reducing the size of downloaded XML
+
+Remove whitespace
+Use gzip HTTP encoding
+Shorter element names
+
+Implement assembler clientside?
+Then various strategies downstream from that, e.g.
+
+Caching of particle definitions
+
+Embedded Scheme interpreter:
+http://howtowriteaprogram.blogspot.com/2010/11/lisp-interpreter-in-90-lines-of-c.html
+http://norvig.com/lispy.html
