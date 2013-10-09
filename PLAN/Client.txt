@@ -1,6 +1,7 @@
 Refactor tools to use IDs instead of names
 
-Add a toolbox table ([toolID,toolboxID]) and a world-allowed-toolbox table ([worldID,toolboxID]) to data model
+Add a toolbox table ([toolboxID,name]), add toolboxID to tool table, and add owner & guest toolboxID's to world table
+Add lock flag & lock expiry time to world info page
 Add world info -> tool selection -> lock screens (connected by push segues) between Worlds menu & game screen
 Add a lock timeout countdown to lock & game screens
 POST turn when done
@@ -14,6 +15,8 @@ http://www.catalystframework.org/calendar/2007/5
 
 Hook up basic auth to login, logout & registration dialogs
 http://www.chrisumbel.com/article/basic_authentication_iphone_cocoa_touch
+
+Ensure that visiting world info page when world is locked & lock belongs to player should delete lock
 
 Add some real multiplayer game logic (player particles/tools, a test board that can be stolen)
 
