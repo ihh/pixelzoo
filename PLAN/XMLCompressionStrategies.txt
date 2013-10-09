@@ -9,8 +9,9 @@ Then various strategies downstream from that, e.g.
 
 1. Caching of particle definitions
 
-2. Build in various macros
+2. Build in various macros (bind-to-dir, random-neighborhood-cell, angle-between-cells...)
 
-3. Just embed a Scheme interpreter:
+3. Just embed a Scheme interpreter...
+See file scheme/lispy.cc
 http://howtowriteaprogram.blogspot.com/2010/11/lisp-interpreter-in-90-lines-of-c.html
 http://norvig.com/lispy.html
