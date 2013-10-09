@@ -320,8 +320,8 @@ sub lock_end_POST {
 	my $proto_xml = &{$c->stash->{grammar}->get_assembled_xml_stash}();
 	# add the lock to the database
 	my $create_time = time();
-	my $expiry_time = $create_time + $world->lock_expiry_delay;
-	my $delete_time = $create_time + $world->lock_delete_delay;
+	my $expiry_time = $create_time + $world->meta_rel->lock_expiry_delay;
+	my $delete_time = $create_time + $world->meta_rel->lock_delete_delay;
 	my $user_id = 1;    # HACK: TODO: use Catalyst::Plugin::Authentication to get proper user IDs
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,

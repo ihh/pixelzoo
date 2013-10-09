@@ -167,6 +167,18 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dduUYG68CPDSW0ZRAAwkQA
 
+=head2 time_to_expire
+
+Returned type: integer time to expiration (seconds)
+
+=cut
+
+sub time_to_expire {
+    my ($self) = @_;
+    my $current_time = time();
+    return $self->expiry_time - $current_time;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

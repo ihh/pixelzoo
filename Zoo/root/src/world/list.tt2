@@ -7,6 +7,16 @@
   <size>[% world.meta_rel.board_size %]</size>
   <owner>
     <id>[% world.owner_id %]</id>
-    <name>[% world.owner.username %]</name></owner></world>
+    <name>[% world.owner.username %]</name></owner>
+  [% FOREACH lock IN world.active_locks -%]
+    <lock>
+      <id>[% lock.lock_id %]</id>
+      <owner>
+	<id>[% lock.owner_id %]</id>
+      <name>[% lock.owner.username %]</name></owner>
+      <expires>[% lock.time_to_expire %]</expires>
+    </lock>
+  [% END -%]
+  </world>
 [% END -%]
 </world-list>

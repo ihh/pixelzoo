@@ -1,4 +1,4 @@
-Add lock flag & lock expiry time to world info page
+Add available tool list to world info
 Add world info -> tool selection -> lock screens (connected by push segues) between Worlds menu & game screen
 Add a lock timeout countdown to lock & game screens
 POST turn when done

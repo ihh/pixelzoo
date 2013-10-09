@@ -65,10 +65,7 @@ Get a L<Zoo::Schema::Result::Lock> object, for a given L<Zoo::Schema::Result::Wo
 
 sub world_active_lock {
     my ($self, $world) = @_;
-#    $self->storage->debug(1);
-    my $current_time = time();
-    my @locks = $self->resultset('Lock')->search({'world_id' => $world->id,
-						  'expiry_time' => { '>' => $current_time }});
+    my @locks = $world->active_locks;
     return @locks ? $locks[$#locks] : undef;
 }
 

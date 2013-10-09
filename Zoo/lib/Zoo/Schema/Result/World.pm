@@ -229,6 +229,20 @@ sub guest_game {
     return $twig;
 }
 
+=head2 active_locks
+
+Returned type: list that should contain zero or one L<Zoo::Schema::Result::Locks> objects
+
+=cut
+
+sub active_locks {
+    my ($self) = @_;
+    my $current_time = time();
+    my @locks = $self->locks->search({'world_id' => $self->id,
+				      'expiry_time' => { '>' => $current_time }});
+    return @locks;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
