@@ -68,8 +68,6 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
     if (MATCHES(node,TRIGGER))
       (void) ListInsertBefore (game->trigger, NULL, newGoalTriggerFromXmlNode (game, node));
 
-  Assert (RBTreeSize(game->toolByName) > 0 && selectedTool != NULL, "You need some tools!");
-
   for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,PROTECT))
       registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->writeProtectWatcher);

@@ -1,21 +1,36 @@
+use utf8;
 package Zoo::Schema::Result::World;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Zoo::Schema::Result::World
+
+=cut
 
 use strict;
 use warnings;
 
 use Moose;
 use MooseX::NonMoose;
-use namespace::autoclean;
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-Zoo::Schema::Result::World
+=head1 TABLE: C<world>
 
 =cut
 
@@ -120,29 +135,20 @@ __PACKAGE__->add_columns(
   "voyeur_game_xml",
   { data_type => "text", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 owner
+=over 4
 
-Type: belongs_to
+=item * L</id>
 
-Related object: L<Zoo::Schema::Result::User>
+=back
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "owner",
-  "Zoo::Schema::Result::User",
-  { id => "owner_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
+__PACKAGE__->set_primary_key("id");
+
+=head1 RELATIONS
 
 =head2 locks
 
@@ -159,9 +165,29 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 owner
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-08-21 10:51:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EQCmQQ1QQgMXhFad47W3SQ
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::User>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "owner",
+  "Zoo::Schema::Result::User",
+  { id => "owner_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t/bf3Q+GRbBibtLBv16Q3Q
 
 =head1 METHODS
 

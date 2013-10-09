@@ -1,21 +1,36 @@
+use utf8;
 package Zoo::Schema::Result::Image;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Zoo::Schema::Result::Image
+
+=cut
 
 use strict;
 use warnings;
 
 use Moose;
 use MooseX::NonMoose;
-use namespace::autoclean;
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-Zoo::Schema::Result::Image
+=head1 TABLE: C<image>
 
 =cut
 
@@ -50,6 +65,17 @@ __PACKAGE__->add_columns(
   "xml",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</name>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("name");
 
 =head1 RELATIONS
@@ -67,7 +93,7 @@ __PACKAGE__->belongs_to(
   "Zoo::Schema::Result::User",
   { id => "creator_id" },
   {
-    is_deferrable => 1,
+    is_deferrable => 0,
     join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
@@ -90,8 +116,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 23:12:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KUhV3OwQSZEGyazgVjkCxg
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XleJZf1sS+geVnsOnKESUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

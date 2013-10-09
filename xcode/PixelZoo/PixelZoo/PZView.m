@@ -104,7 +104,6 @@
             int rgb = pzGetToolRgb(game,tool);
             [self renderTool:(nTool+1) withContext:ctx withColor:rgb withReserve:pzGetToolReserveLevel(tool) withName:((char*)pzGetToolName(tool)) asSelected:(nTool == pzGetSelectedToolNumber(game))];
         }
-        [self renderTool:(nTools+1) withContext:ctx withColor:0 withReserve:1 withName:RESET_TOOL_NAME asSelected:0];
         
         // redraw console
         CGContextSaveGState (ctx);

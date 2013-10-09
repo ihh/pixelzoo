@@ -1,21 +1,36 @@
+use utf8;
 package Zoo::Schema::Result::User;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Zoo::Schema::Result::User
+
+=cut
 
 use strict;
 use warnings;
 
 use Moose;
 use MooseX::NonMoose;
-use namespace::autoclean;
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-Zoo::Schema::Result::User
+=head1 TABLE: C<user>
 
 =cut
 
@@ -57,6 +72,17 @@ __PACKAGE__->add_columns(
   "cash",
   { data_type => "decimal", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
@@ -73,6 +99,36 @@ __PACKAGE__->has_many(
   "images",
   "Zoo::Schema::Result::Image",
   { "foreign.creator_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 inventories
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Inventory>
+
+=cut
+
+__PACKAGE__->has_many(
+  "inventories",
+  "Zoo::Schema::Result::Inventory",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 locks
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Lock>
+
+=cut
+
+__PACKAGE__->has_many(
+  "locks",
+  "Zoo::Schema::Result::Lock",
+  { "foreign.owner_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -121,21 +177,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 inventories
-
-Type: has_many
-
-Related object: L<Zoo::Schema::Result::Inventory>
-
-=cut
-
-__PACKAGE__->has_many(
-  "inventories",
-  "Zoo::Schema::Result::Inventory",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 worlds
 
 Type: has_many
@@ -151,24 +192,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 locks
+=head2 roles
 
-Type: has_many
+Type: many_to_many
 
-Related object: L<Zoo::Schema::Result::Lock>
+Composing rels: L</user_roles> -> role
 
 =cut
 
-__PACKAGE__->has_many(
-  "locks",
-  "Zoo::Schema::Result::Lock",
-  { "foreign.owner_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+__PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 23:12:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8BUkcAEZLlVQUtr/5krMNg
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iKtxv2CyB+vmiOmj/FBYYQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

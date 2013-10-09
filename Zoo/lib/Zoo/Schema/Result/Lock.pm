@@ -1,21 +1,36 @@
+use utf8;
 package Zoo::Schema::Result::Lock;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Zoo::Schema::Result::Lock
+
+=cut
 
 use strict;
 use warnings;
 
 use Moose;
 use MooseX::NonMoose;
-use namespace::autoclean;
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-Zoo::Schema::Result::Lock
+=head1 TABLE: C<lock>
 
 =cut
 
@@ -93,6 +108,17 @@ __PACKAGE__->add_columns(
   "turn_xml",
   { data_type => "text", is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</lock_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("lock_id");
 
 =head1 RELATIONS
@@ -110,7 +136,7 @@ __PACKAGE__->belongs_to(
   "Zoo::Schema::Result::User",
   { id => "owner_id" },
   {
-    is_deferrable => 1,
+    is_deferrable => 0,
     join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
@@ -130,7 +156,7 @@ __PACKAGE__->belongs_to(
   "Zoo::Schema::Result::World",
   { id => "world_id" },
   {
-    is_deferrable => 1,
+    is_deferrable => 0,
     join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
@@ -138,8 +164,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2013-08-21 10:51:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0b3Y70eOmLD2aF2lFB9K+g
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dduUYG68CPDSW0ZRAAwkQA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

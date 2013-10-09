@@ -100,15 +100,15 @@ sub particles_by_name {
     return @particles;
 }
 
-=head2 tools_by_name
+=head2 tools_by_id
 
-Get a list of L<Zoo::Schema::Result::Tool> objects, given a list of their name identifiers.
+Get a list of L<Zoo::Schema::Result::Tool> objects, given a list of their identifiers.
 
 =cut
 
-sub tools_by_name {
-    my ($self, @tool_names) = @_;
-    my @tools = $self->resultset('Tool')->search([map ({ 'name' => $_ }, @tool_names)]);
+sub tools_by_id {
+    my ($self, @tool_ids) = @_;
+    my @tools = @tool_ids ? $self->resultset('Tool')->search([map ({ 'id' => $_ }, @tool_ids)]) : ();
     return @tools;
 }
 
@@ -123,7 +123,6 @@ The dependency table is used to find downstream particle dependencies.
 sub descendant_particles {
     my ($self, @twig) = @_;
     my $emptyType = Grammar::defaultEmptyType();
-    warn "empty='$emptyType'";
     my %particle_name_hash = ($emptyType => 1);
     for my $twig (@twig) {
 	my @names = $twig->particle_names;

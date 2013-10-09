@@ -1,21 +1,36 @@
+use utf8;
 package Zoo::Schema::Result::Particle;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+Zoo::Schema::Result::Particle
+
+=cut
 
 use strict;
 use warnings;
 
 use Moose;
 use MooseX::NonMoose;
-use namespace::autoclean;
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
+
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime");
 
-=head1 NAME
-
-Zoo::Schema::Result::Particle
+=head1 TABLE: C<particle>
 
 =cut
 
@@ -66,29 +81,20 @@ __PACKAGE__->add_columns(
   "xml",
   { data_type => "text", is_nullable => 1 },
 );
-__PACKAGE__->set_primary_key("name");
 
-=head1 RELATIONS
+=head1 PRIMARY KEY
 
-=head2 image
+=over 4
 
-Type: belongs_to
+=item * L</name>
 
-Related object: L<Zoo::Schema::Result::Image>
+=back
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "image",
-  "Zoo::Schema::Result::Image",
-  { name => "image_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
-);
+__PACKAGE__->set_primary_key("name");
+
+=head1 RELATIONS
 
 =head2 creator
 
@@ -103,26 +109,11 @@ __PACKAGE__->belongs_to(
   "Zoo::Schema::Result::User",
   { id => "creator_id" },
   {
-    is_deferrable => 1,
+    is_deferrable => 0,
     join_type     => "LEFT",
     on_delete     => "CASCADE",
     on_update     => "CASCADE",
   },
-);
-
-=head2 dependency_descendants
-
-Type: has_many
-
-Related object: L<Zoo::Schema::Result::Dependency>
-
-=cut
-
-__PACKAGE__->has_many(
-  "dependency_descendants",
-  "Zoo::Schema::Result::Dependency",
-  { "foreign.descendant_id" => "self.name" },
-  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 dependency_ancestors
@@ -140,6 +131,41 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 dependency_descendants
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::Dependency>
+
+=cut
+
+__PACKAGE__->has_many(
+  "dependency_descendants",
+  "Zoo::Schema::Result::Dependency",
+  { "foreign.descendant_id" => "self.name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 image
+
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::Image>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "image",
+  "Zoo::Schema::Result::Image",
+  { name => "image_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 inventories
 
 Type: has_many
@@ -155,9 +181,29 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 ancestors
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-11 23:12:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AJAzS58tuQyX5X8TMjXSJQ
+Type: many_to_many
+
+Composing rels: L</dependency_descendants> -> ancestor
+
+=cut
+
+__PACKAGE__->many_to_many("ancestors", "dependency_descendants", "ancestor");
+
+=head2 descendants
+
+Type: many_to_many
+
+Composing rels: L</dependency_descendants> -> descendant
+
+=cut
+
+__PACKAGE__->many_to_many("descendants", "dependency_descendants", "descendant");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d/fMzjOLvv368Ke94p1X9Q
 
 
 =head2 descendants

@@ -54,8 +54,6 @@
 #define EXAMINE_EMPTY_TEXT "nothing"
 #define EXAMINE_CIRCLE_RADIUS 20
 
-#define RESET_TOOL_NAME "Restart"
-
 
 
 #endif

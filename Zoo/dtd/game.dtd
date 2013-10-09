@@ -9,7 +9,7 @@ This dialect is obtained by compiling files in the "proto" dialect, using the zo
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endturn)>
+<!ELEMENT game (board,rate,tool*,trigger*,protect*,exit?,goal?,endturn?)>
 
 <!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
  with a particular type of particle. -->

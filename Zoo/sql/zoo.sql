@@ -16,7 +16,8 @@ CREATE TABLE particle (
 	);
 
 CREATE TABLE tool (
-	name varchar(255) PRIMARY KEY,  -- the name of this Tool
+        id integer PRIMARY KEY,
+	name varchar(255),  -- the name of this Tool
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
 	);

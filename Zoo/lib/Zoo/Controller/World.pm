@@ -155,10 +155,10 @@ Assembles a Grammar from the components (Board, Particles, Game metadata, Tools)
 =cut
 
 sub assemble {
-    my ( $self, $c, $board, $game, @tool_names ) = @_;
+    my ( $self, $c, $board, $game, @tool_ids ) = @_;
 
     # tools
-    my @tools = $c->model('DB')->tools_by_name(@tool_names);
+    my @tools = $c->model('DB')->tools_by_id(@tool_ids);
     $c->log->debug ("Tool names: " . join (", ", map ($_->name, @tools)));
     $c->stash->{tools} = \@tools;
 
@@ -180,7 +180,7 @@ sub assemble {
 
     # grammar
     my $gram = Grammar->newMinimalGrammar;   # using newMinimalGrammar avoids creating a default 'empty' particle type
-    $gram->verbose(1);
+#    $gram->verbose(1);
 
     # set player & owner IDs...
     # $gram->playerID(...);
@@ -188,7 +188,7 @@ sub assemble {
 
     # particles
     for my $particle (@{$c->stash->{particles}}) {
-	warn "Adding type ", $particle->nest;
+#	warn "Adding type ", $particle->nest;
 	$gram->addType ($particle->nest);
     }
 
@@ -306,16 +306,16 @@ sub lock_end_POST {
     } else {
 	# create the lock...
 	# First, get the tool names from the POST'ed lock XML
-	my @tool_names;
+	my @tool_ids;
 	if ($c->request->content_length) {
 	    my $lock_twig = Twiggy->new();
 	    $lock_twig->parse ($c->request->body);
-	    @tool_names = map ($_->text, $lock_twig->root->first_child("toolbox")->children("name"));
+	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("toolid"));
 	}
-#	warn "Tools:\n", map (" $_\n", @tool_names);
+	warn "Tools:\n", map (" ".($_->name)."\n", @tool_ids);
 	# Assemble the board XML
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
-	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_names);
+	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_ids);
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
 	my $proto_xml = &{$c->stash->{grammar}->get_assembled_xml_stash}();
 	# add the lock to the database

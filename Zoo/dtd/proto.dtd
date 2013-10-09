@@ -13,7 +13,7 @@ are not yet exposed at this higher level (zoocompiler does not define a namespac
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool+,trigger*,protect*,exit,goal,endturn)>
+<!ELEMENT game (board,rate,tool*,trigger*,protect*,exit?,goal?,endturn?)>
 
 <!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
  with a particular type of particle. -->
@@ -468,6 +468,6 @@ Randomly executes either the "pass" or "fail" rule (with probability "prob" of i
 
 
 <!-- Lock -->
-<!ELEMENT lock (toolbox)>
-<!ELEMENT toolbox (name+)>
-
+<!ELEMENT lock (tools)>
+<!ELEMENT tools (toolid*)>
+<!ELEMENT toolid (#PCDATA)>
