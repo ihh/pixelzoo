@@ -1,4 +1,6 @@
-Add a toolbox table ([toolboxID,name]), add toolboxID to tool table, and add owner & guest toolboxID's to world table
+Add owner & guest toolboxID's to world table
+Separate out generic game info (lock delays, XML headers, toolbox IDs) into linked table, connected via DBIx::Class
+
 Add lock flag & lock expiry time to world info page
 Add world info -> tool selection -> lock screens (connected by push segues) between Worlds menu & game screen
 Add a lock timeout countdown to lock & game screens

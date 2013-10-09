@@ -18,8 +18,14 @@ CREATE TABLE particle (
 CREATE TABLE tool (
         id integer PRIMARY KEY,
 	name varchar(255),  -- the name of this Tool
+	toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE CASCADE ON UPDATE CASCADE,
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
+	);
+
+CREATE TABLE toolbox (
+        id integer PRIMARY KEY,
+	name varchar(255)  -- the name of this Toolbox
 	);
 
 CREATE TABLE dependency (  -- Particle dependencies
