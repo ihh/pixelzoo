@@ -10,9 +10,13 @@
 
 #import "GDataXMLNode.h"
 
-@interface PZWorldsViewController : UITableViewController
+@interface PZWorldsViewController : UITableViewController <NSURLConnectionDelegate>
+{
+    NSMutableData *worldListResponseData;
+}
 
+@property (nonatomic, retain) NSURLConnection *worldListConnection;
 @property (nonatomic, retain) GDataXMLDocument *doc;
-@property (nonatomic, retain) NSArray *worlds;
+@property (nonatomic, retain) NSMutableArray *worlds;
 
 @end

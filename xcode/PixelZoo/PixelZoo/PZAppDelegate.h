@@ -8,14 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PZWorldsViewController.h"
-
-@interface PZAppDelegate : UIResponder <UIApplicationDelegate, NSURLConnectionDelegate>
-{
-    PZWorldsViewController* worldsViewController;
-    NSURLConnection *worldListConnection;
-    NSMutableData *worldListResponseData;
-}
+@interface PZAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

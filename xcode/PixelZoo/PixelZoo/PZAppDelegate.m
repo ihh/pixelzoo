@@ -7,25 +7,13 @@
 //
 
 #import "PZAppDelegate.h"
-#import "PZDefs.h"
 #import "GDataXMLNode.h"
-#import "PZWorldDescriptor.h"
 
 @implementation PZAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-
-    // get Worlds controller
-    UINavigationController *navigationController = (UINavigationController*) self.window.rootViewController;
-    worldsViewController = (PZWorldsViewController*) [[navigationController viewControllers] objectAtIndex:0];
-    
-    // get world list, to populate Worlds controller
-    
-    // Send an asynchronous request
-    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/list",@SERVER_URL_PREFIX]]];
-    worldListConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
 
     return YES;
 }
@@ -55,54 +43,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-#pragma mark NSURLConnection Delegate Methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    // A response has been received, this is where we initialize the instance var
-    // so that we can append data to it in the didReceiveData method
-    // Furthermore, this method is called each time there is a redirect so reinitializing it
-    // also serves to clear it
-    worldListResponseData = [[NSMutableData alloc] init];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    // Append the new data to the instance variable
-    [worldListResponseData appendData:data];
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
-    // Return nil to indicate not necessary to store a cached response for this connection
-    return nil;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    // The request is complete and data has been received
-    // We can parse the stuff in the instance variable now
-    
-    // parse data using GDataXMLDocument, use xpath to extract list of <world>...</world> elements as NSArray
-    NSError * error = nil;
-    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:worldListResponseData
-                                                           options:0 error:&error];
-    
-    worldsViewController.doc = doc;
-    
-    NSArray *worldNodes = [doc nodesForXPath:@"//world-list/world" error:nil];
-    NSMutableArray *worldDescriptors = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [worldNodes count]; ++i)
-        [worldDescriptors addObject:[[PZWorldDescriptor alloc] initWithNode:[worldNodes objectAtIndex:i]]];
-    
-    // put worlds NSArray in PZWorldTableViewController
-    worldsViewController.worlds = worldDescriptors;
-    [worldsViewController.tableView reloadData];
-    
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // The request has failed for some reason!
-    // Check the error var
 }
 
 @end

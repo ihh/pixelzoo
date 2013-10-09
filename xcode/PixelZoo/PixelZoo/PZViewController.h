@@ -14,7 +14,7 @@
 typedef struct XYCoord { int x, y; } XYCoord;
 
 
-@interface PZViewController : UIViewController {
+@interface PZViewController : UIViewController <NSURLConnectionDelegate> {
 @public
     // the game
     pzGame* game;
@@ -31,6 +31,9 @@ typedef struct XYCoord { int x, y; } XYCoord;
     XYCoord examCoord;
     
 @protected
+    NSMutableData *lockData;
+    NSHTTPURLResponse* httpLockResponse;
+
 	CGFloat cellSizeAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfPan;  // used when panning
@@ -46,6 +49,8 @@ typedef struct XYCoord { int x, y; } XYCoord;
 @property(readonly) CGPoint viewOrigin;
 @property(readonly) XYCoord examCoord;
 @property(readonly) CGFloat cellSize;
+
+@property (nonatomic, retain) NSURLConnection *lockConnection;
 
 - (void)initGameFromXML:(NSString*)gameXMLString;
 - (void)deleteGame;

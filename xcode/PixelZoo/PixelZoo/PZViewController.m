@@ -26,6 +26,7 @@
 @synthesize viewOrigin;
 @synthesize cellSize;
 
+@synthesize lockConnection;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -91,34 +92,7 @@
     request.HTTPBody = requestBodyData;
     
     // Create url connection and fire request
-    NSURLResponse * response = nil;
-    NSError * error = nil;
-    NSData *lockData = [NSURLConnection sendSynchronousRequest:request
-                                             returningResponse:&response
-                                                         error:&error];
-    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
-    
-    // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
-    if (error == nil && [httpResponse statusCode] == 201)  // 201 CREATED
-    {
-        // parse data using GDataXMLDocument, use xpath to extract <game>...</game> element
-        GDataXMLDocument *lockDoc = [[GDataXMLDocument alloc] initWithData:lockData
-                                                                   options:0 error:&error];
-        
-        NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/world/game" error:nil];
-        GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
-        NSString *gameString = [gameElement XMLString];
-
-        [self initGameFromXML:gameString];
-
-        // TODO:
-        // add another NSTimer for lock expiration, change "restart" to "quit"
-        
-        // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
-        // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
-        // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-        
-    }
+    lockConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
 /* Timers: board updates & rendering */
@@ -392,6 +366,62 @@
 - (void)dealloc {
 	[self stopTimers];
 	[self deleteGame];
+}
+
+#pragma mark NSURLConnection Delegate Methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    // A response has been received, this is where we initialize the instance var
+    // so that we can append data to it in the didReceiveData method
+    // Furthermore, this method is called each time there is a redirect so reinitializing it
+    // also serves to clear it
+    lockData = [[NSMutableData alloc] init];
+    httpLockResponse = (NSHTTPURLResponse*)response;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    // Append the new data to the instance variable
+    [lockData appendData:data];
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    // Return nil to indicate not necessary to store a cached response for this connection
+    return nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    // The request is complete and data has been received
+    // We can parse the stuff in the instance variable now
+    
+    // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
+    if ([httpLockResponse statusCode] == 201)  // 201 CREATED
+    {
+        // parse data using GDataXMLDocument, use xpath to extract <game>...</game> element
+        NSError * error = nil;
+        GDataXMLDocument *lockDoc = [[GDataXMLDocument alloc] initWithData:lockData
+                                                                   options:0 error:&error];
+        
+        NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/world/game" error:nil];
+        GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
+        NSString *gameString = [gameElement XMLString];
+        
+        [self initGameFromXML:gameString];
+        
+        // TODO:
+        // add another NSTimer for lock expiration, change "restart" to "quit"
+        
+        // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
+        // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
+        // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
+        
+    }
+    
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // The request has failed for some reason!
+    // Check the error var
 }
 
 @end
