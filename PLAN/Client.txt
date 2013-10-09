@@ -1,7 +1,6 @@
-Refactor to use NSURLSession instead of NSURLConnection
-http://hayageek.com/ios-nsurlsession-example/
-http://blogs.captechconsulting.com/blog/nicholas-cipollina/ios-7-tutorial-series-nsurlsession
-http://www.shinobicontrols.com/blog/posts/2013/09/20/ios7-day-by-day-day-1-nsurlsession
+Refactor to use async NSURLConnection instead of synchronous
+
+Refactor tools to use IDs instead of names
 
 Add world info -> tool selection -> lock screens (connected by segues) between Worlds menu & game screen
 Add a lock timeout countdown to lock & game screens
@@ -14,9 +13,8 @@ http://search.cpan.org/~ether/Catalyst-Manual-5.9007/lib/Catalyst/Manual/Tutoria
 http://www.catalystframework.org/calendar/2011/15
 http://www.catalystframework.org/calendar/2007/5
 
-Hook up login, logout & registration dialogs
-https://developer.apple.com/library/ios/documentation/cocoa/Conceptual/URLLoadingSystem/Articles/AuthenticationChallenges.html
-https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html
+Hook up basic auth to login, logout & registration dialogs
+http://www.chrisumbel.com/article/basic_authentication_iphone_cocoa_touch
 
 Add some real multiplayer game logic (player particles/tools, a test board that can be stolen)
 
