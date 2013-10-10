@@ -49,6 +49,8 @@
 		2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C017FFBD7500093CEC /* xmlutil.c */; };
 		2818E2DF17FFBD7500093CEC /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C217FFBD7500093CEC /* xymap.c */; };
 		2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2E017FFBDD400093CEC /* xmlparser.c */; };
+		283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F58180722CB0056492E /* PZStatusViewController.m */; };
+		283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5B180725DA0056492E /* PZToolsViewController.m */; };
 		285106411801E9DC00AA3254 /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZViewController.m */; };
 		285106441801ECAE00AA3254 /* PZView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
@@ -135,6 +137,10 @@
 		2818E2E017FFBDD400093CEC /* xmlparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlparser.c; path = ../../../src/xmlparser.c; sourceTree = "<group>"; };
 		2818E2E117FFBDD400093CEC /* xmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlparser.h; path = ../../../src/xmlparser.h; sourceTree = "<group>"; };
 		2818E2E317FFBF2A00093CEC /* PZDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZDefs.h; sourceTree = "<group>"; };
+		283C0F57180722CB0056492E /* PZStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZStatusViewController.h; sourceTree = "<group>"; };
+		283C0F58180722CB0056492E /* PZStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZStatusViewController.m; sourceTree = "<group>"; };
+		283C0F5A180725DA0056492E /* PZToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolsViewController.h; sourceTree = "<group>"; };
+		283C0F5B180725DA0056492E /* PZToolsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZToolsViewController.m; sourceTree = "<group>"; };
 		2851063F1801E9DC00AA3254 /* PZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
 		285106401801E9DC00AA3254 /* PZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
 		285106421801ECAE00AA3254 /* PZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZView.h; sourceTree = "<group>"; };
@@ -192,16 +198,20 @@
 			children = (
 				2818E28417FFBB7500093CEC /* GDataXMLNode.h */,
 				2818E28517FFBB7500093CEC /* GDataXMLNode.m */,
+				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
-				285106451801F1B900AA3254 /* PZWorldDescriptor.h */,
-				285106461801F1B900AA3254 /* PZWorldDescriptor.m */,
-				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
+				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
+				283C0F57180722CB0056492E /* PZStatusViewController.h */,
+				283C0F58180722CB0056492E /* PZStatusViewController.m */,
+				283C0F5A180725DA0056492E /* PZToolsViewController.h */,
+				283C0F5B180725DA0056492E /* PZToolsViewController.m */,
 				285106421801ECAE00AA3254 /* PZView.h */,
 				285106431801ECAE00AA3254 /* PZView.m */,
 				2851063F1801E9DC00AA3254 /* PZViewController.h */,
 				285106401801E9DC00AA3254 /* PZViewController.m */,
-				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
+				285106451801F1B900AA3254 /* PZWorldDescriptor.h */,
+				285106461801F1B900AA3254 /* PZWorldDescriptor.m */,
 				2818E28117FFBACB00093CEC /* PZWorldsViewController.h */,
 				2818E28217FFBACB00093CEC /* PZWorldsViewController.m */,
 				2818E26217FFB6DB00093CEC /* Supporting Files */,
@@ -321,7 +331,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Holmesian Software";
 			};
-			buildConfigurationList = 2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "PixelZoo" */;
+			buildConfigurationList = 2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "pixelzoo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -373,6 +383,7 @@
 				2818E2CC17FFBD7500093CEC /* move.c in Sources */,
 				2818E2CD17FFBD7500093CEC /* notify.c in Sources */,
 				2818E2CE17FFBD7500093CEC /* optlist.c in Sources */,
+				283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */,
 				2818E2CF17FFBD7500093CEC /* particle.c in Sources */,
 				2818E2D017FFBD7500093CEC /* pixelzoo.c in Sources */,
 				285106441801ECAE00AA3254 /* PZView.m in Sources */,
@@ -383,6 +394,7 @@
 				2818E2D517FFBD7500093CEC /* stringmap.c in Sources */,
 				285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */,
 				2818E2D617FFBD7500093CEC /* tool.c in Sources */,
+				283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */,
 				2818E2D717FFBD7500093CEC /* util.c in Sources */,
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
@@ -506,7 +518,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "PixelZoo" */ = {
+		2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "pixelzoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2818E27C17FFB6DB00093CEC /* Debug */,

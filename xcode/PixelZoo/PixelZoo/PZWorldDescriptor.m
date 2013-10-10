@@ -6,12 +6,14 @@
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
+#import "PZDefs.h"
 #import "PZWorldDescriptor.h"
 #import "GDataXMLNode.h"
 
 @implementation PZWorldDescriptor
 
 @synthesize worldNode;
+@synthesize statusNode;
 
 - (id)initWithNode:(GDataXMLNode *)node {
     self = [super init];
@@ -31,11 +33,37 @@
     return [idElement stringValue];
 }
 
-- (NSString*)tools {
-    NSArray *toolsArray = [worldNode nodesForXPath:@"tools" error:nil];
-    if ([toolsArray count] == 0) return [[NSString alloc] init];
-    GDataXMLElement *toolsElement = [toolsArray objectAtIndex:0];
-    return [toolsElement stringValue];
+- (NSMutableURLRequest*)getController:(NSString *)suffix {
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],suffix]];
+    return request;
+}
+
+- (NSString*)toolBoxXpath:(NSString*)suffix {
+    NSMutableString* str = [[NSMutableString alloc] initWithString:@"toolbox/"];
+    [str appendString:@"owner"];  // hardcode this for now; in future, will check ownership & use 'owner' or 'guest'
+    [str appendString:suffix];
+    return str;
+}
+
+- (NSString*)toolboxName {
+    if (!statusNode) return 0;
+    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/name"] error:nil] objectAtIndex:0] stringValue];
+}
+
+- (int)numberOfTools {
+    if (!statusNode) return 0;
+    return [[statusNode nodesForXPath:[self toolBoxXpath:@"/tool"] error:nil] count];
+}
+
+- (NSString*)getToolID:(int)num {
+    if (!statusNode) return @"none";
+    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/tool/id"] error:nil] objectAtIndex:num] stringValue];
+}
+
+- (NSString*)getToolName:(int)num {
+    if (!statusNode) return @"";
+    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/tool/name"] error:nil] objectAtIndex:num] stringValue];
 }
 
 @end

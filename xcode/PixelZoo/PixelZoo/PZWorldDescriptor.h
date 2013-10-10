@@ -12,11 +12,21 @@
 @interface PZWorldDescriptor : NSObject
 
 @property (nonatomic, strong) GDataXMLNode *worldNode;
+@property (nonatomic, strong) GDataXMLNode *statusNode;
 
 - (id)initWithNode:(GDataXMLNode *)node;
 
 - (NSString*)name;
 - (NSString*)identifier;
-- (NSString*)tools;
+
+- (NSMutableURLRequest*)getController:(NSString*)suffix;
+
+- (NSString*)toolBoxXpath:(NSString*)suffix;
+
+- (NSString*)toolboxName;
+- (int)numberOfTools;
+- (NSString*)getToolID:(int)num;
+- (NSString*)getToolName:(int)num;
+
 
 @end

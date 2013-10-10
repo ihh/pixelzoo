@@ -10,7 +10,7 @@
 #import "PZWorldsViewController.h"
 #import "PZWorldDescriptor.h"
 #import "GDataXMLNode.h"
-#import "PZViewController.h"
+#import "PZStatusViewController.h"
 
 @interface PZWorldsViewController ()
 
@@ -19,8 +19,8 @@
 @implementation PZWorldsViewController
 
 @synthesize worldListConnection;
-@synthesize worlds;
 @synthesize doc;
+@synthesize worlds;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -124,9 +124,9 @@
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showWorldDetail"]) {
+    if ([segue.identifier isEqualToString:@"showWorldStatus"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        PZViewController *destViewController = segue.destinationViewController;
+        PZStatusViewController *destViewController = segue.destinationViewController;
         destViewController.worldDescriptor = [self.worlds objectAtIndex:indexPath.row];
     }
 }

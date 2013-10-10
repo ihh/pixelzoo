@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Ft-Wn-1H7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Ft-Wn-1H7">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <development version="4600" identifier="xcode"/>
@@ -24,7 +24,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="knq-Pt-noi" kind="push" identifier="showWorldDetail" id="FM2-YP-EDC"/>
+                                    <segue destination="s8n-Jn-gb0" kind="push" identifier="showWorldStatus" id="EsJ-Kt-Ewj"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -38,6 +38,115 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MCi-6X-waM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1055" y="-112"/>
+        </scene>
+        <!--Status View Controller-->
+        <scene sceneID="G0Y-W2-Jdv">
+            <objects>
+                <viewController id="s8n-Jn-gb0" customClass="PZStatusViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Qw-qs-yo0">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2HA-T6-3gt">
+                                <rect key="frame" x="0.0" y="76" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fhe-Fb-Cbf">
+                                <rect key="frame" x="79" y="394" width="163" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Start turn">
+                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="knq-Pt-noi" kind="push" identifier="lockWorld" id="sGZ-dI-SvX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eq8-5N-CnD">
+                                <rect key="frame" x="79" y="315" width="163" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="163" id="OoT-ag-R1E"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Select tools">
+                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="jU2-gX-zmv" kind="push" identifier="selectTools" id="9BV-T7-zQu"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Umj-BM-dL0">
+                                <rect key="frame" x="139" y="266" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Eq8-5N-CnD" firstAttribute="leading" secondItem="fhe-Fb-Cbf" secondAttribute="leading" type="default" id="0ne-Lc-838"/>
+                            <constraint firstItem="Eq8-5N-CnD" firstAttribute="trailing" secondItem="fhe-Fb-Cbf" secondAttribute="trailing" type="default" id="2ET-4f-YiO"/>
+                            <constraint firstItem="2HA-T6-3gt" firstAttribute="leading" secondItem="6Qw-qs-yo0" secondAttribute="leading" type="default" id="2dH-uB-QyJ"/>
+                            <constraint firstAttribute="bottom" secondItem="Umj-BM-dL0" secondAttribute="bottom" constant="217" id="3Y0-9q-Cxv"/>
+                            <constraint firstAttribute="bottom" secondItem="Eq8-5N-CnD" secondAttribute="bottom" constant="146" id="CHi-pM-o93"/>
+                            <constraint firstItem="2HA-T6-3gt" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="76" id="MUW-Md-ufD"/>
+                            <constraint firstItem="Umj-BM-dL0" firstAttribute="centerX" secondItem="Eq8-5N-CnD" secondAttribute="centerX" type="default" id="ZIf-6u-Sbi"/>
+                            <constraint firstItem="fhe-Fb-Cbf" firstAttribute="centerX" secondItem="6Qw-qs-yo0" secondAttribute="centerX" type="user" id="uGw-JV-FGS"/>
+                            <constraint firstAttribute="bottom" secondItem="fhe-Fb-Cbf" secondAttribute="bottom" constant="67" id="uxf-gW-qiD"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="J5a-BQ-wn6"/>
+                    <connections>
+                        <outlet property="playButton" destination="fhe-Fb-Cbf" id="PqR-Fg-VWe"/>
+                        <outlet property="selectToolsButton" destination="Eq8-5N-CnD" id="hvj-Va-z5t"/>
+                        <outlet property="toolboxLabel" destination="Umj-BM-dL0" id="acO-hB-B8P"/>
+                        <outlet property="worldLabel" destination="2HA-T6-3gt" id="EH3-e2-n99"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MFa-j3-QoQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1672" y="-112"/>
+        </scene>
+        <!--Tools View Controller-->
+        <scene sceneID="e2M-2d-v2u">
+            <objects>
+                <tableViewController id="jU2-gX-zmv" customClass="PZToolsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="sFY-fx-YRK">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ToolCell" id="sY2-hO-cga">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="jU2-gX-zmv" id="dUf-rB-vOr"/>
+                            <outlet property="delegate" destination="jU2-gX-zmv" id="1Uc-V7-ERW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="fik-hZ-e8a"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qMz-So-hZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2263" y="-488"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5Ov-zH-88a">
@@ -78,7 +187,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-bE-azu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1569" y="-112"/>
+            <point key="canvasLocation" x="2271" y="197"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fTb-fE-wjO">

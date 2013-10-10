@@ -77,8 +77,7 @@
     // POST a lock to SERVER_URL_PREFIX/world/WorldID/lock
     // http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
     // Create the request.
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/lock",@SERVER_URL_PREFIX,[worldDescriptor identifier]]];
+    NSMutableURLRequest *request = [worldDescriptor getController:@"lock"];
     
     // Specify that it will be a POST request
     request.HTTPMethod = @"POST";
@@ -87,7 +86,7 @@
     [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     
     // Convert data and set request's HTTPBody property
-    NSString *toolsString = [worldDescriptor tools];
+    NSString *toolsString = @"";// [worldDescriptor tools];
     NSData *requestBodyData = [toolsString dataUsingEncoding:NSUTF8StringEncoding];
     request.HTTPBody = requestBodyData;
     
