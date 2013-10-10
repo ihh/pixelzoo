@@ -43,7 +43,7 @@
 
     // get world list, to populate Worlds controller
     // Send an asynchronous request
-    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/list",@SERVER_URL_PREFIX]]];
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/",@SERVER_URL_PREFIX]]];
     worldListConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
     
 }

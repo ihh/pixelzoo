@@ -9,8 +9,7 @@ All can return 401 Unauthorized for authentication (incl. challenge URL)
 World controller
 ----------------
 
-GET world/list  -->    200 Success + WorldStatus list (may be empty, but will contain <count>)
-GET world/list/FirstIndex/LastIndex  -->    200 Success + WorldStatus list, 416 Requested Range Not Satisfiable
+GET world/  -->    200 Success + WorldDescriptor list
 
 GET world/WorldID/  -->  303 to GET world/WorldID/status
 

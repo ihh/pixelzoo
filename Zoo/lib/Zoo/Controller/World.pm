@@ -24,32 +24,20 @@ Catalyst Controller.
 
 =head2 index
 
+Returns list of worlds
+
 =cut
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-    $c->response->redirect ($c->uri_for($c->controller('World')->action_for('worldlist')), 303);
-    $c->detach;
-}
-
-=head2 world/list
-
-This must come before world/*
-
-=cut
-
-sub worldlist :Path('list') :Args(0) {
-    my ( $self, $c ) = @_;
-
     my @worlds = $c->model('DB')->worlds;
     $c->stash->{worlds} = \@worlds;
-
     $c->stash->{template} = 'world/list.tt2';
 }
 
 =head2 world_id
 
-This must come after world/list
+Get world by ID
 
 =cut
 
