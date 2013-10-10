@@ -334,3 +334,18 @@ int main ()
     environment global_env; add_globals(global_env);
     repl("90> ", &global_env);
 }
+
+
+
+// added by IH to test XCode/iOS version, 10/9/2013
+void test_line(const char* str, environment * env)
+{
+    std::string s(str);
+    std::cout << to_string(eval(read(str), env)) << '\n';
+}
+
+void lispy_test() {
+    environment global_env; add_globals(global_env);
+    test_line("(define cube (lambda (x) (* x x x)))",&global_env);
+    test_line("(cube 3)",&global_env);
+}
