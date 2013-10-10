@@ -25,7 +25,8 @@ CREATE TABLE tool (
 
 CREATE TABLE toolbox (
         id integer PRIMARY KEY,
-	name varchar(255)  -- the name of this Toolbox
+	name varchar(255),  -- the name of this Toolbox
+	max_tools integer -- maximum allowable tools
 	);
 
 CREATE TABLE dependency (  -- Particle dependencies

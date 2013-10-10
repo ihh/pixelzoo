@@ -9,7 +9,7 @@ insert into world values (2, 'mars', 1, 1, 0, 1000, 2000, '<board><size>128</siz
 
 insert into lock values (1, 1, 1, 3000, 4000, 5000, 'proto', 'compiled', 'turn');
 
-insert into toolbox values (1, 'standard tools');
+insert into toolbox values (1, 'standard tools', 6);
 
 insert into tool values (1, 'cement spray (fine)', 1, 1, '<tool><name>cement spray (fine)</name><size>2</size><gstate>cement</gstate><overwrite><gstate>empty</gstate></overwrite><spray>1000</spray><reserve>1000</reserve><recharge>100</recharge></tool>');
 insert into tool values (2, 'cement spray (medium)', 1, 1, '<tool><name>cement spray (medium)</name><size>4</size><gstate>cement</gstate><overwrite><gstate>empty</gstate></overwrite><spray>1000</spray><reserve>1000</reserve><recharge>100</recharge></tool>');
