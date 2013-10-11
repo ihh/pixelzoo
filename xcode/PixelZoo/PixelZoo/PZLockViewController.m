@@ -116,6 +116,9 @@
         [gameWrapper initGameFromXMLElement:gameElement];
 
         lockLabel.text = @"Locked";
+
+        playButton.enabled = YES;
+        playButton.alpha = 1.0;
         
         // TODO:
         // add an NSTimer for lock expiration, change "restart" to "quit"
