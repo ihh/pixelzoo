@@ -1,4 +1,3 @@
-Add lock status screen (connected by push segues) between world status & game screens
 Add a lock timeout countdown to status, lock & game screens
 POST turn when done
 
