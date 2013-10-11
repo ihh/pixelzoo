@@ -13,20 +13,22 @@
     <owner>
       <name>[% world.meta_rel.owner_toolbox.name %]</name>
       <max>[% world.meta_rel.owner_toolbox.max_tools %]</max>
-      [% FOREACH tool IN world.meta_rel.owner_toolbox.tools -%]
+      [% FOREACH toolbox_tool IN world.meta_rel.owner_toolbox.toolbox_tools -%]
       <tool>
-	<id>[% tool.id %]</id>
-	<name>[% tool.name %]</name>
+	<id>[% toolbox_tool.tool.id %]</id>
+	<name>[% toolbox_tool.tool.name %]</name>
+	<checked>[% toolbox_tool.is_default %]</checked>
       </tool>
       [% END -%]
     </owner>
     <guest>
       <name>[% world.meta_rel.guest_toolbox.name %]</name>
       <max>[% world.meta_rel.guest_toolbox.max_tools %]</max>
-      [% FOREACH tool IN world.meta_rel.guest_toolbox.tools -%]
+      [% FOREACH toolbox_tool IN world.meta_rel.guest_toolbox.toolbox_tools -%]
       <tool>
-	<id>[% tool.id %]</id>
-	<name>[% tool.name %]</name>
+	<id>[% toolbox_tool.tool.id %]</id>
+	<name>[% toolbox_tool.tool.name %]</name>
+	<checked>[% toolbox_tool.is_default %]</checked>
       </tool>
       [% END -%]
     </guest>

@@ -1,5 +1,5 @@
 //
-//  PZView.h
+//  PZGameView.h
 //  PixelZoo
 //
 //  Created by Ian Holmes on 10/6/13.
@@ -8,17 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PZViewController.h"
+#import "PZGameViewController.h"
 
-@interface PZView : UIView {
-	PZViewController *pzViewController;
+@interface PZGameView : UIView {
 	unsigned char *bitmapData;
 	int bytesPerRow;
 	CGContextRef bitmapContext;
 	int redraws;
 }
 
-@property (strong, nonatomic) PZViewController* pzViewController;
+@property (strong, nonatomic) PZGameViewController* gameViewController;
 
 
 // helpers

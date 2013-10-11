@@ -1,17 +1,17 @@
 //
-//  PZView.m
+//  PZGameView.m
 //  PixelZoo
 //
 //  Created by Ian Holmes on 10/6/13.
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
-#import "PZView.h"
+#import "PZGameView.h"
 #import "PZDefs.h"
 
-@implementation PZView
+@implementation PZGameView
 
-@synthesize pzViewController;
+@synthesize gameViewController;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,15 +29,16 @@
     ++redraws;
     
     // get controller info
-    pzGame *game = [pzViewController game];
+    pzGame *game = [[gameViewController gameWrapper] game];
     if (game) {
         int boardSize = pzGetBoardSize(game);
-        CGFloat cellSize = [pzViewController cellSize];
-        CGRect boardRect = [pzViewController boardRect];
-        CGRect bigBoardRect = [pzViewController bigBoardRect];
-        CGRect consoleRect = [pzViewController consoleRect];
-        CGRect consoleBoardRect = [pzViewController consoleBoardRect];
+        CGFloat cellSize = [gameViewController cellSize];
+        CGRect boardRect = [gameViewController boardRect];
+        CGRect bigBoardRect = [gameViewController bigBoardRect];
+        CGRect consoleRect = [gameViewController consoleRect];
+        CGRect consoleBoardRect = [gameViewController consoleBoardRect];
         
+
         // create the bitmap context if necessary
         if (bitmapData == NULL) {
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -108,7 +109,7 @@
         // redraw console
         CGContextSaveGState (ctx);
         CGContextClipToRect (ctx, consoleRect);
-        if ([pzViewController examining]) {
+        if ([gameViewController examining]) {
             CGContextDrawImage (ctx, consoleBoardRect, boardImage);
         } else {
             CGFloat cy = [self frame].size.height - 1;
@@ -168,7 +169,7 @@
             CGSize textSize = [self measureText:text withFont:font withSpacing:charspacing];
             
             // calculate coords to center text on point
-            CGPoint viewOrigin = [pzViewController viewOrigin];
+            CGPoint viewOrigin = [gameViewController viewOrigin];
             CGFloat
             xpos = (cellSize * (CGFloat) x) - textSize.width / 2 - viewOrigin.x,
             ypos = (cellSize * (CGFloat) y) + textSize.height / 2 - viewOrigin.y;
@@ -192,8 +193,8 @@
         CGContextRestoreGState (ctx);
         
         // redraw name of currently touched pixel, if "examine" tool is being used
-        if ([pzViewController examining]) {
-            XYCoord pos = [pzViewController examCoord];
+        if ([gameViewController examining]) {
+            XYCoord pos = [gameViewController examCoord];
             UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
             char* text = (char*) pzGetCellName(game,pos.x,pos.y);
             int rgb = pzGetCellNameRgb(game,pos.x,pos.y);
@@ -208,7 +209,7 @@
             CGContextSetCharacterSpacing (ctx, EXAMINE_FONT_SPACING);
             CGContextSetTextDrawingMode (ctx, kCGTextFill);
             
-            CGPoint viewOrigin = [pzViewController viewOrigin];
+            CGPoint viewOrigin = [gameViewController viewOrigin];
             CGFloat
             xcell = (cellSize * (.5 + (CGFloat) pos.x)) - viewOrigin.x,
             ycell = (cellSize * (.5 + (CGFloat) pos.y)) - viewOrigin.y,
@@ -257,7 +258,7 @@
             CGContextStrokeEllipseInRect (ctx, CGRectMake(xcell-EXAMINE_CIRCLE_RADIUS,ycell-EXAMINE_CIRCLE_RADIUS,2*EXAMINE_CIRCLE_RADIUS,2*EXAMINE_CIRCLE_RADIUS));
             
             // console label
-            CGPoint cmid = [pzViewController consoleCentroid];
+            CGPoint cmid = [gameViewController consoleCentroid];
             CGFloat
             clx = cmid.x - textSize.width/2,
             cly = cmid.y + textSize.height/2;
@@ -296,8 +297,8 @@
 	CGContextSetCharacterSpacing (ctx, TOOL_FONT_SPACING);
 	CGContextSetTextDrawingMode (ctx, kCGTextFill);
     
-	CGRect toolRect = [pzViewController toolRect:nTool];
-	CGRect toolPartialRect = [pzViewController toolPartialRect:nTool startingAt:0 endingAt:reserve];
+	CGRect toolRect = [gameViewController toolRect:nTool];
+	CGRect toolPartialRect = [gameViewController toolPartialRect:nTool startingAt:0 endingAt:reserve];
 	[self setFill:rgb withContext:ctx withFactor:1 withOpacity:1 asInverse:0];
 	CGContextFillRect(ctx, toolPartialRect);
 	CGSize textSize = [self measureText:name withFont:font withSpacing:TOOL_FONT_SPACING];

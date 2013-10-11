@@ -298,9 +298,10 @@ sub lock_end_POST {
 	if ($c->request->content_length) {
 	    my $lock_twig = Twiggy->new();
 	    $lock_twig->parse ($c->request->body);
-	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("toolid"));
+	    warn $c->request->body;
+	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("id"));
 	}
-	warn "Tools:\n", map (" ".($_->name)."\n", @tool_ids);
+	warn "Tool IDs (@tool_ids)";
 	# Assemble the board XML
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
 	$self->assemble ($c, $world->board, $world->voyeur_game, @tool_ids);

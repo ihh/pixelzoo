@@ -39,10 +39,10 @@
             </objects>
             <point key="canvasLocation" x="1055" y="-112"/>
         </scene>
-        <!--Status View Controller-->
+        <!--Status View Controller - WorldStatus-->
         <scene sceneID="G0Y-W2-Jdv">
             <objects>
-                <viewController id="s8n-Jn-gb0" customClass="PZStatusViewController" sceneMemberID="viewController">
+                <viewController title="WorldStatus" id="s8n-Jn-gb0" customClass="PZStatusViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Qw-qs-yo0">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -65,7 +65,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="knq-Pt-noi" kind="push" identifier="lockWorld" id="sGZ-dI-SvX"/>
+                                    <segue destination="7EJ-BO-s9v" kind="push" identifier="lockWorld" id="Y8J-42-o0g"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eq8-5N-CnD">
@@ -108,8 +108,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="J5a-BQ-wn6"/>
                     <connections>
-                        <outlet property="playButton" destination="fhe-Fb-Cbf" id="PqR-Fg-VWe"/>
-                        <outlet property="selectToolsButton" destination="Eq8-5N-CnD" id="hvj-Va-z5t"/>
+                        <outlet property="selectToolsButton" destination="Eq8-5N-CnD" id="J8c-ru-ujK"/>
+                        <outlet property="startTurnButton" destination="fhe-Fb-Cbf" id="H96-oV-aeI"/>
                         <outlet property="toolboxLabel" destination="Umj-BM-dL0" id="acO-hB-B8P"/>
                         <outlet property="worldLabel" destination="2HA-T6-3gt" id="EH3-e2-n99"/>
                     </connections>
@@ -118,10 +118,10 @@
             </objects>
             <point key="canvasLocation" x="1672" y="-112"/>
         </scene>
-        <!--Tools View Controller-->
+        <!--Tools View Controller - ToolTable-->
         <scene sceneID="e2M-2d-v2u">
             <objects>
-                <tableViewController id="jU2-gX-zmv" customClass="PZToolsViewController" sceneMemberID="viewController">
+                <tableViewController title="ToolTable" id="jU2-gX-zmv" customClass="PZToolsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="sFY-fx-YRK">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -148,15 +148,63 @@
             </objects>
             <point key="canvasLocation" x="2263" y="-488"/>
         </scene>
-        <!--View Controller-->
+        <!--Lock View Controller - LockDetail-->
+        <scene sceneID="cYp-7v-g7V">
+            <objects>
+                <viewController title="LockDetail" id="7EJ-BO-s9v" customClass="PZLockViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bf3-ff-LLu">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xzm-AX-Y82">
+                                <rect key="frame" x="133" y="382" width="55" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Play">
+                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="knq-Pt-noi" kind="push" identifier="playWorld" id="dkP-P7-5Cp"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(waiting for lock)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wll-8f-KxV">
+                                <rect key="frame" x="97" y="109" width="126" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="centerX" secondItem="xzm-AX-Y82" secondAttribute="centerX" type="default" id="6Z6-dQ-b5e"/>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="top" secondItem="bf3-ff-LLu" secondAttribute="top" constant="109" id="GIx-GK-0Gx"/>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="centerX" secondItem="bf3-ff-LLu" secondAttribute="centerX" type="default" id="MWy-rv-LWr"/>
+                            <constraint firstAttribute="bottom" secondItem="xzm-AX-Y82" secondAttribute="bottom" constant="79" id="NBd-DT-lUu"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="hDi-uT-64X"/>
+                    <connections>
+                        <outlet property="lockLabel" destination="Wll-8f-KxV" id="Ocw-15-dm9"/>
+                        <outlet property="playButton" destination="xzm-AX-Y82" id="3eQ-tb-KtY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="46e-ug-nIs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2283" y="225"/>
+        </scene>
+        <!--Game View Controller - Game-->
         <scene sceneID="5Ov-zH-88a">
             <objects>
-                <viewController id="knq-Pt-noi" customClass="PZViewController" sceneMemberID="viewController">
+                <viewController title="Game" id="knq-Pt-noi" customClass="PZGameViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5NN-2Q-qTd">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZGameView">
                                 <rect key="frame" x="0.0" y="100" width="320" height="404"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -187,7 +235,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-bE-azu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2271" y="197"/>
+            <point key="canvasLocation" x="2907" y="225"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fTb-fE-wjO">

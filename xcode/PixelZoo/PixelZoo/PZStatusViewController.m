@@ -8,7 +8,7 @@
 
 #import "PZStatusViewController.h"
 #import "PZToolsViewController.h"
-#import "PZViewController.h"
+#import "PZLockViewController.h"
 
 @interface PZStatusViewController ()
 
@@ -24,8 +24,8 @@
 
 @synthesize worldLabel;
 @synthesize toolboxLabel;
-@synthesize playButton;
 @synthesize selectToolsButton;
+@synthesize startTurnButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,9 +58,11 @@
     if ([segue.identifier isEqualToString:@"selectTools"]) {
         PZToolsViewController *destViewController = segue.destinationViewController;
         destViewController.worldDescriptor = self.worldDescriptor;
+        destViewController.selectedToolIDs = self.selectedToolIDs;
     } else if ([segue.identifier isEqualToString:@"lockWorld"]) {
-        PZViewController *destViewController = segue.destinationViewController;
+        PZLockViewController *destViewController = segue.destinationViewController;
         destViewController.worldDescriptor = self.worldDescriptor;
+        destViewController.selectedToolIDs = self.selectedToolIDs;
     }
 }
 
@@ -95,6 +97,7 @@
                                          options:0 error:&error];
     
     worldDescriptor.statusNode = [doc rootElement];
+    selectedToolIDs = [worldDescriptor defaultToolIDs];
     toolboxLabel.text = [worldDescriptor toolboxName];
     [self.view setNeedsDisplay];
 }

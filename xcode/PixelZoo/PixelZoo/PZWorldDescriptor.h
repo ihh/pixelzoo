@@ -21,12 +21,14 @@
 
 - (NSMutableURLRequest*)getController:(NSString*)suffix;
 
-- (NSString*)toolBoxXpath:(NSString*)suffix;
+- (NSArray*)toolboxXPath:(NSString*)suffix;
 
 - (NSString*)toolboxName;
 - (int)numberOfTools;
+- (int)maxSelectableTools;
 - (NSString*)getToolID:(int)num;
 - (NSString*)getToolName:(int)num;
+- (NSMutableArray*)defaultToolIDs;
 
 
 @end

@@ -50,12 +50,6 @@ __PACKAGE__->table("tool");
   is_nullable: 1
   size: 255
 
-=head2 toolbox_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 creator_id
 
   data_type: 'integer'
@@ -74,8 +68,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "toolbox_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "creator_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "xml",
@@ -116,29 +108,24 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 toolbox
+=head2 toolbox_tools
 
-Type: belongs_to
+Type: has_many
 
-Related object: L<Zoo::Schema::Result::Toolbox>
+Related object: L<Zoo::Schema::Result::ToolboxTool>
 
 =cut
 
-__PACKAGE__->belongs_to(
-  "toolbox",
-  "Zoo::Schema::Result::Toolbox",
-  { id => "toolbox_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "SET NULL",
-    on_update     => "SET NULL",
-  },
+__PACKAGE__->has_many(
+  "toolbox_tools",
+  "Zoo::Schema::Result::ToolboxTool",
+  { "foreign.tool_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 15:04:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LQTBpfUSnsfmBN08eCCV2w
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-10 14:18:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HcznjEAVIWQltClsMUd2aA
 
 =head1 METHODS
 

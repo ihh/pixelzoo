@@ -18,7 +18,6 @@ CREATE TABLE particle (
 CREATE TABLE tool (
         id integer PRIMARY KEY,
 	name varchar(255),  -- the name of this Tool
-	toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
 	);
@@ -27,6 +26,13 @@ CREATE TABLE toolbox (
         id integer PRIMARY KEY,
 	name varchar(255),  -- the name of this Toolbox
 	max_tools integer -- maximum allowable tools
+	);
+
+CREATE TABLE toolbox_tool (
+        toolbox_id integer REFERENCES toolbox(id),
+        tool_id integer REFERENCES tool(id),
+	is_default integer,
+	PRIMARY KEY (toolbox_id, tool_id)
 	);
 
 CREATE TABLE dependency (  -- Particle dependencies

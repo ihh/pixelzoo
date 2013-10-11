@@ -51,8 +51,10 @@
 		2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2E017FFBDD400093CEC /* xmlparser.c */; };
 		283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F58180722CB0056492E /* PZStatusViewController.m */; };
 		283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5B180725DA0056492E /* PZToolsViewController.m */; };
-		285106411801E9DC00AA3254 /* PZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZViewController.m */; };
-		285106441801ECAE00AA3254 /* PZView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZView.m */; };
+		283C0F5F18075F8C0056492E /* PZLockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5E18075F8C0056492E /* PZLockViewController.m */; };
+		283C0F62180770D30056492E /* PZGameWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F61180770D30056492E /* PZGameWrapper.m */; };
+		285106411801E9DC00AA3254 /* PZGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZGameViewController.m */; };
+		285106441801ECAE00AA3254 /* PZGameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZGameView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 /* End PBXBuildFile section */
 
@@ -141,10 +143,14 @@
 		283C0F58180722CB0056492E /* PZStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZStatusViewController.m; sourceTree = "<group>"; };
 		283C0F5A180725DA0056492E /* PZToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolsViewController.h; sourceTree = "<group>"; };
 		283C0F5B180725DA0056492E /* PZToolsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZToolsViewController.m; sourceTree = "<group>"; };
-		2851063F1801E9DC00AA3254 /* PZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZViewController.h; sourceTree = "<group>"; };
-		285106401801E9DC00AA3254 /* PZViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZViewController.m; sourceTree = "<group>"; };
-		285106421801ECAE00AA3254 /* PZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZView.h; sourceTree = "<group>"; };
-		285106431801ECAE00AA3254 /* PZView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZView.m; sourceTree = "<group>"; };
+		283C0F5D18075F8C0056492E /* PZLockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockViewController.h; sourceTree = "<group>"; };
+		283C0F5E18075F8C0056492E /* PZLockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockViewController.m; sourceTree = "<group>"; };
+		283C0F60180770D30056492E /* PZGameWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZGameWrapper.h; sourceTree = "<group>"; };
+		283C0F61180770D30056492E /* PZGameWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZGameWrapper.m; sourceTree = "<group>"; };
+		2851063F1801E9DC00AA3254 /* PZGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZGameViewController.h; sourceTree = "<group>"; };
+		285106401801E9DC00AA3254 /* PZGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZGameViewController.m; sourceTree = "<group>"; };
+		285106421801ECAE00AA3254 /* PZGameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZGameView.h; sourceTree = "<group>"; };
+		285106431801ECAE00AA3254 /* PZGameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZGameView.m; sourceTree = "<group>"; };
 		285106451801F1B900AA3254 /* PZWorldDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldDescriptor.h; sourceTree = "<group>"; };
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -202,14 +208,18 @@
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
+				283C0F5D18075F8C0056492E /* PZLockViewController.h */,
+				283C0F5E18075F8C0056492E /* PZLockViewController.m */,
 				283C0F57180722CB0056492E /* PZStatusViewController.h */,
 				283C0F58180722CB0056492E /* PZStatusViewController.m */,
 				283C0F5A180725DA0056492E /* PZToolsViewController.h */,
 				283C0F5B180725DA0056492E /* PZToolsViewController.m */,
-				285106421801ECAE00AA3254 /* PZView.h */,
-				285106431801ECAE00AA3254 /* PZView.m */,
-				2851063F1801E9DC00AA3254 /* PZViewController.h */,
-				285106401801E9DC00AA3254 /* PZViewController.m */,
+				283C0F60180770D30056492E /* PZGameWrapper.h */,
+				283C0F61180770D30056492E /* PZGameWrapper.m */,
+				285106421801ECAE00AA3254 /* PZGameView.h */,
+				285106431801ECAE00AA3254 /* PZGameView.m */,
+				2851063F1801E9DC00AA3254 /* PZGameViewController.h */,
+				285106401801E9DC00AA3254 /* PZGameViewController.m */,
 				285106451801F1B900AA3254 /* PZWorldDescriptor.h */,
 				285106461801F1B900AA3254 /* PZWorldDescriptor.m */,
 				2818E28117FFBACB00093CEC /* PZWorldsViewController.h */,
@@ -386,11 +396,12 @@
 				283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */,
 				2818E2CF17FFBD7500093CEC /* particle.c in Sources */,
 				2818E2D017FFBD7500093CEC /* pixelzoo.c in Sources */,
-				285106441801ECAE00AA3254 /* PZView.m in Sources */,
+				285106441801ECAE00AA3254 /* PZGameView.m in Sources */,
 				2818E2D117FFBD7500093CEC /* quadtree.c in Sources */,
 				2818E2D217FFBD7500093CEC /* rbtree.c in Sources */,
 				2818E2D317FFBD7500093CEC /* rule.c in Sources */,
 				2818E2D417FFBD7500093CEC /* statemap.c in Sources */,
+				283C0F62180770D30056492E /* PZGameWrapper.m in Sources */,
 				2818E2D517FFBD7500093CEC /* stringmap.c in Sources */,
 				285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */,
 				2818E2D617FFBD7500093CEC /* tool.c in Sources */,
@@ -398,9 +409,10 @@
 				2818E2D717FFBD7500093CEC /* util.c in Sources */,
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
+				283C0F5F18075F8C0056492E /* PZLockViewController.m in Sources */,
 				2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
-				285106411801E9DC00AA3254 /* PZViewController.m in Sources */,
+				285106411801E9DC00AA3254 /* PZGameViewController.m in Sources */,
 				2818E2DC17FFBD7500093CEC /* xmlgoal.c in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */,

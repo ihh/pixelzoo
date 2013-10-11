@@ -1,5 +1,5 @@
 //
-//  PZViewController.h
+//  PZGameViewController.h
 //  PixelZoo
 //
 //  Created by Ian Holmes on 10/6/13.
@@ -8,32 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "PZWorldDescriptor.h"
-
-#import "pixelzoo.h"
+#import "PZGameWrapper.h"
 
 typedef struct XYCoord { int x, y; } XYCoord;
 
 
-@interface PZViewController : UIViewController <NSURLConnectionDelegate> {
-@public
-    // the game
-    pzGame* game;
-	
-    // rendering
-    CGFloat cellSize;
-    
+@interface PZGameViewController : UIViewController {
     // timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;
 	
 	// UI
-	int panning, zooming, examining;
-    XYCoord examCoord;
+	int panning, zooming;
     
-@protected
-    NSMutableData *lockData;
-    NSHTTPURLResponse* httpLockResponse;
-
+    // zoom
 	CGFloat cellSizeAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfZoom;  // used when zooming
 	CGPoint viewOriginAtStartOfPan;  // used when panning
@@ -41,19 +29,17 @@ typedef struct XYCoord { int x, y; } XYCoord;
 
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
+@property (nonatomic, strong) PZGameWrapper *gameWrapper;
+
 @property (nonatomic, strong) IBOutlet UILabel *worldLabel;
 @property (nonatomic, strong) IBOutlet UIView *worldView;
 
-@property(readonly) pzGame *game;
 @property(readonly) int examining;
 @property(readonly) CGPoint viewOrigin;
 @property(readonly) XYCoord examCoord;
 @property(readonly) CGFloat cellSize;
 
-@property (nonatomic, retain) NSURLConnection *lockConnection;
-
-- (void)initGameFromXML:(NSString*)gameXMLString;
-- (void)deleteGame;
+- (void)startGame;
 - (void)startTimers;
 - (void)stopTimers;
 - (void)triggerRedraw;

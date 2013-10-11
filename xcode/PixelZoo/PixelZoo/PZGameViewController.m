@@ -1,32 +1,31 @@
 //
-//  PZViewController.m
+//  PZGameViewController.m
 //  PixelZoo
 //
 //  Created by Ian Holmes on 10/6/13.
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
-#import "PZViewController.h"
+#import "PZGameViewController.h"
 #import "PZDefs.h"
-#import "PZView.h"
+#import "PZGameView.h"
 
-@interface PZViewController ()
+@interface PZGameViewController ()
 
 @end
 
-@implementation PZViewController
+@implementation PZGameViewController
 
+@synthesize gameWrapper;
 @synthesize worldDescriptor;
+
 @synthesize worldLabel;
 @synthesize worldView;
 
-@synthesize game;
 @synthesize examining;
 @synthesize examCoord;
 @synthesize viewOrigin;
 @synthesize cellSize;
-
-@synthesize lockConnection;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,11 +36,9 @@
     return self;
 }
 
-- (void)initGameFromXML:(NSString*)gameXMLString {
-    game = pzNewGameFromXmlString([gameXMLString UTF8String], false);
-
+- (void)startGame {
 	// tell view about its controller (hacky, this; suspect there'd be a less object-model-violating way if I understood things better)
-	[((PZView*) [self worldView]) setPzViewController:self];   // HACK HACK HACK
+	[((PZGameView*) [self worldView]) setGameViewController:self];   // HACK HACK HACK
     
 	// attach pan recognizer
 	UIPanGestureRecognizer *panner = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
@@ -62,36 +59,12 @@
 	[self startTimers];
 }
 
--(void)deleteGame {
-	if (game)
-		pzDeleteGame(game);
-	game = NULL;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    worldLabel.text = [worldDescriptor name];
-
-    // POST a lock to SERVER_URL_PREFIX/world/WorldID/lock
-    // http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    // Create the request.
-    NSMutableURLRequest *request = [worldDescriptor getController:@"lock"];
-    
-    // Specify that it will be a POST request
-    request.HTTPMethod = @"POST";
-    
-    // set header fields
-    [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    
-    // Convert data and set request's HTTPBody property
-    NSString *toolsString = @"";// [worldDescriptor tools];
-    NSData *requestBodyData = [toolsString dataUsingEncoding:NSUTF8StringEncoding];
-    request.HTTPBody = requestBodyData;
-    
-    // Create url connection and fire request
-    lockConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    worldLabel.text = [self.worldDescriptor name];
+    [self startGame];
 }
 
 /* Timers: board updates & rendering */
@@ -102,9 +75,6 @@
     
 	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
     evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
-    
-	// start the Game
-	pzStartGame(game);
 }
 
 -(void)stopTimers
@@ -117,7 +87,7 @@
 /* Board updates */
 - (void)callGameLoop
 {
-    pzUpdateGame(game,GAMELOOP_CALLS_PER_SECOND,0);
+    pzUpdateGame([gameWrapper game],GAMELOOP_CALLS_PER_SECOND,0);
 }
 
 
@@ -138,7 +108,7 @@
 
 // bigBoardRect method - returns the rectangle that the full board would occupy, in worldView coords
 - (CGRect) bigBoardRect {
-	CGFloat boardSize = pzGetBoardSize(self->game) * [self cellSize];
+	CGFloat boardSize = pzGetBoardSize([gameWrapper game]) * [self cellSize];
 	return CGRectMake(-viewOrigin.x, -viewOrigin.y, boardSize, boardSize);
 }
 
@@ -152,7 +122,7 @@
 // consoleBoardRect method - returns (in worldView coords) the rectangle that the full board would occupy, if it were being displayed in the console window at MAGNIFIED_PIXELS_PER_CELL
 - (CGRect) consoleBoardRect {
 	CGFloat magCellSize = [self magCellSize];
-	CGFloat consoleBoardSize = pzGetBoardSize(self->game) * magCellSize;
+	CGFloat consoleBoardSize = pzGetBoardSize([gameWrapper game]) * magCellSize;
 	CGPoint cmid = [self consoleCentroid];
 	// want origin + magCellSize*examCoord = consoleCentroid
 	return CGRectMake (cmid.x - magCellSize * (.5 + (double) examCoord.x),
@@ -168,7 +138,7 @@
 
 // toolboxRect method - returns the drawing/clipping rectangle of entire toolbox
 - (CGRect) toolboxRect {
-	return CGRectMake(worldView.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
+	return CGRectMake(worldView.frame.size.width - TOOLBAR_WIDTH, 0, TOOLBAR_WIDTH, TOOLBAR_WIDTH * (pzGetNumberOfTools([gameWrapper game]) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 }
 
 // consoleRect method - returns the drawing/clipping rectangle of text console
@@ -188,7 +158,7 @@
 	
 	CGFloat tw = TOOLBAR_WIDTH;
 	CGFloat tx = width - tw;
-	CGFloat th = MIN (tw, height / (pzGetNumberOfTools(game) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
+	CGFloat th = MIN (tw, height / (pzGetNumberOfTools([gameWrapper game]) + EXTRA_TOOLS_AT_TOP + EXTRA_TOOLS_AT_BOTTOM));
 
 	return CGRectMake(tx + startFraction*tw, nTool*th, tw * (endFraction - startFraction), th);
 }
@@ -209,33 +179,33 @@
 			int x = (currentPoint.x + viewOrigin.x) / cellSize;
 			int y = (currentPoint.y + viewOrigin.y) / cellSize;
 			
-			if (pzGetSelectedToolNumber(game) < 0) {
+			if (pzGetSelectedToolNumber([gameWrapper game]) < 0) {
 				examCoord.x = x;
 				examCoord.y = y;
                 
 				examining = 1;
-				pzUntouchCell(game);
+				pzUntouchCell([gameWrapper game]);
                 
 			} else {
-				pzTouchCell(game,x,y);
+				pzTouchCell([gameWrapper game],x,y);
 			}
 			
 		} else if (CGRectContainsPoint(toolboxRect, currentPoint)) {
-			pzUntouchCell(game);
+			pzUntouchCell([gameWrapper game]);
 			if (CGRectContainsPoint (toolboxRect, currentPoint)) {
 				int nTool = 0;
 				CGRect moveToolRect = [self toolRect:(nTool++)];
 				// examine
 				if (CGRectContainsPoint(moveToolRect, currentPoint)) {
-					pzUnselectTool(game);
+					pzUnselectTool([gameWrapper game]);
 				} else {
 					// Game tools
-                    int nTools = pzGetNumberOfTools(game);
+                    int nTools = pzGetNumberOfTools([gameWrapper game]);
 					int foundTool = false;
                     for (int nTool = 0; nTool < nTools; ++nTool) {
                         CGRect toolRect = [self toolRect:(nTool+1)];
                         if (CGRectContainsPoint(toolRect, currentPoint)) {
-                            pzSelectTool(game, nTool);
+                            pzSelectTool([gameWrapper game], nTool);
                             foundTool = true;
                             break;
                         }
@@ -259,12 +229,12 @@
 			int x = (currentPoint.x + viewOrigin.x) / (double) cellSize;
 			int y = (currentPoint.y + viewOrigin.y) / (double) cellSize;
             
-			if (pzGetSelectedToolNumber(game) < 0) {
+			if (pzGetSelectedToolNumber([gameWrapper game]) < 0) {
 				examCoord.x = x;
 				examCoord.y = y;
 				
 			} else {
-                pzTouchCell(game, x, y);
+                pzTouchCell([gameWrapper game], x, y);
 			}
 		}
 	}
@@ -272,7 +242,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
-	pzUntouchCell(game);
+	pzUntouchCell([gameWrapper game]);
 	examining = panning = zooming = 0;
 }
 
@@ -296,7 +266,7 @@
 		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfPan.y - trans.y, mvo.y));
 		
 		panning = 1;
-		pzUntouchCell(game);
+		pzUntouchCell([gameWrapper game]);
 	} else {
 		panning = 0;
 	}
@@ -323,7 +293,7 @@
 		viewOrigin.y = MAX (0, MIN (viewOriginAtStartOfZoom.y * scale, mvo.y));
 		
 		zooming = 1;
-		pzUntouchCell(game);
+		pzUntouchCell([gameWrapper game]);
 	} else {
 		zooming = 0;
 	}
@@ -333,7 +303,7 @@
 - (CGFloat) minCellSize {
 	CGRect boardRect = [self boardRect];
 	CGFloat minDim = MIN (boardRect.size.width, boardRect.size.height);
-	double minSize = minDim / (CGFloat) pzGetBoardSize(self->game);
+	double minSize = minDim / (CGFloat) pzGetBoardSize([gameWrapper game]);
     //	CGFloat maxDim = MAX (boardRect.size.width, boardRect.size.height);
     //	double minSize = maxDim / (CGFloat) self->game->board->size;
     //	int minIntSize = ceil((double) minSize);
@@ -348,7 +318,7 @@
 - (CGPoint) maxViewOrigin {
 	CGPoint mvo;
 	CGFloat cs = [self cellSize];
-	CGFloat boardSize = cs * pzGetBoardSize(self->game);;
+	CGFloat boardSize = cs * pzGetBoardSize([gameWrapper game]);;
 	CGRect boardRect = [self boardRect];
 	mvo.x = MAX (0, boardSize - boardRect.size.width);
 	mvo.y = MAX (0, boardSize - boardRect.size.height);
@@ -364,63 +334,7 @@
 
 - (void)dealloc {
 	[self stopTimers];
-	[self deleteGame];
 }
 
-#pragma mark NSURLConnection Delegate Methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    // A response has been received, this is where we initialize the instance var
-    // so that we can append data to it in the didReceiveData method
-    // Furthermore, this method is called each time there is a redirect so reinitializing it
-    // also serves to clear it
-    lockData = [[NSMutableData alloc] init];
-    httpLockResponse = (NSHTTPURLResponse*)response;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    // Append the new data to the instance variable
-    [lockData appendData:data];
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
-    // Return nil to indicate not necessary to store a cached response for this connection
-    return nil;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    // The request is complete and data has been received
-    // We can parse the stuff in the instance variable now
-    
-    // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
-    if ([httpLockResponse statusCode] == 201)  // 201 CREATED
-    {
-        // parse data using GDataXMLDocument, use xpath to extract <game>...</game> element
-        NSError * error = nil;
-        GDataXMLDocument *lockDoc = [[GDataXMLDocument alloc] initWithData:lockData
-                                                                   options:0 error:&error];
-        
-        NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/world/game" error:nil];
-        GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
-        NSString *gameString = [gameElement XMLString];
-        
-        [self initGameFromXML:gameString];
-        
-        // TODO:
-        // add another NSTimer for lock expiration, change "restart" to "quit"
-        
-        // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
-        // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
-        // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-        
-    }
-    
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // The request has failed for some reason!
-    // Check the error var
-}
 
 @end

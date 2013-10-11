@@ -23,6 +23,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *worldLabel;
 @property (nonatomic, strong) IBOutlet UILabel *toolboxLabel;
 @property (nonatomic, strong) IBOutlet UIButton *selectToolsButton;
-@property (nonatomic, strong) IBOutlet UIButton *playButton;
+@property (nonatomic, strong) IBOutlet UIButton *startTurnButton;
 
 @end

@@ -63,9 +63,34 @@
     
     // Configure the cell...
     
-    cell.textLabel.text = [worldDescriptor getToolName:indexPath.row];
+    int row = indexPath.row;
+    cell.textLabel.text = [worldDescriptor getToolName:row];
+
+    NSString* toolID = [worldDescriptor getToolID:row];
+    if ([selectedToolIDs containsObject:toolID])
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)path {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:path];
+    NSString* toolID = [worldDescriptor getToolID:path.row];
+    
+    if ([selectedToolIDs containsObject:toolID]) {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [selectedToolIDs removeObject:toolID];
+    } else if ([selectedToolIDs count] < [worldDescriptor maxSelectableTools]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [selectedToolIDs addObject:toolID];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Too many tools"
+                                                        message:[NSString stringWithFormat:@"You have already selected %d tools. Please uncheck some before continuing.", [worldDescriptor maxSelectableTools]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 /*

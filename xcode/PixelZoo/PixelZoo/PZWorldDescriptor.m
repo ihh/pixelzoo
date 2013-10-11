@@ -39,31 +39,46 @@
     return request;
 }
 
-- (NSString*)toolBoxXpath:(NSString*)suffix {
+- (NSArray*)toolboxXPath:(NSString*)suffix {
     NSMutableString* str = [[NSMutableString alloc] initWithString:@"toolbox/"];
     [str appendString:@"owner"];  // hardcode this for now; in future, will check ownership & use 'owner' or 'guest'
     [str appendString:suffix];
-    return str;
+    return [statusNode nodesForXPath:str error:nil];
 }
 
 - (NSString*)toolboxName {
     if (!statusNode) return 0;
-    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/name"] error:nil] objectAtIndex:0] stringValue];
+    return [[[self toolboxXPath:@"/name"] objectAtIndex:0] stringValue];
 }
 
 - (int)numberOfTools {
     if (!statusNode) return 0;
-    return [[statusNode nodesForXPath:[self toolBoxXpath:@"/tool"] error:nil] count];
+    return [[self toolboxXPath:@"/tool"] count];
 }
+
+- (int)maxSelectableTools {
+    if (!statusNode) return 0;
+    return [[[[self toolboxXPath:@"/max"] objectAtIndex:0] stringValue] integerValue];
+}
+
 
 - (NSString*)getToolID:(int)num {
     if (!statusNode) return @"none";
-    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/tool/id"] error:nil] objectAtIndex:num] stringValue];
+    return [[[self toolboxXPath:@"/tool/id"] objectAtIndex:num] stringValue];
 }
 
 - (NSString*)getToolName:(int)num {
     if (!statusNode) return @"";
-    return [[[statusNode nodesForXPath:[self toolBoxXpath:@"/tool/name"] error:nil] objectAtIndex:num] stringValue];
+    return [[[self toolboxXPath:@"/tool/name"] objectAtIndex:num] stringValue];
+}
+
+- (NSMutableArray*)defaultToolIDs {
+    NSArray* checked = [self toolboxXPath:@"/tool/checked"];
+    NSMutableArray* ids = [[NSMutableArray alloc] init];
+    for (int n = 0; n < [self numberOfTools]; ++n)
+        if ([[[checked objectAtIndex:n] stringValue] integerValue])
+            [ids addObject:[self getToolID:n]];
+    return ids;
 }
 
 @end
