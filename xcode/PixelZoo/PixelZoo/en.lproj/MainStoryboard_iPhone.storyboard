@@ -6,10 +6,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--Menu View Controller-->
+        <!--Menu View Controller - Main-->
         <scene sceneID="63t-UR-OOU">
             <objects>
-                <tableViewController id="nNW-7A-xg3" customClass="PZMenuViewController" sceneMemberID="viewController">
+                <tableViewController title="Main" id="nNW-7A-xg3" customClass="PZMenuViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="hc9-rA-9Oj">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -136,10 +136,10 @@
             </objects>
             <point key="canvasLocation" x="426" y="-817"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Login View Controller - Login-->
         <scene sceneID="Mdh-0C-nrF">
             <objects>
-                <viewController id="xhs-J4-qbb" customClass="PZLoginViewController" sceneMemberID="viewController">
+                <viewController title="Login" id="xhs-J4-qbb" customClass="PZLoginViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tho-pz-blx">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -218,10 +218,10 @@
             </objects>
             <point key="canvasLocation" x="1035" y="-902"/>
         </scene>
-        <!--Worlds View Controller - WorldTable-->
+        <!--Worlds View Controller - Worlds-->
         <scene sceneID="Oah-p2-LGC">
             <objects>
-                <tableViewController title="WorldTable" id="fbc-wo-K3Y" customClass="PZWorldsViewController" sceneMemberID="viewController">
+                <tableViewController title="Worlds" id="fbc-wo-K3Y" customClass="PZWorldsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="AfO-hA-3XZ">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -251,10 +251,10 @@
             </objects>
             <point key="canvasLocation" x="1055" y="-112"/>
         </scene>
-        <!--Status View Controller - WorldStatus-->
+        <!--Status View Controller - Status-->
         <scene sceneID="G0Y-W2-Jdv">
             <objects>
-                <viewController title="WorldStatus" id="s8n-Jn-gb0" customClass="PZStatusViewController" sceneMemberID="viewController">
+                <viewController title="Status" id="s8n-Jn-gb0" customClass="PZStatusViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Qw-qs-yo0">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -330,10 +330,10 @@
             </objects>
             <point key="canvasLocation" x="1672" y="-112"/>
         </scene>
-        <!--Tools View Controller - ToolTable-->
+        <!--Tools View Controller - Tools-->
         <scene sceneID="e2M-2d-v2u">
             <objects>
-                <tableViewController title="ToolTable" id="jU2-gX-zmv" customClass="PZToolsViewController" sceneMemberID="viewController">
+                <tableViewController title="Tools" id="jU2-gX-zmv" customClass="PZToolsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="sFY-fx-YRK">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -360,10 +360,10 @@
             </objects>
             <point key="canvasLocation" x="2275" y="-600"/>
         </scene>
-        <!--Lock View Controller - LockDetail-->
+        <!--Lock View Controller - Lock-->
         <scene sceneID="cYp-7v-g7V">
             <objects>
-                <viewController title="LockDetail" id="7EJ-BO-s9v" customClass="PZLockViewController" sceneMemberID="viewController">
+                <viewController title="Lock" id="7EJ-BO-s9v" customClass="PZLockViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bf3-ff-LLu">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -467,10 +467,10 @@
             </objects>
             <point key="canvasLocation" x="-129" y="-817"/>
         </scene>
-        <!--View Controller-->
+        <!--View Controller - About-->
         <scene sceneID="wX3-c5-b9z">
             <objects>
-                <viewController id="SxF-WR-khd" sceneMemberID="viewController">
+                <viewController title="About" id="SxF-WR-khd" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fmo-Bb-okX">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
