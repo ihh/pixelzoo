@@ -1,6 +1,3 @@
-Add a lock timeout countdown to status, lock & game screens
-POST turn when done
-
 Add a main menu + dummy login, logout & registration dialogs to client
 
 Add authentication to server; add login, logout & registration controllers
@@ -11,7 +8,10 @@ http://www.catalystframework.org/calendar/2007/5
 Hook up basic auth to login, logout & registration dialogs
 http://www.chrisumbel.com/article/basic_authentication_iphone_cocoa_touch
 
-Ensure that visiting world info page when world is locked & lock belongs to player should delete lock
+Add a lock timeout countdown to status, lock & game screens
+Lock timeout from game screen => exit game screen, disable Play button
+Exit game screen => POST turn (even if incomplete)
+Exit lock screen => DELETE lock
 
 Add some real multiplayer game logic (player particles/tools, a test board that can be stolen)
 
