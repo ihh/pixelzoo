@@ -80,6 +80,19 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.lockConnection cancel];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    didAppear = YES;
+    if (lockFailed)
+        [self.navigationController popViewControllerAnimated:YES];
+}
+
+
 #pragma mark NSURLConnection Delegate Methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -89,6 +102,12 @@
     // also serves to clear it
     lockData = [[NSMutableData alloc] init];
     httpLockResponse = (NSHTTPURLResponse*)response;
+    if ([httpLockResponse statusCode] != 201) {  // 201 CREATED
+        [self.lockConnection cancel];
+        lockFailed = YES;
+        if (didAppear)
+            [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -106,39 +125,42 @@
     // The request is complete and data has been received
     // We can parse the stuff in the instance variable now
     
-    // if lock successfully POSTed, parse return body using GDataXMLDocument; use xpath to get <game>...</game>, also lock expiration time
-    if ([httpLockResponse statusCode] == 201)  // 201 CREATED
-    {
-        // parse data using GDataXMLDocument, use xpath to extract <game>...</game> element
+    // check that lock was successfully POSTed
+    if ([httpLockResponse statusCode] == 201) {  // 201 CREATED
+        // parse return body using GDataXMLDocument; use xpath to get <game>...</game>
         NSError * error = nil;
         lockDoc = [[GDataXMLDocument alloc] initWithData:lockData
                                                  options:0 error:&error];
         
         NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/world/game" error:nil];
         GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
-
+        
         gameWrapper = [PZGameWrapper alloc];
         [gameWrapper initGameFromXMLElement:gameElement];
-
+        
         lockLabel.text = @"Locked";
-
+        
         playButton.enabled = YES;
         playButton.alpha = 1.0;
         
         // TODO:
-        // add an NSTimer for lock expiration, change "restart" to "quit"
+        // get lock expiration time; add an NSTimer for lock expiration
         
         // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
         // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
         // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
         
     }
-    
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     // The request has failed for some reason!
     // Check the error var
+
+    // ...for now, just pop
+    lockFailed = YES;
+    if (didAppear)
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

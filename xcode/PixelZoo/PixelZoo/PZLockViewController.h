@@ -14,6 +14,7 @@
     NSMutableData *lockData;
     NSHTTPURLResponse* httpLockResponse;
     GDataXMLDocument *lockDoc;
+    bool didAppear, lockFailed;
 }
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
