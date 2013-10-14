@@ -50,7 +50,7 @@ sub world_id :Chained('/') :PathPart('world') :CaptureArgs(1) {
     if (!defined $world) {
 	$c->stash( error_msg => "World $world_id does not exist" );
 	$c->response->status(404);
-	$c->detach();  # abort the chain
+	$c->detach();
     }
 
     $c->stash->{world} = $world;
@@ -63,7 +63,7 @@ sub world_id_end_GET {
     my ( $self, $c ) = @_;
     my $world = $c->stash->{world};
     $c->response->redirect ($c->uri_for($c->controller('World')->action_for('status'), [$world->id]), 303);
-#    $c->detach;
+    $c->detach;
 }
 
 
@@ -276,11 +276,11 @@ sub lock_end_GET {
     my $lock = $c->stash->{lock};
     if (defined $lock) {
 	$c->response->redirect ("/world/" . $world->id . "/lock/" . $lock->id, 303);
-#	$c->detach;
+	$c->detach;
     } else {
 	$c->stash( error_msg => "No lock found" );
 	$c->response->status(404);
-#	$c->detach();
+	$c->detach();
     }
 }
 
@@ -292,7 +292,7 @@ sub lock_end_POST {
     my $lock = $c->stash->{lock};
     if (defined $lock) {
 	$c->response->status(423);
-#	$c->detach();
+	$c->detach();
     } else {
 	# create the lock...
 	# First, get the tool names from the POST'ed lock XML
@@ -340,7 +340,7 @@ sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
     unless (defined($lock) && $lock->id == $lock_id) {
 	$c->stash( error_msg => "Lock $lock_id not found in world " . $c->stash->{world}->id );
 	$c->response->status(404);
-	$c->detach();  # abort the chain
+	$c->detach();
     }
 }
 
