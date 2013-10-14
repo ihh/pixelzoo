@@ -7,14 +7,26 @@
 //
 
 #import "PZAppDelegate.h"
+#import "PZDefs.h"
 #import "GDataXMLNode.h"
+#import "Base64.h"
+
+#define GotDefaultUserKey "PZGotDefaultUser"
+#define DefaultUserKey "PZDefaultUser"
+#define DefaultPassKey "PZDefaultPass"
 
 @implementation PZAppDelegate
+
+@synthesize window;
+@synthesize loginValidated;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
 
+    if ([self gotDefaultUser])
+        [self loginUser:[self getDefaultUser] withPass:[self getDefaultPass]];
+    
     return YES;
 }
 							
@@ -44,5 +56,57 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (bool) gotDefaultUser {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@GotDefaultUserKey];
+}
+
+- (NSString*) getDefaultUser {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@DefaultUserKey];
+}
+
+- (NSString*) getDefaultPass {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@DefaultPassKey];
+}
+
+- (void) setDefaultUser:(NSString*)user withPass:(NSString*)pass {
+    [[NSUserDefaults standardUserDefaults] setObject:user forKey:@DefaultUserKey];
+    [[NSUserDefaults standardUserDefaults] setObject:pass forKey:@DefaultPassKey];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@GotDefaultUserKey];
+}
+
+- (void) clearDefaultUser {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@GotDefaultUserKey];
+    self.loginValidated = NO;
+}
+
+- (bool) loginUser:(NSString*)user withPass:(NSString*)pass {
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/login",@SERVER_URL_PREFIX]]
+                                                        cachePolicy: NSURLRequestReloadIgnoringCacheData
+                                                        timeoutInterval: 3];
+
+    // add Base64-encoded authentication token
+    [Base64 addBasicAuthHeader:urlRequest forUser:user withPass:pass];
+
+    // fire it off, synchronously...
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+    
+    if (error == nil)
+    {
+        [self setDefaultUser:user withPass:pass];
+        self.loginValidated = YES;
+        return YES;
+    }
+    
+    [self clearDefaultUser];
+    return NO;
+}
+
+- (void) addStoredBasicAuthHeader:(NSMutableURLRequest*)request {
+    [Base64 addBasicAuthHeader:request forUser:[self getDefaultUser] withPass:[self getDefaultPass]];
+}
+
 
 @end

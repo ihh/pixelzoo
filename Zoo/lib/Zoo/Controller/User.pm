@@ -30,29 +30,19 @@ sub index :Path :Args(0) {
 
 =head2 login
 
+Test user's password credentials, supplied by Basic HTTP Authentication.
+
 =cut
 
-sub login :Local :Args(2) {
-    my ( $self, $c, $username, $password ) = @_;
+sub login :Local :Args(0) {
+    my ( $self, $c ) = @_;
 
-    # Attempt to log the user in
-    if ($c->authenticate({ username => $username,
-			   password => $password  } )) {
-	# If successful, then let them use the application
-	my $uri = $c->uri_for($c->controller('World')->action_for('index'));
-        $c->log->debug("URI is $uri");
-	$c->response->redirect($uri);
-    } else {
-	$c->stash(error_msg => "Bad username or password.");
-	$c->response->status(403);  # Forbidden
-	$c->detach();
-    }
+    # Test user's credentials
+    $c->authenticate({});
 
-    unless ($c->user_exists) {
-	$c->stash(error_msg => "Empty username or password.");
-	$c->response->status(404);  # Not Found
-	$c->detach();
-    }
+    # 204 No Content
+    $c->response->status(204);  # No Content
+    $c->detach();
 }
 
 

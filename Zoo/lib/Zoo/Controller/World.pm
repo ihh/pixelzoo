@@ -286,6 +286,8 @@ sub lock_end_GET {
 
 sub lock_end_POST {
     my ( $self, $c ) = @_;
+    $c->authenticate({});
+    my $user_id = $c->user;
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
     if (defined $lock) {
@@ -310,7 +312,6 @@ sub lock_end_POST {
 	my $create_time = time();
 	my $expiry_time = $create_time + $world->meta_rel->lock_expiry_delay;
 	my $delete_time = $create_time + $world->meta_rel->lock_delete_delay;
-	my $user_id = 1;    # HACK: TODO: use Catalyst::Plugin::Authentication to get proper user IDs
 	my $lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
 	    owner_id => $user_id,

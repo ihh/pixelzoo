@@ -7,6 +7,7 @@
 //
 
 #import "PZLoginViewController.h"
+#import "PZAppDelegate.h"
 
 @interface PZLoginViewController ()
 
@@ -42,6 +43,23 @@
 }
 
 - (IBAction)didLogin:(UIButton *)sender {
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (accountExists) {
+        bool loginWorked = [appDelegate loginUser:username.text withPass:password.text];
+        if (loginWorked) {
+            NSArray* viewControllers = [self.navigationController viewControllers];
+            [[(UITableViewController*)[viewControllers objectAtIndex:([viewControllers count] - 2)] tableView] reloadData];
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            password.text = @"";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login failed"
+                                                            message:@"Oops, that didn't work."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+    }
 }
 
 

@@ -11,5 +11,15 @@
 @interface PZAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) bool loginValidated;
+
+- (bool) gotDefaultUser;
+- (NSString*) getDefaultUser;
+- (NSString*) getDefaultPass;
+- (void) setDefaultUser:(NSString*)user withPass:(NSString*)pass;
+- (void) clearDefaultUser;
+
+- (bool) loginUser:(NSString*)user withPass:(NSString*)pass;
+- (void) addStoredBasicAuthHeader:(NSMutableURLRequest*)request;
 
 @end

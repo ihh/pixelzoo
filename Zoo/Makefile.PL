@@ -22,9 +22,10 @@ test_requires 'Test::More' => '0.88';
 requires 'Catalyst::Controller::REST';
 
 requires 'Catalyst::Authentication::Store::DBIx::Class';
+requires 'Catalyst::Authentication::Credential::HTTP';
 
 requires 'Catalyst::Plugin::Authentication';
-requires 'Catalyst::Plugin::Authentication::Credential::Password';
+requires 'Catalyst::Plugin::Authentication::Credential::HTTP';
 
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::File';

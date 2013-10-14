@@ -8,6 +8,7 @@
 
 #import "PZLockViewController.h"
 #import "PZGameViewController.h"
+#import "PZAppDelegate.h"
 
 @interface PZLockViewController ()
 
@@ -47,6 +48,10 @@
     
     // set header fields
     [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    // add authentication header
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate addStoredBasicAuthHeader:request];
     
     // Convert data and set request's HTTPBody property
     NSMutableString *toolsString = [[NSMutableString alloc] initWithString:@"<lock><tools>"];

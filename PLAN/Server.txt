@@ -68,9 +68,7 @@ POST store/order/type  (PixelPurchaseOrder)  -->  201 Success, 402 Payment Requi
 User controller
 ---------------
 
-GET user/login/UserID/Password  -->  204 No Content (success), 404 Not Found (bad UserID), 403 Forbidden (wrong password)
-
-GET user/logout  -->  204 No Content (success)
+GET user/login  -->  204 No Content (success), 404 Not Found (bad UserID), 403 Forbidden (wrong password)
 
 GET user/status  -->  internally redirect to "GET user/status/UserID"
 POST user/status  (Status)   -->  201 Created + Status (success), 409 Conflict (username taken)

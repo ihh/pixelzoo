@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PZMenuViewController : UITableViewController <UITableViewDelegate>
+@interface PZMenuViewController : UITableViewController <UITableViewDelegate,UIAlertViewDelegate>
+
+- (bool) loginValidated;
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *createAccountCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *loginCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *playCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *aboutCell;
 
 @end

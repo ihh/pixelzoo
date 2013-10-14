@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
+#import "PZAppDelegate.h"
 #import "PZMenuViewController.h"
 #import "PZLoginViewController.h"
 
@@ -15,7 +16,11 @@
 
 @implementation PZMenuViewController
 
+@synthesize createAccountCell;
+@synthesize loginCell;
 @synthesize logoutCell;
+@synthesize playCell;
+@synthesize aboutCell;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,6 +42,12 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (bool) loginValidated {
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate loginValidated];
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -48,12 +59,50 @@
 {
     UITableViewCell *theCellClicked = [tableView cellForRowAtIndexPath:indexPath];
     if (theCellClicked == logoutCell) {
-        //Do stuff
-        NSLog(@"Logout");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm logout"
+                                                        message:@"Really, log out?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Yes"
+                                              otherButtonTitles:@"No",nil];
+        [alert show];
+    }
+}
+
+#pragma mark - UIAlertView delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate clearDefaultUser];
+        [self.tableView reloadData];
     }
 }
 
 
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    return 3;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int row = indexPath.row;
+    if (row == 2) return aboutCell;
+    if ([self loginValidated])
+        return row == 0 ? playCell : logoutCell;
+    return row == 0 ? createAccountCell : loginCell;
+}
 
 
 /*

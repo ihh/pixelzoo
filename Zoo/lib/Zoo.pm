@@ -24,7 +24,7 @@ use Catalyst qw/
     StackTrace
             
     Authentication
-    Authentication::Credential::Password
+    Authentication::Credential::HTTP
 
     Session
     Session::Store::FastMmap
@@ -55,19 +55,20 @@ __PACKAGE__->config->{authentication} =
     default_realm => 'members',
     realms => {
 	members => {
-	    credential => {
-		class => 'Password',
-		password_field => 'password',
-		password_type => 'clear'
-	    },
-		    store => {
-			class => 'DBIx::Class',
-			user_model => 'DB::User',
-			role_relation => 'roles',
-			role_field => 'role_id',
-		}
+		credential => {
+		    class => 'HTTP',
+		    type => 'basic',
+		    password_type => 'clear',
+		    password_field => 'password'
+		},
+			store => {
+			    class => 'DBIx::Class',
+			    user_model => 'DB::User',
+			    role_relation => 'roles',
+			    role_field => 'role_id'
+		    }
+	    }
 	}
-    }
 };
 
 # Start the application
