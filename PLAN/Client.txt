@@ -1,15 +1,12 @@
-Add authentication to server; add login, logout & registration controllers
-http://search.cpan.org/~ether/Catalyst-Manual-5.9007/lib/Catalyst/Manual/Tutorial/05_Authentication.pod
-http://www.catalystframework.org/calendar/2011/15
-http://www.catalystframework.org/calendar/2007/5
+Implement 'Create account'
 
-Hook up basic auth to login, logout & registration dialogs
-http://www.chrisumbel.com/article/basic_authentication_iphone_cocoa_touch
+Add an alert with informative error message for failed lock (rather than just popping)
+Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
 
 Add a lock timeout countdown to status, lock & game screens
 Lock timeout from game screen => exit game screen, disable Play button
 Exit game screen => POST turn (even if incomplete)
-Exit lock screen => DELETE lock
+Exit lock screen => DELETE lock (delegate:nil?)
 
 Add some real multiplayer game logic (player particles/tools, a test board that can be stolen)
 
