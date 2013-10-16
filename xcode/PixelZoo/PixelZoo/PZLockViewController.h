@@ -8,16 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "PZWorldDescriptor.h"
+#import "PZLockDescriptor.h"
 #import "PZGameWrapper.h"
 
 @interface PZLockViewController : UIViewController <NSURLConnectionDelegate> {
     NSMutableData *lockData;
     NSHTTPURLResponse* httpLockResponse;
-    GDataXMLDocument *lockDoc;
     bool didAppear, lockFailed;
 }
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
+@property (nonatomic, strong) PZLockDescriptor *lockDescriptor;
 @property (nonatomic, strong) NSMutableArray *selectedToolIDs;
 @property (nonatomic, strong) PZGameWrapper *gameWrapper;
 

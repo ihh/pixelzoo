@@ -352,7 +352,13 @@ int testGoalMet (Goal* goal, void *voidGame) {
   Stack *enumResult;
   double ticks;
 
-  Assert (goal != NULL, "testGoalMet: null goal");
+  /* fail gracefully if no goal actually provided */
+  if (goal == NULL)
+    return 0;
+  /*
+    Assert (goal != NULL, "testGoalMet: null goal");
+  */
+
   game = (Game*) voidGame;
   board = game->board;
 

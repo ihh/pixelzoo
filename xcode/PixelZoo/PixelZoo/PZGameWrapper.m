@@ -13,13 +13,22 @@
 
 @implementation PZGameWrapper
 
-@synthesize game;
+@synthesize lockDescriptor;
 @synthesize worldDescriptor;
 
--(void)initGameFromXMLElement:(GDataXMLElement*)element forWorld:(PZWorldDescriptor*)world {
-    game = pzNewGameFromXmlString([[element XMLString] UTF8String], false);
-    worldDescriptor = world;
+@synthesize game;
+@synthesize lastSavedBoardClock;
+
+-(void)initGameFromXMLString:(NSString*)xmlString {
+    game = pzNewGameFromXmlString([xmlString UTF8String], false);
+    lastSavedBoardClock = pzBoardClock(game);
 	pzStartGame(game);
+}
+
+-(void)initGameFromLock:(PZLockDescriptor*)lock {
+    worldDescriptor = [lock worldDescriptor];
+    lockDescriptor = lock;
+    [self initGameFromXMLString:[[lock gameXMLElement] XMLString]];
 }
 
 -(bool)isInitialized {
@@ -32,7 +41,7 @@
 }
 
 -(void)postTurn {
-    // check for previous POST in progress
+    // cancel any previous POST in progress
     if (turnConnection) {
         [turnConnection cancel];
         turnConnection = nil;
@@ -51,12 +60,25 @@
     turnConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 
+-(void)postTurnAndDeleteLock {
+    deleteLockWhenTurnPosted = true;
+    [self postTurn];
+}
+
+-(bool)turnSaved {
+    return [self isInitialized] && lastSavedBoardClock == [self boardClock];
+}
+
 -(void)updateGame {
     pzUpdateGame(game,GAMELOOP_CALLS_PER_SECOND,0);
 }
 
 -(int)boardSize {
     return pzGetBoardSize(game);
+}
+
+-(long long)boardClock {
+    return pzBoardClock(game);
 }
 
 -(int)numberOfTools {
@@ -127,7 +149,36 @@
     return pzGetBalloonTextRgb(game,b);
 }
 
+#pragma mark NSURLConnectionDelegate methods
 
-// TODO: NSURLConnectionDelegate methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSHTTPURLResponse *httpLockResponse = (NSHTTPURLResponse*)response;
+    if ([httpLockResponse statusCode] == 204) {  // 204 CREATED
+        lastSavedBoardClock = pzBoardClock(game);
+        if (deleteLockWhenTurnPosted)
+            [lockDescriptor deleteLock];
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    // nothing to see here
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    // Return nil to indicate not necessary to store a cached response for this connection
+    return nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    // nothing to see here
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // The request has failed for some reason!
+    // Check the error var
+}
+
 
 @end

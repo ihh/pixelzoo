@@ -20,6 +20,7 @@
 @synthesize lockConnection;
 
 @synthesize worldDescriptor;
+@synthesize lockDescriptor;
 @synthesize selectedToolIDs;
 @synthesize gameWrapper;
 
@@ -71,9 +72,16 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self.lockConnection cancel];
+    [lockConnection cancel];
+    if ([self isMovingFromParentViewController]) {
+        if ([gameWrapper turnSaved])
+            [lockDescriptor deleteLock];
+        else
+            [gameWrapper postTurnAndDeleteLock];
+    }
     [super viewWillDisappear:animated];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -92,7 +100,7 @@
     // also serves to clear it
     lockData = [[NSMutableData alloc] init];
     httpLockResponse = (NSHTTPURLResponse*)response;
-    if ([httpLockResponse statusCode] != 201) {  // 201 CREATED
+    if ([httpLockResponse statusCode] != 201) {  // 201 NO CONTENT (success)
         [self.lockConnection cancel];
         lockFailed = YES;
         if (didAppear)
@@ -117,16 +125,11 @@
     
     // check that lock was successfully POSTed
     if ([httpLockResponse statusCode] == 201) {  // 201 CREATED
-        // parse return body using GDataXMLDocument; use xpath to get <game>...</game>
-        NSError * error = nil;
-        lockDoc = [[GDataXMLDocument alloc] initWithData:lockData
-                                                 options:0 error:&error];
-        
-        NSArray *gamesArray = [lockDoc nodesForXPath:@"//lock/world/game" error:nil];
-        GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
-        
+        lockDescriptor = [PZLockDescriptor alloc];
+        [lockDescriptor initFromLockData:lockData forWorld:worldDescriptor];
+
         gameWrapper = [PZGameWrapper alloc];
-        [gameWrapper initGameFromXMLElement:gameElement forWorld:worldDescriptor];
+        [gameWrapper initGameFromLock:lockDescriptor];
         
         lockLabel.text = @"Locked";
         
@@ -135,10 +138,6 @@
         
         // TODO:
         // get lock expiration time; add an NSTimer for lock expiration
-        
-        // the following end-of-turn logic needs to go in a common method called by "quit" & timeout:
-        // call pzSaveBoardAsXmlString and POST to http://localhost:3000/world/WorldID/turn
-        // again see GET/POST tutorial http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
         
     }
 }

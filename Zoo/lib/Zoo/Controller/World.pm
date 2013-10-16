@@ -262,7 +262,7 @@ Get the user's Lock for the World, if any.
 sub stash_lock {
     my ($self, $c) = @_;
     my $world = $c->stash->{world};
-    my $lock = $c->model('DB')->world_active_lock($world);   # eventually, world_active_lock should check userid too
+    my $lock = $c->model('DB')->world_active_lock($world);
     $c->stash->{lock} = $lock;
 }
 
@@ -298,7 +298,6 @@ sub lock_end_POST {
 	my @tool_ids;
 	if ($c->request->content_length) {
 	    my $lock_twig = Twiggy->new();
-	    warn "body = ", $c->request->body;
 	    $lock_twig->parse ($c->request->body);
 	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("id"));
 	}
@@ -349,6 +348,23 @@ sub lock_id_end :Chained('lock_id') :PathPart('') :Args(0) :ActionClass('REST') 
 sub lock_id_end_GET {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/lock.tt2';
+}
+
+sub lock_id_end_DELETE {
+    my ( $self, $c ) = @_;
+
+    # Authenticate
+    $c->authenticate({});
+    my $user_id = $c->user->id;
+
+    # If user owns lock, delete it; otherwise, complain
+    my $lock = $c->stash->{lock};
+    if ($user_id == $lock->owner_id) {
+	$lock->delete;
+	$c->response->status(204);  # 204 No Content (success)
+    } else {
+	$c->response->status(403);  # 403 Forbidden
+    }
 }
 
 
@@ -409,23 +425,35 @@ sub turn_end_POST {
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
 
-    if (defined($lock) && $lock->owner_id == $user_id) {
+    if (defined $lock) {
+	if ($lock->owner_id == $user_id) {
 
-	# Update the state of the board
-	my $turn_twig = Twiggy->new();
-	$turn_twig->parse ($c->request->body);
-	my $board_twig = $turn_twig->root->first_child("board");
+	    # Update the state of the board
+	    my $turn_twig = Twiggy->new();
+	    $turn_twig->parse ($c->request->body);
+	    my $board_twig = $turn_twig->root->first_child("board");
 
-	$world->board_xml ($board_twig->sprint);
-	$world->board_time ($board_twig->first_child("t")->text);
+	    $world->board_xml ($board_twig->sprint);
+	    $world->board_time ($board_twig->first_child("t")->text);
 
-	if ($turn_twig->root->first_child("endgoal")->first_child("goal")->has_child("true")) {
-	    # Ultimately we should validate here
-	    $world->owner_id ($user_id);
+	    if ($turn_twig->root->first_child("endturn")->first_child("goal")->has_child("true")) {
+		# Ultimately we should validate here
+		$world->owner_id ($user_id);
+	    }
+
+	    my $current_time = time();
+	    $world->last_modified_time ($current_time);
+
+	    $world->update;  # commit the changes
+
+	    $c->response->status(204);  # 204 No Content (success)
+	} else {
+	    $c->response->status(423);  # 423 Locked (not your lock)
+	    $c->detach();
 	}
-
-	my $current_time = time();
-	$world->last_modified_time ($current_time);
+    } else {
+	$c->response->status(403);  # 403 Forbidden (not locked)
+	$c->detach();
     }
 }
 

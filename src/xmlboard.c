@@ -369,4 +369,3 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
     xmlTextWriterFullEndElement (writer);  /* end gvars */
   }
 }
-

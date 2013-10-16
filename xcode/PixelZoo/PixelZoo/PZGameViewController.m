@@ -67,6 +67,12 @@
     [self startGame];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [gameWrapper postTurn];
+    [super viewWillDisappear:animated];
+}
+
+
 /* Timers: board updates & rendering */
 -(void)startTimers
 {
