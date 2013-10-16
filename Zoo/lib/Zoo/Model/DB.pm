@@ -70,13 +70,13 @@ sub world_active_lock {
 }
 
 
-=head2 delete_locks
+=head2 purge_locks
 
-Delete all locks that can be deleted.
+Delete all locks that are no longer relevant.
 
 =cut
 
-sub delete_locks {
+sub purge_locks {
     my ($self) = @_;
 #    $self->storage->debug(1);
     my $current_time = time();

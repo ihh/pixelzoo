@@ -114,17 +114,13 @@
     // Specify that it will be a POST request
     urlRequest.HTTPMethod = @"POST";
     
-    // set header fields
-    [urlRequest setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    
     // add authentication header
     PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate addStoredBasicAuthHeader:urlRequest];
     
     // Convert data and set request's HTTPBody property
     NSString* statusString = [NSString stringWithFormat:@"<status><user>%@</user><pass>%@</pass></status>",user,pass];
-    NSData *requestBodyData = [statusString dataUsingEncoding:NSUTF8StringEncoding];
-    urlRequest.HTTPBody = requestBodyData;
+    [Base64 setContentTypeXML:urlRequest withContent:statusString];
     
     // fire it off, synchronously...
     NSURLResponse * response = nil;

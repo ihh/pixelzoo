@@ -64,4 +64,10 @@ static char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012
     [request addValue:authHeader forHTTPHeaderField:@"Authorization"];
 }
 
++ (void) setContentTypeXML:(NSMutableURLRequest*)request withContent:(NSString*)content {
+    [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    NSData *requestBodyData = [content dataUsingEncoding:NSUTF8StringEncoding];
+    request.HTTPBody = requestBodyData;
+}
+
 @end

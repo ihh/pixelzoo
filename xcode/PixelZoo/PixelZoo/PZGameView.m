@@ -29,9 +29,9 @@
     ++redraws;
     
     // get controller info
-    pzGame *game = [[gameViewController gameWrapper] game];
-    if (game) {
-        int boardSize = pzGetBoardSize(game);
+    PZGameWrapper *gameWrapper = [gameViewController gameWrapper];
+    if ([gameWrapper isInitialized]) {
+        int boardSize = [gameWrapper boardSize];
         CGFloat cellSize = [gameViewController cellSize];
         CGRect boardRect = [gameViewController boardRect];
         CGRect bigBoardRect = [gameViewController bigBoardRect];
@@ -75,7 +75,7 @@
         unsigned char *bitmapWritePtr = bitmapData;
         for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
             for (int x = 0; x < boardSize; ++x) {
-                int rgb = pzGetCellRgb(game, x, y);
+                int rgb = [gameWrapper cellRgbAtX:x y:y];
                 *(bitmapWritePtr++) = pzGetRgbRed(rgb);
                 *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
                 *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
@@ -98,12 +98,11 @@
         CGContextRestoreGState (ctx);
         
         // redraw tools
-        [self renderTool:0 withContext:ctx withColor:0 withReserve:1 withName:EXAMINE_TOOL_NAME asSelected:(pzGetSelectedToolNumber(game)<0)];
-        int nTools = pzGetNumberOfTools(game);
+        [self renderTool:0 withContext:ctx withColor:0 withReserve:1 withName:EXAMINE_TOOL_NAME asSelected:([gameWrapper selectedToolNumber] < 0)];
+        int nTools = [gameWrapper numberOfTools];
         for (int nTool = 0; nTool < nTools; ++nTool) {
-            pzTool tool = pzGetToolByNumber(game,nTool);
-            int rgb = pzGetToolRgb(game,tool);
-            [self renderTool:(nTool+1) withContext:ctx withColor:rgb withReserve:pzGetToolReserveLevel(tool) withName:((char*)pzGetToolName(tool)) asSelected:(nTool == pzGetSelectedToolNumber(game))];
+            int rgb = [gameWrapper toolRgbByNumber:nTool];
+            [self renderTool:(nTool+1) withContext:ctx withColor:rgb withReserve:[gameWrapper toolReserveByNumber:nTool] withName:((char*)[gameWrapper toolNameByNumber:nTool]) asSelected:(nTool == [gameWrapper selectedToolNumber])];
         }
         
         // redraw console
@@ -114,10 +113,10 @@
         } else {
             CGFloat cy = [self frame].size.height - 1;
             CGFloat fade = 1;
-            int lines = pzGetNumberOfConsoleLines(game);
+            int lines = [gameWrapper numberOfConsoleLines];
             for (int cl = lines; cl > 0 && cy >= boardRect.size.height; --cl) {
                 int ci = (cl + lines - 1) % lines;
-                char* ctext = (char*) pzGetConsoleText(game,ci);
+                char* ctext = (char*) [gameWrapper consoleText:ci];
                 if (ctext) {
                     // measure text
                     CGFloat charsize = CONSOLE_FONT_SIZE;  // ignores game->consoleSize[ci]
@@ -147,12 +146,12 @@
         // redraw speech balloons
         CGContextSaveGState (ctx);
         CGContextClipToRect (ctx, boardRect);
-        int balloons = pzGetNumberOfBalloons(game);
+        int balloons = [gameWrapper numberOfBalloons];
         for (int balloon = 0; balloon < balloons; ++balloon) {
-            pzBalloon b = pzGetBalloonByNumber(game,balloon);
+            pzBalloon b = [gameWrapper balloonNumber:balloon];
             char* text = (char*) pzGetBalloonText(b);
             int len = strlen(text);
-            int rgb = pzGetBalloonTextRgb(game,b);
+            int rgb = [gameWrapper textRgbForBalloon:b];
             double x = pzGetBalloonXpos(b);
             double y = pzGetBalloonYpos(b);
             double csz = pzGetBalloonCharSize(b);
@@ -196,8 +195,8 @@
         if ([gameViewController examining]) {
             XYCoord pos = [gameViewController examCoord];
             UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
-            char* text = (char*) pzGetCellName(game,pos.x,pos.y);
-            int rgb = pzGetCellNameRgb(game,pos.x,pos.y);
+            char* text = (char*) [gameWrapper cellNameAtX:pos.x y:pos.y];
+            int rgb = [gameWrapper cellNameRgbAtX:pos.x y:pos.y];
             if (!text) text = EXAMINE_EMPTY_TEXT;
             
             CGSize textSize = [self measureText:text withFont:font withSpacing:EXAMINE_FONT_SPACING];

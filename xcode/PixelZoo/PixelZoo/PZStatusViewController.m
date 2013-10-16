@@ -44,7 +44,7 @@
 
     // get world status (list of tools, detailed lock info, etc)
     // Send an asynchronous request
-    NSMutableURLRequest *request = [worldDescriptor getController:@"status"];
+    NSMutableURLRequest *request = [worldDescriptor getRequest:@"status"];
     worldStatusConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
 

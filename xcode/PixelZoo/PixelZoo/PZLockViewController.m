@@ -9,6 +9,7 @@
 #import "PZLockViewController.h"
 #import "PZGameViewController.h"
 #import "PZAppDelegate.h"
+#import "Base64.h"
 
 @interface PZLockViewController ()
 
@@ -40,27 +41,16 @@
 	// Do any additional setup after loading the view.
     // POST a lock to SERVER_URL_PREFIX/world/WorldID/lock
     // http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    // Create the request.
-    NSMutableURLRequest *request = [worldDescriptor getController:@"lock"];
     
-    // Specify that it will be a POST request
-    request.HTTPMethod = @"POST";
-    
-    // set header fields
-    [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    
-    // add authentication header
-    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate addStoredBasicAuthHeader:request];
-    
-    // Convert data and set request's HTTPBody property
+    // Create tools description
     NSMutableString *toolsString = [[NSMutableString alloc] initWithString:@"<lock><tools>"];
     for (NSString* toolID in selectedToolIDs) {
         [toolsString appendString:[NSString stringWithFormat:@"<id>%@</id>",toolID]];
     }
     [toolsString appendString:@"</tools></lock>"];
-    NSData *requestBodyData = [toolsString dataUsingEncoding:NSUTF8StringEncoding];
-    request.HTTPBody = requestBodyData;
+
+    // Create the request.
+    NSMutableURLRequest *request = [worldDescriptor authenticatedPostRequest:@"lock" withContent:toolsString];
     
     // Create url connection and fire request
     lockConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -136,7 +126,7 @@
         GDataXMLElement *gameElement = [gamesArray objectAtIndex:0];
         
         gameWrapper = [PZGameWrapper alloc];
-        [gameWrapper initGameFromXMLElement:gameElement];
+        [gameWrapper initGameFromXMLElement:gameElement forWorld:worldDescriptor];
         
         lockLabel.text = @"Locked";
         

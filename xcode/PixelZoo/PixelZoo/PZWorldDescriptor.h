@@ -19,7 +19,8 @@
 - (NSString*)name;
 - (NSString*)identifier;
 
-- (NSMutableURLRequest*)getController:(NSString*)suffix;
+- (NSMutableURLRequest*)getRequest:(NSString*)controllerSuffix;
+- (NSMutableURLRequest*)authenticatedPostRequest:(NSString*)controllerSuffix withContent:(NSString*)content;
 
 - (NSArray*)toolboxXPath:(NSString*)suffix;
 

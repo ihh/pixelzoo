@@ -8,6 +8,8 @@
 
 #import "PZDefs.h"
 #import "PZWorldDescriptor.h"
+#import "PZAppDelegate.h"
+#import "Base64.h"
 #import "GDataXMLNode.h"
 
 @implementation PZWorldDescriptor
@@ -33,9 +35,26 @@
     return [idElement stringValue];
 }
 
-- (NSMutableURLRequest*)getController:(NSString *)suffix {
+- (NSMutableURLRequest*)getRequest:(NSString *)controllerSuffix {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],suffix]];
+    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
+    return request;
+}
+
+- (NSMutableURLRequest*)authenticatedPostRequest:(NSString*)controllerSuffix withContent:(NSString*)content {
+    // start with a GET request URL
+    NSMutableURLRequest *request = [self getRequest:controllerSuffix];
+
+    // Specify instead that it will be a POST request
+    request.HTTPMethod = @"POST";
+    
+    // add authentication header
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate addStoredBasicAuthHeader:request];
+    
+    // set Content-Type to XML, and set content itself
+    [Base64 setContentTypeXML:request withContent:content];
+    
     return request;
 }
 

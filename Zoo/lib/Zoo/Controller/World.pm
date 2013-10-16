@@ -396,8 +396,12 @@ sub turn_end :Chained('turn') :PathPart('') :Args(0) :ActionClass('REST') { }
 sub turn_end_POST {
     my ( $self, $c ) = @_;
 
+    # Authenticate
+    $c->authenticate({});
+    my $user_id = $c->user->id;
+
     # Delete all out-of-date locks
-    $c->model('DB')->delete_locks();
+    $c->model('DB')->purge_locks();
 
     # Get the current lock, if any
     $self->stash_lock($c);
@@ -405,24 +409,23 @@ sub turn_end_POST {
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
 
-    if (defined $lock) {
-
-	my $current_time = time();
+    if (defined($lock) && $lock->owner_id == $user_id) {
 
 	# Update the state of the board
 	my $turn_twig = Twiggy->new();
 	$turn_twig->parse ($c->request->body);
-	$world->board_xml ($turn_twig->root->first_child("game")->first_child("board")->text);  # is this right? need to check
-	if ($turn_twig->root->first_child("game")->first_child("endgoal")->first_child("goal")->has_child("true")) {  # need to check all this, maybe break it down a bit...
-	   # TODO: change ownership....
-	}
-	$world->board_xml ($c->request->body);
-	$world->last_modified_time ($current_time);
-	# TODO: update board_time
-	# TODO: test if board owner has changed, update owner_id
+	my $board_twig = $turn_twig->root->first_child("board");
 
-	# Change the lock expiration date to now
-	$lock->expiry_time ($current_time);
+	$world->board_xml ($board_twig->sprint);
+	$world->board_time ($board_twig->first_child("t")->text);
+
+	if ($turn_twig->root->first_child("endgoal")->first_child("goal")->has_child("true")) {
+	    # Ultimately we should validate here
+	    $world->owner_id ($user_id);
+	}
+
+	my $current_time = time();
+	$world->last_modified_time ($current_time);
     }
 }
 
