@@ -52,7 +52,7 @@ __PACKAGE__->table("toolbox_tool");
 
 =head2 is_default
 
-  data_type: 'boolean'
+  data_type: 'integer'
   is_nullable: 1
 
 =cut
@@ -63,7 +63,7 @@ __PACKAGE__->add_columns(
   "tool_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "is_default",
-  { data_type => "boolean", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -113,8 +113,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-10 14:18:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tpsalHFMx9/RTkf1rDVVYg
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-15 16:13:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OAXbXhDMAncMG6ghhMfNIQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

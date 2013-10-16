@@ -54,7 +54,6 @@ sub world_id :Chained('/') :PathPart('world') :CaptureArgs(1) {
     }
 
     $c->stash->{world} = $world;
-    $c->stash->{world_id} = $world_id;
 }
 
 sub world_id_end :Chained('world_id') :PathPart('') :Args(0) :ActionClass('REST') { }
@@ -299,6 +298,7 @@ sub lock_end_POST {
 	my @tool_ids;
 	if ($c->request->content_length) {
 	    my $lock_twig = Twiggy->new();
+	    warn "body = ", $c->request->body;
 	    $lock_twig->parse ($c->request->body);
 	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("id"));
 	}

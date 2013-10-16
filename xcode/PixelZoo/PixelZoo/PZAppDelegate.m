@@ -81,6 +81,7 @@
 }
 
 - (bool) loginUser:(NSString*)user withPass:(NSString*)pass {
+    // create request
     NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/login",@SERVER_URL_PREFIX]]
                                                         cachePolicy: NSURLRequestReloadIgnoringCacheData
                                                         timeoutInterval: 3];
@@ -102,6 +103,42 @@
     
     [self clearDefaultUser];
     return NO;
+}
+
+- (NSInteger) createUser:(NSString*)user withPass:(NSString*)pass {
+    // create request
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/status",@SERVER_URL_PREFIX]]
+                                                               cachePolicy: NSURLRequestReloadIgnoringCacheData
+                                                           timeoutInterval: 3];
+    
+    // Specify that it will be a POST request
+    urlRequest.HTTPMethod = @"POST";
+    
+    // set header fields
+    [urlRequest setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    // add authentication header
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate addStoredBasicAuthHeader:urlRequest];
+    
+    // Convert data and set request's HTTPBody property
+    NSString* statusString = [NSString stringWithFormat:@"<status><user>%@</user><pass>%@</pass></status>",user,pass];
+    NSData *requestBodyData = [statusString dataUsingEncoding:NSUTF8StringEncoding];
+    urlRequest.HTTPBody = requestBodyData;
+    
+    // fire it off, synchronously...
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
+    
+    if (error == nil && [httpResponse statusCode] == 201) {  // 201 CREATED
+        [self setDefaultUser:user withPass:pass];
+        loginValidated = YES;
+    } else
+        [self clearDefaultUser];
+
+    return (error == nil && httpResponse) ? [httpResponse statusCode] : 500;  // 500 INTERNAL SERVER ERROR (faked)
 }
 
 - (void) addStoredBasicAuthHeader:(NSMutableURLRequest*)request {

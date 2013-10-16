@@ -20,6 +20,7 @@
 - (void) clearDefaultUser;
 
 - (bool) loginUser:(NSString*)user withPass:(NSString*)pass;
+- (NSInteger) createUser:(NSString*)user withPass:(NSString*)pass;  // returns HTTP status code; 201 for success
 - (void) addStoredBasicAuthHeader:(NSMutableURLRequest*)request;
 
 @end

@@ -42,7 +42,7 @@ CREATE TABLE dependency (  -- Particle dependencies
 	);
 
 CREATE TABLE user (
-	id INTEGER PRIMARY KEY,   -- the UserID
+	id INTEGER PRIMARY KEY AUTOINCREMENT,   -- the UserID
 	username VARCHAR(15),   -- same max length as a Twitter handle
         password TEXT,
 	cash DECIMAL  -- user's current cash level

@@ -18,4 +18,6 @@
 
 - (IBAction)didLogin:(UIButton *)sender;
 
+- (void)backToMenu;
+
 @end
