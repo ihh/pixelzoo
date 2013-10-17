@@ -76,6 +76,8 @@ POST user/status  (Status)   -->  201 Created + Status (success), 409 Conflict (
 GET user/status/UserID  -->  200 Success + Status, 404 Not Found (bad UserID)
 PUT user/status/UserID  (Status)  -->  200 Success + Status
 
+GET user/worlds  -->  200 Success + list of owned, neighboring & created worlds
+
 Model
 -----
 

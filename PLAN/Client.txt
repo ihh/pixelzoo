@@ -1,5 +1,4 @@
-Exit game screen => POST turn (even if turn is incomplete)
-Exit lock screen => DELETE lock (delegate:nil?)
+Authenticate world/XXX/status and worldlist; include time-to-deletion for any expired locks you created
 
 Update status screen to show current lock & disable "Start turn" button (or bypass PZLockViewController's POST if it's your lock)
 Add an alert with informative error message for failed lock (rather than just popping)
@@ -10,8 +9,12 @@ Lock timeout from game screen => exit game screen, disable Play button
 
 Add some real multiplayer game content (player particles/tools, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
 
-Modify world/list controller & Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
+Create user/worlds controller (authenticated) that lists created, owned & neighboring worlds, together with expiry times for active locks & deletion times for any of your old locks
+Modify Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
+
 Automatically create one new world per player, at registration time
+
+Add custom UINavigationController UIAppearance that confirms "Back" button
 
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
