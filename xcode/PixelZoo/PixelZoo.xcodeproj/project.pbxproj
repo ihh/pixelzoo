@@ -49,6 +49,7 @@
 		2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C017FFBD7500093CEC /* xmlutil.c */; };
 		2818E2DF17FFBD7500093CEC /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C217FFBD7500093CEC /* xymap.c */; };
 		2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2E017FFBDD400093CEC /* xmlparser.c */; };
+		283350AF181094FC0091CA0C /* lib in Resources */ = {isa = PBXBuildFile; fileRef = 283350AE181094FC0091CA0C /* lib */; };
 		283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F58180722CB0056492E /* PZStatusViewController.m */; };
 		283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5B180725DA0056492E /* PZToolsViewController.m */; };
 		283C0F5F18075F8C0056492E /* PZLockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5E18075F8C0056492E /* PZLockViewController.m */; };
@@ -145,6 +146,7 @@
 		2818E2E017FFBDD400093CEC /* xmlparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlparser.c; path = ../../../src/xmlparser.c; sourceTree = "<group>"; };
 		2818E2E117FFBDD400093CEC /* xmlparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlparser.h; path = ../../../src/xmlparser.h; sourceTree = "<group>"; };
 		2818E2E317FFBF2A00093CEC /* PZDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZDefs.h; sourceTree = "<group>"; };
+		283350AE181094FC0091CA0C /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../chibi/lib; sourceTree = "<group>"; };
 		283C0F57180722CB0056492E /* PZStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZStatusViewController.h; sourceTree = "<group>"; };
 		283C0F58180722CB0056492E /* PZStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZStatusViewController.m; sourceTree = "<group>"; };
 		283C0F5A180725DA0056492E /* PZToolsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolsViewController.h; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 		2818E26217FFB6DB00093CEC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				283350AE181094FC0091CA0C /* lib */,
 				2818E26317FFB6DB00093CEC /* PixelZoo-Info.plist */,
 				2818E26417FFB6DB00093CEC /* InfoPlist.strings */,
 				2818E26717FFB6DB00093CEC /* main.m */,
@@ -397,6 +400,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				283350AF181094FC0091CA0C /* lib in Resources */,
 				2818E26617FFB6DB00093CEC /* InfoPlist.strings in Resources */,
 				2818E26E17FFB6DB00093CEC /* Default.png in Resources */,
 				2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */,

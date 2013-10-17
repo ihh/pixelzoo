@@ -6,7 +6,7 @@ Example program:
 #include "chibi/sexp.h"
 
 int main(int argc, char** argv) {
-  sexp ctx, child_ctx;
+  sexp ctx;
   char* ret;
   ctx = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
 
