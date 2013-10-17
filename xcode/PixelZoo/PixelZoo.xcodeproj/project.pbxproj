@@ -551,6 +551,7 @@
 					"${SRCROOT}/../../chibi/lib",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
+				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -567,6 +568,7 @@
 					"${SRCROOT}/../../chibi/lib",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
+				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;

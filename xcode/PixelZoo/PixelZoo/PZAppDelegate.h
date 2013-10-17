@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern char* sexp_default_module_path;  /* path to chibi-scheme modules... initialized by PZAppDelegate */
+
 @interface PZAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

@@ -15,6 +15,8 @@
 #define DefaultUserKey "PZDefaultUser"
 #define DefaultPassKey "PZDefaultPass"
 
+char* sexp_default_module_path = "";  // empty for now
+
 @implementation PZAppDelegate
 
 @synthesize window;

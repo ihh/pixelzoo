@@ -10,10 +10,13 @@ int main(int argc, char** argv) {
   char* ret;
   ctx = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
 
-  sexp_eval_string(ctx,"(define square (lambda (x) (* x x)))",-1,NULL);
-  ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(square 3)", -1, NULL)));
+  sexp_load_standard_env(ctx, NULL, SEXP_SEVEN);  /* required for definition of (let ...) */
+  sexp_load_standard_ports(ctx, NULL, stdin, stdout, stderr, 0);  /* unnecessary, in this program */
 
-  printf ("Return value is %s\n", ret);  /* should be 9 */
+  sexp_eval_string(ctx,"(define (dbl_square x) (let ((k 2)) (* x x k)))",-1,NULL);
+  ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(dbl_square 3)", -1, NULL)));
+
+  printf ("Return value is %s\n", ret);  /* should be 18 */
   /* don't free(ret) ... it's part of a Scheme string & will be garbage-collected */
 
   sexp_destroy_context(ctx);
