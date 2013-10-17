@@ -1,0 +1,1 @@
+To build chibi-scheme, include sexp.c & eval.c in project (other .c files are #include'd)

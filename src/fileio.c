@@ -35,6 +35,7 @@ const char* readStringFromFile (const char* filename) {
 void writeStringToFile (const char* filename, const char* contents) {
   FILE* fp;
   int success;
+  success = 0;
   if (filename) {
     fp = fopen(filename, "w");
     if (fp) {

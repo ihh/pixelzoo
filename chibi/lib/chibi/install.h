@@ -1,0 +1,5 @@
+#define sexp_so_extension ".dylib"
+#define sexp_default_module_path "lib/chibi"
+#define sexp_platform "pixelzoo"
+#define sexp_version "0.5.2"
+#define sexp_release_name "boron"

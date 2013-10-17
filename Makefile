@@ -26,12 +26,16 @@ LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
+CHIBI_CFILES := chibi/sexp.c chibi/eval.c
+CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIBI_CFILES)))))
+CHIBI_COPTS  := -Ichibi/lib
+
 XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
 all: libtargets targets
 
 clean:
-	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES)
+	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES) chibi/obj/*
 
 cleanxml:
 	rm $(XMLTESTFILES)
@@ -56,9 +60,15 @@ obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
 
-$(LIBTARGET): $(OFILES)
+chibi/obj/%.o: chibi/%.c
+	@test -e chibi/obj || mkdir chibi/obj
+	$(CC) $(ANSI) $(COPTS) $(CHIBI_COPTS) -c $< -o $@
+
+$(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
+	echo chibi_ofiles = $(CHIBI_OFILES)
+	echo ofiles = $(OFILES)
 	@test -e lib || mkdir lib
-	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES)
+	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES) $(CHIBI_OFILES)
 
 .SUFFIXES :
 

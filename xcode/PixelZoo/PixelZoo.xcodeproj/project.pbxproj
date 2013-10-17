@@ -57,6 +57,8 @@
 		285106441801ECAE00AA3254 /* PZGameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZGameView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 		285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285230B4180F37F0006E7FBF /* PZLockDescriptor.m */; };
+		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
+		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
 		28F32789180C971B00799C1D /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F32788180C971B00799C1D /* Base64.m */; };
 		28FA3F5D180A39900072234F /* PZMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F5C180A39900072234F /* PZMenuViewController.m */; };
 		28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F62180A58890072234F /* PZLoginViewController.m */; };
@@ -159,6 +161,8 @@
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 		285230B3180F37F0006E7FBF /* PZLockDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockDescriptor.h; sourceTree = "<group>"; };
 		285230B4180F37F0006E7FBF /* PZLockDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockDescriptor.m; sourceTree = "<group>"; };
+		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
+		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		28F32788180C971B00799C1D /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		28FA3F5B180A39900072234F /* PZMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZMenuViewController.h; sourceTree = "<group>"; };
@@ -266,6 +270,7 @@
 		2818E28917FFBCFD00093CEC /* PixelZoo core */ = {
 			isa = PBXGroup;
 			children = (
+				28A996DF18107D2100681777 /* chibi */,
 				2818E28A17FFBD7500093CEC /* balloon.c */,
 				2818E28B17FFBD7500093CEC /* balloon.h */,
 				2818E28C17FFBD7500093CEC /* bintree.c */,
@@ -331,6 +336,15 @@
 			path = PixelZoo;
 			sourceTree = "<group>";
 		};
+		28A996DF18107D2100681777 /* chibi */ = {
+			isa = PBXGroup;
+			children = (
+				28A996E018107D3B00681777 /* eval.c */,
+				28A996E118107D3B00681777 /* sexp.c */,
+			);
+			name = chibi;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -361,7 +375,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Holmesian Software";
 			};
-			buildConfigurationList = 2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "pixelzoo" */;
+			buildConfigurationList = 2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "PixelZoo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -399,6 +413,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2818E26817FFB6DB00093CEC /* main.m in Sources */,
+				28A996E318107D3B00681777 /* sexp.c in Sources */,
 				2818E26C17FFB6DB00093CEC /* PZAppDelegate.m in Sources */,
 				2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */,
 				2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */,
@@ -428,6 +443,7 @@
 				2818E2D617FFBD7500093CEC /* tool.c in Sources */,
 				283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */,
 				2818E2D717FFBD7500093CEC /* util.c in Sources */,
+				28A996E218107D3B00681777 /* eval.c in Sources */,
 				28F32789180C971B00799C1D /* Base64.m in Sources */,
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
@@ -530,7 +546,10 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PixelZoo/PixelZoo-Prefix.pch";
-				"HEADER_SEARCH_PATHS[arch=*]" = /usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					/usr/include/libxml2,
+					"${SRCROOT}/../../chibi/lib",
+				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -543,7 +562,10 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PixelZoo/PixelZoo-Prefix.pch";
-				"HEADER_SEARCH_PATHS[arch=*]" = /usr/include/libxml2;
+				HEADER_SEARCH_PATHS = (
+					/usr/include/libxml2,
+					"${SRCROOT}/../../chibi/lib",
+				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -554,7 +576,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "pixelzoo" */ = {
+		2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "PixelZoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2818E27C17FFB6DB00093CEC /* Debug */,
