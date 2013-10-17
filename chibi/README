@@ -1,1 +1,20 @@
 To build chibi-scheme, include sexp.c & eval.c in project (other .c files are #include'd)
+
+Example program:
+
+#include "chibi/eval.h"
+#include "chibi/sexp.h"
+
+int main(int argc, char** argv) {
+  sexp ctx, child_ctx;
+  char* ret;
+  ctx = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
+
+  sexp_eval_string(ctx,"(define square (lambda (x) (* x x)))",-1,NULL);
+  ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(square 3)", -1, NULL)));
+
+  printf ("Return value is %s\n", ret);  /* should be 9 */
+  /* don't free(ret) ... it's part of a Scheme string & will be garbage-collected */
+
+  sexp_destroy_context(ctx);
+}
