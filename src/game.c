@@ -17,7 +17,7 @@ Game* newGame() {
   Game *game;
   int n;
 
-  game = SafeMalloc (sizeof (Game));
+  game = SafeCalloc (1, sizeof (Game));
 
   game->board = NULL;
   game->rng = newRNG();
@@ -62,6 +62,8 @@ void deleteGame (Game *game) {
   deleteList (game->trigger);
   if (game->goal)
     deleteGoal (game->goal);
+  if (game->endGoal)
+    deleteGoal (game->endGoal);
   deleteRNG (game->rng);
   deleteBoard (game->board);
   SafeFree (game);

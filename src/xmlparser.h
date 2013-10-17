@@ -39,7 +39,8 @@ xmlChar* deleteXmlTextWriterLeavingText (xmlTextWriterPtr writer);
 
 void xmlTextWriterStartElement (xmlTextWriterPtr writer, const xmlChar* tag);
 void xmlTextWriterStartElementWithAttrs (xmlTextWriterPtr writer, const xmlChar* tag, const xmlAttr* properties);
-void xmlTextWriterWriteFormatElement (xmlTextWriterPtr writer, const xmlChar* tag, const char* str, ...);
+void xmlTextWriterWriteFormatElement (xmlTextWriterPtr writer, const xmlChar* tag, const char* fmt, ...);
+void xmlTextWriterWriteFormatCDATA (xmlTextWriterPtr writer, const char* fmt, ...);
 void xmlTextWriterEndElement (xmlTextWriterPtr writer);
 void xmlTextWriterFullEndElement (xmlTextWriterPtr writer);
 

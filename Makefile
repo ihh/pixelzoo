@@ -7,7 +7,8 @@ SDLCONFIG = sdl-config
 PKGCONFIG = pkg-config
 
 SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
-SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs) -L/usr/X11R6/lib -lXi
+SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs)
+# -L/usr/X11R6/lib -lXi
 
 CC          := gcc
 AR          := ar

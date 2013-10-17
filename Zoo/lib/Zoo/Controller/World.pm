@@ -146,7 +146,7 @@ sub assemble {
 
     # tools
     my @tools = $c->model('DB')->tools_by_id(@tool_ids);
-    $c->log->debug ("Tool names: " . join (", ", map ($_->name, @tools)));
+#    $c->log->debug ("Tool names: " . join (", ", map ($_->name, @tools)));
     $c->stash->{tools} = \@tools;
 
     my @tool_twig = map ($_->twig, @tools);
@@ -162,7 +162,7 @@ sub assemble {
 #    print "particles: ", map (join (" ", map ($_->text, $_->descendants("gstate"))) . "\n", @tool_twig);
 #    print "particles: ", map (join (" ", $_->particle_names) . "\n", @tool_twig);
     my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
-    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
+#    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
     $c->stash->{particles} = \@particles;
 
     # grammar

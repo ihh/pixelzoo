@@ -456,7 +456,7 @@ sub transform_hash {
 	    my ($self, $n) = @_;
 	    $n = forceHash ($n);
 
-	    my ($type, $rate, $rule, $hue, $sat, $bri) = map ($n->{$_}, qw(name rate rule));
+	    my ($type, $vars, $rate, $rule) = map ($n->{$_}, qw(name vars rate rule));
 	    my @particle;
 
 	    warn "Transforming particle '$type'\n" if $self->verbose;
@@ -468,8 +468,23 @@ sub transform_hash {
 	    my $transformed_rule = $self->transform_value ($rule);
 	    $self->pop_scope;
 
+	    my @vars;
+	    if (defined $vars) {
+		my $var_size = forceHash ($vars);
+		my @varsizes;
+		for my $var (@$vars) {
+		    if ($var =~ /^val\@var=(.*)$/) {
+			my $name = $1;
+			my $size = $var_size->{$var};
+			push @varsizes, "varsize" => ["name" => $name, "size" => $size];
+		    }
+		}
+		push @vars, "vars" => \@varsizes if @varsizes;
+	    }
+
 	    push @particle, ('particle' => ['name' => $type,
 					    'type' => $self->getType($type),
+					    @vars,
 					    $self->parse_color ($n, $type, "hue", 1 << 16),
 					    $self->parse_color ($n, $type, "sat", 1 << 8),
 					    $self->parse_color ($n, $type, "bri", 1),

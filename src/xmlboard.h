@@ -54,6 +54,8 @@
 #define XMLZOO_HEXSTATE    "hexstate"
 #define XMLZOO_GVARS       "gvars"
 #define XMLZOO_TYPE        "type"
+#define XMLZOO_VAL         "val"
+#define XMLZOO_VAR         "var"
 #define XMLZOO_DELIVER     "deliver"
 #define XMLZOO_DECMESSAGE  "msg"
 #define XMLZOO_HEXMESSAGE  "hexmsg"

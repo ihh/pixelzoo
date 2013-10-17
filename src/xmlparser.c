@@ -11,7 +11,6 @@
 void writeXmlNode (xmlTextWriterPtr writer, const xmlNode* node);
 xmlNode* newXmlNodeFromTagBlock (const char** s);
 void xmlTextWriterVWriteFormat (xmlTextWriterPtr writer, const char* fmt, va_list argptr);
-void xmlTextWriterWriteFormat (xmlTextWriterPtr writer, const char* fmt, ...);
 
 xmlNode* newXmlNodeFromTagBlock (const char** s) {
   xmlNode *node, *child, *firstChild, *firstProp, *lastChild, *lastProp;
@@ -174,13 +173,13 @@ xmlTextWriterPtr newXmlTextWriter() {
   xmlTextWriterPtr writer;
   writer = SafeCalloc (1, sizeof (xmlTextWriter));
   writer->tagStack = newStringVector();
-  xmlTextWriterWriteFormat (writer, "<?xml version=\"1.0\"?>\n");  /* hack, trying to mimic libxml2 as closely as possible... */
+  xmlTextWriterWriteFormatCDATA (writer, "<?xml version=\"1.0\"?>\n");  /* hack, trying to mimic libxml2 as closely as possible... */
   return writer;
 }
 
 xmlChar* deleteXmlTextWriterLeavingText (xmlTextWriterPtr writer) {
   xmlChar* text;
-  xmlTextWriterWriteFormat (writer, "\n");  /* hack, trying to mimic libxml2 as closely as possible... */
+  xmlTextWriterWriteFormatCDATA (writer, "\n");  /* hack, trying to mimic libxml2 as closely as possible... */
   text = writer->start;
   deleteStringVector (writer->tagStack);
   SafeFreeOrNull (writer);
@@ -214,7 +213,7 @@ void xmlTextWriterVWriteFormat (xmlTextWriterPtr writer, const char* fmt, va_lis
   writer->cur += length;
 }
 
-void xmlTextWriterWriteFormat (xmlTextWriterPtr writer, const char* fmt, ...) {
+void xmlTextWriterWriteFormatCDATA (xmlTextWriterPtr writer, const char* fmt, ...) {
   va_list argptr;
   va_start (argptr, fmt);
   xmlTextWriterVWriteFormat (writer, fmt, argptr);
@@ -223,10 +222,10 @@ void xmlTextWriterWriteFormat (xmlTextWriterPtr writer, const char* fmt, ...) {
 
 void xmlTextWriterStartElementWithAttrs (xmlTextWriterPtr writer, const xmlChar* tag, const xmlAttr* prop) {
   StringVectorPushBack (writer->tagStack, (char*) tag);
-  xmlTextWriterWriteFormat (writer, "<%s", tag);
+  xmlTextWriterWriteFormatCDATA (writer, "<%s", tag);
   for (; prop; prop = prop->next)
-    xmlTextWriterWriteFormat (writer, " %s=\"%s\"", prop->name, prop->content);
-  xmlTextWriterWriteFormat (writer, ">");
+    xmlTextWriterWriteFormatCDATA (writer, " %s=\"%s\"", prop->name, prop->content);
+  xmlTextWriterWriteFormatCDATA (writer, ">");
 }
 
 void xmlTextWriterStartElement (xmlTextWriterPtr writer, const xmlChar* tag) {
@@ -244,9 +243,9 @@ void xmlTextWriterWriteFormatElement (xmlTextWriterPtr writer, const xmlChar* ta
 }
 
 void xmlTextWriterEndElement (xmlTextWriterPtr writer) {
-  xmlTextWriterWriteFormat (writer,
-			    "</%s>",
-			    StringVectorGet (writer->tagStack, StringVectorSize (writer->tagStack) - 1));
+  xmlTextWriterWriteFormatCDATA (writer,
+				 "</%s>",
+				 StringVectorGet (writer->tagStack, StringVectorSize (writer->tagStack) - 1));
   VectorPop (writer->tagStack);
 }
 
@@ -257,7 +256,7 @@ void xmlTextWriterFullEndElement (xmlTextWriterPtr writer) {
 void writeXmlNode (xmlTextWriterPtr writer, const xmlNode* node) {
   xmlNode *child;
   if (node->type == XML_TEXT_NODE)
-    xmlTextWriterWriteFormat (writer, "%s", node->content);
+    xmlTextWriterWriteFormatCDATA (writer, "%s", node->content);
   else if (node->type == XML_ELEMENT_NODE) {
     xmlTextWriterStartElementWithAttrs (writer, node->name, node->properties);
     if (node->children)

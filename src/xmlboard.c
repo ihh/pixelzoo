@@ -352,19 +352,26 @@ void writeTypesXml (Board* board, xmlTextWriterPtr writer) {
   xmlTextWriterFullEndElement (writer);  /* end grammar */
 }
 
+static const char* varAttrName = XMLZOO_VAR;
 void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
   State t, varVal;
   ListNode *node;
   VarsDescriptor *vd;
+  xmlNode *attr;
   t = StateType(s);
-  if (board->byType[t] && board->byType[t]->name) {
+  if (s != 0 && board->byType[t] && board->byType[t]->name) {
     xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GVARS);  /* begin gvars */
     xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_TYPE, "%s", board->byType[t]->name);
     for (node = board->byType[t]->vars->head; node; node = node->next) {
       vd = (VarsDescriptor*) node->value;
       varVal = (s >> vd->offset) & ((1 << vd->width) - 1);
-      if (varVal != 0)
-	xmlTextWriterWriteFormatElement (writer, (xmlChar*) vd->name, "%lld", varVal);
+      if (varVal != 0) {
+	attr = newXmlNode (XML_ATTRIBUTE_NODE, varAttrName, varAttrName + strlen(varAttrName), vd->name, vd->name + strlen(vd->name));
+	xmlTextWriterStartElementWithAttrs (writer, (xmlChar*) XMLZOO_VAL, attr); /* begin val */
+	xmlTextWriterWriteFormatCDATA (writer, "%lld", varVal);
+	xmlTextWriterEndElement (writer);  /* end val */
+	deleteXmlTree (attr);
+      }
     }
     xmlTextWriterFullEndElement (writer);  /* end gvars */
   }
