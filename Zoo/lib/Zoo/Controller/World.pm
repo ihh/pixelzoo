@@ -360,7 +360,10 @@ sub lock_id_end_DELETE {
     # If user owns lock, delete it; otherwise, complain
     my $lock = $c->stash->{lock};
     if ($user_id == $lock->owner_id) {
-	$lock->delete;
+	# we don't actually delete the lock; just set its expiry_time to now
+	my $current_time = time();
+	$lock->expiry_time ($current_time);
+	$lock->update;
 	$c->response->status(204);  # 204 No Content (success)
     } else {
 	$c->response->status(403);  # 403 Forbidden
