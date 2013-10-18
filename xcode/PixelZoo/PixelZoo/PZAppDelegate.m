@@ -17,8 +17,8 @@
 
 char* sexp_default_module_path = "";  // empty for now
 // To actually do anything with chibi, you'll need the following lines...
-// #include "chibi/eval.h"
-// #include "chibi/sexp.h"
+ #include "chibi/eval.h"
+ #include "chibi/sexp.h"
 
 @implementation PZAppDelegate
 
@@ -35,7 +35,7 @@ char* sexp_default_module_path = "";  // empty for now
 
 // the following example code tests the embedded Scheme interpreter & standard environment...
 // first, uncomment the two chibi #include's, above
-/*
+
     sexp ctx;
     char* ret;
     ctx = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
@@ -43,14 +43,17 @@ char* sexp_default_module_path = "";  // empty for now
     sexp_load_standard_env(ctx, NULL, SEXP_SEVEN);  // required for definition of (let ...)
     sexp_load_standard_ports(ctx, NULL, stdin, stdout, stderr, 0);  // unnecessary, in this program
     
-    sexp_eval_string(ctx,"(define (dbl_square x) (let ((k 2)) (* x x k)))",-1,NULL);
-    ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(dbl_square 3)", -1, NULL)));
-    
+//    sexp_eval_string(ctx,"(define (dbl_square x) (let ((k 2)) (* x x k)))",-1,NULL);
+//    ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(dbl_square 3)", -1, NULL)));
+
+    sexp_eval_string(ctx,"(include \"\")",-1,NULL);
+    ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(random-integer 10)", -1, NULL)));
+
     printf ("Return value is %s\n", ret);  // should be 18
     // don't free(ret) ... it's part of a Scheme string & will be garbage-collected
     
     sexp_destroy_context(ctx);
-*/
+
     
     if ([self gotDefaultUser])
         [self loginUser:[self getDefaultUser] withPass:[self getDefaultPass]];
