@@ -16,7 +16,8 @@
 #define DefaultPassKey "PZDefaultPass"
 
 char* sexp_default_module_path = "";  // empty for now
-// To actually do anything with chibi, you'll need the following lines...
+char* sexp_pixelzoo_module_path = "";  // empty for now
+// To actually do anything with chibi, you'll need the following lines in the file where you use it...
 // #include "chibi/eval.h"
 // #include "chibi/sexp.h"
 
@@ -29,10 +30,14 @@ char* sexp_default_module_path = "";  // empty for now
 {
     // Override point for customization after application launch.
 
-    // set up chibi global variable to point to Scheme standard library resource bundle
+    // set up chibi global variables to point to Scheme module resource bundles
     NSString *chibiLibDirectory = [[[NSBundle mainBundle] resourcePath]
                                    stringByAppendingPathComponent:@"lib"];
     sexp_default_module_path = (char*) [chibiLibDirectory UTF8String];
+
+    NSString *pzSchemePath = [[[NSBundle mainBundle] resourcePath]
+                              stringByAppendingPathComponent:@"scheme/zoo.scm"];
+    sexp_pixelzoo_module_path = (char*) [pzSchemePath UTF8String];
 
 // the following example code tests the embedded Scheme interpreter & standard environment...
 // first, uncomment the two chibi #include's, above
@@ -49,12 +54,21 @@ char* sexp_default_module_path = "";  // empty for now
     printf ("Return value is %s\n", ret);  // should be 18
     // don't free(ret) ... it's part of a Scheme string & will be garbage-collected
 
-    // try importing & calling a library
+    // try importing & calling an SRFI library
     sexp_eval_string(ctx,"(import (srfi 27))",-1,NULL);
     ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, "(random-integer 10)", -1, NULL)));
+    printf ("Random integer is %s\n", ret);
+
+    // try the pixelzoo-specific Scheme library
+    sexp_load(ctx, sexp_c_string(ctx, sexp_pixelzoo_module_path, -1), NULL);
+    const char* pixelzoo_scheme_test = "(sxml->string (bindloc \"north\" '(0 -1) (type \"empty\" \"foo\") (type \"wall\" \"bar\") (default \"whatever\")))";
+    ret = sexp_string_data (sexp_write_to_string (ctx, sexp_eval_string(ctx, pixelzoo_scheme_test, -1, NULL)));
+    printf ("Some XML: %s\n", ret);
+    // should be "<bind><loc>north</loc><x>0</x><y>-1</y><bcase><bmatch type=\"empty\">foo</bmatch><bmatch type=\"wall\">bar</bmatch></bcase><default>whatever</default></bind>"
     
     sexp_destroy_context(ctx);
 */
+
 
     // check stored authentication info
     if ([self gotDefaultUser])

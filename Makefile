@@ -26,9 +26,12 @@ LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
+ROOTDIR := $(shell pwd)
+
 CHIBI_CFILES := chibi/sexp.c chibi/eval.c
 CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIBI_CFILES)))))
-CHIBI_COPTS  := -Ichibi/lib -Ichibi/include -Dsexp_default_module_path=\"$(srcdir)/chibi/lib\" -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
+CHIBI_CODE   := -Ichibi/lib -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
+CHIBI_HDRS   := -Ichibi/include -Dsexp_default_module_path=\"$(ROOTDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(ROOTDIR)/scheme/zoo.scm\"
 
 XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 
@@ -58,11 +61,11 @@ bin/%:  tsrc/%.c $(LIBTARGET)
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
-	$(CC) $(ANSI) $(COPTS) $(CFLAGS) -c $< -o $@
+	$(CC) $(ANSI) $(COPTS) $(CFLAGS) $(CHIBI_HDRS) -c $< -o $@
 
 chibi/obj/%.o: chibi/%.c
 	@test -e chibi/obj || mkdir chibi/obj
-	$(CC) $(ANSI) $(COPTS) $(CHIBI_COPTS) -c $< -o $@
+	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) -c $< -o $@
 
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	echo chibi_ofiles = $(CHIBI_OFILES)

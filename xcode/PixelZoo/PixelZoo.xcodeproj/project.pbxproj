@@ -58,6 +58,7 @@
 		285106441801ECAE00AA3254 /* PZGameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZGameView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 		285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285230B4180F37F0006E7FBF /* PZLockDescriptor.m */; };
+		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
 		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
 		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
 		28F32789180C971B00799C1D /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F32788180C971B00799C1D /* Base64.m */; };
@@ -163,6 +164,7 @@
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 		285230B3180F37F0006E7FBF /* PZLockDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockDescriptor.h; sourceTree = "<group>"; };
 		285230B4180F37F0006E7FBF /* PZLockDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockDescriptor.m; sourceTree = "<group>"; };
+		289E523D1811006500CF0B09 /* scheme */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scheme; path = ../../../scheme; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 			children = (
 				283350AE181094FC0091CA0C /* lib */,
 				2818E26317FFB6DB00093CEC /* PixelZoo-Info.plist */,
+				289E523D1811006500CF0B09 /* scheme */,
 				2818E26417FFB6DB00093CEC /* InfoPlist.strings */,
 				2818E26717FFB6DB00093CEC /* main.m */,
 				2818E26917FFB6DB00093CEC /* PixelZoo-Prefix.pch */,
@@ -405,6 +408,7 @@
 				2818E26E17FFB6DB00093CEC /* Default.png in Resources */,
 				2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */,
 				2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */,
+				289E523E1811006500CF0B09 /* scheme in Resources */,
 				2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
