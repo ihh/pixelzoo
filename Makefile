@@ -38,6 +38,7 @@ XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 all: libtargets targets
 
 clean:
+	echo $(CURDIR)
 	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES) chibi/obj/*
 
 cleanxml:
