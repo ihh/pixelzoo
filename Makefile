@@ -28,7 +28,7 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 
 CHIBI_CFILES := chibi/sexp.c chibi/eval.c
 CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIBI_CFILES)))))
-CHIBI_COPTS  := -Ichibi/lib -Dsexp_default_module_path=\"$(srcdir)/chibi/lib\"
+CHIBI_COPTS  := -Ichibi/lib -Ichibi/include -Dsexp_default_module_path=\"$(srcdir)/chibi/lib\" -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
 
 XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
 

@@ -342,8 +342,8 @@
 		28A996DF18107D2100681777 /* chibi */ = {
 			isa = PBXGroup;
 			children = (
-				28A996E018107D3B00681777 /* eval.c */,
 				28A996E118107D3B00681777 /* sexp.c */,
+				28A996E018107D3B00681777 /* eval.c */,
 			);
 			name = chibi;
 			sourceTree = "<group>";
@@ -553,9 +553,13 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"${SRCROOT}/../../chibi/lib",
+					"${SRCROOT}/../../chibi/include",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = (
+					"-DSEXP_USE_DL=0",
+					"-DSEXP_USE_STATIC_LIBS",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -570,9 +574,13 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"${SRCROOT}/../../chibi/lib",
+					"${SRCROOT}/../../chibi/include",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = (
+					"-DSEXP_USE_DL=0",
+					"-DSEXP_USE_STATIC_LIBS",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
