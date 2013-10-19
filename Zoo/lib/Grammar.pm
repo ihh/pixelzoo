@@ -151,7 +151,7 @@ sub proto_xml {
 
     warn "Generating proto-game XML...\n" if $self->verbose;
     my $game_proto = $self->make_game;
-    my $wrapped_proto = ["game" => $game_proto];
+    my $wrapped_proto = ['proto' => $game_proto];
 
     if ($self->debug) {
 	warn "Data structure representing proto-game XML:\n", Data::Dumper->Dump($wrapped_proto);
@@ -438,6 +438,7 @@ sub transform_hash {
 
     # main hash
     return {
+	'proto' => sub { my ($self, $n) = @_; return ('game' => $self->transform_value($n)) },
 	'gtype' => sub { my ($self, $n) = @_; return ('type' => $self->getType($n)) },
 	'gstate' => sub { my ($self, $n) = @_; return ('hexstate' => $self->getTypeAsHexState($n)) },
 	'pstate' => sub { my ($self, $n) = @_; return ('hexstate' => hexv($self->userState($n,$self->playerID))) },

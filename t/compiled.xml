@@ -5,6 +5,20 @@
       <particle>
         <name>empty</name>
         <type>0</type>
+        <vars>
+          <varsize>
+            <name>brightness</name>
+            <size>3</size>
+          </varsize>
+          <varsize>
+            <name>saturation</name>
+            <size>3</size>
+          </varsize>
+          <varsize>
+            <name>hue</name>
+            <size>6</size>
+          </varsize>
+        </vars>
         <colrule>
           <mask>fc0</mask>
           <rshift>6</rshift>
@@ -892,6 +906,16 @@
       <particle>
         <name>wall</name>
         <type>2</type>
+        <vars>
+          <varsize>
+            <name>hue</name>
+            <size>8</size>
+          </varsize>
+          <varsize>
+            <name>decay</name>
+            <size>4</size>
+          </varsize>
+        </vars>
         <colrule>
           <mask>ff</mask>
           <rshift>0</rshift>
@@ -1920,6 +1944,16 @@
       <particle>
         <name>plant</name>
         <type>4</type>
+        <vars>
+          <varsize>
+            <name>gens_left</name>
+            <size>3</size>
+          </varsize>
+          <varsize>
+            <name>branches</name>
+            <size>2</size>
+          </varsize>
+        </vars>
         <colrule>
           <mask>7</mask>
           <rshift>0</rshift>
@@ -3832,6 +3866,12 @@
       <particle>
         <name>cyclobs</name>
         <type>6</type>
+        <vars>
+          <varsize>
+            <name>species</name>
+            <size>2</size>
+          </varsize>
+        </vars>
         <colrule>
           <mask>3</mask>
           <rshift>0</rshift>

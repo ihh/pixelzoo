@@ -1,4 +1,4 @@
-<game>
+<proto>
   <board>
     <size>128</size>
     <grammar>
@@ -5219,4 +5219,4 @@ Guide all remaining guests to the Exit.</message>
       </goal>
     </and>
   </goal>
-</game>
+</proto>
