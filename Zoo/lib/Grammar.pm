@@ -751,14 +751,6 @@ sub transform_hash {
 	    return huff_to_rule ($node[0]);
 	},
 
-	# overload
-	'overload' => sub {
-	    my ($self, $n) = @_;
-	    $n = forceHash ($n);
-	    return ('rule' => [ 'overload' => [ map (($_ => $self->transform_value ($n->{$_})), qw(slow fast)) ] ] );
-	},
-
-
 	# text balloon
 	'ball' => sub {
 	    my ($self, $n) = @_;
