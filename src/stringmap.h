@@ -43,7 +43,7 @@ typedef StringMapNode DictionaryNode;
 #define DictionaryErase(DICTPTR,STRING) StringMapErase((StringMap*)DICTPTR,STRING)
 #define DictionaryFind(DICTPTR,STRING) ((DictionaryNode*) StringMapFind((StringMap*)DICTPTR,STRING))
 
-/* typedefs & macros for StringIntMap, a map from Strings to Strings */
+/* typedefs & macros for StringIntMap, a map from Strings to integers */
 typedef StringMap StringIntMap;
 typedef StringMapNode StringIntMapNode;
 #define newStringIntMap() ((StringIntMap*) newStringMap (IntCopy, IntDelete, IntPrint))

@@ -36,13 +36,12 @@ Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char*
   Game* game = NULL;
   doc = xmlTreeFromString (gameString);
   Assert (doc != NULL, "Game XML string not parsed");
-  boardDoc = xmlTreeFromString (boardString);
+  boardDoc = boardString==gameString ? doc : xmlTreeFromString (boardString);
   Assert (boardDoc != NULL, "Board XML string not parsed");
   game = newGameFromXmlDocumentWithSeparateBoard (doc, boardDoc);
-  // CODE SMELL: potential memory leak? Should call xmlFreeDoc on doc & boardDoc.
-  // But would this corrupt pointers elsewhere -- i.e. does other code rely on strings in doc & boardDoc?
-  // Safe (albeit somewhat ugly) solution would be to wait until the end before deleting doc & boardDoc.
-  // Still need to make sure we don't delete anything twice!
+  deleteXmlTree (doc);
+  if (boardDoc != doc)
+    deleteXmlTree (boardDoc);
   return game;
 }
 
