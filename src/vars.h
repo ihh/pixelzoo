@@ -10,5 +10,4 @@ typedef struct VarsDescriptor {
 VarsDescriptor *newVarsDescriptor (const char* name, unsigned char offset, unsigned char width);
 void deleteVarsDescriptor (void *vd);
 
-
 #endif /* VARS_INCLUDED */

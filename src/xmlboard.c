@@ -8,9 +8,11 @@
 #include "xmlmove.h"
 #include "game.h"
 #include "vars.h"
+#include "proto.h"
 
 /* prototypes for private builder methods */
-Particle* newParticleFromXmlNode (void *game, xmlNode* node);
+Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTable);
+void parseVarsDescriptors (Proto *proto, xmlNode* particleNode);
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node);
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode* node);
 ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent);
@@ -32,6 +34,8 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   State state;
   const char* subRuleName;
   ParticleRule *rule;
+  ProtoTable *protoTable;
+  Proto *proto;
 
   boardNode = CHILD(root,BOARD);
   Assert (boardNode != NULL, "XML board tag not found");
@@ -46,19 +50,41 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   board->microticks = OPTCHILDINT(boardNode,TIME,0);
   board->updateCount = OPTCHILDINT(boardNode,UPDATE,0);
 
+  /* parse grammar */
   grammarNode = CHILD(boardNode,GRAMMAR);
+
+  /* create ProtoTable in two passes (first Particles that have Types, then those that don't) */
+  protoTable = newProtoTable();
+  for (node = grammarNode->children; node; node = node->next)
+    if (MATCHES(node,PARTICLE))
+      if (CHILD(node,DECTYPE) || CHILD(node,HEXTYPE)) {
+	proto = protoTableAddTypedParticle (protoTable, (char*) CHILDSTRING(node,NAME), OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)));
+	parseVarsDescriptors (proto, node);
+      }
+
+  for (node = grammarNode->children; node; node = node->next)
+    if (MATCHES(node,PARTICLE))
+      if (CHILD(node,DECTYPE) || CHILD(node,HEXTYPE)) {
+	proto = protoTableAddParticle (protoTable, (char*) CHILDSTRING(node,NAME));
+	parseVarsDescriptors (proto, node);
+      }
+
+  /* create subrules */
   for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,SUBRULE)) {
       subRuleName = (const char*) CHILDSTRING(node,NAME);
+      Assert (StringMapFind (board->subRule, subRuleName) == 0, "Duplicate subrule name");
       ruleNode = CHILD(node,RULE);
       rule = newRuleFromXmlNode (game, ruleNode);
-      Assert (StringMapFind (board->subRule, subRuleName) == 0, "Duplicate subrule name");
-      (void) StringMapInsert (board->subRule, (char*) subRuleName, rule);
+      (void) StringMapInsert (board->subRule, (char*) subRuleName, (void*) rule);
     }
+
+  /* create particles */
   for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
-      addParticleToBoard (newParticleFromXmlNode(game,node), board);
+      addParticleToBoard (newParticleFromXmlNode(game,node,protoTable), board);
 
+  /* initialize board */
   for (node = boardNode->children; node; node = node->next)
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
@@ -70,6 +96,9 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   queueNode = CHILD (boardNode, QUEUE);
   if (queueNode)
     board->moveQueue = newMoveListFromXmlNode (queueNode);
+
+  /* free ProtoTable and return */
+  deleteProtoTable (protoTable);
 
   return board;
 }
@@ -84,12 +113,13 @@ Board* newBoardFromXmlString (void *game, const char* string) {
 }
 
 
-Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
+Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTable) {
   Particle* p;
   Message message;
-  VarsDescriptor* vd;
-  int nColorRules, readOnlyIndex, varOffset, varWidth;
-  xmlNode *curNode, *syncNode, *varsNode;
+  int nColorRules, readOnlyIndex;
+  xmlNode *curNode, *syncNode;
+  Proto *proto;
+
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
 
   if ((syncNode = CHILD(node,SYNC))) {
@@ -115,7 +145,10 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
     }
 
   p->rate = FloatToIntMillionths (OPTCHILDFLOAT(node,RATE,1.));
-  p->type = OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE));
+
+  proto = protoTableGetProto (protoTable, p->name);
+  p->type = proto->type;
+  protoCopyVarsDescriptorsToList (proto, p->vars);
 
   nColorRules = 0;
   for (curNode = node->children; curNode; curNode = curNode->next)
@@ -123,6 +156,14 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode);
     }
+
+  return p;
+}
+
+void parseVarsDescriptors (Proto *proto, xmlNode* node) {
+  xmlNode *curNode, *varsNode;
+  int varWidth, varOffset;
+  VarsDescriptor* vd;
 
   varsNode = CHILD (node, VARS);
   if (varsNode) {
@@ -133,14 +174,13 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node) {
 	vd = newVarsDescriptor ((const char*) CHILDSTRING (curNode, NAME), varOffset, varWidth);
 	Assert (xmlValidateNameValue ((xmlChar*) vd->name), "Variable names must also be valid XML tags");
 	Assert (strcmp (vd->name, XMLZOO_TYPE) != 0, "'type' is a reserved word that cannot be used as a variable name");
+	protoAddVarsDescriptor (proto, vd->name, varOffset, varWidth);
 	varOffset += varWidth;
 	Assert (varOffset <= 48 && varWidth > 0, "newParticleFromXmlNode: bad vars descriptor");
-	ListAppend (p->vars, vd);
       }
   }
-
-  return p;
 }
+
 
 void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node) {
   colorRule->rightShift = OPTCHILDINT(node,RSHIFT,0);

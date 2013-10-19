@@ -17,4 +17,3 @@ void deleteVarsDescriptor (void *vdVoid) {
   StringDelete (vd->name);
   SafeFree (vd);
 }
-

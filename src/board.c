@@ -21,6 +21,7 @@ Board* newBoard (int size) {
   Board *board;
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
+  board->byName = newStringIntMap();
   board->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
   board->size = size;
   board->cell = SafeCalloc (size * size, sizeof(State));
@@ -66,6 +67,7 @@ void deleteBoard (Board* board) {
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
       deleteParticle (board->byType[(Type) t]);
+  deleteStringIntMap (board->byName);
   deleteStringMap (board->subRule);
   SafeFree(board->byType);
   SafeFree(board);

@@ -13,6 +13,7 @@ typedef struct CellWatcher CellWatcher;
 
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
+  StringIntMap* byName;  /* map from particle names to Type's */
   StringMap* subRule;  /* subroutine ParticleRule's */
   int size;  /* board is a square, this is the length of each side in cells */
   State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */

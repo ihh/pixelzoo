@@ -261,7 +261,7 @@ RBNode * RBTreeInsert(RBTree* tree, void* key, void* value) {
   RBNode * newNode;
 
   x=(RBNode*) SafeMalloc(sizeof(RBNode));
-  x->key=key;
+  x->key=(*tree->CopyKey) (key);
   x->value=value;
 
   TreeInsertHelp(tree,x);
