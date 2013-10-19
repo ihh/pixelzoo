@@ -65,6 +65,9 @@ chibi/obj/%.o: chibi/%.c
 	@test -e chibi/obj || mkdir chibi/obj
 	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) -c $< -o $@
 
+bin/chibi_scheme:
+	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(CHIBI_CFILES) chibi/main.c $< -o $@
+
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	echo chibi_ofiles = $(CHIBI_OFILES)
 	echo ofiles = $(OFILES)
