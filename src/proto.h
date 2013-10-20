@@ -6,25 +6,30 @@
 #include "stringmap.h"
 
 typedef struct Proto {
+  char *name;
   Type type;
   StringMap *varsDescriptorMap;
+  StringVector *varName;
+  unsigned char nextOffset;  /* internal use only */
 } Proto;
 
-Proto* newProto (Type type);
-void deleteProto (Proto *proto);
+Proto* newProto (const char *name, Type type);
+void deleteProto (void *proto);
+void* copyProto (void *a);
 
-void protoAddVarsDescriptor (Proto *proto, const char* varName, unsigned char offset, unsigned char width);
+VarsDescriptor* protoAddVar (Proto *proto, const char* varName, unsigned char width);
 
 VarsDescriptor* protoGetVarsDescriptor (Proto *proto, const char* varName);
 void protoCopyVarsDescriptorsToList (Proto *proto, List* varsDescriptorList);
 
 typedef struct ProtoTable {
-  StringMap *proto;
+  StringMap *byName;
+  Proto **byType;
   Type nextFreeType;  /* internal use only */
 } ProtoTable;
 
 ProtoTable *newProtoTable();
-void deleteProtoTable (ProtoTable* protoTable);
+void deleteProtoTable (void* protoTable);
 
 Proto *protoTableAddTypedParticle (ProtoTable *protoTable, const char* particleName, Type particleType);
 Proto *protoTableAddParticle (ProtoTable *protoTable, const char* particleName);

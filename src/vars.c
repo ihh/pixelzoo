@@ -17,3 +17,10 @@ void deleteVarsDescriptor (void *vdVoid) {
   StringDelete (vd->name);
   SafeFree (vd);
 }
+
+void *copyVarsDescriptor (void *a) {
+  VarsDescriptor *vd_orig, *vd;
+  vd_orig = (VarsDescriptor*) a;
+  vd = newVarsDescriptor (vd_orig->name, vd_orig->offset, vd_orig->width);
+  return (void*) vd;
+}

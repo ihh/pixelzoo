@@ -10,7 +10,7 @@
 */
 
 /* container functions for strings */
-void* StringNew(char *a);
+void* StringNew(const char *a);
 void* StringCopy(void* a);
 void StringDelete(void* a);
 int StringCompare(void* a, void* b);

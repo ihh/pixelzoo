@@ -3,7 +3,7 @@
 #include "stringmap.h"
 
 /* String* functions */
-void* StringNew(char *a) {
+void* StringNew(const char *a) {
   char *ptr;
   ptr = (char*) SafeMalloc ((strlen(a) + 1) * sizeof(char));
   (void) strcpy (ptr, a);

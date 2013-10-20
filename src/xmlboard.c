@@ -162,21 +162,18 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTa
 
 void parseVarsDescriptors (Proto *proto, xmlNode* node) {
   xmlNode *curNode, *varsNode;
-  int varWidth, varOffset;
-  VarsDescriptor* vd;
+  int varWidth;
+  const char *varName;
 
   varsNode = CHILD (node, VARS);
   if (varsNode) {
-    varOffset = 0;
     for (curNode = varsNode->children; curNode; curNode = curNode->next)
       if (MATCHES(curNode,VARSIZE)) {
+	varName = (const char*) CHILDSTRING (curNode, NAME);
 	varWidth = CHILDINT (curNode, SIZE);
-	vd = newVarsDescriptor ((const char*) CHILDSTRING (curNode, NAME), varOffset, varWidth);
-	Assert (xmlValidateNameValue ((xmlChar*) vd->name), "Variable names must also be valid XML tags");
-	Assert (strcmp (vd->name, XMLZOO_TYPE) != 0, "'type' is a reserved word that cannot be used as a variable name");
-	protoAddVarsDescriptor (proto, vd->name, varOffset, varWidth);
-	varOffset += varWidth;
-	Assert (varOffset <= 48 && varWidth > 0, "newParticleFromXmlNode: bad vars descriptor");
+	Assert (xmlValidateNameValue ((xmlChar*) varName), "Variable names must also be valid XML tags");
+	Assert (strcmp (varName, XMLZOO_TYPE) != 0, "'type' is a reserved word that cannot be used as a variable name");
+	(void) protoAddVar (proto, varName, varWidth);
       }
   }
 }
