@@ -419,11 +419,14 @@ int testNodeHasType (xmlNode* node) {
 }
 
 int testNodeHasState (xmlNode* node) {
-  return CHILD(node,DECSTATE) || CHILD(node,HEXSTATE) || CHILD(node,GSTATE) || CHILD(node,GVARS);
+  return testChildrenHaveState (node->children);
 }
 
-int testNodeHasStateOrType (xmlNode* node) {
-  return CHILD(node,DECSTATE) || CHILD(node,HEXSTATE) || CHILD(node,GSTATE) || CHILD(node,GVARS) || CHILD(node,DECTYPE) || CHILD(node,HEXTYPE) || CHILD(node,GTYPE);
+int testChildrenHaveState (xmlNode* child) {
+  for (; child; child = child->next)
+    if (MATCHES(child,DECSTATE) || MATCHES(child,HEXSTATE) || MATCHES(child,GSTATE) || MATCHES(child,GVARS))
+      return 1;
+  return 0;
 }
 
 Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType) {
@@ -447,53 +450,135 @@ Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType) {
 }
 
 State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState) {
-  xmlNode *child, *field;
+  return getNextStateFromChildren (node->children, protoTable, defaultState);
+}
+
+State getNextStateFromChildren (xmlNode* child, ProtoTable* protoTable, State defaultState) {
+  xmlNode *field;
+  const char *type, *varName;
   Proto *proto;
   VarsDescriptor *vd;
   State s;
   s = defaultState;
-  if ( (child = CHILD(node,DECSTATE)) )  /* assignment intentional */
-    s = decToSignedLongLong ((const char*) getNodeContent (child));
-  else if ( (child = CHILD(node,HEXSTATE)) )  /* assignment intentional */
-    s = hexToUnsignedLongLong ((const char*) getNodeContent (child));
-  else if ( (child = CHILD(node,GSTATE)) ) {  /* assignment intentional */
-    proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
-    if (proto)
-      s = ((State) proto->type) << TypeShift;
-    else
-      Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
-  } else if ( (child = CHILD(node,GVARS)) ) {  /* assignment intentional */
-    for (field = child->children; field != NULL; field = field->next)
-      if (MATCHES(field,TYPE))
-	proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
-    if (proto) {
-      s = ((State) proto->type) << TypeShift;
+  for (; child; child = child->next) {
+    if ( MATCHES(child,DECSTATE) ) {
+      s = decToSignedLongLong ((const char*) getNodeContent (child));
+      break;
+    } else if ( MATCHES(child,HEXSTATE) ) {
+      s = hexToUnsignedLongLong ((const char*) getNodeContent (child));
+      break;
+    } else if ( MATCHES(child,GSTATE) ) {  /* assignment intentional */
+      type = (const char*) getNodeContent (child);
+      proto = protoTableGetProto (protoTable, type);
+      if (proto)
+	s = ((State) proto->type) << TypeShift;
+      else
+	Warn ("State descriptor refers to type %s, but no such type was found", type);
+      break;
+    } else if ( MATCHES(child,GVARS) ) {
+      proto = NULL;
       for (field = child->children; field != NULL; field = field->next)
-	if (MATCHES(field,VAL)) {
-	  vd = protoGetVarsDescriptor (proto, ATTR (field, VAR));
-	  if (vd)
-	    s = s | ((decToSignedLongLong ((const char*) getNodeContent (field)) & ((1 << vd->width) - 1)) << vd->offset);
-	  else
-	    Warn ("Couldn't find Var %s in Particle %s", ATTR(field,VAR), (const char*) getNodeContent(child));
+	if (MATCHES(field,TYPE)) {
+	  if (proto)
+	    Warn ("Multiple type fields in State descriptor");
+	  type = (const char*) getNodeContent (field);
+	  proto = protoTableGetProto (protoTable, type);
+	  if (proto == NULL)
+	    Warn ("State descriptor refers to type %s, but no such type was found", type);
 	}
+      if (proto) {
+	s = ((State) proto->type) << TypeShift;
+	for (field = child->children; field != NULL; field = field->next)
+	  if (MATCHES(field,VAL)) {
+	    varName = ATTR (field, VAR);
+	    if (varName) {
+	      vd = protoGetVarsDescriptor (proto, varName);
+	      if (vd)
+		s = s | ((decToSignedLongLong ((const char*) getNodeContent (field)) & ((1 << vd->width) - 1)) << vd->offset);
+	      else
+		Warn ("State descriptor for type %s references var %s, but no such var could be found", proto->name, varName);
+	    } else
+	      Warn ("Val element without var attribute in state descriptor for type %s", type);
+	  }
+      } else
+	Warn ("Couldn't find type field in State descriptor");
+      break;
     } else
-      Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
-  } else
+      child = child->next;
+  }
+  if (child == NULL)
     Warn ("Couldn't find State specifier");
   return s;
 }
 
-State getVarMaskFromNode (xmlNode* node, ProtoTable* protoTable) {
-  /* WRITE ME */
-  return 0;
+State getMaskFromNode (xmlNode* node, ProtoTable* protoTable) {
+  return getTaggedMaskFromNode (node, protoTable, XMLPREFIX(MASK), XMLPREFIX(VMASK), XMLPREFIX(TMASK));
+}
+
+State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable) {
+  return getTaggedMaskFromNode (node, protoTable, XMLPREFIX(SRCMASK), XMLPREFIX(VSRCMASK), XMLPREFIX(TSRCMASK));
+}
+
+State getDestMaskFromNode (xmlNode* node, ProtoTable* protoTable) {
+  return getTaggedMaskFromNode (node, protoTable, XMLPREFIX(DESTMASK), XMLPREFIX(VDESTMASK), XMLPREFIX(TDESTMASK));
+}
+
+State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, const char* maskTag, const char* vmaskTag, const char* tmaskTag) {
+  xmlNode *child;
+  const char *varName;
+  Proto *proto;
+  VarsDescriptor *vd;
+  State m;
+  m = 0;
+  if ( (child = getNodeByName(node->children,maskTag)) )  /* assignment intentional */
+    m = hexToUnsignedLongLong ((const char*) getNodeContent (child));
+  else if ( getNodeByName(node->children,tmaskTag) )
+    m = TypeMask;
+  else if ( (child = getNodeByName(node->children,vmaskTag)) ) {  /* assignment intentional */
+    proto = protoTableGetProto (protoTable, (const char*) CHILDSTRING(child,TYPE));
+    if (proto) {
+      varName = (const char*) CHILDSTRING(child,VAR);
+      vd = protoGetVarsDescriptor (proto, varName);
+      if (vd)
+	m = ((1 << vd->width) - 1) << vd->offset;
+      else
+	Warn ("Mask descriptor for type %s references var %s, but no such var could be found", proto->name, varName);
+    } else
+      Warn ("Mask descriptor lacks type");
+  } else
+    Warn ("Couldn't find Mask specifier");
+  return m;
 }
 
 unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable) {
-  /* WRITE ME */
-  return 0;
+  return getTaggedShiftFromNode (node, protoTable, XMLPREFIX(LSHIFT), XMLPREFIX(VLSHIFT));
 }
 
 unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable) {
-  /* WRITE ME */
-  return 0;
+  return getTaggedShiftFromNode (node, protoTable, XMLPREFIX(RSHIFT), XMLPREFIX(VRSHIFT));
+}
+
+unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, const char* shiftTag, const char* vShiftTag) {
+  xmlNode *child;
+  const char *varName;
+  Proto *proto;
+  VarsDescriptor *vd;
+  unsigned char s;
+  s = 0;
+  if ( (child = getNodeByName(node->children,shiftTag)) )  /* assignment intentional */
+    s = decToSignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = getNodeByName(node->children,vShiftTag)) ) {  /* assignment intentional */
+    proto = protoTableGetProto (protoTable, (const char*) CHILDSTRING(child,TYPE));
+    if (proto) {
+      varName = (const char*) CHILDSTRING(child,VAR);
+      vd = protoGetVarsDescriptor (proto, varName);
+      if (vd)
+	s = vd->offset;
+      else
+	Warn ("Mask descriptor for type %s references var %s, but no such var could be found", proto->name, varName);
+    } else
+      Warn ("Mask descriptor lacks type");
+  } else
+    Warn ("Couldn't find Mask specifier");
+  return s;
 }

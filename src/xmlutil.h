@@ -38,9 +38,9 @@ unsigned long long hexToUnsignedLongLong (const char *);
 #define MATCHENUM(ENUM_VAR,ENUM_STRING,SYMBOL) { if (strcmp ((ENUM_STRING), #SYMBOL) == 0) (ENUM_VAR) = SYMBOL; }
 
 /* prototypes for private builder methods */
-xmlNode* getNodeByName (xmlNode* node, char* name);  /* walks along the node->next list until it finds 'name' */
+xmlNode* getNodeByName (xmlNode* node, const char* name);  /* walks along the node->next list until it finds 'name' */
 xmlChar* getNodeContent (xmlNode* node);
-xmlChar* getNodeContentOrComplain (xmlNode* node, char* tag);
-xmlChar* getAttrByName (xmlNode* node, char* name);
+xmlChar* getNodeContentOrComplain (xmlNode* node, const char* tag);
+xmlChar* getAttrByName (xmlNode* node, const char* name);
 
 #endif /* XMLUTIL_INCLUDED */

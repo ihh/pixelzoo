@@ -69,8 +69,6 @@ bin/chibi_scheme:
 	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(CHIBI_CFILES) chibi/main.c $< -o $@
 
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
-	echo chibi_ofiles = $(CHIBI_OFILES)
-	echo ofiles = $(OFILES)
 	@test -e lib || mkdir lib
 	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES) $(CHIBI_OFILES)
 

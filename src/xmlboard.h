@@ -50,7 +50,11 @@
 #define XMLZOO_DECINC      "inc"
 #define XMLZOO_HEXINC      "hexinc"
 #define XMLZOO_SRCMASK     "srcmask"
+#define XMLZOO_VSRCMASK    "vsrcmask"
+#define XMLZOO_TSRCMASK    "tsrcmask"
 #define XMLZOO_DESTMASK    "destmask"
+#define XMLZOO_VDESTMASK   "vdestmask"
+#define XMLZOO_TDESTMASK   "tdestmask"
 #define XMLZOO_LSHIFT      "lshift"
 #define XMLZOO_RSHIFT      "rshift"
 #define XMLZOO_VLSHIFT     "vlshift"
@@ -85,12 +89,19 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
 int testNodeHasType (xmlNode* node);
 int testNodeHasState (xmlNode* node);
-int testNodeHasStateOrType (xmlNode* node);
+int testChildrenHaveState (xmlNode* firstChild);
 
 Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType);
 State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState);
-State getVarMaskFromNode (xmlNode* node, ProtoTable* protoTable);
+State getNextStateFromChildren (xmlNode* child, ProtoTable* protoTable, State defaultState);
+
+State getMaskFromNode (xmlNode* node, ProtoTable* protoTable);
+State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable);
+State getDestMaskFromNode (xmlNode* node, ProtoTable* protoTable);
+State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, const char* maskTag, const char* vmaskTag, const char* tmaskTag);
+
 unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable);
+unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, const char* shiftTag, const char* vShiftTag);
 
 #endif /* XMLBOARD_INCLUDED */
