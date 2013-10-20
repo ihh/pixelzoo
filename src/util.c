@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdarg.h>
+#include <string.h>
+#include <ctype.h>
 #include <math.h>
 #include "util.h"
 
@@ -137,4 +138,40 @@ int DoubleCompare(void* a, void* b) {
 
 void DoublePrint(void* a) {
   printf("%g",*(double*)a);
+}
+
+/* char* to unsigned long long conversions */
+long long decToSignedLongLong( const char *ca ) {
+  long long ig;
+  char c;
+  int sign;
+  ig = 0;
+  /* test for prefixing white space */
+  while (*ca == ' ' || *ca == '\t' ) 
+    ca++;
+  /* Check sign entered or no */
+  sign = 1;
+  if ( *ca == '-' )
+    sign = -1;
+  /* convert string to int */
+  while ((c = tolower(*ca++)) != '\0')
+    if (c >= '0' && c <= '9')
+      ig = ig * 10LL + (long long) (c - '0');
+  return ig * (long long) sign;
+}
+
+unsigned long long hexToUnsignedLongLong( const char *ca ) {
+  unsigned long long ig;
+  char c;
+  ig = 0;
+  /* test for prefixing white space */
+  while (*ca == ' ' || *ca == '\t' ) 
+    ca++;
+  /* convert string to int */
+  while ((c = tolower(*ca++)) != '\0')
+    if (c >= '0' && c <= '9')
+      ig = ig * 16LL + (unsigned long long) (c - '0');
+    else if (c >= 'a' && c <= 'f')
+      ig = ig * 16LL + 10LL + (unsigned long long) (c - 'a');
+  return ig;
 }

@@ -10,12 +10,6 @@
    It should not be #include'd from public .h files.
  */
 
-/* functions to convert decimal/hexadecimal strings to 64-bit ints.
-   basically the 64-bit versions of atoi() and strtoi()
- */
-long long decToSignedLongLong (const char *);
-unsigned long long hexToUnsignedLongLong (const char *);
-
 /* all XML keyword #define's begin with this prefix */
 #define XMLPREFIX(KEYWORD)  XMLZOO_ ## KEYWORD
 

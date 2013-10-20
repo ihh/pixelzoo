@@ -41,11 +41,11 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
     wallSet = newStateSet();
     for (node = goalNode->children; node; node = node->next)
       if (MATCHES (node, WALL_GPARAM))
-	(void) StateSetInsert (wallSet, OPTCHILDINT(node,DECTYPE,CHILDHEX(node,HEXTYPE)) << TypeShift);  /* hardwired to match Type bits only */
+	(void) StateSetInsert (wallSet, getStateFromNode(node,game->board->protoTable,0));  /* hardwired to match Type bits only */
     subGoalNode = CHILD (goalNode, GOAL_GPARAM);
     countNode = CHILD (goalNode, COUNT_GPARAM);
     areaNode = CHILD (goalNode, POINTS_GPARAM);
-    goal = newEnclosuresGoal (TypeMask,  /* hardwired to match Type bits only */
+    goal = newEnclosuresGoal (getMaskFromNode(node,game->board->protoTable,TypeMask),
 			      wallSet,
 			      countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0) : 0,
 			      countNode ? OPTCHILDINT(countNode,MAX_GPARAM,0) : 0,
@@ -56,21 +56,14 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 
   } else if (MATCHES (goalNode, POPULATION_GOAL)) {
     popSet = newStateSet();
-    for (node = goalNode->children; node; node = node->next)
-      if (MATCHES (node, DECSTATE_GPARAM))
-	(void) StateSetInsert (popSet, decToSignedLongLong ((const char*) getNodeContent(node)));
-      else if (MATCHES (node, HEXSTATE_GPARAM))
-	(void) StateSetInsert (popSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)));
-      else if (MATCHES (node, DECTYPE_GPARAM))
-	(void) StateSetInsert (popSet, decToSignedLongLong ((const char*) getNodeContent(node)) << TypeShift);
-      else if (MATCHES (node, HEXTYPE_GPARAM))
-	(void) StateSetInsert (popSet, hexToUnsignedLongLong ((const char*) getNodeContent(node)) << TypeShift);
+    for (node = nextNodeWithState(goalNode->children); node; node = nextNodeWithState(node->next))
+      (void) StateSetInsert (popSet, getStateFromChild(node,game->board->protoTable,0));
     Assert (RBTreeSize(popSet) > 0, "In " XMLPREFIX(POPULATION_GOAL) " goal: no specified types to count");
     countNode = CHILD (goalNode, COUNT_GPARAM);
     entropyNode = CHILD (goalNode, ENTROPY_GPARAM);
     goal = newEntropyGoal (popSet,
-			   OPTCHILDHEX(goalNode,ALLOWMASK_GPARAM,TypeMask),
-			   OPTCHILDHEX(goalNode,COUNTMASK_GPARAM,StateMask),
+			   getAllowMaskFromNode (goalNode, game->board->protoTable, TypeMask),
+			   getCountMaskFromNode (goalNode, game->board->protoTable, StateMask),
 			   countNode ? OPTCHILDINT(countNode,MIN_GPARAM,0) : 0,
 			   countNode ? OPTCHILDINT(countNode,MAX_GPARAM,0) : 0,
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MIN_GPARAM,0) : 0,
@@ -183,7 +176,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
     goal = newSetGameStatePseudoGoal (enumState);
 
   } else if (MATCHES (goalNode, USETOOL_GOAL)) {
-    tool = newToolFromXmlNode (CHILD (goalNode, TOOL_GPARAM));
+    tool = newToolFromXmlNode (CHILD (goalNode, TOOL_GPARAM), game->board->protoTable);
     goal = newUseToolPseudoGoal (tool, OPTCHILDFLOAT (goalNode, DURATION_GPARAM, game->ticksPerSecond / game->goalTestsPerSecond));
 
   } else if (MATCHES (goalNode, PRINT_GOAL)) {
@@ -231,4 +224,12 @@ Balloon* newBalloonFromXmlNode (xmlNode* balloonNode) {
   if (CHILD (balloonNode, PERSIST) != NULL)
     balloon->reset = balloon;
   return balloon;
+}
+
+State getAllowMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask) {
+  return getTaggedMaskFromNode (node, protoTable, defaultMask, XMLPREFIX(ALLOWMASK_GPARAM), XMLPREFIX(VALLOWMASK_GPARAM), XMLPREFIX(TALLOWMASK_GPARAM));
+}
+
+State getCountMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask) {
+  return getMaskFromNode (node, protoTable, defaultMask);
 }

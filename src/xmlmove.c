@@ -1,16 +1,16 @@
 #include "xmlmove.h"
 #include "xmlutil.h"
 
-Move* newMoveFromXmlNode (xmlNode *moveNode) {
+Move* newMoveFromXmlNode (xmlNode *moveNode, ProtoTable *protoTable) {
   Assert (moveNode != NULL, "newMoveFromXmlNode: null move node");
   return newMove (CHILDINT(moveNode,TIME),
 		  OPTCHILDINT(moveNode,UPDATE,-1),
 		  CHILDINT(moveNode,X),
 		  CHILDINT(moveNode,Y),
-		  OPTCHILDINT(moveNode,DECSTATE,CHILDHEX(moveNode,HEXSTATE)));
+		  getStateFromNode(moveNode,protoTable,0));
 }
 
-MoveList* newMoveListFromXmlNode (xmlNode *moveListNode) {
+MoveList* newMoveListFromXmlNode (xmlNode *moveListNode, ProtoTable *protoTable) {
   MoveList *moveList;
   MoveListNode *lastMoveListNode;
   xmlNode *node;
@@ -22,7 +22,7 @@ MoveList* newMoveListFromXmlNode (xmlNode *moveListNode) {
   for (node = moveListNode->children; node; node = node->next)
     if (MATCHES(node,MOVE)) {
       lastMoveListNode = moveList->tail;
-      ListAppend (moveList, newMoveFromXmlNode (node));
+      ListAppend (moveList, newMoveFromXmlNode (node, protoTable));
       Assert (lastMoveListNode == NULL || ((Move*)moveList->tail->value)->t >= ((Move*)lastMoveListNode->value)->t, "newMoveListFromXmlNode: moves not sorted by time");
     }
 

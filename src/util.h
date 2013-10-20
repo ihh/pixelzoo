@@ -104,4 +104,10 @@ void *SafeCalloc(size_t count, size_t size);
 #define QUOTEME_(x) #x
 #define QUOTEME(x) QUOTEME_(x)
 
+/* functions to convert decimal/hexadecimal strings to 64-bit ints.
+   basically the 64-bit versions of atoi() and strtoi()
+ */
+long long decToSignedLongLong (const char *);
+unsigned long long hexToUnsignedLongLong (const char *);
+
 #endif /* UTIL_INCLUDED */

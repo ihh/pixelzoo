@@ -10,6 +10,9 @@
 #define XMLZOO_SIZE        "size"
 #define XMLZOO_SEED        "seed"
 #define XMLZOO_GRAMMAR     "grammar"
+#define XMLZOO_DEFINE      "grammar"
+#define XMLZOO_SYMBOL      "symbol"
+#define XMLZOO_VALUE       "value"
 #define XMLZOO_PARTICLE    "particle"
 #define XMLZOO_SYNC        "sync"
 #define XMLZOO_PERIOD      "period"
@@ -18,8 +21,6 @@
 #define XMLZOO_HEXTYPE     "hextype"
 #define XMLZOO_GTYPE       "gtype"
 #define XMLZOO_GSTATE      "gstate"
-#define XMLZOO_OSTATE      "ostate"
-#define XMLZOO_PSTATE      "pstate"
 #define XMLZOO_GVARS       "gvars"
 #define XMLZOO_VARS        "vars"
 #define XMLZOO_VARSIZE     "varsize"
@@ -89,16 +90,16 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
 int testNodeHasType (xmlNode* node);
 int testNodeHasState (xmlNode* node);
-int testChildrenHaveState (xmlNode* firstChild);
+xmlNode* nextNodeWithState (xmlNode* node);
 
 Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType);
 State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState);
-State getNextStateFromChildren (xmlNode* child, ProtoTable* protoTable, State defaultState);
+State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState);
 
-State getMaskFromNode (xmlNode* node, ProtoTable* protoTable);
-State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable);
-State getDestMaskFromNode (xmlNode* node, ProtoTable* protoTable);
-State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, const char* maskTag, const char* vmaskTag, const char* tmaskTag);
+State getMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
+State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
+State getDestMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
+State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask, const char* maskTag, const char* vmaskTag, const char* tmaskTag);
 
 unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable);

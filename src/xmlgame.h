@@ -34,7 +34,7 @@ Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separate
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameRoot, xmlNode *separateBoardRoot);
 Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* separateBoardString);
 
-Tool* newToolFromXmlNode (xmlNode *node);
+Tool* newToolFromXmlNode (xmlNode *node, ProtoTable *protoTable);
 
 void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
 

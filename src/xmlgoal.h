@@ -37,12 +37,9 @@
 #define XMLZOO_MAX_GPARAM      "max"
 #define XMLZOO_MOORE_GPARAM    "moore"
 #define XMLZOO_ENTROPY_GPARAM  "entropy"
-#define XMLZOO_DECTYPE_GPARAM   XMLZOO_DECTYPE
-#define XMLZOO_HEXTYPE_GPARAM   XMLZOO_HEXTYPE
-#define XMLZOO_DECSTATE_GPARAM  XMLZOO_DECSTATE
-#define XMLZOO_HEXSTATE_GPARAM  XMLZOO_HEXSTATE
-#define XMLZOO_ALLOWMASK_GPARAM "allowmask"
-#define XMLZOO_COUNTMASK_GPARAM "mask"
+#define XMLZOO_ALLOWMASK_GPARAM  "allowmask"
+#define XMLZOO_VALLOWMASK_GPARAM "vallowmask"
+#define XMLZOO_TALLOWMASK_GPARAM "tallowmask"
 #define XMLZOO_LAZY_GPARAM     "lazy"
 #define XMLZOO_CACHE_GPARAM    "cache"
 #define XMLZOO_TOOL_GPARAM     XMLZOO_TOOL
@@ -66,5 +63,8 @@
 
 /* methods */
 Goal* newGoalFromXmlNode (xmlNode *node, Game *game);
+
+State getAllowMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
+State getCountMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
 
 #endif /* XMLGOAL_INCLUDED */

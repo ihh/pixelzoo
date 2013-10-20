@@ -59,7 +59,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   selectedTool = NULL;
   for (node = gameNode->children; node; node = node->next)
   if (MATCHES(node,TOOL)) {
-    selectedTool = tool = newToolFromXmlNode (node);
+    selectedTool = tool = newToolFromXmlNode (node, game->board->protoTable);
     addToolToGame (game, tool);
   }
 
@@ -91,7 +91,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   return game;
 }
 
-Tool* newToolFromXmlNode (xmlNode* toolNode) {
+Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
   Tool *tool;
   xmlNode *brushNode, *intensityNode, *patternNode, *overwriteNode, *node;
   int x, y, size;
@@ -114,11 +114,11 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
       tool->brushState = newXYMap (copyState, deleteState, printState);
       for (node = patternNode->children; node; node = node->next)
 	if (MATCHES(node,PIXEL))
-	  (void) XYMapInsert (tool->brushState, CHILDINT(node,X), CHILDINT(node,Y), newState(OPTCHILDINT(node,DECSTATE,CHILDHEX(node,HEXSTATE))));
+	  (void) XYMapInsert (tool->brushState, CHILDINT(node,X), CHILDINT(node,Y), newState(getStateFromNode(node,protoTable,0)));
     }
   }
   if (tool->brushState == NULL)
-    tool->defaultBrushState = OPTCHILDINT(toolNode,DECSTATE,CHILDHEX(toolNode,HEXSTATE));
+    tool->defaultBrushState = getStateFromNode(toolNode,protoTable,0);
   if ((overwriteNode = CHILD(toolNode,OVERWRITE))) {
     if (CHILD(overwriteNode,DISALLOW)) {
       tool->overwriteDisallowLoc = newXYSet();
@@ -126,14 +126,11 @@ Tool* newToolFromXmlNode (xmlNode* toolNode) {
 	if (MATCHES(node,DISALLOW))
 	  (void) XYSetInsert (tool->overwriteDisallowLoc, CHILDINT(node,X), CHILDINT(node,Y));
     }
-    if (CHILD(overwriteNode,DECSTATE) || CHILD(overwriteNode,HEXSTATE)) {
+    if (testNodeHasState(overwriteNode)) {
       tool->overwriteStates = newStateSet();
-      for (node = overwriteNode->children; node; node = node->next)
-	if (MATCHES(node,DECSTATE))
-	  (void) StateSetInsert (tool->overwriteStates, NODEINTVAL(node));
-	else if (MATCHES(node,HEXSTATE))
-	  (void) StateSetInsert (tool->overwriteStates, NODEHEXVAL(node));
-      tool->overwriteMask = OPTCHILDHEX(overwriteNode,MASK,TypeMask);
+      for (node = nextNodeWithState(overwriteNode->children); node; node = nextNodeWithState(node->next))
+	(void) StateSetInsert (tool->overwriteStates, getStateFromChild (node, protoTable, 0));
+      tool->overwriteMask = getMaskFromNode(overwriteNode,protoTable,TypeMask);
     }
   }
   tool->sprayRate = OPTCHILDFLOAT(toolNode,SPRAY,1.);

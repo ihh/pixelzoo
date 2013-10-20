@@ -10,7 +10,6 @@ typedef struct Proto {
   Type type;
   StringMap *varsDescriptorMap;
   StringVector *varName;
-  State playerID, ownerID;
   unsigned char nextOffset;  /* internal use only */
 } Proto;
 

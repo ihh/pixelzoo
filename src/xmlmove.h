@@ -13,8 +13,8 @@
 #define XMLZOO_LOG     "log"
 
 /* methods */
-Move* newMoveFromXmlNode (xmlNode *node);
-MoveList* newMoveListFromXmlNode (xmlNode *node);
+Move* newMoveFromXmlNode (xmlNode *node, ProtoTable *protoTable);
+MoveList* newMoveListFromXmlNode (xmlNode *node, ProtoTable *protoTable);
 
 void writeMove (Move* move, xmlTextWriterPtr writer);
 void writeMoveList (MoveList* moveList, xmlTextWriterPtr writer, const xmlChar* name);
