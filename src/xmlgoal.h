@@ -49,7 +49,7 @@
 #define XMLZOO_TOOLNAME_GPARAM XMLZOO_NAME
 #define XMLZOO_RESERVE_GPARAM  "toolres"
 #define XMLZOO_EXSTATE_GPARAM  "exitstate"
-#define XMLZOO_GSTATE_GPARAM   "gamestate"
+#define XMLZOO_GMSTATE_GPARAM  "gamestate"
 #define XMLZOO_DURATION_GPARAM "duration"
 #define XMLZOO_BALLOON_GPARAM  "balloon"
 #define XMLZOO_MESSAGE_GPARAM  "message"

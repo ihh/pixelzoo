@@ -2,6 +2,7 @@
 #define XMLBOARD_INCLUDED
 
 #include "board.h"
+#include "proto.h"
 #include "xmlparser.h"
 
 /* XML node names */
@@ -15,6 +16,11 @@
 #define XMLZOO_PHASE       "phase"
 #define XMLZOO_DECTYPE     "type"
 #define XMLZOO_HEXTYPE     "hextype"
+#define XMLZOO_GTYPE       "gtype"
+#define XMLZOO_GSTATE      "gstate"
+#define XMLZOO_OSTATE      "ostate"
+#define XMLZOO_PSTATE      "pstate"
+#define XMLZOO_GVARS       "gvars"
 #define XMLZOO_VARS        "vars"
 #define XMLZOO_VARSIZE     "varsize"
 #define XMLZOO_READONLY    "readonly"
@@ -37,6 +43,8 @@
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
 #define XMLZOO_MASK        "mask"
+#define XMLZOO_TMASK       "tmask"
+#define XMLZOO_VMASK       "vmask"
 #define XMLZOO_SRC         "src"
 #define XMLZOO_DEST        "dest"
 #define XMLZOO_DECINC      "inc"
@@ -45,6 +53,8 @@
 #define XMLZOO_DESTMASK    "destmask"
 #define XMLZOO_LSHIFT      "lshift"
 #define XMLZOO_RSHIFT      "rshift"
+#define XMLZOO_VLSHIFT     "vlshift"
+#define XMLZOO_VRSHIFT     "vrshift"
 #define XMLZOO_COLRULE     "colrule"
 #define XMLZOO_DECMUL      "mul"
 #define XMLZOO_HEXMUL      "hexmul"
@@ -52,7 +62,6 @@
 #define XMLZOO_QUEUE       "queue"
 #define XMLZOO_DECSTATE    "state"
 #define XMLZOO_HEXSTATE    "hexstate"
-#define XMLZOO_GVARS       "gvars"
 #define XMLZOO_TYPE        "type"
 #define XMLZOO_VAL         "val"
 #define XMLZOO_VAR         "var"
@@ -71,5 +80,17 @@ void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile); 
 void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
 void writeTypesXml (Board* board, xmlTextWriterPtr writer);
 void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
+
+/* private builder methods */
+
+int testNodeHasType (xmlNode* node);
+int testNodeHasState (xmlNode* node);
+int testNodeHasStateOrType (xmlNode* node);
+
+Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType);
+State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState);
+State getVarMaskFromNode (xmlNode* node, ProtoTable* protoTable);
+unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable);
+unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 
 #endif /* XMLBOARD_INCLUDED */

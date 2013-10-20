@@ -8,6 +8,7 @@ Proto* newProto (const char *name, Type type) {
   proto->varsDescriptorMap = newStringMap (copyVarsDescriptor, deleteVarsDescriptor, NullPrintFunction);
   proto->varName = newStringVector();
   proto->nextOffset = 0;
+  proto->playerID = proto->ownerID = 0;
   return proto;
 }
 
@@ -28,6 +29,8 @@ void* copyProto (void *a) {
   proto->name = StringCopy (proto_orig->name);
   proto->varsDescriptorMap = (StringMap*) RBTreeDeepCopy (proto_orig->varsDescriptorMap);
   proto->varName = (StringVector*) VectorDeepCopy (proto_orig->varName);
+  proto->playerID = proto_orig->playerID;
+  proto->ownerID = proto_orig->ownerID;
   return proto;
 }
 

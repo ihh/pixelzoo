@@ -4,6 +4,7 @@
 #include <string.h>
 #include "xmlparser.h"
 #include "xmlutil.h"
+#include "proto.h"
 
 /* This header file is "private" to the PixelZoo XML adapter.
    It should not be #include'd from public .h files.

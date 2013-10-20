@@ -151,7 +151,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 			       countNode ? OPTCHILDINT(countNode,MAX_GPARAM,-1.) : -1.);
 
   } else if (MATCHES (goalNode, TESTGAME_GOAL)) {
-    enumText = (const char*) CHILDSTRING (goalNode, GSTATE_GPARAM);
+    enumText = (const char*) CHILDSTRING (goalNode, GMSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, GameOn);
     MATCHENUM (enumState, enumText, GameWon);
@@ -175,7 +175,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 					enumState);
 
   } else if (MATCHES (goalNode, SETGAME_GOAL)) {
-    enumText = (const char*) CHILDSTRING (goalNode, GSTATE_GPARAM);
+    enumText = (const char*) CHILDSTRING (goalNode, GMSTATE_GPARAM);
     enumState = -1;
     MATCHENUM (enumState, enumText, GameWon);
     MATCHENUM (enumState, enumText, GameLost);

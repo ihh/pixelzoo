@@ -8,7 +8,6 @@
 #include "xmlmove.h"
 #include "game.h"
 #include "vars.h"
-#include "proto.h"
 
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTable);
@@ -412,4 +411,89 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
     }
     xmlTextWriterFullEndElement (writer);  /* end gvars */
   }
+}
+
+
+int testNodeHasType (xmlNode* node) {
+  return CHILD(node,DECTYPE) || CHILD(node,HEXTYPE) || CHILD(node,GTYPE);
+}
+
+int testNodeHasState (xmlNode* node) {
+  return CHILD(node,DECSTATE) || CHILD(node,HEXSTATE) || CHILD(node,GSTATE) || CHILD(node,GVARS);
+}
+
+int testNodeHasStateOrType (xmlNode* node) {
+  return CHILD(node,DECSTATE) || CHILD(node,HEXSTATE) || CHILD(node,GSTATE) || CHILD(node,GVARS) || CHILD(node,DECTYPE) || CHILD(node,HEXTYPE) || CHILD(node,GTYPE);
+}
+
+Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType) {
+  xmlNode *child;
+  Proto *proto;
+  Type t;
+  t = defaultType;
+  if ( (child = CHILD(node,DECTYPE)) )  /* assignment intentional */
+    t = decToSignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,HEXTYPE)) )  /* assignment intentional */
+    t = hexToUnsignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,GTYPE)) ) {  /* assignment intentional */
+    proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
+    if (proto)
+      t = proto->type;
+    else
+      Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
+  } else
+    Warn ("Couldn't find Type specifier");
+  return t;
+}
+
+State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState) {
+  xmlNode *child, *field;
+  Proto *proto;
+  VarsDescriptor *vd;
+  State s;
+  s = defaultState;
+  if ( (child = CHILD(node,DECSTATE)) )  /* assignment intentional */
+    s = decToSignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,HEXSTATE)) )  /* assignment intentional */
+    s = hexToUnsignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,GSTATE)) ) {  /* assignment intentional */
+    proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
+    if (proto)
+      s = ((State) proto->type) << TypeShift;
+    else
+      Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
+  } else if ( (child = CHILD(node,GVARS)) ) {  /* assignment intentional */
+    for (field = child->children; field != NULL; field = field->next)
+      if (MATCHES(field,TYPE))
+	proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
+    if (proto) {
+      s = ((State) proto->type) << TypeShift;
+      for (field = child->children; field != NULL; field = field->next)
+	if (MATCHES(field,VAL)) {
+	  vd = protoGetVarsDescriptor (proto, ATTR (field, VAR));
+	  if (vd)
+	    s = s | ((decToSignedLongLong ((const char*) getNodeContent (field)) & ((1 << vd->width) - 1)) << vd->offset);
+	  else
+	    Warn ("Couldn't find Var %s in Particle %s", ATTR(field,VAR), (const char*) getNodeContent(child));
+	}
+    } else
+      Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
+  } else
+    Warn ("Couldn't find State specifier");
+  return s;
+}
+
+State getVarMaskFromNode (xmlNode* node, ProtoTable* protoTable) {
+  /* WRITE ME */
+  return 0;
+}
+
+unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable) {
+  /* WRITE ME */
+  return 0;
+}
+
+unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable) {
+  /* WRITE ME */
+  return 0;
 }

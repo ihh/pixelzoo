@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <math.h>
 #include "util.h"
 
@@ -18,14 +19,33 @@ double randomExp() {
   return r > 0. ? -log(r) : 0.;
 }
 
-void Abort(char* error) {
-  printf("Abort: %s\n",error);
+void Warn(char* warning, ...) {
+  va_list argptr;
+  va_start (argptr, warning);
+  fprintf(stderr,"Warning: ");
+  vfprintf(stderr,warning,argptr);
+  fprintf(stderr,"\n");
+  va_end (argptr);
+}
+
+void Abort(char* error, ...) {
+  va_list argptr;
+  va_start (argptr, error);
+  printf("Abort: ");
+  vprintf(error,argptr);
+  printf("\n");
+  va_end (argptr);
   exit(-1);
 }
 
-void Assert(int assertion, char* error) {
+void Assert(int assertion, char* error, ...) {
+  va_list argptr;
   if(!assertion) {
-    printf("Assertion Failed: %s\n",error);
+    va_start (argptr, error);
+    printf("Assertion Failed: ");
+    vprintf(error,argptr);
+    printf("\n");
+    va_end (argptr);
     exit(-1);
   }
 }

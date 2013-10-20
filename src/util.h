@@ -89,9 +89,12 @@ double randomExp();  /* randomExp() returns an exponentially-distributed real nu
 #define MIN3(W,X,Y,Z) MIN(MIN(W,X),MIN(Y,Z))
 #define MAX3(W,X,Y,Z) MAX(MAX(W,X),MAX(Y,Z))
 
+/* errors, warnings, assertions */
+void Abort(char* error, ...);
+void Assert(int assertion, char* error, ...);
+void Warn(char* warning, ...);
+
 /* alloc functions */
-void Abort(char* error);
-void Assert(int assertion, char* error);
 void *SafeMalloc(size_t size);
 void *SafeCalloc(size_t count, size_t size);
 #define SafeFree(PTR) free(PTR)
