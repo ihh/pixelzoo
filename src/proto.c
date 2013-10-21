@@ -1,8 +1,12 @@
 #include <string.h>
 #include "proto.h"
+#include "chibi.h"
 
 /* Scheme sxml->string procedure, defined in pixelzoo/scheme/zoo.scm */
 #define SXML_TO_STRING_PROC "sxml->string"
+
+/* Scheme quote procedure (built-in) */
+#define QUOTE_PROC "quote"
 
 Proto* newProto (const char *name, Type type) {
   Proto *proto;
@@ -118,16 +122,26 @@ sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression) {
 }
 
 const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char* schemeExpression) {
-  sexp ctx, ret, sxml, sxml2str;
+  sexp ctx;
   const char* str;
 
-  ctx = sexp_make_eval_context (protoTable->context, NULL, NULL, 0, 0);
+  ctx = protoTable->context;
+
+  /* declare & preserve local variables */
+  sexp_gc_var4 (sxml, sxml2str, quote, ret);
+  sexp_gc_preserve4 (ctx, sxml, sxml2str, quote, ret);
+
+  /* do some Scheme */
   sxml = sexp_eval_string (protoTable->context, schemeExpression, -1, NULL);
 
   sxml2str = sexp_intern(ctx, SXML_TO_STRING_PROC, -1);
-  ret = sexp_eval(ctx, sexp_list2(ctx,sxml2str,sxml), NULL);
+  quote = sexp_intern(ctx, QUOTE_PROC, -1);
 
-  str = StringNew (sexp_string_data (sexp_write_to_string (ctx, ret)));
-  sexp_destroy_context (ctx);
+  ret = sexp_eval(ctx, sexp_list2 (ctx, sxml2str, sexp_list2 (ctx, quote, sxml)), NULL);
+  str = StringNew (sexp_string_data (ret));
+
+  /* release local variables */
+  sexp_gc_release4 (ctx);
+
   return str;
 }

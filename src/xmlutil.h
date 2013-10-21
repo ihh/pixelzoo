@@ -15,6 +15,7 @@
 
 /* private macros for matching XML nodes */
 #define MATCHES(NODE,KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, XMLPREFIX(KEYWORD)) == 0)
+#define MATCHES_EXPANDED(NODE,EXPANDED_KEYWORD) ((NODE)->type == XML_ELEMENT_NODE && strcmp ((const char*) (NODE)->name, EXPANDED_KEYWORD) == 0)
 #define CHILD(NODE,KEYWORD) getNodeByName ((NODE)->children, XMLPREFIX(KEYWORD))
 #define CHILDSTRING(NODE,KEYWORD) getNodeContentOrComplain (CHILD(NODE,KEYWORD), XMLPREFIX(KEYWORD))
 #define CHILDINT(NODE,KEYWORD) decToSignedLongLong((const char*) CHILDSTRING(NODE,KEYWORD))

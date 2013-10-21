@@ -33,6 +33,6 @@ xmlChar* getAttrByName (xmlNode* node, const char* name) {
   xmlAttr* attr;
   for (attr = node->properties; attr; attr = attr->next)
     if (strcmp ((const char*) attr->name, name) == 0)
-      return (xmlChar*) attr->children->content;
+      return (xmlChar*) attr->content;
   return (xmlChar*) NULL;
 }

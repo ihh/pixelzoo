@@ -87,13 +87,17 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
 /* private builder methods */
 
-int testNodeHasType (xmlNode* node);
 int testNodeHasState (xmlNode* node);
 xmlNode* nextNodeWithState (xmlNode* node);
 
-Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType);
+State getGTypeOrStateFromNode (xmlNode* node, ProtoTable* protoTable);
+
 State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultState);
 State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState);
+
+State getGStateOrGVarsFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState);
+
+State getIncOrStateFromNode (xmlNode* node, ProtoTable* protoTable);
 
 State getMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
 State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);

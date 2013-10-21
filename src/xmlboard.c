@@ -258,7 +258,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
     rule->param.goal = newGoalFromXmlNode (ruleNode, game);
 
   } else if (MATCHES (ruleNode, SCHEME)) {
-    evalResult = protoTableEvalSxmlInChildContext (protoTable, (const char*) ruleNode->content);
+    evalResult = protoTableEvalSxmlInChildContext (protoTable, (const char*) getNodeContent(ruleNode));
     evalNode = xmlTreeFromString (evalResult);
 
     rule = newRuleFromXmlNode (game, evalNode, protoTable);
@@ -290,7 +290,7 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
 
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,CASE)) {
-      state = getStateFromNode (curNode, protoTable, 0);
+       state = getGTypeOrStateFromNode (curNode, protoTable);
       rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable);
       Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
       (void) StateMapInsert (lookup->matchRule, state, rule);
@@ -303,7 +303,7 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game,
   xmlNode *src, *dest;
 
   op->rightShift = getRShiftFromNode (node, protoTable);
-  op->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
+  op->offset = getIncOrStateFromNode (node, protoTable);
   op->leftShift = getLShiftFromNode (node, protoTable);
 
   op->srcMask = getSrcMaskFromNode (node, protoTable, StateMask);
@@ -439,10 +439,6 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
 }
 
 
-int testNodeHasType (xmlNode* node) {
-  return CHILD(node,DECTYPE) || CHILD(node,HEXTYPE) || CHILD(node,GTYPE);
-}
-
 int testNodeHasState (xmlNode* node) {
   return nextNodeWithState(node->children) ? 1 : 0;
 }
@@ -454,14 +450,14 @@ xmlNode* nextNodeWithState (xmlNode* node) {
   return node;
 }
 
-Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType) {
+State getGTypeOrStateFromNode (xmlNode* node, ProtoTable* protoTable) {
   xmlNode *child;
   Proto *proto;
-  Type t;
-  t = defaultType;
-  if ( (child = CHILD(node,DECTYPE)) )  /* assignment intentional */
+  State t;
+  t = 0;
+  if ( (child = CHILD(node,DECSTATE)) )  /* assignment intentional */
     t = decToSignedLongLong ((const char*) getNodeContent (child));
-  else if ( (child = CHILD(node,HEXTYPE)) )  /* assignment intentional */
+  else if ( (child = CHILD(node,HEXSTATE)) )  /* assignment intentional */
     t = hexToUnsignedLongLong ((const char*) getNodeContent (child));
   else if ( (child = CHILD(node,GTYPE)) ) {  /* assignment intentional */
     proto = protoTableGetProto (protoTable, (const char*) getNodeContent (child));
@@ -470,7 +466,7 @@ Type getTypeFromNode (xmlNode* node, ProtoTable* protoTable, Type defaultType) {
     else
       Warn ("Couldn't find Particle %s", (const char*) getNodeContent(child));
   } else
-    Warn ("Couldn't find <%s>, <%s> or <%s> in <%s>", XMLPREFIX(DECTYPE), XMLPREFIX(HEXTYPE), XMLPREFIX(GTYPE), (const char*) node->name);
+    Warn ("Couldn't find <%s>, <%s> or <%s> in <%s>", XMLPREFIX(DECSTATE), XMLPREFIX(HEXSTATE), XMLPREFIX(GTYPE), (const char*) node->name);
   return t;
 }
 
@@ -479,10 +475,6 @@ State getStateFromNode (xmlNode* node, ProtoTable* protoTable, State defaultStat
 }
 
 State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState) {
-  xmlNode *field;
-  const char *type, *varName;
-  Proto *proto;
-  VarsDescriptor *vd;
   State s;
   s = defaultState;
   if ( MATCHES(child,DECSTATE) )
@@ -493,7 +485,34 @@ State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultSt
     s = ((State) decToSignedLongLong ((const char*) getNodeContent (child))) << TypeShift;
   else if ( MATCHES(child,HEXTYPE) )
     s = ((State) hexToUnsignedLongLong ((const char*) getNodeContent (child))) << TypeShift;
-  else if ( MATCHES(child,GSTATE) ) {  /* assignment intentional */
+  else if ( MATCHES(child,GSTATE) || MATCHES(child,GVARS) )
+    s = getGStateOrGVarsFromChild (child, protoTable, defaultState);
+  else
+    Warn ("Found element <%s> where I was expecting <%s>, <%s>, <%s>, <%s>, <%s> or <%s>", child->name, XMLPREFIX(DECSTATE), XMLPREFIX(HEXSTATE), XMLPREFIX(DECTYPE), XMLPREFIX(HEXTYPE), XMLPREFIX(GSTATE), XMLPREFIX(GVARS));
+  return s;
+}
+
+State getIncOrStateFromNode (xmlNode* node, ProtoTable* protoTable) {
+  xmlNode *child;
+  State s;
+  s = 0;
+  if ( (child = CHILD(node,DECINC)) )  /* assignment intentional */
+    s = decToSignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,HEXINC)) )  /* assignment intentional */
+    s = hexToUnsignedLongLong ((const char*) getNodeContent (child));
+  else if ( (child = CHILD(node,GSTATE)) || (child = CHILD(node,GVARS)) )  /* assignments intentional */
+    s = getGStateOrGVarsFromChild (child, protoTable, 0);
+  return s;
+}
+
+State getGStateOrGVarsFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState) {
+  xmlNode *field;
+  const char *type, *varName;
+  Proto *proto;
+  VarsDescriptor *vd;
+  State s;
+  s = defaultState;
+  if ( MATCHES(child,GSTATE) ) {
     type = (const char*) getNodeContent (child);
     proto = protoTableGetProto (protoTable, type);
     if (proto)
@@ -528,7 +547,7 @@ State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultSt
     } else
       Warn ("Couldn't find <%s> in <%s>", XMLPREFIX(TYPE), XMLPREFIX(GVARS));
   } else
-    Warn ("Found element <%s> where I was expecting <%s>, <%s>, <%s> or <%s>", child->name, XMLPREFIX(DECSTATE), XMLPREFIX(HEXSTATE), XMLPREFIX(GTYPE), XMLPREFIX(GSTATE));
+    Warn ("Found element <%s> where I was expecting <%s> or <%s>", child->name, XMLPREFIX(GTYPE), XMLPREFIX(GSTATE));
   return s;
 }
 
