@@ -58,6 +58,8 @@
 		285106441801ECAE00AA3254 /* PZGameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZGameView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 		285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285230B4180F37F0006E7FBF /* PZLockDescriptor.m */; };
+		287985A41814FD6300A115A7 /* chibi.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A01814FD6300A115A7 /* chibi.c */; };
+		287985A51814FD6300A115A7 /* proto.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A21814FD6300A115A7 /* proto.c */; };
 		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
 		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
 		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
@@ -164,6 +166,10 @@
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 		285230B3180F37F0006E7FBF /* PZLockDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockDescriptor.h; sourceTree = "<group>"; };
 		285230B4180F37F0006E7FBF /* PZLockDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockDescriptor.m; sourceTree = "<group>"; };
+		287985A01814FD6300A115A7 /* chibi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = chibi.c; path = ../../../src/chibi.c; sourceTree = "<group>"; };
+		287985A11814FD6300A115A7 /* chibi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chibi.h; path = ../../../src/chibi.h; sourceTree = "<group>"; };
+		287985A21814FD6300A115A7 /* proto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = proto.c; path = ../../../src/proto.c; sourceTree = "<group>"; };
+		287985A31814FD6300A115A7 /* proto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = proto.h; path = ../../../src/proto.h; sourceTree = "<group>"; };
 		289E523D1811006500CF0B09 /* scheme */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scheme; path = ../../../scheme; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
@@ -283,6 +289,8 @@
 				2818E28D17FFBD7500093CEC /* bintree.h */,
 				2818E28E17FFBD7500093CEC /* board.c */,
 				2818E28F17FFBD7500093CEC /* board.h */,
+				287985A01814FD6300A115A7 /* chibi.c */,
+				287985A11814FD6300A115A7 /* chibi.h */,
 				2818E29017FFBD7500093CEC /* color.c */,
 				2818E29117FFBD7500093CEC /* color.h */,
 				2818E29217FFBD7500093CEC /* game.c */,
@@ -303,6 +311,8 @@
 				2818E2A117FFBD7500093CEC /* particle.h */,
 				2818E2A217FFBD7500093CEC /* pixelzoo.c */,
 				2818E2A317FFBD7500093CEC /* pixelzoo.h */,
+				287985A21814FD6300A115A7 /* proto.c */,
+				287985A31814FD6300A115A7 /* proto.h */,
 				2818E2A417FFBD7500093CEC /* pzutil.h */,
 				2818E2A517FFBD7500093CEC /* quadtree.c */,
 				2818E2A617FFBD7500093CEC /* quadtree.h */,
@@ -432,6 +442,7 @@
 				2818E2C817FFBD7500093CEC /* game.c in Sources */,
 				2818E2C917FFBD7500093CEC /* goal.c in Sources */,
 				2818E2CA17FFBD7500093CEC /* list.c in Sources */,
+				287985A51814FD6300A115A7 /* proto.c in Sources */,
 				2818E2CB17FFBD7500093CEC /* mersenne.c in Sources */,
 				2818E2CC17FFBD7500093CEC /* move.c in Sources */,
 				2818E2CD17FFBD7500093CEC /* notify.c in Sources */,
@@ -447,6 +458,7 @@
 				2818E2D417FFBD7500093CEC /* statemap.c in Sources */,
 				283C0F62180770D30056492E /* PZGameWrapper.m in Sources */,
 				2818E2D517FFBD7500093CEC /* stringmap.c in Sources */,
+				287985A41814FD6300A115A7 /* chibi.c in Sources */,
 				285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */,
 				2818E2D617FFBD7500093CEC /* tool.c in Sources */,
 				283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */,
