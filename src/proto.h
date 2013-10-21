@@ -40,7 +40,7 @@ Proto *protoTableAddParticle (ProtoTable *protoTable, const char* particleName);
 
 Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName);
 
-sexp protoTableMakeContext (ProtoTable *protoTable);
-#define protoTableDestroyContext(ctx) sexp_destroy_context(ctx)
+sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression);  /* use to add definitions to top-level context */
+const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char* schemeExpression);  /* use for evaluations that won't affect top-level. Auto-converts result from SXML to XML. Caller must free returned string */
 
 #endif /* PROTO_INCLUDED */

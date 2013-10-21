@@ -1,6 +1,9 @@
 #include <string.h>
 #include "proto.h"
 
+/* Scheme sxml->string procedure, defined in pixelzoo/scheme/zoo.scm */
+#define SXML_TO_STRING_PROC "sxml->string"
+
 Proto* newProto (const char *name, Type type) {
   Proto *proto;
   proto = SafeMalloc (sizeof (Proto));
@@ -110,7 +113,21 @@ Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName) {
   return node ? (Proto*) node->value : (Proto*) NULL;
 }
 
-sexp protoTableMakeContext (ProtoTable *protoTable) {
-  return sexp_make_eval_context (protoTable->context, NULL, NULL, 0, 0);
+sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression) {
+  return sexp_eval_string (protoTable->context, schemeExpression, -1, NULL);
 }
 
+const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char* schemeExpression) {
+  sexp ctx, ret, sxml, sxml2str;
+  const char* str;
+
+  ctx = sexp_make_eval_context (protoTable->context, NULL, NULL, 0, 0);
+  sxml = sexp_eval_string (protoTable->context, schemeExpression, -1, NULL);
+
+  sxml2str = sexp_intern(ctx, SXML_TO_STRING_PROC, -1);
+  ret = sexp_eval(ctx, sexp_list2(ctx,sxml2str,sxml), NULL);
+
+  str = StringNew (sexp_string_data (sexp_write_to_string (ctx, ret)));
+  sexp_destroy_context (ctx);
+  return str;
+}
