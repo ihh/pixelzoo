@@ -2,25 +2,30 @@
 (begin
 
   ;; set rule
-  (define set-rule
-    (lambda args
-      (let ((loc (car args))
-	    (type (cadr args))
-	    (var-val-list (caddr args))
-	    (next (if (>= (length args) 4) (cadddr args) '())))
-	`(modify
-	  (srcmask 0)
-	  (dest (x ,(car loc)) (y ,(cadr loc)))
-	  (lshift 0)
-	  (gvars
-	   (type ,type)
-	   ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))
-	  ,@(cond
-	     ((procedure? next) `((next (rule ,(next)))))
-	     ((null? next) '())
-	     (else `((next (rule ,next)))))))))
+  (define (set-rule . args)
+    (let ((loc (list-ref args 0))
+	  (type (list-ref args 1))
+	  (var-val-list (list-ref args 2))
+	  (next (opt-arg args 3 #f)))
+      `(modify
+	(srcmask 0)
+	(dest (x ,(car loc)) (y ,(cadr loc)))
+	(lshift 0)
+	(gvars
+	 (type ,type)
+	 ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))
+	,@(cond
+	   ((procedure? next) `((next (rule ,(next)))))
+	   (next `((next (rule ,next))))
+	   (else '())))))
 
   ;; Utility functions.
+  ;; Optional arguments
+  (define (opt-arg args n default)
+    (if (< n (length args))
+	(list-ref args n)
+	default))
+
   ;; Simple fold
   (define (fold-right binary-func init lst)
     (cond
