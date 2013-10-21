@@ -2,14 +2,23 @@
 (begin
 
   ;; set rule
-  (define (set-rule loc type var-val-list)
-    `(modify
-      (srcmask 0)
-      (dest (x ,(car loc)) (y ,(cadr loc)))
-      (lshift 0)
-      (gvars
-       (type ,type)
-       ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))))
+  (define set-rule
+    (lambda args
+      (let ((loc (car args))
+	    (type (cadr args))
+	    (var-val-list (caddr args))
+	    (next (if (>= (length args) 4) (cadddr args) '())))
+	`(modify
+	  (srcmask 0)
+	  (dest (x ,(car loc)) (y ,(cadr loc)))
+	  (lshift 0)
+	  (gvars
+	   (type ,type)
+	   ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))
+	  ,@(cond
+	     ((procedure? next) `(,(next)))
+	     ((null? next) '())
+	     (else `(,next)))))))
 
   ;; Utility functions.
   ;; Simple fold
