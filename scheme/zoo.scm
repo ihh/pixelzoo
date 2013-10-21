@@ -16,9 +16,9 @@
 	   (type ,type)
 	   ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))
 	  ,@(cond
-	     ((procedure? next) `(,(next)))
+	     ((procedure? next) `(next ,(next)))
 	     ((null? next) '())
-	     (else `(,next)))))))
+	     (else `(next ,next)))))))
 
   ;; Utility functions.
   ;; Simple fold
