@@ -68,6 +68,9 @@ chibi/obj/%.o: chibi/%.c
 bin/chibi_scheme:
 	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(CHIBI_CFILES) chibi/main.c $< -o $@
 
+chibi-test: bin/chibi_scheme
+	(echo '(load "scheme/zoo.scm")'; cat) | bin/chibi_scheme
+
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	@test -e lib || mkdir lib
 	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES) $(CHIBI_OFILES)
