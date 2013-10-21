@@ -5,6 +5,9 @@
 #include "vars.h"
 #include "stringmap.h"
 
+#include "chibi/eval.h"
+#include "chibi/sexp.h"
+
 typedef struct Proto {
   char *name;
   Type type;
@@ -26,6 +29,7 @@ typedef struct ProtoTable {
   StringMap *byName;
   Proto **byType;
   Type nextFreeType;  /* internal use only */
+  sexp context;  /* Chibi Scheme context */
 } ProtoTable;
 
 ProtoTable *newProtoTable();
@@ -35,5 +39,8 @@ Proto *protoTableAddTypedParticle (ProtoTable *protoTable, const char* particleN
 Proto *protoTableAddParticle (ProtoTable *protoTable, const char* particleName);
 
 Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName);
+
+sexp protoTableMakeContext (ProtoTable *protoTable);
+#define protoTableDestroyContext(ctx) sexp_destroy_context(ctx)
 
 #endif /* PROTO_INCLUDED */

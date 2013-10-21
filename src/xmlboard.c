@@ -9,9 +9,6 @@
 #include "game.h"
 #include "vars.h"
 
-#include "chibi/eval.h"
-#include "chibi/sexp.h"
-
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTable);
 void parseVarsDescriptors (Proto *proto, xmlNode* particleNode);

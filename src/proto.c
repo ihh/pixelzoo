@@ -60,6 +60,14 @@ ProtoTable *newProtoTable() {
   protoTable->byName = newStringMap (copyProto, deleteProto, NullPrintFunction);
   protoTable->byType = SafeCalloc (NumTypes, sizeof (Proto*));
   protoTable->nextFreeType = 0;
+
+  protoTable->context = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
+    
+  sexp_load_standard_env(protoTable->context, NULL, SEXP_SEVEN);
+  sexp_load_standard_ports(protoTable->context, NULL, stdin, stdout, stderr, 0);
+
+  sexp_load(protoTable->context, sexp_c_string(protoTable->context, sexp_pixelzoo_module_path, -1), NULL);
+
   return protoTable;
 }
 
@@ -67,6 +75,7 @@ void deleteProtoTable (void* a) {
   ProtoTable *protoTable;
   protoTable = (ProtoTable*) a;
   deleteStringMap (protoTable->byName);
+  sexp_destroy_context (protoTable->context);
   SafeFree (protoTable->byType);
   SafeFree (protoTable);
 }
@@ -100,3 +109,8 @@ Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName) {
   node = StringMapFind (protoTable->byName, particleName);
   return node ? (Proto*) node->value : (Proto*) NULL;
 }
+
+sexp protoTableMakeContext (ProtoTable *protoTable) {
+  return sexp_make_eval_context (protoTable->context, NULL, NULL, 0, 0);
+}
+

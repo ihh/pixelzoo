@@ -55,7 +55,7 @@ libtargets: $(LIBTARGET)
 
 bin/%:  tsrc/%.c $(LIBTARGET)
 	@test -e bin || mkdir bin
-	$(CC) $(COPTS) $(CFLAGS) $(LIBS) -L$(LIBDIR) -l$(LIBNAME) -o $@ tsrc/$*.c
+	$(CC) $(COPTS) $(CFLAGS) $(CHIBI_HDRS) $(LIBS) -L$(LIBDIR) -l$(LIBNAME) -o $@ tsrc/$*.c
 
 obj/%.o: src/%.c
 	@test -e obj || mkdir obj
