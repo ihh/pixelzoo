@@ -7,25 +7,34 @@
 
 /* private builder method prototypes */
 Balloon* newBalloonFromXmlNode (xmlNode* node);
+Goal* newGoalFromXmlNode (xmlNode *node, Game *game);
 
 /* method defs */
-Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
-  Goal *goal, *subGoal[2];
-  const char *enumText;
-  xmlNode *goalNode, *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
-  XYSet *area;
-  StateSet *wallSet, *popSet;
-  int n, lazy, cached, enumState;
-  Tool *tool;
+Goal* newGoalFromXmlParentNode (xmlNode *goalParentNode, Game *game) {
+  xmlNode *goalNode;
 
-  goal = NULL;
-
-  Assert (goalParentNode != NULL, "newGoalFromXmlNode: null goal parent node");
+  Assert (goalParentNode != NULL, "newGoalFromXmlParentNode: null goal parent node");
 
   goalNode = goalParentNode->children;
   while (goalNode != NULL && goalNode->type != XML_ELEMENT_NODE)
     goalNode = goalNode->next;
-  Assert (goalNode != NULL && goalNode->type == XML_ELEMENT_NODE, "newGoalFromXmlNode: null goal node");
+  Assert (goalNode != NULL && goalNode->type == XML_ELEMENT_NODE, "newGoalFromXmlParentNode: null goal node");
+
+  return newGoalFromXmlNode (goalNode, game);
+}
+
+Goal* newGoalFromXmlNode (xmlNode *goalNode, Game *game) {
+  Goal *goal, *subGoal[2];
+  const char *enumText;
+  xmlNode *node, *subGoalNode, *countNode, *areaNode, *entropyNode, *reserveNode, *balloonNode;
+  XYSet *area;
+  StateSet *wallSet, *popSet;
+  int n, lazy, cached, enumState;
+  Tool *tool;
+  const char *evalResult;
+  xmlNode *evalNode;
+
+  goal = NULL;
 
   if (MATCHES (goalNode, AREA_GOAL)) {
     area = newXYSet();
@@ -34,7 +43,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 	(void) XYSetInsert (area, CHILDINT(node,X), CHILDINT(node,Y));
     subGoalNode = CHILD (goalNode, GOAL_GPARAM);
     goal = newAreaGoal (area,
-			subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
+			subGoalNode ? newGoalFromXmlParentNode (subGoalNode, game) : NULL);
 
   } else if (MATCHES (goalNode, CAGE_GOAL)) {
     /* currently the XML adapter sets up the EnclosuresGoal to determine whether a given state is a wall by examining Type only, ignoring Vars */
@@ -52,7 +61,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 			      areaNode ? OPTCHILDINT(areaNode,MIN_GPARAM,0) : 0,
 			      areaNode ? OPTCHILDINT(areaNode,MAX_GPARAM,0) : 0,
 			      CHILD(goalNode,MOORE_GPARAM) == NULL,  /* if using Moore (as opposed to von Neumann) topology, diagonal connections are not allowed */
-			      subGoalNode ? newGoalFromXmlNode (subGoalNode, game) : NULL);
+			      subGoalNode ? newGoalFromXmlParentNode (subGoalNode, game) : NULL);
 
   } else if (MATCHES (goalNode, POPULATION_GOAL)) {
     popSet = newStateSet();
@@ -70,7 +79,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 			   entropyNode ? OPTCHILDFLOAT(entropyNode,MAX_GPARAM,-1) : -1);
 
   } else if (MATCHES (goalNode, CACHED_GOAL)) {
-    goal = newCachedGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game),
+    goal = newCachedGoal (newGoalFromXmlParentNode (CHILD (goalNode, GOAL_GPARAM), game),
 			  OPTCHILDINT (goalNode, REPS_GPARAM, 1));
 
   } else if (MATCHES (goalNode, AND_GOAL)) {
@@ -83,7 +92,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 	  setSubgoalParents (subGoal[0]);   /* we must do this here since setSubgoalParents is not recursive, so these subgoals we've shunted down a level will otherwise not get a call */
 	  --n;
 	}
-	subGoal[n] = newGoalFromXmlNode (node, game);
+	subGoal[n] = newGoalFromXmlParentNode (node, game);
 	if (cached)
 	  subGoal[n] = newCachedGoal (subGoal[n], 1);
 	++n;
@@ -102,7 +111,7 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
 	  setSubgoalParents (subGoal[0]);   /* we must do this here since setSubgoalParents is not recursive, so these subgoals we've shunted down a level will otherwise not get a call */
 	  --n;
 	}
-	subGoal[n] = newGoalFromXmlNode (node, game);
+	subGoal[n] = newGoalFromXmlParentNode (node, game);
 	if (cached)
 	  subGoal[n] = newCachedGoal (subGoal[n], 1);
 	++n;
@@ -112,10 +121,10 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
     goal = newOrGoal (subGoal[0], subGoal[1], lazy);
 
   } else if (MATCHES (goalNode, NOT_GOAL)) {
-    goal = newNotGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game));
+    goal = newNotGoal (newGoalFromXmlParentNode (CHILD (goalNode, GOAL_GPARAM), game));
 
   } else if (MATCHES (goalNode, REPEAT_GOAL)) {
-    goal = newRepeatGoal (newGoalFromXmlNode (CHILD (goalNode, GOAL_GPARAM), game),
+    goal = newRepeatGoal (newGoalFromXmlParentNode (CHILD (goalNode, GOAL_GPARAM), game),
 			  CHILDINT (goalNode, REPS_GPARAM));
 
   } else if (MATCHES (goalNode, TIME_GOAL)) {
@@ -195,16 +204,26 @@ Goal* newGoalFromXmlNode (xmlNode *goalParentNode, Game *game) {
   } else if (MATCHES (goalNode, MAYBE_GOAL)) {
     goal = newMaybeGoal (CHILDFLOAT (goalNode, PROB_GPARAM));
 
+  } else if (MATCHES (goalNode, SCHEME)) {
+    evalResult = protoTableEvalSxml (game->board->protoTable, (const char*) getNodeContent(goalNode));
+    evalNode = xmlTreeFromString (evalResult);
+
+    goal = newGoalFromXmlParentNode (evalNode, game);
+
+    deleteXmlTree (evalNode);
+    StringDelete ((void*) evalResult);
+
   } else {
     Abort ("Unknown goal type");
   }
-
+  
   if (goal)
     setSubgoalParents (goal);
-
+  
   return goal;
 }
 
+  
 Balloon* newBalloonFromXmlNode (xmlNode* balloonNode) {
   xmlNode *locNode;
   HSB24 color;

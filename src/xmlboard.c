@@ -120,46 +120,59 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTa
   Particle* p;
   Message message;
   int nColorRules, readOnlyIndex;
-  xmlNode *curNode, *syncNode;
+  xmlNode *curNode, *syncNode, *schemeNode;
   Proto *proto;
+  const char *evalResult;
+  xmlNode *evalNode;
 
-  p = newParticle ((const char*) CHILDSTRING(node,NAME));
+  if ( (schemeNode = CHILD (node, SCHEME)) ) {  /* assignment intentional */
+    evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
+    evalNode = xmlTreeFromString (evalResult);
 
-  if ((syncNode = CHILD(node,SYNC))) {
-    p->synchronous = 1;
-    p->syncPeriod = OPTCHILDINT(syncNode,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
-    p->syncPhase = OPTCHILDINT(syncNode,PHASE,0);
+    p = newParticleFromXmlNode (game, evalNode, protoTable);
+
+    deleteXmlTree (evalNode);
+    StringDelete ((void*) evalResult);
+
+  } else {
+    p = newParticle ((const char*) CHILDSTRING(node,NAME));
+
+    if ((syncNode = CHILD(node,SYNC))) {
+      p->synchronous = 1;
+      p->syncPeriod = OPTCHILDINT(syncNode,PERIOD,0);  /* leaving this as zero means that it will be auto-set at 1/(total rate) by addParticleToBoard */
+      p->syncPhase = OPTCHILDINT(syncNode,PHASE,0);
+    }
+
+    protoTableSetSelfType (protoTable, p->name);
+    p->rule = newRuleFromXmlParentNode (game, CHILD(node,RULE), protoTable);
+
+    for (curNode = node->children; curNode; curNode = curNode->next)
+      if (MATCHES(curNode,DISPATCH)) {
+	message = OPTCHILDINT(curNode,DECMESSAGE,CHILDHEX(curNode,HEXMESSAGE));
+	addParticleMessageHandler (p, message, newRuleFromXmlGrandparentNode (game, curNode, protoTable));
+      }
+
+    readOnlyIndex = 0;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+      if (MATCHES(curNode,READONLY)) {
+	readOnlyIndex = OPTCHILDINT (curNode, INDEX, readOnlyIndex + 1);
+	Assert (readOnlyIndex >= 0 && readOnlyIndex < ReadOnlyStates, "newParticleFromXmlNode: read-only state index out of range");
+	p->readOnly[readOnlyIndex] = getStateFromNode (curNode, protoTable, 0);
+      }
+
+    p->rate = FloatToIntMillionths (OPTCHILDFLOAT(node,RATE,1.));
+
+    proto = protoTableGetProto (protoTable, p->name);
+    p->type = proto->type;
+    protoCopyVarsDescriptorsToList (proto, p->vars);
+
+    nColorRules = 0;
+    for (curNode = node->children; curNode; curNode = curNode->next)
+      if (MATCHES(curNode,COLRULE)) {
+	Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
+	initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, protoTable);
+      }
   }
-
-  protoTableSetSelfType (protoTable, p->name);
-  p->rule = newRuleFromXmlParentNode (game, CHILD(node,RULE), protoTable);
-
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,DISPATCH)) {
-      message = OPTCHILDINT(curNode,DECMESSAGE,CHILDHEX(curNode,HEXMESSAGE));
-      addParticleMessageHandler (p, message, newRuleFromXmlGrandparentNode (game, curNode, protoTable));
-    }
-
-  readOnlyIndex = 0;
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,READONLY)) {
-      readOnlyIndex = OPTCHILDINT (curNode, INDEX, readOnlyIndex + 1);
-      Assert (readOnlyIndex >= 0 && readOnlyIndex < ReadOnlyStates, "newParticleFromXmlNode: read-only state index out of range");
-      p->readOnly[readOnlyIndex] = getStateFromNode (curNode, protoTable, 0);
-    }
-
-  p->rate = FloatToIntMillionths (OPTCHILDFLOAT(node,RATE,1.));
-
-  proto = protoTableGetProto (protoTable, p->name);
-  p->type = proto->type;
-  protoCopyVarsDescriptorsToList (proto, p->vars);
-
-  nColorRules = 0;
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,COLRULE)) {
-      Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
-      initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, protoTable);
-    }
 
   return p;
 }
@@ -256,7 +269,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
 
   } else if (MATCHES (ruleNode, GOAL)) {
     rule = newGoalRule();
-    rule->param.goal = newGoalFromXmlNode (ruleNode, game);
+    rule->param.goal = newGoalFromXmlParentNode (ruleNode, game);
 
   } else if (MATCHES (ruleNode, SCHEME)) {
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(ruleNode));

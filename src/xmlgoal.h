@@ -62,7 +62,7 @@
 #define XMLZOO_PERSIST     "persist"
 
 /* methods */
-Goal* newGoalFromXmlNode (xmlNode *node, Game *game);
+Goal* newGoalFromXmlParentNode (xmlNode *node, Game *game);
 
 State getAllowMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
 State getCountMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
