@@ -156,17 +156,25 @@
   (define (move-self dest . next)
     (apply move-rule (append (list origin dest) next)))
 
+  ;; (if-type dest dest-type func next fail)
+  ;; if location dest contains dest-type, do (func dest next), otherwise do fail
   (define (if-type dest dest-type func . rest)
     (let ((next (opt-arg rest 0 #f))
 	  (fail (opt-arg rest 1 #f)))
-      (apply switch-type (append (list dest `((,dest-type ,(apply func (cons dest next))))) next))))
+      (apply switch-type (append (list dest `((,dest-type ,(apply func (cons dest next))))) fail))))
 
+  ;; (if-empty dest func next fail)
+  ;; if location dest is empty, do (func dest next), otherwise do fail
   (define (if-empty dest func . rest)
     (apply if-type (append (list dest empty-type func) rest)))
 
+  ;; (if-empty-copy-self dest next fail)
+  ;; if location dest is empty, do (copy-self dest next), otherwise do fail
   (define (if-empty-copy-self dest . rest)
     (apply if-empty (append (list dest copy-self) rest)))
 
+  ;; (if-empty-move-self dest next fail)
+  ;; if location dest is empty, do (move-self dest next), otherwise do fail
   (define (if-empty-move-self dest . rest)
     (apply if-empty (append (list dest move-self) rest)))
 
