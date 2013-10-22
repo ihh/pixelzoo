@@ -3,6 +3,7 @@
 
 #include "util.h"
 #include "statemap.h"
+#include "stringmap.h"
 
 /* Global registers for virtual machine */
 #define NumberOfRegisters 64
@@ -79,5 +80,7 @@ ParticleRule* newGotoRule();
 ParticleRule* newLoadRule();
 
 void deleteParticleRule (void *rule);
+
+void defineSubRule (StringMap **subRuleIndex, const char* name, ParticleRule *rule, StringMap *globalSubRuleIndex);
 
 #endif /* RULE_INCLUDED */

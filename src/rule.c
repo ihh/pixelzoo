@@ -119,3 +119,13 @@ void deleteParticleRule (void *voidRule) {
   }
   SafeFree (rule);
 }
+
+void defineSubRule (StringMap **subRuleIndex, const char* name, ParticleRule *rule, StringMap *globalSubRuleIndex) {
+  if (*subRuleIndex == NULL)
+    *subRuleIndex = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
+  else if (StringMapFind (*subRuleIndex, name))
+    Warn ("Re-definition of subrule name %s", name);
+  if (globalSubRuleIndex && StringMapFind (globalSubRuleIndex, name))
+    Warn ("Local subrule name %s masks definition for pseudonymous global subrule", name);
+  (void) StringMapInsert (*subRuleIndex, name, rule);
+}

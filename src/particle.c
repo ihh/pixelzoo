@@ -48,12 +48,11 @@ void addParticleMessageHandler (Particle *p, Message message, ParticleRule *hand
 }
 
 void addParticleSubRule (Particle *particle, const char* name, ParticleRule *rule, void *game) {
-  if (particle->subRule == NULL)
-    particle->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
-  Assert (StringMapFind (particle->subRule, name) == 0, "Duplicate local subrule name %s for particle %s", name, particle->name);
+  if (particle->subRule)
+    Assert (StringMapFind (particle->subRule, name) == 0, "Duplicate local subrule name %s for particle %s", name, particle->name);
   if (game && StringMapFind (((Game*) game)->board->subRule, name))
     Warn ("Local subrule name %s in particle %s masks definition for pseudonymous global subrule", name, particle->name);
-  StringMapInsert (particle->subRule, name, rule);
+  defineSubRule (&particle->subRule, name, rule, NULL);
 }
 
 PaletteIndex getParticleColor (Particle* particle, State state) {
