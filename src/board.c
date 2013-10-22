@@ -262,8 +262,8 @@ void syncBoard (Board* board) {
 }
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
-  int xSrc, ySrc, xDest, yDest;
-  State currentSrcState, currentDestState, newDestState, var;
+  int xSrc, ySrc, xDest, yDest, tracePos, r;
+  State currentSrcState, currentDestState, newDestState, offset, var;
   Type type;
   Particle *particle;
   unsigned int shift;
@@ -271,11 +271,12 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   ModifyRuleParams *modify;
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
+  LoadRuleParams *load;
   Goal *goal;
   StateMapNode *lookupNode;
   RBNode *dispatchNode;
-  int tracePos;
   ParticleRule *ruleTrace[MaxRuleDepth];
+  State reg[NumberOfRegisters];
 
   tracePos = 0;
   while (rule != NULL) {
@@ -286,8 +287,13 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     switch (rule->type) {
     case LookupRule:
       lookup = &rule->param.lookup;
-      xSrc = x + lookup->loc.x;
-      ySrc = y + lookup->loc.y;
+      if (lookup->loc.xyAreRegisters) {
+	xSrc = x + (Int64) reg[lookup->loc.x];
+	ySrc = y + (Int64) reg[lookup->loc.y];
+      } else {
+	xSrc = x + lookup->loc.x;
+	ySrc = y + lookup->loc.y;
+      }
       if (onBoard (board, xSrc, ySrc) && lookup->matchRule != NULL) {
 
 	currentSrcState = (*read) (board, xSrc, ySrc);
@@ -313,11 +319,23 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case ModifyRule:
       modify = &rule->param.modify;
-      xSrc = x + modify->src.x;
-      ySrc = y + modify->src.y;
+      if (modify->src.xyAreRegisters) {
+	xSrc = x + (Int64) reg[modify->src.x];
+	ySrc = y + (Int64) reg[modify->src.y];
+      } else {
+	xSrc = x + modify->src.x;
+	ySrc = y + modify->src.y;
+      }
+
       if (onBoard (board, xSrc, ySrc)) {
-	xDest = x + modify->dest.x;
-	yDest = y + modify->dest.y;
+	if (modify->dest.xyAreRegisters) {
+	  xDest = x + (Int64) reg[modify->dest.x];
+	  yDest = y + (Int64) reg[modify->dest.y];
+	} else {
+	  xDest = x + modify->dest.x;
+	  yDest = y + modify->dest.y;
+	}
+
 	if (onBoard (board, xDest, yDest)) {
 
 	  currentSrcState = (*read) (board, xSrc, ySrc);
@@ -335,9 +353,11 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	      : 0;
 	  }
 
+	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
+
 	  currentDestState = (*read) (board, xDest, yDest);
 	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
-	    | (((var + modify->offset) << modify->leftShift) & modify->destMask);
+	    | (((var + offset) << modify->leftShift) & modify->destMask);
 	  (*write) (board, xDest, yDest, newDestState);
 	}
       }
@@ -378,6 +398,13 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case GotoRule:
       rule = rule->param.gotoLabel;
+      break;
+
+    case LoadRule:
+      load = &rule->param.load;
+      for (r = 0; r < load->n; ++r)
+	reg[load->reg[r]] = load->state[r];
+      rule = load->nextRule;
       break;
 
     default:

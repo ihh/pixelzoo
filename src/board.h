@@ -15,7 +15,7 @@ typedef struct CellWatcher CellWatcher;
 typedef struct Board {
   Particle** byType;  /* Type t; byType[t] */
   ProtoTable* protoTable;
-  StringMap* subRule;  /* subroutine ParticleRule's */
+  StringMap* subRule;  /* global subroutine ParticleRule's */
   int size;  /* board is a square, this is the length of each side in cells */
   State *cell, *sync;   /* cell[boardIndex(size,x,y)] is the current state at (x,y); sync[boardIndex(size,x,y)] is the state pending the next board synchronization */
   unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y)] is true if sync[boardIndex(size,x,y)] should be written to cell[boardIndex(size,x,y)] at next board sync */

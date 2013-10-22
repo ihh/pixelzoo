@@ -42,6 +42,9 @@
 #define XMLZOO_POS         "pos"
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
+#define XMLZOO_MODE        "mode"
+#define XMLZOO_DIRECT      "direct"
+#define XMLZOO_INDIRECT    "indirect"
 #define XMLZOO_MASK        "mask"
 #define XMLZOO_TMASK       "tmask"
 #define XMLZOO_VMASK       "vmask"
@@ -49,6 +52,7 @@
 #define XMLZOO_DEST        "dest"
 #define XMLZOO_DECINC      "inc"
 #define XMLZOO_HEXINC      "hexinc"
+#define XMLZOO_REGINC      "reginc"
 #define XMLZOO_SRCMASK     "srcmask"
 #define XMLZOO_VSRCMASK    "vsrcmask"
 #define XMLZOO_TSRCMASK    "tsrcmask"
@@ -74,6 +78,8 @@
 #define XMLZOO_HEXMESSAGE  "hexmsg"
 #define XMLZOO_GOTO        "goto"
 #define XMLZOO_DISPATCH    "dispatch"
+#define XMLZOO_LOAD        "load"
+#define XMLZOO_REGISTER    "register"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
@@ -97,7 +103,7 @@ State getStateFromChild (xmlNode* child, ProtoTable* protoTable, State defaultSt
 
 State getGStateOrGVarsFromChild (xmlNode* child, ProtoTable* protoTable, State defaultState);
 
-State getIncOrStateFromNode (xmlNode* node, ProtoTable* protoTable);
+State getIncOrStateFromNode (xmlNode* node, ProtoTable* protoTable, unsigned char* registerFlag);
 
 State getMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);
 State getSrcMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaultMask);

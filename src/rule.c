@@ -54,11 +54,21 @@ ParticleRule* newGotoRule() {
   return rule;
 }
 
+ParticleRule* newLoadRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (LoadRule);
+  rule->param.load.n = 0;
+  rule->param.load.reg = NULL;
+  rule->param.load.state = NULL;
+  return rule;
+}
+
 void deleteParticleRule (void *voidRule) {
   ParticleRule *rule;
   LookupRuleParams *lookup;
   ModifyRuleParams *modify;
   RandomRuleParams *random;
+  LoadRuleParams *load;
   Goal *goal;
 
   rule = (ParticleRule*) voidRule;
@@ -93,6 +103,14 @@ void deleteParticleRule (void *voidRule) {
 
   case GotoRule:
   case DeliverRule:
+    break;
+
+  case LoadRule:
+    load = &rule->param.load;
+    SafeFree (load->reg);
+    SafeFree (load->state);
+    if (load->nextRule)
+      deleteParticleRule (load->nextRule);
     break;
 
   default:

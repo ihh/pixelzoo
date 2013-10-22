@@ -4,40 +4,22 @@
 #include "util.h"
 #include "statemap.h"
 
+/* Global registers for virtual machine */
+#define NumberOfRegisters 64
+
 /* Short-range relative co-ordinate offset.
    1 byte each for X & Y.
-   If X or Y is equal to TempOffset, then the resulting co-ordinate is not physically located the board,
-   but is instead treated as a temporary variable (to facilitate swapping two cells, etc.)
+   If xyAreRegisters is nonzero, X & Y are treated as register indices (i.e. indirect addressing).
  */
 typedef struct LocalOffset {
   signed char x, y;
+  unsigned char xyAreRegisters;
 } LocalOffset;
 
-#define TempOffset -128
-
-/* RuleFunction is one of the following functions (returning an int):
-
-  (Lookup)
-  matchRule[val]  or defaultRule, if no matchRule defined,
-  where
-   val = ((cell[orig+src] & srcMask) >> rightShift)
-
-  (Modify)
-  cell[orig+dest] = (cell[orig+dest] & (StateMask ^ destMask)) | (((newVal) << leftShift) & destMask);
-  where
-   val = ((cell[orig+src] & srcMask) >> rightShift)
-   newVal = val + offset
-  then nextRule
-
-  (Random)
-  rngRandomProb() < prob ? passRule : failRule
-
-  (Goal)
-  passes control to a goal
-*/
+/* Types of rule */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule };
+enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule, LoadRule };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
@@ -51,6 +33,7 @@ typedef struct ModifyRuleParams {
   LocalOffset src, dest;
   unsigned int rightShift, leftShift;
   State srcMask, destMask, offset;
+  unsigned char offsetIsRegister;  /* if nonzero, offset is treated as a register index */
   ParticleRule *nextRule;
 } ModifyRuleParams;
 
@@ -64,11 +47,19 @@ typedef struct RandomRuleParams {
   ParticleRule *passRule, *failRule;
 } RandomRuleParams;
 
+typedef struct LoadRuleParams {
+  int n;
+  unsigned char *reg;
+  State *state;
+  ParticleRule *nextRule;
+} LoadRuleParams;
+
 typedef union RuleParams {
   LookupRuleParams lookup;
   ModifyRuleParams modify;
   DeliverRuleParams deliver;
   RandomRuleParams random;
+  LoadRuleParams load;
   void *goal;
   ParticleRule *gotoLabel;
 } RuleParams;
@@ -85,6 +76,7 @@ ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
 ParticleRule* newGoalRule();
 ParticleRule* newGotoRule();
+ParticleRule* newLoadRule();
 
 void deleteParticleRule (void *rule);
 

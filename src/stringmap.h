@@ -56,7 +56,7 @@ typedef StringMapNode StringIntMapNode;
 typedef Vector StringVector;
 #define newStringVector() ((StringVector*) newVector (StringCopy, StringDelete, StringPrint))
 #define deleteStringVector(STRINGVECPTR) deleteVector ((Vector*) STRINGVECPTR)
-#define StringVectorGet(STRINGVECPTR,N) VectorGet ((Vector*) STRINGVECPTR, N)
+#define StringVectorGet(STRINGVECPTR,N) ((const char*) VectorGet ((Vector*) STRINGVECPTR, N))
 #define StringVectorSet(STRINGVECPTR,N,STRING) VectorSet ((Vector*) STRINGVECPTR, N, (void*) StringNew(STRING))
 #define StringVectorReserve(STRINGVECPTR,N) VectorReserve ((Vector*) STRINGVECPTR, N)
 #define StringVectorPushBack(STRINGVECPTR,STRING) VectorPushBack ((Vector*) STRINGVECPTR, (void*) StringNew(STRING))
