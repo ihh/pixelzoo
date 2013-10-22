@@ -5,7 +5,10 @@
   (define type-mask "ffff000000000000")
   (define type-shift 48)
 
-  (define self-type "empty")
+  (define state-mask "ffffffffffffffff")
+
+  (define empty-type "empty")
+  (define self-type empty-type)
 
   ;; locations, neighborhoods, directions
   (define origin '(0 0))
@@ -67,23 +70,26 @@
       (gvars-list args var-val-list)))
 
   (define (gvars-list type var-val-list)
-    `(gvars
-      (type ,type)
-      ,(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list)))
+    (if (null? var-val-list)
+	`(gstate ,type)
+	`(gvars
+	  (type ,type)
+	  ,@(list (map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list)))))
 
-  ;; helper for optional rule chains
-  (define (opt-rule tag arg)
-    (if arg `((tag ,(rule-eval-or-return arg))) '()))
+  ;; helpers for optional rule chains
+  (define (opt-rule tag arg-or-false)
+    (if arg-or-false `((,tag ,(rule-eval-or-return arg-or-false))) '()))
+
+  (define (listform-opt-rule tag arglist-or-null)
+    (if (not (null? arglist-or-null)) `((,tag ,(rule-eval-or-return (car arglist-or-null)))) '()))
 
   (define (rule-eval-or-return arg)
-    `((rule ,(eval-or-return arg))))
+    `(rule ,(eval-or-return arg)))
 
   ;; set rule
-  (define (set-rule . args)
-    (let ((loc (list-ref args 0))
-	  (type (list-ref args 1))
-	  (var-val-list (opt-arg args 2 '()))
-	  (next (opt-arg args 3 #f)))
+  (define (set-rule loc type . rest)
+    (let ((var-val-list (opt-arg rest 0 '()))
+	  (next (opt-arg rest 1 #f)))
       `(modify
 	(srcmask 0)
 	,(xy 'dest loc)
@@ -92,41 +98,85 @@
 	,@(opt-rule 'next next))))
 
   ;; switch rule for types
-  (define (switch-type . args)
-    (let ((loc (list-ref args 0))
-	  (type-case-list (list-ref args 1))
-	  (default (opt-arg args 2)))
-      `(switch
-	,(xy 'pos loc)
-	(mask ,type-mask)
-	(rshift ,type-shift)
-	(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cdr type-case)))) type-case-list)
-	,@(opt-rule 'default default))))
+  (define (switch-type loc type-case-list . default)
+    `(switch
+      ,(xy 'pos loc)
+      (mask ,type-mask)
+      (rshift ,type-shift)
+      ,(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
+      ,@(listform-opt-rule 'default default)))
 
   ;; switch rule for vars
-  (define (switch-var . args)
-    (let ((loc (list-ref args 0))
-	  (type (list-ref args 1))
-	  (var (list-ref args 2))
-	  (val-case-list (list-ref args 3))
-	  (default (opt-arg args 4)))
-      `(switch
-	,(xy 'pos loc)
-	(vmask (type ,type) (var ,var))
-	(vrshift (type ,type) (var ,var))
-	(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cdr val-case)))) val-case-list)
-	,@(opt-rule 'default default))))
+  (define (switch-var loc type var val-case-list . default)
+    `(switch
+      ,(xy 'pos loc)
+      (vmask (type ,type) (var ,var))
+      (vrshift (type ,type) (var ,var))
+      ,(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
+      ,@(listform-opt-rule 'default default)))
 
   ;; Neighborhood bindings
-  (define (bind-moore dir-var func)
+  (define (bind-neighborhood-dir neighborhood dir-var func)
     (switch-var
      origin self-type dir-var
-     (map (lambda (dir) (list dir (func (moore-loc dir) dir))) moore-dirs)))
+     (map (lambda (dir) (list dir (func (list-ref neighborhood dir) dir))) (iota (length neighborhood)))))
+
+  (define (bind-neighborhood neighborhood dir-var func)
+    (bind-neighborhood-dir neighborhood dir-var (lambda (loc dir) (func loc))))
+
+  (define (bind-moore dir-var func)
+    (bind-neighborhood moore-neighborhood dir-var func))
 
   (define (bind-neumann dir-var func)
-    (switch-var
-     origin self-type dir-var
-     (map (lambda (dir) (list dir (func (neumann-loc dir) dir))) neumann-dirs)))
+    (bind-neighborhood neumann-neighborhood dir-var func))
+
+  (define (bind-moore-dir dir-var func)
+    (bind-neighborhood-dir moore-neighborhood dir-var func))
+
+  (define (bind-neumann-dir dir-var func)
+    (bind-neighborhood-dir neumann-neighborhood dir-var func))
+
+  ;; Copy and move
+  (define (copy-rule src dest . next)
+    `(modify
+      ,(xy 'src src)
+      (srcmask ,state-mask)
+      (rshift 0)
+      (lshift 0)
+      ,(xy 'dest dest)
+      (destmask ,state-mask)
+      ,@(listform-opt-rule 'next next)))
+
+  (define (move-rule src dest . next)
+    (copy-rule src dest (apply set-rule (append (list src empty-type '()) next))))
+
+  (define (copy-self dest . next)
+    (apply copy-rule (append (list origin dest) next)))
+
+  (define (move-self dest . next)
+    (apply move-rule (append (list origin dest) next)))
+
+  (define (if-type dest dest-type func . rest)
+    (let ((next (opt-arg rest 0 #f))
+	  (fail (opt-arg rest 1 #f)))
+      (apply switch-type (append (list dest `((,dest-type ,(apply func (cons dest next))))) next))))
+
+  (define (if-empty dest func . rest)
+    (apply if-type (append (list dest empty-type func) rest)))
+
+  (define (if-empty-copy-self dest . rest)
+    (apply if-empty (append (list dest copy-self) rest)))
+
+  (define (if-empty-move-self dest . rest)
+    (apply if-empty (append (list dest move-self) rest)))
+
+  ;; Random walks
+  (define (neumann-drift . rest)
+    (apply map-neumann (cons if-empty-move-self rest)))
+
+  (define (moore-drift . rest)
+    (apply map-moore (cons if-empty-move-self rest)))
+
 
   ;; Utility functions.
   ;; Optional arguments
@@ -162,10 +212,10 @@
 
   ;; iota
   (define (iota n)
-    (if (= n 0) '() (append (iota (- n 1)) (list n))))
+    (if (= n 0) '() (append (iota (- n 1)) (list (- n 1)))))
 
-  (define neumann-dirs (iota 8))
-  (define moore-dirs (iota 4))
+  (define neumann-dirs (iota (length neumann-neighborhood)))
+  (define moore-dirs (iota (length moore-neighborhood)))
 
   ;; (eval-or-return f)  ... if f is a function, evaluate; otherwise, return
   (define (eval-or-return f)
