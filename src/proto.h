@@ -40,7 +40,8 @@ Proto *protoTableAddParticle (ProtoTable *protoTable, const char* particleName);
 
 Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName);
 
-sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression);  /* use to add definitions to top-level context */
-const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char* schemeExpression);  /* use for evaluations that won't affect top-level. Auto-converts result from SXML to XML. Caller must free returned string */
+sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression);  /* use for top-level <grammar> definitions */
+void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType);
+const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpression);  /* use for <rule> evaluations. Auto-converts result from SXML to XML. Caller must free returned string */
 
 #endif /* PROTO_INCLUDED */

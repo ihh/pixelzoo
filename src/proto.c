@@ -5,8 +5,12 @@
 /* Scheme sxml->string procedure, defined in pixelzoo/scheme/zoo.scm */
 #define SXML_TO_STRING_PROC "sxml->string"
 
-/* Scheme quote procedure (built-in) */
+/* Scheme procedures (built-in) */
 #define QUOTE_PROC "quote"
+#define SET_PROC "set!"
+
+/* Scheme symbol for self */
+#define SELF_TYPE "self-type"
 
 Proto* newProto (const char *name, Type type) {
   Proto *proto;
@@ -121,7 +125,7 @@ sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression) {
   return sexp_eval_string (protoTable->context, schemeExpression, -1, NULL);
 }
 
-const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char* schemeExpression) {
+const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpression) {
   sexp ctx;
   const char* str;
 
@@ -144,4 +148,15 @@ const char* protoTableEvalSxmlInChildContext (ProtoTable *protoTable, const char
   sexp_gc_release4 (ctx);
 
   return str;
+}
+
+void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
+  sexp ctx;
+  ctx = protoTable->context;
+
+  sexp_eval (ctx, sexp_cons (ctx,
+			     sexp_intern(ctx,SET_PROC,-1),
+			     sexp_list2 (ctx,
+					 sexp_intern(ctx,SELF_TYPE,-1),
+					 sexp_c_string(ctx,selfType,-1))), NULL);
 }

@@ -131,6 +131,7 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTa
     p->syncPhase = OPTCHILDINT(syncNode,PHASE,0);
   }
 
+  protoTableSetSelfType (protoTable, p->name);
   p->rule = newRuleFromXmlParentNode (game, CHILD(node,RULE), protoTable);
 
   for (curNode = node->children; curNode; curNode = curNode->next)
@@ -258,7 +259,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
     rule->param.goal = newGoalFromXmlNode (ruleNode, game);
 
   } else if (MATCHES (ruleNode, SCHEME)) {
-    evalResult = protoTableEvalSxmlInChildContext (protoTable, (const char*) getNodeContent(ruleNode));
+    evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(ruleNode));
     evalNode = xmlTreeFromString (evalResult);
 
     rule = newRuleFromXmlNode (game, evalNode, protoTable);
