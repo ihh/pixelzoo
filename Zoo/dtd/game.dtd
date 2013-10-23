@@ -339,12 +339,17 @@ var = ((cell[pos] & mask) >> rshift)
 where "pos" is a local offset. Then looks up the corresponding "case"
 for "var", and executes that rule. If no such "case" exists,
 executes the "default" rule. -->
-<!ELEMENT switch (pos?,mask?,rshift?,case*,default?)>
+<!ELEMENT switch (pos?,mask?,rshift?,(case*|regindex),low?,high?,default?)>
 
 <!-- An individual case in a switch rule. -->
 <!ELEMENT case ((state|hexstate)?,rule)>
 
-<!-- The default case in a switch rule. -->
+<!-- Register for indirect switch rule. -->
+<!ELEMENT regindex (#PCDATA)>
+
+<!-- The default cases in a switch rule. -->
+<!ELEMENT low (rule)>
+<!ELEMENT high (rule)>
 <!ELEMENT default (rule)>
 
 <!-- Modify rule.
