@@ -82,7 +82,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
       subRuleName = (const char*) CHILDSTRING(node,NAME);
       Assert (StringMapFind (board->subRule, subRuleName) == 0, "Duplicate global subrule name %s", subRuleName);
       ruleNode = CHILD(node,RULE);
-      rule = newRuleFromXmlParentNode (game, ruleNode, protoTable, NULL);
+      rule = newRuleFromXmlParentNode (game, ruleNode, protoTable, &board->subRule);
       defineSubRule (&board->subRule, subRuleName, rule, NULL);
     }
 
