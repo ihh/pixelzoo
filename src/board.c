@@ -313,9 +313,9 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
 	if (lookup->useMatchRegister) {
 	  regVal = reg[lookup->matchRegister];
-	  rule = (lookup->lowRule && var < regVal)
+	  rule = var < regVal
 	    ? lookup->lowRule
-	    : ((lookup->highRule && var > regVal)
+	    : (var > regVal
 	       ? lookup->highRule
 	       : lookup->defaultRule);
 
