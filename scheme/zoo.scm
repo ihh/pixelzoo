@@ -179,12 +179,16 @@
     (apply if-empty (append (list dest move-self) rest)))
 
   ;; Random walks
+  ;; (drift-rule map-neighborhood next fail)
+  ;; if random neighborhood location dest is empty, do (move-self dest (next dest)), otherwise do (fail dest)
+  (define (drift-rule map-neighborhood . rest)
+    (map-neighborhood (lambda (dest) (apply if-empty-move-self (cons dest (map (lambda (f) (f dest)) rest))))))
+
   (define (neumann-drift . rest)
-    (apply map-neumann (cons if-empty-move-self rest)))
+    (apply drift-rule (cons map-neumann rest)))
 
   (define (moore-drift . rest)
-    (apply map-moore (cons if-empty-move-self rest)))
-
+    (apply drift-rule (cons map-moore rest)))
 
   ;; Utility functions.
   ;; Optional arguments
