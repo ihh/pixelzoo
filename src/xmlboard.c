@@ -18,10 +18,13 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode* parent, ProtoTable 
 ParticleRule* newRuleFromXmlGrandparentNode (void *game, xmlNode* grandparent, ProtoTable *protoTable, StringMap **localSubRule);
 
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
+void initCompareRuleFromXmlNode (CompareRuleParams* lookup, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
+
+void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, xmlNode* node);
 
 /* method defs */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
@@ -160,7 +163,7 @@ Particle* newParticleFromXmlNode (void *game, xmlNode* node, ProtoTable *protoTa
     /* message dispatch table */
     for (curNode = node->children; curNode; curNode = curNode->next)
       if (MATCHES(curNode,DISPATCH)) {
-	message = OPTCHILDINT(curNode,DECMESSAGE,CHILDHEX(curNode,HEXMESSAGE));
+	message = getMessageFromNode (curNode, protoTable);
 	addParticleMessageHandler (p, message, newRuleFromXmlGrandparentNode (game, curNode, protoTable, &p->subRule));
       }
 
@@ -239,7 +242,7 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode *ruleParentNode, Pro
 	subRule = newRuleFromXmlParentNode (game, childNode, protoTable, localSubRule);
 	defineSubRule (localSubRule, subRuleName, subRule, ((Game*) game)->board->subRule);
 
-      } else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,GOAL) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME)) {
+      } else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,GOAL) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME)) {
 	if (ruleNode)
 	  Warn ("Ignoring <%s> child of <rule> node, in favor of older sibling <%s>", (const char*) childNode->name, (const char*) ruleNode->name);
 	else
@@ -264,6 +267,7 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode *ruleParentNode, Pro
 ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *protoTable, StringMap **localSubRule) {
   ParticleRule *rule, **gotoLabelRef;
   LookupRuleParams *lookup;
+  CompareRuleParams *compare;
   ModifyRuleParams *modify;
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
@@ -277,6 +281,11 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
     rule = newLookupRule();
     lookup = &rule->param.lookup;
     initLookupRuleFromXmlNode (lookup, ruleNode, game, protoTable, localSubRule);
+
+  } else if (MATCHES (ruleNode, COMPARE)) {
+    rule = newCompareRule();
+    compare = &rule->param.compare;
+    initCompareRuleFromXmlNode (compare, ruleNode, game, protoTable, localSubRule);
 
   } else if (MATCHES (ruleNode, MODIFY)) {
     rule = newModifyRule();
@@ -325,46 +334,90 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
   return rule;
 }
 
+void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, xmlNode* node) {
+  const char *mode;
+  if (node) {
+    if ((mode = ATTR(node,MODE)) && ATTRMATCHES(mode,INDIRECT)) {
+      loc->x = CHILDINT(node,X);
+      loc->y = CHILDINT(node,Y);
+      loc->xyAreRegisters = 1;
+      Assert (loc->x >= 0 && loc->x < NumberOfRegisters, "In <%s %s=\"%s\">: x-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->x, NumberOfRegisters);
+      Assert (loc->y >= 0 && loc->y < NumberOfRegisters, "In <%s %s=\"%s\">: y-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->y, NumberOfRegisters);
+    } else {
+      loc->x = OPTCHILDINT(node,X,xDefault);
+      loc->y = OPTCHILDINT(node,Y,yDefault);
+      loc->xyAreRegisters = 0;
+    }
+  } else {
+    loc->x = xDefault;
+    loc->y = yDefault;
+    loc->xyAreRegisters = 0;
+  }
+}
+
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
-  xmlNode *loc, *curNode, *regNode;
-  const char* mode;
+  xmlNode *curNode;
   State state;
   ParticleRule *rule;
 
-  loc = CHILD(node,POS);
-  if (loc) {
-    lookup->loc.x = OPTCHILDINT(loc,X,0);
-    lookup->loc.y = OPTCHILDINT(loc,Y,0);
-    lookup->loc.xyAreRegisters = (mode = ATTR(loc,MODE)) && ATTRMATCHES(mode,INDIRECT);
-  } else {
-    lookup->loc.x = lookup->loc.y = 0;
-    lookup->loc.xyAreRegisters = 0;
-  }
+  initLocalOffsetFromXmlNode (&lookup->loc, 0, 0, CHILD(node,POS));
 
   lookup->mask = getMaskFromNode (node, protoTable, StateMask);
   lookup->shift = getRShiftFromNode (node, protoTable);
 
-  if ( (regNode = CHILD (node, REGINDEX)) ) {  /* assignment intentional */
-    lookup->useMatchRegister = 1;
-    lookup->matchRegister = NODEINTVAL(regNode);
-  } else
-    for (curNode = node->children; curNode; curNode = curNode->next)
-      if (MATCHES(curNode,CASE)) {
-	state = getGTypeOrStateFromNode (curNode, protoTable);
-	rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
-	Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
-	(void) StateMapInsert (lookup->matchRule, state, rule);
-      }
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,CASE)) {
+      state = getGTypeOrStateFromNode (curNode, protoTable);
+      rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
+      Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
+      (void) StateMapInsert (lookup->matchRule, state, rule);
+    }
 
   lookup->lowRule = newRuleFromXmlGrandparentNode (game, CHILD (node, LOW), protoTable, localSubRule);
   lookup->highRule = newRuleFromXmlGrandparentNode (game, CHILD (node, HIGH), protoTable, localSubRule);
   lookup->defaultRule = newRuleFromXmlGrandparentNode (game, CHILD (node, DEFAULT), protoTable, localSubRule);
 }
 
-void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
-  xmlNode *src, *dest;
-  const char *mode;
+void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
+  xmlNode *curNode;
+  ParticleRule *rule;
 
+  initLocalOffsetFromXmlNode (&compare->loc, 0, 0, CHILD(node,POS));
+
+  compare->mask = getMaskFromNode (node, protoTable, StateMask);
+  compare->shift = getRShiftFromNode (node, protoTable);
+
+  compare->registerIndex = CHILDINT(node,REGINDEX);
+
+  for (curNode = node->children; curNode; curNode = curNode->next)
+    if (MATCHES(curNode,LT) || MATCHES(curNode,LEQ) || MATCHES(curNode,EQ) || MATCHES(curNode,GT) || MATCHES(curNode,GEQ)) {
+      rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
+      if (MATCHES(curNode,LT)) {
+	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
+	compare->ltRule = rule;
+      } else if (MATCHES(curNode,EQ)) {
+	Assert (compare->eqRule == NULL, "Redefinition of equal-to rule");
+	compare->eqRule = rule;
+      } else if (MATCHES(curNode,GT)) {
+	Assert (compare->gtRule == NULL, "Redefinition of greater-than rule");
+	compare->gtRule = rule;
+      } else if (MATCHES(curNode,LEQ)) {
+	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
+	Assert (compare->eqRule == NULL, "Redefinition of equal-to rule");
+	compare->ltRule = rule;
+	compare->eqRule = newGotoRule();
+	compare->eqRule->param.gotoLabel = rule;
+      } else if (MATCHES(curNode,GEQ)) {
+	Assert (compare->gtRule == NULL, "Redefinition of greater-than rule");
+	Assert (compare->eqRule == NULL, "Redefinition of equal-to rule");
+	compare->gtRule = rule;
+	compare->eqRule = newGotoRule();
+	compare->eqRule->param.gotoLabel = rule;
+      }
+    }
+}
+
+void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
   op->rightShift = getRShiftFromNode (node, protoTable);
   op->offset = getIncOrStateFromNode (node, protoTable, &op->offsetIsRegister);
   op->leftShift = getLShiftFromNode (node, protoTable);
@@ -372,32 +425,15 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game,
   op->srcMask = getSrcMaskFromNode (node, protoTable, StateMask);
   op->destMask = getDestMaskFromNode (node, protoTable, StateMask);
 
-  src = CHILD(node,SRC);
-  dest = CHILD(node,DEST);
-  if (src) {
-    op->src.x = OPTCHILDINT(src,X,0);
-    op->src.y = OPTCHILDINT(src,Y,0);
-    op->src.xyAreRegisters = (mode = ATTR(src,MODE)) && ATTRMATCHES(mode,INDIRECT);
-  } else {
-    op->src.x = op->src.y = 0;
-    op->src.xyAreRegisters = 0;
-  }
-  if (dest) {
-    op->dest.x = OPTCHILDINT(dest,X,0);
-    op->dest.y = OPTCHILDINT(dest,Y,0);
-    op->dest.xyAreRegisters = (mode = ATTR(dest,MODE)) && ATTRMATCHES(mode,INDIRECT);
-  } else
-    op->dest = op->src;
+  initLocalOffsetFromXmlNode (&op->src, 0, 0, CHILD(node,SRC));
+  initLocalOffsetFromXmlNode (&op->dest, op->src.x, op->src.y, CHILD(node,DEST));
 
   op->nextRule = newRuleFromXmlGrandparentNode (game, CHILD (node, NEXT), protoTable, localSubRule);
 }
 
 void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
-  xmlNode *recip;
-  recip = CHILD(node,POS);
-  deliver->recipient.x = CHILDINT(recip,X);
-  deliver->recipient.y = CHILDINT(recip,Y);
-  deliver->message = OPTCHILDINT(node,DECMESSAGE,CHILDHEX(node,HEXMESSAGE));
+  initLocalOffsetFromXmlNode (&deliver->recipient, 0, 0, CHILD(node,POS));
+  deliver->message = getMessageFromNode (node, protoTable);
 }
 
 void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
@@ -716,4 +752,8 @@ unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, con
       Warn ("<%s> lacks type", vShiftTag);
   }
   return s;
+}
+
+Message getMessageFromNode (xmlNode* node, ProtoTable* protoTable) {
+  return protoTableMessageLookup (protoTable, (const char*) CHILDSTRING (node, MESSAGE));
 }

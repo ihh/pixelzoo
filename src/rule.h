@@ -20,7 +20,7 @@ typedef struct LocalOffset {
 /* Types of rule */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule, LoadRule };
+enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule, LoadRule };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
@@ -30,6 +30,14 @@ typedef struct LookupRuleParams {
   unsigned char matchRegister, useMatchRegister;
   ParticleRule *defaultRule, *lowRule, *highRule;
 } LookupRuleParams;
+
+typedef struct CompareRuleParams {
+  LocalOffset loc;
+  unsigned int shift;
+  State mask;
+  unsigned char registerIndex;
+  ParticleRule *eqRule, *ltRule, *gtRule;
+} CompareRuleParams;
 
 typedef struct ModifyRuleParams {
   LocalOffset src, dest;
@@ -58,6 +66,7 @@ typedef struct LoadRuleParams {
 
 typedef union RuleParams {
   LookupRuleParams lookup;
+  CompareRuleParams compare;
   ModifyRuleParams modify;
   DeliverRuleParams deliver;
   RandomRuleParams random;
@@ -73,6 +82,7 @@ struct ParticleRule {
 
 /* methods */
 ParticleRule* newLookupRule();
+ParticleRule* newCompareRule();
 ParticleRule* newModifyRule();
 ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();

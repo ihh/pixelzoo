@@ -15,11 +15,19 @@ ParticleRule* newLookupRule() {
   ParticleRule* rule;
   rule = newParticleRule (LookupRule);
   rule->param.lookup.matchRule = newStateMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
-  rule->param.lookup.matchRegister = 0;
-  rule->param.lookup.useMatchRegister = 0;
   rule->param.lookup.defaultRule = NULL;
   rule->param.lookup.lowRule = NULL;
   rule->param.lookup.highRule = NULL;
+  return rule;
+}
+
+ParticleRule* newCompareRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (CompareRule);
+  rule->param.compare.registerIndex = 0;
+  rule->param.compare.eqRule = NULL;
+  rule->param.compare.ltRule = NULL;
+  rule->param.compare.gtRule = NULL;
   return rule;
 }
 
@@ -70,6 +78,7 @@ ParticleRule* newLoadRule() {
 void deleteParticleRule (void *voidRule) {
   ParticleRule *rule;
   LookupRuleParams *lookup;
+  CompareRuleParams *compare;
   ModifyRuleParams *modify;
   RandomRuleParams *random;
   LoadRuleParams *load;
@@ -87,6 +96,16 @@ void deleteParticleRule (void *voidRule) {
       deleteParticleRule (lookup->lowRule);
     if (lookup->highRule)
       deleteParticleRule (lookup->highRule);
+    break;
+
+  case CompareRule:
+    compare = &rule->param.compare;
+    if (compare->eqRule)
+      deleteParticleRule (compare->eqRule);
+    if (compare->ltRule)
+      deleteParticleRule (compare->ltRule);
+    if (compare->gtRule)
+      deleteParticleRule (compare->gtRule);
     break;
 
   case ModifyRule:

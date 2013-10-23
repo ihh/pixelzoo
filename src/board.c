@@ -14,6 +14,9 @@
 #define PIXELZOO_DEBUG
 */
 
+/* helpers */
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
+
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
 
@@ -261,13 +264,47 @@ void syncBoard (Board* board) {
   board->syncUpdates++;
 }
 
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, unsigned int shift, State mask, State *reg, int *isOnBoard) {
+  State state, var;
+  Type type;
+  int xLoc, yLoc;
+  Particle *particle;
+
+  var = 0;
+  if (loc->xyAreRegisters) {
+    xLoc = x + (Int64) reg[loc->x];
+    yLoc = y + (Int64) reg[loc->y];
+  } else {
+    xLoc = x + loc->x;
+    yLoc = y + loc->y;
+  }
+
+  if (onBoard (board, xLoc, yLoc)) {
+    *isOnBoard = 1;
+    state = (*read) (board, xLoc, yLoc);
+    if (shift < BitsPerState) {
+      /* read-write var */
+      var = (state & mask) >> shift;
+    } else {
+      /* read-only var */
+      type = StateType (state);
+      particle = board->byType[type];
+      shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
+      if (particle)
+	var = (particle->readOnly[shift / BitsPerState] & mask) >> (shift % BitsPerState);
+    }
+  } else
+    *isOnBoard = 0;
+
+  return var;
+}
+
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
-  int xSrc, ySrc, xDest, yDest, tracePos, r;
+  int xDest, yDest, tracePos, r, isOnBoard;
   State currentSrcState, currentDestState, newDestState, offset, var;
   Type type;
-  Particle *particle;
-  unsigned int shift;
   LookupRuleParams *lookup;
+  CompareRuleParams *compare;
   ModifyRuleParams *modify;
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
@@ -286,91 +323,47 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     switch (rule->type) {
     case LookupRule:
+
       lookup = &rule->param.lookup;
-      if (lookup->loc.xyAreRegisters) {
-	xSrc = x + (Int64) reg[lookup->loc.x];
-	ySrc = y + (Int64) reg[lookup->loc.y];
-      } else {
-	xSrc = x + lookup->loc.x;
-	ySrc = y + lookup->loc.y;
-      }
-      if (onBoard (board, xSrc, ySrc) && lookup->matchRule != NULL) {
-
-	currentSrcState = (*read) (board, xSrc, ySrc);
-	shift = lookup->shift;
-	if (shift < BitsPerState) {
-	  /* read-write var */
-	  var = (currentSrcState & lookup->mask) >> shift;
-	} else {
-	  /* read-only var */
-	  type = StateType (currentSrcState);
-	  particle = board->byType[type];
-	  shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
-	  var = particle
-	    ? ((particle->readOnly[shift / BitsPerState] & lookup->mask) >> (shift % BitsPerState))
-	    : 0;
-	}
-
-	if (lookup->useMatchRegister) {
-	  regVal = reg[lookup->matchRegister];
-	  rule = var < regVal
-	    ? lookup->lowRule
-	    : (var > regVal
-	       ? lookup->highRule
-	       : lookup->defaultRule);
-
-	} else {
-	  lookupNode = StateMapFind (lookup->matchRule, var);
-	  rule = lookupNode
-	    ? (ParticleRule*) lookupNode->value
-	    : ((lookup->lowRule && StateMapIsBeforeFirst (lookup->matchRule, var))
-	       ? lookup->lowRule
-	       : (lookup->highRule && (StateMapIsAfterLast (lookup->matchRule, var))
-		  ? lookup->highRule
-		  : lookup->defaultRule));
-	}
+      var = readVarFromLoc (board, read, &lookup->loc, x, y, lookup->shift, lookup->mask, reg, &isOnBoard);
+      if (isOnBoard) {
+	lookupNode = StateMapFind (lookup->matchRule, var);
+	rule = lookupNode
+	  ? (ParticleRule*) lookupNode->value
+	  : ((lookup->lowRule && StateMapIsBeforeFirst (lookup->matchRule, var))
+	     ? lookup->lowRule
+	     : (lookup->highRule && (StateMapIsAfterLast (lookup->matchRule, var))
+		? lookup->highRule
+		: lookup->defaultRule));
       } else
 	rule = lookup->defaultRule;
       break;
 
+    case CompareRule:
+      compare = &rule->param.compare;
+      var = readVarFromLoc (board, read, &compare->loc, x, y, compare->shift, compare->mask, reg, &isOnBoard);
+      regVal = reg[compare->registerIndex];
+      rule = var < regVal
+	? compare->ltRule
+	: (var > regVal
+	   ? compare->gtRule
+	   : compare->eqRule);
+      break;
+
     case ModifyRule:
       modify = &rule->param.modify;
-      if (modify->src.xyAreRegisters) {
-	xSrc = x + (Int64) reg[modify->src.x];
-	ySrc = y + (Int64) reg[modify->src.y];
+      if (modify->dest.xyAreRegisters) {
+	xDest = x + (Int64) reg[modify->dest.x];
+	yDest = y + (Int64) reg[modify->dest.y];
       } else {
-	xSrc = x + modify->src.x;
-	ySrc = y + modify->src.y;
+	xDest = x + modify->dest.x;
+	yDest = y + modify->dest.y;
       }
 
-      if (onBoard (board, xSrc, ySrc)) {
-	if (modify->dest.xyAreRegisters) {
-	  xDest = x + (Int64) reg[modify->dest.x];
-	  yDest = y + (Int64) reg[modify->dest.y];
-	} else {
-	  xDest = x + modify->dest.x;
-	  yDest = y + modify->dest.y;
-	}
-
-	if (onBoard (board, xDest, yDest)) {
-
-	  currentSrcState = (*read) (board, xSrc, ySrc);
-	  shift = modify->rightShift;
-	  if (shift < BitsPerState) {
-	    /* read-write var */
-	    var = (currentSrcState & modify->srcMask) >> modify->rightShift;
-	  } else {
-	    /* read-only var */
-	    type = StateType (currentSrcState);
-	    particle = board->byType[type];
-	    shift -= BitsPerState;  /* convert shift into an offset into the read-only bitvector */
-	    var = particle
-	      ? ((particle->readOnly[shift / BitsPerState] & modify->srcMask) >> (shift % BitsPerState))
-	      : 0;
-	  }
-
+      if (onBoard (board, xDest, yDest)) {
+	var = readVarFromLoc (board, read, &modify->src, x, y, modify->rightShift, modify->srcMask, reg, &isOnBoard);
+	if (isOnBoard) {
 	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
-
 	  currentDestState = (*read) (board, xDest, yDest);
 	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
 	    | (((var + offset) << modify->leftShift) & modify->destMask);
@@ -383,8 +376,14 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case DeliverRule:
       deliver = &rule->param.deliver;
       /* DeliverRule hands over control: update x, y, ruleOwner and rule */
-      x += deliver->recipient.x;
-      y += deliver->recipient.y;
+      if (deliver->recipient.xyAreRegisters) {
+	x += (Int64) reg[deliver->recipient.x];
+	y += (Int64) reg[deliver->recipient.y];
+      } else {
+	xDest = x + deliver->recipient.x;
+	yDest = y + deliver->recipient.y;
+      }
+
       if (onBoard (board, x, y)) {
 	currentSrcState = (*read) (board, x, y);
 	type = StateType (currentSrcState);

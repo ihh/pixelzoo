@@ -30,13 +30,20 @@
 #define XMLZOO_RULE        "rule"
 #define XMLZOO_RATE        "rate"
 #define XMLZOO_SWITCH      "switch"
+#define XMLZOO_COMPARE     "compare"
 #define XMLZOO_MODIFY      "modify"
 #define XMLZOO_RANDOM      "random"
 #define XMLZOO_GOAL        "goal"
 #define XMLZOO_CASE        "case"
 #define XMLZOO_DEFAULT     "default"
+#define XMLZOO_REGINDEX    "regindex"
 #define XMLZOO_LOW         "low"
 #define XMLZOO_HIGH        "high"
+#define XMLZOO_LT          "lt"
+#define XMLZOO_LEQ         "leq"
+#define XMLZOO_GT          "gt"
+#define XMLZOO_GEQ         "geq"
+#define XMLZOO_EQ          "eq"
 #define XMLZOO_NEXT        "next"
 #define XMLZOO_PROB        "prob"
 #define XMLZOO_PASS        "pass"
@@ -76,13 +83,11 @@
 #define XMLZOO_VAL         "val"
 #define XMLZOO_VAR         "var"
 #define XMLZOO_DELIVER     "deliver"
-#define XMLZOO_DECMESSAGE  "msg"
-#define XMLZOO_HEXMESSAGE  "hexmsg"
+#define XMLZOO_MESSAGE     "message"
 #define XMLZOO_GOTO        "goto"
 #define XMLZOO_DISPATCH    "dispatch"
 #define XMLZOO_LOAD        "load"
 #define XMLZOO_REGISTER    "register"
-#define XMLZOO_REGINDEX    "regindex"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
@@ -116,5 +121,7 @@ State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaul
 unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, const char* shiftTag, const char* vShiftTag);
+
+Message getMessageFromNode (xmlNode* node, ProtoTable* protoTable);
 
 #endif /* XMLBOARD_INCLUDED */

@@ -30,6 +30,8 @@ typedef struct ProtoTable {
   Proto **byType;
   Type nextFreeType;  /* internal use only */
   sexp context;  /* Chibi Scheme context */
+  StringIntMap *message;  /* message lookup */
+  StringVector *messageText;
 } ProtoTable;
 
 ProtoTable *newProtoTable();
@@ -43,5 +45,7 @@ Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName);
 sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression);  /* use for top-level <grammar> definitions */
 void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType);
 const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpression);  /* use for <rule> evaluations. Auto-converts result from SXML to XML. Caller must free returned string */
+
+Message protoTableMessageLookup (ProtoTable *protoTable, const char* message);
 
 #endif /* PROTO_INCLUDED */

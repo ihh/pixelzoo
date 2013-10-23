@@ -73,11 +73,14 @@ ProtoTable *newProtoTable() {
   protoTable->nextFreeType = 0;
 
   protoTable->context = sexp_make_eval_context(NULL, NULL, NULL, 0, 0);
-    
+
   sexp_load_standard_env(protoTable->context, NULL, SEXP_SEVEN);
   sexp_load_standard_ports(protoTable->context, NULL, stdin, stdout, stderr, 0);
 
   sexp_load(protoTable->context, sexp_c_string(protoTable->context, sexp_pixelzoo_module_path, -1), NULL);
+
+  protoTable->message = newStringIntMap();
+  protoTable->messageText = newStringVector();
 
   return protoTable;
 }
@@ -85,6 +88,8 @@ ProtoTable *newProtoTable() {
 void deleteProtoTable (void* a) {
   ProtoTable *protoTable;
   protoTable = (ProtoTable*) a;
+  deleteStringIntMap (protoTable->message);
+  deleteStringVector (protoTable->messageText);
   deleteStringMap (protoTable->byName);
   sexp_destroy_context (protoTable->context);
   SafeFree (protoTable->byType);
@@ -159,4 +164,18 @@ void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
 			     sexp_list2 (ctx,
 					 sexp_intern(ctx,SELF_TYPE,-1),
 					 sexp_c_string(ctx,selfType,-1))), NULL);
+}
+
+Message protoTableMessageLookup (ProtoTable *protoTable, const char* message) {
+  StringIntMapNode *msgNode;
+  Message msg;
+  msgNode = StringIntMapFind (protoTable->message, message);
+  if (msgNode)
+    msg = *(Int64*)msgNode->value;
+  else {
+    msg = StringVectorSize (protoTable->messageText);
+    StringVectorPushBack (protoTable->messageText, message);
+    StringIntMapInsert (protoTable->message, message, msg);
+  }
+  return msg;
 }
