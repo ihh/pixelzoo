@@ -344,7 +344,7 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
   lookup->mask = getMaskFromNode (node, protoTable, StateMask);
   lookup->shift = getRShiftFromNode (node, protoTable);
 
-  if ( (regNode = CHILD (node, REGCASE)) ) {  /* assignment intentional */
+  if ( (regNode = CHILD (node, REGINDEX)) ) {  /* assignment intentional */
     lookup->useMatchRegister = 1;
     lookup->matchRegister = NODEINTVAL(regNode);
   } else
