@@ -82,6 +82,7 @@
 #define XMLZOO_DISPATCH    "dispatch"
 #define XMLZOO_LOAD        "load"
 #define XMLZOO_REGISTER    "register"
+#define XMLZOO_REGCASE     "regcase"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);

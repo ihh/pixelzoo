@@ -326,7 +326,7 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
 }
 
 void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
-  xmlNode *loc, *curNode;
+  xmlNode *loc, *curNode, *regNode;
   const char* mode;
   State state;
   ParticleRule *rule;
@@ -344,13 +344,17 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
   lookup->mask = getMaskFromNode (node, protoTable, StateMask);
   lookup->shift = getRShiftFromNode (node, protoTable);
 
-  for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,CASE)) {
-       state = getGTypeOrStateFromNode (curNode, protoTable);
-       rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
-       Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
-       (void) StateMapInsert (lookup->matchRule, state, rule);
-    }
+  if ( (regNode = CHILD (node, REGCASE)) ) {  /* assignment intentional */
+    lookup->useMatchRegister = 1;
+    lookup->matchRegister = NODEINTVAL(regNode);
+  } else
+    for (curNode = node->children; curNode; curNode = curNode->next)
+      if (MATCHES(curNode,CASE)) {
+	state = getGTypeOrStateFromNode (curNode, protoTable);
+	rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
+	Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
+	(void) StateMapInsert (lookup->matchRule, state, rule);
+      }
 
   lookup->lowRule = newRuleFromXmlGrandparentNode (game, CHILD (node, LOW), protoTable, localSubRule);
   lookup->highRule = newRuleFromXmlGrandparentNode (game, CHILD (node, HIGH), protoTable, localSubRule);

@@ -27,6 +27,7 @@ typedef struct LookupRuleParams {
   unsigned int shift;
   State mask;
   StateMap *matchRule;
+  unsigned char matchRegister, useMatchRegister;
   ParticleRule *defaultRule, *lowRule, *highRule;
 } LookupRuleParams;
 

@@ -15,6 +15,8 @@ ParticleRule* newLookupRule() {
   ParticleRule* rule;
   rule = newParticleRule (LookupRule);
   rule->param.lookup.matchRule = newStateMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
+  rule->param.lookup.matchRegister = 0;
+  rule->param.lookup.useMatchRegister = 0;
   rule->param.lookup.defaultRule = NULL;
   rule->param.lookup.lowRule = NULL;
   rule->param.lookup.highRule = NULL;

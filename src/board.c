@@ -276,7 +276,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   StateMapNode *lookupNode;
   RBNode *dispatchNode;
   ParticleRule *ruleTrace[MaxRuleDepth];
-  State reg[NumberOfRegisters];
+  State reg[NumberOfRegisters], regVal;
 
   tracePos = 0;
   while (rule != NULL) {
@@ -311,14 +311,24 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	    : 0;
 	}
 
-	lookupNode = StateMapFind (lookup->matchRule, var);
-	rule = lookupNode
-	  ? (ParticleRule*) lookupNode->value
-	  : ((lookup->lowRule && StateMapIsBeforeFirst (lookup->matchRule, var))
-	     ? lookup->lowRule
-	     : (lookup->highRule && (StateMapIsAfterLast (lookup->matchRule, var))
-		? lookup->highRule
-		: lookup->defaultRule));
+	if (lookup->useMatchRegister) {
+	  regVal = reg[lookup->matchRegister];
+	  rule = (lookup->lowRule && var < regVal)
+	    ? lookup->lowRule
+	    : ((lookup->highRule && var > regVal)
+	       ? lookup->highRule
+	       : lookup->defaultRule);
+
+	} else {
+	  lookupNode = StateMapFind (lookup->matchRule, var);
+	  rule = lookupNode
+	    ? (ParticleRule*) lookupNode->value
+	    : ((lookup->lowRule && StateMapIsBeforeFirst (lookup->matchRule, var))
+	       ? lookup->lowRule
+	       : (lookup->highRule && (StateMapIsAfterLast (lookup->matchRule, var))
+		  ? lookup->highRule
+		  : lookup->defaultRule));
+	}
       } else
 	rule = lookup->defaultRule;
       break;
