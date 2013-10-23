@@ -90,6 +90,10 @@
   (define (rule-eval-or-return arg)
     `(rule ,(eval-or-return arg)))
 
+  ;; nop (dummy) rule
+  (define nop-rule
+    '(modify (destmask 0)))
+
   ;; set rule
   (define (set-rule loc type . rest)
     (let ((var-val-list (opt-arg rest 0 '()))
@@ -184,6 +188,32 @@
       (vrshift (type ,type) (var ,var))
       (regindex ,reg)
       ,@rest))
+
+  ;; Convert a probability distribution over rules into a Huffman tree of <random> rules
+  (define (prob-rule-cmp a b)
+    (numcmp (car a) (car b)))
+
+  (define (prob-rule-quicksort lst)
+    (quicksort prob-rule-cmp lst))
+
+  (define (random-switch . prob-rule-list)
+    (let ((num-rules (length prob-rule-list)))
+      (cond
+       ((= num-rules 0) nop-rule)
+       ((= num-rules 1) (cadar prob-rule-list))
+       (else (let* ((sorted-prob-rule-list (prob-rule-quicksort prob-rule-list))
+		    (prob-rule1 (car sorted-prob-rule-list))
+		    (prob-rule2 (cadr sorted-prob-rule-list))
+		    (rest-of-prob-rule-list (cddr sorted-prob-rule-list))
+		    (prob1 (car prob-rule1))
+		    (rule1 (cadr prob-rule1))
+		    (prob2 (car prob-rule2))
+		    (rule2 (cadr prob-rule2))
+		    (prob1plus2 (+ prob1 prob2))
+		    (rule1or2 `(random (prob ,(/ prob2 prob1plus2)) (pass (rule ,rule2)) (fail (rule ,rule1)))))
+	       (apply random-switch (cons (list prob1plus2 rule1or2) rest-of-prob-rule-list)))))))
+
+  (define huffman random-switch)  ;; syntactic sugar: a shorter alias
 
   ;; Neighborhood bindings
   (define (bind-neighborhood-dir neighborhood dir-var func)
@@ -365,6 +395,8 @@
 				  `((0 ,(polymer-verify-f polymer-move-f))
 				    (1 ,polymer-verify-fr)))))))
 
+  ;; Now, enumerate all the cases
+;;  (define (polymer-move-rule)
 
   ;; Utility functions.
   ;; Optional arguments
@@ -446,6 +478,31 @@
 	    (if (= (list-index e (cdr lst)) -1)
 		-1
 		(+ 1 (list-index e (cdr lst)))))))
+
+  ;; Quicksort
+  ;; (quicksort cmp lst) returns sorted lst
+  ;; (cmp a b) should return -1 if a<b, 0 if a=b, +1 if a>b
+  (define (qs-pivot cmp l)
+    (cond ((null? l) 'done)
+	  ((null? (cdr l)) 'done)
+	  ((<= (cmp (car l) (cadr l)) 0) (qs-pivot cmp (cdr l)))
+	  (#t (car l))))
+
+  (define (qs-partition cmp piv l p1 p2)
+    (if (null? l) (list p1 p2)
+	(if (< (cmp (car l) piv) 0)
+	    (qs-partition cmp piv (cdr l) (cons (car l) p1) p2)
+	    (qs-partition cmp piv (cdr l) p1 (cons (car l) p2)))))
+
+  (define (quicksort cmp l)
+    (let ((piv (qs-pivot cmp l)))
+      (if (equal? piv 'done) l
+	  (let ((parts (qs-partition cmp piv l '() '())))
+	    (append (quicksort cmp (car parts))
+		    (quicksort cmp (cadr parts)))))))
+
+  (define (numcmp a b)
+    (if (< a b) -1 (if (> a b) +1 0)))
 
   ;; convert an SXML S-expression to an XML string
 
