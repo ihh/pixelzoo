@@ -182,7 +182,8 @@
   ;; (drift-rule map-neighborhood next fail)
   ;; if random neighborhood location dest is empty, do (move-self dest (next dest)), otherwise do (fail dest)
   (define (drift-rule map-neighborhood . rest)
-    (map-neighborhood (lambda (dest) (apply if-empty-move-self (cons dest (map (lambda (f) (f dest)) rest))))))
+    (map-neighborhood
+     (lambda (dest) (apply if-empty-move-self (cons dest (map (lambda (f) (if (procedure? f) (f dest) f) rest)))))))
 
   (define (neumann-drift . rest)
     (apply drift-rule (cons map-neumann rest)))
