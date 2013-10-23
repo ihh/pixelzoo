@@ -3,6 +3,17 @@
 
       <grammar>
 
+      <particle>
+        <name>empty</name>
+        <type>0</type>
+        <rate>0</rate>
+        <vars>
+         <varsize><name>hue</name><size>6</size></varsize>
+         <varsize><name>sat</name><size>3</size></varsize>
+         <varsize><name>bri</name><size>3</size></varsize>
+        </vars>
+      </particle>
+
 	<particle>
 	  <name>drifter</name>
 	  <type>1</type>
@@ -26,7 +37,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><x>0</x></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
@@ -40,7 +51,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><x>0</x></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
@@ -57,7 +68,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><y>0</y></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
@@ -71,7 +82,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><y>0</y></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>1000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
@@ -103,7 +114,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><x>1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><x>0</x></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><x>1</x></dest>
 				</modify></rule></next>
@@ -117,7 +128,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><x>-1</x></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><x>0</x></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><x>-1</x></dest>
 				</modify></rule></next>
@@ -134,7 +145,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><y>1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><y>0</y></dest>
 				<next><rule><modify>
 				    <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><y>1</y></dest>
 				</modify></rule></next>
@@ -148,7 +159,7 @@
 			<case><state>0</state><rule><modify>
 			    <srcmask>0</srcmask>
 			    <next><rule><modify>
-				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest></dest>
+				<src><y>-1</y></src><srcmask>ff9</srcmask><hexinc>49</hexinc><dest><y>0</y></dest>
 				<next><rule><modify>
 				      <srcmask>0</srcmask><hexinc>2000000000001</hexinc><dest><y>-1</y></dest>
 				</modify></rule></next>
