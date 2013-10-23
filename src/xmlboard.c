@@ -390,7 +390,7 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, void
   compare->registerIndex = CHILDINT(node,REGINDEX);
 
   for (curNode = node->children; curNode; curNode = curNode->next)
-    if (MATCHES(curNode,LT) || MATCHES(curNode,LEQ) || MATCHES(curNode,EQ) || MATCHES(curNode,GT) || MATCHES(curNode,GEQ)) {
+    if (MATCHES(curNode,LT) || MATCHES(curNode,LEQ) || MATCHES(curNode,EQ) || MATCHES(curNode,NEQ) || MATCHES(curNode,GT) || MATCHES(curNode,GEQ)) {
       rule = newRuleFromXmlGrandparentNode (game, curNode, protoTable, localSubRule);
       if (MATCHES(curNode,LT)) {
 	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
@@ -413,6 +413,12 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, void
 	compare->gtRule = rule;
 	compare->eqRule = newGotoRule();
 	compare->eqRule->param.gotoLabel = rule;
+      } else if (MATCHES(curNode,NEQ)) {
+	Assert (compare->gtRule == NULL, "Redefinition of greater-than rule");
+	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
+	compare->gtRule = rule;
+	compare->ltRule = newGotoRule();
+	compare->ltRule->param.gotoLabel = rule;
       }
     }
 }

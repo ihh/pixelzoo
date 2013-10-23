@@ -60,8 +60,12 @@
   (define moore-left moore-left-90)
   (define moore-right moore-right-90)
 
+  ;; addresses
   (define (xy tag loc)
     `(,tag (x ,(car loc)) (y ,(cadr loc))))
+
+  (define (xy-indirect tag loc)
+    `(,tag (@ (mode "indirect")) (x ,(car loc)) (y ,(cadr loc))))
 
   ;; gvars
   (define (gvars . args)
@@ -97,6 +101,45 @@
 	,(gvars-list type var-val-list)
 	,@(opt-rule 'next next))))
 
+  ;; set var
+  (define (set-var loc type var val . next)
+    `(modify
+      (srcmask 0)
+      ,(xy 'dest loc)
+      (vlshift (type ,type) (var ,var))
+      (vlmask (type ,type) (var ,var))
+      (inc ,val)
+      ,@(listform-opt-rule 'next next)))
+
+  ;; indirect set rule
+  (define (indirect-set-rule loc type . rest)
+    (let ((var-val-list (opt-arg rest 0 '()))
+	  (next (opt-arg rest 1 #f)))
+      `(modify
+	(srcmask 0)
+	,(xy-indirect 'dest loc)
+	(lshift 0)
+	,(gvars-list type var-val-list)
+	,@(opt-rule 'next next))))
+
+  ;; indirect set var from register
+  (define (indirect-set-var-from-register loc type var reg . next)
+    `(modify
+      (srcmask 0)
+      ,(xy-indirect 'dest loc)
+      (vlshift (type ,type) (var ,var))
+      (reginc ,reg)
+      ,@(listform-opt-rule 'next next)))
+
+  ;; set var from register
+  (define (set-var-from-register loc type var reg . next)
+    `(modify
+      (srcmask 0)
+      ,(xy 'dest loc)
+      (vlshift (type ,type) (var ,var))
+      (reginc ,reg)
+      ,@(listform-opt-rule 'next next)))
+
   ;; switch rule for types
   (define (switch-type loc type-case-list . default)
     `(switch
@@ -114,6 +157,33 @@
       (vrshift (type ,type) (var ,var))
       ,(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
       ,@(listform-opt-rule 'default default)))
+
+  ;; indirect switch rule for types
+  (define (indirect-switch-type loc type-case-list . default)
+    `(switch
+      ,(xy-indirect 'pos loc)
+      (mask ,type-mask)
+      (rshift ,type-shift)
+      ,(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
+      ,@(listform-opt-rule 'default default)))
+
+  ;; indirect switch rule for vars
+  (define (indirect-switch-var loc type var val-case-list . default)
+    `(switch
+      ,(xy-indirect 'pos loc)
+      (vmask (type ,type) (var ,var))
+      (vrshift (type ,type) (var ,var))
+      ,(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
+      ,@(listform-opt-rule 'default default)))
+
+  ;; indirect compare var to register
+  (define (indirect-compare-var-to-register loc type var reg . rest)
+    `(compare
+      ,(xy-indirect 'pos loc)
+      (vmask (type ,type) (var ,var))
+      (vrshift (type ,type) (var ,var))
+      (regindex ,reg)
+      ,@rest))
 
   ;; Neighborhood bindings
   (define (bind-neighborhood-dir neighborhood dir-var func)
@@ -156,6 +226,26 @@
   (define (move-self dest . next)
     (apply move-rule (append (list origin dest) next)))
 
+  ;; indirect copy & move
+  (define (indirect-dest-copy-rule src dest . next)
+    `(modify
+      ,(xy 'src src)
+      (srcmask ,state-mask)
+      (rshift 0)
+      (lshift 0)
+      ,(xy-indirect 'dest dest)
+      (destmask ,state-mask)
+      ,@(listform-opt-rule 'next next)))
+
+  (define (indirect-dest-move-rule src dest . next)
+    (indirect-dest-copy-rule src dest (apply set-rule (append (list src empty-type '()) next))))
+
+  (define (indirect-copy-self dest . next)
+    (apply indirect-dest-copy-rule (append (list origin dest) next)))
+
+  (define (indirect-move-self dest . next)
+    (apply indirect-dest-move-rule (append (list origin dest) next)))
+
   ;; (if-type dest dest-type func next fail)
   ;; if location dest contains dest-type, do (func dest next), otherwise do fail
   (define (if-type dest dest-type func . rest)
@@ -181,15 +271,100 @@
   ;; Random walks
   ;; (drift-rule map-neighborhood next fail)
   ;; if random neighborhood location dest is empty, do (move-self dest (next dest)), otherwise do (fail dest)
+  ;; next & fail are optional arguments, and can be data instead of functions
   (define (drift-rule map-neighborhood . rest)
     (map-neighborhood
      (lambda (dest) (apply if-empty-move-self (cons dest (map (lambda (f) (if (procedure? f) (f dest) f)) rest))))))
 
+  ;; (neumann-drift next fail)
   (define (neumann-drift . rest)
     (apply drift-rule (cons map-neumann rest)))
 
+  ;; (moore-drift next fail)
   (define (moore-drift . rest)
     (apply drift-rule (cons map-moore rest)))
+
+  ;; Polymers
+  ;; Vars: has-fwd-bond (1 bit), fwd-bond-dir (3 bits), has-rev-bond (1 bit), rev-bond-dir (3 bits)
+  ;; First, a subrule that verify integrity of upstream & downstream bonds, then attempt a move
+  ;; Registers:
+  ;;  (0,1)  location of fwd-bond cell
+  ;;  (2,3)  direction & inverse-direction from origin to fwd-bond cell
+  ;;  (4,5)  location of rev-bond cell
+  ;;  (6,7)  direction & inverse-direction from origin to rev-bond cell
+  ;;  (8,9)  location of target cell for move
+  ;; (10,11) direction & inverse-direction from target cell to fwd-bond cell
+  ;; (12,13) direction & inverse-direction from target cell to rev-bond cell
+
+  (define (polymer-move-self)
+    (indirect-move-self '(8 9)))
+
+  (define (polymer-update-f next)
+    (set-var-from-register
+     origin self-type "fwd-bond-dir" 10
+     (indirect-set-var-from-register
+      '(0 1) self-type "rev-bond-dir" 11
+      next)))
+
+  (define (polymer-update-r next)
+    (set-var-from-register
+     origin self-type "rev-bond-dir" 12
+     (indirect-set-var-from-register
+      '(4 5) self-type "fwd-bond-dir" 13
+      next)))
+
+  (define (polymer-move-f)
+    (polymer-update-f polymer-move-self))
+
+  (define (polymer-move-r)
+    (polymer-update-r polymer-move-self))
+
+  (define (polymer-move-fr)
+    (polymer-update-f polymer-move-r))
+
+  (define (polymer-detach-f)
+    (set-var origin self-type "has-fwd-bond" 0))
+
+  (define (polymer-detach-r)
+    (set-var origin self-type "has-rev-bond" 0))
+
+  (define (polymer-verify-f next)
+    (indirect-switch-type
+     '(0 1) `((,self-type
+	       ,(indirect-switch-var
+		 '(0 1) self-type "has-rev-bond"
+		 `((0 ,polymer-detach-f)
+		   (1 ,(indirect-compare-var-to-register
+			'(0 1) self-type "rev-bond-dir" 3
+			`(neq ,(polymer-detach-f))
+			`(eq ,(eval-or-return next))))))))
+     polymer-detach-f))
+
+  (define (polymer-verify-r next)
+    (indirect-switch-type
+     '(4 5) `((,self-type
+	       ,(indirect-switch-var
+		 '(4 5) self-type "has-fwd-bond"
+		 `((0 ,polymer-detach-r)
+		   (1 ,(indirect-compare-var-to-register
+			'(4 5) self-type "fwd-bond-dir" 7
+			`(neq ,(polymer-detach-r))
+			`(eq ,(eval-or-return next))))))))
+     polymer-detach-r))
+
+  (define (polymer-verify-fr)
+    (polymer-verify-f
+     (lambda () (polymer-verify-r polymer-move-fr))))
+
+  (define (polymer-move-subrule)
+    (switch-var origin self-type "has-fwd-bond"
+		`((0 ,(switch-var origin self-type "has-rev-bond"
+				  `((0 ,neumann-drift)
+				    (1 ,(polymer-verify-r polymer-move-r)))))
+		  (1 ,(switch-var origin self-type "has-rev-bond"
+				  `((0 ,(polymer-verify-f polymer-move-f))
+				    (1 ,polymer-verify-fr)))))))
+
 
   ;; Utility functions.
   ;; Optional arguments

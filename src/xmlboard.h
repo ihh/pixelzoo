@@ -44,6 +44,7 @@
 #define XMLZOO_GT          "gt"
 #define XMLZOO_GEQ         "geq"
 #define XMLZOO_EQ          "eq"
+#define XMLZOO_NEQ         "neq"
 #define XMLZOO_NEXT        "next"
 #define XMLZOO_PROB        "prob"
 #define XMLZOO_PASS        "pass"
