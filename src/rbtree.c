@@ -744,6 +744,14 @@ RBNode* RBTreeLast(RBTree* tree) {
   return y;
 }
 
+int RBTreeIsBeforeFirst (RBTree* tree, void* key) {
+  return RBTreeSize(tree) && (*tree->Compare) (key, RBTreeFirst(tree)->key) < 0;
+}
+
+int RBTreeIsAfterLast (RBTree* tree, void* key) {
+  return RBTreeSize(tree) && (*tree->Compare) (key, RBTreeLast(tree)->key) > 0;
+}
+
 void* RBTreeDeepCopyVoid(void* rbTree) { return (void*) RBTreeDeepCopy ((RBTree*) rbTree); }
 void RBTreePrintVoid(void* rbTree) { RBTreePrint ((RBTree*) rbTree); }
 void RBTreeDeleteVoid(void* rbTree) { deleteRBTree ((RBTree*) rbTree); }

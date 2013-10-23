@@ -16,6 +16,8 @@ ParticleRule* newLookupRule() {
   rule = newParticleRule (LookupRule);
   rule->param.lookup.matchRule = newStateMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
   rule->param.lookup.defaultRule = NULL;
+  rule->param.lookup.lowRule = NULL;
+  rule->param.lookup.highRule = NULL;
   return rule;
 }
 
@@ -79,6 +81,10 @@ void deleteParticleRule (void *voidRule) {
     deleteStateMap (lookup->matchRule);
     if (lookup->defaultRule)
       deleteParticleRule (lookup->defaultRule);
+    if (lookup->lowRule)
+      deleteParticleRule (lookup->lowRule);
+    if (lookup->highRule)
+      deleteParticleRule (lookup->highRule);
     break;
 
   case ModifyRule:

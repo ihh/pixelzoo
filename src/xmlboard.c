@@ -227,6 +227,7 @@ ParticleRule* newRuleFromXmlGrandparentNode (void *game, xmlNode* parent, ProtoT
 ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode *ruleParentNode, ProtoTable *protoTable, StringMap **localSubRule) {
   xmlNode *ruleNode;
   ParticleRule *rule;
+  const char* subRuleName;
 
   rule = NULL;
 
@@ -237,6 +238,10 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode *ruleParentNode, Pro
     Assert (ruleNode != NULL && ruleNode->type == XML_ELEMENT_NODE, "Missing rule node");
 
     rule = newRuleFromXmlNode (game, ruleNode, protoTable, localSubRule);
+
+    subRuleName = ATTR(ruleNode,NAME);
+    if (subRuleName)
+      defineSubRule (localSubRule, subRuleName, rule, ((Game*) game)->board->subRule);
   }
 
   return rule;
@@ -341,6 +346,8 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
        (void) StateMapInsert (lookup->matchRule, state, rule);
     }
 
+  lookup->lowRule = newRuleFromXmlGrandparentNode (game, CHILD (node, LOW), protoTable, localSubRule);
+  lookup->highRule = newRuleFromXmlGrandparentNode (game, CHILD (node, HIGH), protoTable, localSubRule);
   lookup->defaultRule = newRuleFromXmlGrandparentNode (game, CHILD (node, DEFAULT), protoTable, localSubRule);
 }
 

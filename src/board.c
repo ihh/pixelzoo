@@ -312,7 +312,13 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	}
 
 	lookupNode = StateMapFind (lookup->matchRule, var);
-	rule = lookupNode ? (ParticleRule*) lookupNode->value : lookup->defaultRule;
+	rule = lookupNode
+	  ? (ParticleRule*) lookupNode->value
+	  : ((lookup->lowRule && StateMapIsBeforeFirst (lookup->matchRule, var))
+	     ? lookup->lowRule
+	     : (lookup->highRule && (StateMapIsAfterLast (lookup->matchRule, var))
+		? lookup->highRule
+		: lookup->defaultRule));
       } else
 	rule = lookup->defaultRule;
       break;

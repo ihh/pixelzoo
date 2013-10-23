@@ -35,6 +35,8 @@
 #define XMLZOO_GOAL        "goal"
 #define XMLZOO_CASE        "case"
 #define XMLZOO_DEFAULT     "default"
+#define XMLZOO_LOW         "low"
+#define XMLZOO_HIGH        "high"
 #define XMLZOO_NEXT        "next"
 #define XMLZOO_PROB        "prob"
 #define XMLZOO_PASS        "pass"

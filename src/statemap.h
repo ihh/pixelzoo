@@ -19,6 +19,8 @@ typedef RBNode StateMapNode;
 #define StateMapInsert(STATEMAPPTR,STATE,VALUE) ((StateMapNode*) RBTreeInsert((RBTree*)STATEMAPPTR,(void*)newState(STATE),(void*)VALUE))
 #define StateMapErase(STATEMAPPTR,STATE) RBTreeErase((RBTree*)STATEMAPPTR,(void*)&STATE)
 #define StateMapFind(STATEMAPPTR,STATE) ((StateMapNode*) RBTreeFind((RBTree*)STATEMAPPTR,(void*)&STATE))
+#define StateMapIsBeforeFirst(STATEMAPPTR,STATE) RBTreeIsBeforeFirst((RBTree*)STATEMAPPTR,(void*)&STATE)
+#define StateMapIsAfterLast(STATEMAPPTR,STATE) RBTreeIsAfterLast((RBTree*)STATEMAPPTR,(void*)&STATE)
 
 /* StateSet, a value-less StateMap */
 typedef StateMap StateSet;

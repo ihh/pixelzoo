@@ -55,6 +55,8 @@ RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
 RBNode* RBTreeFirst(RBTree*);
 RBNode* RBTreeLast(RBTree*);
+int RBTreeIsBeforeFirst(RBTree*, void* key);
+int RBTreeIsAfterLast(RBTree*, void* key);
 void RBTreePrint(RBTree*);  /* debug */
 
 void RBTreeRetain(RBTree*, RBTree*);  /* retains all keys of first RBTree that are also in second RBTree */
