@@ -10,7 +10,7 @@
   (define empty-type "empty")
   (define self-type empty-type)
 
-  ;; locations, neighborhoods, directions
+  ;; directions
   (define origin '(0 0))
 
   (define north '(0 -1))
@@ -23,22 +23,43 @@
   (define southwest '(-1 1))
   (define northwest '(-1 -1))
 
+  ;; (loc-minus loc1 loc2) returns loc2-loc1 as a vector
+  (define (loc-minus loc1 loc2)
+    (list (- (car loc2) (car loc1)) (- (cadr loc2) (cadr loc1))))
+
+  ;; invert-loc flips the sign of a vector
   (define (invert-loc xy)
     (let ((x (car xy))
 	  (y (cadr xy)))
       (list (- 0 x) (- 0 y))))
 
+  ;; neighborhood iterators & functions
   (define neumann-neighborhood (list north east south west))
   (define moore-neighborhood (list north northeast east southeast south southwest west northwest))
 
   (define (map-neumann f) (map f neumann-neighborhood))
   (define (map-moore f) (map f moore-neighborhood))
 
+  (define (map-neumann-dir f) (map f neumann-dirs))
+  (define (map-moore-dir f) (map f moore-dirs))
+
+  (define (map-neighborhood-loc-dir neighborhood f)
+    (map (lambda (dir) (f (list-index neighborhood dir) dir)) (iota (length neighborhood))))
+
+  (define (map-neumann-loc-dir f) (map-neighborhood-loc-dir neumann-neighborhood f))
+  (define (map-moore-loc-dir f) (map-neighborhood-loc-dir moore-neighborhood f))
+
   (define (neumann-loc dir) (list-ref neumann-neighborhood dir))
   (define (moore-loc dir) (list-ref moore-neighborhood dir))
 
   (define (neumann-dir loc) (list-index loc neumann-neighborhood))
   (define (moore-dir loc) (list-index loc moore-neighborhood))
+
+  (define (neumann-neighbor? loc) (>= (neumann-dir loc) 0))
+  (define (moore-neighbor? loc) (>= (moore-dir loc) 0))
+
+  (define (moore-relative-dir dir1 dir2)
+    (moore-dir (loc-minus (moore-loc dir1) (moore-loc dir2))))
 
   (define (neumann-rev loc) (list-index (invert-loc loc) neumann-neighborhood))
   (define (moore-rev loc) (list-index (invert-loc loc) moore-neighborhood))
@@ -93,6 +114,16 @@
   ;; nop (dummy) rule
   (define nop-rule
     '(modify (destmask 0)))
+
+  ;; subrules & gotos
+  (define (subrule name rule)
+    `(subrule (@ (name ,name)) ,(eval-or-return rule)))
+
+  ;; load rules
+  (define (load-rule reg-val-list next)
+    `(load
+      ,(map (lambda (reg-val) `(register (index ,(car reg-val)) (state ,(cadr reg-val)))) reg-val-list)
+      (next ,(rule-eval-or-return next))))
 
   ;; set rule
   (define (set-rule loc type . rest)
@@ -196,7 +227,7 @@
   (define (prob-rule-quicksort lst)
     (quicksort prob-rule-cmp lst))
 
-  (define (random-switch . prob-rule-list)
+  (define (apply-random-switch prob-rule-list)
     (let ((num-rules (length prob-rule-list)))
       (cond
        ((= num-rules 0) nop-rule)
@@ -211,11 +242,17 @@
 		    (rule2 (cadr prob-rule2))
 		    (prob1plus2 (+ prob1 prob2))
 		    (rule1or2 `(random (prob ,(/ prob2 prob1plus2)) (pass (rule ,rule2)) (fail (rule ,rule1)))))
-	       (apply random-switch (cons (list prob1plus2 rule1or2) rest-of-prob-rule-list)))))))
+	       (apply-random-switch (cons (list prob1plus2 rule1or2) rest-of-prob-rule-list)))))))
 
-  (define huffman random-switch)  ;; syntactic sugar: a shorter alias
+  (define (random-switch . prob-rule-list)
+    (apply-random-switch prob-rule-list))
+
+  ;; huffman: shorthand for random-switch. A mixture of syntactic sugar & nostalgia (old name for this function...)
+  (define huffman random-switch)
 
   ;; Neighborhood bindings
+  ;; (bind-neighborhood-dir neighborhood var func)
+  ;; Calls (func loc dir) with 'dir' bound to 'var' and 'loc' bound to the corresponding neighborhood cell
   (define (bind-neighborhood-dir neighborhood dir-var func)
     (switch-var
      origin self-type dir-var
@@ -316,7 +353,7 @@
 
   ;; Polymers
   ;; Vars: has-fwd-bond (1 bit), fwd-bond-dir (3 bits), has-rev-bond (1 bit), rev-bond-dir (3 bits)
-  ;; First, a subrule that verify integrity of upstream & downstream bonds, then attempt a move
+  ;; First, subrules to verify integrity of upstream and/or downstream bonds, then attempt a move
   ;; Registers:
   ;;  (0,1)  location of fwd-bond cell
   ;;  (2,3)  direction & inverse-direction from origin to fwd-bond cell
@@ -326,21 +363,26 @@
   ;; (10,11) direction & inverse-direction from target cell to fwd-bond cell
   ;; (12,13) direction & inverse-direction from target cell to rev-bond cell
 
+  (define polymer-has-fwd-bond-var "has-fwd-bond")
+  (define polymer-has-rev-bond-var "has-rev-bond")
+  (define polymer-fwd-bond-dir-var "fwd-bond-dir")
+  (define polymer-rev-bond-dir-var "rev-bond-dir")
+
   (define (polymer-move-self)
     (indirect-move-self '(8 9)))
 
   (define (polymer-update-f next)
     (set-var-from-register
-     origin self-type "fwd-bond-dir" 10
+     origin self-type polymer-fwd-bond-dir-var 10
      (indirect-set-var-from-register
-      '(0 1) self-type "rev-bond-dir" 11
+      '(0 1) self-type polymer-rev-bond-dir-var 11
       next)))
 
   (define (polymer-update-r next)
     (set-var-from-register
-     origin self-type "rev-bond-dir" 12
+     origin self-type polymer-rev-bond-dir-var 12
      (indirect-set-var-from-register
-      '(4 5) self-type "fwd-bond-dir" 13
+      '(4 5) self-type polymer-fwd-bond-dir-var 13
       next)))
 
   (define (polymer-move-f)
@@ -353,19 +395,19 @@
     (polymer-update-f polymer-move-r))
 
   (define (polymer-detach-f)
-    (set-var origin self-type "has-fwd-bond" 0))
+    (set-var origin self-type polymer-has-fwd-bond-var 0))
 
   (define (polymer-detach-r)
-    (set-var origin self-type "has-rev-bond" 0))
+    (set-var origin self-type polymer-has-rev-bond-var 0))
 
   (define (polymer-verify-f next)
     (indirect-switch-type
      '(0 1) `((,self-type
 	       ,(indirect-switch-var
-		 '(0 1) self-type "has-rev-bond"
+		 '(0 1) self-type polymer-has-rev-bond-var
 		 `((0 ,polymer-detach-f)
 		   (1 ,(indirect-compare-var-to-register
-			'(0 1) self-type "rev-bond-dir" 3
+			'(0 1) self-type polymer-rev-bond-dir-var 3
 			`(neq ,(polymer-detach-f))
 			`(eq ,(eval-or-return next))))))))
      polymer-detach-f))
@@ -374,29 +416,119 @@
     (indirect-switch-type
      '(4 5) `((,self-type
 	       ,(indirect-switch-var
-		 '(4 5) self-type "has-fwd-bond"
+		 '(4 5) self-type polymer-has-fwd-bond-var
 		 `((0 ,polymer-detach-r)
 		   (1 ,(indirect-compare-var-to-register
-			'(4 5) self-type "fwd-bond-dir" 7
+			'(4 5) self-type polymer-fwd-bond-dir-var 7
 			`(neq ,(polymer-detach-r))
 			`(eq ,(eval-or-return next))))))))
      polymer-detach-r))
 
-  (define (polymer-verify-fr)
-    (polymer-verify-f
-     (lambda () (polymer-verify-r polymer-move-fr))))
+  (define (polymer-fr-just-verify-subrule-name) (string-append self-type ".verify.fr"))
+  (define (polymer-fr-subrule-name) (string-append self-type ".fr"))
+  (define (polymer-f-subrule-name) (string-append self-type ".f"))
+  (define (polymer-r-subrule-name) (string-append self-type ".r"))
 
-  (define (polymer-move-subrule)
-    (switch-var origin self-type "has-fwd-bond"
-		`((0 ,(switch-var origin self-type "has-rev-bond"
-				  `((0 ,neumann-drift)
-				    (1 ,(polymer-verify-r polymer-move-r)))))
-		  (1 ,(switch-var origin self-type "has-rev-bond"
-				  `((0 ,(polymer-verify-f polymer-move-f))
-				    (1 ,polymer-verify-fr)))))))
+  (define (polymer-fr-just-verify-subrule)
+    (subrule
+     (polymer-fr-just-verify-subrule-name)
+     (polymer-verify-f
+      (lambda () (polymer-verify-r nop-rule)))))
 
-  ;; Now, enumerate all the cases
-;;  (define (polymer-move-rule)
+  (define (polymer-fr-subrule)
+    (subrule
+     (polymer-fr-subrule-name)
+     (polymer-verify-f
+      (lambda () (polymer-verify-r polymer-move-fr)))))
+
+  (define (polymer-f-subrule)
+    (subrule
+     (polymer-f-subrule-name)
+     (polymer-verify-f polymer-move-f)))
+
+  (define (polymer-r-subrule)
+    (subrule
+     (polymer-r-subrule-name)
+     (polymer-verify-r polymer-move-r)))
+
+  (define (polymer-grep-nbr-dirs dir candidate-nbr-dirs)
+    (grep (lambda (nbr-dir) (moore-neighbor? (loc-minus (moore-loc dir) (moore-loc nbr-dir)))) candidate-nbr-dirs))
+
+  (define (polymer-nbr-dirs dir)
+    (polymer-grep-nbr-dirs dir moore-dirs))
+
+  (define (polymer-nbr2-dirs dir1 dir2)
+    (polymer-grep-nbr-dirs dir1 (polymer-grep-nbr-dirs dir2 moore-dirs)))
+
+  ;; procedure to load registers and perform goto
+  (define (polymer-load-reg fwd-dir rev-dir move-dir goto-label)
+    (let* ((fwd-loc (moore-loc fwd-dir))
+	   (rev-loc (moore-loc rev-dir))
+	   (move-loc (moore-loc move-dir))
+	   (inv-fwd-dir (moore-back fwd-dir))
+	   (inv-rev-dir (moore-back rev-dir))
+	   (new-fwd-dir (moore-relative-dir move-dir fwd-dir))
+	   (new-rev-dir (moore-relative-dir move-dir rev-dir))
+	   (new-inv-fwd-dir (moore-back new-fwd-dir))
+	   (new-inv-rev-dir (moore-back new-rev-dir)))
+      (load-rule `((0 ,(car fwd-loc))
+		   (1 ,(cadr fwd-loc))
+		   (2 ,fwd-dir)
+		   (3 ,inv-fwd-dir)
+		   (4 ,(car rev-loc))
+		   (5 ,(cadr rev-loc))
+		   (6 ,rev-dir)
+		   (7 ,inv-rev-dir)
+		   (8 ,(car move-loc))
+		   (9 ,(cadr move-loc))
+		   (10 ,new-fwd-dir)
+		   (11 ,new-inv-fwd-dir)
+		   (12 ,new-rev-dir)
+		   (13 ,new-inv-rev-dir))
+		 `(goto ,goto-label))))
+
+  ;; Put it all together
+  (define (polymer-move-rule)
+    `(rule
+      ,(polymer-f-subrule)
+      ,(polymer-r-subrule)
+      ,(polymer-fr-subrule)
+      ,(polymer-fr-just-verify-subrule)
+      ,(switch-var
+	origin self-type polymer-has-fwd-bond-var
+	`((0 ,(switch-var
+	       origin self-type polymer-has-rev-bond-var
+	       `((0 ,neumann-drift)
+		 (1 ,(bind-moore-dir
+		      polymer-rev-bond-dir-var
+		      (lambda (rev-loc rev-dir)
+			(apply-random-switch
+			 (map
+			  (lambda (move-dir)
+			    (list 1 (polymer-load-reg 0 rev-dir move-dir (polymer-r-subrule-name))))
+			  (polymer-nbr-dirs rev-dir)))))))))
+	  (1 ,(bind-moore-dir
+	       polymer-fwd-bond-dir-var
+	       (lambda (fwd-loc fwd-dir)
+		 (switch-var
+		  origin self-type polymer-has-rev-bond-var
+		  `((0 ,(apply-random-switch
+			 (map
+			  (lambda (move-dir)
+			    (list 1 (polymer-load-reg fwd-dir 0 move-dir (polymer-f-subrule-name))))
+			  (polymer-nbr-dirs fwd-dir))))
+		    (1 ,(bind-moore-dir
+			 polymer-rev-bond-dir-var
+			 (lambda (rev-loc rev-dir)
+			   (let ((move-dirs (polymer-nbr2-dirs fwd-dir rev-dir)))
+			     (if
+			      (null? move-dirs)
+			      (polymer-load-reg fwd-dir rev-dir 0 (polymer-fr-just-verify-subrule-name))
+			      (apply-random-switch
+			       (map
+				(lambda (move-dir)
+				  (list 1 (polymer-load-reg fwd-dir rev-dir move-dir (polymer-fr-subrule-name))))
+				move-dirs))))))))))))))))
 
   ;; Utility functions.
   ;; Optional arguments
