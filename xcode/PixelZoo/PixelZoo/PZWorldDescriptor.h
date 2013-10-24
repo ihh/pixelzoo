@@ -19,6 +19,12 @@
 - (NSString*)name;
 - (NSString*)identifier;
 
+- (bool)isLocked;
+- (NSString*)lockOwner;
+- (NSInteger)lockExpiryTime;
+- (bool)lockedOut;
+- (NSInteger)nextLockTime;
+
 - (NSMutableURLRequest*)getRequest:(NSString*)controllerSuffix;
 - (NSMutableURLRequest*)postRequest:(NSString*)controllerSuffix withContent:(NSString*)content;
 

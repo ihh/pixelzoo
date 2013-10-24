@@ -7,6 +7,7 @@
 //
 
 #import "PZDefs.h"
+#import "PZAppDelegate.h"
 #import "PZWorldsViewController.h"
 #import "PZWorldDescriptor.h"
 #import "GDataXMLNode.h"
@@ -43,7 +44,12 @@
 
     // get world list, to populate Worlds controller
     // Send an asynchronous request
-    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/",@SERVER_URL_PREFIX]]];
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/",@SERVER_URL_PREFIX]]];
+    
+    // add authentication header
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate addStoredBasicAuthHeader:urlRequest];
+
     worldListConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
     
 }

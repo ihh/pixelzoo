@@ -27,6 +27,10 @@
 @synthesize selectToolsButton;
 @synthesize startTurnButton;
 
+@synthesize currentLock;
+@synthesize nextLock;
+@synthesize lockUpdateTimer;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -42,11 +46,45 @@
 	// Do any additional setup after loading the view.
     worldLabel.text = [worldDescriptor name];
 
-    // get world status (list of tools, detailed lock info, etc)
-    // Send an asynchronous request
-    NSMutableURLRequest *request = [worldDescriptor getRequest:@"status"];
-    worldStatusConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [self initStatusConnection];
 }
+
+- (void) initStatusConnection {
+    if (worldStatusConnection == nil) {
+        // get world status (list of tools, detailed lock info, etc)
+        // Send an asynchronous request
+        NSMutableURLRequest *request = [worldDescriptor getRequest:@"status"];
+        worldStatusConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    }
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [lockUpdateTimer invalidate];
+    lockUpdateTimer = nil;
+
+    worldDescriptor = nil;
+}
+
+-(void)updateLockLabels {
+    if (worldDescriptor) {
+        if ([worldDescriptor isLocked]) {
+            NSInteger expiryTime = [worldDescriptor lockExpiryTime];
+            currentLock.text = [NSString stringWithFormat:@"Locked by %@ for %d:%02d",[worldDescriptor lockOwner],(int)(expiryTime/60),(int)(expiryTime%60)];
+        } else {
+            currentLock.text = [worldDescriptor lockedOut] ? @"Unlocked (but you have to wait)" : @"Unlocked";
+        }
+
+        if ([worldDescriptor lockedOut]) {
+            NSInteger deleteTime = [worldDescriptor nextLockTime];
+            nextLock.text = [NSString stringWithFormat:@"Next turn in %d:%02d",(int)(deleteTime/60),(int)(deleteTime%60)];
+        } else {
+            nextLock.text = @"";
+        }
+        [self.view setNeedsDisplay];
+    }
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -99,12 +137,19 @@
     worldDescriptor.statusNode = [doc rootElement];
     selectedToolIDs = [worldDescriptor defaultToolIDs];
     toolboxLabel.text = [worldDescriptor toolboxName];
-    [self.view setNeedsDisplay];
+
+    worldStatusConnection = nil;
+
+    [lockUpdateTimer invalidate];
+    self.lockUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateLockLabels) userInfo:nil repeats:YES];
+
+    [self updateLockLabels];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     // The request has failed for some reason!
     // Check the error var
 }
+
 
 @end

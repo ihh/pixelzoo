@@ -30,6 +30,7 @@ Returns list of worlds
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+    $c->authenticate({});
     my @worlds = $c->model('DB')->worlds;
     $c->stash->{worlds} = \@worlds;
     $c->stash->{template} = 'world/list.tt2';
@@ -89,6 +90,7 @@ sub status :Chained('world_id') :PathPart('status') :Args(0) :ActionClass('REST'
 sub status_GET {
     my ( $self, $c ) = @_;
     $c->authenticate({});
+    $c->stash->{expired_locks} = [ $c->stash->{world}->expired_locks ($c->user->id) ];
     $c->stash->{template} = 'world/status.tt2';
 # Commenting out this last_modified stuff until we know for sure that the page won't contain any later-modified info, e.g. current lock details
 #    $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
@@ -294,6 +296,9 @@ sub lock_end_POST {
     my $lock = $c->stash->{lock};
     if (defined $lock) {
 	$c->response->status(423);
+	$c->detach();
+    } elsif ($world->expired_locks ($user_id)) {
+	$c->response->status(403);
 	$c->detach();
     } else {
 	# create the lock...

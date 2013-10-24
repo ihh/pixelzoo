@@ -35,9 +35,43 @@
     return [idElement stringValue];
 }
 
+- (bool)isLocked {
+    return [self lockOwner] != nil && [self lockExpiryTime] > 0;
+}
+- (NSString*)lockOwner {
+    NSArray *names = [statusNode nodesForXPath:@"lock/owner/name" error:nil];
+    if ([names count]) {
+        GDataXMLElement *nameElement = [names objectAtIndex:0];
+        return [nameElement stringValue];
+    }
+    return nil;
+}
+- (NSInteger)lockExpiryTime {
+    NSArray *expires = [statusNode nodesForXPath:@"lock/expires" error:nil];
+    if ([expires count]) {
+        GDataXMLElement *expElement = [expires objectAtIndex:0];
+        return [[expElement stringValue] integerValue] - [[NSDate date] timeIntervalSince1970];
+    }
+    return 0;
+}
+- (bool)lockedOut {
+    return [self nextLockTime] > 0;
+}
+- (int)nextLockTime {
+    NSArray *nextLock = [statusNode nodesForXPath:@"nextlock" error:nil];
+    if ([nextLock count]) {
+        GDataXMLElement *nextElement = [nextLock objectAtIndex:0];
+        return [[nextElement stringValue] integerValue] - [[NSDate date] timeIntervalSince1970];
+    }
+    return 0;
+}
+
+
 - (NSMutableURLRequest*)getRequest:(NSString *)controllerSuffix {
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
+                                                           cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                                       timeoutInterval:60.0];
 
     // add authentication header
     PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];

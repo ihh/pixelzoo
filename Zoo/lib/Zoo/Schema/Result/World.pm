@@ -243,6 +243,22 @@ sub active_locks {
     return @locks;
 }
 
+=head2 expired_locks
+
+Returned type: list that should contain zero or one L<Zoo::Schema::Result::Locks> objects
+
+=cut
+
+sub expired_locks {
+    my ($self, $user_id) = @_;
+    my $current_time = time();
+    my @locks = $self->locks->search({'world_id' => $self->id,
+				      'owner_id' => $user_id,
+				      'delete_time' => { '>' => $current_time },
+				      'expiry_time' => { '<=' => $current_time }});
+    return @locks;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

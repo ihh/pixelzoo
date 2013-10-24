@@ -1,12 +1,11 @@
-Authenticate worldlist
-In world/XXX/status, include time-to-deletion for any expired locks you created; disable "Start Turn" if an expired lock remains
+In world/XXX/status, disable "Start Turn" if an expired lock remains
+In world/XXX/status, bypass PZLockViewController's POST if it's your lock
 
-Update status screen to show current lock & disable "Start turn" button (or bypass PZLockViewController's POST if it's your lock)
+Add a lock timeout countdown to lock & game screens
+Lock timeout from game screen => exit game screen, disable Play button
+
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
-
-Add a lock timeout countdown to status, lock & game screens
-Lock timeout from game screen => exit game screen, disable Play button
 
 Add some real multiplayer game content (player particles/tools, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
 

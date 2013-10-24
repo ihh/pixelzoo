@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="FAa-eh-MAL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="FAa-eh-MAL">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <development version="4600" identifier="xcode"/>
@@ -308,22 +308,41 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OH-g6-VfM">
+                                <rect key="frame" x="0.0" y="124" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGj-B1-Hz7">
+                                <rect key="frame" x="0.0" y="160" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Eq8-5N-CnD" firstAttribute="leading" secondItem="fhe-Fb-Cbf" secondAttribute="leading" type="default" id="0ne-Lc-838"/>
                             <constraint firstItem="Eq8-5N-CnD" firstAttribute="trailing" secondItem="fhe-Fb-Cbf" secondAttribute="trailing" type="default" id="2ET-4f-YiO"/>
-                            <constraint firstItem="2HA-T6-3gt" firstAttribute="leading" secondItem="6Qw-qs-yo0" secondAttribute="leading" type="default" id="2dH-uB-QyJ"/>
                             <constraint firstAttribute="bottom" secondItem="Umj-BM-dL0" secondAttribute="bottom" constant="217" id="3Y0-9q-Cxv"/>
                             <constraint firstAttribute="bottom" secondItem="Eq8-5N-CnD" secondAttribute="bottom" constant="146" id="CHi-pM-o93"/>
                             <constraint firstItem="2HA-T6-3gt" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="76" id="MUW-Md-ufD"/>
+                            <constraint firstItem="OGj-B1-Hz7" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="160" id="Oxq-CF-Mfq"/>
+                            <constraint firstItem="7OH-g6-VfM" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="124" id="SI7-WW-jHP"/>
+                            <constraint firstItem="7OH-g6-VfM" firstAttribute="leading" secondItem="6Qw-qs-yo0" secondAttribute="leading" type="default" id="W6Z-rK-bdj"/>
                             <constraint firstItem="Umj-BM-dL0" firstAttribute="centerX" secondItem="Eq8-5N-CnD" secondAttribute="centerX" type="default" id="ZIf-6u-Sbi"/>
+                            <constraint firstItem="OGj-B1-Hz7" firstAttribute="leading" secondItem="7OH-g6-VfM" secondAttribute="leading" type="default" id="aOP-fs-URS"/>
+                            <constraint firstItem="7OH-g6-VfM" firstAttribute="leading" secondItem="2HA-T6-3gt" secondAttribute="leading" type="default" id="qJ4-nF-cRP"/>
                             <constraint firstItem="fhe-Fb-Cbf" firstAttribute="centerX" secondItem="6Qw-qs-yo0" secondAttribute="centerX" type="user" id="uGw-JV-FGS"/>
                             <constraint firstAttribute="bottom" secondItem="fhe-Fb-Cbf" secondAttribute="bottom" constant="67" id="uxf-gW-qiD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="J5a-BQ-wn6"/>
                     <connections>
+                        <outlet property="currentLock" destination="7OH-g6-VfM" id="1bD-pJ-QiB"/>
+                        <outlet property="nextLock" destination="OGj-B1-Hz7" id="bc3-jR-gQB"/>
                         <outlet property="selectToolsButton" destination="Eq8-5N-CnD" id="J8c-ru-ujK"/>
                         <outlet property="startTurnButton" destination="fhe-Fb-Cbf" id="H96-oV-aeI"/>
                         <outlet property="toolboxLabel" destination="Umj-BM-dL0" id="acO-hB-B8P"/>
