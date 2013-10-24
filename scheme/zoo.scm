@@ -335,6 +335,28 @@
   (define (if-empty-move-self dest . rest)
     (apply if-empty (append (list dest move-self) rest)))
 
+  ;; (indirect-if-type dest dest-type func next fail)
+  ;; if indirectly-addressed location dest contains dest-type, do (func dest next), otherwise do fail
+  (define (indirect-if-type dest dest-type func . rest)
+    (let ((next (opt-arg rest 0 #f))
+	  (fail (opt-arg rest 1 #f)))
+      (apply indirect-switch-type (append (list dest `((,dest-type ,(apply func (cons dest next))))) fail))))
+
+  ;; (indirect-if-empty dest func next fail)
+  ;; if location dest is empty, do (func dest next), otherwise do fail
+  (define (indirect-if-empty dest func . rest)
+    (apply indirect-if-type (append (list dest empty-type func) rest)))
+
+  ;; (indirect-if-empty-copy-self dest next fail)
+  ;; if location dest is empty, do (copy-self dest next), otherwise do fail
+  (define (indirect-if-empty-copy-self dest . rest)
+    (apply indirect-if-empty (append (list dest indirect-copy-self) rest)))
+
+  ;; (indirect-if-empty-move-self dest next fail)
+  ;; if location dest is empty, do (move-self dest next), otherwise do fail
+  (define (indirect-if-empty-move-self dest . rest)
+    (apply indirect-if-empty (append (list dest indirect-move-self) rest)))
+
   ;; Random walks
   ;; (drift-rule map-neighborhood next fail)
   ;; if random neighborhood location dest is empty, do (move-self dest (next dest)), otherwise do (fail dest)
@@ -386,13 +408,20 @@
       next)))
 
   (define (polymer-move-f)
-    (polymer-update-f polymer-move-self))
+    (indirect-switch-type
+     '(8 9) empty-type
+     (polymer-update-f polymer-move-self)))
 
   (define (polymer-move-r)
-    (polymer-update-r polymer-move-self))
+    (indirect-switch-type
+     '(8 9) empty-type
+     (polymer-update-r polymer-move-self)))
 
   (define (polymer-move-fr)
-    (polymer-update-f polymer-move-r))
+    (indirect-switch-type
+     '(8 9) empty-type
+     (polymer-update-f
+      (lambda () (polymer-update-r polymer-move-self)))))
 
   (define (polymer-detach-f)
     (set-var origin self-type polymer-has-fwd-bond-var 0))
