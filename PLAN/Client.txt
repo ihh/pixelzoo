@@ -1,4 +1,5 @@
-Authenticate world/XXX/status and worldlist; include time-to-deletion for any expired locks you created
+Authenticate worldlist
+In world/XXX/status, include time-to-deletion for any expired locks you created; disable "Start Turn" if an expired lock remains
 
 Update status screen to show current lock & disable "Start turn" button (or bypass PZLockViewController's POST if it's your lock)
 Add an alert with informative error message for failed lock (rather than just popping)
