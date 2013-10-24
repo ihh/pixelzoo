@@ -31,11 +31,15 @@ char* sexp_pixelzoo_module_path = "";  // empty for now
     // set up chibi global variables to point to Scheme module resource bundles
     NSString *chibiLibDirectoryPath = [[[NSBundle mainBundle] resourcePath]
 					stringByAppendingPathComponent:@"lib"];
-    sexp_default_module_path = (char*) [chibiLibDirectoryPath UTF8String];
+    char *default_module_path = (char*) [chibiLibDirectoryPath UTF8String];
+    sexp_default_module_path = malloc (strlen (default_module_path) + 1);
+    strcpy(sexp_default_module_path,default_module_path);
 
     NSString *pzSchemeFilePath = [[[NSBundle mainBundle] resourcePath]
 				   stringByAppendingPathComponent:@"scheme/zoo.scm"];
-    sexp_pixelzoo_module_path = (char*) [pzSchemeFilePath UTF8String];
+    char* pixelzoo_module_path = (char*) [pzSchemeFilePath UTF8String];
+    sexp_pixelzoo_module_path = malloc (strlen (pixelzoo_module_path) + 1);
+    strcpy(sexp_pixelzoo_module_path,pixelzoo_module_path);
 
     // check stored authentication info
     if ([self gotDefaultUser])

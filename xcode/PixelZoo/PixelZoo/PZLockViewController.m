@@ -51,7 +51,7 @@
     [toolsString appendString:@"</tools></lock>"];
 
     // Create the request.
-    NSMutableURLRequest *request = [worldDescriptor authenticatedPostRequest:@"lock" withContent:toolsString];
+    NSMutableURLRequest *request = [worldDescriptor postRequest:@"lock" withContent:toolsString];
     
     // Create url connection and fire request
     lockConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];

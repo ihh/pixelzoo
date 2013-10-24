@@ -6,9 +6,6 @@
     <name>[% world.owner.username %]</name></owner>
   <size>[% world.meta_rel.board_size %]</size>
   <time>[% world.board_time %]</time>
-  <owner>
-    <id>[% world.owner_id %]</id>
-    <name>[% world.owner.username %]</name></owner>
   <toolbox>
     <owner>
       <name>[% world.meta_rel.owner_toolbox.name %]</name>

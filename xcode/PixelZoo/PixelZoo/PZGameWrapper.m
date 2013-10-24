@@ -54,7 +54,7 @@
     free ((char*) turnCString);
 
     // Create the request.
-    NSMutableURLRequest *request = [worldDescriptor authenticatedPostRequest:@"turn" withContent:turnString];
+    NSMutableURLRequest *request = [worldDescriptor postRequest:@"turn" withContent:turnString];
     
     // Create url connection and fire request
     turnConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];

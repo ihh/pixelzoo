@@ -75,7 +75,8 @@ sub board :Chained('world_id') :PathPart('board') :Args(0) :ActionClass('REST') 
 sub board_GET {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'world/board.tt2';
-    $c->response->headers->last_modified($c->stash->{world}->last_modified_time);
+# Commenting out this last_modified stuff until we know for sure that the page won't contain any later-modified info, e.g. current lock details
+#    $c->response->headers->last_modified($c->stash->{world}->last_modified_time);
 }
 
 
@@ -87,8 +88,10 @@ sub status :Chained('world_id') :PathPart('status') :Args(0) :ActionClass('REST'
 
 sub status_GET {
     my ( $self, $c ) = @_;
+    $c->authenticate({});
     $c->stash->{template} = 'world/status.tt2';
-    $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
+# Commenting out this last_modified stuff until we know for sure that the page won't contain any later-modified info, e.g. current lock details
+#    $c->response->headers->last_modified($c->stash->{world}->last_stolen_time);
 }
 
 =head2 game

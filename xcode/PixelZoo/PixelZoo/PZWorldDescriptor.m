@@ -38,19 +38,20 @@
 - (NSMutableURLRequest*)getRequest:(NSString *)controllerSuffix {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
+
+    // add authentication header
+    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate addStoredBasicAuthHeader:request];
+    
     return request;
 }
 
-- (NSMutableURLRequest*)authenticatedPostRequest:(NSString*)controllerSuffix withContent:(NSString*)content {
+- (NSMutableURLRequest*)postRequest:(NSString*)controllerSuffix withContent:(NSString*)content {
     // start with a GET request URL
     NSMutableURLRequest *request = [self getRequest:controllerSuffix];
 
     // Specify instead that it will be a POST request
     request.HTTPMethod = @"POST";
-    
-    // add authentication header
-    PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate addStoredBasicAuthHeader:request];
     
     // set Content-Type to XML, and set content itself
     [Base64 setContentTypeXML:request withContent:content];
