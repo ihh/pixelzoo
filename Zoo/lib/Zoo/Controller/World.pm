@@ -50,7 +50,7 @@ sub world_id :Chained('/') :PathPart('world') :CaptureArgs(1) {
     my $world = $c->model('DB')->world_by_id($world_id);
     if (!defined $world) {
 	$c->stash( error_msg => "World $world_id does not exist" );
-	$c->response->status(404);
+	$c->response->status(404);  # 404 Not Found
 	$c->detach();
     }
 
@@ -283,7 +283,7 @@ sub lock_end_GET {
 	$c->detach;
     } else {
 	$c->stash( error_msg => "No lock found" );
-	$c->response->status(404);
+	$c->response->status(404);  # 404 Not Found
 	$c->detach();
     }
 }
@@ -295,10 +295,15 @@ sub lock_end_POST {
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
     if (defined $lock) {
-	$c->response->status(423);
-	$c->detach();
+	if ($lock->owner_id == $user_id) {
+	    $c->stash->{template} = 'world/lock.tt2';
+	    $c->stash->{lock} = $lock;
+	    $self->response->status (200);  # 200 OK
+	} else {
+	    $c->response->status(423);  # 423 Locked
+	}
     } elsif ($world->expired_locks ($user_id)) {
-	$c->response->status(403);
+	$c->response->status(403);  # 403 Forbidden
 	$c->detach();
     } else {
 	# create the lock...
@@ -346,7 +351,7 @@ sub lock_id :Chained('lock') :PathPart('') :CaptureArgs(1) {
     my $lock = $c->stash->{lock};
     unless (defined($lock) && $lock->id == $lock_id) {
 	$c->stash( error_msg => "Lock $lock_id not found in world " . $c->stash->{world}->id );
-	$c->response->status(404);
+	$c->response->status(404);  # 404 Not Found
 	$c->detach();
     }
 }
