@@ -46,6 +46,12 @@
     
 	// Do any additional setup after loading the view.
     worldLabel.text = [NSString stringWithFormat:@"Planet %@",[worldDescriptor name]];
+
+    [[startTurnButton layer] setBorderWidth:1.0];
+    [[startTurnButton layer] setCornerRadius:3.0];
+
+    [[selectToolsButton layer] setBorderWidth:1.0];
+    [[selectToolsButton layer] setCornerRadius:3.0];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -64,8 +70,6 @@
 - (void) viewWillDisappear:(BOOL)animated {
     [lockUpdateTimer invalidate];
     lockUpdateTimer = nil;
-    
-    [worldDescriptor setStatusNode:nil];
 }
 
 -(void)updateLockLabels {
@@ -73,9 +77,23 @@
         if ([worldDescriptor isLocked]) {
             NSInteger expiryTime = [worldDescriptor lockExpiryTime];
             currentLock.text = [NSString stringWithFormat:@"Locked by %@ for %d:%02d",[worldDescriptor lockOwner],(int)(expiryTime/60),(int)(expiryTime%60)];
+            bool myLock = [worldDescriptor userOwnsLock];
+            [startTurnButton setTitle:(myLock ? @"Continue turn" : @"Start turn") forState:UIControlStateNormal];
+            startTurnButton.enabled = myLock;
+            selectToolsButton.enabled = !myLock;
+            startTurnButton.alpha = myLock ? 1.0 : 0.5;
+            selectToolsButton.alpha = myLock ? 0.5 : 1.0;
         } else {
-            currentLock.text = [worldDescriptor lockedOut] ? @"Unlocked (but you have to wait)" : @"Unlocked";
+            bool lockedOut = [worldDescriptor lockedOut];
+            currentLock.text = lockedOut ? @"Unlocked (but you have to wait)" : @"Unlocked";
+            [startTurnButton setTitle:@"Start turn" forState:UIControlStateNormal];
+            startTurnButton.enabled = !lockedOut;
+            selectToolsButton.enabled = YES;
+            startTurnButton.alpha = lockedOut ? 0.5 : 1.0;
+            selectToolsButton.alpha = 1.0;
         }
+        [startTurnButton sizeToFit];
+        [selectToolsButton sizeToFit];
 
         if ([worldDescriptor lockedOut]) {
             NSInteger deleteTime = [worldDescriptor nextLockTime];
@@ -139,7 +157,7 @@
     
     worldDescriptor.statusNode = [doc rootElement];
     selectedToolIDs = [worldDescriptor defaultToolIDs];
-    toolboxLabel.text = [worldDescriptor toolboxName];
+    toolboxLabel.text = [NSString stringWithFormat:@"Terraforming: %@",[worldDescriptor toolboxName]];
 
     worldStatusConnection = nil;
 

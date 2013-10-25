@@ -90,6 +90,7 @@ sub status :Chained('world_id') :PathPart('status') :Args(0) :ActionClass('REST'
 sub status_GET {
     my ( $self, $c ) = @_;
     $c->authenticate({});
+    $c->stash->{user} = $c->user;
     $c->stash->{expired_locks} = [ $c->stash->{world}->expired_locks ($c->user->id) ];
     $c->stash->{template} = 'world/status.tt2';
 # Commenting out this last_modified stuff until we know for sure that the page won't contain any later-modified info, e.g. current lock details
@@ -294,19 +295,22 @@ sub lock_end_POST {
     my $user_id = $c->user->id;
     my $world = $c->stash->{world};
     my $lock = $c->stash->{lock};
-    if (defined $lock) {
-	if ($lock->owner_id == $user_id) {
-	    $c->stash->{template} = 'world/lock.tt2';
-	    $c->stash->{lock} = $lock;
-	    $self->response->status (200);  # 200 OK
-	} else {
-	    $c->response->status(423);  # 423 Locked
-	}
+    my $create_time = time();
+    my $expiry_time = $create_time + $world->meta_rel->lock_expiry_delay;
+    if (defined($lock) && $lock->owner_id != $user_id) {
+	$c->response->status(423);  # 423 Locked
     } elsif ($world->expired_locks ($user_id)) {
 	$c->response->status(403);  # 403 Forbidden
 	$c->detach();
     } else {
+	# if user already owns a lock, delete it but keep its expiry time
+	if (defined($lock) && $lock->owner_id == $user_id) {
+	    $expiry_time = $lock->expiry_time;
+	    $lock->delete;
+	    $lock = undef;
+	}
 	# create the lock...
+	my $delete_time = $expiry_time + $world->meta_rel->lock_delete_delay;
 	# First, get the tool names from the POST'ed lock XML
 	my @tool_ids;
 	if ($c->request->content_length) {
@@ -321,10 +325,7 @@ sub lock_end_POST {
 	my $compiled_xml = $c->stash->{grammar}->compiled_xml;
 	my $proto_xml = &{$c->stash->{grammar}->get_assembled_xml_stash}();
 	# add the lock to the database
-	my $create_time = time();
-	my $expiry_time = $create_time + $world->meta_rel->lock_expiry_delay;
-	my $delete_time = $create_time + $world->meta_rel->lock_delete_delay;
-	my $lock = $c->model('DB::Lock')->create({
+	$lock = $c->model('DB::Lock')->create({
 	    world_id => $c->stash->{world}->id,
 	    owner_id => $user_id,
 	    create_time => $create_time,
@@ -373,11 +374,15 @@ sub lock_id_end_DELETE {
     # If user owns lock, delete it; otherwise, complain
     my $lock = $c->stash->{lock};
     if ($user_id == $lock->owner_id) {
-	# we don't actually delete the lock; just set its expiry_time to now
+	# we don't actually delete the lock; just set its expiry_time to now, and reduce its delete_time
 	my $current_time = time();
 	$lock->expiry_time ($current_time);
+	$lock->delete_time ($current_time + $lock->world->meta_rel->lock_delete_delay);
 	$lock->update;
-	$c->response->status(204);  # 204 No Content (success)
+	# return the modified lock
+	$c->stash->{template} = 'world/lock.tt2';
+	$c->stash->{lock} = $lock;
+	$c->response->status (200);  # 200 OK
     } else {
 	$c->response->status(403);  # 403 Forbidden
     }

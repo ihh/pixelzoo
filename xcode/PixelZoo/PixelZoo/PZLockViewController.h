@@ -25,6 +25,10 @@
 @property (nonatomic, retain) NSURLConnection *lockConnection;
 
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIButton *endTurnButton;
 @property (nonatomic, strong) IBOutlet UILabel *lockLabel;
+
+- (IBAction)endTurn:(id)sender;
+
 
 @end

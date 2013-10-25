@@ -36,7 +36,9 @@
       <id>[% lock.lock_id %]</id>
       <owner>
 	<id>[% lock.owner_id %]</id>
-      <name>[% lock.owner.username %]</name></owner>
+	<name>[% lock.owner.username %]</name>
+	<is-user>[% lock.owner_id == user.id ? 1 : 0 %]</is-user>
+      </owner>
       <expires>[% lock.expiry_time %]</expires>
       <deleted>[% lock.delete_time %]</deleted>
     </lock>

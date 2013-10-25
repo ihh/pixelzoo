@@ -25,6 +25,7 @@
 @synthesize gameWrapper;
 
 @synthesize playButton;
+@synthesize endTurnButton;
 @synthesize lockLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -40,9 +41,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+    [[playButton layer] setBorderWidth:1.0];
+    [[playButton layer] setCornerRadius:3.0];
+
+    [[endTurnButton layer] setBorderWidth:1.0];
+    [[endTurnButton layer] setCornerRadius:3.0];
+
+    [playButton sizeToFit];
+    [endTurnButton sizeToFit];
+
     // POST a lock to SERVER_URL_PREFIX/world/WorldID/lock
-    // http://codewithchris.com/tutorial-how-to-use-ios-nsurlconnection-by-example/
-    
     // Create tools description
     NSMutableString *toolsString = [[NSMutableString alloc] initWithString:@"<lock><tools>"];
     for (NSString* toolID in selectedToolIDs) {
@@ -74,10 +83,10 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [lockConnection cancel];
     if ([self isMovingFromParentViewController]) {
-        if ([gameWrapper turnSaved])
-            [lockDescriptor deleteLock];
-        else
-            [gameWrapper postTurnAndDeleteLock];
+        if (![gameWrapper turnSaved])
+            [gameWrapper postTurn];
+        lockDescriptor = nil;  // force reload of lock
+        [worldDescriptor setStatusNode:nil];  // force reload of status in parent controller
     }
     [super viewWillDisappear:animated];
 }
@@ -90,6 +99,15 @@
         [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)endTurn:(id)sender {
+    if ([gameWrapper turnSaved])
+        [lockDescriptor deleteLock];
+    else
+        [gameWrapper postTurnAndDeleteLock];
+    lockDescriptor = nil;  // force reload of lock
+    [worldDescriptor setStatusNode:nil];  // force reload of status in parent controller
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark NSURLConnection Delegate Methods
 
@@ -100,7 +118,8 @@
     // also serves to clear it
     lockData = [[NSMutableData alloc] init];
     httpLockResponse = (NSHTTPURLResponse*)response;
-    if ([httpLockResponse statusCode] != 201) {  // 201 NO CONTENT (success)
+    int statusCode = [httpLockResponse statusCode];
+    if (statusCode != 200 && statusCode != 201) {  // 200 OK, 201 Created
         [self.lockConnection cancel];
         lockFailed = YES;
         if (didAppear)
@@ -124,7 +143,8 @@
     // We can parse the stuff in the instance variable now
     
     // check that lock was successfully POSTed
-    if ([httpLockResponse statusCode] == 201) {  // 201 CREATED
+    int statusCode = [httpLockResponse statusCode];
+    if (statusCode == 200 || statusCode == 201) {  // 200 OK, 201 CREATED
         lockDescriptor = [PZLockDescriptor alloc];
         [lockDescriptor initFromLockData:lockData forWorld:worldDescriptor];
 
@@ -135,6 +155,9 @@
         
         playButton.enabled = YES;
         playButton.alpha = 1.0;
+        
+        endTurnButton.enabled = YES;
+        endTurnButton.alpha = 1.0;
         
         // TODO:
         // get lock expiration time; add an NSTimer for lock expiration

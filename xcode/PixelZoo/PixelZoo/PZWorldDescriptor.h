@@ -21,6 +21,7 @@
 
 - (bool)isLocked;
 - (NSString*)lockOwner;
+- (bool)userOwnsLock;
 - (NSInteger)lockExpiryTime;
 - (bool)lockedOut;
 - (NSInteger)nextLockTime;

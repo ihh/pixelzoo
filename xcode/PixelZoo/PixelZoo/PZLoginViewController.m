@@ -33,7 +33,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    [self.loginButton setTitle:(accountExists ? @"Log in" : @"Create account") forState:UIControlStateNormal];
+    [[loginButton layer] setBorderWidth:1.0];
+    [[loginButton layer] setCornerRadius:3.0];
+    [loginButton sizeToFit];
+    
+    [loginButton setTitle:(accountExists ? @"Log in" : @"Create account") forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning

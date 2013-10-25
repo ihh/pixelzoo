@@ -46,6 +46,15 @@
     }
     return nil;
 }
+- (bool)userOwnsLock {
+    NSArray *isUserArray = [statusNode nodesForXPath:@"lock/owner/is-user" error:nil];
+    if ([isUserArray count]) {
+        GDataXMLElement *isUserElement = [isUserArray objectAtIndex:0];
+        return [[isUserElement stringValue] integerValue] ? YES : NO;
+    }
+    return NO;
+}
+
 - (NSInteger)lockExpiryTime {
     NSArray *expires = [statusNode nodesForXPath:@"lock/expires" error:nil];
     if ([expires count]) {

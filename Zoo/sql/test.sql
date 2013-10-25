@@ -1,7 +1,7 @@
 
 insert into user values (1, 'yam', 'pass', 100);
 
-insert into world_meta values (1, 128, 1, 1, 60, 120, '<game><goal><true/><!-- owner --></goal></game>', '<game><goal><true/><!-- guest --></goal></game>', '<game><goal><true/><!-- voyeur -->Hello voyeur!</goal></game>');
+insert into world_meta values (1, 128, 1, 1, 60, 10, '<game><goal><true/><!-- owner --></goal></game>', '<game><goal><true/><!-- guest --></goal></game>', '<game><goal><true/><!-- voyeur -->Hello voyeur!</goal></game>');
 
 insert into world values (1, 'earth', 1, 1, 0, 1000, 2000, '<board><size>128</size><init><x>99</x><y>99</y><gvars><type>cement</type></gvars></init></board>');
 

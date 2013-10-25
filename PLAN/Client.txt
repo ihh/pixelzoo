@@ -1,16 +1,13 @@
-Change lock/DELETE logic: only delete the lock if player explicitly hits an "End Turn" button from lock screen (this should also shorten the time-to-delete)
-
-In world/XXX/status, disable "Start Turn" if an expired lock remains
-In world/XXX/status, disable "Select Tools" if you already have a lock (and change "Start Turn" to "Continue")
-
-
 Add a lock timeout countdown to lock & game screens
-Lock timeout from game screen => exit game screen, disable Play button
+Lock timeout from game screen => unwind segue to status screen
+Lock timeout from lock screen => unwind segue to status screen
 
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
 
 Add some real multiplayer game content (player particles/tools, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
+
+Add summary counts of player/owner particles to lock screen
 
 Create user/worlds controller (authenticated) that lists created, owned & neighboring worlds, together with expiry times for active locks & deletion times for any of your old locks
 Modify Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
