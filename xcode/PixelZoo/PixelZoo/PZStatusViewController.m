@@ -43,9 +43,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view.
-    worldLabel.text = [worldDescriptor name];
+    worldLabel.text = [NSString stringWithFormat:@"Planet %@",[worldDescriptor name]];
+}
 
+-(void)viewWillAppear:(BOOL)animated {
     [self initStatusConnection];
 }
 
@@ -61,8 +64,8 @@
 - (void) viewWillDisappear:(BOOL)animated {
     [lockUpdateTimer invalidate];
     lockUpdateTimer = nil;
-
-    worldDescriptor = nil;
+    
+    [worldDescriptor setStatusNode:nil];
 }
 
 -(void)updateLockLabels {

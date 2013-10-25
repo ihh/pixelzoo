@@ -1,5 +1,8 @@
 In world/XXX/status, disable "Start Turn" if an expired lock remains
-In world/XXX/status, bypass PZLockViewController's POST if it's your lock
+In world/XXX/status, disable "Select Tools" if you already have a lock (and change "Start Turn" to "Continue")
+In world/XXX/status, bypass PZLockViewController's POST if you already have a lock (GET the current lock instead)
+
+Change lock/DELETE logic: only delete the lock if player explicitly hits an "End Turn" button from lock screen (this should also shorten the time-to-delete)
 
 Add a lock timeout countdown to lock & game screens
 Lock timeout from game screen => exit game screen, disable Play button
