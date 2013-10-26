@@ -1,3 +1,4 @@
+Tidy up game screen layout
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
 
 Add an alert with informative error message for failed lock (rather than just popping)
@@ -11,8 +12,6 @@ Create user/worlds controller (authenticated) that lists created, owned & neighb
 Modify Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
 
 Automatically create one new world per player, at registration time
-
-Add custom UINavigationController UIAppearance that confirms "Back" button
 
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
