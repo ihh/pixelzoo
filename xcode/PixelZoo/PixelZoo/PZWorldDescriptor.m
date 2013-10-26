@@ -12,6 +12,9 @@
 #import "Base64.h"
 #import "GDataXMLNode.h"
 
+// add a few extra seconds to the lockout delay, to ward off race conditions
+#define LOCK_DELETE_DELAY_PADDING 3
+
 @implementation PZWorldDescriptor
 
 @synthesize worldNode;
@@ -35,8 +38,14 @@
     return [idElement stringValue];
 }
 
+- (NSString*)owner {
+    NSArray *owners = [worldNode nodesForXPath:@"owner/name" error:nil];
+    GDataXMLElement *ownerElement = [owners objectAtIndex:0];
+    return [ownerElement stringValue];
+}
+
 - (bool)isLocked {
-    return [self lockOwner] != nil && [self lockExpiryTime] > 0;
+    return [self lockOwner] != nil && [self lockExpiryWait] > 0;
 }
 - (NSString*)lockOwner {
     NSArray *names = [statusNode nodesForXPath:@"lock/owner/name" error:nil];
@@ -55,7 +64,7 @@
     return NO;
 }
 
-- (NSInteger)lockExpiryTime {
+- (NSInteger)lockExpiryWait {
     NSArray *expires = [statusNode nodesForXPath:@"lock/expires" error:nil];
     if ([expires count]) {
         GDataXMLElement *expElement = [expires objectAtIndex:0];
@@ -64,13 +73,13 @@
     return 0;
 }
 - (bool)lockedOut {
-    return [self nextLockTime] > 0;
+    return [self lockDeleteWait] > 0;
 }
-- (int)nextLockTime {
+- (int)lockDeleteWait {
     NSArray *nextLock = [statusNode nodesForXPath:@"nextlock" error:nil];
     if ([nextLock count]) {
         GDataXMLElement *nextElement = [nextLock objectAtIndex:0];
-        return [[nextElement stringValue] integerValue] - [[NSDate date] timeIntervalSince1970];
+        return [[nextElement stringValue] integerValue] - [[NSDate date] timeIntervalSince1970] + LOCK_DELETE_DELAY_PADDING;
     }
     return 0;
 }

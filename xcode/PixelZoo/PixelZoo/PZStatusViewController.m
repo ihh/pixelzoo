@@ -23,6 +23,7 @@
 @synthesize selectedToolIDs;
 
 @synthesize worldLabel;
+@synthesize ownerLabel;
 @synthesize toolboxLabel;
 @synthesize selectToolsButton;
 @synthesize startTurnButton;
@@ -46,6 +47,7 @@
     
 	// Do any additional setup after loading the view.
     worldLabel.text = [NSString stringWithFormat:@"Planet %@",[worldDescriptor name]];
+    ownerLabel.text = [NSString stringWithFormat:@"Ruler: %@",[worldDescriptor owner]];
 
     [[startTurnButton layer] setBorderWidth:1.0];
     [[startTurnButton layer] setCornerRadius:3.0];
@@ -75,7 +77,7 @@
 -(void)updateLockLabels {
     if (worldDescriptor) {
         if ([worldDescriptor isLocked]) {
-            NSInteger expiryTime = [worldDescriptor lockExpiryTime];
+            NSInteger expiryTime = [worldDescriptor lockExpiryWait];
             currentLock.text = [NSString stringWithFormat:@"Locked by %@ for %d:%02d",[worldDescriptor lockOwner],(int)(expiryTime/60),(int)(expiryTime%60)];
             bool myLock = [worldDescriptor userOwnsLock];
             [startTurnButton setTitle:(myLock ? @"Continue turn" : @"Start turn") forState:UIControlStateNormal];
@@ -96,7 +98,7 @@
         [selectToolsButton sizeToFit];
 
         if ([worldDescriptor lockedOut]) {
-            NSInteger deleteTime = [worldDescriptor nextLockTime];
+            NSInteger deleteTime = [worldDescriptor lockDeleteWait];
             nextLock.text = [NSString stringWithFormat:@"Next turn in %d:%02d",(int)(deleteTime/60),(int)(deleteTime%60)];
         } else {
             nextLock.text = @"";

@@ -315,16 +315,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OH-g6-VfM">
-                                <rect key="frame" x="0.0" y="124" width="89" height="21"/>
+                                <rect key="frame" x="0.0" y="134" width="89" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Next turn" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGj-B1-Hz7">
-                                <rect key="frame" x="0.0" y="160" width="72" height="21"/>
+                                <rect key="frame" x="0.0" y="163" width="72" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ruler" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmg-Ja-kwZ">
+                                <rect key="frame" x="0.0" y="105" width="41" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -334,21 +341,24 @@
                             <constraint firstItem="Eq8-5N-CnD" firstAttribute="centerX" secondItem="Umj-BM-dL0" secondAttribute="centerX" type="default" id="3ob-08-AQA"/>
                             <constraint firstAttribute="bottom" secondItem="fhe-Fb-Cbf" secondAttribute="bottom" constant="75" id="BlN-hF-YjK"/>
                             <constraint firstAttribute="bottom" secondItem="Eq8-5N-CnD" secondAttribute="bottom" constant="146" id="CHi-pM-o93"/>
+                            <constraint firstItem="Vmg-Ja-kwZ" firstAttribute="leading" secondItem="2HA-T6-3gt" secondAttribute="leading" type="default" id="El1-Sn-38B"/>
+                            <constraint firstItem="OGj-B1-Hz7" firstAttribute="top" secondItem="7OH-g6-VfM" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Ikh-wF-Dyo"/>
                             <constraint firstItem="2HA-T6-3gt" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="76" id="MUW-Md-ufD"/>
-                            <constraint firstItem="OGj-B1-Hz7" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="160" id="Oxq-CF-Mfq"/>
-                            <constraint firstItem="7OH-g6-VfM" firstAttribute="top" secondItem="6Qw-qs-yo0" secondAttribute="top" constant="124" id="SI7-WW-jHP"/>
                             <constraint firstItem="fhe-Fb-Cbf" firstAttribute="centerX" secondItem="6Qw-qs-yo0" secondAttribute="centerX" type="default" id="Sfe-VM-UHX"/>
                             <constraint firstItem="OGj-B1-Hz7" firstAttribute="leading" secondItem="7OH-g6-VfM" secondAttribute="leading" type="default" id="aOP-fs-URS"/>
                             <constraint firstItem="fhe-Fb-Cbf" firstAttribute="leading" secondItem="Eq8-5N-CnD" secondAttribute="leading" type="default" id="g28-n1-7OY"/>
-                            <constraint firstItem="7OH-g6-VfM" firstAttribute="leading" secondItem="6Qw-qs-yo0" secondAttribute="leading" type="default" id="gpO-Y4-I3G"/>
                             <constraint firstItem="fhe-Fb-Cbf" firstAttribute="trailing" secondItem="Eq8-5N-CnD" secondAttribute="trailing" type="default" id="hU9-eM-X3Q"/>
-                            <constraint firstItem="7OH-g6-VfM" firstAttribute="leading" secondItem="2HA-T6-3gt" secondAttribute="leading" type="default" id="qJ4-nF-cRP"/>
+                            <constraint firstItem="Vmg-Ja-kwZ" firstAttribute="top" secondItem="2HA-T6-3gt" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="kAG-VQ-ah6"/>
+                            <constraint firstItem="7OH-g6-VfM" firstAttribute="top" secondItem="Vmg-Ja-kwZ" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="nHH-gR-AFw"/>
+                            <constraint firstItem="OGj-B1-Hz7" firstAttribute="leading" secondItem="6Qw-qs-yo0" secondAttribute="leading" type="default" id="v04-Ry-7HH"/>
+                            <constraint firstItem="Vmg-Ja-kwZ" firstAttribute="leading" secondItem="7OH-g6-VfM" secondAttribute="leading" type="default" id="xRm-TQ-lqI"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="J5a-BQ-wn6"/>
                     <connections>
                         <outlet property="currentLock" destination="7OH-g6-VfM" id="1bD-pJ-QiB"/>
                         <outlet property="nextLock" destination="OGj-B1-Hz7" id="bc3-jR-gQB"/>
+                        <outlet property="ownerLabel" destination="Vmg-Ja-kwZ" id="VH4-0I-3L9"/>
                         <outlet property="selectToolsButton" destination="Eq8-5N-CnD" id="J8c-ru-ujK"/>
                         <outlet property="startTurnButton" destination="fhe-Fb-Cbf" id="H96-oV-aeI"/>
                         <outlet property="toolboxLabel" destination="Umj-BM-dL0" id="acO-hB-B8P"/>

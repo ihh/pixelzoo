@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSMutableArray *selectedToolIDs;
 
 @property (nonatomic, strong) IBOutlet UILabel *worldLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ownerLabel;
 @property (nonatomic, strong) IBOutlet UILabel *toolboxLabel;
 @property (nonatomic, strong) IBOutlet UIButton *selectToolsButton;
 @property (nonatomic, strong) IBOutlet UIButton *startTurnButton;
