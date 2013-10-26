@@ -39,5 +39,6 @@
 - (NSString*)getToolName:(int)num;
 - (NSMutableArray*)defaultToolIDs;
 
+- (void) setWorldLabel:(UILabel*)worldLabel;
 
 @end

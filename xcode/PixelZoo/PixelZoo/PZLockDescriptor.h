@@ -21,6 +21,7 @@
 -(GDataXMLElement*)gameXMLElement;
 
 - (NSString*)identifier;
+- (NSInteger)lockExpiryWait;
 
 -(void)deleteLock;
 

@@ -29,8 +29,10 @@ typedef struct XYCoord { int x, y; } XYCoord;
 
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
+@property (nonatomic, strong) PZLockDescriptor *lockDescriptor;
 @property (nonatomic, strong) PZGameWrapper *gameWrapper;
 
+@property (weak, nonatomic) IBOutlet UILabel *lockLabel;
 @property (nonatomic, strong) IBOutlet UILabel *worldLabel;
 @property (nonatomic, strong) IBOutlet UIView *worldView;
 

@@ -12,6 +12,7 @@
 @interface PZStatusViewController : UIViewController <NSURLConnectionDelegate>
 {
     NSMutableData *worldStatusResponseData;
+    NSTimer* lockUpdateTimer;
 }
 
 @property (nonatomic, retain) NSURLConnection *worldStatusConnection;
@@ -28,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentLock;
 @property (weak, nonatomic) IBOutlet UILabel *nextLock;
 
-@property (nonatomic,retain) NSTimer* lockUpdateTimer;
 
 -(void)initStatusConnection;
 -(void)updateLockLabels;

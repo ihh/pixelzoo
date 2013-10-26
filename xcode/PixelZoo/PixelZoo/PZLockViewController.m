@@ -26,6 +26,8 @@
 
 @synthesize playButton;
 @synthesize endTurnButton;
+
+@synthesize worldLabel;
 @synthesize lockLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,6 +44,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 
+    [worldDescriptor setWorldLabel:worldLabel];
+    
     [[playButton layer] setBorderWidth:1.0];
     [[playButton layer] setCornerRadius:3.0];
 
@@ -76,12 +80,15 @@
     if ([segue.identifier isEqualToString:@"playWorld"]) {
         PZGameViewController *destViewController = segue.destinationViewController;
         destViewController.worldDescriptor = self.worldDescriptor;
+        destViewController.lockDescriptor = self.lockDescriptor;
         destViewController.gameWrapper = self.gameWrapper;
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [lockConnection cancel];
+    [lockUpdateTimer invalidate];
+    lockUpdateTimer = nil;
     if ([self isMovingFromParentViewController]) {
         if (![gameWrapper turnSaved])
             [gameWrapper postTurn];
@@ -97,6 +104,8 @@
     didAppear = YES;
     if (lockFailed)
         [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self startLockTimer];
 }
 
 - (IBAction)endTurn:(id)sender {
@@ -151,18 +160,34 @@
         gameWrapper = [PZGameWrapper alloc];
         [gameWrapper initGameFromLock:lockDescriptor];
         
-        lockLabel.text = @"Locked";
-        
+        [self startLockTimer];
+    }
+}
+
+-(void)startLockTimer {
+    if (lockDescriptor) {
+        [lockUpdateTimer invalidate];
+        lockUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateLockLabels)   userInfo:nil repeats:YES];
+        [self updateLockLabels];
+    }
+}
+
+-(void)updateLockLabels {
+    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
+    if (expiryTime <= 0) {
+        lockLabel.text = @"Lock expired";
+        playButton.enabled = NO;
+        playButton.alpha = 0.5;
+        endTurnButton.enabled = NO;
+        endTurnButton.alpha = 0.5;
+    } else {
+        lockLabel.text = [NSString stringWithFormat:@"Locked for %d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
         playButton.enabled = YES;
         playButton.alpha = 1.0;
-        
         endTurnButton.enabled = YES;
         endTurnButton.alpha = 1.0;
-        
-        // TODO:
-        // get lock expiration time; add an NSTimer for lock expiration
-        
     }
+    [self.view setNeedsDisplay];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

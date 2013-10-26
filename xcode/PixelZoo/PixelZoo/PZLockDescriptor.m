@@ -33,6 +33,15 @@
     return [idElement stringValue];
 }
 
+- (NSInteger)lockExpiryWait {
+    NSArray *expires = [lockDoc nodesForXPath:@"//lock/expires" error:nil];
+    if ([expires count]) {
+        GDataXMLElement *expElement = [expires objectAtIndex:0];
+        return [[expElement stringValue] integerValue] - [[NSDate date] timeIntervalSince1970];
+    }
+    return 0;
+}
+
 -(void)deleteLock {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/lock/%@",@SERVER_URL_PREFIX,[worldDescriptor identifier],[self identifier]]];

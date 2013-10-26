@@ -153,4 +153,9 @@
     return ids;
 }
 
+- (void) setWorldLabel:(UILabel*)worldLabel {
+    worldLabel.text = [NSString stringWithFormat:@"Planet %@",[self name]];
+}
+
+
 @end

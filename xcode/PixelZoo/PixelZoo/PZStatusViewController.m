@@ -30,7 +30,6 @@
 
 @synthesize currentLock;
 @synthesize nextLock;
-@synthesize lockUpdateTimer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -46,7 +45,7 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    worldLabel.text = [NSString stringWithFormat:@"Planet %@",[worldDescriptor name]];
+    [worldDescriptor setWorldLabel:worldLabel];
     ownerLabel.text = [NSString stringWithFormat:@"Ruler: %@",[worldDescriptor owner]];
 
     [[startTurnButton layer] setBorderWidth:1.0];
@@ -164,7 +163,7 @@
     worldStatusConnection = nil;
 
     [lockUpdateTimer invalidate];
-    self.lockUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateLockLabels) userInfo:nil repeats:YES];
+    lockUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(updateLockLabels) userInfo:nil repeats:YES];
 
     [self updateLockLabels];
 }

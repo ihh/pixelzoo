@@ -18,7 +18,9 @@
 
 @synthesize gameWrapper;
 @synthesize worldDescriptor;
+@synthesize lockDescriptor;
 
+@synthesize lockLabel;
 @synthesize worldLabel;
 @synthesize worldView;
 
@@ -101,7 +103,10 @@
 - (void)triggerRedraw
 {
     //	NSLog(@"triggerRedraw");
-	[self.worldView setNeedsDisplay];
+    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
+    lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
+
+    [self.worldView setNeedsDisplay];
 }
 
 

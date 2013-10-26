@@ -427,7 +427,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(waiting for lock)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wll-8f-KxV">
-                                <rect key="frame" x="97" y="109" width="126" height="21"/>
+                                <rect key="frame" x="0.0" y="104" width="126" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -451,14 +451,22 @@
                                     <action selector="endTurn:" destination="7EJ-BO-s9v" eventType="touchUpInside" id="jjU-fm-N5X"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Planet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H1p-eh-79E">
+                                <rect key="frame" x="0.0" y="75" width="49" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Wll-8f-KxV" firstAttribute="centerX" secondItem="xzm-AX-Y82" secondAttribute="centerX" type="default" id="6Z6-dQ-b5e"/>
                             <constraint firstAttribute="bottom" secondItem="1pk-Y2-pFJ" secondAttribute="bottom" constant="69" id="9UR-OU-VKa"/>
-                            <constraint firstItem="Wll-8f-KxV" firstAttribute="top" secondItem="bf3-ff-LLu" secondAttribute="top" constant="109" id="GIx-GK-0Gx"/>
                             <constraint firstItem="1pk-Y2-pFJ" firstAttribute="centerX" secondItem="bf3-ff-LLu" secondAttribute="centerX" type="default" id="Hmh-TK-5U3"/>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="leading" secondItem="H1p-eh-79E" secondAttribute="leading" type="default" id="JyF-L0-jSC"/>
                             <constraint firstItem="1pk-Y2-pFJ" firstAttribute="centerX" secondItem="xzm-AX-Y82" secondAttribute="centerX" type="user" id="Sow-Gt-OPT"/>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="leading" secondItem="bf3-ff-LLu" secondAttribute="leading" type="default" id="VeO-nV-VPd"/>
+                            <constraint firstItem="Wll-8f-KxV" firstAttribute="top" secondItem="H1p-eh-79E" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="dfh-cg-su1"/>
+                            <constraint firstItem="H1p-eh-79E" firstAttribute="top" secondItem="bf3-ff-LLu" secondAttribute="top" constant="75" id="oUU-GP-ha0"/>
                             <constraint firstAttribute="bottom" secondItem="xzm-AX-Y82" secondAttribute="bottom" constant="132" id="pwz-hJ-KN4"/>
                         </constraints>
                     </view>
@@ -467,6 +475,7 @@
                         <outlet property="endTurnButton" destination="1pk-Y2-pFJ" id="oWp-JB-bLo"/>
                         <outlet property="lockLabel" destination="Wll-8f-KxV" id="Ocw-15-dm9"/>
                         <outlet property="playButton" destination="xzm-AX-Y82" id="3eQ-tb-KtY"/>
+                        <outlet property="worldLabel" destination="H1p-eh-79E" id="FgJ-U0-XJh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="46e-ug-nIs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -493,12 +502,20 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XG3-wt-IXb">
+                                <rect key="frame" x="282" y="71" width="38" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="8sQ-jY-l1W"/>
+                            <constraint firstItem="XG3-wt-IXb" firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="B8J-GD-t40"/>
                             <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" type="default" id="CGa-AC-6JA"/>
                             <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="KZe-6f-snI"/>
+                            <constraint firstItem="XG3-wt-IXb" firstAttribute="baseline" secondItem="QU3-zC-1xV" secondAttribute="baseline" type="default" id="QW5-tC-4RX"/>
                             <constraint firstItem="QU3-zC-1xV" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" constant="71" id="YBS-gv-Ido"/>
                             <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="RMw-5J-9NT" secondAttribute="leading" type="default" id="cr0-O8-4vV"/>
                             <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="QU3-zC-1xV" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ueW-N5-eHL"/>
@@ -506,6 +523,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>
                     <connections>
+                        <outlet property="lockLabel" destination="XG3-wt-IXb" id="rES-3Z-Nth"/>
                         <outlet property="worldLabel" destination="QU3-zC-1xV" id="nwg-1j-CP9"/>
                         <outlet property="worldView" destination="RMw-5J-9NT" id="TET-oq-b5I"/>
                     </connections>

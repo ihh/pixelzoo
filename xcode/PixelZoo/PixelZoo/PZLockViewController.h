@@ -15,6 +15,7 @@
     NSMutableData *lockData;
     NSHTTPURLResponse* httpLockResponse;
     bool didAppear, lockFailed;
+    NSTimer* lockUpdateTimer;
 }
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
@@ -26,9 +27,12 @@
 
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 @property (weak, nonatomic) IBOutlet UIButton *endTurnButton;
+@property (weak, nonatomic) IBOutlet UILabel *worldLabel;
 @property (nonatomic, strong) IBOutlet UILabel *lockLabel;
 
 - (IBAction)endTurn:(id)sender;
+
+-(void)updateLockLabels;
 
 
 @end
