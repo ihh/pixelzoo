@@ -53,6 +53,12 @@
 
     [[selectToolsButton layer] setBorderWidth:1.0];
     [[selectToolsButton layer] setCornerRadius:3.0];
+
+    UIBarButtonItem *button = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                               target:self
+                               action:@selector(initStatusConnection)];
+    self.navigationItem.rightBarButtonItem = button;
 }
 
 -(void)viewWillAppear:(BOOL)animated {

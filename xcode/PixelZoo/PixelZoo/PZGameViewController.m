@@ -104,7 +104,10 @@
 {
     //	NSLog(@"triggerRedraw");
     NSInteger expiryTime = [lockDescriptor lockExpiryWait];
-    lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
+    if (expiryTime < 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else
+        lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
 
     [self.worldView setNeedsDisplay];
 }

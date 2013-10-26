@@ -1,11 +1,4 @@
-Lock timeout from game screen => pop to lock screen
-
-Move evolveTimer from PZGameViewController to PZLockViewController; keep it running while on lock screen
-Acquiring lock should automatically trigger push segue to game screen
-
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
-
-Add a "refresh" button to status screen
 
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's

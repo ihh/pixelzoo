@@ -161,6 +161,7 @@
         [gameWrapper initGameFromLock:lockDescriptor];
         
         [self startLockTimer];
+        [self performSegueWithIdentifier:@"playWorld" sender:self];
     }
 }
 
