@@ -1,10 +1,8 @@
-Tidy up game screen layout
-Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
+Test & debug polymers
+Port cyclobs, cement, wall, acid, plants, guests to Scheme
+Refactor Catalyst to not use Level.pm/Grammar.pm
 
-Add an alert with informative error message for failed lock (rather than just popping)
-Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
-
-Add some real multiplayer game content (player particles/tools, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
+Add some real multiplayer game content (guests become player particles, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
 
 Add summary counts of player/owner particles to lock screen
 
@@ -16,3 +14,8 @@ Automatically create one new world per player, at registration time
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
+Rewrite PZGameView-->PZGameSKView using Sprite Kit
+Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
+
+Add an alert with informative error message for failed lock (rather than just popping)
+Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
