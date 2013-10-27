@@ -66,7 +66,7 @@
 }
 
 - (void) initStatusConnection {
-    if (worldStatusConnection == nil) {
+    if (worldStatusConnection == nil && [worldDescriptor statusNode] == nil) {
         // get world status (list of tools, detailed lock info, etc)
         // Send an asynchronous request
         NSMutableURLRequest *request = [worldDescriptor getRequest:@"status"];
@@ -163,7 +163,8 @@
                                          options:0 error:&error];
     
     worldDescriptor.statusNode = [doc rootElement];
-    selectedToolIDs = [worldDescriptor defaultToolIDs];
+    if (selectedToolIDs == nil)  // preserve tool selection - especially important if we already have a lock - don't reset tools!
+        selectedToolIDs = [worldDescriptor defaultToolIDs];
     toolboxLabel.text = [NSString stringWithFormat:@"Terraforming: %@",[worldDescriptor toolboxName]];
 
     worldStatusConnection = nil;
