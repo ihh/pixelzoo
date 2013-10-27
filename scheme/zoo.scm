@@ -268,7 +268,7 @@
 		    (prob2 (car prob-rule2))
 		    (rule2 (cadr prob-rule2))
 		    (prob1plus2 (+ prob1 prob2))
-		    (rule1or2 `(random (prob ,(/ prob2 prob1plus2)) (pass (rule ,rule2)) (fail (rule ,rule1)))))
+		    (rule1or2 `(random (prob ,(exact->inexact (/ prob2 prob1plus2))) (pass (rule ,rule2)) (fail (rule ,rule1)))))
 	       (apply-random-switch (cons (list prob1plus2 rule1or2) rest-of-prob-rule-list)))))))
 
   (define (random-switch . prob-rule-list)
