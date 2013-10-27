@@ -1,6 +1,11 @@
+Update game.dtd; validate polymer XML
+Create polymer particle wrapper
+Add vars to Examine tool text in PZGameView
 Test & debug polymers
+
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 Refactor Catalyst to not use Level.pm/Grammar.pm
+Add definitions for player & owner IDs to World controller
 
 Add some real multiplayer game content (guests become player particles, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
 
@@ -14,7 +19,7 @@ Automatically create one new world per player, at registration time
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
-Rewrite PZGameView-->PZGameSKView using Sprite Kit
+Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
 
 Add an alert with informative error message for failed lock (rather than just popping)
