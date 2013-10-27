@@ -125,6 +125,29 @@
       ,(map (lambda (reg-val) `(register (index ,(car reg-val)) (state ,(cadr reg-val)))) reg-val-list)
       (next ,(rule-eval-or-return next))))
 
+  ;; modify rule
+  (define (modify-rule src-loc src-type src-var inc dest-loc dest-type dest-var . next)
+    `(modify
+      ,(xy 'src src-loc)
+      (vsrcmask (type ,src-type) (var ,src-var))
+      (vrshift (type ,src-type) (var ,src-var))
+      (inc ,inc)
+      (vlshift (type ,dest-type) (var ,dest-var))
+      (vdestmask (type ,dest-type) (var ,dest-var))
+      ,@(listform-opt-rule 'next next)))
+
+  ;; copy var
+  (define (copy-var src-loc src-type src-var dest-loc dest-type dest-var . next)
+    (apply modify-rule (append (list src-loc src-type src-var 0 dest-loc dest-type dest-var) next)))
+
+  ;; modify self
+  (define (modify-self-var src-var inc dest-var . next)
+    (apply modify-rule (append (list origin self-type src-var inc origin self-type dest-var) next)))
+
+  ;; copy self
+  (define (copy-self-var src-var dest-var . next)
+    (apply modify-self-var (append (list src-var 0 dest-var) next)))
+
   ;; set rule
   (define (set-rule loc type . rest)
     (let ((var-val-list (opt-arg rest 0 '()))
@@ -145,6 +168,10 @@
       (vlmask (type ,type) (var ,var))
       (inc ,val)
       ,@(listform-opt-rule 'next next)))
+
+  ;; set self var
+  (define (set-self-var var val . next)
+    (apply set-var (append (list origin self-type var val) next)))
 
   ;; indirect set rule
   (define (indirect-set-rule loc type . rest)
@@ -258,18 +285,28 @@
      origin self-type dir-var
      (map (lambda (dir) (list dir (func (list-ref neighborhood dir) dir))) (iota (length neighborhood)))))
 
+  ;; (bind-neighborhood neighborhood var func)
+  ;; Calls (func loc) with 'loc' bound to the corresponding neighborhood cell
   (define (bind-neighborhood neighborhood dir-var func)
     (bind-neighborhood-dir neighborhood dir-var (lambda (loc dir) (func loc))))
 
+  ;; (bind-moore var func)
+  ;; Calls (func loc) with 'loc' bound to the corresponding Moore-neighborhood cell
   (define (bind-moore dir-var func)
     (bind-neighborhood moore-neighborhood dir-var func))
 
+  ;; (bind-neumann var func)
+  ;; Calls (func loc) with 'loc' bound to the corresponding Neumann-neighborhood cell
   (define (bind-neumann dir-var func)
     (bind-neighborhood neumann-neighborhood dir-var func))
 
+  ;; (bind-moore-dir var func)
+  ;; Calls (func loc dir) with 'dir' bound to 'var' and 'loc' bound to the corresponding Moore-neighborhood cell
   (define (bind-moore-dir dir-var func)
     (bind-neighborhood-dir moore-neighborhood dir-var func))
 
+  ;; (bind-neumann-dir var func)
+  ;; Calls (func loc dir) with 'dir' bound to 'var' and 'loc' bound to the corresponding Neumann-neighborhood cell
   (define (bind-neumann-dir dir-var func)
     (bind-neighborhood-dir neumann-neighborhood dir-var func))
 
@@ -374,7 +411,10 @@
     (apply drift-rule (cons map-moore rest)))
 
   ;; Polymers
-  ;; Vars: has-fwd-bond (1 bit), fwd-bond-dir (3 bits), has-rev-bond (1 bit), rev-bond-dir (3 bits)
+  ;; Vars:
+  ;;  has-fwd-bond (1 bit), fwd-bond-dir (3 bits), has-rev-bond (1 bit), rev-bond-dir (3 bits),
+  ;;  build-state (2 bits), tail-state (2 bits), edge-len (5 bits), steps (5 bits), edges (2 bits)
+  ;; Start with polymer diffusion dynamics
   ;; First, subrules to verify integrity of upstream and/or downstream bonds, then attempt a move
   ;; Registers:
   ;;  (0,1)  location of fwd-bond cell
@@ -516,6 +556,68 @@
 		   (13 ,new-inv-rev-dir))
 		 `(goto ,goto-label))))
 
+;; polymer cage builders
+;; outline of program:
+
+;; switch (state)
+;;  case 0: (paused)
+;;   nop
+
+;;  case 1: (init)
+;;   set orig.steps = orig.edge_len
+;;   set orig.edges = $edges - 1
+;;   set orig.tail_state = 0 (paused)
+;;   set orig.state = 2 (build)
+
+;;  case 2: (build)
+;;   switch (orig.r_dir)  (loop over neighborhood)
+;;    if (steps = 0)
+;;     if (edges = 0)
+;;      bind (r_pos = neighborhood[r_dir])
+;;       case polymer:  (connect the ends)
+;;        switch (r_pos.state)
+;;         case 0: (paused)
+;;          set r_pos.state = 3 (active)
+;;          set r_pos.l_bond = 1
+;;          set r_pos.l_dir = [direction from r_pos to orig]
+;;          set orig.state = 3 (active)
+;;          set orig.r_bond = 1
+;;    else (edges > 0)
+;;     set orig.r_dir = orig.r_dir + $turn_angle  (turn right)
+;;     set orig.steps = orig.edge_len
+;;     set orig.edges = orig.edges - 1
+;;     if (orig.edges = 0)
+;;      set orig.steps = orig.steps - 1
+;;   else (steps > 0)
+;;    bind (r_pos = neighborhood[r_dir])
+;;     case empty:
+;;      set r_pos = orig
+;;      set orig.state = orig.tail_state
+;;      set orig.r_bond = 1
+;;      set r_pos.l_bond = 1
+;;      set r_pos.l_dir = [direction from r_pos to orig]
+;;      set r_pos.tail_state = 3 (active)
+;;      decrement r_pos.steps
+
+;;  case 3: (active)
+;;   poly_rule
+
+;; where...
+;; poly_rule:
+;;  if (l_bond)
+;;   verify_or_die (l_dir, r_dir)
+;;   if (r_bond)
+;;    verify_or_die (r_dir, l_dir)
+;;    random_lr_step
+;;   else
+;;    random_l_step
+;;  else
+;;   if (r_bond)
+;;    verify_or_die (r_dir, l_dir)
+;;    random_r_step
+;;  else
+;;   random_step
+
   ;; Put it all together
   (define (polymer-move-rule)
     `(rule
@@ -524,40 +626,100 @@
       ,(polymer-fr-subrule)
       ,(polymer-fr-just-verify-subrule)
       ,(switch-var
-	origin self-type polymer-has-fwd-bond-var
-	`((0 ,(switch-var
-	       origin self-type polymer-has-rev-bond-var
-	       `((0 ,neumann-drift)
+	origin self-type "build-state"
+	`((1 ,(copy-self-var  ;; build-state == 1
+	       "edge-len" "steps"
+	       (set-self-var
+		"edges" 3
+		(set-self-var
+		 "tail-state" 0
+		 (set-self-var
+		  "build-state" 2)))))
+
+	  (2 ,(switch-var  ;; build-state == 2
+	       origin self-type "steps"
+	       `((0 ,(switch-var  ;; build-state == 2, steps == 0
+		      origin self-type "edges"
+		      `((0 ,(bind-moore-dir  ;; build-state == 2, steps == 0, edges == 0
+			     polymer-fwd-bond-dir-var
+			     (lambda (loc dir)
+			       (switch-type
+				loc
+				`((,self-type ,(switch-var
+						loc self-type "build-state"
+						`((0 ,(set-var
+						       loc self-type "build-state" 3
+						       (set-var
+							loc self-type polymer-has-rev-bond-var 1
+							(set-var
+							 loc self-type polymer-rev-bond-dir-var
+							 (moore-back dir)
+							 (set-self-var
+							  "build-state" 3
+							  (set-self-var polymer-has-fwd-bond-var 1)))))))))))))))
+		      (modify-self-var  ;; build-state == 2, steps == 0, edges > 0
+		       polymer-fwd-bond-dir-var +2 polymer-fwd-bond-dir-var
+		       (copy-self-var
+			"edge-len" "steps"
+			(modify-self-var
+			 "edges" -1 "edges"
+			 (switch-var
+			  origin self-type "edges"
+			  `((0 ,nop-rule))
+			  (modify-self-var "steps" -1 "steps"))))))))
+	       (bind-moore-dir  ;; build-state == 2, steps > 0, edges > 0
+		polymer-fwd-bond-dir-var
+		(lambda (loc dir)
+		  (switch-type
+		   loc
+		   `((,empty-type ,(set-rule
+				    loc self-type
+				    `((,polymer-has-rev-bond-var 1)
+				      (,polymer-rev-bond-dir-var ,(moore-back dir))
+				      ("build-state" 3))
+				    (copy-var
+				     origin self-type "tail-state" loc self-type "build-state"
+				     (set-self-var
+				      polymer-has-fwd-bond-var 1
+				      (modify-self-var
+				       "steps" -1 "steps")))))))))))
+
+	  (3 ,(switch-var  ;; build-state == 3
+	       origin self-type polymer-has-fwd-bond-var
+	       `((0 ,(switch-var
+		      origin self-type polymer-has-rev-bond-var
+		      `((0 ,neumann-drift)
+			(1 ,(bind-moore-dir
+			     polymer-rev-bond-dir-var
+			     (lambda (rev-loc rev-dir)
+			       (apply-random-switch
+				(map
+				 (lambda (move-dir)
+				   (list 1 (polymer-load-reg 0 rev-dir move-dir (polymer-r-subrule-name))))
+				 (polymer-nbr-dirs rev-dir)))))))))
 		 (1 ,(bind-moore-dir
-		      polymer-rev-bond-dir-var
-		      (lambda (rev-loc rev-dir)
-			(apply-random-switch
-			 (map
-			  (lambda (move-dir)
-			    (list 1 (polymer-load-reg 0 rev-dir move-dir (polymer-r-subrule-name))))
-			  (polymer-nbr-dirs rev-dir)))))))))
-	  (1 ,(bind-moore-dir
-	       polymer-fwd-bond-dir-var
-	       (lambda (fwd-loc fwd-dir)
-		 (switch-var
-		  origin self-type polymer-has-rev-bond-var
-		  `((0 ,(apply-random-switch
-			 (map
-			  (lambda (move-dir)
-			    (list 1 (polymer-load-reg fwd-dir 0 move-dir (polymer-f-subrule-name))))
-			  (polymer-nbr-dirs fwd-dir))))
-		    (1 ,(bind-moore-dir
-			 polymer-rev-bond-dir-var
-			 (lambda (rev-loc rev-dir)
-			   (let ((move-dirs (polymer-nbr2-dirs fwd-dir rev-dir)))
-			     (if
-			      (null? move-dirs)
-			      (polymer-load-reg fwd-dir rev-dir 0 (polymer-fr-just-verify-subrule-name))
-			      (apply-random-switch
-			       (map
-				(lambda (move-dir)
-				  (list 1 (polymer-load-reg fwd-dir rev-dir move-dir (polymer-fr-subrule-name))))
-				move-dirs))))))))))))))))
+		      polymer-fwd-bond-dir-var
+		      (lambda (fwd-loc fwd-dir)
+			(switch-var
+			 origin self-type polymer-has-rev-bond-var
+			 `((0 ,(apply-random-switch
+				(map
+				 (lambda (move-dir)
+				   (list 1 (polymer-load-reg fwd-dir 0 move-dir (polymer-f-subrule-name))))
+				 (polymer-nbr-dirs fwd-dir))))
+			   (1 ,(bind-moore-dir
+				polymer-rev-bond-dir-var
+				(lambda (rev-loc rev-dir)
+				  (let ((move-dirs (polymer-nbr2-dirs fwd-dir rev-dir)))
+				    (if
+				     (null? move-dirs)
+				     (polymer-load-reg fwd-dir rev-dir 0 (polymer-fr-just-verify-subrule-name))
+				     (apply-random-switch
+				      (map
+				       (lambda (move-dir)
+					 (list 1 (polymer-load-reg fwd-dir rev-dir move-dir (polymer-fr-subrule-name))))
+				       move-dirs)))))))))))))))))))
+
 
   ;; Utility functions.
   ;; Optional arguments
