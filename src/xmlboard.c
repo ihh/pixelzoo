@@ -248,7 +248,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
 	if (ruleNode) {
 	  dump = xmlTreeToString (ruleParentNode);
 	  Warn ("Ignoring <%s> child of <%s> node, in favor of older sibling <%s>\nIn %s\n", (const char*) childNode->name, (const char*) ruleParentNode->name, (const char*) ruleNode->name, dump);
-	  SafeFree (dump);
+	  SafeFree ((void*) dump);
 	} else
 	  ruleNode = childNode;
       }

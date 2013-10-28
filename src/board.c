@@ -8,10 +8,11 @@
 #include "notify.h"
 #include "mersenne.h"
 #include "balloon.h"
+#include "xmlboard.h"
 
 /* uncomment the #define to log all board writes to stderr */
-/*
 #define PIXELZOO_DEBUG
+/*
 */
 
 /* helpers */
@@ -105,7 +106,7 @@ void replayBoardMove (Board* board) {
   board->sampledNextSyncEventTime = 0;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y, nextMove->z);
+  Warn ("Servicing move at (%d,%d,%d)", nextMove->x, nextMove->y, nextMove->z);
 #endif /* PIXELZOO_DEBUG */
 
   writeBoardMove (board, nextMove->x, nextMove->y, nextMove->z, nextMove->state);  /* auto-increments updateCount */
@@ -157,7 +158,11 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State 
     board->sync[i] = state;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, z, state);
+  xmlTextWriterPtr writer = newXmlTextWriterNoHeader();
+  writeCellXml (board, writer, x, y, z, 1);
+  xmlChar* xmlText = deleteXmlTextWriterLeavingText (writer);
+  Warn ("writeBoardStateUnguardedFunction: %d %d %d %llx\n%s", x, y, z, state, xmlText);
+  SafeFree (xmlText);
 #endif /* PIXELZOO_DEBUG */
 
 }
@@ -169,7 +174,7 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z, St
   board->syncWrite[i] = 1;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, z, state);
+  Warn ("writeSyncBoardStateUnguardedFunction: %d %d %d %llx", x, y, z, state);
 #endif /* PIXELZOO_DEBUG */
 
 }
@@ -330,6 +335,13 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
       lookup = &rule->param.lookup;
       var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard);
+#ifdef PIXELZOO_DEBUG
+      Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
+	    x, y, z,
+	    lookup->loc.xyzAreRegisters ? "*" : "",
+	    lookup->loc.x, lookup->loc.y, lookup->loc.z,
+	    lookup->mask, lookup->shift, var);
+#endif /* PIXELZOO_DEBUG */
       if (isOnBoard) {
 	lookupNode = StateMapFind (lookup->matchRule, var);
 	rule = lookupNode
@@ -347,6 +359,14 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       compare = &rule->param.compare;
       var = readVarFromLoc (board, read, &compare->loc, x, y, z, compare->shift, compare->mask, reg, &isOnBoard);
       regVal = reg[compare->registerIndex];
+#ifdef PIXELZOO_DEBUG
+      Warn ("Compare @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d <=> reg[%d] = %d",
+	    x, y, z,
+	    compare->loc.xyzAreRegisters ? "*" : "",
+	    compare->loc.x, compare->loc.y, compare->loc.z,
+	    compare->mask, compare->shift, var,
+	    compare->registerIndex, regVal);
+#endif /* PIXELZOO_DEBUG */
       rule = var < regVal
 	? compare->ltRule
 	: (var > regVal
@@ -370,6 +390,30 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	var = readVarFromLoc (board, read, &modify->src, x, y, z, modify->rightShift, modify->srcMask, reg, &isOnBoard);
 	if (isOnBoard) {
 	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
+
+#ifdef PIXELZOO_DEBUG
+	  if (modify->offsetIsRegister)
+	    Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +reg[%d]=%llx <<%d &%llx %s(%d,%d,%d)",
+		  x, y, z,
+		  modify->src.xyzAreRegisters ? "*" : "",
+		  modify->src.x, modify->src.y, modify->src.z,
+		  modify->srcMask, modify->rightShift,
+		  modify->offset, offset,
+		  modify->leftShift, modify->destMask,
+		  modify->dest.xyzAreRegisters ? "*" : "",
+		  modify->dest.x, modify->dest.y, modify->dest.z);
+	  else
+	    Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +%llx <<%d &%llx %s(%d,%d,%d)",
+		  x, y, z,
+		  modify->src.xyzAreRegisters ? "*" : "",
+		  modify->src.x, modify->src.y, modify->src.z,
+		  modify->srcMask, modify->rightShift,
+		  offset,
+		  modify->leftShift, modify->destMask,
+		  modify->dest.xyzAreRegisters ? "*" : "",
+		  modify->dest.x, modify->dest.y, modify->dest.z);
+#endif /* PIXELZOO_DEBUG */
+
 	  currentDestState = (*read) (board, xDest, yDest, zDest);
 	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
 	    | (((var + offset) << modify->leftShift) & modify->destMask);
@@ -521,10 +565,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
 
-#ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Synchronizing board\n");
-#endif /* PIXELZOO_DEBUG */
-
       syncBoard (board);
       ++board->updateCount;
       continue;
@@ -542,10 +582,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       y = boardIndexToY (board->size, boardIdx);
       z = boardIndexToZ (board->size, boardIdx);
 
-#ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Updating synchronized cell at (%d,%d,%d)\n", x, y, z);
-#endif /* PIXELZOO_DEBUG */
-			
       evolveBoardCellSync (board, x, y, z);
       ++cellUpdates;
       ++board->updateCount;
@@ -562,10 +598,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
       z = boardIndexToZ (board->size, boardIdx);
-
-#ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Updating asynchronous cell at (%d,%d,%d)\n", x, y, z);
-#endif /* PIXELZOO_DEBUG */
 			
       evolveBoardCell (board, x, y, z);
       ++cellUpdates;
@@ -580,10 +612,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       continue;
 			
     } else {  /* reached target time */
-
-#ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Reached target time\n");
-#endif /* PIXELZOO_DEBUG */
 
       board->microticks = microticksAtTarget;
       break;

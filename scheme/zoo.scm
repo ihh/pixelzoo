@@ -680,17 +680,20 @@
 		(lambda (loc dir)
 		  (switch-type
 		   loc
-		   `((,empty-type ,(set-rule
-				    loc self-type
-				    `((,polymer-has-rev-bond-var 1)
-				      (,polymer-rev-bond-dir-var ,(moore-back dir))
-				      (,polymer-build-state-var 3))
-				    (copy-var
-				     origin self-type polymer-tail-state-var loc self-type polymer-build-state-var
-				     (set-self-var
-				      polymer-has-fwd-bond-var 1
-				      (modify-self-var
-				       polymer-steps-var -1 polymer-steps-var)))))))))))
+		   `((,empty-type ,(copy-self
+				    loc
+				    (set-var
+				     loc self-type polymer-rev-bond-dir-var (moore-back dir)
+				     (set-var
+				      loc self-type polymer-has-rev-bond-var 1
+				      (set-var
+				       loc self-type polymer-tail-state-var 3
+				       (modify-rule
+					loc self-type polymer-steps-var -1 loc self-type polymer-steps-var
+					(copy-self-var
+					 polymer-tail-state-var polymer-build-state-var
+					 (set-self-var
+					  polymer-has-fwd-bond-var 1))))))))))))))
 
 	  (3 ,(switch-var  ;; build-state == 3
 	       origin self-type polymer-has-fwd-bond-var

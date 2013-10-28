@@ -35,6 +35,7 @@ xmlNode* xmlTreeFromString (const char* str);
 const char* xmlTreeToString (const xmlNode* node);
 
 xmlTextWriterPtr newXmlTextWriter();
+xmlTextWriterPtr newXmlTextWriterNoHeader();
 xmlChar* deleteXmlTextWriterLeavingText (xmlTextWriterPtr writer);
 
 void xmlTextWriterStartElement (xmlTextWriterPtr writer, const xmlChar* tag);

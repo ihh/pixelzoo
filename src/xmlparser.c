@@ -174,9 +174,15 @@ const char* xmlTreeToString (const xmlNode* node) {
 
 xmlTextWriterPtr newXmlTextWriter() {
   xmlTextWriterPtr writer;
+  writer = newXmlTextWriterNoHeader();
+  xmlTextWriterWriteFormatCDATA (writer, "<?xml version=\"1.0\"?>\n");  /* hack, trying to mimic libxml2 as closely as possible... */
+  return writer;
+}
+
+xmlTextWriterPtr newXmlTextWriterNoHeader() {
+  xmlTextWriterPtr writer;
   writer = SafeCalloc (1, sizeof (xmlTextWriter));
   writer->tagStack = newStringVector();
-  xmlTextWriterWriteFormatCDATA (writer, "<?xml version=\"1.0\"?>\n");  /* hack, trying to mimic libxml2 as closely as possible... */
   return writer;
 }
 
