@@ -10,6 +10,7 @@
 typedef struct Tool {
   /* toolbox appearance */
   char *name;  /* name of this tool */
+  int z;  /* layer it operates on */
 
   /* brush */
   LocalOffset brushCenter;  /* delta(x,y) of central cell in brush */

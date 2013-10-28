@@ -20,7 +20,6 @@ Automatically create one new world per player, at registration time
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
-MAJOR refactor: add z-coordinate to EVERYTHING. At a minimum: rule.h, board.[ch], game.[ch], goal.[ch], move.[ch], notify.[ch], pixelzoo.[ch], xymap.[ch], xmlboard.[ch], xmlgame.c, quadtree.[ch]
 Replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)

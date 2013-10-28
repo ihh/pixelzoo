@@ -6,8 +6,8 @@
 
 #include "board.h"
 #include "notify.h"
-#include "goal.h"
 #include "mersenne.h"
+#include "balloon.h"
 
 /* uncomment the #define to log all board writes to stderr */
 /*
@@ -15,25 +15,26 @@
 */
 
 /* helpers */
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
 
-Board* newBoard (int size) {
+Board* newBoard (int size, int depth) {
   Board *board;
   board = SafeMalloc (sizeof (Board));
   board->byType = SafeCalloc (NumTypes, sizeof(Particle*));
   board->protoTable = NULL;
   board->subRule = newStringMap (AbortCopyFunction, deleteParticleRule, NullPrintFunction);
   board->size = size;
-  board->cell = SafeCalloc (size * size, sizeof(State));
-  board->sync = SafeCalloc (size * size, sizeof(State));
-  board->watcher = SafeCalloc (size * size, sizeof(CellWatcher*));
-  board->syncWrite = SafeCalloc (size * size, sizeof(unsigned char));
-  board->syncBin = newBinTree (size * size);
-  board->asyncBin = newBinTree (size * size);
-  board->syncUpdateBin = newBinTree (size * size);
+  board->depth = depth;
+  board->cell = SafeCalloc (size * size * depth, sizeof(State));
+  board->sync = SafeCalloc (size * size * depth, sizeof(State));
+  board->watcher = SafeCalloc (size * size * depth, sizeof(CellWatcher*));
+  board->syncWrite = SafeCalloc (size * size * depth, sizeof(unsigned char));
+  board->syncBin = newBinTree (size * size * depth);
+  board->asyncBin = newBinTree (size * size * depth);
+  board->syncUpdateBin = newBinTree (size * size * depth);
   board->syncParticles = 0;
   board->lastSyncParticles = 0;
   board->microticks = 0;
@@ -77,19 +78,19 @@ void deleteBoard (Board* board) {
   SafeFree(board);
 }
 
-State readBoardStateUnguardedFunction (Board* board, int x, int y) {
-  return readBoardStateUnguarded(board,x,y);
+State readBoardStateUnguardedFunction (Board* board, int x, int y, int z) {
+  return readBoardStateUnguarded(board,x,y,z);
 }
 
-State readSyncBoardStateUnguardedFunction (Board* board, int x, int y) {
-  return readSyncBoardStateUnguarded(board,x,y);
+State readSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z) {
+  return readSyncBoardStateUnguarded(board,x,y,z);
 }
 
-void writeBoardMove (Board* board, int x, int y, State state) {
-  if (onBoard(board,x,y)) {
-    writeBoardStateUnguardedFunction (board, x, y, state);
+void writeBoardMove (Board* board, int x, int y, int z, State state) {
+  if (onBoard(board,x,y,z)) {
+    writeBoardStateUnguardedFunction (board, x, y, z, state);
     if (board->moveLog)
-      (void) MoveListAppend (board->moveLog, board->microticks, board->updateCount, x, y, state);
+      (void) MoveListAppend (board->moveLog, board->microticks, board->updateCount, x, y, z, state);
     ++board->updateCount;
     board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   }
@@ -105,10 +106,10 @@ void replayBoardMove (Board* board) {
   board->sampledNextSyncEventTime = 0;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y);
+  fprintf (stderr, "Servicing move at (%d,%d)\n", nextMove->x, nextMove->y, nextMove->z);
 #endif /* PIXELZOO_DEBUG */
 
-  writeBoardMove (board, nextMove->x, nextMove->y, nextMove->state);  /* auto-increments updateCount */
+  writeBoardMove (board, nextMove->x, nextMove->y, nextMove->z, nextMove->state);  /* auto-increments updateCount */
   (void) MoveListShift (board->moveQueue);
   deleteMove (nextMove);
 }
@@ -118,16 +119,16 @@ void logBoardMoves (Board* board) {
     board->moveLog = newMoveList();
 }
 
-void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
+void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State state) {
   int i;
   Type t;
   Particle *p, *pOld;
   CellWatcher *watcher;
   /* if there's a CellWatcher watching this cell, allow it to intercept & modify the write */
-  i = boardIndex(board->size,x,y);
+  i = boardIndex(board->size,x,y,z);
   watcher = board->watcher[i];
   if (watcher)
-    state = (*watcher->intercept) (watcher, board, x, y, state);
+    state = (*watcher->intercept) (watcher, board, x, y, z, state);
   /* get new Type & Particle, and old Particle */
   t = StateType(state);
   p = board->byType[t];
@@ -157,34 +158,34 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, State state) 
     board->sync[i] = state;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
+  fprintf (stderr, "writeBoardStateUnguardedFunction: %d %d %llx\n", x, y, z, state);
 #endif /* PIXELZOO_DEBUG */
 
 }
 
-void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, State state) {
+void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z, State state) {
   int i;
-  i = boardIndex(board->size,x,y);
+  i = boardIndex(board->size,x,y,z);
   board->sync[i] = state;
   board->syncWrite[i] = 1;
 
 #ifdef PIXELZOO_DEBUG
-  fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, state);
+  fprintf (stderr, "writeSyncBoardStateUnguardedFunction: %d %d %llx\n", x, y, z, state);
 #endif /* PIXELZOO_DEBUG */
 
 }
 
-void dummyWriteBoardStateFunction (Board* board, int x, int y, State state) {
+void dummyWriteBoardStateFunction (Board* board, int x, int y, int z, State state) {
   return;
 }
 
-PaletteIndex readBoardColor (Board* board, int x, int y) {
+PaletteIndex readBoardColor (Board* board, int x, int y, int z) {
   Particle *p;
   State s;
   Type t;
   PaletteIndex c;
   c = 0;  /* default to black */
-  s = readBoardState (board, x, y);
+  s = readBoardState (board, x, y, z);
   t = StateType(s);
   if (t == EmptyType)
     c = s & PaletteMask;  /* hard-wired shortcut for empties */
@@ -214,21 +215,21 @@ void addParticleToBoard (Particle* p, Board* board) {
   }
 }
 
-void evolveBoardCell (Board* board, int x, int y) {
+void evolveBoardCell (Board* board, int x, int y, int z) {
   Particle* p;
-  p = readBoardParticle (board, x, y);
+  p = readBoardParticle (board, x, y, z);
   if (p) {
     /*
       Assert (!p->synchronous, "evolveBoardCell called on async particle");
     */
-    attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
+    attemptRule (p, p->rule, board, x, y, z, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
   }
 }
 
-void evolveBoardCellSync (Board* board, int x, int y) {
+void evolveBoardCellSync (Board* board, int x, int y, int z) {
   Particle* p;
   /* do an update */
-  p = readBoardParticle (board, x, y);
+  p = readBoardParticle (board, x, y, z);
   if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
     /* change "readBoardStateUnguardedFunction" to "readSyncBoardStateUnguardedFunction"
        to allow synchronous Particle's to preview the upcoming sync state of the Board.
@@ -237,51 +238,55 @@ void evolveBoardCellSync (Board* board, int x, int y) {
        note however that Conway's Life - an obvious application for accumulator rules -
        requires simultaneity, so Conway modifies *can't* be cumulative - they must be instantaneous/atomic)
     */
-    attemptRule (p, p->rule, board, x, y, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
+    attemptRule (p, p->rule, board, x, y, z, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
   }
 }
 
 void syncBoard (Board* board) {
-  int x, y, size, i;
+  int x, y, z, size, depth, i;
   State *sync;
   unsigned char *syncWrite;
   sync = board->sync;
   syncWrite = board->syncWrite;
   size = board->size;
+  depth = board->depth;
   /* update only the cells that changed */
   if (board->lastSyncParticles > 0)
     for (x = 0; x < size; ++x)
-      for (y = 0; y < size; ++y) {
-	i = boardIndex(size,x,y);
-	if (syncWrite[i]) {
-	  writeBoardStateUnguardedFunction (board, x, y, sync[i]);
-	  syncWrite[i] = 0;
+      for (y = 0; y < size; ++y)
+	for (z = 0; z < depth; ++z) {
+	  i = boardIndex(size,x,y,z);
+	  if (syncWrite[i]) {
+	    writeBoardStateUnguardedFunction (board, x, y, z, sync[i]);
+	    syncWrite[i] = 0;
+	  }
 	}
-      }
   /* freeze the update queue */
   copyBinTree (board->syncBin, board->syncUpdateBin);
   board->lastSyncParticles = board->syncParticles;
   board->syncUpdates++;
 }
 
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, unsigned int shift, State mask, State *reg, int *isOnBoard) {
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, State *reg, int *isOnBoard) {
   State state, var;
   Type type;
-  int xLoc, yLoc;
+  int xLoc, yLoc, zLoc;
   Particle *particle;
 
   var = 0;
-  if (loc->xyAreRegisters) {
+  if (loc->xyzAreRegisters) {
     xLoc = x + (Int64) reg[loc->x];
     yLoc = y + (Int64) reg[loc->y];
+    zLoc = z + (Int64) reg[loc->z];
   } else {
     xLoc = x + loc->x;
     yLoc = y + loc->y;
+    zLoc = z + loc->z;
   }
 
-  if (onBoard (board, xLoc, yLoc)) {
+  if (onBoard (board, xLoc, yLoc, zLoc)) {
     *isOnBoard = 1;
-    state = (*read) (board, xLoc, yLoc);
+    state = (*read) (board, xLoc, yLoc, zLoc);
     if (shift < BitsPerState) {
       /* read-write var */
       var = (state & mask) >> shift;
@@ -299,8 +304,8 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
   return var;
 }
 
-void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, BoardReadFunction read, BoardWriteFunction write) {
-  int xDest, yDest, tracePos, r, isOnBoard;
+void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, int z, BoardReadFunction read, BoardWriteFunction write) {
+  int xDest, yDest, zDest, tracePos, r, isOnBoard;
   State currentSrcState, currentDestState, newDestState, offset, var;
   Type type;
   LookupRuleParams *lookup;
@@ -309,12 +314,12 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
   LoadRuleParams *load;
-  Goal *goal;
   StateMapNode *lookupNode;
   RBNode *dispatchNode;
   ParticleRule *ruleTrace[MaxRuleDepth];
-  State reg[NumberOfRegisters], regVal;
+  State reg[NumberOfRegisters + 1], regVal;
 
+  reg[NumberOfRegisters] = 0;  /* this allows us to use register -1 as a default zero */
   tracePos = 0;
   while (rule != NULL) {
 
@@ -325,7 +330,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case LookupRule:
 
       lookup = &rule->param.lookup;
-      var = readVarFromLoc (board, read, &lookup->loc, x, y, lookup->shift, lookup->mask, reg, &isOnBoard);
+      var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard);
       if (isOnBoard) {
 	lookupNode = StateMapFind (lookup->matchRule, var);
 	rule = lookupNode
@@ -341,7 +346,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case CompareRule:
       compare = &rule->param.compare;
-      var = readVarFromLoc (board, read, &compare->loc, x, y, compare->shift, compare->mask, reg, &isOnBoard);
+      var = readVarFromLoc (board, read, &compare->loc, x, y, z, compare->shift, compare->mask, reg, &isOnBoard);
       regVal = reg[compare->registerIndex];
       rule = var < regVal
 	? compare->ltRule
@@ -352,22 +357,24 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case ModifyRule:
       modify = &rule->param.modify;
-      if (modify->dest.xyAreRegisters) {
+      if (modify->dest.xyzAreRegisters) {
 	xDest = x + (Int64) reg[modify->dest.x];
 	yDest = y + (Int64) reg[modify->dest.y];
+	zDest = z + (Int64) reg[modify->dest.z];
       } else {
 	xDest = x + modify->dest.x;
 	yDest = y + modify->dest.y;
+	zDest = z + modify->dest.z;
       }
 
-      if (onBoard (board, xDest, yDest)) {
-	var = readVarFromLoc (board, read, &modify->src, x, y, modify->rightShift, modify->srcMask, reg, &isOnBoard);
+      if (onBoard (board, xDest, yDest, zDest)) {
+	var = readVarFromLoc (board, read, &modify->src, x, y, z, modify->rightShift, modify->srcMask, reg, &isOnBoard);
 	if (isOnBoard) {
 	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
-	  currentDestState = (*read) (board, xDest, yDest);
+	  currentDestState = (*read) (board, xDest, yDest, zDest);
 	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
 	    | (((var + offset) << modify->leftShift) & modify->destMask);
-	  (*write) (board, xDest, yDest, newDestState);
+	  (*write) (board, xDest, yDest, zDest, newDestState);
 	}
       }
       rule = modify->nextRule;
@@ -375,17 +382,19 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case DeliverRule:
       deliver = &rule->param.deliver;
-      /* DeliverRule hands over control: update x, y, ruleOwner and rule */
-      if (deliver->recipient.xyAreRegisters) {
+      /* DeliverRule hands over control: update x, y, z, ruleOwner and rule */
+      if (deliver->recipient.xyzAreRegisters) {
 	x += (Int64) reg[deliver->recipient.x];
 	y += (Int64) reg[deliver->recipient.y];
+	z += (Int64) reg[deliver->recipient.z];
       } else {
 	xDest = x + deliver->recipient.x;
 	yDest = y + deliver->recipient.y;
+	zDest = z + deliver->recipient.z;
       }
 
-      if (onBoard (board, x, y)) {
-	currentSrcState = (*read) (board, x, y);
+      if (onBoard (board, x, y, z)) {
+	currentSrcState = (*read) (board, x, y, z);
 	type = StateType (currentSrcState);
 	ruleOwner = board->byType[type];
 	dispatchNode = ruleOwner ? RBTreeFind (ruleOwner->dispatch, &deliver->message) : (RBNode*) NULL;
@@ -399,16 +408,6 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case RandomRule:
       random = &rule->param.random;
       rule = rngRandomProb(board->rng) < random->prob ? random->passRule : random->failRule;
-      break;
-
-    case GoalRule:
-      goal = (Goal*) rule->param.goal;
-      if (goal && board->game)
-	if (testGoalAtPos (goal, board->game, x, y)) {
-	  deleteGoal (goal);
-	  rule->param.goal = NULL;
-	}
-      rule = NULL;
       break;
 
     case GotoRule:
@@ -430,7 +429,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 }
 
 void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret) {
-  int cellUpdates, boardIdx, x, y;
+  int cellUpdates, boardIdx, x, y, z;
   int64_Microticks microticksAtStart, microticksAtTarget, microticksAtNextMove, microticksToNextBoardSync;
   int64_Microticks deadline0, deadline1, deadline2, deadline3;
   double elapsedClockTime;
@@ -499,7 +498,7 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
           BoardSynchronization > SynchronousParticleUpdates > AsynchronousParticleUpdates > UpdatesFromMoveQueue > TargetTimeReached
 
-       Reaching the target time corresponds to ceding control to the Game loop, at which point Game events (UI moves & Goal triggers) occur.
+       Reaching the target time corresponds to ceding control to the Game loop, at which point Game events (UI moves) occur.
        This cession of control is the lowest-priority event to be serviced.
        The second lowest-priority is the move queue, which is used to play back Game events.
     */
@@ -542,12 +541,13 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
+      z = boardIndexToZ (board->size, boardIdx);
 
 #ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Updating synchronized cell at (%d,%d)\n", x, y);
+      fprintf (stderr, "Updating synchronized cell at (%d,%d,%d)\n", x, y, z);
 #endif /* PIXELZOO_DEBUG */
 			
-      evolveBoardCellSync (board, x, y);
+      evolveBoardCellSync (board, x, y, z);
       ++cellUpdates;
       ++board->updateCount;
       continue;
@@ -562,12 +562,13 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       x = boardIndexToX (board->size, boardIdx);
       y = boardIndexToY (board->size, boardIdx);
+      z = boardIndexToZ (board->size, boardIdx);
 
 #ifdef PIXELZOO_DEBUG
-      fprintf (stderr, "Updating asynchronous cell at (%d,%d)\n", x, y);
+      fprintf (stderr, "Updating asynchronous cell at (%d,%d,%d)\n", x, y, z);
 #endif /* PIXELZOO_DEBUG */
 			
-      evolveBoardCell (board, x, y);
+      evolveBoardCell (board, x, y, z);
       ++cellUpdates;
       ++board->updateCount;
       continue;

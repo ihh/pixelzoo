@@ -49,7 +49,7 @@ void deleteTool (void *voidTool) {
 void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int yEnd, double duration) {
   Game *game;
   Board *board;
-  int particles, xOffset, yOffset, xPaint, yPaint;
+  int particles, xOffset, yOffset, xPaint, yPaint, zPaint;
   State oldState, maskedOldState, newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
@@ -57,6 +57,7 @@ void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int 
 
   game = (Game*) voidGame;
   board = game->board;
+  zPaint = tool->z;  /* always paint to top layer */
   particles = (int) (.5 + tool->sprayRate * duration);
   linePos = 0.;
   linePosDelta = 1. / (double) particles;
@@ -71,12 +72,12 @@ void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int 
     xPaint = xStart + xOffset - tool->brushCenter.x + (int) (.5 + linePos * xDelta);
     yPaint = yStart + yOffset - tool->brushCenter.y + (int) (.5 + linePos * yDelta);
     linePos += linePosDelta;
-    if (onBoard (board, xPaint, yPaint)) {
+    if (onBoard (board, xPaint, yPaint, zPaint)) {
       if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
-	oldState = readBoardStateUnguarded(board,xPaint,yPaint);
+	oldState = readBoardStateUnguarded(board,xPaint,yPaint,zPaint);
 	maskedOldState = oldState & tool->overwriteMask;
 	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
-	  writeBoardMove (board, xPaint, yPaint, newState);
+	  writeBoardMove (board, xPaint, yPaint, zPaint, newState);
 	  if (oldState != newState)
 	    tool->reserve = MAX (tool->reserve - 1, 0.);
 	}

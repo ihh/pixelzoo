@@ -101,20 +101,20 @@
     pzUntouchCell(game);
 }
 
--(void)touchCellAtX:(int)x y:(int)y {
+-(void)touchCellAtX:(int)x y:(int)y z:(int)z {
     pzTouchCell(game,x,y);
 }
 
--(int)cellRgbAtX:(int)x y:(int)y {
-    return pzGetCellRgb(game, x, y);
+-(int)cellRgbAtX:(int)x y:(int)y z:(int)z {
+    return pzGetCellRgb(game, x, y, z);
 }
 
--(const char*)cellNameAtX:(int)x y:(int)y {
-    return pzGetCellName(game, x, y);
+-(const char*)cellNameAtX:(int)x y:(int)y z:(int)z {
+    return pzGetCellName(game, x, y, z);
 }
 
--(int)cellNameRgbAtX:(int)x y:(int)y {
-    return pzGetCellNameRgb(game, x, y);
+-(int)cellNameRgbAtX:(int)x y:(int)y z:(int)z {
+    return pzGetCellNameRgb(game, x, y, z);
 }
 
 -(int)toolRgbByNumber:(int)n {

@@ -120,7 +120,7 @@ The color of a cell.
 Equivalent to a call to pzGetCellPaletteIndex() followed by a call to pzGetPaletteRgb()
 
 @return A 24-bit RGB value */
-int PZEXPORT pzGetCellRgb(pzGame,int x,int y);
+int PZEXPORT pzGetCellRgb(pzGame,int x,int y,int z);
 
 #define pzGetRgbRed(Color)   (((Color) >> 16) & 0xff)
 #define pzGetRgbGreen(Color) (((Color) >> 8) & 0xff)
@@ -129,7 +129,7 @@ int PZEXPORT pzGetCellRgb(pzGame,int x,int y);
 /**
 The color of a cell.
 @return the board's internal palette index; see pzGetPaletteRgb() */
-int PZEXPORT pzGetCellPaletteIndex(pzGame,int x,int y);
+int PZEXPORT pzGetCellPaletteIndex(pzGame,int x,int y,int z);
 
 
 /* Description of the board palette */
@@ -147,11 +147,11 @@ int PZEXPORT pzGetPaletteRgb(pzGame,int paletteIndex);
 
 /**
  Name of an individual cell, can be used by an "inspect" tool */
-const char* PZEXPORT pzGetCellName(pzGame,int x,int y);
+const char* PZEXPORT pzGetCellName(pzGame,int x,int y,int z);
 
 /**
  Color of an individual cell's description text, can be used by an "inspect" tool */
-int PZEXPORT pzGetCellNameRgb(pzGame,int x,int y);  /* returns 24-bit RGB */
+int PZEXPORT pzGetCellNameRgb(pzGame,int x,int y,int z);  /* returns 24-bit RGB */
 
 
 /* Using the current tool on the board */

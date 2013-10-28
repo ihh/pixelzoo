@@ -8,6 +8,7 @@
 /* XML node names */
 #define XMLZOO_BOARD       "board"
 #define XMLZOO_SIZE        "size"
+#define XMLZOO_DEPTH       "depth"
 #define XMLZOO_SEED        "seed"
 #define XMLZOO_GRAMMAR     "grammar"
 #define XMLZOO_SCHEME      "scheme"
@@ -33,7 +34,6 @@
 #define XMLZOO_COMPARE     "compare"
 #define XMLZOO_MODIFY      "modify"
 #define XMLZOO_RANDOM      "random"
-#define XMLZOO_GOAL        "goal"
 #define XMLZOO_CASE        "case"
 #define XMLZOO_DEFAULT     "default"
 #define XMLZOO_REGINDEX    "regindex"
@@ -52,6 +52,7 @@
 #define XMLZOO_POS         "pos"
 #define XMLZOO_X           "x"
 #define XMLZOO_Y           "y"
+#define XMLZOO_Z           "z"
 #define XMLZOO_MODE        "mode"
 #define XMLZOO_DIRECT      "direct"
 #define XMLZOO_INDIRECT    "indirect"
@@ -89,6 +90,7 @@
 #define XMLZOO_DISPATCH    "dispatch"
 #define XMLZOO_LOAD        "load"
 #define XMLZOO_REGISTER    "register"
+#define XMLZOO_GOAL        "goal"
 
 /* methods */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
@@ -96,7 +98,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root);
 Board* newBoardFromXmlString (void *game, const char* string);
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
-void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
+void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int z, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
 void writeTypesXml (Board* board, xmlTextWriterPtr writer);
 void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 

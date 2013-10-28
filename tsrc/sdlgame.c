@@ -357,7 +357,7 @@ void render(SDLGame* sdlGame) {
   int size = pzGetBoardSize (sdlGame->game);
   for (x = 0; x < size; ++x)
     for (y = 0; y < size; ++y) {
-      int pal = pzGetCellPaletteIndex (sdlGame->game, x, y);
+      int pal = pzGetCellPaletteIndex (sdlGame->game, x, y, 0);
       for (i = 0; i < PIXELS_PER_CELL; ++i)
 	for (j = 0; j < PIXELS_PER_CELL; ++j)
 	  renderPixel( sdlGame->g_screenSurface, PIXELS_PER_CELL*x+i, PIXELS_PER_CELL*y+j, sdlGame->sdlColor[pal] );

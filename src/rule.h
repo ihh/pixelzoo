@@ -9,18 +9,19 @@
 #define NumberOfRegisters 64
 
 /* Short-range relative co-ordinate offset.
-   1 byte each for X & Y.
-   If xyAreRegisters is nonzero, X & Y are treated as register indices (i.e. indirect addressing).
+   1 byte each for X, Y & Z.
+   If xyzAreRegisters is nonzero, X, Y & Z are treated as register indices (i.e. indirect addressing).
+   The maximum register index is NumberOfRegisters-1; the index one greater than this (NumberOfRegisters) is held at zero, and is the default value for registers that are omitted.
  */
 typedef struct LocalOffset {
-  signed char x, y;
-  unsigned char xyAreRegisters;
+  signed char x, y, z;
+  unsigned char xyzAreRegisters;
 } LocalOffset;
 
 /* Types of rule */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GoalRule, GotoRule, LoadRule };
+enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
@@ -71,7 +72,6 @@ typedef union RuleParams {
   DeliverRuleParams deliver;
   RandomRuleParams random;
   LoadRuleParams load;
-  void *goal;
   ParticleRule *gotoLabel;
 } RuleParams;
 
@@ -86,7 +86,6 @@ ParticleRule* newCompareRule();
 ParticleRule* newModifyRule();
 ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
-ParticleRule* newGoalRule();
 ParticleRule* newGotoRule();
 ParticleRule* newLoadRule();
 

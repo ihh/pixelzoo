@@ -15,9 +15,9 @@ void deleteCellWatcher (CellWatcher* watcher) {
   SafeFree (watcher);
 }
 
-int registerCellWatcher (Board *board, int x, int y, CellWatcher *watcher) {
+int registerCellWatcher (Board *board, int x, int y, int z, CellWatcher *watcher) {
   int i;
-  i = boardIndex(board->size,x,y);
+  i = boardIndex(board->size,x,y,z);
   if (board->watcher[i])
     return 0;
   board->watcher[i] = watcher;
@@ -25,13 +25,14 @@ int registerCellWatcher (Board *board, int x, int y, CellWatcher *watcher) {
 }
 
 void unregisterCellWatcher (Board *board, CellWatcher *watcher) {
-  int x, y, i, size;
+  int x, y, z, i, size;
   size = board->size;
   for (x = 0; x < size; ++x)
-    for (y = 0; y < size; ++y) {
-      i = boardIndex(board->size,x,y);
-      if (board->watcher[i] == watcher)
-	board->watcher[i] = NULL;
-    }
+    for (y = 0; y < size; ++y)
+      for (z = 0; z < size; ++z) {
+	i = boardIndex(board->size,x,y,z);
+	if (board->watcher[i] == watcher)
+	  board->watcher[i] = NULL;
+      }
 }
 

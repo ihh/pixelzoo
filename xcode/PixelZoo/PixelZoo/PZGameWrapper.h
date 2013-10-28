@@ -50,11 +50,11 @@
 -(int)selectedToolNumber;
 
 -(void)untouchCell;
--(void)touchCellAtX:(int)x y:(int)y;
+-(void)touchCellAtX:(int)x y:(int)y z:(int)z;
 
--(int)cellRgbAtX:(int)x y:(int)y;
--(const char*)cellNameAtX:(int)x y:(int)y;
--(int)cellNameRgbAtX:(int)x y:(int)y;
+-(int)cellRgbAtX:(int)x y:(int)y z:(int)z;
+-(const char*)cellNameAtX:(int)x y:(int)y z:(int)z;
+-(int)cellNameRgbAtX:(int)x y:(int)y z:(int)z;
 
 -(int)toolRgbByNumber:(int)n;
 -(const char*)toolNameByNumber:(int)n;

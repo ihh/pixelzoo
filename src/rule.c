@@ -1,6 +1,5 @@
 #include "rule.h"
 #include "statemap.h"
-#include "goal.h"
 
 ParticleRule* newParticleRule (enum RuleType type);
 
@@ -52,13 +51,6 @@ ParticleRule* newRandomRule() {
   return rule;
 }
 
-ParticleRule* newGoalRule() {
-  ParticleRule* rule;
-  rule = newParticleRule (GoalRule);
-  rule->param.goal = NULL;
-  return rule;
-}
-
 ParticleRule* newGotoRule() {
   ParticleRule* rule;
   rule = newParticleRule (GotoRule);
@@ -82,7 +74,6 @@ void deleteParticleRule (void *voidRule) {
   ModifyRuleParams *modify;
   RandomRuleParams *random;
   LoadRuleParams *load;
-  Goal *goal;
 
   rule = (ParticleRule*) voidRule;
 
@@ -120,12 +111,6 @@ void deleteParticleRule (void *voidRule) {
       deleteParticleRule (random->passRule);
     if (random->failRule)
       deleteParticleRule (random->failRule);
-    break;
-
-  case GoalRule:
-    goal = rule->param.goal;
-    if (goal)
-      deleteGoal (goal);
     break;
 
   case GotoRule:

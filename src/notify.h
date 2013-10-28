@@ -13,6 +13,7 @@ typedef State (*WriteInterceptFunction) (CellWatcher *watcher,
 					 Board *board,
 					 int x,
 					 int y,
+					 int z,
 					 State state);
 
 /* a CellWatcher is a WriteInterceptFunction and some context */
@@ -26,7 +27,7 @@ struct CellWatcher {
 /* methods */
 CellWatcher* newCellWatcher (WriteInterceptFunction intercept, void *game, void *context, DestroyFunction contextDestroy);
 void deleteCellWatcher (CellWatcher *watcher);
-int registerCellWatcher (Board *board, int x, int y, CellWatcher *watcher);  /* returns 1 if successful, 0 if cell already being watched */
+int registerCellWatcher (Board *board, int x, int y, int z, CellWatcher *watcher);  /* returns 1 if successful, 0 if cell already being watched */
 void unregisterCellWatcher (Board *board, CellWatcher *watcher);  /* unregisters all instances of this watcher on the board */
 
 #endif /* NOTIFY_INCLUDED */

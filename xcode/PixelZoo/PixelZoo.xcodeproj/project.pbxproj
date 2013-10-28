@@ -25,7 +25,6 @@
 		2818E2C617FFBD7500093CEC /* board.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28E17FFBD7500093CEC /* board.c */; };
 		2818E2C717FFBD7500093CEC /* color.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29017FFBD7500093CEC /* color.c */; };
 		2818E2C817FFBD7500093CEC /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29217FFBD7500093CEC /* game.c */; };
-		2818E2C917FFBD7500093CEC /* goal.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29417FFBD7500093CEC /* goal.c */; };
 		2818E2CA17FFBD7500093CEC /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29617FFBD7500093CEC /* list.c */; };
 		2818E2CB17FFBD7500093CEC /* mersenne.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29817FFBD7500093CEC /* mersenne.c */; };
 		2818E2CC17FFBD7500093CEC /* move.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29A17FFBD7500093CEC /* move.c */; };
@@ -44,7 +43,6 @@
 		2818E2D917FFBD7500093CEC /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2B617FFBD7500093CEC /* vector.c */; };
 		2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2B817FFBD7500093CEC /* xmlboard.c */; };
 		2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2BA17FFBD7500093CEC /* xmlgame.c */; };
-		2818E2DC17FFBD7500093CEC /* xmlgoal.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2BC17FFBD7500093CEC /* xmlgoal.c */; };
 		2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2BE17FFBD7500093CEC /* xmlmove.c */; };
 		2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C017FFBD7500093CEC /* xmlutil.c */; };
 		2818E2DF17FFBD7500093CEC /* xymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E2C217FFBD7500093CEC /* xymap.c */; };
@@ -98,8 +96,6 @@
 		2818E29117FFBD7500093CEC /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = color.h; path = ../../../src/color.h; sourceTree = "<group>"; };
 		2818E29217FFBD7500093CEC /* game.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = game.c; path = ../../../src/game.c; sourceTree = "<group>"; };
 		2818E29317FFBD7500093CEC /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = game.h; path = ../../../src/game.h; sourceTree = "<group>"; };
-		2818E29417FFBD7500093CEC /* goal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = goal.c; path = ../../../src/goal.c; sourceTree = "<group>"; };
-		2818E29517FFBD7500093CEC /* goal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = goal.h; path = ../../../src/goal.h; sourceTree = "<group>"; };
 		2818E29617FFBD7500093CEC /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = list.c; path = ../../../src/list.c; sourceTree = "<group>"; };
 		2818E29717FFBD7500093CEC /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = list.h; path = ../../../src/list.h; sourceTree = "<group>"; };
 		2818E29817FFBD7500093CEC /* mersenne.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mersenne.c; path = ../../../src/mersenne.c; sourceTree = "<group>"; };
@@ -138,8 +134,6 @@
 		2818E2B917FFBD7500093CEC /* xmlboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlboard.h; path = ../../../src/xmlboard.h; sourceTree = "<group>"; };
 		2818E2BA17FFBD7500093CEC /* xmlgame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgame.c; path = ../../../src/xmlgame.c; sourceTree = "<group>"; };
 		2818E2BB17FFBD7500093CEC /* xmlgame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgame.h; path = ../../../src/xmlgame.h; sourceTree = "<group>"; };
-		2818E2BC17FFBD7500093CEC /* xmlgoal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlgoal.c; path = ../../../src/xmlgoal.c; sourceTree = "<group>"; };
-		2818E2BD17FFBD7500093CEC /* xmlgoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlgoal.h; path = ../../../src/xmlgoal.h; sourceTree = "<group>"; };
 		2818E2BE17FFBD7500093CEC /* xmlmove.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlmove.c; path = ../../../src/xmlmove.c; sourceTree = "<group>"; };
 		2818E2BF17FFBD7500093CEC /* xmlmove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xmlmove.h; path = ../../../src/xmlmove.h; sourceTree = "<group>"; };
 		2818E2C017FFBD7500093CEC /* xmlutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = xmlutil.c; path = ../../../src/xmlutil.c; sourceTree = "<group>"; };
@@ -295,8 +289,6 @@
 				2818E29117FFBD7500093CEC /* color.h */,
 				2818E29217FFBD7500093CEC /* game.c */,
 				2818E29317FFBD7500093CEC /* game.h */,
-				2818E29417FFBD7500093CEC /* goal.c */,
-				2818E29517FFBD7500093CEC /* goal.h */,
 				2818E29617FFBD7500093CEC /* list.c */,
 				2818E29717FFBD7500093CEC /* list.h */,
 				2818E29817FFBD7500093CEC /* mersenne.c */,
@@ -337,8 +329,6 @@
 				2818E2B917FFBD7500093CEC /* xmlboard.h */,
 				2818E2BA17FFBD7500093CEC /* xmlgame.c */,
 				2818E2BB17FFBD7500093CEC /* xmlgame.h */,
-				2818E2BC17FFBD7500093CEC /* xmlgoal.c */,
-				2818E2BD17FFBD7500093CEC /* xmlgoal.h */,
 				2818E2BE17FFBD7500093CEC /* xmlmove.c */,
 				2818E2BF17FFBD7500093CEC /* xmlmove.h */,
 				2818E2E017FFBDD400093CEC /* xmlparser.c */,
@@ -440,7 +430,6 @@
 				2818E2C617FFBD7500093CEC /* board.c in Sources */,
 				2818E2C717FFBD7500093CEC /* color.c in Sources */,
 				2818E2C817FFBD7500093CEC /* game.c in Sources */,
-				2818E2C917FFBD7500093CEC /* goal.c in Sources */,
 				2818E2CA17FFBD7500093CEC /* list.c in Sources */,
 				287985A51814FD6300A115A7 /* proto.c in Sources */,
 				2818E2CB17FFBD7500093CEC /* mersenne.c in Sources */,
@@ -472,7 +461,6 @@
 				285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
 				285106411801E9DC00AA3254 /* PZGameViewController.m in Sources */,
-				2818E2DC17FFBD7500093CEC /* xmlgoal.c in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */,
 				2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */,

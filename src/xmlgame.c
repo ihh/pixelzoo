@@ -2,11 +2,7 @@
 #include "notify.h"
 #include "xmlgame.h"
 #include "xmlboard.h"
-#include "xmlgoal.h"
 #include "xmlutil.h"
-
-/* prototypes for private builder methods */
-GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *node);
 
 /* method defs */
 Game* newGameFromXmlString (const char* string) {
@@ -47,9 +43,8 @@ Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char*
 
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateBoardRoot) {
   Game *game;
-  xmlNode *exitNode, *goalNode, *node;
+  xmlNode *node;
   Tool *tool, *selectedTool;
-  xmlNode *endGoalParentNode, *endGoalNode;
 
   game = newGame();
   game->board = newBoardFromXmlRoot ((void*)game, separateBoardRoot);
@@ -64,29 +59,8 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   }
 
   for (node = gameNode->children; node; node = node->next)
-    if (MATCHES(node,TRIGGER))
-      (void) ListInsertBefore (game->trigger, NULL, newGoalTriggerFromXmlNode (game, node));
-
-  for (node = gameNode->children; node; node = node->next)
     if (MATCHES(node,PROTECT))
-      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->writeProtectWatcher);
-
-  exitNode = CHILD(gameNode,EXIT);
-  if (exitNode) {
-    for (node = exitNode->children; node; node = node->next)
-      if (MATCHES(node,POS))
-	registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), game->theExit.watcher);
-    game->theExit.type = OPTCHILDINT(exitNode,DECTYPE,CHILDHEX(exitNode,HEXTYPE));
-  } else
-    game->theExit.type = PortalDestroyed;
-
-  goalNode = CHILD (gameNode, GOAL);
-  if (goalNode)
-    game->goal = newGoalFromXmlParentNode (goalNode, game);
-
-  endGoalParentNode = CHILD (gameNode, ENDTURN);
-  if (endGoalParentNode && (endGoalNode = CHILD (endGoalParentNode, GOAL)))
-    game->endGoal = newGoalFromXmlParentNode (endGoalNode, game);
+      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), CHILDINT(node,Z), game->writeProtectWatcher);
 
   return game;
 }
@@ -110,6 +84,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
   } else {
     size = CHILDINT(toolNode,SIZE);
     tool = newTool ((char*) CHILDSTRING(toolNode,NAME), size);
+    tool->z = OPTCHILDINT(toolNode,Z,0);  /* by default, make tools operate on zeroth layer */
     if ((brushNode = CHILD(toolNode,BRUSH))) {
       if ((node = CHILD(brushNode,CENTER))) {
 	tool->brushCenter.x = CHILDINT(node,X);
@@ -156,24 +131,9 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
   return tool;
 }
 
-GoalTrigger* newGoalTriggerFromXmlNode (Game *game, xmlNode *triggerNode) {
-  GoalTrigger *trigger;
-  xmlNode *node;
-  trigger = newGoalTrigger (game, newGoalFromXmlParentNode (CHILD(triggerNode,GOAL_GPARAM), game));
-  trigger->overwriteType = OPTCHILDINT(triggerNode,DECTYPE,CHILDHEX(triggerNode,HEXTYPE));
-  for (node = triggerNode->children; node; node = node->next)
-    if (MATCHES(node,POS))
-      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), trigger->watcher);
-  return trigger;
-}
-
 void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile) {
   xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);  /* begin game element */
   writeBoardXml (game->board, writer, reverseCompile);  /* board element */
-  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_ENDTURN);  /* begin endturn element */
-  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GOAL);  /* begin goal element */
-  xmlTextWriterWriteFormatElement (writer, (xmlChar*) (testGoalMet(game->endGoal,game) ? XMLZOO_TRUE_GOAL : XMLZOO_FALSE_GOAL), "");  /* empty true or false element */
-  xmlTextWriterFullEndElement (writer);  /* end of goal element */
-  xmlTextWriterFullEndElement (writer);  /* end of endgoal element */
+  /* TODO: write end-of-turn goal test here */
   xmlTextWriterFullEndElement (writer);  /* end of game element */
 }

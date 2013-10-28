@@ -201,7 +201,7 @@
 				[gameWrapper untouchCell];
                 
 			} else {
-				[gameWrapper touchCellAtX:x y:y];
+				[gameWrapper touchCellAtX:x y:y z:0];
 			}
 			
 		} else if (CGRectContainsPoint(toolboxRect, currentPoint)) {
@@ -248,7 +248,7 @@
 				examCoord.y = y;
 				
 			} else {
-                [gameWrapper touchCellAtX:x y:y];
+                [gameWrapper touchCellAtX:x y:y z:0];
 			}
 		}
 	}

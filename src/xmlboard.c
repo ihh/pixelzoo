@@ -4,7 +4,6 @@
 #include "xmlparser.h"
 #include "xmlboard.h"
 #include "xmlutil.h"
-#include "xmlgoal.h"
 #include "xmlmove.h"
 #include "game.h"
 #include "vars.h"
@@ -24,7 +23,7 @@ void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void
 void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule);
 
-void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, xmlNode* node);
+void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, int zDefault, xmlNode* node);
 
 /* method defs */
 Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
@@ -34,7 +33,7 @@ Board* newBoardFromXmlDocument (void *game, xmlDoc *doc) {
 Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   Board *board;
   xmlNode *boardNode, *queueNode, *grammarNode, *seedNode, *node;
-  int x, y;
+  int x, y, z;
   State state;
   const char* subRuleName;
   ParticleRule *rule;
@@ -44,7 +43,7 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
   boardNode = CHILD(root,BOARD);
   Assert (boardNode != NULL, "XML board tag not found");
 
-  board = newBoard (CHILDINT(boardNode,SIZE));
+  board = newBoard (CHILDINT(boardNode,SIZE), OPTCHILDINT(boardNode,DEPTH,1));
   board->game = game;
 
   seedNode = CHILD(boardNode,SEED);
@@ -98,8 +97,9 @@ Board* newBoardFromXmlRoot (void *game, xmlNode *root) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
+      z = OPTCHILDINT(node,Z,0);
       state = getStateFromNode (node, protoTable, 0);
-      writeBoardState (board, x, y, state);
+      writeBoardState (board, x, y, z, state);
     }
 
   queueNode = CHILD (boardNode, QUEUE);
@@ -242,7 +242,7 @@ ParticleRule* newRuleFromXmlParentNode (void *game, xmlNode *ruleParentNode, Pro
 	subRule = newRuleFromXmlParentNode (game, childNode, protoTable, localSubRule);
 	defineSubRule (localSubRule, subRuleName, subRule, ((Game*) game)->board->subRule);
 
-      } else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,GOAL) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME)) {
+      } else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,GOAL)) {
 	if (ruleNode)
 	  Warn ("Ignoring <%s> child of <rule> node, in favor of older sibling <%s>", (const char*) childNode->name, (const char*) ruleNode->name);
 	else
@@ -309,10 +309,6 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
     random->passRule = newRuleFromXmlGrandparentNode (game, CHILD (ruleNode, PASS), protoTable, localSubRule);
     random->failRule = newRuleFromXmlGrandparentNode (game, CHILD (ruleNode, FAIL), protoTable, localSubRule);
 
-  } else if (MATCHES (ruleNode, GOAL)) {
-    rule = newGoalRule();
-    rule->param.goal = newGoalFromXmlParentNode (ruleNode, game);
-
   } else if (MATCHES (ruleNode, LOAD)) {
     rule = newLoadRule();
     load = &rule->param.load;
@@ -327,6 +323,9 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
     deleteXmlTree (evalNode);
     StringDelete ((void*) evalResult);
 
+  } else if (MATCHES (ruleNode, GOAL)) {
+    /* REFACTOR ME: left in place to prevent old tests crashing (ugh....) */
+
   } else {
     Abort ("Unknown rule type");
   }
@@ -334,24 +333,28 @@ ParticleRule* newRuleFromXmlNode (void *game, xmlNode *ruleNode, ProtoTable *pro
   return rule;
 }
 
-void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, xmlNode* node) {
+void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, int zDefault, xmlNode* node) {
   const char *mode;
   if (node) {
     if ((mode = ATTR(node,MODE)) && ATTRMATCHES(mode,INDIRECT)) {
-      loc->x = CHILDINT(node,X);
-      loc->y = CHILDINT(node,Y);
-      loc->xyAreRegisters = 1;
-      Assert (loc->x >= 0 && loc->x < NumberOfRegisters, "In <%s %s=\"%s\">: x-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->x, NumberOfRegisters);
-      Assert (loc->y >= 0 && loc->y < NumberOfRegisters, "In <%s %s=\"%s\">: y-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->y, NumberOfRegisters);
+      loc->x = OPTCHILDINT(node,X,NumberOfRegisters);
+      loc->y = OPTCHILDINT(node,Y,NumberOfRegisters);
+      loc->z = OPTCHILDINT(node,Z,NumberOfRegisters);
+      loc->xyzAreRegisters = 1;
+      Assert (loc->x >= 0 && loc->x < NumberOfRegisters + 1, "In <%s %s=\"%s\">: x-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->x, NumberOfRegisters);
+      Assert (loc->y >= 0 && loc->y < NumberOfRegisters + 1, "In <%s %s=\"%s\">: y-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->y, NumberOfRegisters);
+      Assert (loc->z >= 0 && loc->z < NumberOfRegisters + 1, "In <%s %s=\"%s\">: z-register is %d, should range from 0 to %d", (const char*) node->name, XMLPREFIX(MODE), XMLPREFIX(INDIRECT), loc->z, NumberOfRegisters);
     } else {
       loc->x = OPTCHILDINT(node,X,xDefault);
       loc->y = OPTCHILDINT(node,Y,yDefault);
-      loc->xyAreRegisters = 0;
+      loc->z = OPTCHILDINT(node,Z,zDefault);
+      loc->xyzAreRegisters = 0;
     }
   } else {
     loc->x = xDefault;
     loc->y = yDefault;
-    loc->xyAreRegisters = 0;
+    loc->z = zDefault;
+    loc->xyzAreRegisters = 0;
   }
 }
 
@@ -360,7 +363,7 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, void *g
   State state;
   ParticleRule *rule;
 
-  initLocalOffsetFromXmlNode (&lookup->loc, 0, 0, CHILD(node,POS));
+  initLocalOffsetFromXmlNode (&lookup->loc, 0, 0, 0, CHILD(node,POS));
 
   lookup->mask = getMaskFromNode (node, protoTable, StateMask);
   lookup->shift = getRShiftFromNode (node, protoTable);
@@ -382,7 +385,7 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, void
   xmlNode *curNode;
   ParticleRule *rule;
 
-  initLocalOffsetFromXmlNode (&compare->loc, 0, 0, CHILD(node,POS));
+  initLocalOffsetFromXmlNode (&compare->loc, 0, 0, 0, CHILD(node,POS));
 
   compare->mask = getMaskFromNode (node, protoTable, StateMask);
   compare->shift = getRShiftFromNode (node, protoTable);
@@ -431,14 +434,14 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, void *game,
   op->srcMask = getSrcMaskFromNode (node, protoTable, StateMask);
   op->destMask = getDestMaskFromNode (node, protoTable, StateMask);
 
-  initLocalOffsetFromXmlNode (&op->src, 0, 0, CHILD(node,SRC));
-  initLocalOffsetFromXmlNode (&op->dest, op->src.x, op->src.y, CHILD(node,DEST));
+  initLocalOffsetFromXmlNode (&op->src, 0, 0, 0, CHILD(node,SRC));
+  initLocalOffsetFromXmlNode (&op->dest, op->src.x, op->src.y, op->src.z, CHILD(node,DEST));
 
   op->nextRule = newRuleFromXmlGrandparentNode (game, CHILD (node, NEXT), protoTable, localSubRule);
 }
 
 void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, void *game, ProtoTable *protoTable, StringMap **localSubRule) {
-  initLocalOffsetFromXmlNode (&deliver->recipient, 0, 0, CHILD(node,POS));
+  initLocalOffsetFromXmlNode (&deliver->recipient, 0, 0, 0, CHILD(node,POS));
   deliver->message = getMessageFromNode (node, protoTable);
 }
 
@@ -477,7 +480,7 @@ void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, void *game, P
 }
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
-  int x, y;
+  int x, y, z;
   char *rngState;
 
   Assert (board->rngReleased, "writeBoard: random number generator not released. You need to call boardReleaseRandomNumbers");
@@ -493,23 +496,26 @@ void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
   if (!reverseCompile)
     writeTypesXml (board, writer);
 
-  for (x = 0; x < board->size; ++x)
-    for (y = 0; y < board->size; ++y)
-      writeCellXml (board, writer, x, y, reverseCompile);
+  for (z = 0; z < board->depth; ++z)
+    for (x = 0; x < board->size; ++x)
+      for (y = 0; y < board->size; ++y)
+	writeCellXml (board, writer, x, y, z, reverseCompile);
 
   xmlTextWriterFullEndElement (writer);  /* end board */
 }
 
-void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int reverseCompile) {
+void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int z, int reverseCompile) {
   int i;
   State s;
 
-  i = boardIndex (board->size, x, y);
+  i = boardIndex (board->size, x, y, z);
   s = board->cell[i];
   if (s) {
     xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_INIT);  /* begin init */
     xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_X, "%d", x);
     xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Y, "%d", y);
+    if (z)
+      xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_Z, "%d", z);
     if (reverseCompile)
       writeGVarsXml (board, s, writer);
     else

@@ -5,6 +5,7 @@
 #include "xmlgame.h"
 #include "xmlmove.h"
 #include "xmlparser.h"
+#include "balloon.h"
 
 #define MAX_PROPORTION_TIME_EVOLVING .9  /* so that gameLoop doesn't eat 100% of the time between updates */
 
@@ -82,74 +83,83 @@ int pzGetBoardSize(pzGame pzg) {
   return game->board->size;
 }
 
-int pzGetCellRgb(pzGame pzg,int x,int y) {
+int pzGetCellRgb(pzGame pzg,int x,int y,int z) {
   RGB *cellRgb;
   Game* game;
   game = (Game*) pzg;
-  cellRgb = &game->board->palette.rgb[pzGetCellPaletteIndex(pzg, x, y)];
+  cellRgb = &game->board->palette.rgb[pzGetCellPaletteIndex(pzg, x, y, z)];
   return PackRgbTo24Bit(*cellRgb);
 }
 
-int pzGetCellPaletteIndex(pzGame pzg,int x,int y) {
+int pzGetCellPaletteIndex(pzGame pzg,int x,int y,int z) {
   PaletteIndex cellColorIndex;
   Game* game;
   game = (Game*) pzg;
-  cellColorIndex = readBoardColor(game->board, x, y);
+  cellColorIndex = readBoardColor(game->board, x, y, z);
   return (int) cellColorIndex;
 }
 
-int** pzNewCellRgbArray(pzGame pzg) {
-  int x, size;
-  int** cell;
+int*** pzNewCellRgbArray(pzGame pzg) {
+  int x, y, size, depth;
+  int*** cell;
   Game* game;
   game = (Game*) pzg;
   size = game->board->size;
+  depth = game->board->depth;
   cell = SafeCalloc (size, sizeof(int*));
-  for (x = 0; x < size; ++x)
-    cell[x] = SafeCalloc (size, sizeof(int));
+  for (x = 0; x < size; ++x) {
+    cell[x] = SafeCalloc (size, sizeof(int*));
+    for (y = 0; y < size; ++y)
+      cell[x][y] = SafeCalloc (depth, sizeof(int));
+  }
   return cell;
 }
 
-void pzDeleteCellRgbArray(pzGame pzg, int** cell) {
-  int x, size;
-  Game* game;
-  game = (Game*) pzg;
-  size = game->board->size;
-  for (x = 0; x < size; ++x)
-    SafeFree (cell[x]);
-  SafeFree (cell);
-}
-
-void pzReadCellRgbArray(pzGame pzg,int** cell) {
+void pzDeleteCellRgbArray(pzGame pzg, int*** cell) {
   int x, y, size;
   Game* game;
   game = (Game*) pzg;
   size = game->board->size;
-  for (x = 0; x < size; ++x)
+  for (x = 0; x < size; ++x) {
     for (y = 0; y < size; ++y)
-      cell[x][y] = pzGetCellRgb (pzg, x, y);
+      SafeFree (cell[x][y]);
+    SafeFree (cell[x]);
+  }
+  SafeFree (cell);
 }
 
-const char* pzGetCellName(pzGame pzg,int x,int y) {
+void pzReadCellRgbArray(pzGame pzg,int*** cell) {
+  int x, y, z, size, depth;
+  Game* game;
+  game = (Game*) pzg;
+  size = game->board->size;
+  depth = game->board->depth;
+  for (x = 0; x < size; ++x)
+    for (y = 0; y < size; ++y)
+      for (z = 0; z < depth; ++z)
+	cell[x][y][z] = pzGetCellRgb (pzg, x, y, z);
+}
+
+const char* pzGetCellName(pzGame pzg,int x,int y,int z) {
   State examState;
   Particle *particle;
   char *text;
   Game* game;
   game = (Game*) pzg;
-  examState = readBoardState (game->board, x, y);
+  examState = readBoardState (game->board, x, y, z);
   particle = game->board->byType[StateType(examState)];
   text = particle ? particle->name : NULL;
   return text;
 }
 
-int pzGetCellNameRgb(pzGame pzg,int x,int y) {
+int pzGetCellNameRgb(pzGame pzg,int x,int y,int z) {
   State examState;
   Particle *particle;
   PaletteIndex examColorIndex;
   RGB *cellNameRgb;
   Game* game;
   game = (Game*) pzg;
-  examState = readBoardState (game->board, x, y);
+  examState = readBoardState (game->board, x, y, z);
   particle = game->board->byType[StateType(examState)];
   examColorIndex = particle ? getParticleColor (particle, examState) : PaletteWhite;
   cellNameRgb = &game->board->palette.rgb[examColorIndex];

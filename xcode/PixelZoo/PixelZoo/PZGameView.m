@@ -75,7 +75,7 @@
         unsigned char *bitmapWritePtr = bitmapData;
         for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
             for (int x = 0; x < boardSize; ++x) {
-                int rgb = [gameWrapper cellRgbAtX:x y:y];
+                int rgb = [gameWrapper cellRgbAtX:x y:y z:0];
                 *(bitmapWritePtr++) = pzGetRgbRed(rgb);
                 *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
                 *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
@@ -195,8 +195,8 @@
         if ([gameViewController examining]) {
             XYCoord pos = [gameViewController examCoord];
             UIFont *font = [UIFont fontWithName:fontName size:EXAMINE_FONT_SIZE];
-            char* text = (char*) [gameWrapper cellNameAtX:pos.x y:pos.y];
-            int rgb = [gameWrapper cellNameRgbAtX:pos.x y:pos.y];
+            char* text = (char*) [gameWrapper cellNameAtX:pos.x y:pos.y z:0];
+            int rgb = [gameWrapper cellNameRgbAtX:pos.x y:pos.y z:0];
             if (!text) text = EXAMINE_EMPTY_TEXT;
             
             CGSize textSize = [self measureText:text withFont:font withSpacing:EXAMINE_FONT_SPACING];

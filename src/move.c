@@ -1,12 +1,13 @@
 #include "move.h"
 
-Move* newMove (int64_Microticks t, signed long long int u, int x, int y, State state) {
+Move* newMove (int64_Microticks t, signed long long int u, int x, int y, int z, State state) {
   Move *m;
   m = SafeMalloc (sizeof (Move));
   m->t = t;
   m->u = u;
   m->x = x;
   m->y = y;
+  m->z = z;
   m->state = state;
   return m;
 }
@@ -18,5 +19,5 @@ void deleteMove (void* move) {
 void* copyMove (void* voidMove) {
   Move *move;
   move = (Move*) voidMove;
-  return newMove (move->t, move->u, move->x, move->y, move->state);
+  return newMove (move->t, move->u, move->x, move->y, move->z, move->state);
 }
