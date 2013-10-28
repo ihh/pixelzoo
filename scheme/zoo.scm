@@ -165,7 +165,7 @@
       (srcmask 0)
       ,(xy 'dest loc)
       (vlshift (type ,type) (var ,var))
-      (vlmask (type ,type) (var ,var))
+      (vdestmask (type ,type) (var ,var))
       (inc ,val)
       ,@(listform-opt-rule 'next next)))
 
