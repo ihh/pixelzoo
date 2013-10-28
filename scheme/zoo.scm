@@ -673,8 +673,7 @@
 			 polymer-edges-var -1 polymer-edges-var
 			 (switch-var
 			  origin self-type polymer-edges-var
-			  `((0 ,nop-rule))
-			  (modify-self-var polymer-steps-var -1 polymer-steps-var))))))))
+			  `((0 ,(modify-self-var polymer-steps-var -1 polymer-steps-var))))))))))
 	       (bind-moore-dir  ;; build-state == 2, steps > 0, edges > 0
 		polymer-fwd-bond-dir-var
 		(lambda (loc dir)
@@ -736,16 +735,16 @@
       (name ,name)
       (vars
        (varsize (name ,polymer-has-fwd-bond-var) (size 1))
-       (varsize (name ,polymer-has-rev-bond-var) (size 3))
-       (varsize (name ,polymer-fwd-bond-dir-var) (size 1))
+       (varsize (name ,polymer-fwd-bond-dir-var) (size 3))
+       (varsize (name ,polymer-has-rev-bond-var) (size 1))
        (varsize (name ,polymer-rev-bond-dir-var) (size 3))
        (varsize (name ,polymer-build-state-var) (size 2))
        (varsize (name ,polymer-tail-state-var) (size 2))
        (varsize (name ,polymer-edge-len-var) (size 5))
        (varsize (name ,polymer-steps-var) (size 5))
-       (varsize (name ,polymer-edges-var) (size 1)))
+       (varsize (name ,polymer-edges-var) (size 2)))
 
-      (colrule (hexinc "14ffff"))
+      (colrule (mask 0) (hexinc "14ffff"))
       (rule (scheme "(polymer-move-rule)"))))
 
   ;; Utility functions.

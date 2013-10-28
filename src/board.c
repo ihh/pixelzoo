@@ -159,7 +159,7 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State 
 
 #ifdef PIXELZOO_DEBUG
   xmlTextWriterPtr writer = newXmlTextWriterNoHeader();
-  writeCellXml (board, writer, x, y, z, 1);
+  writeGVarsXml (board, state, writer);
   xmlChar* xmlText = deleteXmlTextWriterLeavingText (writer);
   Warn ("writeBoardStateUnguardedFunction: %d %d %d %llx\n%s", x, y, z, state, xmlText);
   SafeFree (xmlText);
