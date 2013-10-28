@@ -17,15 +17,12 @@ xmlChar* getNodeContent (xmlNode* node) {
 xmlChar* getNodeContentOrComplain (xmlNode* node, const char* tag) {
   if (node == NULL) {
     if (tag)
-      fprintf (stderr, "Missing tag: %s\n", tag);
+      Abort ("Node is null, expected <%s>\n", tag);
     else
-      fprintf (stderr, "Missing node\n");
-    Abort("XML parse error");
+      Abort ("Node and tag are null\n");
   }
-  if (node->children == NULL) {
-    fprintf (stderr, "Missing children for tag: %s\n", tag);
-    Abort("XML parse error");
-  }
+  if (node->children == NULL)
+    Abort ("Missing children for tag: %s\n", tag);
   return (xmlChar*) node->children->content;
 }
 

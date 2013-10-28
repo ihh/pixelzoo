@@ -2,6 +2,7 @@
   <board>
     <size>128</size>
     <grammar>
+      <particle><scheme>(polymer-particle "polymer")</scheme></particle>
       <particle>
         <name>empty</name>
         <type>0</type>
@@ -8603,6 +8604,17 @@
     </init>
   </board>
   <rate>240</rate>
+  <tool>
+    <name>polymer spray</name>
+    <size>4</size>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">10</val></gvars>
+    <overwrite>
+      <hexstate>0000000000000</hexstate>
+    </overwrite>
+    <spray>2500</spray>
+    <reserve>1</reserve>
+    <recharge>100</recharge>
+  </tool>
   <tool>
     <name>cement spray</name>
     <size>2</size>

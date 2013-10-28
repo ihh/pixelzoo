@@ -93,9 +93,9 @@
 #define XMLZOO_GOAL        "goal"
 
 /* methods */
-Board* newBoardFromXmlDocument (void *game, xmlDoc *doc);
-Board* newBoardFromXmlRoot (void *game, xmlNode *root);
-Board* newBoardFromXmlString (void *game, const char* string);
+Board* newBoardFromXmlDocument (xmlDoc *doc);
+Board* newBoardFromXmlRoot (xmlNode *root);
+Board* newBoardFromXmlString (const char* string);
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
 void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int z, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */

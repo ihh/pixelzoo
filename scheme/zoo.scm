@@ -399,8 +399,10 @@
   ;; if random neighborhood location dest is empty, do (move-self dest (next dest)), otherwise do (fail dest)
   ;; next & fail are optional arguments, and can be data instead of functions
   (define (drift-rule map-neighborhood . rest)
-    (map-neighborhood
-     (lambda (dest) (apply if-empty-move-self (cons dest (map (lambda (f) (if (procedure? f) (f dest) f)) rest))))))
+    (apply-random-switch
+     (map-neighborhood
+      (lambda (dest)
+	(list 1 (apply if-empty-move-self (cons dest (map (lambda (f) (if (procedure? f) (f dest) f)) rest))))))))
 
   ;; (neumann-drift next fail)
   (define (neumann-drift . rest)
@@ -429,6 +431,12 @@
   (define polymer-has-rev-bond-var "has-rev-bond")
   (define polymer-fwd-bond-dir-var "fwd-bond-dir")
   (define polymer-rev-bond-dir-var "rev-bond-dir")
+
+  (define polymer-build-state-var "build-state")
+  (define polymer-tail-state-var "tail-state")
+  (define polymer-edge-len-var "edge-len")
+  (define polymer-steps-var "steps")
+  (define polymer-edges-var "edges")
 
   (define (polymer-move-self)
     (indirect-move-self '(8 9)))
@@ -626,47 +634,47 @@
       ,(polymer-fr-subrule)
       ,(polymer-fr-just-verify-subrule)
       ,(switch-var
-	origin self-type "build-state"
+	origin self-type polymer-build-state-var
 	`((1 ,(copy-self-var  ;; build-state == 1
-	       "edge-len" "steps"
+	       polymer-edge-len-var polymer-steps-var
 	       (set-self-var
-		"edges" 3
+		polymer-edges-var 3
 		(set-self-var
-		 "tail-state" 0
+		 polymer-tail-state-var 0
 		 (set-self-var
-		  "build-state" 2)))))
+		  polymer-build-state-var 2)))))
 
 	  (2 ,(switch-var  ;; build-state == 2
-	       origin self-type "steps"
+	       origin self-type polymer-steps-var
 	       `((0 ,(switch-var  ;; build-state == 2, steps == 0
-		      origin self-type "edges"
+		      origin self-type polymer-edges-var
 		      `((0 ,(bind-moore-dir  ;; build-state == 2, steps == 0, edges == 0
 			     polymer-fwd-bond-dir-var
 			     (lambda (loc dir)
 			       (switch-type
 				loc
 				`((,self-type ,(switch-var
-						loc self-type "build-state"
+						loc self-type polymer-build-state-var
 						`((0 ,(set-var
-						       loc self-type "build-state" 3
+						       loc self-type polymer-build-state-var 3
 						       (set-var
 							loc self-type polymer-has-rev-bond-var 1
 							(set-var
 							 loc self-type polymer-rev-bond-dir-var
 							 (moore-back dir)
 							 (set-self-var
-							  "build-state" 3
+							  polymer-build-state-var 3
 							  (set-self-var polymer-has-fwd-bond-var 1)))))))))))))))
 		      (modify-self-var  ;; build-state == 2, steps == 0, edges > 0
 		       polymer-fwd-bond-dir-var +2 polymer-fwd-bond-dir-var
 		       (copy-self-var
-			"edge-len" "steps"
+			polymer-edge-len-var polymer-steps-var
 			(modify-self-var
-			 "edges" -1 "edges"
+			 polymer-edges-var -1 polymer-edges-var
 			 (switch-var
-			  origin self-type "edges"
+			  origin self-type polymer-edges-var
 			  `((0 ,nop-rule))
-			  (modify-self-var "steps" -1 "steps"))))))))
+			  (modify-self-var polymer-steps-var -1 polymer-steps-var))))))))
 	       (bind-moore-dir  ;; build-state == 2, steps > 0, edges > 0
 		polymer-fwd-bond-dir-var
 		(lambda (loc dir)
@@ -676,13 +684,13 @@
 				    loc self-type
 				    `((,polymer-has-rev-bond-var 1)
 				      (,polymer-rev-bond-dir-var ,(moore-back dir))
-				      ("build-state" 3))
+				      (,polymer-build-state-var 3))
 				    (copy-var
-				     origin self-type "tail-state" loc self-type "build-state"
+				     origin self-type polymer-tail-state-var loc self-type polymer-build-state-var
 				     (set-self-var
 				      polymer-has-fwd-bond-var 1
 				      (modify-self-var
-				       "steps" -1 "steps")))))))))))
+				       polymer-steps-var -1 polymer-steps-var)))))))))))
 
 	  (3 ,(switch-var  ;; build-state == 3
 	       origin self-type polymer-has-fwd-bond-var
@@ -720,6 +728,22 @@
 					 (list 1 (polymer-load-reg fwd-dir rev-dir move-dir (polymer-fr-subrule-name))))
 				       move-dirs)))))))))))))))))))
 
+  (define (polymer-particle name)
+    `(particle
+      (name ,name)
+      (vars
+       (varsize (name ,polymer-has-fwd-bond-var) (size 1))
+       (varsize (name ,polymer-has-rev-bond-var) (size 3))
+       (varsize (name ,polymer-fwd-bond-dir-var) (size 1))
+       (varsize (name ,polymer-rev-bond-dir-var) (size 3))
+       (varsize (name ,polymer-build-state-var) (size 2))
+       (varsize (name ,polymer-tail-state-var) (size 2))
+       (varsize (name ,polymer-edge-len-var) (size 5))
+       (varsize (name ,polymer-steps-var) (size 5))
+       (varsize (name ,polymer-edges-var) (size 1)))
+
+      (colrule (hexinc "14ffff"))
+      (rule (scheme "(polymer-move-rule)"))))
 
   ;; Utility functions.
   ;; Optional arguments
@@ -835,6 +859,9 @@
   ;;   "<hello tone=\"perky\" volume=\"11\">world</hello>"
 
   (define (sxml->string lst)
+;    (let ((result (fold-sxml-outer "" lst)))
+;      (display result)
+;      result))
     (fold-sxml-outer "" lst))
 
   (define (fold-sxml-outer str lst)

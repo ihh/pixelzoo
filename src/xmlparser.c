@@ -154,9 +154,12 @@ xmlNode* xmlTreeFromString (const char* s) {
 }
 
 void deleteXmlTree (xmlNode* root) {
-  xmlNode *child;
-  for (child = root->children; child; child = child->next)
-    deleteXmlTree (child);
+  if (root->next)
+    deleteXmlTree (root->next);
+  if (root->children)
+    deleteXmlTree (root->children);
+  if (root->properties)
+    deleteXmlTree (root->properties);
   SafeFreeOrNull ((char*) root->content);
   SafeFreeOrNull ((char*) root->name);
   SafeFreeOrNull (root);

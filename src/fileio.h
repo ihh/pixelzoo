@@ -15,7 +15,7 @@ void writeStringToFileAndDelete (const char* filename, const char* contents);
 xmlNode* xmlTreeFromFile (const char* filanem);
 
 /* XML Board file -> Board object */
-Board* newBoardFromXmlFile (void *game, const char* filename);
+Board* newBoardFromXmlFile (const char* filename);
 
 /* XML Game file -> Game object */
 Game* newGameFromXmlFile (const char* filename);

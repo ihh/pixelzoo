@@ -47,7 +47,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   Tool *tool, *selectedTool;
 
   game = newGame();
-  game->board = newBoardFromXmlRoot ((void*)game, separateBoardRoot);
+  game->board = newBoardFromXmlRoot (separateBoardRoot);
 
   game->ticksPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultTicksPerSecond);
 
@@ -73,6 +73,11 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
   xmlNode *evalNode;
 
   if ( (schemeNode = CHILD (toolNode, SCHEME)) ) {  /* assignment intentional */
+
+    Abort ("<%s> blocks aren't yet allowed inside <%s> blocks because the server doesn't know how to expand them, which it would need to do in order to figure out dependent Particle's", XMLPREFIX(SCHEME), XMLPREFIX(TOOL));
+
+    /* here is what the <scheme> block *should* do */
+
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
     evalNode = xmlTreeFromString (evalResult);
 

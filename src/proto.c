@@ -6,7 +6,6 @@
 #define SXML_TO_STRING_PROC "sxml->string"
 
 /* Scheme procedures (built-in) */
-#define QUOTE_PROC "quote"
 #define SET_PROC "set!"
 
 /* Scheme symbol for self */
@@ -132,22 +131,24 @@ sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression) {
 
 const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpression) {
   sexp ctx;
+  char *schemeExprWrapper;
   const char* str;
 
+  str = NULL;
   ctx = protoTable->context;
 
   /* declare & preserve local variables */
-  sexp_gc_var4 (sxml, sxml2str, quote, ret);
-  sexp_gc_preserve4 (ctx, sxml, sxml2str, quote, ret);
+  sexp_gc_var1 (sxml);
+  sexp_gc_preserve1 (ctx, sxml);
 
   /* do some Scheme */
-  sxml = sexp_eval_string (protoTable->context, schemeExpression, -1, NULL);
-
-  sxml2str = sexp_intern(ctx, SXML_TO_STRING_PROC, -1);
-  quote = sexp_intern(ctx, QUOTE_PROC, -1);
-
-  ret = sexp_eval(ctx, sexp_list2 (ctx, sxml2str, sexp_list2 (ctx, quote, sxml)), NULL);
-  str = StringNew (sexp_string_data (ret));
+  schemeExprWrapper = SafeMalloc (strlen(SXML_TO_STRING_PROC) + strlen(schemeExpression) + 4);
+  sprintf (schemeExprWrapper, "(%s %s)", SXML_TO_STRING_PROC, schemeExpression);
+  sxml = sexp_eval_string (protoTable->context, schemeExprWrapper, -1, NULL);
+  if (sexp_exceptionp(sxml))
+    sexp_print_exception(ctx,sxml,sexp_current_error_port(ctx));
+  else if (sexp_stringp(sxml))
+    str = StringNew (sexp_string_data (sxml));
 
   /* release local variables */
   sexp_gc_release4 (ctx);

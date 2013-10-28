@@ -65,12 +65,12 @@ xmlNode* xmlTreeFromFile (const char* filename) {
   return node;
 }
 
-Board* newBoardFromXmlFile (void *game, const char* filename) {
+Board* newBoardFromXmlFile (const char* filename) {
   xmlDoc* doc;
   Board* board = NULL;
   doc = xmlTreeFromFile (filename);
   if (doc)
-    board = newBoardFromXmlDocument (game, doc);
+    board = newBoardFromXmlDocument (doc);
   return board;
 }
 

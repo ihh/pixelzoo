@@ -42,7 +42,6 @@ Board* newBoard (int size, int depth) {
   board->updateCount = 0;
   board->syncUpdates = 0;
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
-  board->game = NULL;
   board->rng = newRNG();
   board->rngReleased = 1;
   board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
