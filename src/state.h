@@ -37,8 +37,11 @@ typedef unsigned long long int Vars;
 #define BitsPerVars  48
 #define NumVars      0x1000000000000
 
-/* Type <-> State conversion macros */
+/* State->Type conversion macro */
 #define StateType(STATE) (((STATE) & TypeMask) >> TypeShift)
+
+/* State->Vars conversion macro */
+#define StateVar(STATE,OFFSET,WIDTH) (((STATE) >> (OFFSET)) & ((1 << (WIDTH)) - 1))
 
 /* read-only State's for given Type */
 #define ReadOnlyStates    15

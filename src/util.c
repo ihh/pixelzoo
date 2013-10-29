@@ -23,7 +23,6 @@ double randomExp() {
 void Warn(char* warning, ...) {
   va_list argptr;
   va_start (argptr, warning);
-  fprintf(stderr,"Warning: ");
   vfprintf(stderr,warning,argptr);
   fprintf(stderr,"\n");
   va_end (argptr);

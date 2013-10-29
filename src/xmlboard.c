@@ -10,7 +10,7 @@
 /* prototypes for private builder methods */
 Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *protoTable);
 void parseVarsDescriptors (Proto *proto, xmlNode* particleNode);
-void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node, ProtoTable *protoTable);
+void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node, Proto *proto);
 ParticleRule* newRuleFromXmlNode (Board *board, xmlNode* node, ProtoTable *protoTable, StringMap **localSubRule);
 ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode* parent, ProtoTable *protoTable, StringMap **localSubRule);
 ParticleRule* newRuleFromXmlGrandparentNode (Board *board, xmlNode* grandparent, ProtoTable *protoTable, StringMap **localSubRule);
@@ -31,7 +31,7 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
 
 Board* newBoardFromXmlRoot (xmlNode *root) {
   Board *board;
-  xmlNode *boardNode, *queueNode, *grammarNode, *schemeNode, *seedNode, *node, *prev;
+  xmlNode *boardNode, *queueNode, *grammarNode, *schemeNode, *seedNode, *node;
   int x, y, z;
   State state;
   ProtoTable *protoTable;
@@ -58,11 +58,10 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   board->protoTable = protoTable;
 
   /* expand any Particle-level Scheme blocks */
-  prev = NULL;
-  for (node = grammarNode->children; node; prev = node, node = node->next)
+  for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,PARTICLE))
       if ( (schemeNode = CHILD (node, SCHEME)) )  /* assignment intentional */
-	protoTableExpandSchemeNode (protoTable, schemeNode, node, prev);
+	node = protoTableExpandSchemeNode (protoTable, schemeNode, node, grammarNode);
 
   /* populate ProtoTable in two passes (first Particles that have Types, then those that don't) */
   for (node = grammarNode->children; node; node = node->next)
@@ -174,7 +173,7 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,COLRULE)) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
-      initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, protoTable);
+      initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, proto);
     }
 
   return p;
@@ -199,9 +198,9 @@ void parseVarsDescriptors (Proto *proto, xmlNode* node) {
 }
 
 
-void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node, ProtoTable *protoTable) {
-  colorRule->rightShift = getRShiftFromNode (node, protoTable);
-  colorRule->mask = getMaskFromNode (node, protoTable, VarsMask);
+void initColorRuleFromXmlNode (ColorRule *colorRule, xmlNode* node, Proto *proto) {
+  colorRule->rightShift = getColShiftFromNode (node, proto);
+  colorRule->mask = getColMaskFromNode (node, proto);
   colorRule->multiplier = OPTCHILDINT(node,DECMUL,OPTCHILDHEX(node,HEXMUL,1));
   colorRule->offset = OPTCHILDINT(node,DECINC,OPTCHILDHEX(node,HEXINC,0));
 }
@@ -307,7 +306,7 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(ruleNode));
     evalNode = xmlTreeFromString (evalResult);
 
-    rule = newRuleFromXmlParentNode (board, evalNode, protoTable, localSubRule);
+    rule = evalNode ? newRuleFromXmlParentNode (board, evalNode, protoTable, localSubRule) : NULL;
 
     deleteXmlTree (evalNode);
     StringDelete ((void*) evalResult);
@@ -555,7 +554,7 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer) {
     xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_TYPE, "%s", board->byType[t]->name);
     for (node = board->byType[t]->vars->head; node; node = node->next) {
       vd = (VarsDescriptor*) node->value;
-      varVal = (s >> vd->offset) & ((1 << vd->width) - 1);
+      varVal = StateVar(s,vd->offset,vd->width);
       if (varVal != 0) {
 	attr = newXmlNode (XML_ATTRIBUTE_NODE, varAttrName, varAttrName + strlen(varAttrName), vd->name, vd->name + strlen(vd->name));
 	xmlTextWriterStartElementWithAttrs (writer, (xmlChar*) XMLZOO_VAL, attr); /* begin val */
@@ -719,7 +718,7 @@ State getTaggedMaskFromNode (xmlNode* node, ProtoTable* protoTable, State defaul
 	if (vd)
 	  m = ((1 << vd->width) - 1) << vd->offset;
 	else
-	  Warn ("In <%s> for type %s: encountered <%s %s=\"%s\">, but no such var could be found", vmaskTag, proto->name, XMLPREFIX(VAL), XMLPREFIX(VAR), varName);
+	  Warn ("In <%s> for type %s: var %s was referenced, but no such var could be found", vmaskTag, proto->name, varName);
       }
     } else
       m = VarsMask;
@@ -754,13 +753,49 @@ unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, con
 	if (vd)
 	  s = vd->offset;
 	else
-	  Warn ("In <%s> for type %s: encountered <%s %s=\"%s\">, but no such var could be found", vShiftTag, proto->name, XMLPREFIX(VAL), XMLPREFIX(VAR), varName);
+	  Warn ("In <%s> for type %s: var '%s' was referenced, but no such var could be found", vShiftTag, proto->name, varName);
       } else
 	Warn ("In <%s>: type %s unknown", vShiftTag, typeName);
     } else
       Warn ("<%s> lacks type", vShiftTag);
   }
   return s;
+}
+
+unsigned char getColShiftFromNode (xmlNode* node, Proto* proto) {
+  xmlNode *child;
+  const char *varName;
+  VarsDescriptor *vd;
+  unsigned char s;
+  s = 0;
+  if ( (child = CHILD(node,VAR)) ) {  /* assignment intentional */
+    varName = (const char*) getNodeContent(child);
+    vd = protoGetVarsDescriptor (proto, varName);
+    if (vd)
+      s = vd->offset;
+    else
+      Warn ("In <%s> of <%s> for type %s: var '%s' was referenced, but no such var could be found", XMLPREFIX(VAR), XMLPREFIX(COLRULE), proto->name, varName);
+  } else if ( (child = CHILD(node,RSHIFT)) )  /* assignment intentional */
+    s = NODEINTVAL (child);
+  return s;
+}
+
+State getColMaskFromNode (xmlNode* node, Proto* proto) {
+  xmlNode *child;
+  const char *varName;
+  VarsDescriptor *vd;
+  State m;
+  m = VarsMask;
+  if ( (child = CHILD(node,VAR)) ) {  /* assignment intentional */
+    varName = (const char*) getNodeContent(child);
+    vd = protoGetVarsDescriptor (proto, varName);
+    if (vd)
+      m = ((1 << vd->width) - 1) << vd->offset;
+    else
+      Warn ("In <%s> of <%s> for type %s: var %s was referenced, but no such var could be found", XMLPREFIX(VAR), XMLPREFIX(COLRULE), proto->name, varName);
+  } else if ( (child = CHILD(node,MASK)) )  /* assignment intentional */
+    m = NODEHEXVAL (child);
+  return m;
 }
 
 Message getMessageFromNode (xmlNode* node, ProtoTable* protoTable) {

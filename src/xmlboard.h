@@ -126,6 +126,9 @@ unsigned char getLShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getRShiftFromNode (xmlNode* node, ProtoTable* protoTable);
 unsigned char getTaggedShiftFromNode (xmlNode* node, ProtoTable* protoTable, const char* shiftTag, const char* vShiftTag);
 
+unsigned char getColShiftFromNode (xmlNode* node, Proto* proto);
+State getColMaskFromNode (xmlNode* node, Proto* proto);
+
 Message getMessageFromNode (xmlNode* node, ProtoTable* protoTable);
 
 #endif /* XMLBOARD_INCLUDED */

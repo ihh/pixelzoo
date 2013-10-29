@@ -50,18 +50,19 @@ int main( int argc, char *argv[] )
 {
   char *gameFilename, *moveLogFilename, *boardFilename;
   Uint64 totalMicroticks;
-  int userInputAllowed;
+  int userInputAllowed, singleStep;
   option_t *optList, *thisOpt;
 
   /* parse list of command line options and their arguments */
   optList = NULL;
-  optList = GetOptList(argc, argv, "g:t:l:b:r:dh?");
+  optList = GetOptList(&argc, argv, "g:t:l:b:r:dsh?");
 
   /* get options */
   gameFilename = NULL;
   moveLogFilename = NULL;
   boardFilename = NULL;
   userInputAllowed = 1;
+  singleStep = 0;
   totalMicroticks = 0;
   while (optList != NULL)
     {
@@ -76,6 +77,11 @@ int main( int argc, char *argv[] )
 	printf("     -l : specify output XML file for move log (optional).\n");
 	printf("     -b : specify output XML file for board (optional).\n");
 	printf("     -d : disable user input (optional).\n");
+#ifdef PIXELZOO_DEBUG
+	printf("     -s : start with single-stepping turned on (optional).\n");
+#else /* PIXELZOO_DEBUG */
+	printf("     -s : [single-stepping not available; compile in debug mode to enable.]\n");
+#endif /* PIXELZOO_DEBUG */
 	printf(" -h, -? : print out command line options.\n\n");
 
 	FreeOptList(thisOpt); /* done with this list, free it */
@@ -95,10 +101,16 @@ int main( int argc, char *argv[] )
 
       } else if ('d' == thisOpt->option) {
 	userInputAllowed = 0;
+
+      } else if ('s' == thisOpt->option) {
+	singleStep = 1;
       }
     }
 
   SDLGame *sdlGame = NULL;
+
+  if (gameFilename == NULL && argc >= 2)
+    gameFilename = argv[1];
 
   if (gameFilename == NULL) {
     pzAbort ("Game file not specified");
@@ -107,8 +119,18 @@ int main( int argc, char *argv[] )
   printf ("Loading XML game file...\n");
 
   sdlGame = newSDLGame (gameFilename, moveLogFilename != NULL);
+  if (singleStep)
+#ifdef PIXELZOO_DEBUG
+    ((Game*)sdlGame->game)->board->targetUpdateCount = 0;
+#else /* PIXELZOO_DEBUG */
+    Abort("Single-stepping not available; compile with 'debug' makefile pseudotarget to enable.\n");
+#endif /* PIXELZOO_DEBUG */
 
-  printf ("Game file successfully loaded.\n\nPress up- and down-arrow to cycle through tools, or 't' to list all available tools.\n(Any further text beyond this point comes from the game file.)\n======================================================================\n\n");
+  printf ("Game file successfully loaded.\n\nPress up- and down-arrow to cycle through tools, or 't' to list all available tools.\n");
+#ifdef PIXELZOO_DEBUG
+  printf("Press right-arrow to single-step updates.\n");
+#endif /* PIXELZOO_DEBUG */
+  printf("(Any further text beyond this point comes from the game file.)\n======================================================================\n\n");
 
   while( pzGameRunning(sdlGame->game) && (totalMicroticks == 0 || pzBoardClock(sdlGame->game) < totalMicroticks ) )
     {
@@ -118,7 +140,9 @@ int main( int argc, char *argv[] )
       SDL_Event event;
       int tools, t, toolNum;
       pzTool pzt;
-      Board* board;
+#ifdef PIXELZOO_DEBUG
+      Board* board = ((Game*)sdlGame->game)->board;
+#endif /* PIXELZOO_DEBUG */
 
       while( SDL_PollEvent( &event ) )
 	if (userInputAllowed)
@@ -165,9 +189,42 @@ int main( int argc, char *argv[] )
 
 #ifdef PIXELZOO_DEBUG
 		case SDLK_RIGHT:
-		  board = ((Game*)sdlGame->game)->board;
 		  board->targetUpdateCount = board->updateCount + 1;
 		  printf ("*\n* Single-stepping: %lld updates\n*\n", board->targetUpdateCount);
+		  break;
+
+		case SDLK_LEFT:
+		  board->targetUpdateCount = -1;
+		  printf ("*\n* Single-stepping off\n*\n");
+		  break;
+
+		case SDLK_l:
+		  board->logRules = !board->logRules;
+		  printf ("*\n* Rule-logging %s\n*\n", board->logRules ? "on" : "off");
+		  break;
+
+		case SDLK_b:
+		  for (int z = 0; z < board->depth; ++z)
+		    for (int y = 0; y < board->size; ++y)
+		      for (int x = 0; x < board->size; ++x)
+			if (StateType(readBoardState(board,x,y,z))) {
+			  char* s = (char*) boardTypeVarsDebugString(board,readBoardState(board,x,y,z));
+			  printf("(%d,%d,%d)  %s\n",x,y,z,s);
+			  SafeFree(s);
+			}
+		  break;
+#else /* PIXELZOO_DEBUG */
+		case SDLK_RIGHT:
+		case SDLK_LEFT:
+		  Warn ("Compile in debug mode to enable single-stepping");
+		  break;
+
+		case SDLK_b:
+		  Warn ("Compile in debug mode to enable board dumping");
+		  break;
+
+		case SDLK_l:
+		  Warn ("Compile in debug mode to enable rule-logging");
 		  break;
 #endif /* PIXELZOO_DEBUG */
 

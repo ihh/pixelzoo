@@ -98,21 +98,23 @@ int MatchOpt(const char argument, char *const options);
 *   NOTE: The caller is responsible for freeing up the option list when it
 *         is no longer needed.
 ****************************************************************************/
-option_t *GetOptList(const int argc, char *const argv[], char *const options)
+option_t *GetOptList(int *argc, char ** argv, char *const options)
 {
     int nextArg;
     option_t *head, *tail;
-    int optIndex, argIndex;
+    int optIndex, argIndex, argRet, foundArg;
 
     /* start with first argument and nothing found */
     nextArg = 1;
+    argRet = 1;
     head = NULL;
     tail = NULL;
 
     /* loop through all of the command line arguments */
-    while (nextArg < argc)
+    while (nextArg < *argc)
     {
         argIndex = 1;
+	foundArg = 0;
 
         while ((strlen(argv[nextArg]) > argIndex) && ('-' == argv[nextArg][0]))
         {
@@ -122,6 +124,7 @@ option_t *GetOptList(const int argc, char *const argv[], char *const options)
             if (options[optIndex] == argv[nextArg][argIndex])
             {
                 /* we found the matching option */
+	        foundArg = 1;
                 if (NULL == head)
                 {
                     head = MakeOpt(options[optIndex], NULL, OL_NOINDEX);
@@ -135,7 +138,7 @@ option_t *GetOptList(const int argc, char *const argv[], char *const options)
 
                 if (':' == options[optIndex + 1])
                 {
-                    /* the option found should have a text arguement */
+                    /* the option found should have a text argument */
                     argIndex++;
 
                     if (strlen(argv[nextArg]) > argIndex)
@@ -144,7 +147,7 @@ option_t *GetOptList(const int argc, char *const argv[], char *const options)
                         tail->argument = &(argv[nextArg][argIndex]);
                         tail->argIndex = nextArg;
                     }
-                    else if (nextArg < argc)
+                    else if (nextArg < *argc)
                     {
                         /* there must be space between the argument option */
                         nextArg++;
@@ -159,9 +162,13 @@ option_t *GetOptList(const int argc, char *const argv[], char *const options)
             argIndex++;
         }
 
+	if (!foundArg)
+	  argv[argRet++] = argv[nextArg];
+
         nextArg++;
     }
 
+    *argc = argRet;
     return head;
 }
 

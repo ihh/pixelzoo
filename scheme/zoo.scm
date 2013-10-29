@@ -462,19 +462,16 @@
 
   (define (polymer-move-f)
     (indirect-switch-type
-     '(8 9) empty-type
-     (polymer-update-f polymer-move-self)))
+     '(8 9) `((,empty-type ,(polymer-update-f polymer-move-self)))))
 
   (define (polymer-move-r)
     (indirect-switch-type
-     '(8 9) empty-type
-     (polymer-update-r polymer-move-self)))
+     '(8 9) `((empty-type ,(polymer-update-r polymer-move-self)))))
 
   (define (polymer-move-fr)
     (indirect-switch-type
-     '(8 9) empty-type
-     (polymer-update-f
-      (lambda () (polymer-update-r polymer-move-self)))))
+     '(8 9) `((empty-type ,(polymer-update-f
+			    (lambda () (polymer-update-r polymer-move-self)))))))
 
   (define (polymer-detach-f)
     (set-var origin self-type polymer-has-fwd-bond-var 0))
@@ -749,7 +746,8 @@
        (varsize (name ,polymer-steps-var) (size 5))
        (varsize (name ,polymer-edges-var) (size 2)))
 
-      (colrule (mask 0) (hexinc "14ffff"))
+      (colrule (var ,polymer-edges-var) (hexmul "20000"))
+      (colrule (var ,polymer-steps-var) (hexmul "80000") (hexinc "14ffff"))
       (rule (scheme "(polymer-move-rule)"))))
 
   ;; Utility functions.

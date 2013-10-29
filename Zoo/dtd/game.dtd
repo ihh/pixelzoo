@@ -143,9 +143,7 @@ They are stored in 64-bit chunks and can effectively be accessed as higher bits 
 </pre>
 
 where "hsb24" is a 24-bit HSB color value. -->
-<!ELEMENT colrule ((mask|tmask|vmask)?,rshift?,(mul|hexmul)?,(inc|hexinc|reginc)?)>
-<!ELEMENT rshift (#PCDATA)>
-<!ELEMENT vrshift (type,var)>
+<!ELEMENT colrule ((var?|(mask?,rshift?)),(mul|hexmul)?,(inc|hexinc|reginc)?)>
 <!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
 <!-- A hexadecimal multiplier. -->
@@ -212,6 +210,9 @@ where "pos" is a local offset. Then looks up the corresponding "case"
 for "var", and executes that rule. If no such "case" exists,
 executes the "default" rule. -->
 <!ELEMENT switch (pos?,(mask|vmask|tmask)?,(rshift|vrshift)?,(case*|regindex),low?,high?,default?)>
+
+<!ELEMENT rshift (#PCDATA)>
+<!ELEMENT vrshift (type,var)>
 
 <!-- An individual case in a switch rule. -->
 <!ELEMENT case ((state|hexstate|gtype|gstate|gvars)?,rule)>

@@ -68,7 +68,7 @@ typedef struct option_t
 /***************************************************************************
 *                               PROTOTYPES
 ***************************************************************************/
-option_t *GetOptList(int argc, char *const argv[], char *const options);
+option_t *GetOptList(int* argc, char **argv, char *const options);
 void FreeOptList(option_t *list);
 
 #endif  /* ndef OPTLIST_H */

@@ -181,11 +181,11 @@ Message protoTableMessageLookup (ProtoTable *protoTable, const char* message) {
   return msg;
 }
 
-int protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent) {
+xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent) {
   const char *evalResult;
   xmlNode *evalNode;
-  int success = 0;
 
+  evalNode = NULL;
   evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
   if (evalResult) {
     evalNode = xmlTreeFromString (evalResult);
@@ -210,12 +210,10 @@ int protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xml
       evalNode->next = replaceNode->next;
       replaceNode->next = NULL;
       deleteXmlTree (replaceNode);
-
-      success = 1;
     }
 
     StringDelete ((void*) evalResult);
   }
 
-  return success;
+  return evalNode;
 }

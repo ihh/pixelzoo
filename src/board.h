@@ -31,6 +31,7 @@ typedef struct Board {
   signed long long int updateCount;  /* total number of updates (calls to evolveBoardCell, evolveBoardCellSync, syncBoard, or replayBoardMove) */
 #ifdef PIXELZOO_DEBUG
   signed long long int targetUpdateCount;   /* set to a nonnegative integer to allow single-stepping */
+  int logRules;  /* set to nonzero to log all rule applications */
 #endif /* PIXELZOO_DEBUG */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
@@ -136,5 +137,7 @@ void evolveBoardCellSync (Board *board, int x, int y, int z);
 
 void freezeBoard (Board* board);
 void syncBoard (Board* board);
+
+const char* boardTypeVarsDebugString (Board *board, State state);
 
 #endif /* BOARD_INCLUDED */

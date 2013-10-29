@@ -8,7 +8,6 @@
 #include "notify.h"
 #include "mersenne.h"
 #include "balloon.h"
-#include "xmlboard.h"
 
 /* helpers */
 State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
@@ -38,6 +37,7 @@ Board* newBoard (int size, int depth) {
   board->updateCount = 0;
 #ifdef PIXELZOO_DEBUG
   board->targetUpdateCount = -1;
+  board->logRules = 0;
 #endif /* PIXELZOO_DEBUG */
   board->syncUpdates = 0;
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
@@ -89,7 +89,6 @@ void writeBoardMove (Board* board, int x, int y, int z, State state) {
     writeBoardStateUnguardedFunction (board, x, y, z, state);
     if (board->moveLog)
       (void) MoveListAppend (board->moveLog, board->microticks, board->updateCount, x, y, z, state);
-    ++board->updateCount;
     board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   }
 }
@@ -115,6 +114,7 @@ void replayBoardMove (Board* board) {
   writeBoardMove (board, nextMove->x, nextMove->y, nextMove->z, nextMove->state);  /* auto-increments updateCount */
   (void) MoveListShift (board->moveQueue);
   deleteMove (nextMove);
+  ++board->updateCount;
 }
 
 void logBoardMoves (Board* board) {
@@ -161,11 +161,11 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State 
     board->sync[i] = state;
 
 #ifdef PIXELZOO_DEBUG
-  xmlTextWriterPtr writer = newXmlTextWriterNoHeader();
-  writeGVarsXml (board, state, writer);
-  xmlChar* xmlText = deleteXmlTextWriterLeavingText (writer);
-  Warn ("writeBoardStateUnguardedFunction: %d %d %d %llx\n%s", x, y, z, state, xmlText);
-  SafeFree (xmlText);
+  if (board->logRules) {
+    const char* debugStr = boardTypeVarsDebugString(board,state);
+    Warn ("Write: %d %d %d %llx  %s", x, y, z, state, debugStr);
+    SafeFree ((char*) debugStr);
+  }
 #endif /* PIXELZOO_DEBUG */
 
 }
@@ -235,6 +235,7 @@ void evolveBoardCell (Board* board, int x, int y, int z) {
     */
     attemptRule (p, p->rule, board, x, y, z, readBoardStateUnguardedFunction, writeBoardStateUnguardedFunction);
   }
+  ++board->updateCount;
 }
 
 void evolveBoardCellSync (Board* board, int x, int y, int z) {
@@ -255,6 +256,7 @@ void evolveBoardCellSync (Board* board, int x, int y, int z) {
     */
     attemptRule (p, p->rule, board, x, y, z, readBoardStateUnguardedFunction, writeSyncBoardStateUnguardedFunction);
   }
+  ++board->updateCount;
 }
 
 void syncBoard (Board* board) {
@@ -283,7 +285,8 @@ void syncBoard (Board* board) {
   /* freeze the update queue */
   copyBinTree (board->syncBin, board->syncUpdateBin);
   board->lastSyncParticles = board->syncParticles;
-  board->syncUpdates++;
+  ++board->syncUpdates;
+  ++board->updateCount;
 }
 
 State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, State *reg, int *isOnBoard) {
@@ -339,7 +342,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   State reg[NumberOfRegisters + 1], regVal;
 
 #ifdef PIXELZOO_DEBUG
-  Warn ("attemptRule @(%d,%d,%d)", x, y, z);
+  if (board->logRules)
+    Warn ("attemptRule @(%d,%d,%d)", x, y, z);
 #endif
 
   reg[NumberOfRegisters] = 0;  /* this allows us to use register -1 as a default zero */
@@ -355,11 +359,12 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       lookup = &rule->param.lookup;
       var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard);
 #ifdef PIXELZOO_DEBUG
-      Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
-	    x, y, z,
-	    lookup->loc.xyzAreRegisters ? "*" : "",
-	    lookup->loc.x, lookup->loc.y, lookup->loc.z,
-	    lookup->mask, lookup->shift, var);
+      if (board->logRules)
+	Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
+	      x, y, z,
+	      lookup->loc.xyzAreRegisters ? "*" : "",
+	      lookup->loc.x, lookup->loc.y, lookup->loc.z,
+	      lookup->mask, lookup->shift, var);
 #endif /* PIXELZOO_DEBUG */
       if (isOnBoard) {
 	lookupNode = StateMapFind (lookup->matchRule, var);
@@ -379,12 +384,13 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       var = readVarFromLoc (board, read, &compare->loc, x, y, z, compare->shift, compare->mask, reg, &isOnBoard);
       regVal = reg[compare->registerIndex];
 #ifdef PIXELZOO_DEBUG
-      Warn ("Compare @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d <=> reg[%d] = %d",
-	    x, y, z,
-	    compare->loc.xyzAreRegisters ? "*" : "",
-	    compare->loc.x, compare->loc.y, compare->loc.z,
-	    compare->mask, compare->shift, var,
-	    compare->registerIndex, regVal);
+      if (board->logRules)
+        Warn ("Compare @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d <=> reg[%d] = %d",
+	      x, y, z,
+	      compare->loc.xyzAreRegisters ? "*" : "",
+	      compare->loc.x, compare->loc.y, compare->loc.z,
+	      compare->mask, compare->shift, var,
+	      compare->registerIndex, regVal);
 #endif /* PIXELZOO_DEBUG */
       rule = var < regVal
 	? compare->ltRule
@@ -411,26 +417,28 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
 
 #ifdef PIXELZOO_DEBUG
-	  if (modify->offsetIsRegister)
-	    Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +reg[%d]=%llx <<%d &%llx %s(%d,%d,%d)",
-		  x, y, z,
-		  modify->src.xyzAreRegisters ? "*" : "",
-		  modify->src.x, modify->src.y, modify->src.z,
-		  modify->srcMask, modify->rightShift,
-		  modify->offset, offset,
-		  modify->leftShift, modify->destMask,
-		  modify->dest.xyzAreRegisters ? "*" : "",
-		  modify->dest.x, modify->dest.y, modify->dest.z);
-	  else
-	    Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +%llx <<%d &%llx %s(%d,%d,%d)",
-		  x, y, z,
-		  modify->src.xyzAreRegisters ? "*" : "",
-		  modify->src.x, modify->src.y, modify->src.z,
-		  modify->srcMask, modify->rightShift,
-		  offset,
-		  modify->leftShift, modify->destMask,
-		  modify->dest.xyzAreRegisters ? "*" : "",
-		  modify->dest.x, modify->dest.y, modify->dest.z);
+	  if (board->logRules) {
+	    if (modify->offsetIsRegister)
+	      Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +reg[%d]=%llx <<%d &%llx %s(%d,%d,%d)",
+		    x, y, z,
+		    modify->src.xyzAreRegisters ? "*" : "",
+		    modify->src.x, modify->src.y, modify->src.z,
+		    modify->srcMask, modify->rightShift,
+		    modify->offset, offset,
+		    modify->leftShift, modify->destMask,
+		    modify->dest.xyzAreRegisters ? "*" : "",
+		    modify->dest.x, modify->dest.y, modify->dest.z);
+	    else
+	      Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +%llx <<%d &%llx %s(%d,%d,%d)",
+		    x, y, z,
+		    modify->src.xyzAreRegisters ? "*" : "",
+		    modify->src.x, modify->src.y, modify->src.z,
+		    modify->srcMask, modify->rightShift,
+		    offset,
+		    modify->leftShift, modify->destMask,
+		    modify->dest.xyzAreRegisters ? "*" : "",
+		    modify->dest.x, modify->dest.y, modify->dest.z);
+	  }
 #endif /* PIXELZOO_DEBUG */
 
 	  currentDestState = (*read) (board, xDest, yDest, zDest);
@@ -475,8 +483,9 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case GotoRule:
       rule = rule->param.gotoLabel;
 #ifdef PIXELZOO_DEBUG
-    if (rule->label)
-      Warn ("Goto %s", rule->label);
+      if (board->logRules)
+	if (rule->label)
+	  Warn ("Goto %s", rule->label);
 #endif
       break;
 
@@ -485,7 +494,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       for (r = 0; r < load->n; ++r) {
 	reg[load->reg[r]] = load->state[r];
 #ifdef PIXELZOO_DEBUG
-	Warn ("Load reg[%d] = %llx", load->reg[r], load->state[r]);
+	if (board->logRules)
+	  Warn ("Load reg[%d] = %llx", load->reg[r], load->state[r]);
 #endif /* PIXELZOO_DEBUG */
       }
       rule = load->nextRule;
@@ -593,7 +603,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
       board->microticksAtNextBoardSync += PowerOfTwoClosestToOneMillion;
 
       syncBoard (board);
-      ++board->updateCount;
       continue;
 
     } else if (board->microticksAtNextSyncEvent <= deadline2) {  /* do a synchronized cell update? */
@@ -611,7 +620,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
       evolveBoardCellSync (board, x, y, z);
       ++cellUpdates;
-      ++board->updateCount;
       continue;
 
     } else if (board->microticksAtNextAsyncEvent <= deadline1) {  /* do an asynchronous cell update? */
@@ -628,7 +636,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 			
       evolveBoardCell (board, x, y, z);
       ++cellUpdates;
-      ++board->updateCount;
       continue;
 
     } else if (microticksAtNextMove <= deadline0) {  /* take a move from the queue? */
@@ -677,4 +684,31 @@ void boardReleaseRandomNumbers (Board *board) {
   board->sampledNextAsyncEventTime = 0;
   board->sampledNextSyncEventTime = 0;
   board->rngReleased = 1;
+}
+
+const char* boardTypeVarsDebugString (Board *board, State state) {
+  char *str;
+  Type type;
+  Particle *particle;
+  int size, nvars;
+  ListNode *node;
+  VarsDescriptor *vars;
+  type = StateType(state);
+  particle = board->byType[type];
+  size = strlen(particle->name) + 2;
+  for (node = particle->vars->head; node; node = node->next) {
+    vars = (VarsDescriptor*) node->value;
+    size += strlen(vars->name) + 18;  /* 16 is enough characters to display 2^48 in decimal, plus a couple padding characters */
+  }
+  str = SafeMalloc(size);
+  sprintf(str,"%s",particle->name);
+  nvars = 0;
+  for (node = particle->vars->head; node; node = node->next) {
+    vars = (VarsDescriptor*) node->value;
+    sprintf(str+strlen(str),"%s%s=%lld",nvars ? "," : "(",vars->name,StateVar(state,vars->offset,vars->width));
+    ++nvars;
+  }
+  if (nvars)
+    sprintf(str+strlen(str),")");
+  return str;
 }
