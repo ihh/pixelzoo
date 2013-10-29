@@ -111,6 +111,9 @@
   (define (rule-eval-or-return arg)
     `(rule ,(eval-or-return arg)))
 
+  ;; rule wrapper
+  (define (rule x) `(rule ,x))
+
   ;; nop (dummy) rule
   (define nop-rule
     '(modify (destmask 0)))
@@ -154,19 +157,19 @@
 	  (next (opt-arg rest 1 #f)))
       `(modify
 	(srcmask 0)
-	,(xy 'dest loc)
-	(lshift 0)
 	,(gvars-list type var-val-list)
+	(lshift 0)
+	,(xy 'dest loc)
 	,@(opt-rule 'next next))))
 
   ;; set var
   (define (set-var loc type var val . next)
     `(modify
       (srcmask 0)
-      ,(xy 'dest loc)
+      (inc ,val)
       (vlshift (type ,type) (var ,var))
       (vdestmask (type ,type) (var ,var))
-      (inc ,val)
+      ,(xy 'dest loc)
       ,@(listform-opt-rule 'next next)))
 
   ;; set self var
@@ -179,29 +182,29 @@
 	  (next (opt-arg rest 1 #f)))
       `(modify
 	(srcmask 0)
-	,(xy-indirect 'dest loc)
-	(lshift 0)
 	,(gvars-list type var-val-list)
+	(lshift 0)
+	,(xy-indirect 'dest loc)
 	,@(opt-rule 'next next))))
 
   ;; indirect set var from register
   (define (indirect-set-var-from-register loc type var reg . next)
     `(modify
       (srcmask 0)
-      ,(xy-indirect 'dest loc)
+      (reginc ,reg)
       (vlshift (type ,type) (var ,var))
       (vdestmask (type ,type) (var ,var))
-      (reginc ,reg)
+      ,(xy-indirect 'dest loc)
       ,@(listform-opt-rule 'next next)))
 
   ;; set var from register
   (define (set-var-from-register loc type var reg . next)
     `(modify
       (srcmask 0)
-      ,(xy 'dest loc)
+      (reginc ,reg)
       (vlshift (type ,type) (var ,var))
       (vdestmask (type ,type) (var ,var))
-      (reginc ,reg)
+      ,(xy 'dest loc)
       ,@(listform-opt-rule 'next next)))
 
   ;; switch rule for types
@@ -319,8 +322,8 @@
       (srcmask ,state-mask)
       (rshift 0)
       (lshift 0)
-      ,(xy 'dest dest)
       (destmask ,state-mask)
+      ,(xy 'dest dest)
       ,@(listform-opt-rule 'next next)))
 
   (define (move-rule src dest . next)
@@ -339,8 +342,8 @@
       (srcmask ,state-mask)
       (rshift 0)
       (lshift 0)
-      ,(xy-indirect 'dest dest)
       (destmask ,state-mask)
+      ,(xy-indirect 'dest dest)
       ,@(listform-opt-rule 'next next)))
 
   (define (indirect-dest-move-rule src dest . next)

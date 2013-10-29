@@ -62,19 +62,8 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   prev = NULL;
   for (node = grammarNode->children; node; prev = node, node = node->next)
     if (MATCHES(node,PARTICLE))
-      if ( (schemeNode = CHILD (node, SCHEME)) ) {  /* assignment intentional */
-	evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
-	evalNode = xmlTreeFromString (evalResult);
-	/* replace schemeNode with evalNode */
-	if (prev)
-	  prev->next = evalNode;
-	else
-	  grammarNode->children = evalNode;
-	evalNode->next = node->next;
-	node->next = NULL;
-	deleteXmlTree (node);
-	StringDelete ((void*) evalResult);
-      }
+      if ( (schemeNode = CHILD (node, SCHEME)) )  /* assignment intentional */
+	protoTableExpandSchemeNode (protoTable, schemeNode, node, prev);
 
   /* populate ProtoTable in two passes (first Particles that have Types, then those that don't) */
   for (node = grammarNode->children; node; node = node->next)
@@ -93,7 +82,7 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
 
   /* evaluate top-level Scheme expressions */
   for (node = grammarNode->children; node; node = node->next)
-    if (MATCHES(node,SCHEME))
+    if (MATCHES(node,SCHEMEDEF))
       (void) protoTableEval (protoTable, (const char*) getNodeContent (node));
 
   /* create subrules */
@@ -319,7 +308,7 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(ruleNode));
     evalNode = xmlTreeFromString (evalResult);
 
-    rule = newRuleFromXmlNode (board, evalNode, protoTable, localSubRule);
+    rule = newRuleFromXmlParentNode (board, evalNode, protoTable, localSubRule);
 
     deleteXmlTree (evalNode);
     StringDelete ((void*) evalResult);

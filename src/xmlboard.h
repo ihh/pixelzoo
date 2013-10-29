@@ -12,6 +12,7 @@
 #define XMLZOO_SEED        "seed"
 #define XMLZOO_GRAMMAR     "grammar"
 #define XMLZOO_SCHEME      "scheme"
+#define XMLZOO_SCHEMEDEF   "schemedef"
 #define XMLZOO_VALUE       "value"
 #define XMLZOO_PARTICLE    "particle"
 #define XMLZOO_SYNC        "sync"

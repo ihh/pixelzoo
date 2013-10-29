@@ -180,3 +180,42 @@ Message protoTableMessageLookup (ProtoTable *protoTable, const char* message) {
   }
   return msg;
 }
+
+int protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent) {
+  const char *evalResult;
+  xmlNode *evalNode;
+  int success = 0;
+
+  evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
+  if (evalResult) {
+    evalNode = xmlTreeFromString (evalResult);
+
+    /* replace replaceNode with evalNode */
+    if (replaceNode) {
+      if (replaceParent) {
+	if (replaceParent->children == replaceNode)
+	  replaceParent->children = evalNode;
+	else if (replaceParent->properties == replaceNode)
+	  replaceParent->properties = evalNode;
+	else if (replaceParent->next == replaceNode)
+	  replaceParent->next = evalNode;
+	else {
+	  for (replaceParent = replaceParent->children; replaceParent; replaceParent = replaceParent->next)
+	    if (replaceParent->next == replaceNode)
+	      break;
+	  Assert (replaceParent && replaceParent->next == replaceNode, "Can't find parent of Scheme node to be replaced");
+	  replaceParent->next = evalNode;
+	}
+      }
+      evalNode->next = replaceNode->next;
+      replaceNode->next = NULL;
+      deleteXmlTree (replaceNode);
+
+      success = 1;
+    }
+
+    StringDelete ((void*) evalResult);
+  }
+
+  return success;
+}

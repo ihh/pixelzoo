@@ -71,6 +71,10 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
 
 <!-- A 64-bit hexadecimal mask. -->
 <!ELEMENT mask (#PCDATA)>
+<!ELEMENT vmask (type,var)>
+<!ELEMENT tmask EMPTY>
+
+<!ELEMENT var (#PCDATA)>
 
 <!-- A 16-bit decimal integer representing the type of a cell on the Board
 (equal to the upper 16 bits of the state).
@@ -111,9 +115,6 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
 
-<!-- A subroutine particle Rule. -->
-<!ELEMENT subrule (name,rule)>
-
 <!-- An elementary particle in the game, identified by a unique 16-bit type ID ("type").
 Each particle has its own update rate ("rate") and rule ("rule"),
 up to three color rules for rendering ("colrule"),
@@ -125,7 +126,7 @@ named bit-fields of different widths ("vars").
 
 By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
  -->
-<!ELEMENT particle (scheme|(name,(type|hextype),vars?,readonly*,colrule*,sync?,rate?,rule,dispatch*))>
+<!ELEMENT particle (scheme|(name,(type|hextype)?,vars?,readonly*,colrule*,sync?,rate?,rule,dispatch*))>
 
 <!-- Scheme code -->
 <!ELEMENT scheme (#PCDATA)>
@@ -148,8 +149,9 @@ They are stored in 64-bit chunks and can effectively be accessed as higher bits 
 </pre>
 
 where "hsb24" is a 24-bit HSB color value. -->
-<!ELEMENT colrule (mask?,rshift?,(mul|hexmul)?,(inc|hexinc)?)>
+<!ELEMENT colrule ((mask|tmask|vmask)?,rshift?,(mul|hexmul)?,(inc|hexinc|reginc)?)>
 <!ELEMENT rshift (#PCDATA)>
+<!ELEMENT vrshift (type,var)>
 <!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
 <!-- A hexadecimal multiplier. -->
@@ -158,6 +160,8 @@ where "hsb24" is a 24-bit HSB color value. -->
 <!ELEMENT inc (#PCDATA)>
 <!-- A hexadecimal offset. -->
 <!ELEMENT hexinc (#PCDATA)>
+<!-- A register offset. -->
+<!ELEMENT reginc (#PCDATA)>
 
 <!-- Variable (<i>Vars</i>) declarations. -->
 <!ELEMENT vars (varsize*)>
@@ -196,8 +200,12 @@ The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
   (tests a Goal, if the Board has an associated Game).
 </li></ul>
  -->
-<!ELEMENT rule (scheme|switch|compare|modify|deliver|random|load|goto)>
-<!ATTLIST rule label CDATA #IMPLIED>
+<!ELEMENT rule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto))>
+<!ATTLIST rule name CDATA #IMPLIED>
+
+<!-- A subrule is just a rule that is not executed -->
+<!ELEMENT subrule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto))>
+<!ATTLIST subrule name CDATA #REQUIRED>
 
 <!-- Switch rule.
 
@@ -209,7 +217,7 @@ var = ((cell[pos] & mask) >> rshift)
 where "pos" is a local offset. Then looks up the corresponding "case"
 for "var", and executes that rule. If no such "case" exists,
 executes the "default" rule. -->
-<!ELEMENT switch (pos?,mask?,rshift?,(case*|regindex),low?,high?,default?)>
+<!ELEMENT switch (pos?,(mask|vmask|tmask)?,(rshift|vrshift)?,(case*|regindex),low?,high?,default?)>
 
 <!-- An individual case in a switch rule. -->
 <!ELEMENT case ((state|hexstate|gtype|gstate|gvars)?,rule)>
@@ -221,6 +229,15 @@ executes the "default" rule. -->
 <!ELEMENT low (rule)>
 <!ELEMENT high (rule)>
 <!ELEMENT default (rule)>
+
+<!-- Compare rule. -->
+<!ELEMENT compare (pos?,(mask|vmask|tmask)?,(rshift|vrshift)?,regindex,(lt|leq|eq|neq|geq|gt)+)>
+<!ELEMENT lt (rule)>
+<!ELEMENT leq (rule)>
+<!ELEMENT eq (rule)>
+<!ELEMENT neq (rule)>
+<!ELEMENT geq (rule)>
+<!ELEMENT gt (rule)>
 
 <!-- Modify rule.
 
@@ -235,16 +252,21 @@ This is equivalent to reading a Var from cell "src", adding "inc", and storing i
 ("src" and "dest" are co-ordinate offsets to the cell whose rule is being executed.)
 
 After this, the (optional) "next" rule is executed. -->
-<!ELEMENT modify (src?,srcmask?,rshift?,(inc|hexinc|gtype|gstate|gvars)?,lshift?,destmask?,dest?,next?)>
+<!ELEMENT modify (src?,(srcmask|vsrcmask|tsrcmask)?,(rshift|vrshift)?,(inc|hexinc|reginc|gtype|gstate|gvars)?,(lshift|vlshift)?,(destmask|vdestmask|tdestmask)?,dest?,next?)>
 <!ELEMENT src (x?,y?,z?)>
 <!ATTLIST src mode (direct|indirect) #IMPLIED>
 <!ELEMENT dest (x?,y?,z?)>
 <!ATTLIST dest mode (direct|indirect) #IMPLIED>
 <!-- A 64-bit hexadecimal mask. -->
 <!ELEMENT srcmask (#PCDATA)>
+<!ELEMENT vsrcmask (type,var)>
+<!ELEMENT tsrcmask EMPTY>
 <!-- A 64-bit hexadecimal mask. -->
 <!ELEMENT destmask (#PCDATA)>
+<!ELEMENT vdestmask (type,var)>
+<!ELEMENT tdestmask EMPTY>
 <!ELEMENT lshift (#PCDATA)>
+<!ELEMENT vlshift (type,var)>
 <!ELEMENT next (rule)>
 
 <!-- Deliver rule.
@@ -253,6 +275,10 @@ Delivers a message to the dispatch table of a neighboring cell ("pos"). -->
 <!ELEMENT deliver (pos,message)>
 <!-- A string message. -->
 <!ELEMENT message (#PCDATA)>
+
+<!-- Load-registers rule. -->
+<!ELEMENT load (register+,next)>
+<!ELEMENT register (index,state)>
 
 <!-- Goto rule.
 

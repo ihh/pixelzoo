@@ -725,7 +725,7 @@
                                           <prob>0.333333333333333</prob>
                                           <pass>
                                             <rule>
-					      <scheme>(set-rule '(0 0) "wall" '(("hue" 84)))</scheme>
+					      <scheme>(rule (set-rule '(0 0) "wall" '(("hue" 84))))</scheme>
                                               <!-- modify>
                                                 <src>
                                                   <x>0</x>
@@ -749,7 +749,7 @@
                                                 <prob>0.5</prob>
                                                 <pass>
                                                   <rule>
-						    <scheme>(set-rule '(0 0) "wall" '(("hue" 0)))</scheme>
+						    <scheme>(rule (set-rule '(0 0) "wall" '(("hue" 0))))</scheme>
                                                     <!-- modify>
                                                       <src>
                                                         <x>0</x>
@@ -769,7 +769,7 @@
                                                 </pass>
                                                 <fail>
                                                   <rule>
-						    <scheme>(set-rule '(0 0) "wall" '(("hue" 42)))</scheme>
+						    <scheme>(rule (set-rule '(0 0) "wall" '(("hue" 42))))</scheme>
                                                     <!-- modify>
                                                       <src>
                                                         <x>0</x>
