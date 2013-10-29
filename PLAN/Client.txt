@@ -1,9 +1,7 @@
-Write utility program to expand all <scheme> blocks in an XML file
-Update Zoo/dtd/game.dtd (DO NOT SKIP THIS! REMEMBER LOST HOURS!)
-Validate t/newproto.xml against Zoo/dtd/game.dtd
+Add single-step feature to sdlgame
+Test & debug polymers
 
 Add vars to Examine tool text in PZGameView
-Test & debug polymers
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 Refactor Catalyst to not use Level.pm/Grammar.pm
