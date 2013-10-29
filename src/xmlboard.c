@@ -36,8 +36,7 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   State state;
   ProtoTable *protoTable;
   Proto *proto;
-  const char *subRuleName, *evalResult;
-  xmlNode *evalNode;
+  const char *subRuleName;
 
   boardNode = CHILD(root,BOARD);
   Assert (boardNode != NULL, "XML board tag not found");

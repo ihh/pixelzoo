@@ -10,11 +10,6 @@
 #include "balloon.h"
 #include "xmlboard.h"
 
-/* uncomment the #define to log all board writes to stderr */
-#define PIXELZOO_DEBUG
-/*
-*/
-
 /* helpers */
 State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
 

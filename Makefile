@@ -18,6 +18,10 @@ ANSI        := -ansi -std=c99
 LIBS        := -lc $(SDL_LDFLAGS)
 ARFLAGS     := -rcvs
 
+ifneq (,$(findstring debug,$(MAKECMDGOALS)))
+CFLAGS := $(CFLAGS) -DPIXELZOO_DEBUG
+endif
+
 TARGETS   := test_red_black_tree sdlgame pztest hardcoded-eloise-pztest
 LIBDIR    := lib
 LIBNAME   := pixelzoo
@@ -74,6 +78,8 @@ chibi-test: bin/chibi_scheme
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	@test -e lib || mkdir lib
 	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES) $(CHIBI_OFILES)
+
+debug:
 
 .SUFFIXES :
 
