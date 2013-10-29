@@ -40,6 +40,8 @@ int main( int argc, char *argv[] )
 void expand (ProtoTable *protoTable, xmlNode *node, const char* xpath) {
   xmlNode *child, *scheme, *prev;
   char *nodeXpath;
+  if (MATCHES(node,PARTICLE))
+    protoTableSetSelfType (protoTable, (const char*) CHILDSTRING(node,NAME));
   if (node->children) {
     nodeXpath = SafeMalloc (strlen(xpath) + strlen((const char*) node->name) + 2);
     sprintf (nodeXpath, "%s/%s", xpath, node->name);
