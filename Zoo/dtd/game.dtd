@@ -1,11 +1,5 @@
 <!--
-This DTD defines the "game" dialect for the PixelZoo XML game format,
-wherein all game objects (e.g. neighborhood locations, particle types, variables)
-are described directly as integers (cell co-ordinates, IDs, masks, and so forth).
-
-This is a very low-level dialect. It is the format understood by the C board engine.
-
-This dialect is obtained by compiling files in the "proto" dialect, using the zoocompiler.pl program.
+This DTD defines the PixelZoo XML game format.
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
