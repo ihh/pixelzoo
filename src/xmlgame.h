@@ -7,9 +7,7 @@
 /* XML node names */
 #define XMLZOO_GAME       "game"
 #define XMLZOO_PROTECT    "protect"
-#define XMLZOO_EXIT       "exit"
 #define XMLZOO_TOOL       "tool"
-#define XMLZOO_HIDE       "hide"
 #define XMLZOO_BRUSH      "brush"
 #define XMLZOO_CENTER     "center"
 #define XMLZOO_INTENSITY  "intensity"
@@ -22,8 +20,6 @@
 #define XMLZOO_RESERVE    "reserve"
 #define XMLZOO_RECHARGE   "recharge"
 #define XMLZOO_MAXRESERVE "maxreserve"
-#define XMLZOO_TRIGGER    "trigger"
-#define XMLZOO_ENDTURN    "endturn"
 
 /* methods */
 Game* newGameFromXmlDocument (xmlDoc *doc);

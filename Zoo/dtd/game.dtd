@@ -9,181 +9,40 @@ This dialect is obtained by compiling files in the "proto" dialect, using the zo
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool*,trigger*,protect*,exit?,goal?,endturn?)>
+<!ELEMENT game (board,rate,tool*,protect*)>
 
-<!-- A Goal that is tested (and the return value discarded) whenever a particular cell (or cells) is written
- with a particular type of particle. -->
-<!ELEMENT trigger (goal,(type|hextype),pos+)>
+<!-- Rate -->
+<!ELEMENT rate (#PCDATA)>
 
 <!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>
 
-<!-- end-of-turn goal -->
-<!ELEMENT endturn (goal)>
-
-<!-- PixelZoo Goal is a domain-specific mini-language for testing challenge conditions
- and creating <i>side effects</i> like rewards, hints, game events, and so forth. A Goal node
- in the XML tree represents a single expression node in this mini-language.
-
-A Goal expression is a function, with side effects, that returns a Boolean (true or false) value.
-
-Each Goal expression operates on a given <i>area</i> of the Board
- (i.e. a subset of the Board's cells). By default, this area is inherited
- from the parent Goal expression, and the default area for the root Goal is the entire Board.
- -->
-<!ELEMENT goal (area|cage|population|repeat|cached|and|or|not|true|false|maybe|time|testtool|testexit|testgame|charge|setexit|setgame|usetool|print|place)>
-
-<!-- A Goal that restricts the child expression ("goal") to a given area,
- specified as a list of cell co-ordinates. -->
-<!ELEMENT area (pos*,goal)>
-
-<!-- A Goal that tests if the parent area contains a specified number ("count")
- of enclosures, made of a particular type of boundary cell ("wall").
- Each enclosure must contain a specified number of cells ("points"),
- and satisfy a particular child expression ("goal"). -->
-<!ELEMENT cage (wall+,goal,count?,points?)>
-
-<!-- A Goal that tests if the parent area contains a population of cells 
- belonging to a specified set of types ("state" / "type"),
- having a specified number ("count"), and having, when masked with a given bitmask ("mask"),
- a specified Shannon entropy ("entropy"). -->
-<!ELEMENT population (allowmask?,(state|hexstate|type|hextype)+,mask?,count?,entropy?)>
-
-<!-- A Goal that is true if the child expression ("goal") has evaluated true
- consecutively for a specified number of times ("reps"). -->
-<!ELEMENT repeat (reps,goal)>
-
-<!-- A Goal that is false until the child expression ("goal") has evaluated true
- consecutively for a specified number of times ("reps"), and is thereafter always true.
- This has the effect of caching the result of future tests of the child expression. -->
-<!ELEMENT cached (reps?,goal)>
-
-<!-- A Goal that is true if all of the child expressions are true. -->
-<!ELEMENT and (lazy?,cache?,goal+)>
-
-<!-- A Goal that is true if any of the child expressions are true. -->
-<!ELEMENT or (lazy?,cache?,goal+)>
-
-<!-- A Goal that is true if, and only if, the child expression is <b>not</b> true. -->
-<!ELEMENT not (goal)>
-
-<!-- A Goal that is always true. -->
-<!ELEMENT true EMPTY>
-
-<!-- A Goal that is always false. -->
-<!ELEMENT false EMPTY>
-
-<!-- A Goal that randomly returns true or false on each call, with a specified probability of truth ("prob"). -->
-<!ELEMENT maybe (prob)>
-
-<!-- A Goal that is true if the time on the Board clock (in microticks) is in the specified range. -->
-<!ELEMENT time (min?,max?)>
-
-<!-- A Goal that is true if the named Tool ("name") has the specified reserve ("toolres"). -->
-<!ELEMENT testtool (name,toolres)>
-<!ELEMENT toolres (min?,max?)>
-
-<!-- A Goal that is true if the Game's exit portal is in the specified portal state ("exitstate"),
- and the count of particles that has 'exited' the Board is in the specified range ("count"). -->
-<!ELEMENT testexit (count,exitstate)>
-
-<!-- A Goal that is true if the Game is in the specified game state ("gamestate"). -->
-<!ELEMENT testgame (gamestate)>
-
-<!-- A Goal that recharges a given tool ("toolname") by a specified amount ("reserve").
-
-Always returns true. -->
-<!ELEMENT charge (toolname,reserve?)>
-
-<!-- A Goal that places the exit portal in a given portal state.
-
-Always returns true. -->
-<!ELEMENT setexit (exitstate)>
-
-<!-- A Goal that places the game in a given game state.
-
-Always returns true. -->
-<!ELEMENT setgame (gamestate)>
-
-<!-- A Goal that samples a point from the parent area and tries to use a Tool at that point.
-
-Returns true if the Tool's reserve level is used up after the Tool is used.
-(Note: these Tools live outside the usual player toolbox, and their reserve level is never replenished.) -->
-<!ELEMENT usetool (tool)>
-
-<!-- A Goal that prints a message on the output console.
-
-Always returns true. -->
-<!ELEMENT print (message)>
-
-<!-- A Goal that places a text balloon over the playing area.
-
-Always returns true. -->
-<!ELEMENT place (balloon?)>
-
 <!-- The co-ordinates of a Board cell.
 
 Generally specified relative to the current cell (e.g. the one whose update rule is being executed). -->
-<!ELEMENT pos (x?,y?)>
+<!ELEMENT pos (x?,y?,z?)>
+<!ATTLIST pos mode (direct|indirect) #IMPLIED>
 <!ELEMENT x (#PCDATA)>
 <!ELEMENT y (#PCDATA)>
-
-<!ELEMENT points (min?,max?)>
-<!ELEMENT allowmask (#PCDATA)>
-<!ELEMENT count (min?,max?)>
-<!ELEMENT entropy (min?,max?)>
-
-<!ELEMENT min (#PCDATA)>
-<!ELEMENT max (#PCDATA)>
-<!ELEMENT wall (#PCDATA)>
-<!ELEMENT reps (#PCDATA)>
-
-<!-- Exit portal state.
-
-Legal values: "PortalWaiting", "PortalCounting", "PortalUnlocked", "PortalDestroyed" -->
-<!ELEMENT exitstate (#PCDATA)>
-
-<!-- Game state.
-
-Legal values: "GameOn", "GameWon", "GameLost" -->
-<!ELEMENT gamestate (#PCDATA)>
-<!ELEMENT toolname (#PCDATA)>
-<!ELEMENT message (#PCDATA)>
-<!ELEMENT prob (#PCDATA)>
-<!ELEMENT lazy EMPTY>
-<!ELEMENT cache EMPTY>
-
-<!-- A text balloon. -->
-<!ELEMENT balloon (rate?,pos?,(color|hexcolor)?,text,size?,ttl?,rise?,zoom?,fade?,persist?)>
-<!ELEMENT color (#PCDATA)>
-<!ELEMENT hexcolor (#PCDATA)>
-<!ELEMENT text (#PCDATA)>
-<!ELEMENT size (#PCDATA)>
-<!ELEMENT ttl (#PCDATA)>
-<!ELEMENT rise (#PCDATA)>
-<!ELEMENT zoom (#PCDATA)>
-<!ELEMENT fade (#PCDATA)>
-<!ELEMENT rate (#PCDATA)>
-<!ELEMENT persist EMPTY>
+<!ELEMENT z (#PCDATA)>
 
 <!-- A Tool.
 
 Places a single particle ("state"), or a complex brush pattern ("brush"), wherever the player points it.
 
 Properties include spray rate ("spray") and diameter ("size"),
-initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge"),
-and whether the Tool should initially be hidden ("hide").
+initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge").
 
 Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
 -->
-<!ELEMENT tool (name,size,brush?,(state|hexstate)?,overwrite?,spray?,reserve?,recharge?,maxreserve?,hide?)>
+<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?)>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
 <!ELEMENT spot (x,y,rate?)>
 <!ELEMENT pattern (pixel+)>
-<!ELEMENT pixel (x,y,(state|hexstate))>
-<!ELEMENT overwrite (disallow*,(state|hexstate)*,mask?)>
+<!ELEMENT pixel (x,y,(state|hexstate|gstate|gvars))>
+<!ELEMENT overwrite (disallow*,(state|hexstate|gstate|gvars)*,mask?)>
 <!ELEMENT disallow (x,y)>
 
 <!-- A 64-bit decimal integer representing the state of a cell on the Board. -->
@@ -192,22 +51,26 @@ Can also be selectively prohibited from overwriting certain cell co-ordinates or
 <!-- A 64-bit hexadecimal integer representing the state of a cell on the Board. -->
 <!ELEMENT hexstate (#PCDATA)>
 
+<!-- The name of a type of particle (a "type"). -->
+<!ELEMENT gstate (#PCDATA)>
+
+<!-- The name of a type of particle (a "type"). Will be returned as a state index (i.e. left-shifted 48 bits). -->
+<!ELEMENT gtype (#PCDATA)>
+
+<!-- Type + vars. -->
+<!ELEMENT gvars (type,val*)>
+<!ELEMENT val (#PCDATA)>
+<!ATTLIST val var CDATA #REQUIRED>
+
+<!-- Tool info -->
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT spray (#PCDATA)>
 <!ELEMENT reserve (#PCDATA)>
 <!ELEMENT recharge (#PCDATA)>
 <!ELEMENT maxreserve (#PCDATA)>
+
 <!-- A 64-bit hexadecimal mask. -->
 <!ELEMENT mask (#PCDATA)>
-<!ELEMENT hide EMPTY>
-
-<!-- The exit portal for the Board, enabling Lemmings-style play.
- The exit portal is initially in the "PortalWaiting" state.
- When placed in the "PortalCounting" state (as a side-effect of a Goal expression),
- the portal counts the number of times that particles of a given type ("type") are written to it.
- (The actual write operations are intercepted, so the particles appear to drain from the Board.)
- -->
-<!ELEMENT exit ((type|hextype),pos+)>
 
 <!-- A 16-bit decimal integer representing the type of a cell on the Board
 (equal to the upper 16 bits of the state).
@@ -226,21 +89,24 @@ a grammar of update rules ("grammar"),
 an optional move queue ("queue") and random number seed ("seed").
 
 Cells are empty (zero) by default, unless specifically initialized ("init"). -->
-<!ELEMENT board (size,t?,grammar,init*,queue?,seed?)>
+<!ELEMENT board (size,depth?,t?,grammar,init*,queue?,seed?)>
+
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT depth (#PCDATA)>
 
 <!-- A grammar consists of a set of optional subroutines ("subrule")
  and a set of particle definitions ("particle"). -->
 <!ELEMENT grammar (subrule*,particle+)>
 
 <!-- Initialize a particular cell on the Board. -->
-<!ELEMENT init (x,y,(state|hexstate|type|hextype))>
+<!ELEMENT init (x,y,(state|hexstate|type|hextype|gstate|gvars))>
 
 <!-- Seed the random number generator. -->
 <!ELEMENT seed (#PCDATA)>
 
 <!-- The move queue (for replaying moves). -->
 <!ELEMENT queue (move*)>
-<!ELEMENT move (t,x,y,(state|hexstate))>
+<!ELEMENT move (t,x,y,(state|hexstate|gstate|gvars))>
 
 <!-- A time on the Board clock. Measured in microticks. -->
 <!ELEMENT t (#PCDATA)>
@@ -259,12 +125,15 @@ named bit-fields of different widths ("vars").
 
 By default, particles are updated asynchronously and randomly, but they optionally may be synchronized ("sync").
  -->
-<!ELEMENT particle (name,(type|hextype),vars?,readonly*,colrule*,sync?,rate?,rule,dispatch*)>
+<!ELEMENT particle (scheme|(name,(type|hextype),vars?,readonly*,colrule*,sync?,rate?,rule,dispatch*))>
+
+<!-- Scheme code -->
+<!ELEMENT scheme (#PCDATA)>
 
 <!-- Read-only variables. Any particle can have an unlimited number of these.
 
 They are stored in 64-bit chunks and can effectively be accessed as higher bits of the particle's state. -->
-<!ELEMENT readonly (index?,(state|hexstate))>
+<!ELEMENT readonly (index?,(state|hexstate|gstate|gvars))>
 <!ELEMENT index (#PCDATA)>
 
 <!-- Synchronously updated particles. -->
@@ -327,7 +196,8 @@ The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
   (tests a Goal, if the Board has an associated Game).
 </li></ul>
  -->
-<!ELEMENT rule (switch|modify|deliver|random|goal|goto)>
+<!ELEMENT rule (scheme|switch|compare|modify|deliver|random|load|goto)>
+<!ATTLIST rule label CDATA #IMPLIED>
 
 <!-- Switch rule.
 
@@ -342,7 +212,7 @@ executes the "default" rule. -->
 <!ELEMENT switch (pos?,mask?,rshift?,(case*|regindex),low?,high?,default?)>
 
 <!-- An individual case in a switch rule. -->
-<!ELEMENT case ((state|hexstate)?,rule)>
+<!ELEMENT case ((state|hexstate|gtype|gstate|gvars)?,rule)>
 
 <!-- Register for indirect switch rule. -->
 <!ELEMENT regindex (#PCDATA)>
@@ -365,9 +235,11 @@ This is equivalent to reading a Var from cell "src", adding "inc", and storing i
 ("src" and "dest" are co-ordinate offsets to the cell whose rule is being executed.)
 
 After this, the (optional) "next" rule is executed. -->
-<!ELEMENT modify (src?,srcmask?,rshift?,(inc|hexinc)?,lshift?,destmask?,dest?,next?)>
-<!ELEMENT src (x?,y?)>
-<!ELEMENT dest (x?,y?)>
+<!ELEMENT modify (src?,srcmask?,rshift?,(inc|hexinc|gtype|gstate|gvars)?,lshift?,destmask?,dest?,next?)>
+<!ELEMENT src (x?,y?,z?)>
+<!ATTLIST src mode (direct|indirect) #IMPLIED>
+<!ELEMENT dest (x?,y?,z?)>
+<!ATTLIST dest mode (direct|indirect) #IMPLIED>
 <!-- A 64-bit hexadecimal mask. -->
 <!ELEMENT srcmask (#PCDATA)>
 <!-- A 64-bit hexadecimal mask. -->
@@ -377,12 +249,10 @@ After this, the (optional) "next" rule is executed. -->
 
 <!-- Deliver rule.
 
-Delivers a 64-bit message ("msg") to the dispatch table of a neighboring cell ("pos"). -->
-<!ELEMENT deliver (pos,(msg|hexmsg))>
-<!-- A 64-bit decimal integer message. -->
-<!ELEMENT msg (#PCDATA)>
-<!-- A 64-bit hexadecimal integer message. -->
-<!ELEMENT hexmsg (#PCDATA)>
+Delivers a message to the dispatch table of a neighboring cell ("pos"). -->
+<!ELEMENT deliver (pos,message)>
+<!-- A string message. -->
+<!ELEMENT message (#PCDATA)>
 
 <!-- Goto rule.
 
@@ -395,6 +265,7 @@ Randomly executes either the "pass" or "fail" rule (with probability "prob" of i
 <!ELEMENT random (prob?,pass?,fail?)>
 <!ELEMENT pass (rule)>
 <!ELEMENT fail (rule)>
+<!ELEMENT prob (#PCDATA)>
 
 <!-- An entry in a particle's message dispatch table. -->
 <!ELEMENT dispatch (msg,rule)>

@@ -168,16 +168,12 @@ int pzGetCellNameRgb(pzGame pzg,int x,int y,int z) {
 
 int pzGetNumberOfTools(pzGame pzg) {
   ListNode *toolNode;
-  Tool *tool;
   int nTools;
   Game* game;
   game = (Game*) pzg;
   nTools = 0;
-  for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
-    tool = toolNode->value;
-    if (!tool->hidden)
-      ++nTools;
-  }
+  for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next)
+    ++nTools;
   return nTools;
 }
 
@@ -188,9 +184,8 @@ pzTool pzGetToolByNumber(pzGame pzg,int toolNum) {
   game = (Game*) pzg;
   for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
     tool = toolNode->value;
-    if (!tool->hidden)
-      if (--toolNum < 0)
-	return (pzTool) tool;
+    if (--toolNum < 0)
+      return (pzTool) tool;
   }
   return (pzTool) NULL;
 }
@@ -214,13 +209,11 @@ int pzGetSelectedToolNumber(pzGame pzg) {
   if (game->selectedTool)
     for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
       tool = toolNode->value;
-      if (!tool->hidden) {
-	if (tool == game->selectedTool) {
-	  selectedToolNum = toolNum;
-	  break;
-	}
-	++toolNum;
+      if (tool == game->selectedTool) {
+	selectedToolNum = toolNum;
+	break;
       }
+      ++toolNum;
     }
   return selectedToolNum;
 }

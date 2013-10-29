@@ -24,7 +24,6 @@ typedef struct Tool {
   State overwriteMask;  /* mask for overwriteStates */
 
   /* spray rate */
-  int hidden;    /* tool won't be visible to player or selectable unless this is true */
   double sprayRate;  /* mean number of particles deposited per second */
   double reserve;  /* number of particles left that can be deposited */
   double rechargeRate;  /* particle recharge rate, i.e. rate per second at which reserve is replenished */

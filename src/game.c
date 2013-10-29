@@ -108,11 +108,8 @@ int numberOfToolsVisible (Game *game) {
   ListNode *toolNode;
   int nTools;
   nTools = 0;
-  for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next) {
-    Tool *tool = toolNode->value;
-    if (!tool->hidden)
-      ++nTools;
-  }
+  for (toolNode = game->toolOrder->head; toolNode != NULL; toolNode = toolNode->next)
+    ++nTools;
   return nTools;
 }
 

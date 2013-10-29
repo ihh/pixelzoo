@@ -26,7 +26,6 @@ Tool* newTool (char *name, int size) {
   tool->overwriteStates = NULL;
   tool->overwriteMask = TypeMask;
 
-  tool->hidden = 0;
   tool->sprayRate = tool->rechargeRate = tool->reserve = tool->maxReserve = 1.;
 
   return tool;
