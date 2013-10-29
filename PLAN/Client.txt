@@ -1,4 +1,6 @@
-Update game.dtd (DO THIS! LOST HOURS!); validate polymer XML
+Write utility program to expand all <scheme> blocks in an XML file
+Update Zoo/dtd/game.dtd (DO NOT SKIP THIS! REMEMBER LOST HOURS!)
+Validate t/newproto.xml against Zoo/dtd/game.dtd
 
 Add vars to Examine tool text in PZGameView
 Test & debug polymers
@@ -6,6 +8,9 @@ Test & debug polymers
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 Refactor Catalyst to not use Level.pm/Grammar.pm
 Add definitions for player & owner IDs to World controller
+
+Delete Zoo/lib/Grammar.pm, Zoo/lib/Level.pm, Zoo/lib/Level/Simple.pm
+Delete Zoo/dtd/proto.dtd
 
 Add some real multiplayer game content (guests become player particles, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
 
