@@ -7,6 +7,7 @@ ParticleRule* newParticleRule (enum RuleType type) {
   ParticleRule* rule;
   rule = SafeCalloc (1, sizeof (ParticleRule));
   rule->type = type;
+  rule->label = NULL;
   return rule;
 }
 
@@ -76,6 +77,7 @@ void deleteParticleRule (void *voidRule) {
   LoadRuleParams *load;
 
   rule = (ParticleRule*) voidRule;
+  SafeFreeOrNull ((void*) rule->label);
 
   switch (rule->type) {
   case LookupRule:

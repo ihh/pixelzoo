@@ -323,6 +323,10 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   ParticleRule *ruleTrace[MaxRuleDepth];
   State reg[NumberOfRegisters + 1], regVal;
 
+#ifdef PIXELZOO_DEBUG
+  Warn ("attemptRule @(%d,%d,%d)", x, y, z);
+#endif
+
   reg[NumberOfRegisters] = 0;  /* this allows us to use register -1 as a default zero */
   tracePos = 0;
   while (rule != NULL) {
@@ -455,12 +459,20 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case GotoRule:
       rule = rule->param.gotoLabel;
+#ifdef PIXELZOO_DEBUG
+    if (rule->label)
+      Warn ("Goto %s", rule->label);
+#endif
       break;
 
     case LoadRule:
       load = &rule->param.load;
-      for (r = 0; r < load->n; ++r)
+      for (r = 0; r < load->n; ++r) {
 	reg[load->reg[r]] = load->state[r];
+#ifdef PIXELZOO_DEBUG
+	Warn ("Load reg[%d] = %llx", load->reg[r], load->state[r]);
+#endif /* PIXELZOO_DEBUG */
+      }
       rule = load->nextRule;
       break;
 

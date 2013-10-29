@@ -190,6 +190,7 @@
       (srcmask 0)
       ,(xy-indirect 'dest loc)
       (vlshift (type ,type) (var ,var))
+      (vdestmask (type ,type) (var ,var))
       (reginc ,reg)
       ,@(listform-opt-rule 'next next)))
 
@@ -199,6 +200,7 @@
       (srcmask 0)
       ,(xy 'dest loc)
       (vlshift (type ,type) (var ,var))
+      (vdestmask (type ,type) (var ,var))
       (reginc ,reg)
       ,@(listform-opt-rule 'next next)))
 
@@ -485,8 +487,8 @@
 		 `((0 ,polymer-detach-f)
 		   (1 ,(indirect-compare-var-to-register
 			'(0 1) self-type polymer-rev-bond-dir-var 3
-			`(neq ,(polymer-detach-f))
-			`(eq ,(eval-or-return next))))))))
+			`(neq (rule ,(polymer-detach-f)))
+			`(eq (rule ,(eval-or-return next)))))))))
      polymer-detach-f))
 
   (define (polymer-verify-r next)
@@ -497,8 +499,8 @@
 		 `((0 ,polymer-detach-r)
 		   (1 ,(indirect-compare-var-to-register
 			'(4 5) self-type polymer-fwd-bond-dir-var 7
-			`(neq ,(polymer-detach-r))
-			`(eq ,(eval-or-return next))))))))
+			`(neq (rule ,(polymer-detach-r)))
+			`(eq (rule ,(eval-or-return next)))))))))
      polymer-detach-r))
 
   (define (polymer-fr-just-verify-subrule-name) (string-append self-type ".verify.fr"))

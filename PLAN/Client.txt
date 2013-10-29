@@ -1,5 +1,4 @@
-Create polymer particle wrapper
-Update game.dtd; validate polymer XML
+Update game.dtd (DO THIS! LOST HOURS!); validate polymer XML
 
 Add vars to Examine tool text in PZGameView
 Test & debug polymers

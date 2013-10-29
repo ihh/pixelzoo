@@ -141,9 +141,7 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   Message message;
   int nColorRules, readOnlyIndex;
   xmlNode *curNode, *syncNode, *childNode;
-  ParticleRule *subRule;
   Proto *proto;
-  const char *subRuleName;
 
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
 
@@ -157,11 +155,8 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
 
   /* create subrules local to this Particle */
   for (childNode = node->children; childNode; childNode = childNode->next)
-    if (MATCHES(childNode,SUBRULE)) {
-      subRuleName = (const char*) ATTR(childNode,NAME);
-      subRule = newRuleFromXmlParentNode (board, childNode, protoTable, &p->subRule);
-      addParticleSubRule (p, subRuleName, subRule, board);
-    }
+    if (MATCHES(childNode,SUBRULE))
+      (void) newRuleFromXmlParentNode (board, childNode, protoTable, &p->subRule);
 
   /* create main update rule */
   p->rule = newRuleFromXmlParentNode (board, CHILD(node,RULE), protoTable, &p->subRule);
@@ -260,6 +255,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
     subRuleName = ATTR(ruleParentNode,NAME);
     if (subRuleName) {
       subRule = rule;
+      subRule->label = StringNew (subRuleName);
       defineSubRule (localSubRule, subRuleName, subRule, board->subRule);
       rule = newGotoRule();
       rule->param.gotoLabel = subRule;
@@ -403,6 +399,7 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, Boar
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,LT) || MATCHES(curNode,LEQ) || MATCHES(curNode,EQ) || MATCHES(curNode,NEQ) || MATCHES(curNode,GT) || MATCHES(curNode,GEQ)) {
       rule = newRuleFromXmlGrandparentNode (board, curNode, protoTable, localSubRule);
+      Assert (rule != NULL, "No rule found in <%s> clause", curNode->name);
       if (MATCHES(curNode,LT)) {
 	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
 	compare->ltRule = rule;

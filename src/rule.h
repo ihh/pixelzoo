@@ -78,6 +78,7 @@ typedef union RuleParams {
 struct ParticleRule {
   enum RuleType type;
   RuleParams param;
+  const char *label;
 };
 
 /* methods */

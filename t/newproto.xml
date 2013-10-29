@@ -8607,7 +8607,7 @@
   <tool>
     <name>polymer spray</name>
     <size>4</size>
-    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">10</val></gvars>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">3</val></gvars>
     <overwrite>
       <hexstate>0000000000000</hexstate>
     </overwrite>
