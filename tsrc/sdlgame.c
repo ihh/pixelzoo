@@ -8,6 +8,7 @@
 #include "xmlutil.h"  /* used only for string to 64-bit integer conversion */
 #include "fileio.h"   /* file I/O helpers */
 #include "optlist.h"  /* option parsing */
+#include "board.h"
 
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
@@ -117,6 +118,7 @@ int main( int argc, char *argv[] )
       SDL_Event event;
       int tools, t, toolNum;
       pzTool pzt;
+      Board* board;
 
       while( SDL_PollEvent( &event ) )
 	if (userInputAllowed)
@@ -160,6 +162,14 @@ int main( int argc, char *argv[] )
 		  pzt = pzGetToolByNumber(sdlGame->game,toolNum);
 		  printf ("Selected tool (#%d): %s   Reserve: %g\n", toolNum + 1, pzGetToolName(pzt), pzGetToolReserveLevel(pzt));
 		  break;
+
+#ifdef PIXELZOO_DEBUG
+		case SDLK_RIGHT:
+		  board = ((Game*)sdlGame->game)->board;
+		  board->targetUpdateCount = board->updateCount + 1;
+		  printf ("*\n* Single-stepping: %lld updates\n*\n", board->targetUpdateCount);
+		  break;
+#endif /* PIXELZOO_DEBUG */
 
 		default:
 		  break;

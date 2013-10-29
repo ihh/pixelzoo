@@ -29,6 +29,9 @@ typedef struct Board {
   int64_Microticks microticksAtNextAsyncEvent, microticksAtNextSyncEvent;  /* time of upcoming async/sync events */
   int64_Microticks microticksAtNextBoardSync;  /* time of next board sync */
   signed long long int updateCount;  /* total number of updates (calls to evolveBoardCell, evolveBoardCellSync, syncBoard, or replayBoardMove) */
+#ifdef PIXELZOO_DEBUG
+  signed long long int targetUpdateCount;   /* set to a nonnegative integer to allow single-stepping */
+#endif /* PIXELZOO_DEBUG */
   int syncUpdates;  /* number of board synchronizations */
   Vector *balloon;  /* container & owner of Balloon's */
   RandomNumberGenerator *rng;  /* the Board's random number generator. Drives all random simulation events */

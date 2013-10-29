@@ -36,6 +36,9 @@ Board* newBoard (int size, int depth) {
   board->microticks = 0;
   board->microticksAtNextBoardSync = 0;
   board->updateCount = 0;
+#ifdef PIXELZOO_DEBUG
+  board->targetUpdateCount = -1;
+#endif /* PIXELZOO_DEBUG */
   board->syncUpdates = 0;
   board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
   board->rng = newRNG();
@@ -93,6 +96,11 @@ void writeBoardMove (Board* board, int x, int y, int z, State state) {
 
 void replayBoardMove (Board* board) {
   Move *nextMove;
+
+#ifdef PIXELZOO_DEBUG
+  if (board->targetUpdateCount >= 0 && board->targetUpdateCount <= board->updateCount)
+    return;
+#endif /* PIXELZOO_DEBUG */
 
   nextMove = MoveListFront (board->moveQueue);
 
@@ -216,6 +224,10 @@ void addParticleToBoard (Particle* p, Board* board) {
 
 void evolveBoardCell (Board* board, int x, int y, int z) {
   Particle* p;
+#ifdef PIXELZOO_DEBUG
+  if (board->targetUpdateCount >= 0 && board->targetUpdateCount <= board->updateCount)
+    return;
+#endif /* PIXELZOO_DEBUG */
   p = readBoardParticle (board, x, y, z);
   if (p) {
     /*
@@ -227,6 +239,10 @@ void evolveBoardCell (Board* board, int x, int y, int z) {
 
 void evolveBoardCellSync (Board* board, int x, int y, int z) {
   Particle* p;
+#ifdef PIXELZOO_DEBUG
+  if (board->targetUpdateCount >= 0 && board->targetUpdateCount <= board->updateCount)
+    return;
+#endif /* PIXELZOO_DEBUG */
   /* do an update */
   p = readBoardParticle (board, x, y, z);
   if (p && p->synchronous && board->syncUpdates % p->syncPeriod == p->syncPhase) {
@@ -245,6 +261,10 @@ void syncBoard (Board* board) {
   int x, y, z, size, depth, i;
   State *sync;
   unsigned char *syncWrite;
+#ifdef PIXELZOO_DEBUG
+  if (board->targetUpdateCount >= 0 && board->targetUpdateCount <= board->updateCount)
+    return;
+#endif /* PIXELZOO_DEBUG */
   sync = board->sync;
   syncWrite = board->syncWrite;
   size = board->size;
