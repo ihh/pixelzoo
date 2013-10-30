@@ -181,6 +181,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 particle_tool
+
+Type: might_have
+
+Related object: L<Zoo::Schema::Result::ParticleTool>
+
+=cut
+
+__PACKAGE__->might_have(
+  "particle_tool",
+  "Zoo::Schema::Result::ParticleTool",
+  { "foreign.particle_name" => "self.name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 ancestors
 
 Type: many_to_many
@@ -202,8 +217,8 @@ Composing rels: L</dependency_descendants> -> descendant
 __PACKAGE__->many_to_many("descendants", "dependency_descendants", "descendant");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d/fMzjOLvv368Ke94p1X9Q
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-29 21:52:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ClYptqmFZmlfNEVwOYhLaw
 
 
 =head2 descendants

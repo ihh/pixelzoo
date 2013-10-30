@@ -108,6 +108,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 particle_tools
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::ParticleTool>
+
+=cut
+
+__PACKAGE__->has_many(
+  "particle_tools",
+  "Zoo::Schema::Result::ParticleTool",
+  { "foreign.tool_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 toolbox_tools
 
 Type: has_many
@@ -124,8 +139,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-10 14:18:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HcznjEAVIWQltClsMUd2aA
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-29 21:52:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sJFj42TTeOYBZ+QvrInXWw
 
 =head1 METHODS
 

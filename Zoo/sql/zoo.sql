@@ -8,7 +8,7 @@ CREATE TABLE image (
 	);
 
 CREATE TABLE particle (
-	name varchar(255) PRIMARY KEY,  -- the name of this Particle
+	name varchar(255) PRIMARY KEY,  -- the Type of this Particle, as referenced in update rules, etc.
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	image_id varchar(255) REFERENCES image(name) ON DELETE SET NULL ON UPDATE CASCADE,
 	cost DECIMAL,
@@ -16,8 +16,8 @@ CREATE TABLE particle (
 	);
 
 CREATE TABLE tool (
-        id integer PRIMARY KEY,
-	name varchar(255),  -- the name of this Tool
+        id INTEGER PRIMARY KEY,
+	name varchar(255),  -- the displayed name of this Tool
         creator_id INTEGER REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	xml TEXT  -- Tool XML
 	);
@@ -26,6 +26,11 @@ CREATE TABLE toolbox (
         id integer PRIMARY KEY,
 	name varchar(255),  -- the name of this Toolbox
 	max_tools integer -- maximum allowable tools
+	);
+
+CREATE TABLE particle_tool (
+        particle_name varchar(255) PRIMARY KEY REFERENCES particle(name),
+        tool_id integer REFERENCES tool(id)
 	);
 
 CREATE TABLE toolbox_tool (

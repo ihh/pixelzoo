@@ -1,7 +1,6 @@
-Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies
-Implement ultra-basic, unsafe version of "PUT store/tool", which adds all tools to a hardwired "experimental toolbox"
+Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies, which automatically associates the Particle with a Tool (using particle_tool table) and adds this tool to a hardwired "experimental toolbox"
 Add an experimental world + worldmeta hardwired to use the experimental toolbox
-Using biwascheme & PegJS, implement an ultra-basic reaction-diffusion grammar editor (one tool/type, no safety checks, just uses "UserID/" as a prefix)
+Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
