@@ -26,6 +26,8 @@ Add depth to worldmeta; replace current 2D (X*Y) board with 3D slab of height 2 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
 
+Debug lock/world status UI getting out of sync with network
+
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
 
