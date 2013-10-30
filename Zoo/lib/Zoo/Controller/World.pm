@@ -188,12 +188,13 @@ sub assemble {
 
     # particles
     for my $particle (@{$c->stash->{particles}}) {
-#	warn "Adding type ", $particle->nest;
+#	warn "Adding type ", $particle->name, "\nXML: ", $particle->xml, "\nNest: ", Dumper($particle->nest);
 	$gram->addType ($particle->nest);
     }
 
     # board size
     $gram->boardSize($c->stash->{world}->meta_rel->board_size);
+    $gram->boardDepth($c->stash->{world}->meta_rel->board_depth);
 
     # misc tags
     for my $board_tag (qw(init seed)) {

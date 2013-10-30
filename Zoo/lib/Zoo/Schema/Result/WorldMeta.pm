@@ -49,6 +49,11 @@ __PACKAGE__->table("world_meta");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 board_depth
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 owner_toolbox_id
 
   data_type: 'integer'
@@ -105,6 +110,8 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "board_size",
+  { data_type => "integer", is_nullable => 1 },
+  "board_depth",
   { data_type => "integer", is_nullable => 1 },
   "owner_toolbox_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
@@ -216,8 +223,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 11:19:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oTKnp9bzinIB3Zqrxugktw
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 16:24:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6HhJ+ldHq0MEqcx2SBV9Hg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

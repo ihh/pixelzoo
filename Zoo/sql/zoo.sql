@@ -84,6 +84,7 @@ CREATE TABLE inventory (
 CREATE TABLE world_meta (
 	id INTEGER PRIMARY KEY,   -- the WorldMetaID
 	board_size INTEGER,   -- size of the board
+	board_depth INTEGER,   -- depth of the board
 	owner_toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
 	guest_toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
 	lock_expiry_delay INTEGER,  -- number of seconds that locking grants control of the board
