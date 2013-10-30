@@ -380,3 +380,15 @@ void pzAssert(int assertion, char* error) { Assert(assertion,error); }
 void pzPrintConsoleText (pzGame game, char* text) {
   printToGameConsole (game, text, PaletteWhite, 1);
 }
+
+int pzIncumbentCount(pzGame pzg) {
+  Game *game;
+  game = (Game*) pzg;
+  return boardContestParticleCount (game->board, game->board->incumbentWinVar);
+}
+
+int pzChallengerCount(pzGame pzg) {
+  Game *game;
+  game = (Game*) pzg;
+  return boardContestParticleCount (game->board, game->board->challengerWinVar);
+}

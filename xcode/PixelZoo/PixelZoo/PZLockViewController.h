@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *endTurnButton;
 @property (weak, nonatomic) IBOutlet UILabel *worldLabel;
 @property (nonatomic, strong) IBOutlet UILabel *lockLabel;
+@property (weak, nonatomic) IBOutlet UILabel *incumbentCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *challengerCountLabel;
 
 - (IBAction)endTurn:(id)sender;
 - (void)lockWasDeleted;

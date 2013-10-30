@@ -44,6 +44,15 @@
     return [ownerElement stringValue];
 }
 
+- (bool)userIsOwner {
+    NSArray *owners = [statusNode nodesForXPath:@"owner/id" error:nil];
+    NSArray *players = [statusNode nodesForXPath:@"player/id" error:nil];
+    GDataXMLElement *ownerElement = [owners objectAtIndex:0];
+    GDataXMLElement *playerElement = [players objectAtIndex:0];
+    return [[ownerElement stringValue] isEqualToString:[playerElement stringValue]];
+    
+}
+
 - (bool)isLocked {
     return [self lockOwner] != nil && [self lockExpiryWait] > 0;
 }
@@ -56,10 +65,12 @@
     return nil;
 }
 - (bool)userOwnsLock {
-    NSArray *isUserArray = [statusNode nodesForXPath:@"lock/owner/is-user" error:nil];
-    if ([isUserArray count]) {
-        GDataXMLElement *isUserElement = [isUserArray objectAtIndex:0];
-        return [[isUserElement stringValue] integerValue] ? YES : NO;
+    NSArray *owners = [statusNode nodesForXPath:@"lock/owner/id" error:nil];
+    NSArray *players = [statusNode nodesForXPath:@"player/id" error:nil];
+    if ([owners count]) {
+        GDataXMLElement *ownerElement = [owners objectAtIndex:0];
+        GDataXMLElement *playerElement = [players objectAtIndex:0];
+        return [[ownerElement stringValue] isEqualToString:[playerElement stringValue]];
     }
     return NO;
 }

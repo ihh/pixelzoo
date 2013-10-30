@@ -457,6 +457,18 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incumbent count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Clf-oi-CYH">
+                                <rect key="frame" x="0.0" y="159" width="130" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Challenger count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7M-OQ-ILE">
+                                <rect key="frame" x="0.0" y="188" width="131" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -466,13 +478,19 @@
                             <constraint firstItem="1pk-Y2-pFJ" firstAttribute="centerX" secondItem="xzm-AX-Y82" secondAttribute="centerX" type="user" id="Sow-Gt-OPT"/>
                             <constraint firstItem="Wll-8f-KxV" firstAttribute="leading" secondItem="bf3-ff-LLu" secondAttribute="leading" type="default" id="VeO-nV-VPd"/>
                             <constraint firstItem="Wll-8f-KxV" firstAttribute="top" secondItem="H1p-eh-79E" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="dfh-cg-su1"/>
+                            <constraint firstItem="Clf-oi-CYH" firstAttribute="top" secondItem="bf3-ff-LLu" secondAttribute="top" constant="159" id="g1E-S3-yBf"/>
                             <constraint firstItem="H1p-eh-79E" firstAttribute="top" secondItem="bf3-ff-LLu" secondAttribute="top" constant="75" id="oUU-GP-ha0"/>
+                            <constraint firstItem="Clf-oi-CYH" firstAttribute="leading" secondItem="Wll-8f-KxV" secondAttribute="leading" type="default" id="oul-Wg-hIu"/>
                             <constraint firstAttribute="bottom" secondItem="xzm-AX-Y82" secondAttribute="bottom" constant="132" id="pwz-hJ-KN4"/>
+                            <constraint firstItem="P7M-OQ-ILE" firstAttribute="top" secondItem="Clf-oi-CYH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="r2X-fb-T9c"/>
+                            <constraint firstItem="P7M-OQ-ILE" firstAttribute="leading" secondItem="Clf-oi-CYH" secondAttribute="leading" type="default" id="sSD-c7-oPa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hDi-uT-64X"/>
                     <connections>
+                        <outlet property="challengerCountLabel" destination="P7M-OQ-ILE" id="QaN-Iw-9ui"/>
                         <outlet property="endTurnButton" destination="1pk-Y2-pFJ" id="oWp-JB-bLo"/>
+                        <outlet property="incumbentCountLabel" destination="Clf-oi-CYH" id="QGd-Cy-5dh"/>
                         <outlet property="lockLabel" destination="Wll-8f-KxV" id="Ocw-15-dm9"/>
                         <outlet property="playButton" destination="xzm-AX-Y82" id="3eQ-tb-KtY"/>
                         <outlet property="worldLabel" destination="H1p-eh-79E" id="FgJ-U0-XJh"/>
@@ -508,21 +526,31 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIb-wT-LlV">
+                                <rect key="frame" x="137" y="71" width="47" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="hIb-wT-LlV" firstAttribute="baseline" secondItem="QU3-zC-1xV" secondAttribute="baseline" type="default" id="1SR-cd-7v1"/>
+                            <constraint firstItem="hIb-wT-LlV" firstAttribute="centerX" secondItem="RMw-5J-9NT" secondAttribute="centerX" type="default" id="89Z-W5-Ch3"/>
                             <constraint firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="8sQ-jY-l1W"/>
                             <constraint firstItem="XG3-wt-IXb" firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="B8J-GD-t40"/>
                             <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" type="default" id="CGa-AC-6JA"/>
                             <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="KZe-6f-snI"/>
-                            <constraint firstItem="XG3-wt-IXb" firstAttribute="baseline" secondItem="QU3-zC-1xV" secondAttribute="baseline" type="default" id="QW5-tC-4RX"/>
                             <constraint firstItem="QU3-zC-1xV" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" constant="71" id="YBS-gv-Ido"/>
                             <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="RMw-5J-9NT" secondAttribute="leading" type="default" id="cr0-O8-4vV"/>
+                            <constraint firstItem="hIb-wT-LlV" firstAttribute="baseline" secondItem="XG3-wt-IXb" secondAttribute="baseline" type="default" id="tvt-Aq-k4f"/>
                             <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="QU3-zC-1xV" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ueW-N5-eHL"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>
                     <connections>
+                        <outlet property="countLabel" destination="hIb-wT-LlV" id="dP4-S9-wiQ"/>
                         <outlet property="lockLabel" destination="XG3-wt-IXb" id="rES-3Z-Nth"/>
                         <outlet property="worldLabel" destination="QU3-zC-1xV" id="nwg-1j-CP9"/>
                         <outlet property="worldView" destination="RMw-5J-9NT" id="TET-oq-b5I"/>

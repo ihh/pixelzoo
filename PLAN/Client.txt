@@ -1,5 +1,4 @@
 Add an optional <overwrite> block in the game header, whose <disallow> states are added to the tool-specific <disallow> states, enabling easy specification of off-limits areas for challengers
-Add summary counts of player/owner particles to lock screen
 
 Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
 

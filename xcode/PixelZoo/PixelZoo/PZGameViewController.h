@@ -34,6 +34,7 @@ typedef struct XYCoord { int x, y; } XYCoord;
 
 @property (weak, nonatomic) IBOutlet UILabel *lockLabel;
 @property (nonatomic, strong) IBOutlet UILabel *worldLabel;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic, strong) IBOutlet UIView *worldView;
 
 @property(readonly) int examining;

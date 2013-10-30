@@ -748,3 +748,20 @@ int boardWinner (Board *board) {
     ? board->challengerWinVar
     : board->incumbentWinVar;
 }
+
+int boardContestParticleCount (Board *board, int id) {
+  int x, y, z, var, count;
+  State s;
+  count = 0;
+  for (x = 0; x < board->size; ++x)
+    for (y = 0; y < board->size; ++y)
+      for (z = 0; z < board->depth; ++z) {
+	s = readBoardState (board, x, y, z);
+	if (StateType(s) == board->winType) {
+	  var = (int) StateVar(s,board->winVarOffset,board->winVarWidth);
+	  if (var == id)
+	    ++count;
+	  }
+      }
+  return count;
+}

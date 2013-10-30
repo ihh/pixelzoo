@@ -67,5 +67,7 @@
 -(pzBalloon)balloonNumber:(int)n;
 -(int)textRgbForBalloon:(pzBalloon)b;
 
+-(int)incumbentCount;
+-(int)challengerCount;
 
 @end

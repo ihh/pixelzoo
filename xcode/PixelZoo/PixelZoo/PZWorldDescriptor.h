@@ -18,8 +18,11 @@
 
 - (NSString*)name;
 - (NSString*)identifier;
+
 - (NSString*)owner;
 
+// the following methods require statusNode to be loaded, i.e. they can only be used from the status screen or beyond
+- (bool)userIsOwner;
 - (bool)isLocked;
 - (NSString*)lockOwner;
 - (bool)userOwnsLock;

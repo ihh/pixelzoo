@@ -4,6 +4,8 @@
   <owner>
     <id>[% world.owner_id %]</id>
     <name>[% world.owner.username %]</name></owner>
+  <player>
+    <id>[% user.id %]</id></player>
   <size>[% world.meta_rel.board_size %]</size>
   <time>[% world.board_time %]</time>
   <toolbox>
@@ -37,7 +39,6 @@
       <owner>
 	<id>[% lock.owner_id %]</id>
 	<name>[% lock.owner.username %]</name>
-	<is-user>[% lock.owner_id == user.id ? 1 : 0 %]</is-user>
       </owner>
       <expires>[% lock.expiry_time %]</expires>
     </lock>

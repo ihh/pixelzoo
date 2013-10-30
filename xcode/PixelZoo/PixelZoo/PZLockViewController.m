@@ -29,6 +29,8 @@
 
 @synthesize worldLabel;
 @synthesize lockLabel;
+@synthesize incumbentCountLabel;
+@synthesize challengerCountLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -196,6 +198,8 @@
         endTurnButton.enabled = YES;
         endTurnButton.alpha = 1.0;
     }
+    incumbentCountLabel.text = [NSString stringWithFormat:@"Incumbents: %d",[gameWrapper incumbentCount]];
+    challengerCountLabel.text = [worldDescriptor userIsOwner] ? @"" : [NSString stringWithFormat:@"Challengers: %d",[gameWrapper challengerCount]];
     [self.view setNeedsDisplay];
 }
 

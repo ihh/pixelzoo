@@ -149,6 +149,10 @@
     return pzGetBalloonTextRgb(game,b);
 }
 
+-(int)incumbentCount { return pzIncumbentCount(game); }
+-(int)challengerCount { return pzChallengerCount(game); }
+
+
 #pragma mark NSURLConnectionDelegate methods
 
 

@@ -288,10 +288,19 @@ const char* PZEXPORT pzSaveBoardAsXmlString(pzGame);  /* use to save game state;
 
 
 /**
- Convert the current board state, including the result of testing the end-of-turn goal, to an XML string.
+ Convert the current board state & move to an XML string.
 
  @return A string that must be free'd */
 const char* PZEXPORT pzSaveBoardAndMoveAsXmlString(pzGame);
+
+
+/**
+ Number of incumbent contest-particles. */
+int PZEXPORT pzIncumbentCount(pzGame);
+
+/**
+ Number of challenger contest-particles. */
+int PZEXPORT pzChallengerCount(pzGame);
 
 
 /* Wrappers to general utility functions */

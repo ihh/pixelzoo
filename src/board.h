@@ -146,5 +146,6 @@ const char* boardTypeVarsDebugString (Board *board, State state);
 
 /* win condition */
 int boardWinner (Board *board);
+int boardContestParticleCount (Board *board, int id);
 
 #endif /* BOARD_INCLUDED */

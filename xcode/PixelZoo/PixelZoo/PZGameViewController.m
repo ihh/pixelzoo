@@ -22,6 +22,8 @@
 
 @synthesize lockLabel;
 @synthesize worldLabel;
+@synthesize countLabel;
+
 @synthesize worldView;
 
 @synthesize examining;
@@ -109,6 +111,8 @@
     } else
         lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
 
+    countLabel.text = [NSString stringWithFormat:@"%d/%d",[gameWrapper incumbentCount],[gameWrapper challengerCount]];
+    
     [self.worldView setNeedsDisplay];
 }
 
