@@ -25,44 +25,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../src/xmlboard.c"
-            timestampString = "404852934.60575"
+            filePath = "PixelZoo/PZLockViewController.m"
+            timestampString = "404853908.446851"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "newBoardFromXmlRoot()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "newBoardFromXmlRoot"
-                  moduleName = "PixelZoo"
-                  urlString = "file://localhost/Users/yam/pixelzoo/src/xmlboard.c"
-                  timestampString = "404853250.015358"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "30">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "newBoardFromXmlRoot"
-                  moduleName = "PixelZoo"
-                  urlString = "file://localhost/Users/yam/pixelzoo/src/xmlboard.c"
-                  timestampString = "404853250.015965"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42"
-                  offsetFromSymbolStart = "74">
-               </Location>
-            </Locations>
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "-endTurn:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
