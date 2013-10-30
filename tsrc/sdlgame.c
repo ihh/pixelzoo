@@ -128,7 +128,7 @@ int main( int argc, char *argv[] )
 
   printf ("Game file successfully loaded.\n\nPress up- and down-arrow to cycle through tools, or 't' to list all available tools.\n");
 #ifdef PIXELZOO_DEBUG
-  printf("Press right-arrow to single-step updates.\n");
+  printf("Press right-arrow to single-step through updates, and left-arrow to exit single-step mode.\nPress 'l' to log rules & writes, and 'b' to dump the board.\n");
 #endif /* PIXELZOO_DEBUG */
   printf("(Any further text beyond this point comes from the game file.)\n======================================================================\n\n");
 

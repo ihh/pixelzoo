@@ -46,6 +46,7 @@ sub newMinimalGrammar {
 # other game data
 	'boardRate' => 240,
 	'boardSize' => 128,
+	'boardDepth' => 1,
 	'playerID' => 0,
 	'ownerID' => 0,
 
@@ -126,6 +127,12 @@ sub newGrammar {
 sub addType {
     my ($self, @type_proto_xml) = @_;
     push @{$self->xml->type}, 'particle' => \@type_proto_xml;
+}
+
+# helper to add generic stuff that goes in <grammar>
+sub addGrammarXML {
+    my ($self, @xml) = @_;
+    push @{$self->xml->type}, @xml;
 }
 
 # new tool helper
@@ -275,6 +282,7 @@ sub make_game {
     }
 
     my @game = ("board" => ["size" => $self->boardSize,
+			    "depth" => $self->boardDepth,
 			    "grammar" => $self->xml->type,
 			    @{$self->xml->board_stash},
 			    @{$self->xml->seed},

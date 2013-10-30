@@ -175,9 +175,9 @@ sub assemble {
     my $gram = Grammar->newMinimalGrammar;   # using newMinimalGrammar avoids creating a default 'empty' particle type
 #    $gram->verbose(1);
 
-    # set player & owner IDs...
-    # $gram->playerID(...);
-    # $gram->ownerID(...);
+    # set player & owner IDs
+    $gram->addGrammarXML ("schemedef" => ("(define owner-id " . $c->stash->{world}->owner_id . ")"));
+    $gram->addGrammarXML ("schemedef" => ("(define player-id " . $c->user->id . ")"));
 
     # particles
     for my $particle (@{$c->stash->{particles}}) {

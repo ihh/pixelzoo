@@ -1,20 +1,22 @@
-Add single-step feature to sdlgame
-Test & debug polymers
+Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
-Add vars to Examine tool text in PZGameView
+Add new elements "<win><type>XXX</type><var>ID</var><incumbent>OwnerID</incumbent><challenger>PlayerID</challenger></win>", the implied logic being that the end-of-game ruler is OwnerID *unless* two conditions are satisfied at the end of the player's turn: (a) all type-XXX particles ("player particles") with ID=OwnerID have been eliminated, (b) there are more type-XXX particles with ID=PlayerID than type-XXX particles with any other ID.
+Automatically define 'player-id' and 'owner-id' from within xmlboard.c, rather than by inserting <schemedef>'s.
+Update pzSaveBoardAndEndGoalStatusAsXmlString and World::turn_end_POST.
+
+Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
+Add summary counts of player/owner particles to lock screen
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 Refactor Catalyst to not use Level.pm/Grammar.pm
-Add definitions for player & owner IDs to World controller
 
 Delete Zoo/lib/Grammar.pm, Zoo/lib/Level.pm, Zoo/lib/Level/Simple.pm
 Delete Zoo/dtd/proto.dtd
 
-Add some real multiplayer game content (guests become player particles, a proper end-of-turn goal in worldmeta, a test board that can be stolen)
+Add a <rule> to create text balloons
+Add a syntactic-sugar <nop> rule
 
-Add summary counts of player/owner particles to lock screen
-
-Create user/worlds controller (authenticated) that lists created, owned & neighboring worlds, together with expiry times for active locks & deletion times for any of your old locks
+Modify "world/" controller (authenticated) to list created, owned & neighboring worlds, together with expiry times for active locks & deletion times for any of your old locks
 Modify Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
 
 Automatically create one new world per player, at registration time
@@ -22,7 +24,7 @@ Automatically create one new world per player, at registration time
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
-Replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
+Add depth to worldmeta; replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)

@@ -466,12 +466,12 @@
 
   (define (polymer-move-r)
     (indirect-switch-type
-     '(8 9) `((empty-type ,(polymer-update-r polymer-move-self)))))
+     '(8 9) `((,empty-type ,(polymer-update-r polymer-move-self)))))
 
   (define (polymer-move-fr)
     (indirect-switch-type
-     '(8 9) `((empty-type ,(polymer-update-f
-			    (lambda () (polymer-update-r polymer-move-self)))))))
+     '(8 9) `((,empty-type ,(polymer-update-f
+			     (lambda () (polymer-update-r polymer-move-self)))))))
 
   (define (polymer-detach-f)
     (set-var origin self-type polymer-has-fwd-bond-var 0))

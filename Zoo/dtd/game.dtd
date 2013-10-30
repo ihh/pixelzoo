@@ -29,7 +29,7 @@ initial reserve ("reserve") and maximum ("maxreserve"), recharge rate ("recharge
 
 Can also be selectively prohibited from overwriting certain cell co-ordinates or pixel types ("overwrite").
 -->
-<!ELEMENT tool (name,size,brush?,(state|hexstate|gstate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?)>
+<!ELEMENT tool (scheme|(name,size,brush?,(state|hexstate|gstate|gvars)?,overwrite?,spray?,reserve?,recharge?,maxreserve?))>
 <!ELEMENT brush (center?,intensity?,pattern?)>
 <!ELEMENT center (x,y)>
 <!ELEMENT intensity (spot+)>
@@ -94,7 +94,7 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 
 <!-- A grammar consists of a set of optional subroutines ("subrule")
  and a set of particle definitions ("particle"). -->
-<!ELEMENT grammar (subrule*,particle+)>
+<!ELEMENT grammar (schemedef*,subrule*,particle+)>
 
 <!-- Initialize a particular cell on the Board. -->
 <!ELEMENT init (x,y,(state|hexstate|type|hextype|gstate|gvars))>
