@@ -7439,4 +7439,7 @@
     <reserve>1000</reserve>
     <recharge>100</recharge>
   </tool>
+  <toolset>
+    <scheme>`(toolset ,(map (lambda (x) (map (lambda (y) `(disallow (x ,x) (y ,y))) (iota 30))) (iota 20)))</scheme>
+  </toolset>
 </game>

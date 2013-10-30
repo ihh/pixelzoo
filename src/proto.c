@@ -225,6 +225,7 @@ xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode
 
     /* replace replaceNode with evalNode */
     if (replaceNode) {
+      Assert (strcmp((const char*)evalNode->name,(const char*)replaceNode->name) == 0, "Expanded Scheme node <%s> does not match replacement node <%s>",(const char*)evalNode->name,(const char*)replaceNode->name);
       if (replaceParent) {
 	if (replaceParent->children == replaceNode)
 	  replaceParent->children = evalNode;

@@ -1,6 +1,4 @@
-Add an optional <overwrite> block in the game header, whose <disallow> states are added to the tool-specific <disallow> states, enabling easy specification of off-limits areas for challengers
-
-Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
+Add a guest spraytool & owner-specific toolset/overwrite block, allowing actual (albeit trivial) multiplayer logic
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 

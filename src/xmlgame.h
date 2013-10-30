@@ -15,6 +15,7 @@
 #define XMLZOO_PATTERN    "pattern"
 #define XMLZOO_PIXEL      "pixel"
 #define XMLZOO_OVERWRITE  "overwrite"
+#define XMLZOO_TOOLSET    "toolset"
 #define XMLZOO_DISALLOW   "disallow"
 #define XMLZOO_SPRAY      "spray"
 #define XMLZOO_RESERVE    "reserve"
@@ -30,6 +31,6 @@ Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separate
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameRoot, xmlNode *separateBoardRoot);
 Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* separateBoardString);
 
-Tool* newToolFromXmlNode (xmlNode *node, ProtoTable *protoTable);
+Tool* newToolFromXmlNode (xmlNode *node, xmlNode *globalOverwriteNode, ProtoTable *protoTable);
 
 #endif /* XMLGAME_INCLUDED */

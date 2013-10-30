@@ -3,10 +3,13 @@ This DTD defines the PixelZoo XML game format.
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool*,protect*)>
+<!ELEMENT game (board,rate,tool*,toolset?,protect*)>
 
 <!-- Rate -->
 <!ELEMENT rate (#PCDATA)>
+
+<!-- Globally disallow tool use over a particular set of Board cells. -->
+<!ELEMENT toolset (scheme|(disallow*))>
 
 <!-- Write-protect a particular Board cell. -->
 <!ELEMENT protect (x,y)>

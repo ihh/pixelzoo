@@ -43,7 +43,7 @@ Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char*
 
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateBoardRoot) {
   Game *game;
-  xmlNode *node;
+  xmlNode *node, *globalOverwriteNode, *schemeNode;
   Tool *tool, *selectedTool;
 
   game = newGame();
@@ -51,10 +51,14 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
 
   game->ticksPerSecond = OPTCHILDFLOAT (gameNode, RATE, DefaultTicksPerSecond);
 
+  globalOverwriteNode = CHILD(gameNode,TOOLSET);
+  if (globalOverwriteNode && (schemeNode = CHILD(globalOverwriteNode,SCHEME)))
+    globalOverwriteNode = protoTableExpandSchemeNode (game->board->protoTable, schemeNode, globalOverwriteNode, gameNode);
+
   selectedTool = NULL;
   for (node = gameNode->children; node; node = node->next)
   if (MATCHES(node,TOOL)) {
-    selectedTool = tool = newToolFromXmlNode (node, game->board->protoTable);
+    selectedTool = tool = newToolFromXmlNode (node, globalOverwriteNode, game->board->protoTable);
     addToolToGame (game, tool);
   }
 
@@ -65,7 +69,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   return game;
 }
 
-Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
+Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, ProtoTable *protoTable) {
   Tool *tool;
   xmlNode *brushNode, *intensityNode, *patternNode, *overwriteNode, *node, *schemeNode;
   int x, y, size;
@@ -81,7 +85,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
     evalNode = xmlTreeFromString (evalResult);
 
-    tool = newToolFromXmlNode (evalNode, protoTable);
+    tool = newToolFromXmlNode (evalNode, globalOverwriteNode, protoTable);
 
     deleteXmlTree (evalNode);
     StringDelete ((void*) evalResult);
@@ -112,13 +116,18 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
     }
     if (tool->brushState == NULL)
       tool->defaultBrushState = getStateFromNode(toolNode,protoTable,0);
-    if ((overwriteNode = CHILD(toolNode,OVERWRITE))) {
-      if (CHILD(overwriteNode,DISALLOW)) {
-	tool->overwriteDisallowLoc = newXYSet();
-	for (node = overwriteNode->children; node; node = node->next)
-	  if (MATCHES(node,DISALLOW))
-	    (void) XYSetInsert (tool->overwriteDisallowLoc, CHILDINT(node,X), CHILDINT(node,Y));
-      }
+    overwriteNode = CHILD(toolNode,OVERWRITE);
+    if ((overwriteNode && CHILD(overwriteNode,DISALLOW))
+	 || (globalOverwriteNode && CHILD(globalOverwriteNode,DISALLOW)))
+      tool->overwriteDisallowLoc = newXYSet();
+    if (globalOverwriteNode)
+      for (node = globalOverwriteNode->children; node; node = node->next)
+	if (MATCHES(node,DISALLOW))
+	  (void) XYSetInsert (tool->overwriteDisallowLoc, CHILDINT(node,X), CHILDINT(node,Y));
+    if (overwriteNode) {
+      for (node = overwriteNode->children; node; node = node->next)
+	if (MATCHES(node,DISALLOW))
+	  (void) XYSetInsert (tool->overwriteDisallowLoc, CHILDINT(node,X), CHILDINT(node,Y));
       if (testNodeHasState(overwriteNode)) {
 	tool->overwriteStates = newStateSet();
 	for (node = nextNodeWithState(overwriteNode->children); node; node = nextNodeWithState(node->next))
