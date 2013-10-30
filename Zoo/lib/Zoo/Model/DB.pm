@@ -111,17 +111,25 @@ sub tools_by_id {
 
 =head2 descendant_particles
 
-Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a list of L<Twiggy> objects.
+Get the list of L<Zoo::Schema::Result::Particle> objects that are named by, or downstream of all the particles named by, a given set of Particle, Tool, and Twiggy XML objects.
 
-The dependency table is used to find downstream particle dependencies.
+The dependency and tool_dependency tables are used to find downstream particles.
 
 =cut
 
 sub descendant_particles {
-    my ($self, @twig) = @_;
+    my ($self, $particle_list, $tool_list, $twig_list) = @_;
     my $emptyType = Grammar::defaultEmptyType();
     my %particle_name_hash = ($emptyType => 1);
-    for my $twig (@twig) {
+    for my $particle (@$particle_list) {
+	$particle_name_hash{ref($particle) ? $particle->name : $particle} = 1;
+    }
+    for my $tool (@$tool_list) {
+	for my $particle ($tool->particles) {
+	    $particle_name_hash{$particle->name} = 1;
+	}
+    }
+    for my $twig (@$twig_list) {
 	my @names = $twig->particle_names;
 	%particle_name_hash = (%particle_name_hash, map (($_ => 1), @names));
     }

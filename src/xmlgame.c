@@ -82,10 +82,6 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, Proto
 
   if ( (schemeNode = CHILD (toolNode, SCHEME)) ) {  /* assignment intentional */
 
-    Abort ("<%s> blocks aren't yet allowed inside <%s> blocks because the server doesn't know how to expand them, which it would need to do in order to figure out dependent Particle's", XMLPREFIX(SCHEME), XMLPREFIX(TOOL));
-
-    /* here is what the <scheme> block *should* do */
-
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
     evalNode = xmlTreeFromString (evalResult);
 

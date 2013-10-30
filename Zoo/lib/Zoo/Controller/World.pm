@@ -156,7 +156,6 @@ sub assemble {
     $c->stash->{tools} = \@tools;
 
     my @tool_twig = map ($_->twig, @tools);
-#    warn map($_->sprint,@tool_twig);
 
     # What we should do here is loop over the following call to descendant_particles,
     # popping tools until the number of particles is less than a configurable limit (<64k)
@@ -175,14 +174,16 @@ sub assemble {
     my $contestVar = $world->meta_rel->contest_var;
 
     # set contest info
-    $gram->addBoardXml ("contest" => [ "type" => $contestType,
-				       "var" => $contestVar,
-				       "incumbent" => $world->owner_id,
-				       "challenger" => $user->id ]);
+    $gram->addBoardStashXml ("contest" => [ "type" => $contestType,
+					    "var" => $contestVar,
+					    "incumbent" => $world->owner_id,
+					    "challenger" => $user->id ]);
 
     # particles
-    my @particles = $c->model('DB')->descendant_particles ($board, $gram->getBoardXml, @tool_twig);
-#    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
+    my @particles = $c->model('DB')->descendant_particles ([$contestType],
+							   \@tools,
+							   [$board, @tool_twig]);
+    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
     $c->stash->{particles} = \@particles;
 
     # particles
@@ -206,7 +207,7 @@ sub assemble {
     push @{$gram->xml->game_stash}, @{$game_nest[1]};  # stash all game meta-info
 
     # tools
-    for my $tool (@{$c->stash->{tools}}) {
+    for my $tool (@tools) {
 	$gram->addTool ($tool->nest);
     }
 

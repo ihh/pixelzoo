@@ -40,10 +40,16 @@ CREATE TABLE toolbox_tool (
 	PRIMARY KEY (toolbox_id, tool_id)
 	);
 
-CREATE TABLE dependency (  -- Particle dependencies
+CREATE TABLE dependency (  -- Particle-Particle dependencies
 	ancestor_id varchar(255) REFERENCES particle(name) ON DELETE CASCADE ON UPDATE CASCADE,  -- the type that owns the original event
 	descendant_id varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the type that may be created any number of events downstream
 	PRIMARY KEY (ancestor_id, descendant_id)
+	);
+
+CREATE TABLE tool_dependency (  -- Tool-Particle dependencies
+	tool_id INTEGER REFERENCES tool(id) ON DELETE CASCADE ON UPDATE CASCADE,  -- the tool
+	particle_id varchar(255) REFERENCES particle(name) ON DELETE RESTRICT ON UPDATE RESTRICT,  -- the particle being created by the tool
+	PRIMARY KEY (tool_id, particle_id)
 	);
 
 CREATE TABLE user (

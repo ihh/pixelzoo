@@ -46,7 +46,6 @@
     
 	// Do any additional setup after loading the view.
     [worldDescriptor setWorldLabel:worldLabel];
-    ownerLabel.text = [NSString stringWithFormat:@"Ruler: %@",[worldDescriptor owner]];
 
     [[startTurnButton layer] setBorderWidth:1.0];
     [[startTurnButton layer] setCornerRadius:3.0];
@@ -86,9 +85,9 @@
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
-    [lockUpdateTimer invalidate];
-    lockUpdateTimer = nil;
     if ([self isMovingFromParentViewController]) {
+        [lockUpdateTimer invalidate];
+        lockUpdateTimer = nil;
         [worldDescriptor setStatusNode:nil];
         [worldStatusConnection cancel];
         worldStatusConnection = nil;
@@ -124,6 +123,7 @@
         } else {
             nextLock.text = @"";
         }
+        ownerLabel.text = [NSString stringWithFormat:@"Ruler: %@",[worldDescriptor owner]];
         [self.view setNeedsDisplay];
     }
 }

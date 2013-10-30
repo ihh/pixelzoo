@@ -31,4 +31,20 @@ typedef StateMapNode StateSetNode;
 #define StateSetErase(STATESETPTR,STATE) StateMapErase((StateMap*)STATESETPTR,STATE)
 #define StateSetFind(STATESETPTR,STATE) ((StateSetNode*) StateMapFind((StateMap*)STATESETPTR,STATE))
 
+/* Message new/delete/compare/print functions */
+Message* newMessage(Message m);
+void* copyMessage(void* mPtr);
+void deleteMessage(void* mPtr);
+int compareMessage(void* aPtr,void* bPtr);
+void printMessage(void* mPtr);
+
+/* MessageRuleMap, a map from Message's to ParticleRule*'s */
+typedef RBTree MessageRuleMap;
+typedef RBNode MessageRuleMapNode;
+#define newMessageRuleMap() ((MessageRuleMap*) newRBTree(compareMessage, copyMessage, AbortCopyFunction, deleteMessage, deleteParticleRule, printMessage, NullPrintFunction))
+#define deleteMessageRuleMap(MRMAPPTR) deleteRBTree((RBTree*)MRMAPPTR)
+#define MessageRuleMapInsert(MRMAPPTR,MSG,RULEPTR) ((MessageRuleMapNode*) RBTreeInsert((RBTree*)MRMAPPTR,(void*)newMessage(MSG),(void*)RULEPTR))
+#define MessageRuleMapFind(MRMAPPTR,MSG) ((MessageRuleMapNode*) RBTreeFind((RBTree*)MRMAPPTR,(void*)&MSG))
+
+
 #endif /* STATE_MAP_INCLUDED */

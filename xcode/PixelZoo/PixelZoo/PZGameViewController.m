@@ -111,7 +111,9 @@
     } else
         lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
 
-    countLabel.text = [NSString stringWithFormat:@"%d/%d",[gameWrapper incumbentCount],[gameWrapper challengerCount]];
+    countLabel.text = [worldDescriptor userIsOwner]
+    ? [NSString stringWithFormat:@"%d",[gameWrapper incumbentCount]]
+    : [NSString stringWithFormat:@"%d/%d",[gameWrapper incumbentCount],[gameWrapper challengerCount]];
     
     [self.worldView setNeedsDisplay];
 }

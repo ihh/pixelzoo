@@ -196,6 +196,21 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tool_dependencies
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::ToolDependency>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tool_dependencies",
+  "Zoo::Schema::Result::ToolDependency",
+  { "foreign.particle_id" => "self.name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 world_metas
 
 Type: has_many
@@ -231,9 +246,19 @@ Composing rels: L</dependency_descendants> -> descendant
 
 __PACKAGE__->many_to_many("descendants", "dependency_descendants", "descendant");
 
+=head2 tools
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 11:19:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DwmOaKZN1QdVCUtEEnsk9A
+Type: many_to_many
+
+Composing rels: L</tool_dependencies> -> tool
+
+=cut
+
+__PACKAGE__->many_to_many("tools", "tool_dependencies", "tool");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 15:06:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NYfWtuFXv6bMK8WDm7YosA
 
 
 =head2 descendants

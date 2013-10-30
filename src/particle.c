@@ -43,8 +43,8 @@ void deleteParticle (Particle* p) {
 
 void addParticleMessageHandler (Particle *p, Message message, ParticleRule *handler) {
   if (p->dispatch == NULL)
-    p->dispatch = newRBTree (IntCompare, IntCopy, AbortCopyFunction, IntDelete, deleteParticleRule, NullPrintFunction, NullPrintFunction);
-  RBTreeInsert (p->dispatch, &message, handler);
+    p->dispatch = newMessageRuleMap();
+  MessageRuleMapInsert (p->dispatch, message, handler);
 }
 
 void addParticleSubRule (Particle *particle, const char* name, ParticleRule *rule, void *game) {

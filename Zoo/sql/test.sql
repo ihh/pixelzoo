@@ -63,3 +63,6 @@ insert into particle values ('perfume', 1, NULL, 1, '<particle><name>perfume</na
 insert into dependency values ('perfume', 'empty');
 
 insert into particle values ('guest', 1, NULL, 1, '<particle><name>guest</name><vars><val var="id">24</val></vars><rate>0</rate><rule><nop/></rule></particle>');
+insert into tool values (9, 'guest placer', 1, '<tool><scheme>(quasiquote (tool (name "guest placer") (size 2) (gvars (type "guest") (val (@ (var "id")) ,challenger-id)) (overwrite (gstate "empty")) (spray 1000) (reserve 1000) (recharge 100)))</scheme></tool>');
+insert into toolbox_tool values (1, 9, 0);
+insert into tool_dependency values (9, 'guest');

@@ -1,5 +1,3 @@
-Add a guest spraytool & owner-specific toolset/overwrite block, allowing actual (albeit trivial) multiplayer logic
-
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme

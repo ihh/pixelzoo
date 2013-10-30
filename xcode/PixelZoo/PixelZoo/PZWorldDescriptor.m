@@ -39,7 +39,7 @@
 }
 
 - (NSString*)owner {
-    NSArray *owners = [worldNode nodesForXPath:@"owner/name" error:nil];
+    NSArray *owners = [statusNode nodesForXPath:@"owner/name" error:nil];
     GDataXMLElement *ownerElement = [owners objectAtIndex:0];
     return [ownerElement stringValue];
 }

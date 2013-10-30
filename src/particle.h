@@ -36,7 +36,7 @@ typedef struct Particle {
   State readOnly[ReadOnlyStates];
 
   /* Message dispatch table */
-  RBTree *dispatch;  /* map from Message to (Rule*) */
+  MessageRuleMap *dispatch;  /* map from Message to (Rule*) */
 
   /* Local subroutines */
   StringMap* subRule;  /* local subroutine ParticleRule's */

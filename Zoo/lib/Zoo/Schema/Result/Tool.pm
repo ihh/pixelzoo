@@ -123,6 +123,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tool_dependencies
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::ToolDependency>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tool_dependencies",
+  "Zoo::Schema::Result::ToolDependency",
+  { "foreign.tool_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 toolbox_tools
 
 Type: has_many
@@ -138,9 +153,19 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 particles
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-29 21:52:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sJFj42TTeOYBZ+QvrInXWw
+Type: many_to_many
+
+Composing rels: L</tool_dependencies> -> particle
+
+=cut
+
+__PACKAGE__->many_to_many("particles", "tool_dependencies", "particle");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 15:06:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GIB5UvLZtCQX+r48HMCzCw
 
 =head1 METHODS
 

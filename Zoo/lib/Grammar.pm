@@ -130,17 +130,16 @@ sub addType {
 }
 
 # helper to add generic stuff that goes in <board>
-sub addBoardXml {
+sub addBoardStashXml {
     my ($self, @xml) = @_;
     push @{$self->xml->board_stash}, @xml;
 }
 
-sub getBoardXml {
+sub getBoardStashXml {
     my ($self) = @_;
     my $elt = new_XML_element(@{$self->xml->board_stash});
     my $twig = Twiggy->new(pretty_print => 'indented');
     $twig->set_root($elt);
-    warn $twig->sprint;
     return $twig;
 }
 
@@ -151,7 +150,7 @@ sub addTool {
 }
 
 sub toolArgs {
-    return qw(name size brush state hexstate pstate ostate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
+    return qw(scheme name size brush state hexstate pstate ostate gstate gtype gvars overwrite spray reserve recharge maxreserve hide);
 }
 
 sub balloonArgs {

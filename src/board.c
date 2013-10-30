@@ -342,7 +342,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   RandomRuleParams *random;
   LoadRuleParams *load;
   StateMapNode *lookupNode;
-  RBNode *dispatchNode;
+  MessageRuleMapNode *dispatchNode;
   ParticleRule *ruleTrace[MaxRuleDepth];
   State reg[NumberOfRegisters + 1], regVal;
 
@@ -472,7 +472,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	currentSrcState = (*read) (board, x, y, z);
 	type = StateType (currentSrcState);
 	ruleOwner = board->byType[type];
-	dispatchNode = ruleOwner ? RBTreeFind (ruleOwner->dispatch, &deliver->message) : (RBNode*) NULL;
+	dispatchNode = ruleOwner ? MessageRuleMapFind (ruleOwner->dispatch, deliver->message) : (MessageRuleMapNode*) NULL;
 	rule = (ruleOwner && dispatchNode) ? ((ParticleRule*) dispatchNode->value) : ((ParticleRule*) NULL);
       } else {
 	ruleOwner = NULL;
@@ -720,10 +720,9 @@ const char* boardTypeVarsDebugString (Board *board, State state) {
 
 int boardWinner (Board *board) {
   RBTree *rb;
-  int x, y, z, zero, var, bestVar, bestCount, incumbentExtinct;
+  int x, y, z, var, bestVar, bestCount, incumbentExtinct;
   State s;
   RBNode *node;
-  zero = 0;
   bestVar = -1;
   bestCount = -1;
   rb = newRBTree (IntCompare, IntCopy, IntCopy, IntDelete, IntDelete, NullPrintFunction, NullPrintFunction);
@@ -735,7 +734,7 @@ int boardWinner (Board *board) {
 	  var = (int) StateVar(s,board->winVarOffset,board->winVarWidth);
 	  node = RBTreeFind (rb, &var);
 	  if (node == NULL)
-	    node = RBTreeInsert (rb, &var, &zero);
+	    node = RBTreeInsert (rb, IntNew(var), IntNew(0));
 	  if (++*(int*)node->value > bestCount) {
 	    bestCount = *(int*)node->value;
 	    bestVar = var;

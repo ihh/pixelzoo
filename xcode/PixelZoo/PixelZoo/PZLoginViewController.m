@@ -35,9 +35,9 @@
 	// Do any additional setup after loading the view.
     [[loginButton layer] setBorderWidth:1.0];
     [[loginButton layer] setCornerRadius:3.0];
-    [loginButton sizeToFit];
     
     [loginButton setTitle:(accountExists ? @"Log in" : @"Create account") forState:UIControlStateNormal];
+    [loginButton sizeToFit];
 }
 
 - (void)didReceiveMemoryWarning
@@ -69,18 +69,26 @@
             [alert show];
         }
     } else {
-        // create account
-        NSInteger statusCode = [appDelegate createUser:username.text withPass:password.text];
-        if (statusCode == 201)
-            [self backToMenu];
+        if ([[username text] isEqualToString:@""] || [[password text] isEqualToString:@""])
+            [[[UIAlertView alloc] initWithTitle:@"Type something dammit"
+                                        message:@"You must enter a username and password."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil] show];
         else {
-            bool userExists = statusCode == 409;  // 409 CONFLICT
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't create account"
+            // create account
+            NSInteger statusCode = [appDelegate createUser:username.text withPass:password.text];
+            if (statusCode == 201)
+                [self backToMenu];
+            else {
+                bool userExists = statusCode == 409;  // 409 CONFLICT
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't create account"
                                                             message:(userExists ? @"Sorry, that username is taken." : @"Oops, that didn't work.")
                                                            delegate:nil
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
-            [alert show];
+                [alert show];
+            }
         }
     }
 }

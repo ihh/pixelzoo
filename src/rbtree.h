@@ -46,7 +46,7 @@ void deleteRBTree(RBTree*);
 size_t RBTreeSize(RBTree* tree);
 RBTree* RBTreeDeepCopy(RBTree* tree);  /* uses CopyFunction's to copy keys & values */
 RBTree* RBTreeShallowCopy(RBTree* tree);  /* does not use CopyFunction's. Do not delete original tree before shallow-copying! */
-RBNode* RBTreeInsert(RBTree*, void* key, void* value);
+RBNode* RBTreeInsert(RBTree*, void* key, void* value);  /* by default this does NOT copy either key or value */
 void RBTreeEraseUnguarded(RBTree* , RBNode* );
 void RBTreeErase(RBTree* , void* key);
 RBNode* RBTreeFind(RBTree*, void* key);

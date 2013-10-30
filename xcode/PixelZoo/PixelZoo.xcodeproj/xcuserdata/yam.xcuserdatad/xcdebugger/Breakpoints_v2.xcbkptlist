@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../src/xmlgame.c"
-            timestampString = "404852908.179222"
+            filePath = "../../src/util.c"
+            timestampString = "404862096.47074"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "newGameFromXmlStringWithSeparateBoard()"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "Abort()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
