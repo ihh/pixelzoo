@@ -164,20 +164,26 @@ sub assemble {
     # What to do if the board itself contains >64K downstream particles?
     # ideal/generic: sort particles by some function f(D,B) where D = upstream dependencies and B = number on board; drop lowest-ranked.
 
-    # particles
-#    print "particles: ", map (join (" ", map ($_->text, $_->descendants("gstate"))) . "\n", @tool_twig);
-#    print "particles: ", map (join (" ", $_->particle_names) . "\n", @tool_twig);
-    my @particles = $c->model('DB')->descendant_particles ($board, @tool_twig);
-#    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
-    $c->stash->{particles} = \@particles;
-
-    # grammar
+    # create grammar
     my $gram = Grammar->newMinimalGrammar;   # using newMinimalGrammar avoids creating a default 'empty' particle type
 #    $gram->verbose(1);
 
-    # set player & owner IDs
-    $gram->addGrammarXML ("schemedef" => ("(define owner-id " . $c->stash->{world}->owner_id . ")"));
-    $gram->addGrammarXML ("schemedef" => ("(define player-id " . $c->user->id . ")"));
+    # get contest info
+    my $world = $c->stash->{world};
+    my $user = $c->user;
+    my $contestType = $world->meta_rel->contest_type->name;
+    my $contestVar = $world->meta_rel->contest_var;
+
+    # set contest info
+    $gram->addBoardXml ("contest" => [ "type" => $contestType,
+				       "var" => $contestVar,
+				       "incumbent" => $world->owner_id,
+				       "challenger" => $user->id ]);
+
+    # particles
+    my @particles = $c->model('DB')->descendant_particles ($board, $gram->getBoardXml, @tool_twig);
+#    $c->log->debug ("Particle names: " . join (", ", map ($_->name, @particles)));
+    $c->stash->{particles} = \@particles;
 
     # particles
     for my $particle (@{$c->stash->{particles}}) {
@@ -457,9 +463,9 @@ sub turn_end_POST {
 	    $world->board_xml ($board_twig->sprint);
 	    $world->board_time ($board_twig->first_child("t")->text);
 
-	    if ($turn_twig->root->first_child("endturn")->first_child("goal")->has_child("true")) {
-		# Ultimately we should validate here
-		$world->owner_id ($user_id);
+	    if ($board_twig->has_child("winner")) {
+		# Ultimately we should validate ownership here
+		$world->owner_id ($board_twig->first_child("winner")->text);
 	    }
 
 	    my $current_time = time();

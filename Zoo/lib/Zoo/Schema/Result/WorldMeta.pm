@@ -71,6 +71,19 @@ __PACKAGE__->table("world_meta");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 contest_type
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 255
+
+=head2 contest_var
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =head2 owner_game_xml
 
   data_type: 'text'
@@ -101,6 +114,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "lock_delete_delay",
   { data_type => "integer", is_nullable => 1 },
+  "contest_type",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 255 },
+  "contest_var",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "owner_game_xml",
   { data_type => "text", is_nullable => 1 },
   "guest_game_xml",
@@ -122,6 +139,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
+
+=head2 contest_type
+
+Type: belongs_to
+
+Related object: L<Zoo::Schema::Result::Particle>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "contest_type",
+  "Zoo::Schema::Result::Particle",
+  { name => "contest_type" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
 
 =head2 guest_toolbox
 
@@ -179,8 +216,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 15:04:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fBKgWIzLiX/3eIH0kS6vcw
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 11:19:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oTKnp9bzinIB3Zqrxugktw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -40,13 +40,13 @@ void pzStartGame(pzGame pzg) {
 void pzQuitGame(pzGame pzg) {
   Game* game;
   game = (Game*) pzg;
-  quitGame(game);
+  gameQuit(game);
 }
 
 int pzGameRunning(pzGame pzg) {
   Game* game;
   game = (Game*) pzg;
-  return gameRunning(game);
+  return game != NULL;
 }
 
 void pzUpdateGame(pzGame pzg,int callsPerSecond,long long boardClockTimeLimit) {
@@ -344,7 +344,8 @@ const char* pzSaveBoardAsXmlString(pzGame pzg) {
   return str;
 }
 
-const char* pzSaveBoardAndEndGoalStatusAsXmlString(pzGame pzg) {
+
+const char* pzSaveBoardAndMoveAsXmlString(pzGame pzg) {
   xmlTextWriterPtr writer;
   const char* str;
   Game* game;
@@ -353,11 +354,15 @@ const char* pzSaveBoardAndEndGoalStatusAsXmlString(pzGame pzg) {
   boardReleaseRandomNumbers (game->board);
   writer = newXmlTextWriter();
   if (writer) {
-    writeBoardAndEndGoalStatusXml (game, writer, 1);
+    xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);
+    writeMoveList (game->board->moveLog, writer, (xmlChar*) XMLZOO_LOG);
+    writeBoardXml (game->board, writer, 1);
+    xmlTextWriterEndElement (writer);  /* end game element */
     str = (const char*) deleteXmlTextWriterLeavingText (writer);
   }
   return str;
 }
+
 
 int pzGetPaletteSize(pzGame pzg) { return PaletteSize; }
 

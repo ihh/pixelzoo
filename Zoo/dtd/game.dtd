@@ -87,7 +87,7 @@ a grammar of update rules ("grammar"),
 an optional move queue ("queue") and random number seed ("seed").
 
 Cells are empty (zero) by default, unless specifically initialized ("init"). -->
-<!ELEMENT board (size,depth?,t?,grammar,init*,queue?,seed?)>
+<!ELEMENT board (size,depth?,t?,grammar,contest?,init*,queue?,seed?)>
 
 <!ELEMENT size (#PCDATA)>
 <!ELEMENT depth (#PCDATA)>
@@ -95,6 +95,11 @@ Cells are empty (zero) by default, unless specifically initialized ("init"). -->
 <!-- A grammar consists of a set of optional subroutines ("subrule")
  and a set of particle definitions ("particle"). -->
 <!ELEMENT grammar (schemedef*,subrule*,particle+)>
+
+<!-- Info about the win condition -->
+<!ELEMENT contest (type,var,incumbent?,challenger?)>
+<!ELEMENT incumbent (#PCDATA)>
+<!ELEMENT challenger (#PCDATA)>
 
 <!-- Initialize a particular cell on the Board. -->
 <!ELEMENT init (x,y,(state|hexstate|type|hextype|gstate|gvars))>

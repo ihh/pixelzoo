@@ -32,5 +32,6 @@
 
 -(void)initStatusConnection;
 -(void)updateLockLabels;
+-(void)refreshStatus;
 
 @end

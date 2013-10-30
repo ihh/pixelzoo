@@ -60,6 +60,10 @@ void gameStart (Game *game) {
   /* called once at start of game */
 }
 
+void gameQuit (Game *game) {
+  /* called once at end of game */
+}
+
 void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime) {
   double maxUpdateTimeInSeconds;
   int64_Microticks targetMicroticks;
@@ -77,8 +81,7 @@ void innerGameLoop (Game *game, int64_Microticks targetMicroticks, double maxUpd
   evolveBoard (game->board, targetMicroticks, maxUpdateTimeInSeconds, &actualMicroticks, actualUpdates, evolveTime);
   actualTicks = IntMillionthsToFloat (actualMicroticks);
 
-  if (game->gameState == GameOn || game->gameState == GameWon)   /* tools working? */
-    useTools (game, actualTicks);
+  useTools (game, actualTicks);
   updateBalloons (game->board, actualTicks / game->ticksPerSecond);
 
   if (actualMicroticks_ret)

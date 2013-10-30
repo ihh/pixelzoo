@@ -38,6 +38,10 @@ typedef struct Board {
   RandomNumberGenerator *rng;  /* the Board's random number generator. Drives all random simulation events */
   char rngReleased;  /* if true, then the Board has no cached random samples from the random number generator: the RNG's state can be saved or restored. Call boardReleaseRandomNumbers() to set this flag */
   MoveList *moveLog, *moveQueue; /* log of past user moves, and queue of simulated upcoming user moves */
+  /* Contest logic */
+  Type winType;
+  unsigned char winVarOffset, winVarWidth;
+  signed long long int incumbentWinVar, challengerWinVar;
 } Board;
 
 /* public methods */
@@ -139,5 +143,8 @@ void freezeBoard (Board* board);
 void syncBoard (Board* board);
 
 const char* boardTypeVarsDebugString (Board *board, State state);
+
+/* win condition */
+int boardWinner (Board *board);
 
 #endif /* BOARD_INCLUDED */

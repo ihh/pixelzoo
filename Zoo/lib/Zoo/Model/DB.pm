@@ -123,16 +123,12 @@ sub descendant_particles {
     my %particle_name_hash = ($emptyType => 1);
     for my $twig (@twig) {
 	my @names = $twig->particle_names;
-#	warn "@names";
 	%particle_name_hash = (%particle_name_hash, map (($_ => 1), @names));
     }
     my @particle_names = keys %particle_name_hash;
-#    warn "looking for particles (@particle_names)";
     my @particles = $self->particles_by_name (@particle_names);
-#    warn "particles (@particles)";
     warn "Some named particles not found" if @particles < @particle_names;
     my @descendants = map ($_->descendants, @particles);
-#    warn "descendants (@descendants)";
     my %descendant_hash = map (($_->name => $_), @particles, @descendants);
     # the sort ensures that 'empty' is particle #0; alphabetic sort of remaining particles is just for reproducibility
     my @particles = sort

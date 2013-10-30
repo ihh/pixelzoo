@@ -129,10 +129,19 @@ sub addType {
     push @{$self->xml->type}, 'particle' => \@type_proto_xml;
 }
 
-# helper to add generic stuff that goes in <grammar>
-sub addGrammarXML {
+# helper to add generic stuff that goes in <board>
+sub addBoardXml {
     my ($self, @xml) = @_;
-    push @{$self->xml->type}, @xml;
+    push @{$self->xml->board_stash}, @xml;
+}
+
+sub getBoardXml {
+    my ($self) = @_;
+    my $elt = new_XML_element(@{$self->xml->board_stash});
+    my $twig = Twiggy->new(pretty_print => 'indented');
+    $twig->set_root($elt);
+    warn $twig->sprint;
+    return $twig;
 }
 
 # new tool helper

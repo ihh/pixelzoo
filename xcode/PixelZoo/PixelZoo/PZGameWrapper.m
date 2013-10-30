@@ -49,7 +49,7 @@
     
     // POST a turn to SERVER_URL_PREFIX/world/WorldID/turn
     // Create turn XML
-    const char* turnCString = pzSaveBoardAndEndGoalStatusAsXmlString(game);
+    const char* turnCString = pzSaveBoardAndMoveAsXmlString(game);
     NSString *turnString = [[NSString alloc] initWithUTF8String:turnCString];
     free ((char*) turnCString);
 

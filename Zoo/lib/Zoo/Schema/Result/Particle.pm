@@ -196,6 +196,21 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 world_metas
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::WorldMeta>
+
+=cut
+
+__PACKAGE__->has_many(
+  "world_metas",
+  "Zoo::Schema::Result::WorldMeta",
+  { "foreign.contest_type" => "self.name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 ancestors
 
 Type: many_to_many
@@ -217,8 +232,8 @@ Composing rels: L</dependency_descendants> -> descendant
 __PACKAGE__->many_to_many("descendants", "dependency_descendants", "descendant");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-29 21:52:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ClYptqmFZmlfNEVwOYhLaw
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 11:19:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DwmOaKZN1QdVCUtEEnsk9A
 
 
 =head2 descendants

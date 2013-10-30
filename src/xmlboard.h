@@ -91,6 +91,12 @@
 #define XMLZOO_DISPATCH    "dispatch"
 #define XMLZOO_LOAD        "load"
 #define XMLZOO_REGISTER    "register"
+
+#define XMLZOO_CONTEST     "contest"
+#define XMLZOO_INCUMBENT   "incumbent"
+#define XMLZOO_CHALLENGER  "challenger"
+#define XMLZOO_WINNER      "winner"
+
 #define XMLZOO_GOAL        "goal"
 
 /* methods */

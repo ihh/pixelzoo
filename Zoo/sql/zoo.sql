@@ -82,6 +82,8 @@ CREATE TABLE world_meta (
 	guest_toolbox_id INTEGER REFERENCES toolbox(id) ON DELETE SET NULL ON UPDATE SET NULL,
 	lock_expiry_delay INTEGER,  -- number of seconds that locking grants control of the board
 	lock_delete_delay INTEGER,  -- minimum number of seconds between locks
+	contest_type varchar(255) REFERENCES particle(name),
+	contest_var varchar(255),
 	owner_game_xml TEXT,  -- Game headers for owner's turn
 	guest_game_xml TEXT,  -- Game headers for guest's turn
 	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)

@@ -8,8 +8,12 @@
 /* Scheme procedures (built-in) */
 #define SET_PROC "set!"
 
-/* Scheme symbol for self */
-#define SELF_TYPE "self-type"
+/* Scheme symbols */
+#define SELF_TYPE     "self-type"
+#define CONTEST_TYPE  "contest-type"
+#define CONTEST_VAR   "contest-var"
+#define INCUMBENT_ID  "incumbent-id"
+#define CHALLENGER_ID "challenger-id"
 
 Proto* newProto (const char *name, Type type) {
   Proto *proto;
@@ -165,6 +169,35 @@ void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
 			     sexp_list2 (ctx,
 					 sexp_intern(ctx,SELF_TYPE,-1),
 					 sexp_c_string(ctx,selfType,-1))), NULL);
+}
+
+void protoTableSetContestInfo (ProtoTable *protoTable, const char* winType, const char* winVar, int incumbent, int challenger) {
+  sexp ctx;
+  ctx = protoTable->context;
+
+  sexp_eval (ctx, sexp_cons (ctx,
+			     sexp_intern(ctx,SET_PROC,-1),
+			     sexp_list2 (ctx,
+					 sexp_intern(ctx,CONTEST_TYPE,-1),
+					 sexp_c_string(ctx,winType,-1))), NULL);
+
+  sexp_eval (ctx, sexp_cons (ctx,
+			     sexp_intern(ctx,SET_PROC,-1),
+			     sexp_list2 (ctx,
+					 sexp_intern(ctx,CONTEST_VAR,-1),
+					 sexp_c_string(ctx,winVar,-1))), NULL);
+
+  sexp_eval (ctx, sexp_cons (ctx,
+			     sexp_intern(ctx,SET_PROC,-1),
+			     sexp_list2 (ctx,
+					 sexp_intern(ctx,INCUMBENT_ID,-1),
+					 sexp_make_integer(ctx,incumbent))), NULL);
+
+  sexp_eval (ctx, sexp_cons (ctx,
+			     sexp_intern(ctx,SET_PROC,-1),
+			     sexp_list2 (ctx,
+					 sexp_intern(ctx,CHALLENGER_ID,-1),
+					 sexp_make_integer(ctx,challenger))), NULL);
 }
 
 Message protoTableMessageLookup (ProtoTable *protoTable, const char* message) {

@@ -32,6 +32,4 @@ Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char*
 
 Tool* newToolFromXmlNode (xmlNode *node, ProtoTable *protoTable);
 
-void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile);  /* if reverseCompile=1, output uses type-vars notation; otherwise, hexadecimal */
-
 #endif /* XMLGAME_INCLUDED */

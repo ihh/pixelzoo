@@ -1,15 +1,8 @@
-Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies, which automatically associates the Particle with a Tool (using particle_tool table) and adds this tool to a hardwired "experimental toolbox"
-Add an experimental world + worldmeta hardwired to use the experimental toolbox
-Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
-
-Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
-
-Add new elements "<win><type>XXX</type><var>ID</var><incumbent>OwnerID</incumbent><challenger>PlayerID</challenger></win>", the implied logic being that the end-of-game ruler is OwnerID *unless* two conditions are satisfied at the end of the player's turn: (a) all type-XXX particles ("player particles") with ID=OwnerID have been eliminated, (b) there are more type-XXX particles with ID=PlayerID than type-XXX particles with any other ID.
-Automatically define 'player-id' and 'owner-id' from within xmlboard.c, rather than by inserting <schemedef>'s.
-Update pzSaveBoardAndEndGoalStatusAsXmlString and World::turn_end_POST.
-
 Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
 Add summary counts of player/owner particles to lock screen
+Add an optional <overwrite> block in the game header, whose <disallow> states are added to the tool-specific <disallow> states, enabling easy specification of off-limits areas for challengers
+
+Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 Refactor Catalyst to not use Level.pm/Grammar.pm
@@ -35,3 +28,8 @@ Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen
 
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's
+
+Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies, which automatically associates the Particle with a Tool (using particle_tool table) and adds this tool to a hardwired "experimental toolbox"
+Add an experimental world + worldmeta hardwired to use the experimental toolbox
+Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
+

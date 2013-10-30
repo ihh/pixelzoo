@@ -33,14 +33,6 @@ typedef struct Game {
   XYCoord toolPos, lastToolPos;
   int toolActive;
 
-  /* Game logic */
-  /* game state */
-  enum GameState { GameOn = 0,       /* board is evolving, player can use tools */
-		   GameWon = 1,      /* board is evolving, player can use tools (exit portal opened, level stolen, etc) */
-		   GameLost = 2,     /* board is evolving, player can't use tools (timeout, etc) */
-		   GameQuit = 3      /* board has stopped; no way out of this state (player hits quit) */
-  } gameState;
-
   /* dummy CellWatcher for write protects */
   CellWatcher *writeProtectWatcher;
 
@@ -57,11 +49,9 @@ typedef struct Game {
 Game* newGame();
 void deleteGame (Game *game);
 void gameStart (Game *game);
+void gameQuit (Game *game);
 void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
 void innerGameLoop (Game *game, int64_Microticks targetMicroticks, double maxUpdateTimeInSeconds, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime);
-
-#define gameRunning(GAME_PTR) ((GAME_PTR)->gameState == GameOn || (GAME_PTR)->gameState == GameWon || (GAME_PTR)->gameState == GameLost)
-#define quitGame(GAME_PTR) { (GAME_PTR)->gameState = GameQuit; }
 
 void printToGameConsole (Game *game, char *text, PaletteIndex color, double size);   /* copies text */
 

@@ -57,12 +57,23 @@
     UIBarButtonItem *button = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                target:self
-                               action:@selector(initStatusConnection)];
+                               action:@selector(refreshStatus)];
     self.navigationItem.rightBarButtonItem = button;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [self initStatusConnection];
+}
+
+- (void) refreshStatus {
+    [worldDescriptor setStatusNode:nil];
+    [worldStatusConnection cancel];
+    worldStatusConnection = nil;
+    [self initStatusConnection];
+    startTurnButton.enabled = NO;
+    selectToolsButton.enabled = NO;
+    startTurnButton.alpha = 0.5;
+    selectToolsButton.alpha = 0.5;
 }
 
 - (void) initStatusConnection {

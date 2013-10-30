@@ -45,6 +45,11 @@ Board* newBoard (int size, int depth) {
   board->rngReleased = 1;
   board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
   board->moveLog = board->moveQueue = NULL;
+  board->winType = MaxType;
+  board->winVarOffset = 0;
+  board->winVarWidth = BitsPerVars;
+  board->incumbentWinVar = -1;
+  board->challengerWinVar = -1;
 
   initializePalette (&board->palette);
 
@@ -711,4 +716,35 @@ const char* boardTypeVarsDebugString (Board *board, State state) {
   if (nvars)
     sprintf(str+strlen(str),")");
   return str;
+}
+
+int boardWinner (Board *board) {
+  RBTree *rb;
+  int x, y, z, zero, var, bestVar, bestCount, incumbentExtinct;
+  State s;
+  RBNode *node;
+  zero = 0;
+  bestVar = -1;
+  bestCount = -1;
+  rb = newRBTree (IntCompare, IntCopy, IntCopy, IntDelete, IntDelete, NullPrintFunction, NullPrintFunction);
+  for (x = 0; x < board->size; ++x)
+    for (y = 0; y < board->size; ++y)
+      for (z = 0; z < board->depth; ++z) {
+	s = readBoardState (board, x, y, z);
+	if (StateType(s) == board->winType) {
+	  var = (int) StateVar(s,board->winVarOffset,board->winVarWidth);
+	  node = RBTreeFind (rb, &var);
+	  if (node == NULL)
+	    node = RBTreeInsert (rb, &var, &zero);
+	  if (++*(int*)node->value > bestCount) {
+	    bestCount = *(int*)node->value;
+	    bestVar = var;
+	  }
+	}
+      }
+  incumbentExtinct = RBTreeFind(rb,&board->incumbentWinVar) == NULL;
+  deleteRBTree (rb);
+  return (incumbentExtinct && bestVar == board->challengerWinVar)
+    ? board->challengerWinVar
+    : board->incumbentWinVar;
 }

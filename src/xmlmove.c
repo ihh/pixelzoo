@@ -41,9 +41,11 @@ void writeMove (Move* move, xmlTextWriterPtr writer) {
 }
 
 void writeMoveList (MoveList* moveList, xmlTextWriterPtr writer, const xmlChar* name) {
-  xmlTextWriterStartElement (writer, name);
   MoveListNode *moveListNode;
-  for (moveListNode = moveList->head; moveListNode; moveListNode = moveListNode->next)
-    writeMove ((Move*) moveListNode->value, writer);
-  xmlTextWriterFullEndElement (writer);
+  if (moveList) {
+    xmlTextWriterStartElement (writer, name);
+    for (moveListNode = moveList->head; moveListNode; moveListNode = moveListNode->next)
+      writeMove ((Move*) moveListNode->value, writer);
+    xmlTextWriterFullEndElement (writer);
+  }
 }

@@ -39,7 +39,7 @@ typedef StringMap Dictionary;
 typedef StringMapNode DictionaryNode;
 #define newDictionary() ((Dictionary*) newStringMap (StringCopy, StringDelete, StringPrint))
 #define deleteDictionary(DICTPTR) deleteStringMap((StringMap*)DICTPTR)
-#define DictionaryInsert(DICTPTR,STRING1,STRING2) ((DictionaryNode*) StringMapInsert((StringMap*)DICTPTR,STRING1,StringCopy(STRING2)))
+#define DictionaryInsert(DICTPTR,STRING1,STRING2) ((DictionaryNode*) StringMapInsert((StringMap*)DICTPTR,STRING1,STRING2))
 #define DictionaryErase(DICTPTR,STRING) StringMapErase((StringMap*)DICTPTR,STRING)
 #define DictionaryFind(DICTPTR,STRING) ((DictionaryNode*) StringMapFind((StringMap*)DICTPTR,STRING))
 
@@ -48,7 +48,7 @@ typedef StringMap StringIntMap;
 typedef StringMapNode StringIntMapNode;
 #define newStringIntMap() ((StringIntMap*) newStringMap (IntCopy, IntDelete, IntPrint))
 #define deleteStringIntMap(SIMPTR) deleteStringMap((StringMap*)SIMPTR)
-#define StringIntMapInsert(SIMPTR,STRING,INT) ((StringIntMapNode*) StringMapInsert((StringMap*)SIMPTR,STRING,IntNew(INT)))
+#define StringIntMapInsert(SIMPTR,STRING,INT) ((StringIntMapNode*) StringMapInsert((StringMap*)SIMPTR,STRING,&(INT)))
 #define StringIntMapErase(SIMPTR,STRING) StringMapErase((StringMap*)SIMPTR,STRING)
 #define StringIntMapFind(SIMPTR,STRING) ((StringIntMapNode*) StringMapFind((StringMap*)SIMPTR,STRING))
 

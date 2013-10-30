@@ -134,10 +134,3 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, ProtoTable *protoTable) {
 
   return tool;
 }
-
-void writeBoardAndEndGoalStatusXml (Game* game, xmlTextWriterPtr writer, int reverseCompile) {
-  xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_GAME);  /* begin game element */
-  writeBoardXml (game->board, writer, reverseCompile);  /* board element */
-  /* TODO: write end-of-turn goal test here */
-  xmlTextWriterFullEndElement (writer);  /* end of game element */
-}

@@ -31,11 +31,12 @@ Board* newBoardFromXmlDocument (xmlDoc *doc) {
 
 Board* newBoardFromXmlRoot (xmlNode *root) {
   Board *board;
-  xmlNode *boardNode, *queueNode, *grammarNode, *schemeNode, *seedNode, *node;
+  xmlNode *boardNode, *queueNode, *grammarNode, *schemeNode, *seedNode, *contestNode, *node;
   int x, y, z;
   State state;
   ProtoTable *protoTable;
   Proto *proto;
+  VarsDescriptor *vd;
   const char *subRuleName;
 
   boardNode = CHILD(root,BOARD);
@@ -56,6 +57,11 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   /* create ProtoTable */
   protoTable = newProtoTable();
   board->protoTable = protoTable;
+
+  /* evaluate top-level Scheme expressions */
+  for (node = grammarNode->children; node; node = node->next)
+    if (MATCHES(node,SCHEMEDEF))
+      (void) protoTableEval (protoTable, (const char*) getNodeContent (node));
 
   /* expand any Particle-level Scheme blocks */
   for (node = grammarNode->children; node; node = node->next)
@@ -78,10 +84,17 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
 	parseVarsDescriptors (proto, node);
       }
 
-  /* evaluate top-level Scheme expressions */
-  for (node = grammarNode->children; node; node = node->next)
-    if (MATCHES(node,SCHEMEDEF))
-      (void) protoTableEval (protoTable, (const char*) getNodeContent (node));
+  /* get contest info */
+  if ( (contestNode = CHILD(boardNode,CONTEST)) ) {  /* assignment intentional */
+    proto = protoTableGetProto (protoTable, (const char*) CHILDSTRING(contestNode,TYPE));
+    vd = protoGetVarsDescriptor (proto, (const char*) CHILDSTRING(contestNode,VAR));
+    board->winType = proto->type;
+    board->winVarOffset = vd->offset;
+    board->winVarWidth = vd->width;
+    board->incumbentWinVar = OPTCHILDINT(contestNode,INCUMBENT,-1);
+    board->challengerWinVar = OPTCHILDINT(contestNode,CHALLENGER,board->incumbentWinVar);
+    protoTableSetContestInfo (protoTable, proto->name, vd->name, board->incumbentWinVar, board->challengerWinVar);
+  }
 
   /* create subrules */
   for (node = grammarNode->children; node; node = node->next)
@@ -472,14 +485,19 @@ void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board,
 }
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile) {
-  int x, y, z;
+  int x, y, z, winner;
   char *rngState;
 
   Assert (board->rngReleased, "writeBoard: random number generator not released. You need to call boardReleaseRandomNumbers");
 
   xmlTextWriterStartElement (writer, (xmlChar*) XMLZOO_BOARD);  /* begin board */
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SIZE, "%d", board->size);
+  xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_DEPTH, "%d", board->depth);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_TIME, "%lld", board->microticks);
+
+  winner = boardWinner(board);
+  if (winner >= 0)
+    xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_WINNER, "%d", winner);
 
   rngState = getRngStateString (board->rng);
   xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_SEED, "%s", rngState);

@@ -45,6 +45,8 @@ Proto *protoTableAddParticle (ProtoTable *protoTable, const char* particleName);
 Proto *protoTableGetProto (ProtoTable *protoTable, const char* particleName);
 
 sexp protoTableEval (ProtoTable *protoTable, const char* schemeExpression);  /* use for top-level <grammar> definitions */
+
+void protoTableSetContestInfo (ProtoTable *protoTable, const char* winType, const char* winVar, int incumbent, int challenger);
 void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType);
 
 Message protoTableMessageLookup (ProtoTable *protoTable, const char* message);
