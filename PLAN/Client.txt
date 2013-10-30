@@ -1,4 +1,4 @@
-Implement ultra-basic, unsafe version of "PUT store/type", including serverside detection of particle dependencies
+Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies
 Implement ultra-basic, unsafe version of "PUT store/tool", which adds all tools to a hardwired "experimental toolbox"
 Add an experimental world + worldmeta hardwired to use the experimental toolbox
 Using biwascheme & PegJS, implement an ultra-basic reaction-diffusion grammar editor (one tool/type, no safety checks, just uses "UserID/" as a prefix)

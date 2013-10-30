@@ -34,7 +34,7 @@ int main( int argc, char *argv[] )
 
   /* parse list of command line options and their arguments */
   optList = NULL;
-  optList = GetOptList(argc, argv, "g:t:l:b:r:dh?");
+  optList = GetOptList(&argc, argv, "g:t:l:b:r:dh?");
 
   /* get options */
   gameFilename = NULL;
