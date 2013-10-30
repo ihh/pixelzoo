@@ -109,10 +109,18 @@
 }
 
 - (IBAction)endTurn:(id)sender {
+    endTurnButton.enabled = NO;
+    endTurnButton.alpha = 0.5;
+    playButton.enabled = NO;
+    playButton.alpha = 0.5;
+    [lockDescriptor setLockDeletionDelegate:self];
     if ([gameWrapper turnSaved])
         [lockDescriptor deleteLock];
     else
         [gameWrapper postTurnAndDeleteLock];
+}
+
+- (void)lockWasDeleted {
     lockDescriptor = nil;  // force reload of lock
     [worldDescriptor setStatusNode:nil];  // force reload of status in parent controller
     [self.navigationController popViewControllerAnimated:YES];

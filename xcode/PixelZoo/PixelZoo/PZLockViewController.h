@@ -31,6 +31,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *lockLabel;
 
 - (IBAction)endTurn:(id)sender;
+- (void)lockWasDeleted;
 
 -(void)updateLockLabels;
 

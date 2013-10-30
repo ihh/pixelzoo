@@ -1,6 +1,7 @@
-Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
-Add summary counts of player/owner particles to lock screen
 Add an optional <overwrite> block in the game header, whose <disallow> states are added to the tool-specific <disallow> states, enabling easy specification of off-limits areas for challengers
+Add summary counts of player/owner particles to lock screen
+
+Add some real multiplayer game content (guests become player particles, a test board that can be stolen)
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
@@ -25,8 +26,6 @@ Add depth to worldmeta; replace current 2D (X*Y) board with 3D slab of height 2 
 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
-
-Debug lock/world status UI getting out of sync with network
 
 Add an alert with informative error message for failed lock (rather than just popping)
 Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection's

@@ -40,8 +40,8 @@
 	<is-user>[% lock.owner_id == user.id ? 1 : 0 %]</is-user>
       </owner>
       <expires>[% lock.expiry_time %]</expires>
-      <deleted>[% lock.delete_time %]</deleted>
     </lock>
+    <nextlock>[% lock.delete_time %]</nextlock>
   [% END -%]
 
   [% FOREACH lock IN expired_locks -%]

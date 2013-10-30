@@ -10,12 +10,17 @@
 #import "GDataXMLNode.h"
 #import "PZWorldDescriptor.h"
 
+@interface NSObject(LockDeletionDelegate)
+- (void)lockWasDeleted;
+@end
+
 @interface PZLockDescriptor : NSObject <NSURLConnectionDelegate> {
     GDataXMLDocument *lockDoc;
     NSURLConnection *deleteConnection;
 }
 
 @property (strong, atomic) PZWorldDescriptor *worldDescriptor;
+@property (strong, atomic) id lockDeletionDelegate;
 
 -(void)initFromLockData:(NSData*)lockData forWorld:(PZWorldDescriptor*)world;
 -(GDataXMLElement*)gameXMLElement;

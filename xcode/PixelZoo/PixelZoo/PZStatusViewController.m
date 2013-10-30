@@ -88,6 +88,11 @@
 - (void) viewWillDisappear:(BOOL)animated {
     [lockUpdateTimer invalidate];
     lockUpdateTimer = nil;
+    if ([self isMovingFromParentViewController]) {
+        [worldDescriptor setStatusNode:nil];
+        [worldStatusConnection cancel];
+        worldStatusConnection = nil;
+    }
 }
 
 -(void)updateLockLabels {

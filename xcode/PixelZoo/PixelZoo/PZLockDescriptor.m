@@ -13,6 +13,7 @@
 @implementation PZLockDescriptor
 
 @synthesize worldDescriptor;
+@synthesize lockDeletionDelegate;
 
 -(void)initFromLockData:(NSData*)lockData forWorld:(PZWorldDescriptor*)world {
     NSError * error = nil;
@@ -57,8 +58,9 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     NSHTTPURLResponse *httpLockResponse = (NSHTTPURLResponse*)response;
-    if ([httpLockResponse statusCode] == 204) {  // 204 NO CONTENT (success)
+    if ([httpLockResponse statusCode] == 200) {  // 200 OK (success)
         lockDoc = nil;
+        [lockDeletionDelegate lockWasDeleted];
     }
 }
 

@@ -73,7 +73,7 @@
     return 0;
 }
 - (bool)lockedOut {
-    return [self lockDeleteWait] > 0;
+    return !([self isLocked] && [self userOwnsLock]) && [self lockDeleteWait] > 0;
 }
 - (int)lockDeleteWait {
     NSArray *nextLock = [statusNode nodesForXPath:@"nextlock" error:nil];
