@@ -1,3 +1,8 @@
+Implement ultra-basic, unsafe version of "PUT store/type", including serverside detection of particle dependencies
+Implement ultra-basic, unsafe version of "PUT store/tool", which adds all tools to a hardwired "experimental toolbox"
+Add an experimental world + worldmeta hardwired to use the experimental toolbox
+Using biwascheme & PegJS, implement an ultra-basic reaction-diffusion grammar editor (one tool/type, no safety checks)
+
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Add new elements "<win><type>XXX</type><var>ID</var><incumbent>OwnerID</incumbent><challenger>PlayerID</challenger></win>", the implied logic being that the end-of-game ruler is OwnerID *unless* two conditions are satisfied at the end of the player's turn: (a) all type-XXX particles ("player particles") with ID=OwnerID have been eliminated, (b) there are more type-XXX particles with ID=PlayerID than type-XXX particles with any other ID.
