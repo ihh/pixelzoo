@@ -7,6 +7,7 @@
 /* XML node names */
 #define XMLZOO_GAME       "game"
 #define XMLZOO_PROTECT    "protect"
+#define XMLZOO_CELL       "cell"
 #define XMLZOO_TOOL       "tool"
 #define XMLZOO_BRUSH      "brush"
 #define XMLZOO_CENTER     "center"

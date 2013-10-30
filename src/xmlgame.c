@@ -43,7 +43,7 @@ Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char*
 
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateBoardRoot) {
   Game *game;
-  xmlNode *node, *globalOverwriteNode, *schemeNode;
+  xmlNode *node, *globalOverwriteNode, *protectNode, *schemeNode;
   Tool *tool, *selectedTool;
 
   game = newGame();
@@ -62,9 +62,13 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
     addToolToGame (game, tool);
   }
 
-  for (node = gameNode->children; node; node = node->next)
-    if (MATCHES(node,PROTECT))
-      registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), CHILDINT(node,Z), game->writeProtectWatcher);
+  if ( (protectNode = CHILD(gameNode,PROTECT)) ) {
+    if ( (schemeNode = CHILD(protectNode,SCHEME)) )
+      protectNode = protoTableExpandSchemeNode (game->board->protoTable, schemeNode, protectNode, gameNode);
+    for (node = protectNode->children; node; node = node->next)
+      if (MATCHES(node,CELL))
+	registerCellWatcher (game->board, CHILDINT(node,X), CHILDINT(node,Y), CHILDINT(node,Z), game->writeProtectWatcher);
+  }
 
   return game;
 }

@@ -7,10 +7,11 @@
 #include "statemap.h"
 #include "xymap.h"
 
+/* Tools are designed to be used in an overhead view, so the z-coordinate is absolute */
 typedef struct Tool {
   /* toolbox appearance */
   char *name;  /* name of this tool */
-  int z;  /* layer it operates on */
+  int z;  /* absolute z-coord specifying layer that Tool operates on */
 
   /* brush */
   LocalOffset brushCenter;  /* delta(x,y) of central cell in brush */

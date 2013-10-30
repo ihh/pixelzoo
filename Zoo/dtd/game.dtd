@@ -3,7 +3,7 @@ This DTD defines the PixelZoo XML game format.
 -->
 
 <!-- An element representing a PixelZoo Game, including the Board, the Tools, and the Goals. -->
-<!ELEMENT game (board,rate,tool*,toolset?,protect*)>
+<!ELEMENT game (board,rate,tool*,toolset?,protect?)>
 
 <!-- Rate -->
 <!ELEMENT rate (#PCDATA)>
@@ -11,8 +11,9 @@ This DTD defines the PixelZoo XML game format.
 <!-- Globally disallow tool use over a particular set of Board cells. -->
 <!ELEMENT toolset (scheme|(disallow*))>
 
-<!-- Write-protect a particular Board cell. -->
-<!ELEMENT protect (x,y)>
+<!-- Write-protect particular Board cells. -->
+<!ELEMENT protect (scheme|(cell*))>
+<!ELEMENT cell (x,y,z)>
 
 <!-- The co-ordinates of a Board cell.
 
@@ -151,7 +152,7 @@ They are stored in 64-bit chunks and can effectively be accessed as higher bits 
 </pre>
 
 where "hsb24" is a 24-bit HSB color value. -->
-<!ELEMENT colrule ((var?|(mask?,rshift?)),(mul|hexmul)?,(inc|hexinc|reginc)?)>
+<!ELEMENT colrule ((var?|(mask?,rshift?)),(mul|hexmul)?,(inc|hexinc)?)>
 <!-- A decimal multiplier. -->
 <!ELEMENT mul (#PCDATA)>
 <!-- A hexadecimal multiplier. -->
