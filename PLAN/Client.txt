@@ -2,6 +2,8 @@ Strip down test.sql, take out proto-xml particles
 Refactor Catalyst to just assemble XML (no proto-compilation; don't use Level.pm, Grammar.pm, etc)
 Move Zoo/lib/Grammar.pm, Zoo/lib/Level.pm, Zoo/lib/Level/Simple.pm into perl/ directory; remove references from Catalyst
 
+Make particle dependency queries recursive (i.e. table only needs to store immediate dependencies; descendant_particles will recurse until all dependents found)
+
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
