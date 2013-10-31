@@ -1,10 +1,11 @@
-Replace dummy guest particle with guest XML (for rapid content, don't port to Scheme just yet)
+Strip down test.sql, take out proto-xml particles
+Refactor Catalyst to just assemble XML (no proto-compilation; don't use Level.pm, Grammar.pm, etc)
+Move Zoo/lib/Grammar.pm, Zoo/lib/Level.pm, Zoo/lib/Level/Simple.pm into perl/ directory; remove references from Catalyst
+
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
-Refactor Catalyst to not use Level.pm/Grammar.pm
 
-Delete Zoo/lib/Grammar.pm, Zoo/lib/Level.pm, Zoo/lib/Level/Simple.pm
 Delete Zoo/dtd/proto.dtd
 
 Add a <rule> to create text balloons
