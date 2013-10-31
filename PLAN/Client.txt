@@ -7,6 +7,7 @@ Design some new particle content: a voter-process scintillating wall + spraytool
 Port cyclobs, cement, wall, acid, plants, guests to Scheme
 
 Delete Zoo/dtd/proto.dtd
+Strip out <goal> blocks from all test XML files; remove <goal> from game.dtd, C source files
 
 Add a <rule> to create text balloons
 Add a syntactic-sugar <nop> rule
