@@ -7374,9 +7374,53 @@
   </board>
   <rate>240</rate>
   <tool>
-    <name>polymer spray</name>
+    <name>little polymer loops</name>
     <size>4</size>
     <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">3</val></gvars>
+    <overwrite>
+      <hexstate>0000000000000</hexstate>
+    </overwrite>
+    <spray>2500</spray>
+    <reserve>1</reserve>
+    <recharge>100</recharge>
+  </tool>
+  <tool>
+    <name>medium polymer loops</name>
+    <size>4</size>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">6</val></gvars>
+    <overwrite>
+      <hexstate>0000000000000</hexstate>
+    </overwrite>
+    <spray>2500</spray>
+    <reserve>1</reserve>
+    <recharge>100</recharge>
+  </tool>
+  <tool>
+    <name>big polymer loops</name>
+    <size>4</size>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">9</val></gvars>
+    <overwrite>
+      <hexstate>0000000000000</hexstate>
+    </overwrite>
+    <spray>2500</spray>
+    <reserve>1</reserve>
+    <recharge>100</recharge>
+  </tool>
+  <tool>
+    <name>huge polymer loops</name>
+    <size>4</size>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">12</val></gvars>
+    <overwrite>
+      <hexstate>0000000000000</hexstate>
+    </overwrite>
+    <spray>2500</spray>
+    <reserve>1</reserve>
+    <recharge>100</recharge>
+  </tool>
+  <tool>
+    <name>biggest polymer loops</name>
+    <size>4</size>
+    <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">15</val></gvars>
     <overwrite>
       <hexstate>0000000000000</hexstate>
     </overwrite>
@@ -7439,7 +7483,7 @@
     <reserve>1000</reserve>
     <recharge>100</recharge>
   </tool>
-  <toolset>
+  <!-- toolset>
     <scheme>`(toolset ,(map (lambda (x) (map (lambda (y) `(disallow (x ,x) (y ,y))) (iota 30))) (iota 20)))</scheme>
-  </toolset>
+  </toolset -->
 </game>
