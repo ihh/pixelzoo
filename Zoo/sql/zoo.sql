@@ -91,9 +91,8 @@ CREATE TABLE world_meta (
 	lock_delete_delay INTEGER,  -- minimum number of seconds between locks
 	contest_type varchar(255) REFERENCES particle(name),
 	contest_var varchar(255),
-	owner_game_xml TEXT,  -- Game headers for owner's turn
-	guest_game_xml TEXT,  -- Game headers for guest's turn
-	voyeur_game_xml TEXT  -- Game headers for voyeur's turn (world/XXX/view)
+	owner_toolset_xml TEXT,  -- Game headers for owner's turn
+	guest_toolset_xml TEXT  -- Game headers for guest's turn
 	);
 
 CREATE TABLE world (
@@ -114,7 +113,11 @@ CREATE TABLE lock (
 	create_time INTEGER,  -- lock creation time (UNIX timestamp)
 	expiry_time INTEGER,  -- lock expiration time (UNIX timestamp)
 	delete_time INTEGER,  -- lock deletion time (UNIX timestamp)
-	proto_xml TEXT,  -- temporary assembled Game
-	compiled_xml TEXT,  -- temporary compiled Game
-	turn_xml TEXT  -- the lock owner's turn
+	toolset_xml   -- toolset XML used for lock
 	);
+
+CREATE TABLE lock_tool (
+	lock_id INTEGER REFERENCES lock(lock_id) ON DELETE CASCADE ON UPDATE CASCADE,  -- the lock
+	tool_id INTEGER REFERENCES tool(id) ON DELETE CASCADE ON UPDATE CASCADE,  -- the tool
+	PRIMARY KEY (lock_id, tool_id)
+);

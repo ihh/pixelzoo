@@ -10,9 +10,9 @@
   <time>[% world.board_time %]</time>
   <toolbox>
     <owner>
-      <name>[% world.meta_rel.owner_toolbox.name %]</name>
-      <max>[% world.meta_rel.owner_toolbox.max_tools %]</max>
-      [% FOREACH toolbox_tool IN world.meta_rel.owner_toolbox.toolbox_tools -%]
+      <name>[% toolbox.name %]</name>
+      <max>[% toolbox.max_tools %]</max>
+      [% FOREACH toolbox_tool IN toolbox.toolbox_tools -%]
       <tool>
 	<id>[% toolbox_tool.tool.id %]</id>
 	<name>[% toolbox_tool.tool.name %]</name>

@@ -6,5 +6,6 @@
   <expires>[% lock.expiry_time %]</expires>
   <world>
     <id>[% world.id %]</id>
-    [% lock.compiled_xml %] </world>
+    [% INCLUDE "world/compiled.tt2" %]
+  </world>
 </lock>

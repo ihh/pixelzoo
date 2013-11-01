@@ -104,10 +104,15 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     didAppear = YES;
-    if (lockFailed)
+    if (popQueued)
         [self.navigationController popViewControllerAnimated:YES];
-    else
+    else {
         [self startLockTimer];
+        if (pushQueued) {
+            pushQueued = NO;
+            [self performSegueWithIdentifier:@"playWorld" sender:self];
+        }
+    }
 }
 
 - (IBAction)endTurn:(id)sender {
@@ -140,7 +145,7 @@
     int statusCode = [httpLockResponse statusCode];
     if (statusCode != 200 && statusCode != 201) {  // 200 OK, 201 Created
         [self.lockConnection cancel];
-        lockFailed = YES;
+        popQueued = YES;
         if (didAppear)
             [self.navigationController popViewControllerAnimated:YES];
     }
@@ -170,8 +175,7 @@
         gameWrapper = [PZGameWrapper alloc];
         [gameWrapper initGameFromLock:lockDescriptor];
         
-        [self startLockTimer];
-        [self performSegueWithIdentifier:@"playWorld" sender:self];
+        pushQueued = true;
     }
 }
 
@@ -208,7 +212,7 @@
     // Check the error var
 
     // ...for now, just pop
-    lockFailed = YES;
+    popQueued = YES;
     if (didAppear)
         [self.navigationController popViewControllerAnimated:YES];
 }

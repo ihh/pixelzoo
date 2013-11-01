@@ -91,6 +91,7 @@
 #define XMLZOO_DISPATCH    "dispatch"
 #define XMLZOO_LOAD        "load"
 #define XMLZOO_REGISTER    "register"
+#define XMLZOO_NOP         "nop"
 
 #define XMLZOO_CONTEST     "contest"
 #define XMLZOO_INCUMBENT   "incumbent"

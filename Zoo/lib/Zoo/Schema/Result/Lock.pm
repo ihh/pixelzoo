@@ -71,19 +71,9 @@ __PACKAGE__->table("lock");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 proto_xml
+=head2 toolset_xml
 
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 compiled_xml
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 turn_xml
-
-  data_type: 'text'
+  data_type: (empty string)
   is_nullable: 1
 
 =cut
@@ -101,12 +91,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "delete_time",
   { data_type => "integer", is_nullable => 1 },
-  "proto_xml",
-  { data_type => "text", is_nullable => 1 },
-  "compiled_xml",
-  { data_type => "text", is_nullable => 1 },
-  "turn_xml",
-  { data_type => "text", is_nullable => 1 },
+  "toolset_xml",
+  { data_type => "", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -122,6 +108,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("lock_id");
 
 =head1 RELATIONS
+
+=head2 lock_tools
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::LockTool>
+
+=cut
+
+__PACKAGE__->has_many(
+  "lock_tools",
+  "Zoo::Schema::Result::LockTool",
+  { "foreign.lock_id" => "self.lock_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 owner
 
@@ -163,9 +164,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 tools
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-09 12:07:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dduUYG68CPDSW0ZRAAwkQA
+Type: many_to_many
+
+Composing rels: L</lock_tools> -> tool
+
+=cut
+
+__PACKAGE__->many_to_many("tools", "lock_tools", "tool");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-31 17:28:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y/qe/78xtYFAyiW1CN8QUg
 
 =head2 time_to_expire
 

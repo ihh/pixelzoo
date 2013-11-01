@@ -108,6 +108,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 lock_tools
+
+Type: has_many
+
+Related object: L<Zoo::Schema::Result::LockTool>
+
+=cut
+
+__PACKAGE__->has_many(
+  "lock_tools",
+  "Zoo::Schema::Result::LockTool",
+  { "foreign.tool_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 particle_tools
 
 Type: has_many
@@ -153,6 +168,16 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 locks
+
+Type: many_to_many
+
+Composing rels: L</lock_tools> -> lock
+
+=cut
+
+__PACKAGE__->many_to_many("locks", "lock_tools", "lock");
+
 =head2 particles
 
 Type: many_to_many
@@ -164,8 +189,8 @@ Composing rels: L</tool_dependencies> -> particle
 __PACKAGE__->many_to_many("particles", "tool_dependencies", "particle");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 15:06:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GIB5UvLZtCQX+r48HMCzCw
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-31 17:28:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y+wkGJvz/Swf+mYQ4zfbWQ
 
 =head1 METHODS
 

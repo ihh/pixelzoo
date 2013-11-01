@@ -140,7 +140,7 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   Particle* p;
   Message message;
   int nColorRules, readOnlyIndex;
-  xmlNode *curNode, *syncNode, *childNode;
+  xmlNode *curNode, *syncNode, *childNode, *schemeNode;
   Proto *proto;
 
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
@@ -186,6 +186,8 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   for (curNode = node->children; curNode; curNode = curNode->next)
     if (MATCHES(curNode,COLRULE)) {
       Assert (nColorRules < NumColorRules, "newParticleFromXmlNode: too many color rules");
+      if ( (schemeNode = CHILD (curNode, SCHEME)) )  /* assignment intentional */
+	curNode = protoTableExpandSchemeNode (protoTable, schemeNode, curNode, node);
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, proto);
     }
 
@@ -239,7 +241,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
       if (MATCHES (childNode, SUBRULE))
 	(void) newRuleFromXmlParentNode (board, childNode, protoTable, localSubRule);
 
-      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,GOAL)) {
+      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP) || MATCHES(childNode,GOAL)) {
 	if (ruleNode) {
 	  dump = xmlTreeToString (ruleParentNode);
 	  Warn ("Ignoring <%s> child of <%s> node, in favor of older sibling <%s>\nIn %s\n", (const char*) childNode->name, (const char*) ruleParentNode->name, (const char*) ruleNode->name, dump);
@@ -326,6 +328,9 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
 
   } else if (MATCHES (ruleNode, RULE)) {
     rule = newRuleFromXmlParentNode (board, ruleNode, protoTable, localSubRule);
+
+  } else if (MATCHES (ruleNode, NOP)) {
+    /* nop rule is just NULL */
 
   } else if (MATCHES (ruleNode, GOAL)) {
     /* REFACTOR ME: left in place to prevent old tests crashing (ugh....) */

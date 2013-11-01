@@ -101,6 +101,13 @@
 	  (type ,type)
 	  ,@(list (map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list)))))
 
+  ;; color rule
+  ;; (hsb hue saturation brightness)
+  (define (hsb hue . rest)
+    (let ((sat (opt-arg rest 0 255))
+	  (bri (opt-arg rest 1 255)))
+      `(colrule (mask 0) (inc ,(+ (* 256 (+ (* 256 hue) sat)) bri)))))
+
   ;; helpers for optional rule chains
   (define (opt-rule tag arg-or-false)
     (if arg-or-false `((,tag ,(rule-eval-or-return arg-or-false))) '()))
@@ -109,10 +116,10 @@
     (if (not (null? arglist-or-null)) `((,tag ,(rule-eval-or-return (car arglist-or-null)))) '()))
 
   (define (rule-eval-or-return arg)
-    `(rule ,(eval-or-return arg)))
+    (rule (eval-or-return arg)))
 
   ;; rule wrapper
-  (define (rule x) `(rule ,x))
+  (define (rule r . rest) `(rule ,r ,@rest))
 
   ;; nop (dummy) rule
   (define nop-rule
@@ -252,6 +259,11 @@
       (regindex ,reg)
       ,@rest))
 
+  ;; random rule
+  ;; (random-rule prob pass fail)
+  (define (random-rule prob pass . fail)
+    `(random (prob ,prob) (pass (rule ,pass)) ,@(listform-opt-rule 'fail fail)))
+
   ;; Convert a probability distribution over rules into a Huffman tree of <random> rules
   (define (prob-rule-cmp a b)
     (numcmp (car a) (car b)))
@@ -281,6 +293,16 @@
 
   ;; huffman: shorthand for random-switch. A mixture of syntactic sugar & nostalgia (old name for this function...)
   (define huffman random-switch)
+
+  ;; kill & kill-self rules
+  (define (kill-rule loc . next)
+    (apply set-rule (append (list loc empty-type '()) next)))
+
+  (define (kill-self . next)
+    (apply kill-rule (append (list origin) next)))
+
+  (define (suicide-pact loc . next)
+    (kill-rule loc (apply kill-self next)))
 
   ;; Neighborhood bindings
   ;; (bind-neighborhood-dir neighborhood var func)
@@ -356,11 +378,15 @@
     (apply indirect-dest-move-rule (append (list origin dest) next)))
 
   ;; (if-type dest dest-type func next fail)
-  ;; if location dest contains dest-type, do (func dest next), otherwise do fail
+  ;; if location dest contains dest-type, do (func dest next), otherwise do (fail dest)
   (define (if-type dest dest-type func . rest)
     (let ((next (opt-arg rest 0 #f))
 	  (fail (opt-arg rest 1 #f)))
-      (apply switch-type (append (list dest `((,dest-type ,(apply func (cons dest next))))) fail))))
+      (apply switch-type (append
+			  (list dest `((,dest-type ,(apply func (list dest next)))))
+			  (cond ((procedure? fail) (list (fail dest)))
+				(fail (list fail))
+				(else '()))))))
 
   ;; (if-empty dest func next fail)
   ;; if location dest is empty, do (func dest next), otherwise do fail

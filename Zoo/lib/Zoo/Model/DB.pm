@@ -119,7 +119,11 @@ The dependency and tool_dependency tables are used to find downstream particles.
 
 sub descendant_particles {
     my ($self, $particle_list, $tool_list, $twig_list) = @_;
-    my $emptyType = Grammar::defaultEmptyType();
+
+    # hard-wired name of empty particle
+    my $emptyType = "empty";
+
+    # build the initial set of particles
     my %particle_name_hash = ($emptyType => 1);
     for my $particle (@$particle_list) {
 	$particle_name_hash{ref($particle) ? $particle->name : $particle} = 1;
@@ -133,17 +137,24 @@ sub descendant_particles {
 	my @names = $twig->particle_names;
 	%particle_name_hash = (%particle_name_hash, map (($_ => 1), @names));
     }
-    my @particle_names = keys %particle_name_hash;
-    my @particles = $self->particles_by_name (@particle_names);
-    warn "Some named particles not found" if @particles < @particle_names;
-    my @descendants = map ($_->descendants, @particles);
-    my %descendant_hash = map (($_->name => $_), @particles, @descendants);
-    # the sort ensures that 'empty' is particle #0; alphabetic sort of remaining particles is just for reproducibility
-    my @particles = sort
+    my @ancestor_names = keys %particle_name_hash;
+    my @ancestors = $self->particles_by_name (@ancestor_names);
+    warn "Some named particles not found" if @ancestors < @ancestor_names;
+
+    # do recursive query
+    my %descendant_hash;
+    while (@ancestors) {
+	%descendant_hash = (%descendant_hash, map (($_->name => $_), @ancestors));
+	my @descendants = map ($_->descendants, @ancestors);
+	@ancestors = grep (!exists($descendant_hash{$_->name}), @descendants);
+    }
+
+    # the following sort ensures that 'empty' is particle #0; alphabetic sort of remaining particles is just for reproducibility
+    my @sorted_particles = sort
     { $a->name eq $emptyType ? -1 : ($b->name eq $emptyType ? +1 : ($a->name cmp $b->name)) }
     values %descendant_hash;
 #    warn "descendant_particles = (", join(", ",map("'".($_->name)."'",@particles)), ")";
-    return @particles;
+    return @sorted_particles;
 }
 
 =head2 users_by_name

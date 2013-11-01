@@ -89,17 +89,12 @@ __PACKAGE__->table("world_meta");
   is_nullable: 1
   size: 255
 
-=head2 owner_game_xml
+=head2 owner_toolset_xml
 
   data_type: 'text'
   is_nullable: 1
 
-=head2 guest_game_xml
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 voyeur_game_xml
+=head2 guest_toolset_xml
 
   data_type: 'text'
   is_nullable: 1
@@ -125,11 +120,9 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 255 },
   "contest_var",
   { data_type => "varchar", is_nullable => 1, size => 255 },
-  "owner_game_xml",
+  "owner_toolset_xml",
   { data_type => "text", is_nullable => 1 },
-  "guest_game_xml",
-  { data_type => "text", is_nullable => 1 },
-  "voyeur_game_xml",
+  "guest_toolset_xml",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -223,8 +216,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-30 16:24:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6HhJ+ldHq0MEqcx2SBV9Hg
+# Created by DBIx::Class::Schema::Loader v0.07036 @ 2013-10-31 16:56:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RumauHYNF0+L2VvEwLPFsA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

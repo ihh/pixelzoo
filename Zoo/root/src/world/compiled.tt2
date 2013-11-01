@@ -1,1 +1,29 @@
-[% compiled_xml %]
+<game>
+<board>
+<size>[% world.meta_rel.board_size %]</size>
+<depth>[% world.meta_rel.board_depth %]</depth>
+<t>[% world.board_time %]</t>
+<grammar>
+[% FOREACH particle IN particles -%]
+[% particle.xml %]
+[% END %]
+</grammar>
+<contest>
+ <type>[% contestType %]</type>
+ <var>[% contestVar %]</var>
+ <incumbent>[% incumbent %]</incumbent>
+ <challenger>[% challenger %]</challenger>
+</contest>
+[% FOREACH init IN inits -%]
+[% init %]
+[% END %]
+[% seed %]
+</board>
+<rate>240</rate>
+[% FOREACH tool IN tools -%]
+[% tool.xml %]
+[% END %]
+<toolset>
+[% toolset_xml %]
+</toolset>
+</game>

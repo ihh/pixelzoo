@@ -14,7 +14,7 @@
 @interface PZLockViewController : UIViewController <NSURLConnectionDelegate> {
     NSMutableData *lockData;
     NSHTTPURLResponse* httpLockResponse;
-    bool didAppear, lockFailed;
+    bool didAppear, popQueued, pushQueued;
     NSTimer* lockUpdateTimer;
 }
 
