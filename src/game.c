@@ -19,6 +19,7 @@ Game* newGame() {
 
   game = SafeCalloc (1, sizeof (Game));
 
+  game->gameState = GameNotStarted;
   game->board = NULL;
   game->rng = newRNG();
 
@@ -58,10 +59,12 @@ void addToolToGame (Game *game, Tool *tool) {
 
 void gameStart (Game *game) {
   /* called once at start of game */
+  game->gameState = GameRunning;
 }
 
 void gameQuit (Game *game) {
   /* called once at end of game */
+  game->gameState = GameOver;
 }
 
 void gameLoop (Game *game, double targetTicks, double maxFractionOfTimeInterval, int64_Microticks *actualMicroticks_ret, double *actualTicks_ret, int *actualUpdates, double *evolveTime) {

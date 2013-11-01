@@ -157,6 +157,7 @@ int main( int argc, char *argv[] )
 		switch (event.key.keysym.sym) {
 
 		case SDLK_ESCAPE:
+		case SDLK_q:
 		  pzQuitGame(sdlGame->game);
 		  break;
 
@@ -321,6 +322,9 @@ SDLGame* newSDLGame( char *filename, int logMoves )
     int rgb = pzGetPaletteRgb (sdlGame->game, pal);
     sdlGame->sdlColor[pal] = SDL_MapRGB( sdlGame->g_screenSurface->format, (rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff );
   }
+
+  /* start game */
+  pzStartGame(sdlGame->game);
 
   /* return */
   return sdlGame;

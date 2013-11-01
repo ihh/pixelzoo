@@ -120,6 +120,9 @@ pzGame newTestGame( char *filename, int logMoves )
   if (pzGetNumberOfTools(game) > 0)
     pzSelectTool(game,0);
 
+  /* start game */
+  pzStartGame(game);
+
   /* return */
   return game;
 }

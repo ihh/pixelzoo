@@ -46,7 +46,7 @@ void pzQuitGame(pzGame pzg) {
 int pzGameRunning(pzGame pzg) {
   Game* game;
   game = (Game*) pzg;
-  return game != NULL;
+  return game != NULL && game->gameState == GameRunning;
 }
 
 void pzUpdateGame(pzGame pzg,int callsPerSecond,long long boardClockTimeLimit) {

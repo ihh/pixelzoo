@@ -15,6 +15,9 @@
 
 /* state of play */
 typedef struct Game {
+  /* flag indicating if game has started */
+  enum GameState { GameNotStarted = 0, GameRunning = 1, GameOver = 2 } gameState;
+
   /* board */
   Board *board;
 
