@@ -95,7 +95,7 @@
 }
 
 -(void)updateLockLabels {
-    if (worldDescriptor) {
+    if ([worldDescriptor statusNode]) {
         if ([worldDescriptor isLocked]) {
             NSInteger expiryTime = [worldDescriptor lockExpiryWait];
             currentLock.text = [NSString stringWithFormat:@"Locked by %@ for %d:%02d",[worldDescriptor lockOwner],(int)(expiryTime/60),(int)(expiryTime%60)];
