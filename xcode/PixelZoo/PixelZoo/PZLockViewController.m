@@ -104,9 +104,10 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     didAppear = YES;
-    if (popQueued)
+    if (popQueued) {
+        popQueued = NO;
         [self.navigationController popViewControllerAnimated:YES];
-    else {
+    } else {
         [self startLockTimer];
         if (pushQueued) {
             pushQueued = NO;
@@ -175,7 +176,10 @@
         gameWrapper = [PZGameWrapper alloc];
         [gameWrapper initGameFromLock:lockDescriptor];
         
-        pushQueued = true;
+        if (didAppear)
+            [self performSegueWithIdentifier:@"playWorld" sender:self];
+        else
+            pushQueued = true;
     }
 }
 
@@ -212,9 +216,10 @@
     // Check the error var
 
     // ...for now, just pop
-    popQueued = YES;
     if (didAppear)
         [self.navigationController popViewControllerAnimated:YES];
+    else
+        popQueued = YES;
 }
 
 @end
