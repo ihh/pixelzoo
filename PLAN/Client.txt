@@ -4,10 +4,8 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Delete AutoHash, Level, Grammar, simplezoo, polyzoo, zoocompiler from project
 Delete Zoo/dtd/proto.dtd
-Strip out <goal> blocks from all test XML files; remove <goal> from game.dtd, C source files
 
 Add a <rule> to create text balloons
-Add a syntactic-sugar <nop> rule
 Add a default handler to <deliver> rules, so particles that don't implement the rule can be given some default behavior
 
 Modify "world/" controller (authenticated) to list created, owned & neighboring worlds, together with expiry times for active locks & deletion times for any of your old locks

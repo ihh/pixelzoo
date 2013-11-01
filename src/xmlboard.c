@@ -241,7 +241,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
       if (MATCHES (childNode, SUBRULE))
 	(void) newRuleFromXmlParentNode (board, childNode, protoTable, localSubRule);
 
-      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP) || MATCHES(childNode,GOAL)) {
+      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP)) {
 	if (ruleNode) {
 	  dump = xmlTreeToString (ruleParentNode);
 	  Warn ("Ignoring <%s> child of <%s> node, in favor of older sibling <%s>\nIn %s\n", (const char*) childNode->name, (const char*) ruleParentNode->name, (const char*) ruleNode->name, dump);
@@ -331,9 +331,6 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
 
   } else if (MATCHES (ruleNode, NOP)) {
     /* nop rule is just NULL */
-
-  } else if (MATCHES (ruleNode, GOAL)) {
-    /* REFACTOR ME: left in place to prevent old tests crashing (ugh....) */
 
   } else {
     Abort ("Unknown rule type <%s>", ruleNode->name);

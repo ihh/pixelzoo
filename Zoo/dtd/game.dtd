@@ -192,21 +192,16 @@ The four public rules are <b>switch</b>, <b>modify</b>, <b>random</b>, and <b>de
   (passing control to an update rule in that particle's dispatch table).
 </li></ul>
 
-The two private (internally-used) rules are <b>goto</b> and <b>goal</b>:
-<ul><li>
- <b>goto</b>, used not to loop, but simply to save space,
-  (passes control to a named subroutine, which never returns),
-</li><li>
- <b>goal</b>, allowing a callback hook for in-game feedback and effects
-  (tests a Goal, if the Board has an associated Game).
-</li></ul>
  -->
-<!ELEMENT rule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto))>
+<!ELEMENT rule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto|nop))>
 <!ATTLIST rule name CDATA #IMPLIED>
 
 <!-- A subrule is just a rule that is not executed -->
-<!ELEMENT subrule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto))>
+<!ELEMENT subrule (subrule*,(scheme|switch|compare|modify|deliver|random|load|goto|nop))>
 <!ATTLIST subrule name CDATA #REQUIRED>
+
+<!-- NOP rule. -->
+<!ELEMENT nop EMPTY>
 
 <!-- Switch rule.
 

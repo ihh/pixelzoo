@@ -35,15 +35,10 @@ CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIB
 CHIBI_CODE   := -Ichibi/lib -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
 CHIBI_HDRS   := -Ichibi/include -Dsexp_default_module_path=\"$(CURDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(CURDIR)/scheme/zoo.scm\"
 
-XMLTESTFILES := t/simple.copy.xml t/compiled.copy.xml
-
 all: libtargets targets
 
 clean:
-	rm -rf obj/* bin/* lib/* *~ *.dSYM $(XMLTESTFILES) chibi/obj/*
-
-cleanxml:
-	rm $(XMLTESTFILES)
+	rm -rf obj/* bin/* lib/* *~ *.dSYM chibi/obj/*
 
 sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -r t/revcomp.xml
@@ -132,32 +127,6 @@ eloise: eloise-sdl-test eloise-pztest
 # These should produce no output
 xml-valid-test:
 	$(XMLLINT) --dtdvalid Zoo/dtd/game.dtd --noout t/testgame.xml
-	$(XMLLINT) --dtdvalid Zoo/dtd/proto.dtd --noout t/proto.xml
-
-# XML generation tests
-
-xml-build-test: $(XMLTESTFILES)
-
-# Build a simple world using the Perl API.
-t/simple.copy.xml: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out $@ -verbose
-	diff t/proto.xml t/proto.copy.xml
-	diff t/simple.xml t/simple.copy.xml
-
-xml-debug: perl/simplezoo.pl Zoo/lib/Grammar.pm Zoo/lib/Level.pm
-	$(PERL) perl/simplezoo.pl -xmllint $(XMLLINT) -proto t/proto.copy.xml -out t/simple.copy.xml -debug
-
-t/compiled.copy.xml: t/proto.xml
-	$(PERL) perl/zoocompiler.pl $< >$@
-	diff t/compiled.xml t/compiled.copy.xml
-
-
-# Polymers
-t/poly.xml: perl/polyzoo.pl
-	perl/polyzoo.pl >$@
-
-polysdl: t/poly.xml bin/sdlgame
-	bin/sdlgame -g $<
 
 # Documentation
 doc: dtddoc-doc doxygen-doc

@@ -98,8 +98,6 @@
 #define XMLZOO_CHALLENGER  "challenger"
 #define XMLZOO_WINNER      "winner"
 
-#define XMLZOO_GOAL        "goal"
-
 /* methods */
 Board* newBoardFromXmlDocument (xmlDoc *doc);
 Board* newBoardFromXmlRoot (xmlNode *root);

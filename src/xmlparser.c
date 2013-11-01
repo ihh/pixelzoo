@@ -139,14 +139,15 @@ xmlNode* newXmlNode (xmlElementType type, const char* nameStart, const char* nam
 }
 
 xmlNode* xmlTreeFromString (const char* s) {
+  const char* s0 = s;
   while (1) {
     while (*s != '\0' && *s != '<')
       ++s;
     Assert (*s == '<', "No root tag found");
     if (s[1] == '!')
-      while (!(*s == '\0' || (s[-2] == '-' && s[-1] == '>'))) ++s;
+      while (!(*s == '\0' || (s >= s0+2 && s[-2] == '-' && s[-1] == '>'))) ++s;
     else if (s[1] == '?')
-      while (!(*s == '\0' || s[-1] == '>')) ++s;
+      while (!(*s == '\0' || (s >= s0+1 && s[-1] == '>'))) ++s;
     else
       break;
   }

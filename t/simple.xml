@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <game>
   <board>
     <size>128</size>
@@ -945,33 +946,6 @@
                   </dest>
                   <next>
                     <rule>
-                      <goal>
-                        <and>
-                          <lazy></lazy>
-                          <goal>
-                            <and>
-                              <lazy></lazy>
-                              <goal>
-                                <maybe>
-                                  <prob>0.01</prob>
-                                </maybe>
-                              </goal>
-                              <goal>
-                                <place>
-                                  <balloon>
-                                    <rate>0.01</rate>
-                                    <hexcolor>20ffff</hexcolor>
-                                    <text>decay</text>
-                                  </balloon>
-                                </place>
-                              </goal>
-                            </and>
-                          </goal>
-                          <goal>
-                            <false></false>
-                          </goal>
-                        </and>
-                      </goal>
                     </rule>
                   </next>
                 </modify>
@@ -2067,8 +2041,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>18</srcmask>
                                                             <rshift>3</rshift>
@@ -2076,8 +2050,8 @@
                                                             <lshift>3</lshift>
                                                             <destmask>18</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2086,8 +2060,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>1</y>
+                                                            <x>0</x>
+                                                            <y>1</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
                                                             <rshift>0</rshift>
@@ -2095,8 +2069,8 @@
                                                             <lshift>0</lshift>
                                                             <destmask>7</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>1</y>
+                                                            <x>0</x>
+                                                            <y>1</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2176,8 +2150,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>18</srcmask>
                                                             <rshift>3</rshift>
@@ -2185,8 +2159,8 @@
                                                             <lshift>3</lshift>
                                                             <destmask>18</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2195,8 +2169,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>-1</x>
-                                                              <y>0</y>
+                                                            <x>-1</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
                                                             <rshift>0</rshift>
@@ -2204,8 +2178,8 @@
                                                             <lshift>0</lshift>
                                                             <destmask>7</destmask>
                                                             <dest>
-                                                              <x>-1</x>
-                                                              <y>0</y>
+                                                            <x>-1</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2292,8 +2266,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>18</srcmask>
                                                             <rshift>3</rshift>
@@ -2301,8 +2275,8 @@
                                                             <lshift>3</lshift>
                                                             <destmask>18</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2311,8 +2285,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>-1</y>
+                                                            <x>0</x>
+                                                            <y>-1</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
                                                             <rshift>0</rshift>
@@ -2320,8 +2294,8 @@
                                                             <lshift>0</lshift>
                                                             <destmask>7</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>-1</y>
+                                                            <x>0</x>
+                                                            <y>-1</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2401,8 +2375,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>18</srcmask>
                                                             <rshift>3</rshift>
@@ -2410,8 +2384,8 @@
                                                             <lshift>3</lshift>
                                                             <destmask>18</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2420,8 +2394,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>1</x>
-                                                              <y>0</y>
+                                                            <x>1</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
                                                             <rshift>0</rshift>
@@ -2429,8 +2403,8 @@
                                                             <lshift>0</lshift>
                                                             <destmask>7</destmask>
                                                             <dest>
-                                                              <x>1</x>
-                                                              <y>0</y>
+                                                            <x>1</x>
+                                                            <y>0</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -3923,8 +3897,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -3932,70 +3906,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -4092,8 +4014,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -4101,70 +4023,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -4211,8 +4081,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -4220,70 +4090,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -4390,40 +4208,14 @@
                                                       <prob>0.024390243902439</prob>
                                                       <pass>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>breed</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -4431,38 +4223,12 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>step</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
@@ -4535,32 +4301,6 @@
                                                       </dest>
                                                       <next>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>eat</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </next>
                                                     </modify>
@@ -4568,32 +4308,6 @@
                                                 </pass>
                                                 <fail>
                                                   <rule>
-                                                    <goal>
-                                                      <and>
-                                                        <lazy></lazy>
-                                                        <goal>
-                                                          <and>
-                                                            <lazy></lazy>
-                                                            <goal>
-                                                              <maybe>
-                                                                <prob>0.001</prob>
-                                                              </maybe>
-                                                            </goal>
-                                                            <goal>
-                                                              <place>
-                                                                <balloon>
-                                                                  <rate>0.001</rate>
-                                                                  <text>spawn</text>
-                                                                </balloon>
-                                                              </place>
-                                                            </goal>
-                                                          </and>
-                                                        </goal>
-                                                        <goal>
-                                                          <false></false>
-                                                        </goal>
-                                                      </and>
-                                                    </goal>
                                                   </rule>
                                                 </fail>
                                               </random>
@@ -4749,8 +4463,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -4758,70 +4472,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -4918,8 +4580,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -4927,70 +4589,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -5037,8 +4647,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -5046,70 +4656,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -5216,40 +4774,14 @@
                                                       <prob>0.024390243902439</prob>
                                                       <pass>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>breed</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -5257,38 +4789,12 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>step</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
@@ -5361,32 +4867,6 @@
                                                       </dest>
                                                       <next>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>eat</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </next>
                                                     </modify>
@@ -5394,32 +4874,6 @@
                                                 </pass>
                                                 <fail>
                                                   <rule>
-                                                    <goal>
-                                                      <and>
-                                                        <lazy></lazy>
-                                                        <goal>
-                                                          <and>
-                                                            <lazy></lazy>
-                                                            <goal>
-                                                              <maybe>
-                                                                <prob>0.001</prob>
-                                                              </maybe>
-                                                            </goal>
-                                                            <goal>
-                                                              <place>
-                                                                <balloon>
-                                                                  <rate>0.001</rate>
-                                                                  <text>spawn</text>
-                                                                </balloon>
-                                                              </place>
-                                                            </goal>
-                                                          </and>
-                                                        </goal>
-                                                        <goal>
-                                                          <false></false>
-                                                        </goal>
-                                                      </and>
-                                                    </goal>
                                                   </rule>
                                                 </fail>
                                               </random>
@@ -5582,8 +5036,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -5591,70 +5045,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -5751,8 +5153,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -5760,70 +5162,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -5870,8 +5220,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -5879,70 +5229,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -6049,40 +5347,14 @@
                                                       <prob>0.024390243902439</prob>
                                                       <pass>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>breed</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -6090,38 +5362,12 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>step</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
@@ -6194,32 +5440,6 @@
                                                       </dest>
                                                       <next>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>eat</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </next>
                                                     </modify>
@@ -6227,32 +5447,6 @@
                                                 </pass>
                                                 <fail>
                                                   <rule>
-                                                    <goal>
-                                                      <and>
-                                                        <lazy></lazy>
-                                                        <goal>
-                                                          <and>
-                                                            <lazy></lazy>
-                                                            <goal>
-                                                              <maybe>
-                                                                <prob>0.001</prob>
-                                                              </maybe>
-                                                            </goal>
-                                                            <goal>
-                                                              <place>
-                                                                <balloon>
-                                                                  <rate>0.001</rate>
-                                                                  <text>spawn</text>
-                                                                </balloon>
-                                                              </place>
-                                                            </goal>
-                                                          </and>
-                                                        </goal>
-                                                        <goal>
-                                                          <false></false>
-                                                        </goal>
-                                                      </and>
-                                                    </goal>
                                                   </rule>
                                                 </fail>
                                               </random>
@@ -6408,8 +5602,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -6417,70 +5611,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -6577,8 +5719,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -6586,70 +5728,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -6696,8 +5786,8 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -6705,70 +5795,18 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>prey</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>0wn</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </fail>
                                                     </random>
@@ -6875,40 +5913,14 @@
                                                       <prob>0.024390243902439</prob>
                                                       <pass>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>breed</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </pass>
                                                       <fail>
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </src>
                                                             <srcmask>0</srcmask>
                                                             <rshift>0</rshift>
@@ -6916,38 +5928,12 @@
                                                             <lshift>0</lshift>
                                                             <destmask>ffffffffffffffff</destmask>
                                                             <dest>
-                                                              <x>0</x>
-                                                              <y>0</y>
+                                                            <x>0</x>
+                                                            <y>0</y>
                                                             </dest>
                                                             <next>
-                                                              <rule>
-                                                                <goal>
-                                                                  <and>
-                                                                    <lazy></lazy>
-                                                                    <goal>
-                                                                      <and>
-                                                                        <lazy></lazy>
-                                                                        <goal>
-                                                                          <maybe>
-                                                                            <prob>0.001</prob>
-                                                                          </maybe>
-                                                                        </goal>
-                                                                        <goal>
-                                                                          <place>
-                                                                            <balloon>
-                                                                              <rate>0.001</rate>
-                                                                              <text>step</text>
-                                                                            </balloon>
-                                                                          </place>
-                                                                        </goal>
-                                                                      </and>
-                                                                    </goal>
-                                                                    <goal>
-                                                                      <false></false>
-                                                                    </goal>
-                                                                  </and>
-                                                                </goal>
-                                                              </rule>
+                                                            <rule>
+                                                            </rule>
                                                             </next>
                                                           </modify>
                                                         </rule>
@@ -7020,32 +6006,6 @@
                                                       </dest>
                                                       <next>
                                                         <rule>
-                                                          <goal>
-                                                            <and>
-                                                              <lazy></lazy>
-                                                              <goal>
-                                                                <and>
-                                                                  <lazy></lazy>
-                                                                  <goal>
-                                                                    <maybe>
-                                                                      <prob>0.001</prob>
-                                                                    </maybe>
-                                                                  </goal>
-                                                                  <goal>
-                                                                    <place>
-                                                                      <balloon>
-                                                                        <rate>0.001</rate>
-                                                                        <text>eat</text>
-                                                                      </balloon>
-                                                                    </place>
-                                                                  </goal>
-                                                                </and>
-                                                              </goal>
-                                                              <goal>
-                                                                <false></false>
-                                                              </goal>
-                                                            </and>
-                                                          </goal>
                                                         </rule>
                                                       </next>
                                                     </modify>
@@ -7053,32 +6013,6 @@
                                                 </pass>
                                                 <fail>
                                                   <rule>
-                                                    <goal>
-                                                      <and>
-                                                        <lazy></lazy>
-                                                        <goal>
-                                                          <and>
-                                                            <lazy></lazy>
-                                                            <goal>
-                                                              <maybe>
-                                                                <prob>0.001</prob>
-                                                              </maybe>
-                                                            </goal>
-                                                            <goal>
-                                                              <place>
-                                                                <balloon>
-                                                                  <rate>0.001</rate>
-                                                                  <text>spawn</text>
-                                                                </balloon>
-                                                              </place>
-                                                            </goal>
-                                                          </and>
-                                                        </goal>
-                                                        <goal>
-                                                          <false></false>
-                                                        </goal>
-                                                      </and>
-                                                    </goal>
                                                   </rule>
                                                 </fail>
                                               </random>
@@ -8654,589 +7588,4 @@
     <reserve>1000</reserve>
     <recharge>100</recharge>
   </tool>
-  <exit>
-    <type>0</type>
-    <pos>
-      <x>-5</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>-5</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>-4</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>-3</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>-2</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>-1</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>0</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>1</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>2</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>-5</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>3</x>
-      <y>5</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>-4</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>3</y>
-    </pos>
-    <pos>
-      <x>4</x>
-      <y>4</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>-3</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>-2</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>-1</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>0</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>1</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>2</y>
-    </pos>
-    <pos>
-      <x>5</x>
-      <y>3</y>
-    </pos>
-  </exit>
-  <goal>
-    <and>
-      <lazy></lazy>
-      <cache></cache>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <place>
-              <balloon>
-                <text>ENTRANCE</text>
-                <persist></persist>
-              </balloon>
-            </place>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <place>
-              <balloon>
-                <text>EXIT</text>
-                <persist></persist>
-              </balloon>
-            </place>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <print>
-          <message>Welcome to level 1!
-Guide guests safely to the Exit.
-</message>
-        </print>
-      </goal>
-      <goal>
-        <setexit>
-          <exitstate>PortalCounting</exitstate>
-        </setexit>
-      </goal>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <usetool>
-              <tool>
-                <name>entrance</name>
-                <size>1</size>
-                <brush>
-                  <center>
-                    <x>0</x>
-                    <y>0</y>
-                  </center>
-                  <intensity>
-                    <spot>
-                      <x>0</x>
-                      <y>0</y>
-                    </spot>
-                  </intensity>
-                </brush>
-                <hexstate>0000000000000</hexstate>
-                <spray>1</spray>
-                <reserve>0</reserve>
-                <recharge>0</recharge>
-              </tool>
-            </usetool>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <place></place>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <print>
-          <message>The zoo is now closed to further guests.
-Guide all remaining guests to the Exit.</message>
-        </print>
-      </goal>
-      <goal>
-        <setexit>
-          <exitstate>PortalCounting</exitstate>
-        </setexit>
-      </goal>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <place></place>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <area>
-          <pos>
-            <x>0</x>
-            <y>0</y>
-          </pos>
-          <goal>
-            <place>
-              <balloon>
-                <text>UNLOCKED!</text>
-              </balloon>
-            </place>
-          </goal>
-        </area>
-      </goal>
-      <goal>
-        <print>
-          <message>Exit unlocked! You could try the next level, if there was one.</message>
-        </print>
-      </goal>
-      <goal>
-        <setexit>
-          <exitstate>PortalUnlocked</exitstate>
-        </setexit>
-      </goal>
-      <goal>
-        <print>
-          <message>YOU WIN! Congratulations.</message>
-        </print>
-      </goal>
-      <goal>
-        <setgame>
-          <gamestate>GameWon</gamestate>
-        </setgame>
-      </goal>
-    </and>
-  </goal>
 </game>
