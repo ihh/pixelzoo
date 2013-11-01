@@ -255,7 +255,6 @@ sub lock_end_POST {
 	    $lock_twig->parse ($c->request->body);
 	    @tool_ids = map ($_->text, $lock_twig->root->first_child("tools")->children("id"));
 	}
-#	warn "Tool IDs (@tool_ids)";
 	# Assemble the board XML
 	my $toolset_xml = $user_is_owner ? $world->meta_rel->owner_toolset_xml : $world->meta_rel->guest_toolset_xml;
 	# For now, use voyeur rules (until more owner/guest logic is implemented)
@@ -304,7 +303,6 @@ sub lock_id_end_GET {
     my ( $self, $c ) = @_;
     my $lock = $c->stash->{lock};
     my $world = $c->stash->{world};
-    warn map("lock_tool: $_\n", $lock->lock_tools);
     my @tool_ids = map ($_->tool, $lock->lock_tools);
     $self->assemble ($c, $world->board, $lock->toolset_xml, @tool_ids);
     $c->stash->{template} = 'world/lock.tt2';
