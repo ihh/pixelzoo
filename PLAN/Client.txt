@@ -1,6 +1,7 @@
 Scheme rules:
 - Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
 - SXML blob is loaded & saved with file
+ - potentially also have a sprite SXML blob which is viewable only to sprite kit
 - ZooGas modify rule has four modes: (1) do not modify source or destination SXML blob (default when not modifying type bits), (2) erase the destination cell's SXML blob (default when setting type bits), (2) copy source->destination SXML & erase source (default when copying type bits), (4) swap source<->destination SXML
 - Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
 - Use chibi-ffi (or just sexp_define_foreign) to wrap various C functions:
@@ -27,6 +28,7 @@ Delete AutoHash, Level, Grammar, simplezoo, polyzoo, zoocompiler from project
 Delete Zoo/dtd/proto.dtd
 
 Add a <rule> or (preferably) a Scheme function to create text balloons
+
 Add a default handler to <deliver> rules, so particles that don't implement the rule can be given some default behavior
 Allow <deliver> to get message from a register
 
@@ -38,7 +40,7 @@ Automatically create one new world per player, at registration time
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
-Add depth to worldmeta; replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
+Replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 - Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
