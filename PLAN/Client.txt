@@ -44,6 +44,7 @@ Add Galaxy Map view to world info screen; can use this to select neighbors of wo
 
 Replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
 
+Scheme function returning "examine" text
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
 - Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
 - API so DynamicRule can generate animations when visible cells are updated
