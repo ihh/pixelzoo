@@ -155,7 +155,7 @@ const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpres
     str = StringNew (sexp_string_data (sxml));
 
   /* release local variables */
-  sexp_gc_release4 (ctx);
+  sexp_gc_release1 (ctx);
 
   return str;
 }
