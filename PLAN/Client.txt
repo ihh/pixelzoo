@@ -6,8 +6,9 @@ Scheme rules:
 - Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
 - Use chibi-ffi (or just sexp_define_foreign) to wrap various C functions:
  - Board will need Scheme get/set-accessors for registers (setRegister regnum regval), cell type (setCellType x y strval), cell vars (setCellVar x y varname intval), and cell SXML blob (setCellSXML x y sexp)
- - Also make get-accessors for board size (integer), board depth (integer), xy-coords of center of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
- - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
+ - Also make get-accessors for board size (integer), board depth (integer), random number generator (32-bit int), xy-coords of center of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
+  - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
+  - Need to record the center of the current view area in the move log
 
 Optimization:
 - Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
