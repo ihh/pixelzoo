@@ -21,14 +21,10 @@ Tool rationing:
 - This, along with incumbent/challenger tool differences, should be sufficient to implement social play.
 
 
-Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
-
-Port cyclobs, cement, wall, plants, guests to Scheme
-
 Delete AutoHash, Level, Grammar, simplezoo, polyzoo, zoocompiler from project
 Delete Zoo/dtd/proto.dtd
 
-Add a <rule> or (preferably) a Scheme function to create text balloons
+Add a Board Scheme function to create text balloons
 
 Add a default handler to <deliver> rules, so particles that don't implement the rule can be given some default behavior
 Allow <deliver> to get message from a register
@@ -59,3 +55,5 @@ Implement ultra-basic, unsafe version of "PUT store/type", with clientside speci
 Add an experimental world + worldmeta hardwired to use the experimental toolbox
 Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
 
+Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
+Port cyclobs, cement, wall, plants, guests to Scheme
