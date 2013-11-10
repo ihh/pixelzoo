@@ -1,4 +1,4 @@
-Scheme rules.
+Scheme rules:
 - Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
 - SXML blob is loaded & saved with file
 - ZooGas modify rule has four modes: (1) do not modify source or destination SXML blob (default when not modifying type bits), (2) erase the destination cell's SXML blob (default when setting type bits), (2) copy source->destination SXML & erase source (default when copying type bits), (4) swap source<->destination SXML
@@ -10,6 +10,11 @@ Scheme rules.
 Optimization:
 - Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
 - Bit buffer should not be preserved between atomic update events (i.e. between cell updates)
+
+
+Tool rationing:
+- Tool levels should be stored in database, and recharges applied for period while world offline.
+- This, along with incumbent/challenger tool differences, should be sufficient to implement social play.
 
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
