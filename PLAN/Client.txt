@@ -10,8 +10,8 @@ Scheme rules:
 Optimization:
 - Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
  - Bit buffer should not be preserved between atomic update events (i.e. between cell updates)
-- Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var)
- - Lookup in writeBoardStateUnguardedFunction
+- Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) or log scaling (1<<var)/(1<<((1<<width)-1)))
+ - Look up rate in writeBoardStateUnguardedFunction when updating bin trees
 
 Tool rationing:
 - Tool levels should be stored in database, and recharges applied for period while world offline.
