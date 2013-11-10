@@ -41,6 +41,9 @@ Add Galaxy Map view to world info screen; can use this to select neighbors of wo
 Add depth to worldmeta; replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".
 
 Rewrite PZGameView-->PZGameSKView using Sprite Kit (keep PZGameView for debugging)
+- Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
+- API so DynamicRule can generate animations when visible cells are updated
+
 Change lock text to be consistent with narrative (e.g. "(creating Einstein-Rosen bridge)", "Orbital exit in 1:00"...)
 
 Add an alert with informative error message for failed lock (rather than just popping)
