@@ -36,6 +36,8 @@ Modify "world/" controller (authenticated) to list created, owned & neighboring 
 Modify Worlds menu to show up to 3 sections (omitting empty sections): 1) worlds that you control, 2) neighbors of worlds you control, 3) worlds you created
 
 Automatically create one new world per player, at registration time
+Add an accomplishments table, also player_accomplishments and worldmeta_required_accomplishments (which determines which worlds you can create)
+Add Scheme functions for awarding accomplishments, cash, world creation credits (need to figure out generic but simple reward structure here)
 
 Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
