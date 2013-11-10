@@ -7,6 +7,10 @@ Scheme rules.
  - Board will need Scheme get/set-accessors for registers (setRegister regnum regval), cell type (setCellType x y strval), cell vars (setCellVar x y varname intval), and cell SXML blob (setCellSXML x y sexp)
  - Also make get-accessors for board size (integer), board depth (integer), particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
 
+Optimization:
+- Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
+
+
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 
 Port cyclobs, cement, wall, plants, guests to Scheme
