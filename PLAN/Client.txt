@@ -1,9 +1,13 @@
-As well as {Lookup,Modify,Compare} implement lower-level, ARM-like primitive Rules:
+Conceptually the 7 opcodes {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 9 lower-level, ARM-like primitive Rules, all with conditional flags (LT,LE,EQ,NE,GT,GE,AL), and conventions about the highest registers meaning (x,y,message):
+-LoadRegisterWithLiteral(Rdest,#val)
+-LoadRegisterWithRandom(Rdest,#bits)
 -LoadRegisterFromCellVar(Rx,Ry,Roffset,Rwidth,Rload)
 -StoreRegisterToCellVar(Rx,Ry,Roffset,Rwidth,Rstore)
 -AddRegisters(Ra,Rb,Rdest)
--CompareRegisters(Ri,Rj;LT,LE,EQ,NE,GT,GE)
-...or maybe just (load,store,add,subtract,goto,deliver) and conditional flags on everything including GOTO & DELIVER?
+-SubtractRegisters(Ra,Rb,Rdest)
+-BranchOrContinue
+-WipeCellMeta(Rx,Ry)
+-SwapCellMeta(Rx1,Ry1,Rx2,Ry2)
 
 
 Scheme rules:
@@ -63,6 +67,5 @@ Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safe
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 Port cyclobs, cement, wall, plants, guests to Scheme
 
-Optimization:
-- Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
- - Bit buffer should not be preserved between atomic update events (i.e. between cell updates)
+Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
+
