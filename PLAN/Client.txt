@@ -1,20 +1,23 @@
+As well as {Lookup,Modify,Compare} implement lower-level, ARM-like primitive Rules:
+-LoadRegisterFromCellVar(Rx,Ry,Roffset,Rwidth,Rload)
+-StoreRegisterToCellVar(Rx,Ry,Roffset,Rwidth,Rstore)
+-AddRegisters(Ra,Rb,Rdest)
+-CompareRegisters(Ri,Rj;LT,LE,EQ,NE,GT,GE)
+
 Scheme rules:
-- Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
+Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
 - SXML blob is loaded & saved with file
- - potentially also have a sprite SXML blob which is viewable only to sprite kit
 - ZooGas modify rule has four modes: (1) do not modify source or destination SXML blob (default when not modifying type bits), (2) erase the destination cell's SXML blob (default when setting type bits), (2) copy source->destination SXML & erase source (default when copying type bits), (4) swap source<->destination SXML
-- Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
+Add ReturnRule, which gives a return value for a Rule (change attemptRule return type to State)
+Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
 - Use chibi-ffi (or just sexp_define_foreign) to wrap various C functions:
  - Board will need Scheme get/set-accessors for registers (setRegister regnum regval), cell type (setCellType x y strval), cell vars (setCellVar x y varname intval), and cell SXML blob (setCellSXML x y sexp)
  - Also make get-accessors for board size (integer), board depth (integer), random number generator (32-bit int), xy-coords of center of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
   - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
   - Need to record the center of the current view area in the move log
 
-Optimization:
-- Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
- - Bit buffer should not be preserved between atomic update events (i.e. between cell updates)
-- Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) .. log scaling is easy to create with a macro)
- - Look up rate in writeBoardStateUnguardedFunction when updating bin trees
+Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) .. log scaling is easy to create with a macro)
+- Look up rate in writeBoardStateUnguardedFunction when updating bin trees
 
 Tool rationing:
 - Tool levels should be stored in database, and recharges applied for period while world offline.
@@ -57,3 +60,7 @@ Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safe
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 Port cyclobs, cement, wall, plants, guests to Scheme
+
+Optimization:
+- Add a RandomNumberGeneratorBitBuffer (returns one random bit at a time; RandomNumberGenerator still just thinks it's giving out rngRandomInt32's; transiently created & destroyed in sampleBinLeaf; also in evolveBoardCell and evolveBoardCellSync, from where they're passed to attemptRule)
+ - Bit buffer should not be preserved between atomic update events (i.e. between cell updates)
