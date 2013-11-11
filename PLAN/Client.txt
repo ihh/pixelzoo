@@ -7,7 +7,7 @@ Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to u
  - Board will need Scheme get/set-accessors for cell states (setCellState x y state) and cell SXML blobs (setCellMeta x y sexp)
  - Also global defines for board size (integer), board depth (integer), random number generator (32-bit int), xy-bounding box of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
   - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
-  - Need to record the center of the current view area in the move log
+  - Need to record the bounding box of the current view area in the move log
 
 Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) .. log scaling is easy to create with a macro)
 - Look up rate in writeBoardStateUnguardedFunction when updating bin trees
