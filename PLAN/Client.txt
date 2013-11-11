@@ -1,13 +1,14 @@
-Conceptually the 7 opcodes {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 9 lower-level, ARM-like primitive Rules, all with conditional flags (LT,LE,EQ,NE,GT,GE,AL), and conventions about the highest registers meaning (x,y,message):
+Conceptually the 7 opcodes {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive Rules, all with conditional flags (LT,LE,EQ,NE,GT,GE,AL):
 -LoadRegisterWithLiteral(Rdest,#val)
 -LoadRegisterWithRandom(Rdest,#bits)
 -LoadRegisterFromCellVar(Rx,Ry,Roffset,Rwidth,Rload)
 -StoreRegisterToCellVar(Rx,Ry,Roffset,Rwidth,Rstore)
 -AddRegisters(Ra,Rb,Rdest)
 -SubtractRegisters(Ra,Rb,Rdest)
--BranchOrContinue
 -WipeCellMeta(Rx,Ry)
 -SwapCellMeta(Rx1,Ry1,Rx2,Ry2)
+-Branch (like Goto, but has a default 'next' for when conditional test is not met)
+-Dispatch(Rx,Ry,Rmessage)
 
 
 Scheme rules:
