@@ -57,7 +57,7 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
 
-Conceptually the 7 opcodes {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive Rules, all with conditional flags (LT,LE,EQ,NE,GT,GE,AL):
+Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive opcodes:
 -LoadRegisterWithLiteral(Rdest,#val)
 -LoadRegisterWithRandom(Rdest,#bits)
 -LoadRegisterFromCellVar(Rx,Ry,Roffset,Rwidth,Rload)
@@ -66,5 +66,5 @@ Conceptually the 7 opcodes {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with
 -SubtractRegisters(Ra,Rb,Rdest)
 -WipeCellMeta(Rx,Ry)
 -SwapCellMeta(Rx1,Ry1,Rx2,Ry2)
--Branch (like Goto, but has a default 'next' for when conditional test is not met)
--Dispatch(Rx,Ry,Rmessage)
+-ConditionalBranch(LT,LE,EQ,NE,GT,GE)
+-Dispatch(Rx,Ry)
