@@ -3,6 +3,8 @@ As well as {Lookup,Modify,Compare} implement lower-level, ARM-like primitive Rul
 -StoreRegisterToCellVar(Rx,Ry,Roffset,Rwidth,Rstore)
 -AddRegisters(Ra,Rb,Rdest)
 -CompareRegisters(Ri,Rj;LT,LE,EQ,NE,GT,GE)
+...or maybe just (load,store,add,subtract,goto,deliver) and conditional flags on everything including GOTO & DELIVER?
+
 
 Scheme rules:
 Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
