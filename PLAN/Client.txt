@@ -2,7 +2,6 @@ Scheme rules:
 Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
 - SXML blob is loaded & saved with file
 - ZooGas modify rule has four modes: (1) do not modify source or destination SXML blob (default when not modifying type bits), (2) erase the destination cell's SXML blob (default when setting type bits), (2) copy source->destination SXML & erase source (default when copying type bits), (4) swap source<->destination SXML
-Add ReturnRule, which gives a return value for a Rule (change attemptRule return type to State)
 Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
 - Use chibi-ffi (or just sexp_define_foreign) to wrap various C functions:
  - Board will need Scheme get/set-accessors for registers (setRegister regnum regval), cell type (setCellType x y strval), cell vars (setCellVar x y varname intval), and cell SXML blob (setCellSXML x y sexp)
