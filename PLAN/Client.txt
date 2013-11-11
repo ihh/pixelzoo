@@ -57,7 +57,7 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
 
-Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive opcodes:
+Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive opcodes & some conventions (e.g. that R0=message on entry to dispatch routine):
 -LoadRegisterWithLiteral(Rdest,#val)
 -LoadRegisterWithRandom(Rdest,#bits)
 -LoadRegisterFromCellVar(Rx,Ry,Roffset,Rwidth,Rload)
@@ -68,3 +68,4 @@ Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with t
 -SwapCellMeta(Rx1,Ry1,Rx2,Ry2)
 -ConditionalBranch(LT,LE,EQ,NE,GT,GE)
 -Dispatch(Rx,Ry)
+This would facilitate direct generation of ARM code. However, generating C code directly from the 7 Rules, and then compiling that, is probably just as effective.
