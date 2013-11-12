@@ -59,8 +59,8 @@ Optimization: add bit buffer to Mersenne Twister (included when serializing/init
 
 Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following lower-level, ARM-like primitive opcodes & some conventions:
 -LoadRegisterLiteral(Rdest,#val)      [LDR immediate]
--LoadCell(Rxyz,Rd)                    [LDR]
--StoreCell(Rn,Rxyz)                   [STR]
+-LoadCell(Rxyz,Rd)                    [LDR, memory-mapped neighborhood]
+-StoreCell(Rn,Rxyz)                   [STR, memory-mapped neighborhood]
 -ExtractBitField(Rd,#lsb,#width,Rn)   [UBFX]
 -InsertBitField(Rn,#lsb,#width,Rd)    [BFI]
 -AddRegisters(Ra,Rb,Rdest)            [ADD]
