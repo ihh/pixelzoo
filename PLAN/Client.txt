@@ -57,17 +57,15 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
 
-Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following lower-level, ARM-like primitive opcodes & some conventions:
--LoadRegisterLiteral(Rdest,#val)      [LDR immediate]
--LoadCell(Rxyz,Rd)                    [LDR, memory-mapped neighborhood]
--StoreCell(Rn,Rxyz)                   [STR, memory-mapped neighborhood]
--ExtractBitField(Rd,#lsb,#width,Rn)   [UBFX]
--InsertBitField(Rn,#lsb,#width,Rd)    [BFI]
--AddRegisters(Ra,Rb,Rdest)            [ADD]
--SubtractRegisters(Ra,Rb,Rdest)       [SUB]
+Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following lower-level, ARM-like primitive opcodes:
+-LoadLiteral(Rd,#val)                 [LDR immediate]
+-LoadBitField(Rxyz,#lsb,#width,Rd)    [LDR,UBFX]
+-StoreBitField(Rn,#lsb,#width,Rxyz)   [LDR,BFI,STR]
+-AddRegisters(Ra,Rb,Rd)               [ADD]
+-SubtractRegisters(Ra,Rb,Rd)          [SUB]
 -ConditionalBranch(LT,LE,EQ,NE,GT,GE) [B]
--LoadRegisterWithRandom(Rdest,#bits)
--Dispatch(Rxyz,Rmessage)
+-LoadRegisterWithRandom(Rd,#bits)
+-Dispatch(Rxyz,Rmsg)
 -WipeCellMeta(Rxyz)
 -SwapCellMeta(Rxyz1,Rxyz2)
 Example Rxyz format (24bits, 3*signed 8-bit bitfields): x in bits 0-7, y in bits 8-15, z in bits 16-24.
