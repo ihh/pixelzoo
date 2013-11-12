@@ -57,14 +57,16 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
 
-Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following 10 lower-level, ARM-like primitive opcodes & some conventions:
--LoadRegisterWithLiteral(Rdest,#val)  [LDR]
+Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following lower-level, ARM-like primitive opcodes & some conventions:
+-LoadRegisterLiteral(Rdest,#val)      [LDR immediate]
+-LoadCell(Rxyz,Rd)                    [LDR]
+-StoreCell(Rn,Rxyz)                   [STR]
+-ExtractBitField(Rd,#lsb,#width,Rn)   [UBFX]
+-InsertBitField(Rn,#lsb,#width,Rd)    [BFI]
+-AddRegisters(Ra,Rb,Rdest)            [ADD]
+-SubtractRegisters(Ra,Rb,Rdest)       [SUB]
+-ConditionalBranch(LT,LE,EQ,NE,GT,GE) [B]
 -LoadRegisterWithRandom(Rdest,#bits)
--LoadRegisterFromBitField(Rxyz,#lsb,#width,Rload)  [SBFX]
--StoreRegisterToBitField(Rxyz,#lsb,#width,Rstore)  [BFC,BFI]
--AddRegisters(Ra,Rb,Rdest)  [ADD]
--SubtractRegisters(Ra,Rb,Rdest)  [SUB]
--ConditionalBranch(LT,LE,EQ,NE,GT,GE)  [B]
 -Dispatch(Rxyz,Rmessage)
 -WipeCellMeta(Rxyz)
 -SwapCellMeta(Rxyz1,Rxyz2)
