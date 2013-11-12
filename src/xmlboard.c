@@ -117,6 +117,8 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
       z = OPTCHILDINT(node,Z,0);
       state = getStateFromNode (node, protoTable, 0);
       writeBoardState (board, x, y, z, state);
+      if (CHILD(node,META))
+	board->meta[boardIndex(board->size,x,y,z)] = (char*) StringNew((const char*)CHILDSTRING(node,META));
     }
 
   queueNode = CHILD (boardNode, QUEUE);
@@ -434,6 +436,7 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, Boar
 }
 
 void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {
+  const char* modifyTypeAttr;
   op->rightShift = getRShiftFromNode (node, protoTable);
   op->offset = getIncOrStateFromNode (node, protoTable, &op->offsetIsRegister);
   op->leftShift = getLShiftFromNode (node, protoTable);
@@ -443,6 +446,21 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, Board *boar
 
   initLocalOffsetFromXmlNode (&op->src, 0, 0, 0, CHILD(node,SRC));
   initLocalOffsetFromXmlNode (&op->dest, op->src.x, op->src.y, op->src.z, CHILD(node,DEST));
+
+  modifyTypeAttr = (const char*) ATTR(node,ACTION);
+  if (modifyTypeAttr) {
+    if (strcmp (modifyTypeAttr, XMLZOO_ACTION_CONSERVE) == 0)
+      op->modifyType = ConserveModify;
+    else if (strcmp (modifyTypeAttr, XMLZOO_ACTION_KILL) == 0)
+      op->modifyType = KillModify;
+    else if (strcmp (modifyTypeAttr, XMLZOO_ACTION_EAT) == 0)
+      op->modifyType = EatModify;
+    else
+      Abort ("Unknown action type: %s", modifyTypeAttr);
+  } else
+    op->modifyType = ((op->destMask & TypeMask) == TypeMask)
+      ? (((op->srcMask & TypeMask) == TypeMask)
+	 ? EatModify : KillModify) : ConserveModify;
 
   op->nextRule = newRuleFromXmlGrandparentNode (board, CHILD (node, NEXT), protoTable, localSubRule);
 }
@@ -532,6 +550,10 @@ void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int z, i
       writeGVarsXml (board, s, writer);
     else
       xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_HEXSTATE, "%llx", s);
+
+    if (board->meta[i])
+      xmlTextWriterWriteFormatElement (writer, (xmlChar*) XMLZOO_META, "%s", board->meta[i]);
+
     xmlTextWriterFullEndElement (writer);  /* end init */
   }
 }

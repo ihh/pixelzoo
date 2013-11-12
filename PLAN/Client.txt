@@ -57,17 +57,9 @@ Port cyclobs, cement, wall, plants, guests to Scheme
 
 Optimization: add bit buffer to Mersenne Twister (included when serializing/initializing seed state)
 
-Conceptually the 7 Rules {Lookup,Compare,Modify,Deliver,Random,Goto,Load} with their various addressing modes can be implemented using the following lower-level, ARM-like primitive opcodes:
--LoadLiteral(Rd,#val)                 [LDR immediate]
--LoadBitField(Rxyz,#lsb,#width,Rd)    [LDR,UBFX]
--StoreBitField(Rn,#lsb,#width,Rxyz)   [LDR,BFI,STR]
--AddRegisters(Ra,Rb,Rd)               [ADD]
--SubtractRegisters(Ra,Rb,Rd)          [SUB]
--ConditionalBranch(LT,LE,EQ,NE,GT,GE) [B]
--LoadRegisterWithRandom(Rd,#bits)
--Dispatch(Rxyz,Rmsg)
--WipeCellMeta(Rxyz)
--SwapCellMeta(Rxyz1,Rxyz2)
-Example Rxyz format (24bits, 3*signed 8-bit bitfields): x in bits 0-7, y in bits 8-15, z in bits 16-24.
-This would facilitate direct generation of ARM code. In practise, generating C code directly from the 7 Rules, and then compiling that, is probably just as effective.
-However, this is nice for the paper, due to the natural mapping to ARM.
+Conceptually, the 7 Rules with their various addressing modes & options can be implemented using lower-level primitives:
+-ARM opcodes for load/store (LDR/STR), arithmetic (ADD/SUB), bit-packing/unpacking (BFI/UBFX), and conditional branch (BLT/BLE/BGT/BGE/BEQ/BNE).
+-Subroutines: Mersenne twister, board accessors.
+This closeness to assembly language is useful for giving rigorous performance guarantees.
+In practise, generating C code directly from the 7 Rules, and then compiling that, would probably generate faster/smaller code than a hand-crafted assembler.
+

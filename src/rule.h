@@ -22,6 +22,7 @@ typedef struct LocalOffset {
 typedef struct ParticleRule ParticleRule;
 
 enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule };
+enum ModifyRuleType { ConserveModify, KillModify, EatModify };
 
 typedef struct LookupRuleParams {
   LocalOffset loc;
@@ -45,6 +46,7 @@ typedef struct ModifyRuleParams {
   unsigned int rightShift, leftShift;
   State srcMask, destMask, offset;
   unsigned char offsetIsRegister;  /* if nonzero, offset is treated as a register index */
+  enum ModifyRuleType modifyType;
   ParticleRule *nextRule;
 } ModifyRuleParams;
 

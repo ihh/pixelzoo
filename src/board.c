@@ -10,7 +10,7 @@
 #include "balloon.h"
 
 /* helpers */
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard);
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard, int *boardIndex_ret);
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
@@ -27,6 +27,7 @@ Board* newBoard (int size, int depth) {
   board->sync = SafeCalloc (size * size * depth, sizeof(State));
   board->watcher = SafeCalloc (size * size * depth, sizeof(CellWatcher*));
   board->syncWrite = SafeCalloc (size * size * depth, sizeof(unsigned char));
+  board->meta = SafeCalloc (size * size * depth, sizeof(char*));
   board->syncBin = newBinTree (size * size * depth);
   board->asyncBin = newBinTree (size * size * depth);
   board->syncUpdateBin = newBinTree (size * size * depth);
@@ -57,6 +58,7 @@ Board* newBoard (int size, int depth) {
 }
 
 void deleteBoard (Board* board) {
+  long i;
   State t;
   if (board->moveQueue)
     deleteMoveList (board->moveQueue);
@@ -70,6 +72,9 @@ void deleteBoard (Board* board) {
   SafeFree(board->cell);
   SafeFree(board->sync);
   SafeFree(board->syncWrite);
+  for (i = 0; i < board->size * board->size * board->depth; ++i)
+    SafeFreeOrNull (board->meta[i]);
+  SafeFree(board->meta);
   SafeFree(board->watcher);
   for (t = 0; t < NumTypes; ++t)
     if (board->byType[(Type) t])
@@ -294,7 +299,7 @@ void syncBoard (Board* board) {
   ++board->updateCount;
 }
 
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, State *reg, int *isOnBoard) {
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, State *reg, int *isOnBoard, int *boardIndex_ret) {
   State state, var;
   Type type;
   int xLoc, yLoc, zLoc;
@@ -313,6 +318,8 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
 
   if (onBoard (board, xLoc, yLoc, zLoc)) {
     *isOnBoard = 1;
+    if (boardIndex_ret)
+      *boardIndex_ret = boardIndex (board->size, xLoc, yLoc, zLoc);
     state = (*read) (board, xLoc, yLoc, zLoc);
     if (shift < BitsPerState) {
       /* read-write var */
@@ -332,7 +339,7 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
 }
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, int z, BoardReadFunction read, BoardWriteFunction write) {
-  int xDest, yDest, zDest, tracePos, r, isOnBoard;
+  int xDest, yDest, zDest, tracePos, r, isOnBoard, srcBoardIndex, destBoardIndex;
   State currentSrcState, currentDestState, newDestState, offset, var;
   Type type;
   LookupRuleParams *lookup;
@@ -362,7 +369,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case LookupRule:
 
       lookup = &rule->param.lookup;
-      var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard);
+      var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard, NULL);
 #ifdef PIXELZOO_DEBUG
       if (board->logRules)
 	Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
@@ -386,7 +393,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 
     case CompareRule:
       compare = &rule->param.compare;
-      var = readVarFromLoc (board, read, &compare->loc, x, y, z, compare->shift, compare->mask, reg, &isOnBoard);
+      var = readVarFromLoc (board, read, &compare->loc, x, y, z, compare->shift, compare->mask, reg, &isOnBoard, NULL);
       regVal = reg[compare->registerIndex];
 #ifdef PIXELZOO_DEBUG
       if (board->logRules)
@@ -417,7 +424,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       }
 
       if (onBoard (board, xDest, yDest, zDest)) {
-	var = readVarFromLoc (board, read, &modify->src, x, y, z, modify->rightShift, modify->srcMask, reg, &isOnBoard);
+	var = readVarFromLoc (board, read, &modify->src, x, y, z, modify->rightShift, modify->srcMask, reg, &isOnBoard, &srcBoardIndex);
 	if (isOnBoard) {
 	  offset = modify->offsetIsRegister ? reg[modify->offset] : modify->offset;
 
@@ -450,6 +457,22 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
 	    | (((var + offset) << modify->leftShift) & modify->destMask);
 	  (*write) (board, xDest, yDest, zDest, newDestState);
+
+	  destBoardIndex = boardIndex (board->size, xDest, yDest, zDest);
+	  switch (modify->modifyType) {
+	  case EatModify:
+	    SafeFreeOrNull (board->meta[srcBoardIndex]);
+	    board->meta[srcBoardIndex] = board->meta[destBoardIndex];
+	    board->meta[srcBoardIndex] = NULL;
+	    break;
+	  case KillModify:
+	    SafeFreeOrNull (board->meta[destBoardIndex]);
+	    board->meta[destBoardIndex] = NULL;
+	    break;
+	  case ConserveModify:
+	  default:
+	    break;
+	  }
 	}
       }
       rule = modify->nextRule;

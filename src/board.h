@@ -20,6 +20,7 @@ typedef struct Board {
   int depth;  /* number of layers */
   State *cell, *sync;   /* cell[boardIndex(size,x,y,z)] is the current state at (x,y,z); sync[boardIndex(size,x,y,z)] is the state pending the next board synchronization */
   unsigned char *syncWrite; /* syncWrite[boardIndex(size,x,y,z)] is true if sync[boardIndex(size,x,y,z)] should be written to cell[boardIndex(size,x,y,z)] at next board sync */
+  char **meta;  /* meta[boardIndex(size,x,y,z)] is NULL or a C string */
   CellWatcher **watcher;  /* notify[boardIndex(size,x,y,z)] is pointer to CellWatcher object that intercepts & potentially modifies writes to cell (x,y,z) */
   BinTree *asyncBin, *syncBin, *syncUpdateBin;  /* asyncBin = stochastic update rates AND queue, syncBin = sync update rates, syncUpdateBin = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */

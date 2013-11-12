@@ -35,6 +35,7 @@ ParticleRule* newModifyRule() {
   ParticleRule* rule;
   rule = newParticleRule (ModifyRule);
   rule->param.modify.nextRule = NULL;
+  rule->param.modify.modifyType = ConserveModify;
   return rule;
 }
 
