@@ -31,7 +31,7 @@ typedef struct ProtoTable {
   StringMap *byName;
   Proto **byType;
   Type nextFreeType;  /* internal use only */
-  sexp context;  /* Chibi Scheme context */
+  sexp context, sexp_Board_type_tag;  /* Chibi Scheme context & types */
   StringIntMap *message;  /* message lookup */
   StringVector *messageText;
 } ProtoTable;

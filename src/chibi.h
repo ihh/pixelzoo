@@ -8,5 +8,8 @@
 const char* sexp_string_data_wrapper (sexp x);
 const char* sexp_string (sexp ctx, sexp x);
 
+/* Initialize PixelZoo Scheme API */
+sexp sexp_init_lib_board (sexp ctx, sexp env);
+
 
 #endif /* CHIBI_INCLUDED */

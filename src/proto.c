@@ -80,6 +80,8 @@ ProtoTable *newProtoTable() {
   sexp_load_standard_env(protoTable->context, NULL, SEXP_SEVEN);
   sexp_load_standard_ports(protoTable->context, NULL, stdin, stdout, stderr, 0);
 
+  protoTable->sexp_Board_type_tag = sexp_init_lib_board (protoTable->context, sexp_context_env(protoTable->context));
+
   sexp_load(protoTable->context, sexp_c_string(protoTable->context, sexp_pixelzoo_module_path, -1), NULL);
 
   protoTable->message = newStringIntMap();

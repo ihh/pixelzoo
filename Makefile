@@ -81,7 +81,7 @@ $(INSTALLPATH)/chibi-scheme: bin/chibi_scheme
 
 # chibi-scheme board library
 bin/pzchibi: $(LIBTARGET)
-	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(LIBTARGET) chibi/main.c -o $@
+	$(CC) -DSEXP_PIXELZOO_REPL $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(LIBTARGET) chibi/main.c -o $@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)

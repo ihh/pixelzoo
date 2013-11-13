@@ -4,6 +4,10 @@
 
 #include "chibi/eval.h"
 
+#ifdef SEXP_PIXELZOO_REPL
+#include "../../src/chibi.h"
+#endif /* SEXP_PIXELZOO_REPL */
+
 #define sexp_argv_symbol "command-line"
 
 #define sexp_import_prefix "(import ("
@@ -251,6 +255,11 @@ static sexp sexp_load_standard_params (sexp ctx, sexp e) {
   sexp_gc_var2(p, res);
   sexp_gc_preserve2(ctx, p, res);
   sexp_load_standard_ports(ctx, e, stdin, stdout, stderr, 0);
+
+#ifdef SEXP_PIXELZOO_REPL
+  sexp_init_lib_board (ctx, e);
+#endif /* SEXP_PIXELZOO_REPL */
+
 #if SEXP_USE_GREEN_THREADS
   p  = sexp_param_ref(ctx, e, sexp_global(ctx, SEXP_G_CUR_IN_SYMBOL));
   if (sexp_portp(p)) sexp_maybe_block_port(ctx, p, 1);

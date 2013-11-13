@@ -21,6 +21,7 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, Board *boar
 void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
+void initFunctionRuleFromXmlNode (FunctionRuleParams* function, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 
 void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, int zDefault, xmlNode* node);
 
@@ -243,7 +244,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
       if (MATCHES (childNode, SUBRULE))
 	(void) newRuleFromXmlParentNode (board, childNode, protoTable, localSubRule);
 
-      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP)) {
+      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,DYNAMIC) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP)) {
 	if (ruleNode) {
 	  dump = xmlTreeToString (ruleParentNode);
 	  Warn ("Ignoring <%s> child of <%s> node, in favor of older sibling <%s>\nIn %s\n", (const char*) childNode->name, (const char*) ruleParentNode->name, (const char*) ruleNode->name, dump);
@@ -261,8 +262,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
       subRule = rule;
       subRule->label = StringNew (subRuleName);
       defineSubRule (localSubRule, subRuleName, subRule, board->subRule);
-      rule = newGotoRule();
-      rule->param.gotoLabel = subRule;
+      rule = newGotoRuleTo(subRule);
     }
   }
 
@@ -277,6 +277,7 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
   LoadRuleParams *load;
+  FunctionRuleParams *function;
   const char *evalResult;
   xmlNode *evalNode;
 
@@ -318,6 +319,11 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
     rule = newLoadRule();
     load = &rule->param.load;
     initLoadRuleFromXmlNode (load, ruleNode, board, protoTable, localSubRule);
+
+  } else if (MATCHES (ruleNode, DYNAMIC)) {
+    rule = newFunctionRule();
+    function = &rule->param.function;
+    initFunctionRuleFromXmlNode (function, ruleNode, board, protoTable, localSubRule);
 
   } else if (MATCHES (ruleNode, SCHEME)) {
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(ruleNode));
@@ -417,20 +423,17 @@ void initCompareRuleFromXmlNode (CompareRuleParams* compare, xmlNode* node, Boar
 	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
 	Assert (compare->eqRule == NULL, "Redefinition of equal-to rule");
 	compare->ltRule = rule;
-	compare->eqRule = newGotoRule();
-	compare->eqRule->param.gotoLabel = rule;
+	compare->eqRule = newGotoRuleTo(rule);
       } else if (MATCHES(curNode,GEQ)) {
 	Assert (compare->gtRule == NULL, "Redefinition of greater-than rule");
 	Assert (compare->eqRule == NULL, "Redefinition of equal-to rule");
 	compare->gtRule = rule;
-	compare->eqRule = newGotoRule();
-	compare->eqRule->param.gotoLabel = rule;
+	compare->eqRule = newGotoRuleTo(rule);
       } else if (MATCHES(curNode,NEQ)) {
 	Assert (compare->gtRule == NULL, "Redefinition of greater-than rule");
 	Assert (compare->ltRule == NULL, "Redefinition of less-than rule");
 	compare->gtRule = rule;
-	compare->ltRule = newGotoRule();
-	compare->ltRule->param.gotoLabel = rule;
+	compare->ltRule = newGotoRuleTo(rule);
       }
     }
 }
@@ -502,6 +505,20 @@ void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board,
     }
 
   load->nextRule = newRuleFromXmlGrandparentNode (board, CHILD (node, NEXT), protoTable, localSubRule);
+}
+
+void initFunctionRuleFromXmlNode (FunctionRuleParams *function, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {
+  xmlNode *next, *pass, *fail;
+  function->schemeExpr = StringNew ((const char*) CHILDSTRING(node,FUNCTION));
+  if ((next = CHILD(node,NEXT))) {
+    function->passRule = newRuleFromXmlGrandparentNode (board, next, protoTable, localSubRule);
+    function->failRule = newGotoRuleTo(function->passRule);
+  } else {
+    if ((pass = CHILD(node,PASS)))
+      function->passRule = newRuleFromXmlGrandparentNode (board, pass, protoTable, localSubRule);
+    if ((fail = CHILD(node,FAIL)))
+      function->failRule = newRuleFromXmlGrandparentNode (board, fail, protoTable, localSubRule);
+  }
 }
 
 void writeBoardXml (Board* board, xmlTextWriterPtr writer, int reverseCompile) {

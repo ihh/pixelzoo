@@ -1,0 +1,17 @@
+(c-include "src/board.h")
+
+(define-c-struct Board
+  predicate: Board?
+  finalizer: deleteBoard
+  (int              size         Board-size)
+  (int              depth        Board-depth))
+
+(define-c Board (Board-new newBoard) (int int))
+
+(define-c unsigned-long (Board-get-state readBoardStateFunction) (Board int int int))
+(define-c void (Board-set-state writeBoardStateFunction) (Board int int int unsigned-long))
+
+(define-c string (Board-get-meta readBoardMeta) (Board int int int))
+(define-c void (Board-set-meta writeBoardMeta) (Board int int int string))
+
+(define-c unsigned-long (Board-random boardRandomInt32) (Board))

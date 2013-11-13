@@ -60,12 +60,28 @@ ParticleRule* newGotoRule() {
   return rule;
 }
 
+ParticleRule* newGotoRuleTo(ParticleRule* label) {
+  ParticleRule* rule;
+  rule = newGotoRule();
+  rule->param.gotoLabel = label;
+  return rule;
+}
+
 ParticleRule* newLoadRule() {
   ParticleRule* rule;
   rule = newParticleRule (LoadRule);
   rule->param.load.n = 0;
   rule->param.load.reg = NULL;
   rule->param.load.state = NULL;
+  return rule;
+}
+
+ParticleRule* newFunctionRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (FunctionRule);
+  rule->param.function.schemeExpr = NULL;
+  rule->param.function.passRule = NULL;
+  rule->param.function.failRule = NULL;
   return rule;
 }
 
@@ -76,6 +92,7 @@ void deleteParticleRule (void *voidRule) {
   ModifyRuleParams *modify;
   RandomRuleParams *random;
   LoadRuleParams *load;
+  FunctionRuleParams *function;
 
   rule = (ParticleRule*) voidRule;
   SafeFreeOrNull ((void*) rule->label);
@@ -126,6 +143,15 @@ void deleteParticleRule (void *voidRule) {
     SafeFree (load->state);
     if (load->nextRule)
       deleteParticleRule (load->nextRule);
+    break;
+
+  case FunctionRule:
+    function = &rule->param.function;
+    SafeFreeOrNull (function->schemeExpr);
+    if (function->passRule)
+      deleteParticleRule (function->passRule);
+    if (function->failRule)
+      deleteParticleRule (function->failRule);
     break;
 
   default:

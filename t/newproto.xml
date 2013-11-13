@@ -5929,6 +5929,7 @@
           </switch>
         </rule>
       </particle>
+
       <particle>
         <name>perfume</name>
         <type>7</type>
@@ -5946,6 +5947,15 @@
         </colrule>
         <rate>0.6</rate>
         <rule>
+	  <dynamic>
+	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
+<!--
+	    <function>(lambda (board x y z) (display board))</function>
+	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
+	    <function>Board-get-state</function>
+-->
+	    <next><rule>
+
           <random>
             <prob>0.485</prob>
             <pass>
@@ -6823,8 +6833,12 @@
               </rule>
             </fail>
           </random>
+
+	</rule></next></dynamic>  <!-- end of dynamic rule -->
+
         </rule>
       </particle>
+
     </grammar>
     <init>
       <x>-5</x>

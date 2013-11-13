@@ -21,7 +21,7 @@ typedef struct LocalOffset {
 /* Types of rule */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule };
+enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule, FunctionRule };
 enum ModifyRuleType { ConserveModify, KillModify, EatModify };
 
 typedef struct LookupRuleParams {
@@ -67,6 +67,11 @@ typedef struct LoadRuleParams {
   ParticleRule *nextRule;
 } LoadRuleParams;
 
+typedef struct FunctionRuleParams {
+  char *schemeExpr;
+  ParticleRule *passRule, *failRule;
+} FunctionRuleParams;
+
 typedef union RuleParams {
   LookupRuleParams lookup;
   CompareRuleParams compare;
@@ -74,6 +79,7 @@ typedef union RuleParams {
   DeliverRuleParams deliver;
   RandomRuleParams random;
   LoadRuleParams load;
+  FunctionRuleParams function;
   ParticleRule *gotoLabel;
 } RuleParams;
 
@@ -91,6 +97,9 @@ ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
 ParticleRule* newGotoRule();
 ParticleRule* newLoadRule();
+ParticleRule* newFunctionRule();
+
+ParticleRule* newGotoRuleTo(ParticleRule* label);
 
 void deleteParticleRule (void *rule);
 

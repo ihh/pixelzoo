@@ -90,6 +90,10 @@ State readBoardStateUnguardedFunction (Board* board, int x, int y, int z) {
   return readBoardStateUnguarded(board,x,y,z);
 }
 
+State readBoardStateFunction (Board* board, int x, int y, int z) {
+  return readBoardState(board,x,y,z);
+}
+
 State readSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z) {
   return readSyncBoardStateUnguarded(board,x,y,z);
 }
@@ -130,6 +134,10 @@ void replayBoardMove (Board* board) {
 void logBoardMoves (Board* board) {
   if (board->moveLog == NULL)
     board->moveLog = newMoveList();
+}
+
+void writeBoardStateFunction (Board* board, int x, int y, int z, State state) {
+  writeBoardState(board,x,y,z,state);
 }
 
 void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State state) {
@@ -194,6 +202,23 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z, St
 
 void dummyWriteBoardStateFunction (Board* board, int x, int y, int z, State state) {
   return;
+}
+
+const char* readBoardMeta (Board* board, int x, int y, int z) {
+  return onBoard(board,x,y,z) ? board->meta[boardIndex(board->size,x,y,z)] : NULL;
+}
+
+void writeBoardMeta (Board* board, int x, int y, int z, const char* meta) {
+  int idx;
+  if (onBoard(board,x,y,z)) {
+    idx = boardIndex(board->size,x,y,z);
+    SafeFreeOrNull (board->meta[idx]);
+    board->meta[idx] = StringNew (meta);
+  }
+}
+
+unsigned long boardRandomInt32 (Board *board) {
+  return rngRandomInt32(board->rng);
 }
 
 PaletteIndex readBoardColor (Board* board, int x, int y, int z) {
@@ -529,11 +554,52 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       rule = load->nextRule;
       break;
 
+    case FunctionRule:
+      rule = boardAttemptFunctionRule (board, x, y, z, rule->param.function.schemeExpr)
+	? rule->param.function.passRule
+	: rule->param.function.failRule;
+      break;
+
     default:
       Abort ("Unknown rule type");
       break;
     }
   }
+}
+
+int boardAttemptFunctionRule (Board *board, int x, int y, int z, const char* expr) {
+  int success;
+  sexp ctx, env;
+  sexp_gc_var4(f,b,args,ret);
+
+  success = 0;
+  ctx = board->protoTable->context;
+  env = sexp_context_env(ctx);
+
+  sexp_gc_preserve4(ctx,f,b,args,ret);
+
+  f = sexp_eval_string(ctx,expr,-1,NULL);
+  if (sexp_exceptionp(f))
+    sexp_print_exception(ctx,f,sexp_current_error_port(ctx));
+  else if (sexp_procedurep(f)) {
+
+    b = sexp_make_cpointer(ctx, sexp_type_tag(board->protoTable->sexp_Board_type_tag), board, SEXP_FALSE, 0);
+    args = sexp_cons (ctx, b,
+		      sexp_cons (ctx, sexp_make_integer(ctx,x),
+				 sexp_cons (ctx, sexp_make_integer(ctx,y),
+					    sexp_cons (ctx, sexp_make_integer(ctx,z),
+						       SEXP_NULL))));
+
+    ret = sexp_apply (ctx, f, args);
+
+    if (sexp_exceptionp(ret))
+      sexp_print_exception(ctx,ret,sexp_current_error_port(ctx));
+    else
+      success = (ret != SEXP_FALSE);
+  }
+
+  sexp_gc_release4(ctx);
+  return success;
 }
 
 void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double maxElapsedTimeInSeconds, int64_Microticks *elapsedMicroticks_ret, int *cellUpdates_ret, double *elapsedTimeInSeconds_ret) {

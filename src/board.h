@@ -89,12 +89,14 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
 
 
 /* Board read accessors.
-   These "unguarded" methods do not check for off-board co-ordinates. Use readBoardState macro instead.
+   The "unguarded" methods do not check for off-board co-ordinates.
+   Use readBoardState (macro) or readBoardStateFunction to include such checking.
 */
 
-/* Board read accessor for asynchronous updates.
+/* Board read accessors for asynchronous updates.
  */
 State readBoardStateUnguardedFunction (Board* board, int x, int y, int z);
+State readBoardStateFunction (Board* board, int x, int y, int z);  /* wrapper for readBoardState macro */
 
 /* Board read accessor for synchronous updates.
  */
@@ -104,9 +106,10 @@ State readSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z);
    These "unguarded" methods do not check for off-board co-ordinates, or log the move. Use writeBoardMove function instead.
 */
 
-/* Board write accessor for asynchronous updates.
+/* Board write accessors for asynchronous updates.
  */
 void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State state);
+void writeBoardStateFunction (Board* board, int x, int y, int z, State state);  /* wrapper for writeBoardState macro */
 
 /* Board write accessor for synchronous updates.
  */
@@ -116,6 +119,15 @@ void writeSyncBoardStateUnguardedFunction (Board* board, int x, int y, int z, St
  */
 void dummyWriteBoardStateFunction (Board* board, int x, int y, int z, State state);
 
+/* Accessors for cell metadata (guarded) */
+const char* readBoardMeta (Board* board, int x, int y, int z);  /* does not copy the string */
+void writeBoardMeta (Board* board, int x, int y, int z, const char* meta);  /* copies the string */
+
+/* Wrappers for Board-related functions, for Scheme scripting */
+unsigned long boardRandomInt32 (Board *board);  /* wrapper for rngRandomInt32(board->rng) */
+
+/* Dynamic Scheme FunctionRule method. Returns 0 or 1 */
+int boardAttemptFunctionRule (Board *board, int x, int y, int z, const char* expr);
 
 /* Private helper methods & macros */
 
