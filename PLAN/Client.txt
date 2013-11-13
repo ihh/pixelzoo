@@ -1,3 +1,5 @@
+Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variable
+
 Scheme rules:
 Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
 - SXML blob is loaded & saved with file
@@ -9,18 +11,28 @@ Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to u
   - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
   - Need to record the bounding box of the current view area in the move log
 
+Tool rationing:
+- Tool levels should be stored in database, and recharges applied for period while world offline.
+- This, along with incumbent/challenger tool differences, should be sufficient to implement basic social play.
+- PROTECTED WORLDS: worldmeta setting allowing incumbent to revert challengers' moves. For social play.
+
+Scheme function returning "examine" text
+Create a PZIsometricGameView version of PZGameView that uses 2:1 isometric grid
+PZIsometricGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
+- Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
+- API so DynamicRule can generate animations when visible cells are updated
+
+TEMPORAL ZOOMING MECHANIC: at zoomed-in scales, animations & sound FX play, board runs slower
+
+
 Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) .. log scaling is easy to create with a macro)
 - Look up rate in writeBoardStateUnguardedFunction when updating bin trees
 
-Tool rationing:
-- Tool levels should be stored in database, and recharges applied for period while world offline.
-- This, along with incumbent/challenger tool differences, should be sufficient to implement social play.
+Add SwapRule that swaps two cells (state + meta)
 
-Scheme function returning "examine" text
-Rewrite PZGameView to use 2:1 isometric grid
-PZGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
-- Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
-- API so DynamicRule can generate animations when visible cells are updated
+Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single integrated function (Board-set-typed (c (x 1) (y 2) (z 3)) (p (t wall) (b (w 5) (k hue) (v 23)) (s (meta (inform (ation))))))  (cptbwkvd=cell,particle,type,bitfield,width,key,value,state)
+(similarly, combine (Board-get-state 1 2 3) and (Board-get-meta 1 2 3) into (Board-get (c (x 1) (y 2) (z 3)))
+These can be implemented in Scheme for now; in future we can provide syntactic-sugar wrappers with access to the ProtoTable, e.g. (Board-set 1 2 3 (wall (hue 23)) (meta (inform (ation))))
 
 
 Delete AutoHash, Level, Grammar, simplezoo, polyzoo, zoocompiler from project

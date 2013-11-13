@@ -583,6 +583,8 @@ int boardAttemptFunctionRule (Board *board, int x, int y, int z, const char* exp
     sexp_print_exception(ctx,f,sexp_current_error_port(ctx));
   else if (sexp_procedurep(f)) {
 
+    printf("boardAttemptFunctionRule: Board=%lx\n",board);
+
     b = sexp_make_cpointer(ctx, sexp_type_tag(board->protoTable->sexp_Board_type_tag), board, SEXP_FALSE, 0);
     args = sexp_cons (ctx, b,
 		      sexp_cons (ctx, sexp_make_integer(ctx,x),
