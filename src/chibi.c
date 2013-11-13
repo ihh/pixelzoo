@@ -73,10 +73,6 @@ static sexp sexp_Board_set_state_stub (sexp ctx, sexp self, sexp_sint_t n, sexp 
 
 static sexp sexp_Board_get_state_stub (sexp ctx, sexp self, sexp_sint_t n, sexp arg0, sexp arg1, sexp arg2, sexp arg3) {
   sexp res;
-  printf("sexp_Board_get_state_stub: Board=%lx\n",(Board*)sexp_cpointer_value(arg0));
-  printf("sexp_pointerp(arg0): %d\n",sexp_pointerp(arg0));
-  printf("sexp_pointer_tag(arg0): %d\n",sexp_pointer_tag(arg0));
-  printf("sexp_unbox_fixnum(sexp_opcode_arg1_type(self)): %d\n",sexp_unbox_fixnum(sexp_opcode_arg1_type(self)));
   if (! (sexp_pointerp(arg0) && (sexp_pointer_tag(arg0) == sexp_unbox_fixnum(sexp_opcode_arg1_type(self)))))
     return sexp_type_exception(ctx, self, sexp_unbox_fixnum(sexp_opcode_arg1_type(self)), arg0);
   if (! sexp_exact_integerp(arg1))
@@ -117,7 +113,7 @@ static sexp sexp_Board_get_depth (sexp ctx, sexp self, sexp_sint_t n, sexp b) {
   return sexp_make_integer(ctx, ((struct Board*)sexp_cpointer_value(b))->depth);
 }
 
-sexp sexp_init_lib_board (sexp ctx, sexp env) {
+void sexp_init_lib_board (sexp ctx, sexp env) {
   sexp sexp_Board_type_tag;
   sexp_gc_var3(name, tmp, op);
   sexp_gc_preserve3(ctx, name, tmp, op);
@@ -199,6 +195,5 @@ sexp sexp_init_lib_board (sexp ctx, sexp env) {
   }
 
   sexp_gc_release3(ctx);
-  return sexp_Board_type_tag;
 }
 
