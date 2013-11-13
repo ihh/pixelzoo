@@ -80,9 +80,6 @@ $(INSTALLPATH)/chibi-scheme: bin/chibi_scheme
 	cp $< $@
 
 # chibi-scheme board library
-chibi/lib/pixelzoo/board.c: chibi/lib/pixelzoo/board.stub
-	chibi/tools/chibi-ffi $<
-
 bin/pzchibi: $(LIBTARGET)
 	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(LIBTARGET) chibi/main.c -o $@
 
