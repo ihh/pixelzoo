@@ -10,6 +10,8 @@ SDL_CFLAGS  := $(shell $(SDLCONFIG) --cflags)
 SDL_LDFLAGS := $(shell $(SDLCONFIG) --static-libs)
 # -L/usr/X11R6/lib -lXi
 
+INSTALLPATH := /usr/local/bin
+
 CC          := gcc
 AR          := ar
 COPTS       := -g -Wall
@@ -27,7 +29,8 @@ LIBDIR    := lib
 LIBNAME   := pixelzoo
 LIBTARGET := $(LIBDIR)/lib$(LIBNAME).a
 
-OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(wildcard src/*.c))))))
+CFILES  := $(wildcard src/*.c)
+OFILES  := $(addprefix obj/,$(addsuffix .o,$(filter-out $(TARGETS),$(basename $(notdir $(CFILES))))))
 XFILES  := $(addprefix bin/,$(TARGETS))
 
 CHIBI_CFILES := chibi/sexp.c chibi/eval.c
@@ -60,16 +63,23 @@ obj/%.o: src/%.c
 	@test -e obj || mkdir obj
 	$(CC) $(ANSI) $(COPTS) $(CFLAGS) $(CHIBI_HDRS) -c $< -o $@
 
+# Base chibi-scheme
 chibi/obj/%.o: chibi/%.c
 	@test -e chibi/obj || mkdir chibi/obj
 	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) -c $< -o $@
 
-bin/chibi_scheme:
-	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(CHIBI_CFILES) chibi/main.c $< -o $@
+bin/chibi_scheme: $(CHIBI_CFILES)
+	$(CC) $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(CHIBI_CFILES) chibi/main.c -o $@
 
 chibi-test: bin/chibi_scheme
 	(echo '(load "scheme/zoo.scm")'; cat) | bin/chibi_scheme
 
+chibi-install: $(INSTALLPATH)/chibi-scheme
+
+$(INSTALLPATH)/chibi-scheme: bin/chibi_scheme
+	cp $< $@
+
+# pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	@test -e lib || mkdir lib
 	$(AR) $(ARFLAGS) $(LIBTARGET) $(OFILES) $(CHIBI_OFILES)

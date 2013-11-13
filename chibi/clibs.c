@@ -74,7 +74,6 @@
 #include "lib/chibi/ast.c"
 #undef sexp_init_library
 
-
 typedef struct {
   const char *name;
   sexp_init_proc init;
