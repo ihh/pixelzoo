@@ -114,9 +114,8 @@ static sexp sexp_Board_get_depth (sexp ctx, sexp self, sexp_sint_t n, sexp b) {
 }
 
 void sexp_init_lib_board (sexp ctx, sexp env) {
-  sexp sexp_Board_type_tag;
-  sexp_gc_var3(name, tmp, op);
-  sexp_gc_preserve3(ctx, name, tmp, op);
+  sexp_gc_var4(name, tmp, op, sexp_Board_type_tag);
+  sexp_gc_preserve4(ctx, name, tmp, op, sexp_Board_type_tag);
 
   name = sexp_c_string(ctx, "Board", -1);
   sexp_Board_type_tag = sexp_register_c_type(ctx, name, sexp_deleteBoard_stub);
@@ -194,6 +193,6 @@ void sexp_init_lib_board (sexp ctx, sexp env) {
     sexp_opcode_arg2_type(op) = sexp_make_fixnum(SEXP_FIXNUM);
   }
 
-  sexp_gc_release3(ctx);
+  sexp_gc_release4(ctx);
 }
 

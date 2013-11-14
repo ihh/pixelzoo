@@ -570,38 +570,42 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 int boardAttemptFunctionRule (Board *board, int x, int y, int z, const char* expr) {
   int success;
   sexp ctx, env;
-  sexp_gc_var4(f,b,args,ret);
+  sexp_gc_var3(f,tmp,args);
 
   success = 0;
   ctx = board->protoTable->context;
   env = sexp_context_env(ctx);
 
-  sexp_gc_preserve4(ctx,f,b,args,ret);
+  sexp_gc_preserve3(ctx,f,tmp,args);
 
   f = sexp_eval_string(ctx,expr,-1,NULL);
   if (sexp_exceptionp(f))
     sexp_print_exception(ctx,f,sexp_current_error_port(ctx));
   else if (sexp_procedurep(f)) {
 
-    b = sexp_make_cpointer(ctx, sexp_type_tag(sexp_lookup_type(ctx, sexp_c_string(ctx, "Board", -1), SEXP_FALSE)), board, SEXP_FALSE, 0);
-    /*
-    b = sexp_make_cpointer(ctx, sexp_type_tag(sexp_eval_string(ctx,"Board",-1,env)), board, SEXP_FALSE, 0);
-    */
-    args = sexp_cons (ctx, b,
-		      sexp_cons (ctx, sexp_make_integer(ctx,x),
-				 sexp_cons (ctx, sexp_make_integer(ctx,y),
-					    sexp_cons (ctx, sexp_make_integer(ctx,z),
-						       SEXP_NULL))));
+    tmp = sexp_make_integer(ctx,z);
+    args = sexp_cons (ctx, tmp, SEXP_NULL);
 
-    ret = sexp_apply (ctx, f, args);
+    tmp = sexp_make_integer(ctx,y);
+    args = sexp_cons (ctx, tmp, args);
 
-    if (sexp_exceptionp(ret))
-      sexp_print_exception(ctx,ret,sexp_current_error_port(ctx));
+    tmp = sexp_make_integer(ctx,x);
+    args = sexp_cons (ctx, tmp, args);
+
+    tmp = sexp_c_string(ctx, "Board", -1);
+    tmp = sexp_lookup_type(ctx, tmp, SEXP_FALSE);
+    tmp = sexp_make_cpointer(ctx, sexp_type_tag(tmp), board, SEXP_FALSE, 0);
+    args = sexp_cons (ctx, tmp, args);
+
+    tmp = sexp_apply (ctx, f, args);
+
+    if (sexp_exceptionp(tmp))
+      sexp_print_exception(ctx,tmp,sexp_current_error_port(ctx));
     else
-      success = (ret != SEXP_FALSE);
+      success = (tmp != SEXP_FALSE);
   }
 
-  sexp_gc_release4(ctx);
+  sexp_gc_release3(ctx);
   return success;
 }
 

@@ -29,6 +29,8 @@ Allow Particle rates to be influenced by state of var (e.g. as a generalization 
 - Look up rate in writeBoardStateUnguardedFunction when updating bin trees
 
 Add SwapRule that swaps two cells (state + meta)
+Syntax for read-only bits: global Particle vars
+
 
 Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single integrated function (Board-set-typed (c (x 1) (y 2) (z 3)) (p (t wall) (b (w 5) (k hue) (v 23)) (s (meta (inform (ation))))))  (cptbwkvd=cell,particle,type,bitfield,width,key,value,state)
 (similarly, combine (Board-get-state 1 2 3) and (Board-get-meta 1 2 3) into (Board-get (c (x 1) (y 2) (z 3)))

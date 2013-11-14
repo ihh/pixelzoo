@@ -62,7 +62,7 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   /* evaluate top-level Scheme expressions */
   for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,SCHEMEDEF))
-      (void) protoTableEval (protoTable, (const char*) getNodeContent (node));
+      protoTableEval (protoTable, (const char*) getNodeContent (node));
 
   /* expand any Particle-level Scheme blocks */
   for (node = grammarNode->children; node; node = node->next)
