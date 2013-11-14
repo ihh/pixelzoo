@@ -79,8 +79,11 @@ static sexp sexp_Board_set_state_stub (sexp ctx, sexp self, sexp_sint_t n, sexp 
 
 static sexp sexp_Board_get_state_stub (sexp ctx, sexp self, sexp_sint_t n, sexp arg0, sexp arg1, sexp arg2, sexp arg3) {
   sexp res;
+
+  // The following test fails & eventually segfaults
   if (! (sexp_pointerp(arg0) && (sexp_pointer_tag(arg0) == sexp_unbox_fixnum(sexp_opcode_arg1_type(self)))))
     return sexp_type_exception(ctx, self, sexp_unbox_fixnum(sexp_opcode_arg1_type(self)), arg0);
+
   if (! sexp_exact_integerp(arg1))
     return sexp_type_exception(ctx, self, SEXP_FIXNUM, arg1);
   if (! sexp_exact_integerp(arg2))

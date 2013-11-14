@@ -5948,10 +5948,10 @@
         <rate>0.6</rate>
         <rule>
 	  <dynamic>
-<!-- this doesn't work: -->
-	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
+<!-- this doesn't work when type-checking is on: -->
+	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
 <!--
-The following don't work...
+The following don't work when type-checking is on...
 	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
 	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
 The following DO seem to work...
