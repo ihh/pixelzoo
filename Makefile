@@ -83,6 +83,10 @@ $(INSTALLPATH)/chibi-scheme: bin/chibi_scheme
 bin/pzchibi: $(LIBTARGET)
 	$(CC) -DSEXP_PIXELZOO_REPL $(ANSI) $(COPTS) $(CHIBI_HDRS) $(CHIBI_CODE) $(LIBTARGET) chibi/main.c -o $@
 
+# this will hang...
+pzchibi-bug: bin/pzchibi
+	cat scheme/pzchibi-bug.scm | bin/pzchibi
+
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	@test -e lib || mkdir lib
