@@ -168,7 +168,9 @@ const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpres
   else if (sexp_stringp(sxml))
     str = StringNew (sexp_string_data (sxml));
 
-  Warn("%s evaluated to '%s'",schemeExprWrapper,str);
+  /*
+    Warn("%s evaluated to '%s'",schemeExprWrapper,str);
+  */
 
   SafeFree (schemeExprWrapper);
 
@@ -178,58 +180,62 @@ const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpres
   return str;
 }
 
-void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
+void protoTableSetString (ProtoTable *protoTable, const char* symbol, const char* value) {
   char* str;
   sexp ctx;
-  sexp_gc_var3 (s, tmp, args);
+  sexp_gc_var2 (tmp, f);
 
   ctx = protoTable->context;
-  sexp_gc_preserve3 (ctx, s, tmp, args);
+  sexp_gc_preserve2 (ctx, tmp, f);
 
-  s = sexp_intern(ctx,SET_PROC,-1);
+  tmp = sexp_c_string(ctx,value,-1);
+  f = sexp_cons(ctx,tmp,SEXP_NULL);
 
-  tmp = sexp_intern(ctx,SELF_TYPE,-1);
-  args = sexp_c_string(ctx,selfType,-1);
-  args = sexp_list2 (ctx, tmp, args);
+  tmp = sexp_intern(ctx,symbol,-1);
+  f = sexp_cons(ctx,tmp,f);
 
-  sexp_apply (ctx, s, args);
+  tmp = sexp_intern(ctx,SET_PROC,-1);
+  f = sexp_cons(ctx,tmp,f);
 
-  sexp_gc_release3 (ctx);
+  sexp_eval (ctx, f, NULL);
 
-  str = sexp_string_data (sexp_eval_string (protoTable->context, SELF_TYPE, -1, NULL));
-  Assert (strcmp(str,selfType)==0, "%s evaluates to '%s', should be '%s'", SELF_TYPE, str, selfType);
+  sexp_gc_release2 (ctx);
+
+  /* test */
+  str = sexp_string_data (sexp_eval_string (protoTable->context, symbol, -1, NULL));
+  Assert (strcmp(str,value)==0, "%s evaluates to '%s', should be '%s'", symbol, str, value);
+}
+
+void protoTableSetInt (ProtoTable *protoTable, const char* symbol, int value) {
+  sexp ctx;
+  sexp_gc_var2 (tmp, f);
+
+  ctx = protoTable->context;
+  sexp_gc_preserve2 (ctx, tmp, f);
+
+  tmp = sexp_make_integer(ctx,value);
+  f = sexp_cons(ctx,tmp,SEXP_NULL);
+
+  tmp = sexp_intern(ctx,symbol,-1);
+  f = sexp_cons(ctx,tmp,f);
+
+  tmp = sexp_intern(ctx,SET_PROC,-1);
+  f = sexp_cons(ctx,tmp,f);
+
+  sexp_eval (ctx, f, NULL);
+
+  sexp_gc_release2 (ctx);
+}
+
+void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
+  protoTableSetString (protoTable, SELF_TYPE, selfType);
 }
 
 void protoTableSetContestInfo (ProtoTable *protoTable, const char* winType, const char* winVar, int incumbent, int challenger) {
-  sexp ctx;
-  sexp_gc_var3 (s, tmp, args);
-
-  ctx = protoTable->context;
-  sexp_gc_preserve3 (ctx, s, tmp, args);
-
-  s = sexp_intern(ctx,SET_PROC,-1);
-
-  tmp = sexp_intern(ctx,CONTEST_TYPE,-1);
-  args = sexp_c_string(ctx,winType,-1);
-  args = sexp_list2 (ctx, tmp, args);
-  sexp_apply (ctx, s, args);
-
-  tmp = sexp_intern(ctx,CONTEST_VAR,-1);
-  args = sexp_c_string(ctx,winVar,-1);
-  args = sexp_list2 (ctx, tmp, args);
-  sexp_apply (ctx, s, args);
-
-  tmp = sexp_intern(ctx,INCUMBENT_ID,-1);
-  args = sexp_make_integer(ctx,incumbent);
-  args = sexp_list2 (ctx, tmp, args);
-  sexp_apply (ctx, s, args);
-
-  tmp = sexp_intern(ctx,CHALLENGER_ID,-1);
-  args = sexp_make_integer(ctx,challenger);
-  args = sexp_list2 (ctx, tmp, args);
-  sexp_apply (ctx, s, args);
-
-  sexp_gc_release3 (ctx);
+  protoTableSetString (protoTable, CONTEST_TYPE, winType);
+  protoTableSetString (protoTable, CONTEST_VAR, winVar);
+  protoTableSetInt (protoTable, INCUMBENT_ID, incumbent);
+  protoTableSetInt (protoTable, CHALLENGER_ID, challenger);
 }
 
 Message protoTableMessageLookup (ProtoTable *protoTable, const char* message) {

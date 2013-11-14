@@ -5948,10 +5948,15 @@
         <rate>0.6</rate>
         <rule>
 	  <dynamic>
+<!-- this doesn't work: -->
 	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
 <!--
-	    <function>(lambda (board x y z) (display board))</function>
+The following don't work...
+	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
 	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
+The following DO seem to work...
+	    <function>(lambda (board x y z) (display `(perfume ,x ,y ,z)))</function>
+	    <function>(lambda (board x y z) (display board))</function>
 	    <function>Board-get-state</function>
 -->
 	    <next><rule>
