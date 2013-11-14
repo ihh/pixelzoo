@@ -1,11 +1,19 @@
+Kids are getting bored, no way this ship runs without fuel. Clear breathing comes first.
+Then, a realistic (slow but steady) progress rate.
+
 pzchibi is still segfaulting, e.g.
  > (define b (Board-new 128 1))
  > b
  #<Object>
  > b
  ^C [hangs]
+Reproducible as 'make pzchibi-bug'.
 Make a small test file that reproduces the bug & can be compiled to latest chibi on Google Code. (Either start from scratch or copy&paste key functions from board.c.)
+Diagnose in XCode - catches some memory leaks, unsafe free's, etc.
+
 Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variable.
+(Disabling type-checking for Board* seems to work, too, but bugs might indicate memory corruption behind the scenes, so need to be preserved for investigation.)
+
 
 Scheme rules:
 Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
@@ -18,16 +26,31 @@ Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to u
   - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
   - Need to record the bounding box of the current view area in the move log
 
-Tool rationing:
-- Tool levels should be stored in database, and recharges applied for period while world offline.
-- This, along with incumbent/challenger tool differences, should be sufficient to implement basic social play.
-- PROTECTED WORLDS: worldmeta setting allowing incumbent to revert challengers' moves. For social play.
 
-Scheme function returning "examine" text
+Define the following via a ProtoTable-level set!  (ptbwsk=particle,type,bitfield,width,shift,key)
+ Board-proto-table --> (("empty" (p (t 0))) ("wall" (p (t 5) (b (w 5) (s 0) (k "hue")))) ...)      i.e. an assoc list of the form ((name (p (t T) (b (w W) (s S) (k K)))*)*)
+...then all the following can be implemented in Scheme...
+Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single integrated function  (cxyzvd=cell,xcoord,ycoord,zcoord,value,data)
+ (Board-set 1 2 3 (wall (hue 23)) (meta (inform (ation))))  (wraps Board-set-proto)
+ (Board-set-proto (c (x 1) (y 2) (z 3)) (p (n wall) (b (k hue) (v 23)) (d (meta (inform (ation))))))   (verifies using Board-proto-table, wraps Board-set-typed)
+ (Board-set-typed (c (x 1) (y 2) (z 3)) (p (t 5) (b (w 5) (s 0) (v 23)) (d (meta (inform (ation))))))   (wraps Board-get-state, Board-set-state and Board-set-meta)
+ (Board-get-typed (c (x 1) (y 2) (z 3))) --> (p (t 5) (n wall) (b (w 5) (s 0) (k hue) (v 23)) (d (meta (inform (ation)))))  (wraps Board-get-state and Board-get-meta, uses Board-proto-table to decorate)
+
+
 Create a PZIsometricGameView version of PZGameView that uses 2:1 isometric grid
 PZIsometricGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
 - Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
 - API so DynamicRule can generate animations when visible cells are updated
+
+
+Scheme function returning "examine" text
+Scheme function to create text balloons
+
+
+Tool rationing:
+- Tool levels should be stored in database, and recharges applied for period while world offline.
+- This, along with incumbent/challenger tool differences, should be sufficient to implement basic social play.
+- PROTECTED WORLDS: worldmeta setting allowing incumbent to revert challengers' moves. For social play.
 
 TEMPORAL ZOOMING MECHANIC: at zoomed-in scales, animations & sound FX play, board runs slower
 
@@ -39,15 +62,8 @@ Add SwapRule that swaps two cells (state + meta)
 Syntax for read-only bits: global Particle vars
 
 
-Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single integrated function (Board-set-typed (c (x 1) (y 2) (z 3)) (p (t wall) (b (w 5) (k hue) (v 23)) (s (meta (inform (ation))))))  (cptbwkvd=cell,particle,type,bitfield,width,key,value,state)
-(similarly, combine (Board-get-state 1 2 3) and (Board-get-meta 1 2 3) into (Board-get (c (x 1) (y 2) (z 3)))
-These can be implemented in Scheme for now; in future we can provide syntactic-sugar wrappers with access to the ProtoTable, e.g. (Board-set 1 2 3 (wall (hue 23)) (meta (inform (ation))))
-
-
 Delete AutoHash, Level, Grammar, simplezoo, polyzoo, zoocompiler from project
 Delete Zoo/dtd/proto.dtd
-
-Add a Board Scheme function to create text balloons
 
 Add a default handler to <deliver> rules, so particles that don't implement the rule can be given some default behavior
 Allow <deliver> to get message from a register
@@ -71,7 +87,7 @@ Add graceful failure modes (alert-then-pop-after-appear) for all NSURLConnection
 
 Implement ultra-basic, unsafe version of "PUT store/type", with clientside specification of particle dependencies, which automatically associates the Particle with a Tool (using particle_tool table) and adds this tool to a hardwired "experimental toolbox"
 Add an experimental world + worldmeta hardwired to use the experimental toolbox
-Using PegJS, implement an ultra-basic reaction-diffusion grammar editor (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
+Using PegJS, implement an ultra-basic drag-and-drop reaction-diffusion grammar editor, using isometric tiles to represent AB->CD rules and logarithmic sliders for rates (no safety checks, just uses "UserID/" as a prefix on particle names to avoid clashes)
 
 Design some new particle content: a voter-process scintillating wall + spraytool, an SIR zombie model
 Port cyclobs, cement, wall, plants, guests to Scheme

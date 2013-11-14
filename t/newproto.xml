@@ -5948,10 +5948,10 @@
         <rate>0.6</rate>
         <rule>
 	  <dynamic>
-<!-- this doesn't work when type-checking is on: -->
-	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
+<!-- this doesn't work when Board type-checking is on: -->
+	    <function>(lambda (board x y z) (begin (display `(perfume ,x ,y ,z ,(Board-get-state board x y z))) #t))</function>
 <!--
-The following don't work when type-checking is on...
+The following don't work when Board type-checking is on...
 	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>
 	    <function>(lambda (board x y z) (display `("perfume" ,x ,y ,z ,(Board-get-state board x y z))))</function>
 The following DO seem to work...
@@ -5959,7 +5959,7 @@ The following DO seem to work...
 	    <function>(lambda (board x y z) (display board))</function>
 	    <function>Board-get-state</function>
 -->
-	    <next><rule>
+	    <pass><rule>
 
           <random>
             <prob>0.485</prob>
@@ -6839,7 +6839,7 @@ The following DO seem to work...
             </fail>
           </random>
 
-	</rule></next></dynamic>  <!-- end of dynamic rule -->
+	</rule></pass></dynamic>  <!-- end of dynamic rule -->
 
         </rule>
       </particle>

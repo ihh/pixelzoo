@@ -595,6 +595,9 @@ int boardAttemptFunctionRule (Board *board, int x, int y, int z, const char* exp
     tmp = sexp_c_string(ctx, "Board", -1);
     tmp = sexp_lookup_type(ctx, tmp, SEXP_FALSE);
     tmp = sexp_make_cpointer(ctx, sexp_type_tag(tmp), board, SEXP_FALSE, 0);
+    /*
+    tmp = sexp_make_cpointer(ctx, SEXP_CPOINTER, board, SEXP_FALSE, 0);
+    */
     args = sexp_cons (ctx, tmp, args);
 
     tmp = sexp_apply (ctx, f, args);
