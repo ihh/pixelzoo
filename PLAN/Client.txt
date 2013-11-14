@@ -1,4 +1,11 @@
-Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variable
+pzchibi is still segfaulting, e.g.
+ > (define b (Board-new 128 1))
+ > b
+ #<Object>
+ > b
+ ^C [hangs]
+Make a small test file that reproduces the bug & can be compiled to latest chibi on Google Code. (Either start from scratch or copy&paste key functions from board.c.)
+Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variable.
 
 Scheme rules:
 Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
