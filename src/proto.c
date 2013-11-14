@@ -207,6 +207,7 @@ void protoTableSetString (ProtoTable *protoTable, const char* symbol, const char
 }
 
 void protoTableSetInt (ProtoTable *protoTable, const char* symbol, int value) {
+  int n;
   sexp ctx;
   sexp_gc_var2 (tmp, f);
 
@@ -225,6 +226,10 @@ void protoTableSetInt (ProtoTable *protoTable, const char* symbol, int value) {
   sexp_eval (ctx, f, NULL);
 
   sexp_gc_release2 (ctx);
+
+  /* test */
+  n = sexp_sint_value (sexp_eval_string (protoTable->context, symbol, -1, NULL));
+  Assert (n == value, "%s evaluates to %d, should be %d", symbol, n, value);
 }
 
 void protoTableSetSelfType (ProtoTable *protoTable, const char* selfType) {
