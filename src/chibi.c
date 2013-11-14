@@ -7,7 +7,13 @@ const char* sexp_string_data_wrapper (sexp x) {
 }
 
 const char* sexp_string (sexp ctx, sexp x) {
-  return sexp_string_data_wrapper (sexp_write_to_string (ctx, x));
+  const char* cstr;
+  sexp_gc_var1(str);
+  sexp_gc_preserve1(ctx,str);
+  str = sexp_write_to_string (ctx, x);
+  cstr = StringNew (sexp_string_data (str));
+  sexp_gc_release1(ctx);
+  return cstr;
 }
 
 
