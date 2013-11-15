@@ -100,8 +100,8 @@
 		CGPoint trans = [recognizer translationInView:self.view];
         
 		CGPoint mvo = [self maxViewOffset];
-		currentViewOffset.x = MAX (0, MIN (viewOffsetAtStartOfPan.x - trans.x, mvo.x));
-		currentViewOffset.y = MAX (0, MIN (viewOffsetAtStartOfPan.y - trans.y, mvo.y));
+		currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfPan.x - trans.x));
+		currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfPan.y - trans.y));
 		
 		panning = 1;
 		[gameWrapper untouchCell];
@@ -126,8 +126,8 @@
 		currentTileHeight = MAX (minth, MIN (maxth, tileHeightAtStartOfZoom * scale));
 		
 		CGPoint mvo = [self maxViewOffset];
-		currentViewOffset.x = MAX (-mvo.x, MIN (viewOffsetAtStartOfZoom.x * scale, mvo.x));
-		currentViewOffset.y = MAX (-mvo.y, MIN (viewOffsetAtStartOfZoom.y * scale, mvo.y));
+		currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfZoom.x * scale));
+		currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfZoom.y * scale));
 		
 		zooming = 1;
 		[gameWrapper untouchCell];
@@ -145,8 +145,8 @@
     CGFloat boardImgWidth = 2 * th * bs;
     CGFloat boardImgHeight = th * bs;
     CGSize frameSize = skview.frame.size;
-	mvo.x = MAX (0, boardImgWidth - frameSize.width);
-	mvo.y = MAX (0, boardImgHeight - frameSize.height);
+	mvo.x = MAX (0, (boardImgWidth - frameSize.width)/2);
+	mvo.y = MAX (0, (boardImgHeight - frameSize.height)/2);
 	return mvo;
 }
 
