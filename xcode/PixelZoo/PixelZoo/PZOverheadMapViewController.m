@@ -72,6 +72,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+	[self stopTimers];
     [gameWrapper postTurn];
     [super viewWillDisappear:animated];
 }
@@ -350,10 +351,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
-	[self stopTimers];
 }
 
 

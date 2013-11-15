@@ -9,6 +9,7 @@
 #import <SpriteKit/SpriteKit.h>
 #import "PZIsometricViewController.h"
 #import "PZIsoMapScene.h"
+#import "PZDefs.h"
 
 @interface PZIsometricViewController ()
 
@@ -47,10 +48,40 @@
     [skview presentScene: map];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [self startTimers];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[self stopTimers];
+    [gameWrapper postTurn];
+    [super viewWillDisappear:animated];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+/* Timers: board updates & rendering */
+-(void)startTimers
+{
+	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
+    evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
+}
+
+-(void)stopTimers
+{
+	[evolveTimer invalidate];
+}
+
+/* Board updates */
+- (void)callGameLoop
+{
+    [gameWrapper updateGame];
+}
+
 
 @end

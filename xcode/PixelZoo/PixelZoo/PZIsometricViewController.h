@@ -11,7 +11,10 @@
 #import "PZWorldDescriptor.h"
 #import "PZGameWrapper.h"
 
-@interface PZIsometricViewController : UIViewController
+@interface PZIsometricViewController : UIViewController {
+    // timers
+	NSTimer *evolveTimer;
+}
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
 @property (nonatomic, strong) PZLockDescriptor *lockDescriptor;
