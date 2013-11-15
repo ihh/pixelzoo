@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SpriteKit/SpriteKit.h>
 #import "PZWorldDescriptor.h"
 #import "PZGameWrapper.h"
 
@@ -15,6 +16,7 @@
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
 @property (nonatomic, strong) PZLockDescriptor *lockDescriptor;
 @property (nonatomic, strong) PZGameWrapper *gameWrapper;
+@property (weak, nonatomic) IBOutlet SKView *skview;
 
 
 @end

@@ -58,6 +58,8 @@
 		285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285230B4180F37F0006E7FBF /* PZLockDescriptor.m */; };
 		285F608D18369842003467F7 /* PZIsometricViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F608C18369842003467F7 /* PZIsometricViewController.m */; };
 		285F608F18369A5E003467F7 /* tutorial.xml in Resources */ = {isa = PBXBuildFile; fileRef = 285F608E18369A5D003467F7 /* tutorial.xml */; };
+		285F609218369F36003467F7 /* PZIsoMapScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F609118369F36003467F7 /* PZIsoMapScene.m */; };
+		285F60DF1836A1A7003467F7 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285F60DE1836A1A7003467F7 /* SpriteKit.framework */; };
 		287985A41814FD6300A115A7 /* chibi.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A01814FD6300A115A7 /* chibi.c */; };
 		287985A51814FD6300A115A7 /* proto.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A21814FD6300A115A7 /* proto.c */; };
 		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
@@ -165,6 +167,9 @@
 		285F608B18369842003467F7 /* PZIsometricViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsometricViewController.h; sourceTree = "<group>"; };
 		285F608C18369842003467F7 /* PZIsometricViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsometricViewController.m; sourceTree = "<group>"; };
 		285F608E18369A5D003467F7 /* tutorial.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tutorial.xml; sourceTree = "<group>"; };
+		285F609018369F36003467F7 /* PZIsoMapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsoMapScene.h; sourceTree = "<group>"; };
+		285F609118369F36003467F7 /* PZIsoMapScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsoMapScene.m; sourceTree = "<group>"; };
+		285F60DE1836A1A7003467F7 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		287985A01814FD6300A115A7 /* chibi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = chibi.c; path = ../../../src/chibi.c; sourceTree = "<group>"; };
 		287985A11814FD6300A115A7 /* chibi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chibi.h; path = ../../../src/chibi.h; sourceTree = "<group>"; };
 		287985A21814FD6300A115A7 /* proto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = proto.c; path = ../../../src/proto.c; sourceTree = "<group>"; };
@@ -185,6 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				285F60DF1836A1A7003467F7 /* SpriteKit.framework in Frameworks */,
 				2818E28817FFBC3100093CEC /* libxml2.dylib in Frameworks */,
 				2818E25C17FFB6DB00093CEC /* UIKit.framework in Frameworks */,
 				2818E25E17FFB6DB00093CEC /* Foundation.framework in Frameworks */,
@@ -217,6 +223,7 @@
 		2818E25A17FFB6DB00093CEC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				285F60DE1836A1A7003467F7 /* SpriteKit.framework */,
 				2818E25B17FFB6DB00093CEC /* UIKit.framework */,
 				2818E25D17FFB6DB00093CEC /* Foundation.framework */,
 				2818E25F17FFB6DB00093CEC /* CoreGraphics.framework */,
@@ -241,6 +248,8 @@
 				285106431801ECAE00AA3254 /* PZOverheadMapView.m */,
 				2851063F1801E9DC00AA3254 /* PZOverheadMapViewController.h */,
 				285106401801E9DC00AA3254 /* PZOverheadMapViewController.m */,
+				285F609018369F36003467F7 /* PZIsoMapScene.h */,
+				285F609118369F36003467F7 /* PZIsoMapScene.m */,
 				285F608B18369842003467F7 /* PZIsometricViewController.h */,
 				285F608C18369842003467F7 /* PZIsometricViewController.m */,
 				285230B3180F37F0006E7FBF /* PZLockDescriptor.h */,
@@ -440,6 +449,7 @@
 				2818E2C717FFBD7500093CEC /* color.c in Sources */,
 				2818E2C817FFBD7500093CEC /* game.c in Sources */,
 				2818E2CA17FFBD7500093CEC /* list.c in Sources */,
+				285F609218369F36003467F7 /* PZIsoMapScene.m in Sources */,
 				287985A51814FD6300A115A7 /* proto.c in Sources */,
 				2818E2CB17FFBD7500093CEC /* mersenne.c in Sources */,
 				2818E2CC17FFBD7500093CEC /* move.c in Sources */,
@@ -570,6 +580,7 @@
 					"${SRCROOT}/../../chibi/include",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
@@ -591,6 +602,7 @@
 					"${SRCROOT}/../../chibi/include",
 				);
 				INFOPLIST_FILE = "PixelZoo/PixelZoo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
