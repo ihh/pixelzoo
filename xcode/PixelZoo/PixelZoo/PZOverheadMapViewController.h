@@ -13,7 +13,7 @@
 typedef struct XYCoord { int x, y; } XYCoord;
 
 
-@interface PZGameViewController : UIViewController {
+@interface PZOverheadMapViewController : UIViewController {
     // timers
 	NSTimer *redrawTimer;
 	NSTimer *evolveTimer;

@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
-#import "PZGameViewController.h"
+#import "PZOverheadMapViewController.h"
 #import "PZDefs.h"
-#import "PZGameView.h"
+#import "PZOverheadMapView.h"
 
-@interface PZGameViewController ()
+@interface PZOverheadMapViewController ()
 
 @end
 
-@implementation PZGameViewController
+@implementation PZOverheadMapViewController
 
 @synthesize gameWrapper;
 @synthesize worldDescriptor;
@@ -42,7 +42,7 @@
 
 - (void)startGame {
 	// tell view about its controller (hacky, this; suspect there'd be a less object-model-violating way if I understood things better)
-	[((PZGameView*) [self worldView]) setGameViewController:self];   // HACK HACK HACK
+	[((PZOverheadMapView*) [self worldView]) setGameViewController:self];   // HACK HACK HACK
     
 	// attach pan recognizer
 	UIPanGestureRecognizer *panner = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];

@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Holmesian Software. All rights reserved.
 //
 
-#import "PZGameView.h"
+#import "PZOverheadMapView.h"
 #import "PZDefs.h"
 
-@implementation PZGameView
+@implementation PZOverheadMapView
 
 @synthesize gameViewController;
 

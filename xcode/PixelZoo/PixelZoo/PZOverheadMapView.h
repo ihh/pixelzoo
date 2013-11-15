@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PZGameViewController.h"
+#import "PZOverheadMapViewController.h"
 
-@interface PZGameView : UIView {
+@interface PZOverheadMapView : UIView {
 	unsigned char *bitmapData;
 	int bytesPerRow;
 	CGContextRef bitmapContext;
 	int redraws;
 }
 
-@property (strong, nonatomic) PZGameViewController* gameViewController;
+@property (strong, nonatomic) PZOverheadMapViewController* gameViewController;
 
 
 // helpers

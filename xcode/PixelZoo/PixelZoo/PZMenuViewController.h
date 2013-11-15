@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *playCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *logoutCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *aboutCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *tutorialCell;
 
 @end

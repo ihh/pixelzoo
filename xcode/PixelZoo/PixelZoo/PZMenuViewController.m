@@ -9,6 +9,7 @@
 #import "PZAppDelegate.h"
 #import "PZMenuViewController.h"
 #import "PZLoginViewController.h"
+#import "PZIsometricViewController.h"
 
 @interface PZMenuViewController ()
 
@@ -21,6 +22,7 @@
 @synthesize logoutCell;
 @synthesize playCell;
 @synthesize aboutCell;
+@synthesize tutorialCell;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -92,16 +94,25 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int row = indexPath.row;
-    if (row == 2) return aboutCell;
-    if ([self loginValidated])
-        return row == 0 ? playCell : logoutCell;
-    return row == 0 ? createAccountCell : loginCell;
+    switch (row) {
+        case 0:
+            return [self loginValidated] ? playCell : createAccountCell;
+        case 1:
+            return [self loginValidated] ? logoutCell : loginCell;
+        case 2:
+            return tutorialCell;
+        case 3:
+            return aboutCell;
+        default:
+            break;
+    }
+    return NULL;
 }
 
 
@@ -155,6 +166,13 @@
     } else if ([segue.identifier isEqualToString:@"createAccountSegue"]) {
         PZLoginViewController *destViewController = segue.destinationViewController;
         destViewController.accountExists = false;
+    } else if ([segue.identifier isEqualToString:@"tutorialSegue"]) {
+        PZIsometricViewController *destViewController = segue.destinationViewController;
+        PZGameWrapper *game = [PZGameWrapper alloc];
+        NSString *tutorialPath = [[[NSBundle mainBundle] resourcePath]
+                                      stringByAppendingPathComponent:@"tutorial.xml"];
+        [game initGameFromXMLString:[NSString stringWithContentsOfFile:tutorialPath encoding:NSUTF8StringEncoding error:nil] ];
+        destViewController.gameWrapper = game;
     }
 }
 
