@@ -45,6 +45,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     map = [[PZIsoMapScene alloc] initWithSize:CGSizeMake(skview.bounds.size.width,skview.bounds.size.height)];
+    map.game = gameWrapper;
     [skview presentScene: map];
 }
 
@@ -81,15 +82,8 @@
 - (void)callGameLoop
 {
     [gameWrapper updateGame];
-    CGImageRef boardImg = [gameWrapper newIsometricBoardImage:1];
-    SKTexture *texture = [SKTexture textureWithCGImage:boardImg];
-    SKSpriteNode *node = [[SKSpriteNode alloc] initWithTexture:texture];
-    node.position = CGPointMake(skview.frame.size.width/2,
-                                skview.frame.size.height/2);
-    [map removeAllChildren];
-    [map addChild:node];
-    CGImageRelease(boardImg);
- }
+    [map showMap];
+}
 
 
 @end

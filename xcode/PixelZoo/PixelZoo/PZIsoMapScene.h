@@ -7,7 +7,12 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "PZGameWrapper.h"
 
 @interface PZIsoMapScene : SKScene
+
+@property PZGameWrapper* game;
+
+-(void) showMap;
 
 @end
