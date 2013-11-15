@@ -41,18 +41,7 @@
 
         // create the bitmap context if necessary
         if (bitmapData == NULL) {
-            CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-            bytesPerRow = 4 * boardSize * sizeof(unsigned char);
-            bitmapData = malloc (bytesPerRow * boardSize);
-            bitmapContext = CGBitmapContextCreate(bitmapData,
-                                                  boardSize,
-                                                  boardSize,
-                                                  8,  // bits per component
-                                                  bytesPerRow,
-                                                  colorSpace,
-                                                  (CGBitmapInfo) kCGImageAlphaNoneSkipLast);
-            
-            CGColorSpaceRelease(colorSpace);
+            bitmapData = [gameWrapper allocBoardBitmap];
             pzAssert (bitmapData != NULL, "Couldn't alloc bitmapData");
         }
         
@@ -72,19 +61,9 @@
         CGContextClipToRect (ctx, boardRect);
         
         // create board image
-        unsigned char *bitmapWritePtr = bitmapData;
-        for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
-            for (int x = 0; x < boardSize; ++x) {
-                int rgb = [gameWrapper cellRgbAtX:x y:y z:0];
-                *(bitmapWritePtr++) = pzGetRgbRed(rgb);
-                *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
-                *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
-                ++bitmapWritePtr;
-            }
-        }
+        CGImageRef boardImage = [gameWrapper createBoardImage:bitmapData];
         
         // draw board image
-        CGImageRef boardImage = CGBitmapContextCreateImage(bitmapContext);
         CGContextDrawImage (ctx, bigBoardRect, boardImage);
         
         // draw border

@@ -636,7 +636,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MNm-1D-mp4" customClass="SKView">
-                                <rect key="frame" x="0.0" y="94" width="320" height="410"/>
+                                <rect key="frame" x="0.0" y="63" width="320" height="441"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
@@ -645,8 +645,8 @@
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="MNm-1D-mp4" secondAttribute="bottom" type="default" id="3DA-u3-hGM"/>
                             <constraint firstItem="MNm-1D-mp4" firstAttribute="leading" secondItem="Qdk-Oc-n3t" secondAttribute="leading" type="default" id="9ao-vF-j5Z"/>
-                            <constraint firstItem="MNm-1D-mp4" firstAttribute="top" secondItem="Qdk-Oc-n3t" secondAttribute="top" constant="94" id="i8Y-dd-62o"/>
                             <constraint firstAttribute="trailing" secondItem="MNm-1D-mp4" secondAttribute="trailing" type="default" id="uUX-fI-jZk"/>
+                            <constraint firstItem="MNm-1D-mp4" firstAttribute="top" secondItem="Qdk-Oc-n3t" secondAttribute="top" constant="63" id="zMZ-Se-Boe"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KEE-QQ-499"/>

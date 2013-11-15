@@ -31,6 +31,10 @@
 -(void)initGameFromLock:(PZLockDescriptor*)lock;
 -(bool)isInitialized;
 
+// drawing map
+-(unsigned char*) allocBoardBitmap;
+-(CGImageRef) createBoardImage:(unsigned char*)bitmapData;
+
 // saving turns
 
 -(void)postTurn;

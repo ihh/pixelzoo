@@ -40,6 +40,46 @@
         pzDeleteGame(game);
 }
 
+-(unsigned char*) allocBoardBitmap {
+    int bytesPerRow = 4 * [self boardSize] * sizeof(unsigned char);
+    unsigned char* bitmapData = malloc (bytesPerRow * [self boardSize]);
+    return bitmapData;
+}
+
+
+-(CGImageRef) createBoardImage:(unsigned char*)bitmapData {
+    // create the bitmap context if necessary
+    int boardSize = [self boardSize];
+    int bytesPerRow = 4 * boardSize * sizeof(unsigned char);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bitmapContext = CGBitmapContextCreate(bitmapData,
+                                                       boardSize,
+                                                       boardSize,
+                                                       8,  // bits per component
+                                                       bytesPerRow,
+                                                       colorSpace,
+                                                       (CGBitmapInfo) kCGImageAlphaNoneSkipLast);
+    
+    CGColorSpaceRelease(colorSpace);
+
+    // create board image
+    unsigned char *bitmapWritePtr = bitmapData;
+    for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
+        for (int x = 0; x < boardSize; ++x) {
+            int rgb = [self cellRgbAtX:x y:y z:0];
+            *(bitmapWritePtr++) = pzGetRgbRed(rgb);
+            *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
+            *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
+            ++bitmapWritePtr;
+        }
+    }
+    
+    // draw board image
+    return CGBitmapContextCreateImage(bitmapContext);
+
+}
+
+
 -(void)postTurn {
     // cancel any previous POST in progress
     if (turnConnection) {
