@@ -1,6 +1,13 @@
 Kids are getting bored, no way this ship runs without fuel. Clear breathing comes first.
 Then, a realistic (slow but steady) progress rate.
 
+
+Create a PZIsometricGameView version of PZGameView that uses 2:1 isometric grid
+PZIsometricGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
+- Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
+- API so DynamicRule can generate animations when visible cells are updated
+
+
 pzchibi is still segfaulting, e.g.
  > (define b (Board-new 128 1))
  > b
@@ -15,19 +22,12 @@ Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variab
 (Disabling type-checking for Board* seems to work, too, but bugs might indicate memory corruption behind the scenes, so need to be preserved for investigation.)
 
 
-Scheme rules:
-Each cell gets its own initially-empty freeform SXML blob (stored as C string; default = empty = NULL)
-- SXML blob is loaded & saved with file
-- ZooGas modify rule has four modes: (1) do not modify source or destination SXML blob (default when not modifying type bits), (2) erase the destination cell's SXML blob (default when setting type bits), (2) copy source->destination SXML & erase source (default when copying type bits), (4) swap source<->destination SXML
-Add DynamicRule, a new type of Rule: executes a Scheme function dynamically to update the cell. Effectively does { sexp_eval_string(protoTable->context,str=asprintf("(%s %d %d)",dynamicRuleParams->updateFunctionName,x,y),-1,NULL); free(str); rule = dynamicRuleParams->next; }
-- Use sexp_define_foreign (or chibi-ffi) to wrap various C functions:
- - Board will need Scheme get/set-accessors for cell states (setCellState x y state) and cell SXML blobs (setCellMeta x y sexp)
- - Also global defines for board size (integer), board depth (integer), random number generator (32-bit int), xy-bounding box of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
+ProtoTable-level set!
+ - board size (integer), board depth (integer), random number generator (32-bit int), xy-bounding box of current view area, particle names (int->string), particle types (string->int), and particle varSizes (string->(string->int))
   - NB an avatar is simply a Scheme-scripted agent that uses A* pathfinding to attempt to run to center of current view area
   - Need to record the bounding box of the current view area in the move log
 
-
-Define the following via a ProtoTable-level set!  (ptbwsk=particle,type,bitfield,width,shift,key)
+Another ProtoTable-level set!  (ptbwsk=particle,type,bitfield,width,shift,key)
  Board-proto-table --> (("empty" (p (t 0))) ("wall" (p (t 5) (b (w 5) (s 0) (k "hue")))) ...)      i.e. an assoc list of the form ((name (p (t T) (b (w W) (s S) (k K)))*)*)
 ...then all the following can be implemented in Scheme...
 Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single integrated function  (cxyzvd=cell,xcoord,ycoord,zcoord,value,data)
@@ -36,11 +36,6 @@ Combine (Board-set-state 1 2 3 ...) and (Board-set-meta 1 2 3 ...) into a single
  (Board-set-typed (c (x 1) (y 2) (z 3)) (p (t 5) (b (w 5) (s 0) (v 23)) (d (meta (inform (ation))))))   (wraps Board-get-state, Board-set-state and Board-set-meta)
  (Board-get-typed (c (x 1) (y 2) (z 3))) --> (p (t 5) (n wall) (b (w 5) (s 0) (k hue) (v 23)) (d (meta (inform (ation)))))  (wraps Board-get-state and Board-get-meta, uses Board-proto-table to decorate)
 
-
-Create a PZIsometricGameView version of PZGameView that uses 2:1 isometric grid
-PZIsometricGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
-- Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
-- API so DynamicRule can generate animations when visible cells are updated
 
 
 Scheme function returning "examine" text
