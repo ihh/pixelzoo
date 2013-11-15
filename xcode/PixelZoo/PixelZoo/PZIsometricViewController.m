@@ -134,8 +134,6 @@
 	} else {
 		zooming = 0;
 	}
-    
-    NSLog(@"Current tile height is %f\n",currentTileHeight);
 }
 
 - (CGPoint) maxViewOffset {
