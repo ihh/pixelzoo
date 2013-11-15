@@ -30,9 +30,7 @@ BinTree* newBinTree (int size) {
 }
 
 void copyBinTree (BinTree* src, BinTree* dest) {
-  int size;
   Assert (src->K == dest->K, "BinTree sizes don't match");
-  size = binTreeSize (src);
   memcpy (dest->binRate, src->binRate, totalBinTreeNodes(src->K) * sizeof(int64_Millionths));
 }
 

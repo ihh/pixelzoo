@@ -73,7 +73,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>1</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -96,7 +96,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>1</y>
                                           </dest>
                                           <next>
@@ -136,7 +136,7 @@
                                 <rule>
                                   <modify>
                                     <src>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>1</y>
                                     </src>
                                     <srcmask>ffffffffffffffff</srcmask>
@@ -158,7 +158,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>0</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -181,7 +181,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </dest>
                                           <next>
@@ -221,7 +221,7 @@
                                 <rule>
                                   <modify>
                                     <src>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>0</y>
                                     </src>
                                     <srcmask>ffffffffffffffff</srcmask>
@@ -435,7 +435,7 @@
                             <switch>
                               <pos>
                                 <x>1</x>
-                                <y>-1</y>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -458,7 +458,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>1</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -498,7 +498,7 @@
                                   <modify>
                                     <src>
                                       <x>1</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </src>
                                     <srcmask>ffffffffffffffff</srcmask>
                                     <rshift>0</rshift>
@@ -611,8 +611,8 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
-                                <y>-1</y>
+                                <x>127</x>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -634,8 +634,8 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
-                                            <y>-1</y>
+                                            <x>127</x>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -674,8 +674,8 @@
                                 <rule>
                                   <modify>
                                     <src>
-                                      <x>-1</x>
-                                      <y>-1</y>
+                                      <x>127</x>
+                                      <y>127</y>
                                     </src>
                                     <srcmask>ffffffffffffffff</srcmask>
                                     <rshift>0</rshift>
@@ -802,7 +802,7 @@
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
                                     <rshift>48</rshift>
@@ -825,7 +825,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -865,7 +865,7 @@
                                         <modify>
                                           <src>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </src>
                                           <srcmask>ffffffffffffffff</srcmask>
                                           <rshift>0</rshift>
@@ -1004,7 +1004,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>1</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -1023,7 +1023,7 @@
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>1</y>
                                     </dest>
                                     <next>
@@ -1065,7 +1065,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>1</y>
                                           </dest>
                                           <next>
@@ -1107,7 +1107,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>0</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -1126,7 +1126,7 @@
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>0</y>
                                     </dest>
                                     <next>
@@ -1168,7 +1168,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </dest>
                                           <next>
@@ -1438,7 +1438,7 @@
                             <switch>
                               <pos>
                                 <x>1</x>
-                                <y>-1</y>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -1457,7 +1457,7 @@
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
                                       <x>1</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </dest>
                                     <next>
                                       <rule>
@@ -1499,7 +1499,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>1</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -1650,8 +1650,8 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
-                                <y>-1</y>
+                                <x>127</x>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -1669,8 +1669,8 @@
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
-                                      <y>-1</y>
+                                      <x>127</x>
+                                      <y>127</y>
                                     </dest>
                                     <next>
                                       <rule>
@@ -1711,8 +1711,8 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
-                                            <y>-1</y>
+                                            <x>127</x>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -1791,7 +1791,7 @@
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
                                     <rshift>48</rshift>
@@ -1810,7 +1810,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -1852,7 +1852,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -2091,7 +2091,7 @@
                                 <rule>
                                   <switch>
                                     <pos>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>0</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
@@ -2110,7 +2110,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </dest>
                                           <next>
@@ -2127,7 +2127,7 @@
                                                   <rule>
                                                     <modify>
                                                       <src>
-                                                        <x>-1</x>
+                                                        <x>127</x>
                                                         <y>0</y>
                                                       </src>
                                                       <srcmask>7</srcmask>
@@ -2136,7 +2136,7 @@
                                                       <lshift>0</lshift>
                                                       <destmask>7</destmask>
                                                       <dest>
-                                                        <x>-1</x>
+                                                        <x>127</x>
                                                         <y>0</y>
                                                       </dest>
                                                     </modify>
@@ -2169,7 +2169,7 @@
                                                         <rule>
                                                           <modify>
                                                             <src>
-                                                              <x>-1</x>
+                                                              <x>127</x>
                                                               <y>0</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
@@ -2178,7 +2178,7 @@
                                                             <lshift>0</lshift>
                                                             <destmask>7</destmask>
                                                             <dest>
-                                                              <x>-1</x>
+                                                              <x>127</x>
                                                               <y>0</y>
                                                             </dest>
                                                           </modify>
@@ -2208,7 +2208,7 @@
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
                                     <rshift>48</rshift>
@@ -2227,7 +2227,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -2244,7 +2244,7 @@
                                                     <modify>
                                                       <src>
                                                         <x>0</x>
-                                                        <y>-1</y>
+                                                        <y>127</y>
                                                       </src>
                                                       <srcmask>7</srcmask>
                                                       <rshift>0</rshift>
@@ -2253,7 +2253,7 @@
                                                       <destmask>7</destmask>
                                                       <dest>
                                                         <x>0</x>
-                                                        <y>-1</y>
+                                                        <y>127</y>
                                                       </dest>
                                                     </modify>
                                                   </rule>
@@ -2286,7 +2286,7 @@
                                                           <modify>
                                                             <src>
                                                               <x>0</x>
-                                                              <y>-1</y>
+                                                              <y>127</y>
                                                             </src>
                                                             <srcmask>7</srcmask>
                                                             <rshift>0</rshift>
@@ -2295,7 +2295,7 @@
                                                             <destmask>7</destmask>
                                                             <dest>
                                                               <x>0</x>
-                                                              <y>-1</y>
+                                                              <y>127</y>
                                                             </dest>
                                                           </modify>
                                                         </rule>
@@ -2464,7 +2464,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>1</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -2487,7 +2487,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>1</y>
                                           </dest>
                                           <next>
@@ -2601,7 +2601,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>0</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -2624,7 +2624,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </dest>
                                           <next>
@@ -3034,7 +3034,7 @@
                             <switch>
                               <pos>
                                 <x>1</x>
-                                <y>-1</y>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -3057,7 +3057,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>1</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -3314,8 +3314,8 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
-                                <y>-1</y>
+                                <x>127</x>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -3337,8 +3337,8 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
-                                            <y>-1</y>
+                                            <x>127</x>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -3553,7 +3553,7 @@
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
                                     <rshift>48</rshift>
@@ -3576,7 +3576,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -4339,7 +4339,7 @@
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>0</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -4359,7 +4359,7 @@
                                       <rule>
                                         <switch>
                                           <pos>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </pos>
                                           <mask>3</mask>
@@ -4412,7 +4412,7 @@
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
-                                                  <x>-1</x>
+                                                  <x>127</x>
                                                   <y>0</y>
                                                 </dest>
                                                 <next>
@@ -4460,7 +4460,7 @@
                                       <rule>
                                         <switch>
                                           <pos>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </pos>
                                           <mask>3</mask>
@@ -4521,7 +4521,7 @@
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
-                                                  <x>-1</x>
+                                                  <x>127</x>
                                                   <y>0</y>
                                                 </dest>
                                                 <next>
@@ -4561,7 +4561,7 @@
                                       <rule>
                                         <switch>
                                           <pos>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </pos>
                                           <mask>3</mask>
@@ -4580,7 +4580,7 @@
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
-                                                  <x>-1</x>
+                                                  <x>127</x>
                                                   <y>0</y>
                                                 </dest>
                                                 <next>
@@ -4701,7 +4701,7 @@
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
-                                                  <x>-1</x>
+                                                  <x>127</x>
                                                   <y>0</y>
                                                 </dest>
                                                 <next>
@@ -4751,7 +4751,7 @@
                                 <rule>
                                   <switch>
                                     <pos>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>0</y>
                                     </pos>
                                     <mask>7</mask>
@@ -4770,7 +4770,7 @@
                                           <lshift>0</lshift>
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </dest>
                                           <next>
@@ -4820,7 +4820,7 @@
                                                 <lshift>0</lshift>
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
-                                                  <x>-1</x>
+                                                  <x>127</x>
                                                   <y>0</y>
                                                 </dest>
                                                 <next>
@@ -4873,7 +4873,7 @@
                             <switch>
                               <pos>
                                 <x>0</x>
-                                <y>-1</y>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -4893,7 +4893,7 @@
                                         <switch>
                                           <pos>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </pos>
                                           <mask>3</mask>
                                           <rshift>0</rshift>
@@ -4946,7 +4946,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -4994,7 +4994,7 @@
                                         <switch>
                                           <pos>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </pos>
                                           <mask>3</mask>
                                           <rshift>0</rshift>
@@ -5055,7 +5055,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -5095,7 +5095,7 @@
                                         <switch>
                                           <pos>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </pos>
                                           <mask>3</mask>
                                           <rshift>0</rshift>
@@ -5114,7 +5114,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -5235,7 +5235,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -5285,7 +5285,7 @@
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>7</mask>
                                     <rshift>0</rshift>
@@ -5304,7 +5304,7 @@
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -5354,7 +5354,7 @@
                                                 <destmask>ffffffffffffffff</destmask>
                                                 <dest>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </dest>
                                                 <next>
                                                   <rule>
@@ -5975,7 +5975,7 @@ The following DO seem to work...
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>1</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -5989,7 +5989,7 @@ The following DO seem to work...
                                       <rule>
                                         <modify>
                                           <src>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>1</y>
                                           </src>
                                           <srcmask>ffffffffffffffff</srcmask>
@@ -6028,7 +6028,7 @@ The following DO seem to work...
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>1</y>
                                     </dest>
                                     <next>
@@ -6074,7 +6074,7 @@ The following DO seem to work...
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
+                                <x>127</x>
                                 <y>0</y>
                               </pos>
                               <mask>ffff000000000000</mask>
@@ -6088,7 +6088,7 @@ The following DO seem to work...
                                       <rule>
                                         <modify>
                                           <src>
-                                            <x>-1</x>
+                                            <x>127</x>
                                             <y>0</y>
                                           </src>
                                           <srcmask>ffffffffffffffff</srcmask>
@@ -6127,7 +6127,7 @@ The following DO seem to work...
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
+                                      <x>127</x>
                                       <y>0</y>
                                     </dest>
                                     <next>
@@ -6393,7 +6393,7 @@ The following DO seem to work...
                             <switch>
                               <pos>
                                 <x>1</x>
-                                <y>-1</y>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -6407,7 +6407,7 @@ The following DO seem to work...
                                         <modify>
                                           <src>
                                             <x>1</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </src>
                                           <srcmask>ffffffffffffffff</srcmask>
                                           <rshift>0</rshift>
@@ -6446,7 +6446,7 @@ The following DO seem to work...
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
                                       <x>1</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </dest>
                                     <next>
                                       <rule>
@@ -6597,8 +6597,8 @@ The following DO seem to work...
                           <rule>
                             <switch>
                               <pos>
-                                <x>-1</x>
-                                <y>-1</y>
+                                <x>127</x>
+                                <y>127</y>
                               </pos>
                               <mask>ffff000000000000</mask>
                               <rshift>48</rshift>
@@ -6611,8 +6611,8 @@ The following DO seem to work...
                                       <rule>
                                         <modify>
                                           <src>
-                                            <x>-1</x>
-                                            <y>-1</y>
+                                            <x>127</x>
+                                            <y>127</y>
                                           </src>
                                           <srcmask>ffffffffffffffff</srcmask>
                                           <rshift>0</rshift>
@@ -6650,8 +6650,8 @@ The following DO seem to work...
                                     <lshift>0</lshift>
                                     <destmask>ffffffffffffffff</destmask>
                                     <dest>
-                                      <x>-1</x>
-                                      <y>-1</y>
+                                      <x>127</x>
+                                      <y>127</y>
                                     </dest>
                                     <next>
                                       <rule>
@@ -6734,7 +6734,7 @@ The following DO seem to work...
                                   <switch>
                                     <pos>
                                       <x>0</x>
-                                      <y>-1</y>
+                                      <y>127</y>
                                     </pos>
                                     <mask>ffff000000000000</mask>
                                     <rshift>48</rshift>
@@ -6748,7 +6748,7 @@ The following DO seem to work...
                                               <modify>
                                                 <src>
                                                   <x>0</x>
-                                                  <y>-1</y>
+                                                  <y>127</y>
                                                 </src>
                                                 <srcmask>ffffffffffffffff</srcmask>
                                                 <rshift>0</rshift>
@@ -6787,7 +6787,7 @@ The following DO seem to work...
                                           <destmask>ffffffffffffffff</destmask>
                                           <dest>
                                             <x>0</x>
-                                            <y>-1</y>
+                                            <y>127</y>
                                           </dest>
                                           <next>
                                             <rule>
@@ -6846,273 +6846,278 @@ The following DO seem to work...
 
     </grammar>
     <init>
-      <x>-5</x>
-      <y>-3</y>
+      <x>64</x>
+      <y>64</y>
+      <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">12</val></gvars>
+    </init>
+    <init>
+      <x>123</x>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
-      <y>-2</y>
+      <x>123</x>
+      <y>126</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
-      <y>-1</y>
+      <x>123</x>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
+      <x>123</x>
       <y>0</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
+      <x>123</x>
       <y>1</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
+      <x>123</x>
       <y>2</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-5</x>
+      <x>123</x>
       <y>3</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
-      <y>-4</y>
+      <x>124</x>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
-      <y>-3</y>
+      <x>124</x>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
-      <y>-2</y>
+      <x>124</x>
+      <y>126</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
-      <y>-1</y>
+      <x>124</x>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
+      <x>124</x>
       <y>0</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-4</x>
+      <x>124</x>
       <y>1</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
+      <x>124</x>
       <y>2</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
+      <x>124</x>
       <y>3</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-4</x>
+      <x>124</x>
       <y>4</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
-      <y>-5</y>
+      <x>125</x>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
-      <y>-4</y>
+      <x>125</x>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
-      <y>-3</y>
+      <x>125</x>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
-      <y>-2</y>
+      <x>125</x>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-3</x>
-      <y>-1</y>
+      <x>125</x>
+      <y>127</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>0</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>1</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>2</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>3</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>4</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-3</x>
+      <x>125</x>
       <y>5</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-2</x>
-      <y>-5</y>
+      <x>126</x>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-2</x>
-      <y>-4</y>
+      <x>126</x>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-2</x>
-      <y>-3</y>
+      <x>126</x>
+      <y>125</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
-      <y>-2</y>
+      <x>126</x>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
-      <y>-1</y>
+      <x>126</x>
+      <y>127</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>0</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>1</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>2</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>3</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>4</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-2</x>
+      <x>126</x>
       <y>5</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
-      <y>-5</y>
+      <x>127</x>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
-      <y>-4</y>
+      <x>127</x>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
-      <y>-3</y>
+      <x>127</x>
+      <y>125</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-1</x>
-      <y>-2</y>
+      <x>127</x>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-1</x>
-      <y>-1</y>
+      <x>127</x>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>0</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>1</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>2</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>3</y>
       <hexstate>7</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>4</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
-      <x>-1</x>
+      <x>127</x>
       <y>5</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>0</x>
-      <y>-5</y>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>0</x>
-      <y>-4</y>
+      <y>124</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>0</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>0</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>0</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
@@ -7147,27 +7152,27 @@ The following DO seem to work...
     </init>
     <init>
       <x>1</x>
-      <y>-5</y>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>1</x>
-      <y>-4</y>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>1</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>1</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>1</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
@@ -7202,27 +7207,27 @@ The following DO seem to work...
     </init>
     <init>
       <x>2</x>
-      <y>-5</y>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>2</x>
-      <y>-4</y>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>2</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>2</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>2</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>7</hexstate>
     </init>
     <init>
@@ -7257,27 +7262,27 @@ The following DO seem to work...
     </init>
     <init>
       <x>3</x>
-      <y>-5</y>
+      <y>123</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>3</x>
-      <y>-4</y>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>3</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>3</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>7</hexstate>
     </init>
     <init>
       <x>3</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>7</hexstate>
     </init>
     <init>
@@ -7312,22 +7317,22 @@ The following DO seem to work...
     </init>
     <init>
       <x>4</x>
-      <y>-4</y>
+      <y>124</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>4</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>4</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>4</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
@@ -7357,17 +7362,17 @@ The following DO seem to work...
     </init>
     <init>
       <x>5</x>
-      <y>-3</y>
+      <y>125</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>5</x>
-      <y>-2</y>
+      <y>126</y>
       <hexstate>3f</hexstate>
     </init>
     <init>
       <x>5</x>
-      <y>-1</y>
+      <y>127</y>
       <hexstate>3f</hexstate>
     </init>
     <init>

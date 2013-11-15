@@ -16,11 +16,13 @@ List* newList(void* (*CopyFunc)(void*),
 }
 
 void deleteList(List* list) {
-  ListNode* node;
+  ListNode *node, *next;
   for (node = list->head; node != NULL; node = node->next)
     (*list->Destroy) (node->value);
-  for (node = list->head; node != NULL; node = node->next)
-    SafeFree(node);
+    for (node = list->head; node != NULL; node = next) {
+        next = node->next;
+        SafeFree(node);
+    }
   SafeFree(list);
 }
 

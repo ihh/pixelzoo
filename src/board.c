@@ -522,6 +522,9 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	ruleOwner = board->byType[type];
 	dispatchNode = ruleOwner ? MessageRuleMapFind (ruleOwner->dispatch, deliver->message) : (MessageRuleMapNode*) NULL;
 	rule = (ruleOwner && dispatchNode) ? ((ParticleRule*) dispatchNode->value) : ((ParticleRule*) NULL);
+          x = xDest;
+          y = yDest;
+          z = zDest;
       } else {
 	ruleOwner = NULL;
 	rule = NULL;

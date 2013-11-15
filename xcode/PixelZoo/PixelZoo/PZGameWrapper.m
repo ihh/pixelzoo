@@ -46,8 +46,14 @@
     return bitmapData;
 }
 
+-(CGImageRef) newBoardImage {
+    unsigned char* bitmap = [self allocBoardBitmap];
+    CGImageRef boardImg = [self newBoardImage:bitmap];
+    free(bitmap);
+    return boardImg;
+}
 
--(CGImageRef) createBoardImage:(unsigned char*)bitmapData {
+-(CGImageRef) newBoardImage:(unsigned char*)bitmapData {
     // create the bitmap context if necessary
     int boardSize = [self boardSize];
     int bytesPerRow = 4 * boardSize * sizeof(unsigned char);
@@ -60,8 +66,6 @@
                                                        colorSpace,
                                                        (CGBitmapInfo) kCGImageAlphaNoneSkipLast);
     
-    CGColorSpaceRelease(colorSpace);
-
     // create board image
     unsigned char *bitmapWritePtr = bitmapData;
     for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
@@ -75,10 +79,43 @@
     }
     
     // draw board image
-    return CGBitmapContextCreateImage(bitmapContext);
+    CGImageRef boardImg = CGBitmapContextCreateImage(bitmapContext);
+    CGContextRelease(bitmapContext);
+    CGColorSpaceRelease(colorSpace);
+    return boardImg;
 
 }
 
+- (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight {
+    int boardSize = [self boardSize];
+    CGImageRef boardImg = [self newBoardImage];
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                   2*tileHeight*boardSize,
+                                                   tileHeight*boardSize,
+                                                   8,
+                                                   0,
+                                                   colorSpace,
+                                                   (CGBitmapInfo) kCGImageAlphaPremultipliedFirst);
+    
+    CGAffineTransform trans = CGAffineTransformMake(tileHeight,tileHeight/2,-tileHeight,tileHeight/2,tileHeight*boardSize,0);
+    CGContextConcatCTM(bmContext, trans);
+    
+    CGContextSetAllowsAntialiasing(bmContext, FALSE);
+    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+    CGColorSpaceRelease(colorSpace);
+    CGContextDrawImage(bmContext, CGRectMake(0, 0,
+                                             boardSize,
+                                             boardSize),
+                       boardImg);
+    
+    CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+    CFRelease(bmContext);
+    CGImageRelease(boardImg);
+    
+    return rotatedImage;
+}
 
 -(void)postTurn {
     // cancel any previous POST in progress

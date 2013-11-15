@@ -61,7 +61,7 @@
         CGContextClipToRect (ctx, boardRect);
         
         // create board image
-        CGImageRef boardImage = [gameWrapper createBoardImage:bitmapData];
+        CGImageRef boardImage = [gameWrapper newBoardImage:bitmapData];
         
         // draw board image
         CGContextDrawImage (ctx, bigBoardRect, boardImage);

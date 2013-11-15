@@ -658,9 +658,6 @@ void RBTreeEraseUnguarded(RBTree* tree, RBNode* z){
     SafeFree(y);
   }
   
-#ifdef DEBUG_ASSERT
-  Assert(!tree->nilt->red,"nilt not black in RBTreeEraseUnguarded");
-#endif
 }
 
 void RBTreeErase(RBTree* tree, void* key) {

@@ -33,7 +33,10 @@
 
 // drawing map
 -(unsigned char*) allocBoardBitmap;
--(CGImageRef) createBoardImage:(unsigned char*)bitmapData;
+-(CGImageRef) newBoardImage:(unsigned char*)bitmapData;
+-(CGImageRef) newBoardImage;
+
+- (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
 
 // saving turns
 
