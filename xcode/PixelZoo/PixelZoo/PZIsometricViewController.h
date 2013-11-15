@@ -18,6 +18,15 @@
 
     // scenes
     PZIsoMapScene* map;
+
+    // zoom
+    bool zooming;
+    CGFloat currentTileHeight, tileHeightAtStartOfZoom;
+    CGPoint viewOffsetAtStartOfZoom;
+
+    // pan
+    bool panning;
+    CGPoint currentViewOffset, viewOffsetAtStartOfPan;
 }
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
@@ -25,5 +34,9 @@
 @property (nonatomic, strong) PZGameWrapper *gameWrapper;
 @property (weak, nonatomic) IBOutlet SKView *skview;
 
+- (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer;
+- (IBAction)handlePinch:(UIPinchGestureRecognizer *)recognizer;
+
+- (CGPoint) maxViewOffset;
 
 @end

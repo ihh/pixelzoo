@@ -639,6 +639,11 @@
                                 <rect key="frame" x="0.0" y="63" width="320" height="441"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="4oT-23-6c9" appends="YES" id="na2-1I-CHq"/>
+                                    <outletCollection property="gestureRecognizers" destination="v8K-Hc-WXe" appends="YES" id="UOj-w4-trB"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -655,6 +660,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prU-QJ-IL2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="4oT-23-6c9">
+                    <connections>
+                        <action selector="handlePan:" destination="fkp-KA-7j9" id="hYl-5l-pYh"/>
+                    </connections>
+                </panGestureRecognizer>
+                <pinchGestureRecognizer id="v8K-Hc-WXe">
+                    <connections>
+                        <action selector="handlePinch:" destination="fkp-KA-7j9" id="Txe-jm-CH3"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="463" y="-86"/>
         </scene>

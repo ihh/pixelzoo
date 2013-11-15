@@ -13,6 +13,6 @@
 
 @property PZGameWrapper* game;
 
--(void) showMap;
+-(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight ;
 
 @end
