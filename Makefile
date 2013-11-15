@@ -49,6 +49,10 @@ sdl: targets
 timed-sdl: targets
 	bin/sdlgame -g t/testgame.xml -l t/movelog.xml -b t/board.xml -r t/revcomp.xml -t 5000000000
 
+sdl2: targets
+	bin/sdlgame t/newproto.xml
+
+
 # Targets
 
 targets: $(XFILES)
