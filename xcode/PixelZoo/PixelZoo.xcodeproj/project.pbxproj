@@ -65,6 +65,8 @@
 		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
 		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
 		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
+		28E2B574183714600036E8CE /* 64x32.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 28E2B573183714600036E8CE /* 64x32.atlas */; };
+		28E2B5761837146C0036E8CE /* 64x64.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 28E2B5751837146C0036E8CE /* 64x64.atlas */; };
 		28F32789180C971B00799C1D /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F32788180C971B00799C1D /* Base64.m */; };
 		28FA3F5D180A39900072234F /* PZMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F5C180A39900072234F /* PZMenuViewController.m */; };
 		28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F62180A58890072234F /* PZLoginViewController.m */; };
@@ -177,6 +179,8 @@
 		289E523D1811006500CF0B09 /* scheme */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scheme; path = ../../../scheme; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
+		28E2B573183714600036E8CE /* 64x32.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x32.atlas; path = ../../../sprites/64x32.atlas; sourceTree = "<group>"; };
+		28E2B5751837146C0036E8CE /* 64x64.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x64.atlas; path = ../../../sprites/64x64.atlas; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		28F32788180C971B00799C1D /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		28FA3F5B180A39900072234F /* PZMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZMenuViewController.h; sourceTree = "<group>"; };
@@ -286,6 +290,8 @@
 				2818E26D17FFB6DB00093CEC /* Default.png */,
 				2818E26F17FFB6DB00093CEC /* Default@2x.png */,
 				2818E27117FFB6DB00093CEC /* Default-568h@2x.png */,
+				28E2B5751837146C0036E8CE /* 64x64.atlas */,
+				28E2B573183714600036E8CE /* 64x32.atlas */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -426,8 +432,10 @@
 				2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */,
 				2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */,
 				289E523E1811006500CF0B09 /* scheme in Resources */,
+				28E2B5761837146C0036E8CE /* 64x64.atlas in Resources */,
 				2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */,
 				285F608F18369A5E003467F7 /* tutorial.xml in Resources */,
+				28E2B574183714600036E8CE /* 64x32.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,6 +594,7 @@
 					"-DSEXP_USE_STATIC_LIBS",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -608,6 +617,7 @@
 					"-DSEXP_USE_STATIC_LIBS",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
