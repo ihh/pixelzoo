@@ -1,5 +1,5 @@
 //
-//  PZIsometricMapViewController.m
+//  PZIsometricViewController.m
 //  PixelZoo
 //
 //  Created by Ian Holmes on 11/15/13.
@@ -8,7 +8,7 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "PZIsometricViewController.h"
-#import "PZIsoMapScene.h"
+#import "PZIsometricScene.h"
 #import "PZDefs.h"
 
 @interface PZIsometricViewController ()
@@ -47,8 +47,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    map = [[PZIsoMapScene alloc] initWithSize:CGSizeMake(skview.bounds.size.width,skview.bounds.size.height)];
-    map.game = gameWrapper;
+    map = [[PZIsometricScene alloc] initWithSize:skview.bounds.size forGame:gameWrapper];
     [skview presentScene: map];
 }
 

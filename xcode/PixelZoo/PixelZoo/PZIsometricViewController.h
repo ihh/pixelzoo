@@ -1,5 +1,5 @@
 //
-//  PZIsometricMapViewController.h
+//  PZIsometricViewController.h
 //  PixelZoo
 //
 //  Created by Ian Holmes on 11/15/13.
@@ -10,14 +10,14 @@
 #import <SpriteKit/SpriteKit.h>
 #import "PZWorldDescriptor.h"
 #import "PZGameWrapper.h"
-#import "PZIsoMapScene.h"
+#import "PZIsometricScene.h"
 
 @interface PZIsometricViewController : UIViewController {
     // timers
 	NSTimer *evolveTimer;
 
     // scenes
-    PZIsoMapScene* map;
+    PZIsometricScene* map;
 
     // zoom
     bool zooming;

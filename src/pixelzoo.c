@@ -198,6 +198,14 @@ const char* pzGetToolName(pzTool pzt) {
   return toolName;
 }
 
+const char* pzGetToolIcon(pzTool pzt) {
+    const char *toolIcon;
+    Tool* tool;
+    tool = (Tool*) pzt;
+    toolIcon = tool ? tool->icon : NULL;
+    return toolIcon;
+}
+
 int pzGetSelectedToolNumber(pzGame pzg) {
   ListNode *toolNode;
   Tool *tool;

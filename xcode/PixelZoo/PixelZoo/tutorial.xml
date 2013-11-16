@@ -7399,6 +7399,7 @@ The following DO seem to work...
   <rate>240</rate>
   <tool>
     <name>little polymer loops</name>
+    <icon>spray.png</icon>
     <size>4</size>
     <gvars><type>polymer</type><val var="build-state">1</val><val var="edge-len">3</val></gvars>
     <overwrite>

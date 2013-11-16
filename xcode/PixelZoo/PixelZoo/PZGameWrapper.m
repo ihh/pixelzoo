@@ -202,6 +202,10 @@
     return pzGetToolName(pzGetToolByNumber(game,n));
 }
 
+-(const char*)toolIconByNumber:(int)n {
+    return pzGetToolIcon(pzGetToolByNumber(game,n));
+}
+
 -(CGFloat)toolReserveByNumber:(int)n {
     return (CGFloat) pzGetToolReserveLevel(pzGetToolByNumber(game, n));
 }

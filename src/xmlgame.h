@@ -9,6 +9,7 @@
 #define XMLZOO_PROTECT    "protect"
 #define XMLZOO_CELL       "cell"
 #define XMLZOO_TOOL       "tool"
+#define XMLZOO_ICON       "icon"
 #define XMLZOO_BRUSH      "brush"
 #define XMLZOO_CENTER     "center"
 #define XMLZOO_INTENSITY  "intensity"

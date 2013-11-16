@@ -65,6 +65,7 @@
 
 -(int)toolRgbByNumber:(int)n;
 -(const char*)toolNameByNumber:(int)n;
+-(const char*)toolIconByNumber:(int)n;
 -(CGFloat)toolReserveByNumber:(int)n;
 
 -(int)numberOfConsoleLines;

@@ -522,15 +522,15 @@
             </objects>
             <point key="canvasLocation" x="2283" y="225"/>
         </scene>
-        <!--Overhead Map View Controller - Game-->
+        <!--Overhead View Controller - Game-->
         <scene sceneID="5Ov-zH-88a">
             <objects>
-                <viewController title="Game" id="knq-Pt-noi" customClass="PZOverheadMapViewController" sceneMemberID="viewController">
+                <viewController title="Game" id="knq-Pt-noi" customClass="PZOverheadViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5NN-2Q-qTd">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZOverheadMapView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZOverheadView">
                                 <rect key="frame" x="0.0" y="100" width="320" height="404"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

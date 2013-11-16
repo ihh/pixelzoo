@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2818DED71837FC64000EB483 /* PZToolNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818DED61837FC64000EB483 /* PZToolNode.m */; };
+		2818DEDA18380324000EB483 /* 64x32.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2818DED818380324000EB483 /* 64x32.atlas */; };
+		2818DEDB18380324000EB483 /* 64x64.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2818DED918380324000EB483 /* 64x64.atlas */; };
+		2818DEE1183803F0000EB483 /* PZToolbarNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818DEE0183803F0000EB483 /* PZToolbarNode.m */; };
 		2818E25C17FFB6DB00093CEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25B17FFB6DB00093CEC /* UIKit.framework */; };
 		2818E25E17FFB6DB00093CEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25D17FFB6DB00093CEC /* Foundation.framework */; };
 		2818E26017FFB6DB00093CEC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25F17FFB6DB00093CEC /* CoreGraphics.framework */; };
@@ -52,27 +56,31 @@
 		283C0F5C180725DA0056492E /* PZToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5B180725DA0056492E /* PZToolsViewController.m */; };
 		283C0F5F18075F8C0056492E /* PZLockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F5E18075F8C0056492E /* PZLockViewController.m */; };
 		283C0F62180770D30056492E /* PZGameWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 283C0F61180770D30056492E /* PZGameWrapper.m */; };
-		285106411801E9DC00AA3254 /* PZOverheadMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZOverheadMapViewController.m */; };
-		285106441801ECAE00AA3254 /* PZOverheadMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZOverheadMapView.m */; };
+		285106411801E9DC00AA3254 /* PZOverheadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106401801E9DC00AA3254 /* PZOverheadViewController.m */; };
+		285106441801ECAE00AA3254 /* PZOverheadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106431801ECAE00AA3254 /* PZOverheadView.m */; };
 		285106471801F1B900AA3254 /* PZWorldDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285106461801F1B900AA3254 /* PZWorldDescriptor.m */; };
 		285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285230B4180F37F0006E7FBF /* PZLockDescriptor.m */; };
 		285F608D18369842003467F7 /* PZIsometricViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F608C18369842003467F7 /* PZIsometricViewController.m */; };
 		285F608F18369A5E003467F7 /* tutorial.xml in Resources */ = {isa = PBXBuildFile; fileRef = 285F608E18369A5D003467F7 /* tutorial.xml */; };
-		285F609218369F36003467F7 /* PZIsoMapScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F609118369F36003467F7 /* PZIsoMapScene.m */; };
+		285F609218369F36003467F7 /* PZIsometricScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 285F609118369F36003467F7 /* PZIsometricScene.m */; };
 		285F60DF1836A1A7003467F7 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285F60DE1836A1A7003467F7 /* SpriteKit.framework */; };
 		287985A41814FD6300A115A7 /* chibi.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A01814FD6300A115A7 /* chibi.c */; };
 		287985A51814FD6300A115A7 /* proto.c in Sources */ = {isa = PBXBuildFile; fileRef = 287985A21814FD6300A115A7 /* proto.c */; };
 		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
 		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
 		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
-		28E2B574183714600036E8CE /* 64x32.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 28E2B573183714600036E8CE /* 64x32.atlas */; };
-		28E2B5761837146C0036E8CE /* 64x64.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 28E2B5751837146C0036E8CE /* 64x64.atlas */; };
 		28F32789180C971B00799C1D /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F32788180C971B00799C1D /* Base64.m */; };
 		28FA3F5D180A39900072234F /* PZMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F5C180A39900072234F /* PZMenuViewController.m */; };
 		28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F62180A58890072234F /* PZLoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2818DED51837FC64000EB483 /* PZToolNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolNode.h; sourceTree = "<group>"; };
+		2818DED61837FC64000EB483 /* PZToolNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZToolNode.m; sourceTree = "<group>"; };
+		2818DED818380324000EB483 /* 64x32.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x32.atlas; path = sprites/64x32.atlas; sourceTree = SOURCE_ROOT; };
+		2818DED918380324000EB483 /* 64x64.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x64.atlas; path = sprites/64x64.atlas; sourceTree = SOURCE_ROOT; };
+		2818DEDF183803F0000EB483 /* PZToolbarNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolbarNode.h; sourceTree = "<group>"; };
+		2818DEE0183803F0000EB483 /* PZToolbarNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZToolbarNode.m; sourceTree = "<group>"; };
 		2818E25817FFB6DB00093CEC /* PixelZoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixelZoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2818E25B17FFB6DB00093CEC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2818E25D17FFB6DB00093CEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -158,10 +166,10 @@
 		283C0F5E18075F8C0056492E /* PZLockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockViewController.m; sourceTree = "<group>"; };
 		283C0F60180770D30056492E /* PZGameWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZGameWrapper.h; sourceTree = "<group>"; };
 		283C0F61180770D30056492E /* PZGameWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZGameWrapper.m; sourceTree = "<group>"; };
-		2851063F1801E9DC00AA3254 /* PZOverheadMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZOverheadMapViewController.h; sourceTree = "<group>"; };
-		285106401801E9DC00AA3254 /* PZOverheadMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZOverheadMapViewController.m; sourceTree = "<group>"; };
-		285106421801ECAE00AA3254 /* PZOverheadMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZOverheadMapView.h; sourceTree = "<group>"; };
-		285106431801ECAE00AA3254 /* PZOverheadMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZOverheadMapView.m; sourceTree = "<group>"; };
+		2851063F1801E9DC00AA3254 /* PZOverheadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZOverheadViewController.h; sourceTree = "<group>"; };
+		285106401801E9DC00AA3254 /* PZOverheadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZOverheadViewController.m; sourceTree = "<group>"; };
+		285106421801ECAE00AA3254 /* PZOverheadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZOverheadView.h; sourceTree = "<group>"; };
+		285106431801ECAE00AA3254 /* PZOverheadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZOverheadView.m; sourceTree = "<group>"; };
 		285106451801F1B900AA3254 /* PZWorldDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldDescriptor.h; sourceTree = "<group>"; };
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 		285230B3180F37F0006E7FBF /* PZLockDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockDescriptor.h; sourceTree = "<group>"; };
@@ -169,8 +177,8 @@
 		285F608B18369842003467F7 /* PZIsometricViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsometricViewController.h; sourceTree = "<group>"; };
 		285F608C18369842003467F7 /* PZIsometricViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsometricViewController.m; sourceTree = "<group>"; };
 		285F608E18369A5D003467F7 /* tutorial.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tutorial.xml; sourceTree = "<group>"; };
-		285F609018369F36003467F7 /* PZIsoMapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsoMapScene.h; sourceTree = "<group>"; };
-		285F609118369F36003467F7 /* PZIsoMapScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsoMapScene.m; sourceTree = "<group>"; };
+		285F609018369F36003467F7 /* PZIsometricScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsometricScene.h; sourceTree = "<group>"; };
+		285F609118369F36003467F7 /* PZIsometricScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsometricScene.m; sourceTree = "<group>"; };
 		285F60DE1836A1A7003467F7 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		287985A01814FD6300A115A7 /* chibi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = chibi.c; path = ../../../src/chibi.c; sourceTree = "<group>"; };
 		287985A11814FD6300A115A7 /* chibi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chibi.h; path = ../../../src/chibi.h; sourceTree = "<group>"; };
@@ -179,8 +187,6 @@
 		289E523D1811006500CF0B09 /* scheme */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scheme; path = ../../../scheme; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
-		28E2B573183714600036E8CE /* 64x32.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x32.atlas; path = ../../../sprites/64x32.atlas; sourceTree = "<group>"; };
-		28E2B5751837146C0036E8CE /* 64x64.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x64.atlas; path = ../../../sprites/64x64.atlas; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		28F32788180C971B00799C1D /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		28FA3F5B180A39900072234F /* PZMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZMenuViewController.h; sourceTree = "<group>"; };
@@ -248,12 +254,12 @@
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
 				283C0F60180770D30056492E /* PZGameWrapper.h */,
 				283C0F61180770D30056492E /* PZGameWrapper.m */,
-				285106421801ECAE00AA3254 /* PZOverheadMapView.h */,
-				285106431801ECAE00AA3254 /* PZOverheadMapView.m */,
-				2851063F1801E9DC00AA3254 /* PZOverheadMapViewController.h */,
-				285106401801E9DC00AA3254 /* PZOverheadMapViewController.m */,
-				285F609018369F36003467F7 /* PZIsoMapScene.h */,
-				285F609118369F36003467F7 /* PZIsoMapScene.m */,
+				285106421801ECAE00AA3254 /* PZOverheadView.h */,
+				285106431801ECAE00AA3254 /* PZOverheadView.m */,
+				2851063F1801E9DC00AA3254 /* PZOverheadViewController.h */,
+				285106401801E9DC00AA3254 /* PZOverheadViewController.m */,
+				285F609018369F36003467F7 /* PZIsometricScene.h */,
+				285F609118369F36003467F7 /* PZIsometricScene.m */,
 				285F608B18369842003467F7 /* PZIsometricViewController.h */,
 				285F608C18369842003467F7 /* PZIsometricViewController.m */,
 				285230B3180F37F0006E7FBF /* PZLockDescriptor.h */,
@@ -266,6 +272,10 @@
 				28FA3F5C180A39900072234F /* PZMenuViewController.m */,
 				283C0F57180722CB0056492E /* PZStatusViewController.h */,
 				283C0F58180722CB0056492E /* PZStatusViewController.m */,
+				2818DEDF183803F0000EB483 /* PZToolbarNode.h */,
+				2818DEE0183803F0000EB483 /* PZToolbarNode.m */,
+				2818DED51837FC64000EB483 /* PZToolNode.h */,
+				2818DED61837FC64000EB483 /* PZToolNode.m */,
 				283C0F5A180725DA0056492E /* PZToolsViewController.h */,
 				283C0F5B180725DA0056492E /* PZToolsViewController.m */,
 				285106451801F1B900AA3254 /* PZWorldDescriptor.h */,
@@ -290,8 +300,8 @@
 				2818E26D17FFB6DB00093CEC /* Default.png */,
 				2818E26F17FFB6DB00093CEC /* Default@2x.png */,
 				2818E27117FFB6DB00093CEC /* Default-568h@2x.png */,
-				28E2B5751837146C0036E8CE /* 64x64.atlas */,
-				28E2B573183714600036E8CE /* 64x32.atlas */,
+				2818DED818380324000EB483 /* 64x32.atlas */,
+				2818DED918380324000EB483 /* 64x64.atlas */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -299,6 +309,7 @@
 		2818E28917FFBCFD00093CEC /* PixelZoo core */ = {
 			isa = PBXGroup;
 			children = (
+				2818E2A317FFBD7500093CEC /* pixelzoo.h */,
 				28A996DF18107D2100681777 /* chibi */,
 				2818E28A17FFBD7500093CEC /* balloon.c */,
 				2818E28B17FFBD7500093CEC /* balloon.h */,
@@ -325,7 +336,6 @@
 				2818E2A017FFBD7500093CEC /* particle.c */,
 				2818E2A117FFBD7500093CEC /* particle.h */,
 				2818E2A217FFBD7500093CEC /* pixelzoo.c */,
-				2818E2A317FFBD7500093CEC /* pixelzoo.h */,
 				287985A21814FD6300A115A7 /* proto.c */,
 				287985A31814FD6300A115A7 /* proto.h */,
 				2818E2A417FFBD7500093CEC /* pzutil.h */,
@@ -432,10 +442,10 @@
 				2818E27017FFB6DB00093CEC /* Default@2x.png in Resources */,
 				2818E27217FFB6DB00093CEC /* Default-568h@2x.png in Resources */,
 				289E523E1811006500CF0B09 /* scheme in Resources */,
-				28E2B5761837146C0036E8CE /* 64x64.atlas in Resources */,
+				2818DEDB18380324000EB483 /* 64x64.atlas in Resources */,
 				2818E27517FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard in Resources */,
 				285F608F18369A5E003467F7 /* tutorial.xml in Resources */,
-				28E2B574183714600036E8CE /* 64x32.atlas in Resources */,
+				2818DEDA18380324000EB483 /* 64x32.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,11 +463,12 @@
 				2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */,
 				2818E2C417FFBD7500093CEC /* balloon.c in Sources */,
 				2818E2C517FFBD7500093CEC /* bintree.c in Sources */,
+				2818DEE1183803F0000EB483 /* PZToolbarNode.m in Sources */,
 				2818E2C617FFBD7500093CEC /* board.c in Sources */,
 				2818E2C717FFBD7500093CEC /* color.c in Sources */,
 				2818E2C817FFBD7500093CEC /* game.c in Sources */,
 				2818E2CA17FFBD7500093CEC /* list.c in Sources */,
-				285F609218369F36003467F7 /* PZIsoMapScene.m in Sources */,
+				285F609218369F36003467F7 /* PZIsometricScene.m in Sources */,
 				287985A51814FD6300A115A7 /* proto.c in Sources */,
 				2818E2CB17FFBD7500093CEC /* mersenne.c in Sources */,
 				2818E2CC17FFBD7500093CEC /* move.c in Sources */,
@@ -467,7 +478,7 @@
 				283C0F59180722CB0056492E /* PZStatusViewController.m in Sources */,
 				2818E2CF17FFBD7500093CEC /* particle.c in Sources */,
 				2818E2D017FFBD7500093CEC /* pixelzoo.c in Sources */,
-				285106441801ECAE00AA3254 /* PZOverheadMapView.m in Sources */,
+				285106441801ECAE00AA3254 /* PZOverheadView.m in Sources */,
 				2818E2D117FFBD7500093CEC /* quadtree.c in Sources */,
 				2818E2D217FFBD7500093CEC /* rbtree.c in Sources */,
 				2818E2D317FFBD7500093CEC /* rule.c in Sources */,
@@ -482,13 +493,14 @@
 				2818E2D717FFBD7500093CEC /* util.c in Sources */,
 				28A996E218107D3B00681777 /* eval.c in Sources */,
 				28F32789180C971B00799C1D /* Base64.m in Sources */,
+				2818DED71837FC64000EB483 /* PZToolNode.m in Sources */,
 				2818E2D817FFBD7500093CEC /* vars.c in Sources */,
 				2818E2D917FFBD7500093CEC /* vector.c in Sources */,
 				283C0F5F18075F8C0056492E /* PZLockViewController.m in Sources */,
 				2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */,
 				285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
-				285106411801E9DC00AA3254 /* PZOverheadMapViewController.m in Sources */,
+				285106411801E9DC00AA3254 /* PZOverheadViewController.m in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */,
 				2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */,

@@ -7,7 +7,7 @@
 //
 
 #import "PZLockViewController.h"
-#import "PZOverheadMapViewController.h"
+#import "PZOverheadViewController.h"
 #import "PZAppDelegate.h"
 #import "Base64.h"
 
@@ -80,7 +80,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"playWorld"]) {
-        PZOverheadMapViewController *destViewController = segue.destinationViewController;
+        PZOverheadViewController *destViewController = segue.destinationViewController;
         destViewController.worldDescriptor = self.worldDescriptor;
         destViewController.lockDescriptor = self.lockDescriptor;
         destViewController.gameWrapper = self.gameWrapper;

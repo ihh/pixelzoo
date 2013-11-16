@@ -18,7 +18,7 @@
 #define REDRAWS_PER_SECOND 30   /* frame rate */
 #define GAMELOOP_CALLS_PER_SECOND REDRAWS_PER_SECOND    /* for some reason, increasing this slows updates down; maybe need a separate thread? */
 
-// dimensions
+// dimensions (overhead view)
 #define CONSOLE_HEIGHT  128
 #define TOOLBAR_WIDTH   64
 #define INITIAL_PIXELS_PER_CELL 4
@@ -26,7 +26,7 @@
 #define MAX_PIXELS_PER_CELL 4
 #define MAGNIFIED_PIXELS_PER_CELL 32
 
-// text
+// text (overhead view)
 #define GAME_FONT "Helvetica"
 #define CONSOLE_FONT_SIZE 5
 #define CONSOLE_FONT_SPACING 1
@@ -44,16 +44,17 @@
 #define EXAMINE_TEXT_DISPLACEMENT 64
 #define EXAMINE_LABEL_BORDER 1
 
-// other visuals
+// other visuals (overhead view)
 #define BOARD_BORDER_OPACITY .5
-
 #define EXTRA_TOOLS_AT_TOP 1  /* Examine tool */
 #define EXTRA_TOOLS_AT_BOTTOM 0
-
 #define EXAMINE_TOOL_NAME "Examine"
 #define EXAMINE_EMPTY_TEXT "nothing"
 #define EXAMINE_CIRCLE_RADIUS 20
 
-
+// isometric view
+#define TOOL_ICON_WIDTH 64
+#define TOOL_ICON_HEIGHT 64
+#define TOOL_RESERVE_HEIGHT 4
 
 #endif

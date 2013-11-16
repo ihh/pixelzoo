@@ -13,6 +13,7 @@ Tool* newTool (char *name, int size) {
   int x, y;
   tool = SafeMalloc (sizeof(Tool));
   tool->name = StringCopy (name);
+  tool->icon = NULL;
 
   tool->brushIntensity = newQuadTree (size);
   for (x = 0; x < size; ++x)
@@ -42,6 +43,7 @@ void deleteTool (void *voidTool) {
   if (tool->overwriteStates)
     deleteStateSet (tool->overwriteStates);
   StringDelete (tool->name);
+  SafeFreeOrNull (tool->icon);
   SafeFree (tool);
 }
 

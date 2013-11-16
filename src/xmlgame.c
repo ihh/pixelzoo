@@ -75,7 +75,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
 
 Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, ProtoTable *protoTable) {
   Tool *tool;
-  xmlNode *brushNode, *intensityNode, *patternNode, *overwriteNode, *node, *schemeNode;
+  xmlNode *brushNode, *intensityNode, *patternNode, *overwriteNode, *node, *schemeNode, *iconNode;
   int x, y, size;
   const char *evalResult;
   xmlNode *evalNode;
@@ -93,6 +93,8 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, Proto
   } else {
     size = CHILDINT(toolNode,SIZE);
     tool = newTool ((char*) CHILDSTRING(toolNode,NAME), size);
+    if ((iconNode = CHILD(toolNode,ICON)))
+      tool->icon = StringNew((const char*)NODESTRINGVAL(iconNode));
     tool->z = OPTCHILDINT(toolNode,Z,0);  /* by default, make tools operate on zeroth layer */
     if ((brushNode = CHILD(toolNode,BRUSH))) {
       if ((node = CHILD(brushNode,CENTER))) {

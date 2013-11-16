@@ -11,6 +11,7 @@
 typedef struct Tool {
   /* toolbox appearance */
   char *name;  /* name of this tool */
+  char *icon;
   int z;  /* absolute z-coord specifying layer that Tool operates on */
 
   /* brush */

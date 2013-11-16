@@ -199,6 +199,11 @@ int PZEXPORT pzGetToolRgb(pzGame,pzTool);  /* returns 24-bit RGB */
 const char* PZEXPORT pzGetToolName(pzTool);
 
 /**
+ Icon name of a particular tool.
+ */
+const char* PZEXPORT pzGetToolIcon(pzTool);
+
+/**
  Reserve level of a particular tool (i.e. how much the player has in reserve).
  @return A value from 0 to 1 */
 double PZEXPORT pzGetToolReserveLevel(pzTool);  /* returns a value from 0 to 1 */
