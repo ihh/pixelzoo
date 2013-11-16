@@ -2,7 +2,12 @@ Kids are getting bored, no way this ship runs without fuel. Clear breathing come
 Then, a realistic (slow but steady) progress rate.
 
 
-Create a PZIsometricGameView version of PZGameView that uses 2:1 isometric grid
+Add icon name to tools; tool icons, reserve bars, selection frame
+For every cell, store time (board clock) of last modification; nature (ConserveModify/KillModify/EatModify); previous state; & location of source cell
+In PZIsoMapScene, maintain an array of SKNode*'s (or a coordinate-decorated subclass thereof) that parallels the Board, so nodes can be re-used and animations can continue through a pan event
+(delete them when they go too far offscreen)
+
+
 PZIsometricGameSKView using Sprite Kit, with (64x32px for flat tiles e.g. grass, dirt; 64x128px for tall tiles e.g. people, trees)
 - Scheme functions for generating sprite & emitter nodes (from vars & SXML blob)
 - API so DynamicRule can generate animations when visible cells are updated
