@@ -33,8 +33,8 @@
 
 // drawing map
 -(unsigned char*) allocBoardBitmap;
--(CGImageRef) newBoardImage:(unsigned char*)bitmapData;
--(CGImageRef) newBoardImage;
+-(CGImageRef) newBoardImageForZ:(int)z withBitmap:(unsigned char*)bitmapData;
+-(CGImageRef) newBoardImageForZ:(int)z;
 
 - (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
 
@@ -49,6 +49,7 @@
 
 -(void)updateGame;
 -(int)boardSize;
+-(int)boardDepth;
 -(long long)boardClock;
 
 -(int)numberOfTools;

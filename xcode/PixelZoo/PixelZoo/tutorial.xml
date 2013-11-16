@@ -1,6 +1,7 @@
 <game>
   <board>
     <size>128</size>
+    <depth>2</depth>
     <grammar>
       <particle><scheme>(polymer-particle "polymer")</scheme></particle>
       <particle>
@@ -6845,6 +6846,9 @@ The following DO seem to work...
       </particle>
 
     </grammar>
+    <!-- uncomment to test transparency of top layer -->
+    <!-- init><x>20</x><y>20</y><z>0</z><hexstate>3f</hexstate></init -->
+
     <init>
       <x>64</x>
       <y>64</y>

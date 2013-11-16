@@ -115,6 +115,10 @@ The conversion factor from board clock units ("microticks") to expected updates 
 int PZEXPORT pzGetBoardSize(pzGame);
 
 /**
+ Depth of the board. */
+int PZEXPORT pzGetBoardDepth(pzGame);
+
+/**
 The color of a cell.
 
 Equivalent to a call to pzGetCellPaletteIndex() followed by a call to pzGetPaletteRgb()

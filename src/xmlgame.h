@@ -33,6 +33,6 @@ Game* newGameFromXmlDocumentWithSeparateBoard (xmlDoc *gameDoc, xmlDoc *separate
 Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameRoot, xmlNode *separateBoardRoot);
 Game* newGameFromXmlStringWithSeparateBoard (const char* gameString, const char* separateBoardString);
 
-Tool* newToolFromXmlNode (xmlNode *node, xmlNode *globalOverwriteNode, ProtoTable *protoTable);
+Tool* newToolFromXmlNode (xmlNode *node, int defaultZ, xmlNode *globalOverwriteNode, ProtoTable *protoTable);
 
 #endif /* XMLGAME_INCLUDED */

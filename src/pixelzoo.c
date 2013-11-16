@@ -78,9 +78,15 @@ unsigned long long pzBoardClock (pzGame pzg) {
 }
 
 int pzGetBoardSize(pzGame pzg) {
-  Game* game;
-  game = (Game*) pzg;
-  return game->board->size;
+    Game* game;
+    game = (Game*) pzg;
+    return game->board->size;
+}
+
+int pzGetBoardDepth(pzGame pzg) {
+    Game* game;
+    game = (Game*) pzg;
+    return game->board->depth;
 }
 
 int pzGetCellRgb(pzGame pzg,int x,int y,int z) {

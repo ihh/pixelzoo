@@ -46,14 +46,14 @@
     return bitmapData;
 }
 
--(CGImageRef) newBoardImage {
+-(CGImageRef) newBoardImageForZ:(int)z {
     unsigned char* bitmap = [self allocBoardBitmap];
-    CGImageRef boardImg = [self newBoardImage:bitmap];
+    CGImageRef boardImg = [self newBoardImageForZ:z withBitMap:bitmap];
     free(bitmap);
     return boardImg;
 }
 
--(CGImageRef) newBoardImage:(unsigned char*)bitmapData {
+-(CGImageRef) newBoardImageForZ:(int)z withBitMap:(unsigned char*)bitmapData {
     // create the bitmap context if necessary
     int boardSize = [self boardSize];
     int bytesPerRow = 4 * boardSize * sizeof(unsigned char);
@@ -64,17 +64,17 @@
                                                        8,  // bits per component
                                                        bytesPerRow,
                                                        colorSpace,
-                                                       (CGBitmapInfo) kCGImageAlphaNoneSkipLast);
+                                                       (CGBitmapInfo) kCGImageAlphaPremultipliedLast);
     
     // create board image
     unsigned char *bitmapWritePtr = bitmapData;
     for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
         for (int x = 0; x < boardSize; ++x) {
-            int rgb = [self cellRgbAtX:x y:y z:0];
+            int rgb = [self cellRgbAtX:x y:y z:z];
             *(bitmapWritePtr++) = pzGetRgbRed(rgb);
             *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
             *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
-            ++bitmapWritePtr;
+            *(bitmapWritePtr++) = (z == 0 || rgb > 0) ? 255 : 0;  // black cells above the bottom layer are transparent... a bit hacky
         }
     }
     
@@ -88,33 +88,51 @@
 
 - (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight {
     int boardSize = [self boardSize];
-    CGImageRef boardImg = [self newBoardImage];
+    int boardDepth = [self boardDepth];
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef bmContext = CGBitmapContextCreate(NULL,
                                                    2*tileHeight*boardSize,
-                                                   tileHeight*boardSize,
+                                                   tileHeight*(boardSize+boardDepth),
                                                    8,
                                                    0,
                                                    colorSpace,
                                                    (CGBitmapInfo) kCGImageAlphaPremultipliedFirst);
     
-    CGAffineTransform trans = CGAffineTransformMake(tileHeight,tileHeight/2,-tileHeight,tileHeight/2,tileHeight*boardSize,0);
+    CGAffineTransform trans = CGAffineTransformMake(tileHeight,-tileHeight/2,-tileHeight,-tileHeight/2,tileHeight*boardSize,tileHeight*boardSize);
     CGContextConcatCTM(bmContext, trans);
     
     CGContextSetAllowsAntialiasing(bmContext, FALSE);
     CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
     CGColorSpaceRelease(colorSpace);
-    CGContextDrawImage(bmContext, CGRectMake(0, 0,
-                                             boardSize,
-                                             boardSize),
+
+    for (int z = 0; z < boardDepth; ++z) {
+        int zOffset = -z;
+        CGImageRef boardImg = [self newBoardImageForZ:z];
+        CGContextDrawImage(bmContext, CGRectMake(zOffset,
+                                                 zOffset,
+                                                 boardSize + zOffset,
+                                                 boardSize + zOffset),
                        boardImg);
+        
+        CGImageRelease(boardImg);
+
+        /* Commented-out code should put a green dot at the top and a blue dot at the bottom:
+        
+        UIColor * greenColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+        CGContextSetFillColorWithColor(bmContext, greenColor.CGColor);
+        CGContextFillRect(bmContext,CGRectMake(-1, -1, 1, 1));
+        
+        UIColor * blueColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0];
+        CGContextSetFillColorWithColor(bmContext, blueColor.CGColor);
+        CGContextFillRect(bmContext,CGRectMake(boardSize-1, boardSize-1, 1, 1));
+         */
+    }
     
-    CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+    CGImageRef isoBoardImg = CGBitmapContextCreateImage(bmContext);
     CFRelease(bmContext);
-    CGImageRelease(boardImg);
     
-    return rotatedImage;
+    return isoBoardImg;
 }
 
 -(void)postTurn {
@@ -152,6 +170,10 @@
 
 -(int)boardSize {
     return pzGetBoardSize(game);
+}
+
+-(int)boardDepth{
+    return pzGetBoardDepth(game);
 }
 
 -(long long)boardClock {

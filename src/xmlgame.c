@@ -58,7 +58,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   selectedTool = NULL;
   for (node = gameNode->children; node; node = node->next)
   if (MATCHES(node,TOOL)) {
-    selectedTool = tool = newToolFromXmlNode (node, globalOverwriteNode, game->board->protoTable);
+    selectedTool = tool = newToolFromXmlNode (node, game->board->depth - 1, globalOverwriteNode, game->board->protoTable);
     addToolToGame (game, tool);
   }
 
@@ -73,7 +73,7 @@ Game* newGameFromXmlRootWithSeparateBoard (xmlNode *gameNode, xmlNode *separateB
   return game;
 }
 
-Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, ProtoTable *protoTable) {
+Tool* newToolFromXmlNode (xmlNode* toolNode, int defaultZ, xmlNode* globalOverwriteNode, ProtoTable *protoTable) {
   Tool *tool;
   xmlNode *brushNode, *intensityNode, *patternNode, *overwriteNode, *node, *schemeNode, *iconNode;
   int x, y, size;
@@ -85,7 +85,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, Proto
     evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
     evalNode = xmlTreeFromString (evalResult);
 
-    tool = newToolFromXmlNode (evalNode, globalOverwriteNode, protoTable);
+    tool = newToolFromXmlNode (evalNode, defaultZ, globalOverwriteNode, protoTable);
 
     deleteXmlTree (evalNode);
     StringDelete ((void*) evalResult);
@@ -95,7 +95,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, xmlNode* globalOverwriteNode, Proto
     tool = newTool ((char*) CHILDSTRING(toolNode,NAME), size);
     if ((iconNode = CHILD(toolNode,ICON)))
       tool->icon = StringNew((const char*)NODESTRINGVAL(iconNode));
-    tool->z = OPTCHILDINT(toolNode,Z,0);  /* by default, make tools operate on zeroth layer */
+    tool->z = OPTCHILDINT(toolNode,Z,defaultZ);
     if ((brushNode = CHILD(toolNode,BRUSH))) {
       if ((node = CHILD(brushNode,CENTER))) {
 	tool->brushCenter.x = CHILDINT(node,X);

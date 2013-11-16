@@ -115,7 +115,7 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
     if (MATCHES(node,INIT)) {
       x = CHILDINT(node,X);
       y = CHILDINT(node,Y);
-      z = OPTCHILDINT(node,Z,0);
+      z = OPTCHILDINT(node,Z,board->depth-1);
       state = getStateFromNode (node, protoTable, 0);
       writeBoardState (board, x, y, z, state);
       if (CHILD(node,META))
