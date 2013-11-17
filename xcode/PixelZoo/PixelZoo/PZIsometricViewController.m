@@ -47,6 +47,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    // present a dummy scene so that the screen looks black when the view appears.
+    // if we present the actual scene here, the SKView's coordinate system gets screwed up.
     SKScene *dummyScene = [[SKScene alloc] initWithSize:skview.frame.size];
     [skview presentScene: dummyScene];
     [super viewWillAppear:animated];
