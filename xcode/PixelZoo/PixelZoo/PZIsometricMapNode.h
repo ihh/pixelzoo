@@ -10,16 +10,13 @@
 #import "PZGameWrapper.h"
 
 @interface PZIsometricMapNode : SKSpriteNode {
-    UIViewController* controller;
     int renderTileHeight;
-    CGPoint previousTouchLocation;  // hack, workaround for weird touchesMoved coordinate-change effect
+    CGPoint offset;
 }
 
 @property PZGameWrapper* game;
 
-+(PZIsometricMapNode*) newMapForGame:(PZGameWrapper*)game withOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight forController:(UIViewController*)controller;
-
--(CGPoint) touchLocation:(UITouch*)touch withCorrection:(bool)doCorrection;
++(PZIsometricMapNode*) newMapForGame:(PZGameWrapper*)game withOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight;
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInParent;
 

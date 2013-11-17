@@ -61,6 +61,7 @@
         [game selectTool:toolnum];
     else
         [game unselectTool];
+    [game untouchCell];
     [super touchesBegan:touches withEvent:event];
 }
 

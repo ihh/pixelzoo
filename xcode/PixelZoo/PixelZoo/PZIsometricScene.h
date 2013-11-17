@@ -14,14 +14,13 @@
 @interface PZIsometricScene : SKScene {
     PZIsometricMapNode *map;
     PZToolbarNode *toolbar;
-    SKSpriteNode *center, *newCenter;  // debug
 }
 
 @property PZGameWrapper* game;
 
 -(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper;
 
--(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight forController:(UIViewController*)controller;
+-(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight;
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInView;
 

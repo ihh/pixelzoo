@@ -47,13 +47,17 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper];
-    [skview presentScene: map];
+    SKScene *dummyScene = [[SKScene alloc] initWithSize:skview.frame.size];
+    [skview presentScene: dummyScene];
+    [super viewWillAppear:animated];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper];
+    [skview presentScene: map];
     [self startTimers];
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -84,7 +88,7 @@
 - (void)callGameLoop
 {
     [gameWrapper updateGame];
-    [map showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight forController:self];
+    [map showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight];
 }
 
 
@@ -175,12 +179,9 @@
 	// single-touch
 	if ([touches count] == 1) {
 		UITouch *touch = [touches anyObject];
-        CGPoint currentPoint = [touch locationInView:[self skview]];
-        // seems like skview is getting resized. original center is green dot, new center (where map is centered) is yellow dot. according to frame, center is still at green dot. what we want is to translate (and probably scale) to get co-ordinates relative to yellow dot.
-        // a quick & dirty fix is to initialize skview within viewDidAppear, rather than viewWillAppear. This looks horrible though.
-        NSLog(@"touchesBegan: in skview (%f,%f)  center is (%f,%f)",currentPoint.x,currentPoint.y,[self skview].frame.size.width/2,[self skview].frame.size.height/2);
-        CGPoint mapPoint = [map locationInMapImage:currentPoint];
-//        NSLog(@"touchesBegan: (%f,%f) -> (%f,%f)",currentPoint.x,currentPoint.y,mapPoint.x,mapPoint.y);
+        CGPoint touchPoint = [touch locationInView:[self skview]];
+        CGPoint mapPoint = [map locationInMapImage:touchPoint];
+        [gameWrapper touchIsometricMapAt:mapPoint];
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -190,13 +191,15 @@
 	// single-touch
 	if ([touches count] == 1) {
 		UITouch *touch = [touches anyObject];
-        CGPoint currentPoint = [touch locationInView:[self skview]];
-//        NSLog(@"touchesMoved=(%f,%f)",currentPoint.x,currentPoint.y);
+        CGPoint touchPoint = [touch locationInView:[self skview]];
+        CGPoint mapPoint = [map locationInMapImage:touchPoint];
+        [gameWrapper touchIsometricMapAt:mapPoint];
 	}
     [super touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [gameWrapper untouchCell];
     [super touchesEnded:touches withEvent:event];
 }
 
