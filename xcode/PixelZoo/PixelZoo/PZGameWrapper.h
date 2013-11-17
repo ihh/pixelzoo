@@ -41,7 +41,7 @@
 
 -(void)touchIsometricMapAt:(CGPoint)xy;
 -(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
--(void)iterateOverIsometricRegion:(CGRect)rect withIterator:(NSObject<PZBoardIterator>*)iter;
+-(void)iterateOverIsometricRegion:(CGRect)mapImageRect withIterator:(NSObject<PZBoardIterator>*)iter;
 
 // saving turns
 
