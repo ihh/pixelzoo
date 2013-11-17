@@ -188,6 +188,7 @@
 		287985A21814FD6300A115A7 /* proto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = proto.c; path = ../../../src/proto.c; sourceTree = "<group>"; };
 		287985A31814FD6300A115A7 /* proto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = proto.h; path = ../../../src/proto.h; sourceTree = "<group>"; };
 		289E523D1811006500CF0B09 /* scheme */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scheme; path = ../../../scheme; sourceTree = "<group>"; };
+		28A55D6E18394B4700B8035A /* PZBoardIterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PZBoardIterator.h; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
@@ -254,6 +255,7 @@
 				2818E27317FFB6DB00093CEC /* MainStoryboard_iPhone.storyboard */,
 				2818E26A17FFB6DB00093CEC /* PZAppDelegate.h */,
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
+				28A55D6E18394B4700B8035A /* PZBoardIterator.h */,
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
 				283C0F60180770D30056492E /* PZGameWrapper.h */,
 				283C0F61180770D30056492E /* PZGameWrapper.m */,

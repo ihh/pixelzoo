@@ -139,12 +139,50 @@
     int tn = pzGetSelectedToolNumber(game);
     CGFloat bs = [self boardSize];
     int bd = [self boardDepth];
-    int tz = pzGetToolZ (pzGetToolByNumber (game, tn));
-    CGFloat px = p.x - bs / 2;
-    CGFloat py = p.y - (bd - 1 - tz);
+    int bz = pzGetToolZ (pzGetToolByNumber (game, tn));
+    CGFloat px = (p.x - bs) / 2;
+    CGFloat py = p.y - (bd - 1 - bz);
     int bx = px + py + .5;
     int by = py - px + .5;
-    [self touchCellAtX:bx y:by z:tz];
+    [self touchCellAtX:bx y:by z:bz];
+}
+
+-(void)iterateOverIsometricRegion:(CGRect)rect withIterator:(NSObject<PZBoardIterator>*)iter {
+    // with reference to the variables defined in touchIsometricMapAt:
+    // if (p.x,p.y) bounded by (a,b) [top left] and (c,d) [bottom right]
+    // then a < p.x < c,  b < p.y < d
+    // now, p.x = 2(px+bs)   and   p.y = py+(bd-1-z)
+    // so (a-bs)/2 < px < (c-bs)/2,   b-(bd-1-bz) < py < d-(bd-1-bz)
+    // but px=(bx-by)/2 and py=(bx+by)/2
+    // so a-bs < (bx-by) < c-bs,   2(b-bd+1+bz) < (bx+by) < 2(d-bd+1+bz)
+
+    int bs = [self boardSize];
+    int bd = [self boardDepth];
+
+    CGFloat a = rect.origin.x,
+            b = rect.origin.y,
+            c = rect.origin.x + rect.size.width,
+            d = rect.origin.y + rect.size.height;
+
+    const CGFloat bx_minus_by_min = MAX(-bs,a - bs), bx_minus_by_max = MIN(bs,c - bs);
+    for (int bz = 0; bz < bd; ++bz) {
+        const CGFloat bx_plus_by_min = MAX(0,2*(b-bd+1+bz)), bx_plus_by_max = MIN(2*bs,2*(d-bd+1+bz)+.5);
+        for (int bx_plus_by = bx_plus_by_min; bx_plus_by <= bx_plus_by_max; ++bx_plus_by) {
+            const int bx_max = MIN(bs-1,bx_plus_by);
+            for (int bx = MAX(bx_plus_by-bs,0); bx <= bx_max; ++bx) {
+                const int by = bx_plus_by - bx;
+                if (by >= 0 && by < bs && bx-by >= bx_minus_by_min && bx-by <= bx_minus_by_max)
+                    [iter visitCellAtX:bx y:by z:bz];
+            }
+        }
+    }
+}
+
+-(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight {
+    int bs = [self boardSize];
+    int bd = [self boardDepth];
+    
+    return CGPointMake(tileHeight*(x-y+bs),tileHeight*((x+y)/2+bd-z-1));
 }
 
 

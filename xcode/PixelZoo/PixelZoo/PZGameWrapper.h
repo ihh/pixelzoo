@@ -12,6 +12,7 @@
 #import "GDataXMLNode.h"
 #import "PZWorldDescriptor.h"
 #import "PZLockDescriptor.h"
+#import "PZBoardIterator.h"
 
 
 @interface PZGameWrapper : NSObject <NSURLConnectionDelegate> {
@@ -39,6 +40,8 @@
 -(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
 
 -(void)touchIsometricMapAt:(CGPoint)xy;
+-(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
+-(void)iterateOverIsometricRegion:(CGRect)rect withIterator:(NSObject<PZBoardIterator>*)iter;
 
 // saving turns
 

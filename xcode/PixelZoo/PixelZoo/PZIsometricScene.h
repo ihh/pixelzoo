@@ -11,8 +11,10 @@
 #import "PZToolbarNode.h"
 #import "PZIsometricMapNode.h"
 
-@interface PZIsometricScene : SKScene {
+@interface PZIsometricScene : SKScene <PZBoardIterator> {
     PZIsometricMapNode *map;
+    CGPoint mapCenter;
+    CGFloat tileHeight;
     PZToolbarNode *toolbar;
 }
 
@@ -23,5 +25,6 @@
 -(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight;
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInView;
+-(CGPoint) locationInSpriteView:(CGPoint)locationInMapImage;
 
 @end
