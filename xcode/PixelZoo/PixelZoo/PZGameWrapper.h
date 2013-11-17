@@ -36,7 +36,9 @@
 -(CGImageRef) newBoardImageForZ:(int)z withBitmap:(unsigned char*)bitmapData;
 -(CGImageRef) newBoardImageForZ:(int)z;
 
-- (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
+-(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
+
+-(void)touchIsometricMapAt:(CGPoint)xy;
 
 // saving turns
 

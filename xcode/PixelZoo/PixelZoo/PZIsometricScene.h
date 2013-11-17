@@ -9,16 +9,20 @@
 #import <SpriteKit/SpriteKit.h>
 #import "PZGameWrapper.h"
 #import "PZToolbarNode.h"
+#import "PZIsometricMapNode.h"
 
 @interface PZIsometricScene : SKScene {
-    SKSpriteNode *map;
+    PZIsometricMapNode *map;
     PZToolbarNode *toolbar;
+    SKSpriteNode *center, *newCenter;  // debug
 }
 
 @property PZGameWrapper* game;
 
 -(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper;
 
--(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight ;
+-(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight forController:(UIViewController*)controller;
+
+-(CGPoint) locationInMapImage:(CGPoint)locationInView;
 
 @end

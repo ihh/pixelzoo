@@ -11,6 +11,7 @@
 		2818DEDA18380324000EB483 /* 64x32.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2818DED818380324000EB483 /* 64x32.atlas */; };
 		2818DEDB18380324000EB483 /* 64x64.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 2818DED918380324000EB483 /* 64x64.atlas */; };
 		2818DEE1183803F0000EB483 /* PZToolbarNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818DEE0183803F0000EB483 /* PZToolbarNode.m */; };
+		2818DEE418385F35000EB483 /* PZIsometricMapNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818DEE318385F35000EB483 /* PZIsometricMapNode.m */; };
 		2818E25C17FFB6DB00093CEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25B17FFB6DB00093CEC /* UIKit.framework */; };
 		2818E25E17FFB6DB00093CEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25D17FFB6DB00093CEC /* Foundation.framework */; };
 		2818E26017FFB6DB00093CEC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E25F17FFB6DB00093CEC /* CoreGraphics.framework */; };
@@ -81,6 +82,8 @@
 		2818DED918380324000EB483 /* 64x64.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = 64x64.atlas; path = sprites/64x64.atlas; sourceTree = SOURCE_ROOT; };
 		2818DEDF183803F0000EB483 /* PZToolbarNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZToolbarNode.h; sourceTree = "<group>"; };
 		2818DEE0183803F0000EB483 /* PZToolbarNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZToolbarNode.m; sourceTree = "<group>"; };
+		2818DEE218385F35000EB483 /* PZIsometricMapNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZIsometricMapNode.h; sourceTree = "<group>"; };
+		2818DEE318385F35000EB483 /* PZIsometricMapNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZIsometricMapNode.m; sourceTree = "<group>"; };
 		2818E25817FFB6DB00093CEC /* PixelZoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixelZoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2818E25B17FFB6DB00093CEC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2818E25D17FFB6DB00093CEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -258,6 +261,8 @@
 				285106431801ECAE00AA3254 /* PZOverheadView.m */,
 				2851063F1801E9DC00AA3254 /* PZOverheadViewController.h */,
 				285106401801E9DC00AA3254 /* PZOverheadViewController.m */,
+				2818DEE218385F35000EB483 /* PZIsometricMapNode.h */,
+				2818DEE318385F35000EB483 /* PZIsometricMapNode.m */,
 				285F609018369F36003467F7 /* PZIsometricScene.h */,
 				285F609118369F36003467F7 /* PZIsometricScene.m */,
 				285F608B18369842003467F7 /* PZIsometricViewController.h */,
@@ -500,6 +505,7 @@
 				2818E2DA17FFBD7500093CEC /* xmlboard.c in Sources */,
 				285230B5180F37F0006E7FBF /* PZLockDescriptor.m in Sources */,
 				2818E2DB17FFBD7500093CEC /* xmlgame.c in Sources */,
+				2818DEE418385F35000EB483 /* PZIsometricMapNode.m in Sources */,
 				285106411801E9DC00AA3254 /* PZOverheadViewController.m in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */,

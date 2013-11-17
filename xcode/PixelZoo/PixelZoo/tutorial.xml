@@ -5949,8 +5949,9 @@
         <rate>0.6</rate>
         <rule>
 	  <dynamic>
+          <function>(lambda(b x y z)#t)</function>
 <!-- this doesn't work when Board type-checking is on: -->
-	    <function>(lambda (board x y z) (begin (display `(perfume ,x ,y ,z ,(Board-get-state board x y z))) #t))</function>
+	    <!-- function>(lambda (board x y z) (begin (display `(perfume ,x ,y ,z ,(Board-get-state board x y z))) #t))</function -->
 <!--
 The following don't work when Board type-checking is on...
 	    <function>(lambda (board x y z) (Board-get-state board x y z))</function>

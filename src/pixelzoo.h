@@ -212,6 +212,11 @@ const char* PZEXPORT pzGetToolIcon(pzTool);
  @return A value from 0 to 1 */
 double PZEXPORT pzGetToolReserveLevel(pzTool);  /* returns a value from 0 to 1 */
 
+/**
+ z-coordinate of a particular tool.
+ */
+const int PZEXPORT pzGetToolZ(pzTool);
+
 
 /* Functions to select & deselect tools */
 

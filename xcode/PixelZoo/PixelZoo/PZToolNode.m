@@ -9,10 +9,9 @@
 #import "PZToolNode.h"
 #import "PZDefs.h"
 
-#define ExamineIcon "hand.png"
+#define MoveIcon "hand.png"
 #define DefaultIcon @"tool-spray.png"
 #define FrameIcon @"ToolFrame.png"
-// #define FrameIcon @"spray.png"
 
 @implementation PZToolNode
 
@@ -22,7 +21,7 @@
 @synthesize reserve;
 
 +(PZToolNode*)spriteNodeForToolNumber:(int)n forGame:(PZGameWrapper*)game forToolbar:(UIResponder*)toolbar {
-    const char* icon = n < 0 ? ExamineIcon : [game toolIconByNumber:n];
+    const char* icon = n < 0 ? MoveIcon : [game toolIconByNumber:n];
     NSString* iconImage = icon ? [NSString stringWithCString:icon encoding:NSUTF8StringEncoding] : DefaultIcon;
     PZToolNode* node = [[PZToolNode alloc] initWithImageNamed:iconImage];
     node.anchorPoint = CGPointMake(0,1);

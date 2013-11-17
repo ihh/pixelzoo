@@ -257,6 +257,12 @@ double pzGetToolReserveLevel(pzTool pzt) {
   return toolReserveLevel;
 }
 
+const int PZEXPORT pzGetToolZ(pzTool pzt) {
+    Tool* tool;
+    tool = (Tool*) pzt;
+    return tool->z;
+}
+
 void pzSelectTool(pzGame pzg,int toolNum) {
   Game* game;
   game = (Game*) pzg;

@@ -37,6 +37,10 @@
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer;
 - (IBAction)handlePinch:(UIPinchGestureRecognizer *)recognizer;
 
+-(CGPoint) touchLocation:(UITouch*)touch;
+
 - (CGPoint) maxViewOffset;
+
+- (bool) moveToolSelected;
 
 @end

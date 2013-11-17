@@ -48,12 +48,12 @@
 
 -(CGImageRef) newBoardImageForZ:(int)z {
     unsigned char* bitmap = [self allocBoardBitmap];
-    CGImageRef boardImg = [self newBoardImageForZ:z withBitMap:bitmap];
+    CGImageRef boardImg = [self newBoardImageForZ:z withBitmap:bitmap];
     free(bitmap);
     return boardImg;
 }
 
--(CGImageRef) newBoardImageForZ:(int)z withBitMap:(unsigned char*)bitmapData {
+-(CGImageRef) newBoardImageForZ:(int)z withBitmap:(unsigned char*)bitmapData {
     // create the bitmap context if necessary
     int boardSize = [self boardSize];
     int bytesPerRow = 4 * boardSize * sizeof(unsigned char);
@@ -134,6 +134,19 @@
     
     return isoBoardImg;
 }
+
+-(void)touchIsometricMapAt:(CGPoint)p {
+    int tn = pzGetSelectedToolNumber(game);
+    CGFloat bs = [self boardSize];
+    int bd = [self boardDepth];
+    int tz = pzGetToolZ (pzGetToolByNumber (game, tn));
+    CGFloat px = p.x - bs / 2;
+    CGFloat py = p.y - (bd - 1 - tz);
+    int bx = px + py + .5;
+    int by = py - px + .5;
+    [self touchCellAtX:bx y:by z:tz];
+}
+
 
 -(void)postTurn {
     // cancel any previous POST in progress

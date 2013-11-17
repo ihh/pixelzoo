@@ -660,7 +660,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prU-QJ-IL2" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="4oT-23-6c9">
+                <panGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="4oT-23-6c9">
                     <connections>
                         <action selector="handlePan:" destination="fkp-KA-7j9" id="hYl-5l-pYh"/>
                     </connections>
