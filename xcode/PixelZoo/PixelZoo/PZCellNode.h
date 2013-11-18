@@ -11,8 +11,8 @@
 
 @interface PZCellNode : SKSpriteNode
 
-@property unsigned long long lastModified;
-@property unsigned long long lastUpdated;
+@property long long lastModified;
+@property long long lastUpdated;
 
 +(PZCellNode*)newForGame:(PZGameWrapper*)game x:(int)x y:(int)y z:(int)z;
 

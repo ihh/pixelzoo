@@ -51,9 +51,11 @@
         [self iterateOverIsometricRegion:self];
         [self flushStaleSprites:[game microticksPerSecond]];
         tileNode.position = mapCenter;
+        tileNode.zPosition = 0;
         [tileNode setScale:tileHeight / TILE_SPRITE_HEIGHT];
         if (![tileNode parent])
             [self addChild:tileNode];
+//        NSLog(@"Updated tileNode position (%f,%f) scale %f",tileNode.position.x,tileNode.position.y,tileHeight/TILE_SPRITE_HEIGHT);
     }
     
 
@@ -64,7 +66,7 @@
     CGRect frame = [[self view] frame];
     CGPoint mapTopLeft = [self locationInMapImage:CGPointMake(0,0)];
     CGPoint mapBottomRight = [self locationInMapImage:CGPointMake(frame.size.width,frame.size.height)];
-    CGRect mapFrame = CGRectMake(mapTopLeft.x,mapTopLeft.y,mapBottomRight.x-mapTopLeft.x,mapBottomRight.y-mapTopLeft.y);
+    CGRect mapFrame = CGRectMake(mapTopLeft.x-2,mapTopLeft.y-1,mapBottomRight.x-mapTopLeft.x+4,mapBottomRight.y-mapTopLeft.y+1);
 //    NSLog(@"Map frame is (%f,%f) + (%f,%f)",mapFrame.origin.x,mapFrame.origin.y,mapFrame.size.width,mapFrame.size.height);
     [game iterateOverIsometricRegion:mapFrame withIterator:iter];
 }
@@ -114,6 +116,7 @@
         PZCellNode *newSprite = [PZCellNode newForGame:game x:x y:y z:z];
         tileSprite[i] = newSprite;
         [tileNode addChild:newSprite];
+//        NSLog(@"Sprite (%d,%d,%d) position (%f,%f)",x,y,z,newSprite.position.x,newSprite.position.y);
     }
     tileSprite[i].lastUpdated = [game boardClock];
 }

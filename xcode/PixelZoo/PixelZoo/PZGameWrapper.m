@@ -182,7 +182,7 @@
     int bs = [self boardSize];
     int bd = [self boardDepth];
     
-    return CGPointMake(tileHeight*(x-y+bs),tileHeight*((x+y)/2+bd-z-1));
+    return CGPointMake(tileHeight*(x-y+bs),tileHeight*(((double)(x+y))/2+bd-z-1));
 }
 
 

@@ -42,8 +42,8 @@
     skview.showsNodeCount = YES;
     skview.showsFPS = YES;
 
-    currentTileHeight = 1;
-//    currentTileHeight = 8;
+//    currentTileHeight = 1;
+    currentTileHeight = 32;
 }
 
 - (void)viewWillAppear:(BOOL)animated
