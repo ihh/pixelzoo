@@ -57,4 +57,6 @@
 #define TOOL_ICON_HEIGHT 64
 #define TOOL_RESERVE_HEIGHT 4
 
+#define TILE_SPRITE_HEIGHT 32
+
 #endif

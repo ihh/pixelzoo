@@ -21,8 +21,9 @@ typedef struct Particle {
   char *name;
   Type type;
 
-  /* Color rules */
+  /* Rendering rules */
   ColorRule colorRule[NumColorRules];  /* results of ColorRule applications are summed */
+  char *sprite;
 
   /* Evolution rule info: */
   /*  evolution rule callback style: synchronous or (preferred) asynchronous? */

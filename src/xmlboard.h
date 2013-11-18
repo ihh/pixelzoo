@@ -15,6 +15,7 @@
 #define XMLZOO_SCHEMEDEF   "schemedef"
 #define XMLZOO_VALUE       "value"
 #define XMLZOO_PARTICLE    "particle"
+#define XMLZOO_SPRITE      "sprite"
 #define XMLZOO_SYNC        "sync"
 #define XMLZOO_PERIOD      "period"
 #define XMLZOO_PHASE       "phase"

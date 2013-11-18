@@ -28,6 +28,10 @@ Board* newBoard (int size, int depth) {
   board->watcher = SafeCalloc (size * size * depth, sizeof(CellWatcher*));
   board->syncWrite = SafeCalloc (size * size * depth, sizeof(unsigned char));
   board->meta = SafeCalloc (size * size * depth, sizeof(char*));
+  board->lastModified = SafeCalloc (size * size * depth, sizeof(int64_Microticks));
+  board->previousState = SafeCalloc (size * size * depth, sizeof(State));
+  board->lastModifyType = SafeCalloc (size * size * depth, sizeof(enum ModifyRuleType));
+  board->lastSource = SafeCalloc (size * size * depth, sizeof(LocalOffset));
   board->syncBin = newBinTree (size * size * depth);
   board->asyncBin = newBinTree (size * size * depth);
   board->syncUpdateBin = newBinTree (size * size * depth);
@@ -72,6 +76,10 @@ void deleteBoard (Board* board) {
   SafeFree(board->cell);
   SafeFree(board->sync);
   SafeFree(board->syncWrite);
+  SafeFree(board->lastModified);
+  SafeFree(board->previousState);
+  SafeFree(board->lastModifyType);
+  SafeFree(board->lastSource);
   for (i = 0; i < board->size * board->size * board->depth; ++i)
     SafeFreeOrNull (board->meta[i]);
   SafeFree(board->meta);
@@ -174,6 +182,7 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State 
     if (p->synchronous)
       ++board->syncParticles;
   }
+  /* write */
   board->cell[i] = state;
   if (!board->syncWrite[i])
     board->sync[i] = state;
@@ -365,7 +374,7 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, int z, BoardReadFunction read, BoardWriteFunction write) {
   int xDest, yDest, zDest, tracePos, r, isOnBoard, srcBoardIndex, destBoardIndex;
-  State currentSrcState, currentDestState, newDestState, offset, var;
+  State currentSrcState, oldDestState, newDestState, offset, var;
   Type type;
   LookupRuleParams *lookup;
   CompareRuleParams *compare;
@@ -478,8 +487,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  }
 #endif /* PIXELZOO_DEBUG */
 
-	  currentDestState = (*read) (board, xDest, yDest, zDest);
-	  newDestState = (currentDestState & (StateMask ^ modify->destMask))
+	  oldDestState = (*read) (board, xDest, yDest, zDest);
+	  newDestState = (oldDestState & (StateMask ^ modify->destMask))
 	    | (((var + offset) << modify->leftShift) & modify->destMask);
 	  (*write) (board, xDest, yDest, zDest, newDestState);
 
@@ -497,6 +506,15 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  case ConserveModify:
 	  default:
 	    break;
+	  }
+
+	  if ((oldDestState ^ newDestState) & TypeMask) {
+	      board->lastModified[destBoardIndex] = board->microticks;
+	      board->previousState[destBoardIndex] = oldDestState;
+	      board->lastModifyType[destBoardIndex] = modify->modifyType;
+	      board->lastSource[destBoardIndex].x = x;
+	      board->lastSource[destBoardIndex].y = y;
+	      board->lastSource[destBoardIndex].z = z;
 	  }
 	}
       }

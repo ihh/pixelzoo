@@ -56,6 +56,7 @@
 -(int)boardSize;
 -(int)boardDepth;
 -(long long)boardClock;
+-(double)microticksPerSecond;
 
 -(int)numberOfTools;
 -(void)selectTool:(int)n;
@@ -68,6 +69,9 @@
 -(int)cellRgbAtX:(int)x y:(int)y z:(int)z;
 -(const char*)cellNameAtX:(int)x y:(int)y z:(int)z;
 -(int)cellNameRgbAtX:(int)x y:(int)y z:(int)z;
+
+-(const char*)cellSpriteAtX:(int)x y:(int)y z:(int)z;
+-(long long)cellLastModifiedTimeAtX:(int)x y:(int)y z:(int)z;
 
 -(int)toolRgbByNumber:(int)n;
 -(const char*)toolNameByNumber:(int)n;

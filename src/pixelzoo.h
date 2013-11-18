@@ -31,7 +31,6 @@ Pointer to a data structure describing a text balloon. Client can display these 
  */
 typedef void* pzBalloon;
 #else  /* !defined(USE_VOID_TYPEDEFS) */
-#include "xmlgame.h"
 typedef Game* pzGame;
 typedef Tool* pzTool;
 typedef Balloon* pzBalloon;
@@ -104,6 +103,11 @@ Returns the board clock measured in "microticks" (2^20 microticks = 1 expected u
 unsigned long long PZEXPORT pzBoardClock(pzGame);
 
 /**
+Returns the board clock rate measured in microticks/second.
+ */
+double PZEXPORT pzBoardMicroticksPerSecond(pzGame);
+
+/**
 The conversion factor from board clock units ("microticks") to expected updates per cell; equal to 2^20 */
 #define pzBoardClockMicroticksPerTick 1048576
 
@@ -156,6 +160,16 @@ const char* PZEXPORT pzGetCellName(pzGame,int x,int y,int z);
 /**
  Color of an individual cell's description text, can be used by an "inspect" tool */
 int PZEXPORT pzGetCellNameRgb(pzGame,int x,int y,int z);  /* returns 24-bit RGB */
+
+
+/* Cell sprites
+**/
+const char* PZEXPORT pzGetCellSprite(pzGame,int x,int y,int z);
+
+/* Cell last modified time
+**/
+unsigned long long PZEXPORT pzGetCellLastModifiedTime(pzGame,int x,int y,int z);
+
 
 
 /* Using the current tool on the board */

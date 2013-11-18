@@ -143,7 +143,7 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   Particle* p;
   Message message;
   int nColorRules, readOnlyIndex;
-  xmlNode *curNode, *syncNode, *childNode, *schemeNode;
+  xmlNode *curNode, *syncNode, *childNode, *schemeNode, *spriteNode;
   Proto *proto;
 
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
@@ -193,6 +193,9 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
 	curNode = protoTableExpandSchemeNode (protoTable, schemeNode, curNode, node);
       initColorRuleFromXmlNode (&p->colorRule[nColorRules++], curNode, proto);
     }
+
+  if ((spriteNode = CHILD(node,SPRITE)))
+    p->sprite = StringNew ((const char*) NODESTRINGVAL(spriteNode));
 
   return p;
 }

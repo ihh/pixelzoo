@@ -43,6 +43,7 @@
     skview.showsFPS = YES;
 
     currentTileHeight = 1;
+//    currentTileHeight = 8;
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -231,6 +231,10 @@
     return pzBoardClock(game);
 }
 
+-(double)microticksPerSecond {
+    return pzBoardMicroticksPerSecond(game);
+}
+
 -(int)numberOfTools {
     return pzGetNumberOfTools(game);
 }
@@ -265,6 +269,14 @@
 
 -(int)cellNameRgbAtX:(int)x y:(int)y z:(int)z {
     return pzGetCellNameRgb(game, x, y, z);
+}
+
+-(long long)cellLastModifiedTimeAtX:(int)x y:(int)y z:(int)z {
+    return pzGetCellLastModifiedTime(game, x, y, z);
+}
+
+-(const char*)cellSpriteAtX:(int)x y:(int)y z:(int)z {
+    return pzGetCellSprite(game, x, y, z);
 }
 
 -(int)toolRgbByNumber:(int)n {

@@ -12,6 +12,7 @@ Particle* newParticle (const char* name) {
   p = SafeMalloc (sizeof (Particle));
   p->type = 0;
   p->name = StringCopy ((void*) name);
+  p->sprite = NULL;
   p->vars = newList (AbortCopyFunction, deleteVarsDescriptor, NullPrintFunction);
   for (c = 0; c < NumColorRules; ++c) {
     p->colorRule[c].mask = 0;
@@ -37,6 +38,7 @@ void deleteParticle (Particle* p) {
   if (p->rule)
     deleteParticleRule (p->rule);
   deleteList (p->vars);
+  SafeFreeOrNull(p->sprite);
   StringDelete(p->name);
   SafeFree(p);
 }

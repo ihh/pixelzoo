@@ -10,12 +10,15 @@
 #import "PZGameWrapper.h"
 #import "PZToolbarNode.h"
 #import "PZIsometricMapNode.h"
+#import "PZCellNode.h"
 
 @interface PZIsometricScene : SKScene <PZBoardIterator> {
     PZIsometricMapNode *map;
     CGPoint mapCenter;
     CGFloat tileHeight;
     PZToolbarNode *toolbar;
+    SKNode *tileNode;
+    PZCellNode *__strong *tileSprite;
 }
 
 @property PZGameWrapper* game;
@@ -26,5 +29,11 @@
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInView;
 -(CGPoint) locationInSpriteView:(CGPoint)locationInMapImage;
+
+-(PZCellNode*) getSprite:(int)i;
+-(void) destroySprite:(int)i;
+-(void) flushStaleSprites:(long long)minimumAge;
+
+-(void) updateSpriteAtX:(int)x y:(int)y z:(int)z;
 
 @end

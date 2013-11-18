@@ -7,6 +7,9 @@
 //
 
 #import "PZIsometricScene.h"
+#import "PZDefs.h"
+
+#define boardIndex(SIZE,X,Y,Z) ((X) + (SIZE) * ((Y) + (SIZE) * (Z)))
 
 @implementation PZIsometricScene
 
@@ -15,6 +18,9 @@
 -(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper {
     self = [super initWithSize:size];
     game = gameWrapper;
+    int bs = [game boardSize], bd = [game boardDepth];
+    tileNode = [SKNode node];
+    tileSprite = (PZCellNode*__strong*)calloc(bs*bs*bd, sizeof(PZCellNode*));
     toolbar = [PZToolbarNode newToolbarNodeForGame:game withWidth:size.width];
     toolbar.position = CGPointMake(0, [toolbar height]);
     toolbar.zPosition = 1;
@@ -23,38 +29,34 @@
     return self;
 }
 
--(void)testMapCoord:(int)x y:(int)y z:(int)z {
-    CGPoint p = [game isometricMapCoordAtX:x y:y z:z forTileHeight:tileHeight];
-    CGPoint s = [self locationInSpriteView:p];
-    NSLog(@"xyz=(%d,%d,%d) Map (%f,%f) Screen (%f,%f)",x,y,z,p.x,p.y,s.x,s.y);
-}
-
 -(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)newTileHeight {
     CGRect frame = [[self view] frame];
     mapCenter = CGPointMake(frame.size.width/2 - offset.x,
                             frame.size.height/2 + offset.y);
     tileHeight = newTileHeight;
 
-    PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withTileHeight:newTileHeight];
-    node.position = mapCenter;
-    node.zPosition = 0;
-
-    // debug hacks
-    [self removeAllChildren];
-    [self addChild:toolbar];
-
-    /*
-    [self testMapCoord:0 y:0 z:1];
-    [self testMapCoord:0 y:128 z:1];
-    [self testMapCoord:128 y:0 z:1];
-    [self testMapCoord:128 y:128 z:1];
-     */
-    [self iterateOverIsometricRegion:self];
-
     if ([map parent])
         [map removeFromParent];
-    [self addChild:node];
-    map = node;
+    map = nil;
+    
+    if (tileHeight < TILE_SPRITE_HEIGHT / 4) {
+        if ([tileNode parent])
+            [tileNode removeFromParent];
+        PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withTileHeight:newTileHeight];
+        node.position = mapCenter;
+        node.zPosition = 0;
+        [self addChild:node];
+        map = node;
+    } else {
+        [self iterateOverIsometricRegion:self];
+        [self flushStaleSprites:[game microticksPerSecond]];
+        tileNode.position = mapCenter;
+        [tileNode setScale:tileHeight / TILE_SPRITE_HEIGHT];
+        if (![tileNode parent])
+            [self addChild:tileNode];
+    }
+    
+
     [toolbar refresh];
 }
 
@@ -69,6 +71,8 @@
 
 
 -(void)visitCellAtX:(int)x y:(int)y z:(int)z {
+    [self updateSpriteAtX:x y:y z:z];
+    /*
     if (x % 16 == 0 && y % 16 == 0) {
         SKSpriteNode *rect = [[SKSpriteNode alloc] initWithColor:[SKColor greenColor] size:CGSizeMake(4,4)];
         CGPoint mapCoord = [game isometricMapCoordAtX:x y:y z:z forTileHeight:tileHeight];
@@ -78,6 +82,7 @@
         rect.zPosition = 100;
         [self addChild:rect];
     }
+*/
 }
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInView {
@@ -94,5 +99,42 @@
     CGFloat sy = bs*tileHeight/2 - locationInMapImage.y + mapCenter.y;
     return CGPointMake(sx,sy);
 }
+
+-(PZCellNode*) getSprite:(int)i{
+    return tileSprite[i];
+}
+
+-(void) updateSpriteAtX:(int)x y:(int)y z:(int)z {
+    const int bs = [game boardSize];
+    const int i = boardIndex(bs,x,y,z);
+    PZCellNode *oldSprite = [self getSprite:i];
+    if (oldSprite == nil || [oldSprite lastModified] < [game cellLastModifiedTimeAtX:x y:y z:z]) {
+        if (oldSprite)
+            [self destroySprite:i];
+        PZCellNode *newSprite = [PZCellNode newForGame:game x:x y:y z:z];
+        tileSprite[i] = newSprite;
+        [tileNode addChild:newSprite];
+    }
+    tileSprite[i].lastUpdated = [game boardClock];
+}
+
+-(void) destroySprite:(int)i {
+    PZCellNode *oldSprite = tileSprite[i];
+    [oldSprite removeFromParent];
+    tileSprite[i] = nil;
+}
+
+-(void) flushStaleSprites:(long long)minimumAge {
+    const int bs = [game boardSize];
+    const int bd = [game boardDepth];
+    long long minUpdateTime = [game boardClock] - minimumAge;
+    for (int i = bs*bs*bd-1; i >= 0; --i) {
+        PZCellNode* sprite = [self getSprite:i];
+        if ([sprite lastUpdated] < minUpdateTime)
+            [self destroySprite:i];
+    }
+    
+}
+
 
 @end

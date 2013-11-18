@@ -77,6 +77,12 @@ unsigned long long pzBoardClock (pzGame pzg) {
   return game->board->microticks;
 }
 
+double pzBoardMicroticksPerSecond(pzGame pzg) {
+  Game* game;
+  game = (Game*) pzg;
+  return game->ticksPerSecond * (1 << 20);
+}
+
 int pzGetBoardSize(pzGame pzg) {
     Game* game;
     game = (Game*) pzg;
@@ -171,6 +177,25 @@ int pzGetCellNameRgb(pzGame pzg,int x,int y,int z) {
   cellNameRgb = &game->board->palette.rgb[examColorIndex];
   return PackRgbTo24Bit(*cellNameRgb);
 }
+
+const char* pzGetCellSprite(pzGame pzg,int x,int y,int z) {
+  State s;
+  Particle *particle;
+  char *text;
+  Game* game;
+  game = (Game*) pzg;
+  s = readBoardState (game->board, x, y, z);
+  particle = game->board->byType[StateType(s)];
+  text = particle ? particle->sprite : NULL;
+  return text;
+}
+
+unsigned long long PZEXPORT pzGetCellLastModifiedTime(pzGame pzg,int x,int y,int z) {
+  Game* game;
+  game = (Game*) pzg;
+  return game->board->lastModified[boardIndex(game->board->size, x, y, z)];
+}
+
 
 int pzGetNumberOfTools(pzGame pzg) {
   ListNode *toolNode;
