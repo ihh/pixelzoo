@@ -21,9 +21,9 @@
     const int bs = [gw boardSize];
     const int bd = [gw boardDepth];
     const char* sprite = [gw cellSpriteAtX:x y:y z:z];
-//    PZCellNode *node = [[PZCellNode alloc] initWithImageNamed:sprite ? [NSString stringWithUTF8String:sprite] : DefaultSpriteName];
+    PZCellNode *node = [[PZCellNode alloc] initWithImageNamed:sprite ? [NSString stringWithUTF8String:sprite] : DefaultSpriteName];
 
-    PZCellNode *node = [[PZCellNode alloc] initWithColor:(z == 0 ? [SKColor greenColor] : [SKColor yellowColor]) size:CGSizeMake(4,4)];
+//    PZCellNode *node = [[PZCellNode alloc] initWithColor:(z == 0 ? [SKColor greenColor] : [SKColor yellowColor]) size:CGSizeMake(4,4)];
     if (z == 1) {
         SKLabelNode *coordsNode = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
         coordsNode.text = [NSString stringWithFormat:@"(%d,%d)",x,y];
