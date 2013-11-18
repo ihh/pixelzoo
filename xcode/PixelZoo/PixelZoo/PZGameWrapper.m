@@ -22,6 +22,7 @@
 -(void)initGameFromXMLString:(NSString*)xmlString {
     game = pzNewGameFromXmlString([xmlString UTF8String], false);
     lastSavedBoardClock = pzBoardClock(game);
+    textureCache = [[NSMutableDictionary alloc] init];
 	pzStartGame(game);
 }
 
@@ -183,6 +184,15 @@
     int bd = [self boardDepth];
     
     return CGPointMake(tileHeight*(x-y+bs),tileHeight*(((double)(x+y))/2+bd-z-1));
+}
+
+-(SKTexture*)textureWithName:(NSString*)name {
+    SKTexture* texture = [textureCache valueForKey:name];
+    if (!texture) {
+        texture = [SKTexture textureWithImageNamed:name];
+        [textureCache setValue:texture forKey:name];
+    }
+    return texture;
 }
 
 

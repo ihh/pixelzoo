@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SpriteKit/SpriteKit.h>
 
 #import "pixelzoo.h"
 #import "GDataXMLNode.h"
@@ -16,6 +17,9 @@
 
 
 @interface PZGameWrapper : NSObject <NSURLConnectionDelegate> {
+    // caching sprite textures
+    NSMutableDictionary* textureCache;
+    // saving the turn
     NSURLConnection* turnConnection;
     bool deleteLockWhenTurnPosted;
 }
@@ -42,6 +46,8 @@
 -(void)touchIsometricMapAt:(CGPoint)xy;
 -(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
 -(void)iterateOverIsometricRegion:(CGRect)mapImageRect withIterator:(NSObject<PZBoardIterator>*)iter;
+
+-(SKTexture*)textureWithName:(NSString*)name;
 
 // saving turns
 
