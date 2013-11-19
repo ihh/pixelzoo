@@ -863,3 +863,41 @@ State getColMaskFromNode (xmlNode* node, Proto* proto) {
 Message getMessageFromNode (xmlNode* node, ProtoTable* protoTable) {
   return protoTableMessageLookup (protoTable, (const char*) CHILDSTRING (node, MESSAGE));
 }
+
+xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent) {
+  const char *evalResult;
+  xmlNode *evalNode;
+
+  evalNode = NULL;
+  evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
+  if (evalResult) {
+    evalNode = xmlTreeFromString (evalResult);
+
+    /* replace replaceNode with evalNode */
+    if (replaceNode) {
+      Assert (strcmp((const char*)evalNode->name,(const char*)replaceNode->name) == 0, "Expanded Scheme node <%s> does not match replacement node <%s>",(const char*)evalNode->name,(const char*)replaceNode->name);
+      if (replaceParent) {
+	if (replaceParent->children == replaceNode)
+	  replaceParent->children = evalNode;
+	else if (replaceParent->properties == replaceNode)
+	  replaceParent->properties = evalNode;
+	else if (replaceParent->next == replaceNode)
+	  replaceParent->next = evalNode;
+	else {
+	  for (replaceParent = replaceParent->children; replaceParent; replaceParent = replaceParent->next)
+	    if (replaceParent->next == replaceNode)
+	      break;
+	  Assert (replaceParent && replaceParent->next == replaceNode, "Can't find parent of Scheme node to be replaced");
+	  replaceParent->next = evalNode;
+	}
+      }
+      evalNode->next = replaceNode->next;
+      replaceNode->next = NULL;
+      deleteXmlTree (replaceNode);
+    }
+
+    StringDelete ((void*) evalResult);
+  }
+
+  return evalNode;
+}

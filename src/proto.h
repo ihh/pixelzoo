@@ -8,8 +8,6 @@
 #include "chibi/eval.h"
 #include "chibi/sexp.h"
 
-#include "xmlutil.h"
-
 typedef struct Proto {
   char *name;
   Type type;
@@ -55,8 +53,5 @@ Message protoTableMessageLookup (ProtoTable *protoTable, const char* message);
 
 /* protoTableEvalSxml returns NULL for failure */
 const char* protoTableEvalSxml (ProtoTable *protoTable, const char* schemeExpression);  /* use for <rule> evaluations. Auto-converts result from SXML to XML. Caller must free returned string */
-
-/* protoTableExpandSchemeNode returns expanded node, or NULL for failure */
-xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent);
 
 #endif /* PROTO_INCLUDED */

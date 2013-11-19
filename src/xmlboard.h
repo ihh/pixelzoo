@@ -116,6 +116,9 @@ void writeCellXml (Board* board, xmlTextWriterPtr writer, int x, int y, int z, i
 void writeTypesXml (Board* board, xmlTextWriterPtr writer);
 void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
+/* protoTableExpandSchemeNode returns expanded node, or NULL for failure */
+xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent);
+
 /* private builder methods */
 
 int testNodeHasState (xmlNode* node);

@@ -26,6 +26,8 @@
     // TODO: at higher zooms, render z=0 using a bitmap and z>0 using sprites
     // TODO: implement bitmap in ARM for max speed (using Galactic Dan pipelining trick)
 
+    // TODO: try using CGContextDrawImage to place sprite images directly onto map, bypassing Sprite Kit
+    
     // TODO: identify & eliminate "premature optimization" in above list
     // TODO: consider if isometric view is really worth the speed hit? (it IS cute)
     
