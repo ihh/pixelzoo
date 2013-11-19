@@ -55,7 +55,6 @@
 }
 
 -(CGImageRef) newBoardImageForZ:(int)z withBitmap:(unsigned char*)bitmapData {
-    // create the bitmap context if necessary
     int boardSize = [self boardSize];
     int bytesPerRow = 4 * boardSize * sizeof(unsigned char);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -68,14 +67,14 @@
                                                        (CGBitmapInfo) kCGImageAlphaPremultipliedLast);
     
     // create board image
-    unsigned char *bitmapWritePtr = bitmapData;
+    unsigned int *bitmapWritePtr = (unsigned int*) bitmapData;
     for (int y = boardSize - 1; y >= 0; --y) {   // quick hack/fix: reverse y-loop order to flip image vertically
         for (int x = 0; x < boardSize; ++x) {
-            int rgb = [self cellRgbAtX:x y:y z:z];
-            *(bitmapWritePtr++) = pzGetRgbRed(rgb);
-            *(bitmapWritePtr++) = pzGetRgbGreen(rgb);
-            *(bitmapWritePtr++) = pzGetRgbBlue(rgb);
-            *(bitmapWritePtr++) = (z == 0 || rgb > 0) ? 255 : 0;  // black cells above the bottom layer are transparent... a bit hacky
+            int pzRgb = [self cellRgbAtX:x y:y z:z];
+            unsigned int rgb = pzGetRgbRed(pzRgb) | (pzGetRgbGreen(pzRgb) << 8) | (pzGetRgbBlue(pzRgb) << 16);
+            if (rgb || z == 0)
+                rgb = rgb | 0xff000000;  // black cells above the bottom layer are transparent... a bit hacky
+            *(bitmapWritePtr++) = rgb;
         }
     }
     
@@ -85,6 +84,62 @@
     CGColorSpaceRelease(colorSpace);
     return boardImg;
 
+}
+
+-(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight {
+    int boardSize = [self boardSize];
+    int boardDepth = [self boardDepth];
+    int boardImgWidth = 2 * tileHeight * boardSize;
+    int boardImgHeight = tileHeight * (boardSize + boardDepth);
+    int bytesPerRow = boardImgWidth * 4 * sizeof(unsigned char);
+    unsigned char* bitmapData = calloc (boardImgWidth * boardImgHeight, 4*sizeof(unsigned char));
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bitmapContext = CGBitmapContextCreate(bitmapData,
+                                                       boardImgWidth,
+                                                       boardImgHeight,
+                                                       8,  // bits per component
+                                                       bytesPerRow,
+                                                       colorSpace,
+                                                       (CGBitmapInfo) kCGImageAlphaPremultipliedLast);
+    
+    // create board image
+    unsigned int *bitmapWritePtr = (unsigned int*) bitmapData;
+// #define bitmapWriteLoc(X,Y) *(bitmapWritePtr + (Y)*boardImgWidth + (X))
+#define bitmapWriteLoc(X,Y) *(X >= 0 && X < boardImgWidth && Y >= 0 && Y < boardImgHeight ? bitmapWritePtr + (Y)*boardImgWidth + (X) : NULL)
+    for (int bz = 0; bz < boardDepth; ++bz) {
+        for (int bx = 0; bx < boardSize; ++bx) {
+            for (int by = 0; by < boardSize; ++by) {
+                int pxMid = tileHeight * (bx - by + boardSize);
+                int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth) / 2;
+                int pyBottom = pyTop + tileHeight - 1;
+
+                int pzRgb = [self cellRgbAtX:bx y:by z:bz];
+                int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
+                unsigned int rgb100 = r | (g<<8) | (b<<16);
+
+                // black cells above the bottom layer are transparent... a bit hacky
+                if (pzRgb || bz == 0) {
+                    rgb100 |= 0xff000000;
+                    for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
+                        for (int px = 0; px < pxMax; ++px) {
+                            bitmapWriteLoc(pxMid+px,pyTop+py) = rgb100;
+                            bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb100;
+                            bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb100;
+                            bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb100;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // draw board image
+    CGImageRef boardImg = CGBitmapContextCreateImage(bitmapContext);
+    CGContextRelease(bitmapContext);
+    CGColorSpaceRelease(colorSpace);
+
+    free(bitmapData);
+    return boardImg;
 }
 
 - (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight {

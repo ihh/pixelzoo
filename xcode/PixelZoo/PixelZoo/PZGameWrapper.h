@@ -42,6 +42,7 @@
 -(CGImageRef) newBoardImageForZ:(int)z;
 
 -(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
+-(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight;
 
 -(void)touchIsometricMapAt:(CGPoint)xy;
 -(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
