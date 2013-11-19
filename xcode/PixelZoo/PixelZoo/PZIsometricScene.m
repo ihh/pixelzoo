@@ -39,7 +39,7 @@
         [map removeFromParent];
     map = nil;
     
-    if (tileHeight < TILE_SPRITE_HEIGHT / 4) {
+    if (tileHeight < MAX_PIXEL_TILE_HEIGHT) {
         if ([tileNode parent])
             [tileNode removeFromParent];
         PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withTileHeight:newTileHeight];
@@ -73,6 +73,7 @@
 
 
 -(void)visitCellAtX:(int)x y:(int)y z:(int)z {
+//    if (z == 1 && (x & 2) == 0 && (y & 2) == 0)
     [self updateSpriteAtX:x y:y z:z];
     /*
     if (x % 16 == 0 && y % 16 == 0) {

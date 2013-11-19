@@ -190,6 +190,7 @@
     SKTexture* texture = [textureCache valueForKey:name];
     if (!texture) {
         texture = [SKTexture textureWithImageNamed:name];
+        texture.usesMipmaps = YES;
         [textureCache setValue:texture forKey:name];
     }
     return texture;

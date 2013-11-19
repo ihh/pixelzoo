@@ -130,7 +130,7 @@
             CGFloat scale = MAX (0, [recognizer scale]);
             
             CGFloat minth = 1;
-            CGFloat maxth = TILE_SPRITE_HEIGHT * 2;
+            CGFloat maxth = MAX_TILE_HEIGHT;
             currentTileHeight = MAX (minth, MIN (maxth, tileHeightAtStartOfZoom * scale));
             
             CGPoint mvo = [self maxViewOffset];
