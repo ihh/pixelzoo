@@ -445,7 +445,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="knq-Pt-noi" kind="push" identifier="playWorld" id="dkP-P7-5Cp"/>
+                                    <segue destination="fkp-KA-7j9" kind="push" identifier="playWorld" id="9xO-ax-SrN"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(waiting for lock)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wll-8f-KxV">
@@ -520,67 +520,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="46e-ug-nIs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2283" y="225"/>
-        </scene>
-        <!--Overhead View Controller - Game-->
-        <scene sceneID="5Ov-zH-88a">
-            <objects>
-                <viewController title="Game" id="knq-Pt-noi" customClass="PZOverheadViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5NN-2Q-qTd">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RMw-5J-9NT" customClass="PZOverheadView">
-                                <rect key="frame" x="0.0" y="100" width="320" height="404"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Planet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QU3-zC-1xV">
-                                <rect key="frame" x="0.0" y="71" width="49" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XG3-wt-IXb">
-                                <rect key="frame" x="282" y="71" width="38" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIb-wT-LlV">
-                                <rect key="frame" x="137" y="71" width="47" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="hIb-wT-LlV" firstAttribute="baseline" secondItem="QU3-zC-1xV" secondAttribute="baseline" type="default" id="1SR-cd-7v1"/>
-                            <constraint firstItem="hIb-wT-LlV" firstAttribute="centerX" secondItem="RMw-5J-9NT" secondAttribute="centerX" type="default" id="89Z-W5-Ch3"/>
-                            <constraint firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="8sQ-jY-l1W"/>
-                            <constraint firstItem="XG3-wt-IXb" firstAttribute="trailing" secondItem="RMw-5J-9NT" secondAttribute="trailing" type="default" id="B8J-GD-t40"/>
-                            <constraint firstAttribute="bottom" secondItem="RMw-5J-9NT" secondAttribute="bottom" type="default" id="CGa-AC-6JA"/>
-                            <constraint firstItem="RMw-5J-9NT" firstAttribute="leading" secondItem="5NN-2Q-qTd" secondAttribute="leading" type="default" id="KZe-6f-snI"/>
-                            <constraint firstItem="QU3-zC-1xV" firstAttribute="top" secondItem="5NN-2Q-qTd" secondAttribute="top" constant="71" id="YBS-gv-Ido"/>
-                            <constraint firstItem="QU3-zC-1xV" firstAttribute="leading" secondItem="RMw-5J-9NT" secondAttribute="leading" type="default" id="cr0-O8-4vV"/>
-                            <constraint firstItem="hIb-wT-LlV" firstAttribute="baseline" secondItem="XG3-wt-IXb" secondAttribute="baseline" type="default" id="tvt-Aq-k4f"/>
-                            <constraint firstItem="RMw-5J-9NT" firstAttribute="top" secondItem="QU3-zC-1xV" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ueW-N5-eHL"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="6Ht-DK-IG7"/>
-                    <connections>
-                        <outlet property="countLabel" destination="hIb-wT-LlV" id="dP4-S9-wiQ"/>
-                        <outlet property="lockLabel" destination="XG3-wt-IXb" id="rES-3Z-Nth"/>
-                        <outlet property="worldLabel" destination="QU3-zC-1xV" id="nwg-1j-CP9"/>
-                        <outlet property="worldView" destination="RMw-5J-9NT" id="TET-oq-b5I"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-bE-azu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2895" y="225"/>
+            <point key="canvasLocation" x="2291" y="225"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="JYl-5s-Lgx">
@@ -671,7 +611,7 @@
                     </connections>
                 </pinchGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="463" y="-86"/>
+            <point key="canvasLocation" x="2828" y="225"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -681,5 +621,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="sfA-bx-7tu"/>
+        <segue reference="9xO-ax-SrN"/>
     </inferredMetricsTieBreakers>
 </document>

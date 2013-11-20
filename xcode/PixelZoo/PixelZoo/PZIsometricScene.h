@@ -16,12 +16,15 @@
     CGPoint mapCenter;
     CGFloat tileHeight;
     PZToolbarNode *toolbar;
-    SKNode *tileNode;
+    SKLabelNode *lockLabel, *countLabel, *worldLabel;
 }
 
 @property PZGameWrapper* game;
 
--(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper;
+@property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
+@property (nonatomic, strong) PZLockDescriptor *lockDescriptor;
+
+-(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper withWorld:(PZWorldDescriptor*)world withLock:(PZLockDescriptor*)lock;
 
 -(void) showMapWithOffset:(CGPoint)offset withTileHeight:(CGFloat)tileHeight;
 

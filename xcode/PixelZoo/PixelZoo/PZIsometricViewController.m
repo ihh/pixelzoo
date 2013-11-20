@@ -57,7 +57,7 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper];
+    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper withWorld:worldDescriptor withLock:lockDescriptor];
     [skview presentScene: map];
     [self startTimers];
     [super viewDidAppear:animated];
@@ -90,8 +90,13 @@
 /* Board updates */
 - (void)callGameLoop
 {
-    [gameWrapper updateGame];
-    [map showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight];
+    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
+    if (expiryTime < 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [gameWrapper updateGame];
+        [map showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight];
+    }
 }
 
 

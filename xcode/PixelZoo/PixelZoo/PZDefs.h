@@ -58,8 +58,10 @@
 #define TOOL_RESERVE_HEIGHT 4
 
 #define TILE_SPRITE_HEIGHT 32  /* natural height for a (flat) tile sprite (a cube will be twice this height) */
-#define MIN_TILE_HEIGHT_FOR_SPRITES 8  /* threshold for showing sprites instead of solid cubes */
+#define MIN_TILE_HEIGHT_FOR_SPRITES 12  /* threshold for showing sprites instead of solid cubes */
 #define MAX_NATURAL_TILE_HEIGHT 32 /* max scale at which board image will actually be rendered */
 #define MAX_TILE_HEIGHT 32  /* max scale at which board image will be shown */
+
+#define TUTORIAL_WORLD_NAME "Tutorial"
 
 #endif

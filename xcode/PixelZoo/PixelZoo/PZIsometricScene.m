@@ -14,16 +14,44 @@
 @implementation PZIsometricScene
 
 @synthesize game;
+@synthesize worldDescriptor;
+@synthesize lockDescriptor;
 
--(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper {
+-(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper withWorld:(PZWorldDescriptor*)world withLock:(PZLockDescriptor*)lock {
     self = [super initWithSize:size];
     game = gameWrapper;
-    tileNode = [SKNode node];
+    worldDescriptor = world;
+    lockDescriptor = lock;
+
     toolbar = [PZToolbarNode newToolbarNodeForGame:game withWidth:size.width];
     toolbar.position = CGPointMake(0, [toolbar height]);
     toolbar.zPosition = 1;
     [self addChild:toolbar];
 
+    worldLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkboard"];
+    worldLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeTop;
+    worldLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft;
+    worldLabel.position = CGPointMake(0,size.height);
+    worldLabel.text = worldDescriptor ? [worldDescriptor name] : @TUTORIAL_WORLD_NAME;
+    worldLabel.zPosition = 1;
+    [self addChild:worldLabel];
+    
+    countLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkboard"];
+    countLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeTop;
+    countLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+    countLabel.position = CGPointMake(size.width / 2,size.height);
+    countLabel.zPosition = 1;
+    if (worldDescriptor)
+        [self addChild:countLabel];
+
+    lockLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkboard"];
+    lockLabel.verticalAlignmentMode = SKLabelVerticalAlignmentModeTop;
+    lockLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeRight;
+    lockLabel.position = CGPointMake(size.width,size.height);
+    lockLabel.zPosition = 1;
+    if (lockDescriptor)
+        [self addChild:lockLabel];
+    
     return self;
 }
 
@@ -37,25 +65,20 @@
         [map removeFromParent];
     map = nil;
     
-    if ([tileNode parent])
-        [tileNode removeFromParent];
     PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withVisibleRect:[self visibleMapRect] withTileHeight:newTileHeight];
     node.position = mapCenter;
     node.zPosition = 0;
     [self addChild:node];
     map = node;
 
-    /*
-    [self iterateOverIsometricRegion:self];
-        [self flushStaleSprites:[game microticksPerSecond]];
-        tileNode.position = mapCenter;
-        tileNode.zPosition = 0;
-        [tileNode setScale:tileHeight / TILE_SPRITE_HEIGHT];
-        if (![tileNode parent])
-            [self addChild:tileNode];
-*/
-     
-
+    //	NSLog(@"triggerRedraw");
+    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
+    lockLabel.text = [NSString stringWithFormat:@"%d:%02d",(int)(expiryTime/60),(int)(expiryTime%60)];
+    
+    countLabel.text = [worldDescriptor userIsOwner]
+    ? [NSString stringWithFormat:@"%d",[game incumbentCount]]
+    : [NSString stringWithFormat:@"%d/%d",[game incumbentCount],[game challengerCount]];
+    
     [toolbar refresh];
 }
 
