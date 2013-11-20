@@ -29,6 +29,7 @@
 
 -(CGPoint) locationInMapImage:(CGPoint)locationInView;
 -(CGPoint) locationInSpriteView:(CGPoint)locationInMapImage;
+-(CGRect) visibleMapRect;
 
 -(PZCellNode*) getSprite:(int)i;
 -(void) destroySprite:(int)i;

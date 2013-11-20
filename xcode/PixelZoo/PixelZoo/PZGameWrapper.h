@@ -36,18 +36,24 @@
 -(void)initGameFromLock:(PZLockDescriptor*)lock;
 -(bool)isInitialized;
 
-// drawing map
+// overhead-view map
 -(unsigned char*) allocBoardBitmap;
 -(CGImageRef) newBoardImageForZ:(int)z withBitmap:(unsigned char*)bitmapData;
 -(CGImageRef) newBoardImageForZ:(int)z;
 
+// isometric-view map
+-(CGSize)isometricMapSize:(CGFloat)tileHeight;
+
 -(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
 -(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight;
+-(CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)origin;
 
 -(void)touchIsometricMapAt:(CGPoint)xy;
 -(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
+
 -(void)iterateOverIsometricRegion:(CGRect)mapImageRect withIterator:(NSObject<PZBoardIterator>*)iter;
 
+// texture/image cache
 -(SKTexture*)textureWithName:(NSString*)name;
 
 // saving turns

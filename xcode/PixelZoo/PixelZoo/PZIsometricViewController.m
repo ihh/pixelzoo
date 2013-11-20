@@ -42,8 +42,8 @@
     skview.showsNodeCount = YES;
     skview.showsFPS = YES;
 
-//    currentTileHeight = 1;
-    currentTileHeight = 8;
+    currentTileHeight = 1;
+//    currentTileHeight = 8;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -132,6 +132,7 @@
             CGFloat minth = 1;
             CGFloat maxth = MAX_TILE_HEIGHT;
             currentTileHeight = MAX (minth, MIN (maxth, tileHeightAtStartOfZoom * scale));
+            scale = currentTileHeight / tileHeightAtStartOfZoom;
             
             CGPoint mvo = [self maxViewOffset];
             currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfZoom.x * scale));

@@ -86,6 +86,64 @@
 
 }
 
+- (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight {
+    int boardSize = [self boardSize];
+    int boardDepth = [self boardDepth];
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                   2*tileHeight*boardSize,
+                                                   tileHeight*(boardSize+boardDepth),
+                                                   8,
+                                                   0,
+                                                   colorSpace,
+                                                   (CGBitmapInfo) kCGImageAlphaPremultipliedFirst);
+    
+    CGAffineTransform trans = CGAffineTransformMake(tileHeight,-tileHeight/2,-tileHeight,-tileHeight/2,tileHeight*boardSize,tileHeight*boardSize);
+    CGContextConcatCTM(bmContext, trans);
+    
+    CGContextSetAllowsAntialiasing(bmContext, FALSE);
+    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+    CGColorSpaceRelease(colorSpace);
+    
+    for (int z = 0; z < boardDepth; ++z) {
+        int zOffset = -z;
+        CGImageRef boardImg = [self newBoardImageForZ:z];
+        CGContextDrawImage(bmContext, CGRectMake(zOffset,
+                                                 zOffset,
+                                                 boardSize + zOffset,
+                                                 boardSize + zOffset),
+                           boardImg);
+        
+        CGImageRelease(boardImg);
+        
+        /* Commented-out code should put a green dot at the top and a blue dot at the bottom:
+         
+         UIColor * greenColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+         CGContextSetFillColorWithColor(bmContext, greenColor.CGColor);
+         CGContextFillRect(bmContext,CGRectMake(-1, -1, 1, 1));
+         
+         UIColor * blueColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0];
+         CGContextSetFillColorWithColor(bmContext, blueColor.CGColor);
+         CGContextFillRect(bmContext,CGRectMake(boardSize-1, boardSize-1, 1, 1));
+         */
+    }
+    
+    CGImageRef isoBoardImg = CGBitmapContextCreateImage(bmContext);
+    CFRelease(bmContext);
+    
+    return isoBoardImg;
+}
+
+
+-(CGSize)isometricMapSize:(CGFloat)tileHeight {
+    int boardSize = [self boardSize];
+    int boardDepth = [self boardDepth];
+    int boardImgWidth = 2 * tileHeight * boardSize;
+    int boardImgHeight = tileHeight * (boardSize + boardDepth);
+    return CGSizeMake(boardImgWidth, boardImgHeight);
+}
+
 -(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight {
     int boardSize = [self boardSize];
     int boardDepth = [self boardDepth];
@@ -115,17 +173,17 @@
 
                 int pzRgb = [self cellRgbAtX:bx y:by z:bz];
                 int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
-                unsigned int rgb100 = r | (g<<8) | (b<<16);
+                unsigned int rgb = r | (g<<8) | (b<<16);
 
                 // black cells above the bottom layer are transparent... a bit hacky
                 if (pzRgb || bz == 0) {
-                    rgb100 |= 0xff000000;
+                    rgb |= 0xff000000;
                     for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
                         for (int px = 0; px < pxMax; ++px) {
-                            bitmapWriteLoc(pxMid+px,pyTop+py) = rgb100;
-                            bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb100;
-                            bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb100;
-                            bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb100;
+                            bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
+                            bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
+                            bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb;
+                            bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb;
                         }
                     }
                 }
@@ -142,53 +200,80 @@
     return boardImg;
 }
 
-- (CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight {
-    int boardSize = [self boardSize];
-    int boardDepth = [self boardDepth];
+- (CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)originRet {
+    const int boardSize = [self boardSize];
+    const int boardDepth = [self boardDepth];
     
+    const CGFloat
+    a = rect.origin.x,
+    b = rect.origin.y,
+    c = rect.origin.x + rect.size.width,
+    d = rect.origin.y + rect.size.height;
+
+    const int boardImgWidth = tileHeight * (rect.size.width + 4);  // 2 tiles horizontal padding
+    const int boardImgHeight = tileHeight * (rect.size.height + 4);  // 4 tiles vertical padding
+    const int pxOrig = tileHeight * (a - 1);
+    const int pyOrig = tileHeight * (b - 1);
+    originRet->x = -pxOrig;
+    originRet->y = -pyOrig;
+    const int bytesPerRow = boardImgWidth * 4 * sizeof(unsigned char);
+    unsigned char* bitmapData = calloc (boardImgWidth * boardImgHeight, 4*sizeof(unsigned char));
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef bmContext = CGBitmapContextCreate(NULL,
-                                                   2*tileHeight*boardSize,
-                                                   tileHeight*(boardSize+boardDepth),
-                                                   8,
-                                                   0,
-                                                   colorSpace,
-                                                   (CGBitmapInfo) kCGImageAlphaPremultipliedFirst);
+    CGContextRef bitmapContext = CGBitmapContextCreate(bitmapData,
+                                                       boardImgWidth,
+                                                       boardImgHeight,
+                                                       8,  // bits per component
+                                                       bytesPerRow,
+                                                       colorSpace,
+                                                       (CGBitmapInfo) kCGImageAlphaPremultipliedLast);
     
-    CGAffineTransform trans = CGAffineTransformMake(tileHeight,-tileHeight/2,-tileHeight,-tileHeight/2,tileHeight*boardSize,tileHeight*boardSize);
-    CGContextConcatCTM(bmContext, trans);
+    // create board image
+    unsigned int *bitmapWritePtr = (unsigned int*) bitmapData;
+// #define bitmapWriteLoc(X,Y) *(bitmapWritePtr + (Y)*boardImgWidth + (X))
+#define bitmapWriteLoc(X,Y) *(X >= 0 && X < boardImgWidth && Y >= 0 && Y < boardImgHeight ? bitmapWritePtr + (Y)*boardImgWidth + (X) : NULL)
     
-    CGContextSetAllowsAntialiasing(bmContext, FALSE);
-    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
-    CGColorSpaceRelease(colorSpace);
-
-    for (int z = 0; z < boardDepth; ++z) {
-        int zOffset = -z;
-        CGImageRef boardImg = [self newBoardImageForZ:z];
-        CGContextDrawImage(bmContext, CGRectMake(zOffset,
-                                                 zOffset,
-                                                 boardSize + zOffset,
-                                                 boardSize + zOffset),
-                       boardImg);
-        
-        CGImageRelease(boardImg);
-
-        /* Commented-out code should put a green dot at the top and a blue dot at the bottom:
-        
-        UIColor * greenColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
-        CGContextSetFillColorWithColor(bmContext, greenColor.CGColor);
-        CGContextFillRect(bmContext,CGRectMake(-1, -1, 1, 1));
-        
-        UIColor * blueColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0];
-        CGContextSetFillColorWithColor(bmContext, blueColor.CGColor);
-        CGContextFillRect(bmContext,CGRectMake(boardSize-1, boardSize-1, 1, 1));
-         */
+    const CGFloat bx_minus_by_min = MAX(-boardSize,a - boardSize), bx_minus_by_max = MIN(boardSize,c - boardSize);
+    for (int bz = 0; bz < boardDepth; ++bz) {
+        const CGFloat bx_plus_by_min = MAX(0,2*(b-boardDepth+1+bz)), bx_plus_by_max = MIN(2*boardSize,2*(d-boardDepth+1+bz)+.5);
+        for (int bx_plus_by = bx_plus_by_min; bx_plus_by <= bx_plus_by_max; ++bx_plus_by) {
+            const int bx_max = MIN(boardSize-1,bx_plus_by);
+            for (int bx = MAX(bx_plus_by-boardSize,0); bx <= bx_max; ++bx) {
+                const int by = bx_plus_by - bx;
+                if (by >= 0 && by < boardSize && bx-by >= bx_minus_by_min && bx-by <= bx_minus_by_max) {
+                    int pxMid = tileHeight * (bx - by + boardSize) - pxOrig;
+                    int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth) / 2 - pyOrig;
+                    int pyBottom = pyTop + tileHeight - 1;
+                    
+                    int pzRgb = [self cellRgbAtX:bx y:by z:bz];
+                    int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
+                    unsigned int rgb = r | (g<<8) | (b<<16);
+                    
+                    // black cells above the bottom layer are transparent... a bit hacky
+                    if (pzRgb || bz == 0) {
+                        rgb |= 0xff000000;
+                        for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
+                            for (int px = 0; px < pxMax; ++px) {
+                                bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
+                                bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
+                                bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb;
+                                bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+
+    // draw board image
+    CGImageRef boardImg = CGBitmapContextCreateImage(bitmapContext);
+    CGContextRelease(bitmapContext);
+    CGColorSpaceRelease(colorSpace);
     
-    CGImageRef isoBoardImg = CGBitmapContextCreateImage(bmContext);
-    CFRelease(bmContext);
+    free(bitmapData);
+    return boardImg;
     
-    return isoBoardImg;
 }
 
 -(void)touchIsometricMapAt:(CGPoint)p {
@@ -212,10 +297,11 @@
     // but px=(bx-by)/2 and py=(bx+by)/2
     // so a-bs < (bx-by) < c-bs,   2(b-bd+1+bz) < (bx+by) < 2(d-bd+1+bz)
 
-    int bs = [self boardSize];
-    int bd = [self boardDepth];
+    const int bs = [self boardSize];
+    const int bd = [self boardDepth];
 
-    CGFloat a = rect.origin.x,
+    const CGFloat
+            a = rect.origin.x,
             b = rect.origin.y,
             c = rect.origin.x + rect.size.width,
             d = rect.origin.y + rect.size.height;

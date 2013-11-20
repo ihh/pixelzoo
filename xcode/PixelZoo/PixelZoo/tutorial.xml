@@ -6873,22 +6873,22 @@ The following DO seem to work...
     <init>
       <x>123</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>123</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>123</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>123</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>124</x>
@@ -6918,22 +6918,22 @@ The following DO seem to work...
     <init>
       <x>124</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>124</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>124</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>124</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>125</x>
@@ -6978,17 +6978,17 @@ The following DO seem to work...
     <init>
       <x>125</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>125</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>125</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>126</x>
@@ -7038,12 +7038,12 @@ The following DO seem to work...
     <init>
       <x>126</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>126</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>127</x>
@@ -7073,12 +7073,12 @@ The following DO seem to work...
     <init>
       <x>127</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>127</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>127</x>
@@ -7093,17 +7093,17 @@ The following DO seem to work...
     <init>
       <x>127</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>127</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>23f</hexstate>
     </init>
     <init>
       <x>0</x>
       <y>123</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>0</x>
@@ -7123,17 +7123,17 @@ The following DO seem to work...
     <init>
       <x>0</x>
       <y>127</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>0</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>0</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>0</x>
@@ -7153,17 +7153,17 @@ The following DO seem to work...
     <init>
       <x>0</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>1</x>
       <y>123</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>1</x>
       <y>124</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>1</x>
@@ -7178,17 +7178,17 @@ The following DO seem to work...
     <init>
       <x>1</x>
       <y>127</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>1</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>1</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>1</x>
@@ -7203,22 +7203,22 @@ The following DO seem to work...
     <init>
       <x>1</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>1</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>2</x>
       <y>123</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>2</x>
       <y>124</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>2</x>
@@ -7258,27 +7258,27 @@ The following DO seem to work...
     <init>
       <x>2</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>2</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>3</x>
       <y>123</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>3</x>
       <y>124</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>3</x>
       <y>125</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>3</x>
@@ -7308,37 +7308,37 @@ The following DO seem to work...
     <init>
       <x>3</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>3</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>3</x>
       <y>5</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>124</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>125</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>126</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>127</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>4</x>
@@ -7348,57 +7348,57 @@ The following DO seem to work...
     <init>
       <x>4</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>4</x>
       <y>4</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>125</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>126</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>127</y>
-      <hexstate>3f</hexstate>
+      <hexstate>13f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>0</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>1</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>2</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
     <init>
       <x>5</x>
       <y>3</y>
-      <hexstate>3f</hexstate>
+      <hexstate>33f</hexstate>
     </init>
   </board>
   <rate>240</rate>

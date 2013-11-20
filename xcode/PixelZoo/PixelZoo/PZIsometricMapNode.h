@@ -13,6 +13,6 @@
 
 @property PZGameWrapper* game;
 
-+(PZIsometricMapNode*) newMapForGame:(PZGameWrapper*)game withTileHeight:(CGFloat)tileHeight;
++(PZIsometricMapNode*) newMapForGame:(PZGameWrapper*)game withVisibleRect:(CGRect)mapRect withTileHeight:(CGFloat)tileHeight;
 
 @end

@@ -42,7 +42,7 @@
     if (tileHeight < MAX_PIXEL_TILE_HEIGHT) {
         if ([tileNode parent])
             [tileNode removeFromParent];
-        PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withTileHeight:newTileHeight];
+        PZIsometricMapNode *node = [PZIsometricMapNode newMapForGame:game withVisibleRect:[self visibleMapRect] withTileHeight:newTileHeight];
         node.position = mapCenter;
         node.zPosition = 0;
         [self addChild:node];
@@ -62,12 +62,16 @@
     [toolbar refresh];
 }
 
--(void)iterateOverIsometricRegion:(NSObject<PZBoardIterator>*)iter {
+-(CGRect) visibleMapRect {
     CGRect frame = [[self view] frame];
     CGPoint mapTopLeft = [self locationInMapImage:CGPointMake(0,0)];
     CGPoint mapBottomRight = [self locationInMapImage:CGPointMake(frame.size.width,frame.size.height)];
-    CGRect mapFrame = CGRectMake(mapTopLeft.x-2,mapTopLeft.y-1,mapBottomRight.x-mapTopLeft.x+4,mapBottomRight.y-mapTopLeft.y+1);
-//    NSLog(@"Map frame is (%f,%f) + (%f,%f)",mapFrame.origin.x,mapFrame.origin.y,mapFrame.size.width,mapFrame.size.height);
+    return CGRectMake(mapTopLeft.x-2,mapTopLeft.y-1,mapBottomRight.x-mapTopLeft.x+4,mapBottomRight.y-mapTopLeft.y+1);
+}
+
+
+-(void)iterateOverIsometricRegion:(NSObject<PZBoardIterator>*)iter {
+    CGRect mapFrame = [self visibleMapRect];
     [game iterateOverIsometricRegion:mapFrame withIterator:iter];
 }
 
