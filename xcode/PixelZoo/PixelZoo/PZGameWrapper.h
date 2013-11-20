@@ -45,7 +45,6 @@
 -(CGSize)isometricMapSize:(CGFloat)tileHeight;
 
 -(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
--(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight;
 -(CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)origin;
 
 -(void)touchIsometricMapAt:(CGPoint)xy;

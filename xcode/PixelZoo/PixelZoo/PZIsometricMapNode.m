@@ -21,7 +21,6 @@
     
     // TODO: optimize newNaturalIsometricBoardImage (i.e. isometric bitmap)
     // TODO: preserve bitmap between calls, only render cells that change
-    // TODO: for z>0, render shaded 3d blocks instead of tiles (or make this a configurable property of the Particle)
     // TODO: at higher zooms, render z=0 using a bitmap and z>0 using sprites
     // TODO: implement bitmap in ARM for max speed (using Galactic Dan pipelining trick)
 

@@ -144,62 +144,6 @@
     return CGSizeMake(boardImgWidth, boardImgHeight);
 }
 
--(CGImageRef)newNaturalIsometricBoardImage:(CGFloat)tileHeight {
-    int boardSize = [self boardSize];
-    int boardDepth = [self boardDepth];
-    int boardImgWidth = 2 * tileHeight * boardSize;
-    int boardImgHeight = tileHeight * (boardSize + boardDepth);
-    int bytesPerRow = boardImgWidth * 4 * sizeof(unsigned char);
-    unsigned char* bitmapData = calloc (boardImgWidth * boardImgHeight, 4*sizeof(unsigned char));
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef bitmapContext = CGBitmapContextCreate(bitmapData,
-                                                       boardImgWidth,
-                                                       boardImgHeight,
-                                                       8,  // bits per component
-                                                       bytesPerRow,
-                                                       colorSpace,
-                                                       (CGBitmapInfo) kCGImageAlphaPremultipliedLast);
-    
-    // create board image
-    unsigned int *bitmapWritePtr = (unsigned int*) bitmapData;
-// #define bitmapWriteLoc(X,Y) *(bitmapWritePtr + (Y)*boardImgWidth + (X))
-#define bitmapWriteLoc(X,Y) *(X >= 0 && X < boardImgWidth && Y >= 0 && Y < boardImgHeight ? bitmapWritePtr + (Y)*boardImgWidth + (X) : NULL)
-    for (int bz = 0; bz < boardDepth; ++bz) {
-        for (int bx = 0; bx < boardSize; ++bx) {
-            for (int by = 0; by < boardSize; ++by) {
-                int pxMid = tileHeight * (bx - by + boardSize);
-                int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth) / 2;
-                int pyBottom = pyTop + tileHeight - 1;
-
-                int pzRgb = [self cellRgbAtX:bx y:by z:bz];
-                int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
-                unsigned int rgb = r | (g<<8) | (b<<16);
-
-                // black cells above the bottom layer are transparent... a bit hacky
-                if (pzRgb || bz == 0) {
-                    rgb |= 0xff000000;
-                    for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
-                        for (int px = 0; px < pxMax; ++px) {
-                            bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
-                            bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
-                            bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb;
-                            bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // draw board image
-    CGImageRef boardImg = CGBitmapContextCreateImage(bitmapContext);
-    CGContextRelease(bitmapContext);
-    CGColorSpaceRelease(colorSpace);
-
-    free(bitmapData);
-    return boardImg;
-}
-
 - (CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)originRet {
     const int boardSize = [self boardSize];
     const int boardDepth = [self boardDepth];
@@ -210,8 +154,8 @@
     c = rect.origin.x + rect.size.width,
     d = rect.origin.y + rect.size.height;
 
-    const int boardImgWidth = tileHeight * (rect.size.width + 4);  // 2 tiles horizontal padding
-    const int boardImgHeight = tileHeight * (rect.size.height + 4);  // 4 tiles vertical padding
+    const int boardImgWidth = tileHeight * (rect.size.width + 4);  // 2*tileWidth horizontal padding
+    const int boardImgHeight = tileHeight * (rect.size.height + 4);  // 4*tileHeight vertical padding
     const int pxOrig = tileHeight * (a - 1);
     const int pyOrig = tileHeight * (b - 1);
     originRet->x = -pxOrig;
@@ -240,25 +184,40 @@
             for (int bx = MAX(bx_plus_by-boardSize,0); bx <= bx_max; ++bx) {
                 const int by = bx_plus_by - bx;
                 if (by >= 0 && by < boardSize && bx-by >= bx_minus_by_min && bx-by <= bx_minus_by_max) {
-                    int pxMid = tileHeight * (bx - by + boardSize) - pxOrig;
-                    int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth) / 2 - pyOrig;
-                    int pyBottom = pyTop + tileHeight - 1;
+                    const int pxMid = tileHeight * (bx - by + boardSize) - pxOrig;
+                    const int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth - 2) / 2 - pyOrig;
+                    const int pyMid = pyTop + tileHeight;
+                    const int pyBottom = pyTop + 2*tileHeight;
                     
-                    int pzRgb = [self cellRgbAtX:bx y:by z:bz];
-                    int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
-                    unsigned int rgb = r | (g<<8) | (b<<16);
+                    const int pzRgb = [self cellRgbAtX:bx y:by z:bz];
                     
                     // black cells above the bottom layer are transparent... a bit hacky
                     if (pzRgb || bz == 0) {
-                        rgb |= 0xff000000;
+                        const int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
+                        const int rDark = r*3/4, gDark = g*3/4, bDark = b*3/4;
+                        const int rLight = (r+255)/2, gLight = (g+255)/2, bLight = (b+255)/2;
+                        const unsigned int rgb = r | (g<<8) | (b<<16) | 0xff000000;
+                        const unsigned int rgbDark = rDark | (gDark<<8) | (bDark<<16) | 0xff000000;
+                        const unsigned int rgbLight = rLight | (gLight<<8) | (bLight<<16) | 0xff000000;
                         for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
                             for (int px = 0; px < pxMax; ++px) {
                                 bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
                                 bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
-                                bitmapWriteLoc(pxMid+px,pyBottom-py) = rgb;
-                                bitmapWriteLoc(pxMid-px-1,pyBottom-py) = rgb;
+                                bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgb;
+                                bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgb;
+                                bitmapWriteLoc(pxMid+px,pyBottom-1-py) = rgbLight;
+                                bitmapWriteLoc(pxMid-px-1,pyBottom-1-py) = rgbDark;
+                            }
+                            for (int px = pxMax; px < tileHeight; ++px) {
+                                bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgbLight;
+                                bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgbDark;
                             }
                         }
+                        for (int py = tileHeight/2 - 1; py >= 0; --py)
+                            for (int px = 0; px < tileHeight; ++px) {
+                                bitmapWriteLoc(pxMid+px,pyMid+py) = rgbLight;
+                                bitmapWriteLoc(pxMid-px-1,pyMid+py) = rgbDark;
+                            }
                     }
                 }
             }
