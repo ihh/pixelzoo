@@ -42,8 +42,6 @@
     skview.showsNodeCount = YES;
     skview.showsFPS = YES;
 
-    currentTileHeight = 1;
-//    currentTileHeight = 8;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -57,15 +55,14 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper withWorld:worldDescriptor withLock:lockDescriptor];
+    map = [[PZIsometricScene alloc] initWithSize:skview.frame.size forGame:gameWrapper withWorld:worldDescriptor withLock:lockDescriptor forController:self];
     [skview presentScene: map];
-    [self startTimers];
+    [map startTimers];
     [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	[self stopTimers];
-    [gameWrapper postTurn];
+	[map stopTimers];
     [super viewWillDisappear:animated];
 }
 
@@ -75,141 +72,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-/* Timers: board updates & rendering */
--(void)startTimers
-{
-	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
-    evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
-}
-
--(void)stopTimers
-{
-	[evolveTimer invalidate];
-}
-
-/* Board updates */
-- (void)callGameLoop
-{
-    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
-    if (expiryTime < 0) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        [gameWrapper updateGame];
-        [map showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight];
-    }
-}
-
-
 /* Gesture recognizers */
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer {
-    
-    if ([self moveToolSelected]) {
-        if (recognizer.state == UIGestureRecognizerStateBegan) {
-            viewOffsetAtStartOfPan = currentViewOffset;
-        }
-        
-        if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
-            CGPoint trans = [recognizer translationInView:self.view];
-            
-            CGPoint mvo = [self maxViewOffset];
-            currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfPan.x - trans.x));
-            currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfPan.y - trans.y));
-            
-            panning = 1;
-            [gameWrapper untouchCell];
-        } else {
-            panning = 0;
-        }
-    }
+    [map handlePan:recognizer];
 }
 
 - (IBAction)handlePinch:(UIPinchGestureRecognizer *)recognizer {
-	
-    if ([self moveToolSelected]) {
-        if (recognizer.state == UIGestureRecognizerStateBegan) {
-            tileHeightAtStartOfZoom = currentTileHeight;
-            viewOffsetAtStartOfZoom = currentViewOffset;
-        }
-        
-        if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
-            CGFloat scale = MAX (0, [recognizer scale]);
-            
-            CGFloat minth = 1;
-            CGFloat maxth = MAX_TILE_HEIGHT;
-            currentTileHeight = MAX (minth, MIN (maxth, tileHeightAtStartOfZoom * scale));
-            scale = currentTileHeight / tileHeightAtStartOfZoom;
-            
-            CGPoint mvo = [self maxViewOffset];
-            currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfZoom.x * scale));
-            currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfZoom.y * scale));
-            
-            zooming = 1;
-            [gameWrapper untouchCell];
-        } else {
-            zooming = 0;
-        }
-    }
-}
-
-// helpers
-
-- (bool) moveToolSelected {
-    return [gameWrapper selectedToolNumber] < 0;
-}
-
-
-- (CGPoint) maxViewOffset {
-	CGPoint mvo;
-	CGFloat th = currentTileHeight;
-	CGFloat bs = [gameWrapper boardSize];
-	CGFloat bd = [gameWrapper boardDepth];
-    CGFloat boardImgWidth = 2 * th * bs;
-    CGFloat boardImgHeight = th * bs + bd;
-    CGSize frameSize = skview.frame.size;
-	mvo.x = MAX (0, (boardImgWidth - frameSize.width)/2);
-	mvo.y = MAX (0, (boardImgHeight - (frameSize.height - TOOL_ICON_HEIGHT))/2);
-	return mvo;
-}
-
-
-
--(CGPoint) touchLocation:(UITouch*)touch {
-    CGPoint currentPoint = [touch locationInView:[self skview]];
-    int bs = [gameWrapper boardSize];
-    int renderTileHeight = 1;
-    CGFloat px = currentPoint.x / (2*renderTileHeight) + bs/2;
-    CGFloat py = bs/2 - currentPoint.y / renderTileHeight;
-    return CGPointMake(px,py);
-}
-
-
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	// single-touch
-	if ([touches count] == 1) {
-		UITouch *touch = [touches anyObject];
-        CGPoint touchPoint = [touch locationInView:[self skview]];
-        CGPoint mapPoint = [map locationInMapImage:touchPoint];
-        [gameWrapper touchIsometricMapAt:mapPoint];
-    }
-    [super touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-	// single-touch
-	if ([touches count] == 1) {
-		UITouch *touch = [touches anyObject];
-        CGPoint touchPoint = [touch locationInView:[self skview]];
-        CGPoint mapPoint = [map locationInMapImage:touchPoint];
-        [gameWrapper touchIsometricMapAt:mapPoint];
-	}
-    [super touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [gameWrapper untouchCell];
-    [super touchesEnded:touches withEvent:event];
+    [map handlePinch:recognizer];
 }
 
 

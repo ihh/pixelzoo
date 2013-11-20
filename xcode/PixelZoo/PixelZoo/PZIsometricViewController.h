@@ -13,20 +13,8 @@
 #import "PZIsometricScene.h"
 
 @interface PZIsometricViewController : UIViewController {
-    // timers
-	NSTimer *evolveTimer;
-
     // scenes
     PZIsometricScene* map;
-
-    // zoom
-    bool zooming;
-    CGFloat currentTileHeight, tileHeightAtStartOfZoom;
-    CGPoint viewOffsetAtStartOfZoom;
-
-    // pan
-    bool panning;
-    CGPoint currentViewOffset, viewOffsetAtStartOfPan;
 }
 
 @property (nonatomic, strong) PZWorldDescriptor *worldDescriptor;
@@ -36,11 +24,5 @@
 
 - (IBAction)handlePan:(UIPanGestureRecognizer *)recognizer;
 - (IBAction)handlePinch:(UIPinchGestureRecognizer *)recognizer;
-
--(CGPoint) touchLocation:(UITouch*)touch;
-
-- (CGPoint) maxViewOffset;
-
-- (bool) moveToolSelected;
 
 @end

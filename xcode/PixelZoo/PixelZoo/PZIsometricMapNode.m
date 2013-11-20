@@ -45,7 +45,6 @@
 
     node.game = game;
     [node setScale:tileHeight / renderTileHeight];
-    node.userInteractionEnabled = YES;
 
     CGImageRelease(boardImg);
     return node;

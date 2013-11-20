@@ -17,12 +17,13 @@
 @synthesize worldDescriptor;
 @synthesize lockDescriptor;
 
--(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper withWorld:(PZWorldDescriptor*)world withLock:(PZLockDescriptor*)lock {
+-(PZIsometricScene*) initWithSize:(CGSize)size forGame:(PZGameWrapper*)gameWrapper withWorld:(PZWorldDescriptor*)world withLock:(PZLockDescriptor*)lock forController:(UIViewController*)controller {
     self = [super initWithSize:size];
     game = gameWrapper;
     worldDescriptor = world;
     lockDescriptor = lock;
-
+    viewController = controller;
+    
     toolbar = [PZToolbarNode newToolbarNodeForGame:game withWidth:size.width];
     toolbar.position = CGPointMake(0, [toolbar height]);
     toolbar.zPosition = 1;
@@ -52,6 +53,9 @@
     if (lockDescriptor)
         [self addChild:lockLabel];
     
+
+    currentTileHeight = 1;
+
     return self;
 }
 
@@ -86,7 +90,7 @@
     CGRect frame = [[self view] frame];
     CGPoint mapTopLeft = [self locationInMapImage:CGPointMake(0,0)];
     CGPoint mapBottomRight = [self locationInMapImage:CGPointMake(frame.size.width,frame.size.height)];
-    return CGRectMake(mapTopLeft.x-2,mapTopLeft.y-1,mapBottomRight.x-mapTopLeft.x+4,mapBottomRight.y-mapTopLeft.y+1);
+    return CGRectMake(mapTopLeft.x-2,mapTopLeft.y-1,mapBottomRight.x-mapTopLeft.x+4,mapBottomRight.y-mapTopLeft.y+2);
 }
 
 
@@ -109,6 +113,131 @@
     CGFloat sy = bs*tileHeight/2 - locationInMapImage.y + mapCenter.y;
     return CGPointMake(sx,sy);
 }
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	// single-touch
+	if ([touches count] == 1) {
+		UITouch *touch = [touches anyObject];
+        CGPoint touchPoint = [touch locationInView:[self view]];
+        CGPoint mapPoint = [self locationInMapImage:touchPoint];
+        [game touchIsometricMapAt:mapPoint];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+	// single-touch
+	if ([touches count] == 1) {
+		UITouch *touch = [touches anyObject];
+        CGPoint touchPoint = [touch locationInView:[self view]];
+        CGPoint mapPoint = [self locationInMapImage:touchPoint];
+        [game touchIsometricMapAt:mapPoint];
+	}
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [game untouchCell];
+    [super touchesEnded:touches withEvent:event];
+}
+
+/* Gesture recognizers */
+- (void)handlePan:(UIPanGestureRecognizer *)recognizer {
+    
+    if ([self moveToolSelected]) {
+        if (recognizer.state == UIGestureRecognizerStateBegan) {
+            viewOffsetAtStartOfPan = currentViewOffset;
+        }
+        
+        if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
+            CGPoint trans = [recognizer translationInView:self.view];
+            
+            CGPoint mvo = [self maxViewOffset];
+            currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfPan.x - trans.x));
+            currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfPan.y - trans.y));
+            
+            panning = 1;
+            [game untouchCell];
+        } else {
+            panning = 0;
+        }
+    }
+}
+
+- (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {
+	
+    if ([self moveToolSelected]) {
+        if (recognizer.state == UIGestureRecognizerStateBegan) {
+            tileHeightAtStartOfZoom = currentTileHeight;
+            viewOffsetAtStartOfZoom = currentViewOffset;
+        }
+        
+        if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
+            CGFloat scale = MAX (0, [recognizer scale]);
+            
+            CGFloat minth = 1;
+            CGFloat maxth = MAX_TILE_HEIGHT;
+            currentTileHeight = MAX (minth, MIN (maxth, tileHeightAtStartOfZoom * scale));
+            scale = currentTileHeight / tileHeightAtStartOfZoom;
+            
+            CGPoint mvo = [self maxViewOffset];
+            currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfZoom.x * scale));
+            currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfZoom.y * scale));
+            
+            zooming = 1;
+            [game untouchCell];
+        } else {
+            zooming = 0;
+        }
+    }
+}
+
+/* Timers: board updates & rendering */
+-(void)startTimers
+{
+	double evolvePeriod = 1. / GAMELOOP_CALLS_PER_SECOND;
+    evolveTimer = [NSTimer scheduledTimerWithTimeInterval:evolvePeriod target:self selector:@selector(callGameLoop) userInfo:self repeats:YES];
+}
+
+-(void)stopTimers
+{
+	[evolveTimer invalidate];
+    [game postTurn];
+}
+
+/* Board updates */
+- (void)callGameLoop
+{
+    NSInteger expiryTime = [lockDescriptor lockExpiryWait];
+    if (expiryTime < 0) {
+        [[viewController navigationController] popViewControllerAnimated:YES];
+    } else {
+        [game updateGame];
+        [self showMapWithOffset:currentViewOffset withTileHeight:currentTileHeight];
+    }
+}
+
+// helpers
+
+- (bool) moveToolSelected {
+    return [game selectedToolNumber] < 0;
+}
+
+
+- (CGPoint) maxViewOffset {
+	CGPoint mvo;
+	CGFloat th = currentTileHeight;
+	CGFloat bs = [game boardSize];
+	CGFloat bd = [game boardDepth];
+    CGFloat boardImgWidth = 2 * th * bs;
+    CGFloat boardImgHeight = th * bs + bd;
+    CGSize frameSize = [self view].frame.size;
+	mvo.x = MAX (0, (boardImgWidth - frameSize.width)/2);
+	mvo.y = MAX (0, (boardImgHeight - (frameSize.height - TOOL_ICON_HEIGHT))/2);
+	return mvo;
+}
+
 
 
 @end
