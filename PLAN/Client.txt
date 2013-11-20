@@ -18,8 +18,7 @@ Reproducible as 'make pzchibi-bug'.
 Make a small test file that reproduces the bug & can be compiled to latest chibi on Google Code. (Either start from scratch or copy&paste key functions from board.c.)
 Diagnose in XCode - catches some memory leaks, unsafe free's, etc.
 
-Hack/workaround for chibi cpointers, for now: hardwire Board* to a global variable.
-(Disabling type-checking for Board* seems to work, too, but bugs might indicate memory corruption behind the scenes, so need to be preserved for investigation.)
+(Disabling type-checking for Board* seems to work for now, but bugs might indicate memory corruption behind the scenes, so need to be preserved for investigation.)
 
 
 ProtoTable-level set!
