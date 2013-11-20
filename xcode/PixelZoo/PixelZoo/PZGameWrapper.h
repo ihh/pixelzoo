@@ -18,7 +18,7 @@
 
 @interface PZGameWrapper : NSObject <NSURLConnectionDelegate> {
     // caching sprite textures
-    NSMutableDictionary* textureCache;
+    NSMutableDictionary *imageCache;
     // saving the turn
     NSURLConnection* turnConnection;
     bool deleteLockWhenTurnPosted;
@@ -45,15 +45,15 @@
 -(CGSize)isometricMapSize:(CGFloat)tileHeight;
 
 -(CGImageRef)newIsometricBoardImage:(CGFloat)tileHeight;
--(CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)origin;
+-(CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight usingImages:(bool)useImages storingOriginIn:(CGPoint*)origin;
 
 -(void)touchIsometricMapAt:(CGPoint)xy;
 -(CGPoint)isometricMapCoordAtX:(int)x y:(int)y z:(int)z forTileHeight:(CGFloat)tileHeight;
 
 -(void)iterateOverIsometricRegion:(CGRect)mapImageRect withIterator:(NSObject<PZBoardIterator>*)iter;
 
-// texture/image cache
--(SKTexture*)textureWithName:(NSString*)name;
+// image cache
+-(CGImageRef)imageWithName:(NSString*)name;
 
 // saving turns
 

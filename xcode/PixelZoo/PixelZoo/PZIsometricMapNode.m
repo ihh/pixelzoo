@@ -35,8 +35,7 @@
         boardImg = [game newIsometricBoardImage:renderTileHeight];
     } else {
         for (renderTileHeight = 1; renderTileHeight < MAX_NATURAL_TILE_HEIGHT && 2*renderTileHeight <= tileHeight; renderTileHeight *= 2) { }
-//        boardImg = [game newNaturalIsometricBoardImage:renderTileHeight];
-        boardImg = [game newNaturalIsometricBoardImageForMapRect:mapRect withTileHeight:renderTileHeight storingOriginIn:&origin];
+        boardImg = [game newNaturalIsometricBoardImageForMapRect:mapRect withTileHeight:renderTileHeight usingImages:(renderTileHeight >= MIN_TILE_HEIGHT_FOR_SPRITES) storingOriginIn:&origin];
     }
     
     SKTexture *texture = [SKTexture textureWithCGImage:boardImg];

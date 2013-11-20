@@ -22,7 +22,7 @@
 -(void)initGameFromXMLString:(NSString*)xmlString {
     game = pzNewGameFromXmlString([xmlString UTF8String], false);
     lastSavedBoardClock = pzBoardClock(game);
-    textureCache = [[NSMutableDictionary alloc] init];
+    imageCache = [[NSMutableDictionary alloc] init];
 	pzStartGame(game);
 }
 
@@ -144,7 +144,7 @@
     return CGSizeMake(boardImgWidth, boardImgHeight);
 }
 
-- (CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight storingOriginIn:(CGPoint*)originRet {
+- (CGImageRef)newNaturalIsometricBoardImageForMapRect:(CGRect)rect withTileHeight:(CGFloat)tileHeight usingImages:(bool)useImages storingOriginIn:(CGPoint*)originRet {
     const int boardSize = [self boardSize];
     const int boardDepth = [self boardDepth];
     
@@ -188,36 +188,47 @@
                     const int pyTop = tileHeight * (bx + by - 2*bz + 2*boardDepth - 2) / 2 - pyOrig;
                     const int pyMid = pyTop + tileHeight;
                     const int pyBottom = pyTop + 2*tileHeight;
-                    
-                    const int pzRgb = [self cellRgbAtX:bx y:by z:bz];
-                    
-                    // black cells above the bottom layer are transparent... a bit hacky
-                    if (pzRgb || bz == 0) {
-                        const int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
-                        const int rDark = r*3/4, gDark = g*3/4, bDark = b*3/4;
-                        const int rLight = (r+255)/2, gLight = (g+255)/2, bLight = (b+255)/2;
-                        const unsigned int rgb = r | (g<<8) | (b<<16) | 0xff000000;
-                        const unsigned int rgbDark = rDark | (gDark<<8) | (bDark<<16) | 0xff000000;
-                        const unsigned int rgbLight = rLight | (gLight<<8) | (bLight<<16) | 0xff000000;
-                        for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
-                            for (int px = 0; px < pxMax; ++px) {
-                                bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
-                                bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
-                                bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgb;
-                                bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgb;
-                                bitmapWriteLoc(pxMid+px,pyBottom-1-py) = rgbLight;
-                                bitmapWriteLoc(pxMid-px-1,pyBottom-1-py) = rgbDark;
+
+                    CGImageRef spriteImg = NULL;
+                    if (useImages) {
+                        const char* sprite = [self cellSpriteAtX:bx y:by z:bz];
+                        if (sprite)
+                            spriteImg = [self imageWithName:[NSString stringWithUTF8String:sprite]];
+                    }
+                    if (spriteImg) {
+                        CGFloat spriteWidth = CGImageGetWidth(spriteImg) * tileHeight / TILE_SPRITE_HEIGHT, spriteHeight = CGImageGetHeight(spriteImg) * tileHeight / TILE_SPRITE_HEIGHT;
+                        CGContextDrawImage(bitmapContext, CGRectMake(pxMid-spriteWidth/2, boardImgHeight-pyBottom, spriteWidth, spriteHeight), spriteImg);
+                    } else {
+                        const int pzRgb = [self cellRgbAtX:bx y:by z:bz];
+                        
+                        // black cells above the bottom layer are transparent... a bit hacky
+                        if (pzRgb || bz == 0) {
+                            const int r = pzGetRgbRed(pzRgb), g = pzGetRgbGreen(pzRgb), b = pzGetRgbBlue(pzRgb);
+                            const int rDark = r*3/4, gDark = g*3/4, bDark = b*3/4;
+                            const int rLight = (r+255)/2, gLight = (g+255)/2, bLight = (b+255)/2;
+                            const unsigned int rgb = r | (g<<8) | (b<<16) | 0xff000000;
+                            const unsigned int rgbDark = rDark | (gDark<<8) | (bDark<<16) | 0xff000000;
+                            const unsigned int rgbLight = rLight | (gLight<<8) | (bLight<<16) | 0xff000000;
+                            for (int py = 0, pxMax = 1; py < tileHeight/2; ++py, pxMax += 2) {
+                                for (int px = 0; px < pxMax; ++px) {
+                                    bitmapWriteLoc(pxMid+px,pyTop+py) = rgb;
+                                    bitmapWriteLoc(pxMid-px-1,pyTop+py) = rgb;
+                                    bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgb;
+                                    bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgb;
+                                    bitmapWriteLoc(pxMid+px,pyBottom-1-py) = rgbLight;
+                                    bitmapWriteLoc(pxMid-px-1,pyBottom-1-py) = rgbDark;
+                                }
+                                for (int px = pxMax; px < tileHeight; ++px) {
+                                    bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgbLight;
+                                    bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgbDark;
+                                }
                             }
-                            for (int px = pxMax; px < tileHeight; ++px) {
-                                bitmapWriteLoc(pxMid+px,pyMid-1-py) = rgbLight;
-                                bitmapWriteLoc(pxMid-px-1,pyMid-1-py) = rgbDark;
-                            }
+                            for (int py = tileHeight/2 - 1; py >= 0; --py)
+                                for (int px = 0; px < tileHeight; ++px) {
+                                    bitmapWriteLoc(pxMid+px,pyMid+py) = rgbLight;
+                                    bitmapWriteLoc(pxMid-px-1,pyMid+py) = rgbDark;
+                                }
                         }
-                        for (int py = tileHeight/2 - 1; py >= 0; --py)
-                            for (int px = 0; px < tileHeight; ++px) {
-                                bitmapWriteLoc(pxMid+px,pyMid+py) = rgbLight;
-                                bitmapWriteLoc(pxMid-px-1,pyMid+py) = rgbDark;
-                            }
                     }
                 }
             }
@@ -286,14 +297,13 @@
     return CGPointMake(tileHeight*(x-y+bs),tileHeight*(((double)(x+y))/2+bd-z-1));
 }
 
--(SKTexture*)textureWithName:(NSString*)name {
-    SKTexture* texture = [textureCache valueForKey:name];
-    if (!texture) {
-        texture = [SKTexture textureWithImageNamed:name];
-        texture.usesMipmaps = YES;
-        [textureCache setValue:texture forKey:name];
+-(CGImageRef)imageWithName:(NSString*)name {
+    UIImage *img = [imageCache valueForKey:name];
+    if (!img) {
+        img = [UIImage imageNamed:name];
+        [imageCache setValue:img forKey:name];
     }
-    return texture;
+    return img.CGImage;
 }
 
 

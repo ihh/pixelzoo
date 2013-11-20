@@ -897,6 +897,7 @@
       </particle>
       <particle>
         <name>wall</name>
+	<sprite>Rock wall.png</sprite>
         <type>2</type>
         <vars>
           <varsize>
