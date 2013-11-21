@@ -68,6 +68,7 @@
 		289E523E1811006500CF0B09 /* scheme in Resources */ = {isa = PBXBuildFile; fileRef = 289E523D1811006500CF0B09 /* scheme */; };
 		28A996E218107D3B00681777 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E018107D3B00681777 /* eval.c */; };
 		28A996E318107D3B00681777 /* sexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28A996E118107D3B00681777 /* sexp.c */; };
+		28ACA375183DE15900FC55EE /* PZFastCube.s in Sources */ = {isa = PBXBuildFile; fileRef = 28ACA374183DE15900FC55EE /* PZFastCube.s */; };
 		28F32789180C971B00799C1D /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F32788180C971B00799C1D /* Base64.m */; };
 		28FA3F5D180A39900072234F /* PZMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F5C180A39900072234F /* PZMenuViewController.m */; };
 		28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FA3F62180A58890072234F /* PZLoginViewController.m */; };
@@ -184,6 +185,7 @@
 		28A55D6E18394B4700B8035A /* PZBoardIterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PZBoardIterator.h; sourceTree = "<group>"; };
 		28A996E018107D3B00681777 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = ../../../chibi/eval.c; sourceTree = "<group>"; };
 		28A996E118107D3B00681777 /* sexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sexp.c; path = ../../../chibi/sexp.c; sourceTree = "<group>"; };
+		28ACA374183DE15900FC55EE /* PZFastCube.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = PZFastCube.s; sourceTree = "<group>"; };
 		28F32787180C971B00799C1D /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
 		28F32788180C971B00799C1D /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		28FA3F5B180A39900072234F /* PZMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZMenuViewController.h; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				2818E26B17FFB6DB00093CEC /* PZAppDelegate.m */,
 				28A55D6E18394B4700B8035A /* PZBoardIterator.h */,
 				2818E2E317FFBF2A00093CEC /* PZDefs.h */,
+				28ACA374183DE15900FC55EE /* PZFastCube.s */,
 				283C0F60180770D30056492E /* PZGameWrapper.h */,
 				283C0F61180770D30056492E /* PZGameWrapper.m */,
 				2818DEE218385F35000EB483 /* PZIsometricMapNode.h */,
@@ -502,6 +505,7 @@
 				2818DEE418385F35000EB483 /* PZIsometricMapNode.m in Sources */,
 				2818E2DD17FFBD7500093CEC /* xmlmove.c in Sources */,
 				28FA3F63180A58890072234F /* PZLoginViewController.m in Sources */,
+				28ACA375183DE15900FC55EE /* PZFastCube.s in Sources */,
 				2818E2DE17FFBD7500093CEC /* xmlutil.c in Sources */,
 				2818E2DF17FFBD7500093CEC /* xymap.c in Sources */,
 				2818E2E217FFBDD400093CEC /* xmlparser.c in Sources */,
@@ -605,7 +609,6 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
-					"-mapcs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -632,7 +635,6 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
-					"-mapcs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
