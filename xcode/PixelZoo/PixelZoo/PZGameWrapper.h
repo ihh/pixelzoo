@@ -15,7 +15,7 @@
 #import "PZLockDescriptor.h"
 #import "PZBoardIterator.h"
 
-// extern int fastCube16(int* writePtr, int bytesPerRow, int topFace, int leftFace, int rightFace);
+// extern int fastCube16(int* writePtr, int bytesPerRow, int topFaceRGB, int leftFaceRGB, int rightFaceRGB);
 
 @interface PZGameWrapper : NSObject <NSURLConnectionDelegate> {
     // caching sprite textures
