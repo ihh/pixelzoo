@@ -63,7 +63,7 @@ typedef struct RandomRuleParams {
 typedef struct LoadRuleParams {
   int n;
   unsigned char *reg;
-  State *state;
+  int *val;
   ParticleRule *nextRule;
 } LoadRuleParams;
 

@@ -72,7 +72,7 @@ ParticleRule* newLoadRule() {
   rule = newParticleRule (LoadRule);
   rule->param.load.n = 0;
   rule->param.load.reg = NULL;
-  rule->param.load.state = NULL;
+  rule->param.load.val = NULL;
   return rule;
 }
 
@@ -140,7 +140,7 @@ void deleteParticleRule (void *voidRule) {
   case LoadRule:
     load = &rule->param.load;
     SafeFree (load->reg);
-    SafeFree (load->state);
+    SafeFree (load->val);
     if (load->nextRule)
       deleteParticleRule (load->nextRule);
     break;

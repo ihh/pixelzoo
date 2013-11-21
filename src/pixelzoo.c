@@ -5,7 +5,6 @@
 #include "xmlgame.h"
 #include "xmlmove.h"
 #include "xmlparser.h"
-#include "balloon.h"
 
 #define MAX_PROPORTION_TIME_EVOLVING .9  /* so that gameLoop doesn't eat 100% of the time between updates */
 
@@ -190,12 +189,6 @@ const char* pzGetCellSprite(pzGame pzg,int x,int y,int z) {
   return text;
 }
 
-unsigned long long PZEXPORT pzGetCellLastModifiedTime(pzGame pzg,int x,int y,int z) {
-  Game* game;
-  game = (Game*) pzg;
-  return game->board->lastModified[boardIndex(game->board->size, x, y, z)];
-}
-
 
 int pzGetNumberOfTools(pzGame pzg) {
   ListNode *toolNode;
@@ -316,45 +309,6 @@ void pzUntouchCell(pzGame pzg) {
   game->toolActive = 0;
 }
 
-int pzGetNumberOfConsoleLines(pzGame pzg) {
-  Game* game;
-  game = (Game*) pzg;
-  return ConsoleLines;
-}
-
-const char* pzGetConsoleText(pzGame pzg,int lineNum) {
-  int ci;
-  Game* game;
-  game = (Game*) pzg;
-  ci = (lineNum + game->consoleLastLineIndex) % ConsoleLines;
-  return game->consoleText[ci];
-}
-
-int pzGetNumberOfBalloons(pzGame pzg) {
-  Game* game;
-  game = (Game*) pzg;
-  return VectorSize (game->board->balloon);
-}
-
-pzBalloon pzGetBalloonByNumber(pzGame pzg,int balloonNum) {
-  Game* game;
-  game = (Game*) pzg;
-  return (pzBalloon) VectorGet (game->board->balloon, balloonNum);
-}
-
-const char* pzGetBalloonText(pzBalloon pzb) { return ((Balloon*)pzb)->text; }
-double pzGetBalloonXpos(pzBalloon pzb) { return ((Balloon*)pzb)->x; }
-double pzGetBalloonYpos(pzBalloon pzb) { return ((Balloon*)pzb)->y; }
-double pzGetBalloonCharSize(pzBalloon pzb) { return ((Balloon*)pzb)->size; }
-double pzGetBalloonCharSpacing(pzBalloon pzb) { return ((Balloon*)pzb)->z; }
-int pzGetBalloonTextRgb(pzGame pzg,pzBalloon pzb) {
-  RGB *textRgb;
-  Game* game;
-  game = (Game*) pzg;
-  textRgb = &game->board->palette.rgb[((Balloon*)pzb)->color];
-  return PackRgbTo24Bit(*textRgb);
-}
-double pzGetBalloonOpacity(pzBalloon pzb) { return ((Balloon*)pzb)->opacity; }
 
 const char* pzSaveMoveAsXmlString(pzGame pzg) {
   xmlTextWriterPtr writer;
@@ -421,10 +375,6 @@ int pzGetPaletteRgb(pzGame pzg,int paletteIndex) {
 
 void pzAbort(char* error) { Abort(error); }
 void pzAssert(int assertion, char* error) { Assert(assertion,error); }
-
-void pzPrintConsoleText (pzGame game, char* text) {
-  printToGameConsole (game, text, PaletteWhite, 1);
-}
 
 int pzIncumbentCount(pzGame pzg) {
   Game *game;

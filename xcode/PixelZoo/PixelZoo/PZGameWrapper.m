@@ -392,10 +392,6 @@
     return pzGetCellNameRgb(game, x, y, z);
 }
 
--(long long)cellLastModifiedTimeAtX:(int)x y:(int)y z:(int)z {
-    return pzGetCellLastModifiedTime(game, x, y, z);
-}
-
 -(const char*)cellSpriteAtX:(int)x y:(int)y z:(int)z {
     return pzGetCellSprite(game, x, y, z);
 }
@@ -414,26 +410,6 @@
 
 -(CGFloat)toolReserveByNumber:(int)n {
     return (CGFloat) pzGetToolReserveLevel(pzGetToolByNumber(game, n));
-}
-
--(int)numberOfConsoleLines {
-    return pzGetNumberOfConsoleLines(game);
-}
-
--(const char*)consoleText:(int)line {
-    return pzGetConsoleText(game, line);
-}
-
--(int)numberOfBalloons {
-    return pzGetNumberOfBalloons(game);
-}
-
--(pzBalloon)balloonNumber:(int)n {
-    return pzGetBalloonByNumber(game,n);
-}
-
--(int)textRgbForBalloon:(pzBalloon)b {
-    return pzGetBalloonTextRgb(game,b);
 }
 
 -(int)incumbentCount { return pzIncumbentCount(game); }

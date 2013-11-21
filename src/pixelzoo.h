@@ -26,14 +26,9 @@ Pointer to a data structure describing a tool that the player can use to paint o
  */
 typedef void* pzTool;
 
-/**
-Pointer to a data structure describing a text balloon. Client can display these for in-game feedback.
- */
-typedef void* pzBalloon;
 #else  /* !defined(USE_VOID_TYPEDEFS) */
 typedef Game* pzGame;
 typedef Tool* pzTool;
-typedef Balloon* pzBalloon;
 #endif  /* defined(USE_VOID_TYPEDEFS) */
 
 /* Functions */
@@ -166,10 +161,6 @@ int PZEXPORT pzGetCellNameRgb(pzGame,int x,int y,int z);  /* returns 24-bit RGB 
 **/
 const char* PZEXPORT pzGetCellSprite(pzGame,int x,int y,int z);
 
-/* Cell last modified time
-**/
-unsigned long long PZEXPORT pzGetCellLastModifiedTime(pzGame,int x,int y,int z);
-
 
 
 /* Using the current tool on the board */
@@ -243,58 +234,7 @@ void PZEXPORT pzSelectTool(pzGame,int toolNum);
 void PZEXPORT pzUnselectTool(pzGame);
 
 
-/* Output text console */
 
-/**
- Get size of output text console */
-int PZEXPORT pzGetNumberOfConsoleLines(pzGame);
-
-/**
- Get a line from the output text console */
-const char* PZEXPORT pzGetConsoleText(pzGame,int lineNum);
-
-/**
- Print a line to the output text console */
-void PZEXPORT pzPrintConsoleText(pzGame,char* text);
-
-
-/* Floating text balloons, over the board */
-
-/**
- Number of floating text balloons */
-int PZEXPORT pzGetNumberOfBalloons(pzGame);
-
-/**
- Get data structure describing a floating text balloon */
-pzBalloon PZEXPORT pzGetBalloonByNumber(pzGame,int balloonNum);  /* use the returned pzBalloon for subsequent access to the text balloon */
-
-/**
- Get 24-bit RGB color of a floating text balloon */
-int PZEXPORT pzGetBalloonTextRgb(pzGame,pzBalloon);  /* returns 24-bit RGB */
-
-/**
- Get text in a floating text balloon */
-const char* PZEXPORT pzGetBalloonText(pzBalloon);
-
-/**
- Get X co-ordinate of a floating text balloon */
-double PZEXPORT pzGetBalloonXpos(pzBalloon);
-
-/**
- Get Y co-ordinate of a floating text balloon */
-double PZEXPORT pzGetBalloonYpos(pzBalloon);
-
-/**
- Get font size of a floating text balloon */
-double PZEXPORT pzGetBalloonCharSize(pzBalloon);
-
-/**
- Get font spacing of a floating text balloon */
-double PZEXPORT pzGetBalloonCharSpacing(pzBalloon);
-
-/**
- Get opacity of text in a floating text balloon */
-double PZEXPORT pzGetBalloonOpacity(pzBalloon);
 
 
 /* Functions to save the game state */

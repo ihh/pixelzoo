@@ -85,7 +85,6 @@ void innerGameLoop (Game *game, int64_Microticks targetMicroticks, double maxUpd
   actualTicks = IntMillionthsToFloat (actualMicroticks);
 
   useTools (game, actualTicks);
-  updateBalloons (game->board, actualTicks / game->ticksPerSecond);
 
   if (actualMicroticks_ret)
     *actualMicroticks_ret = actualMicroticks;

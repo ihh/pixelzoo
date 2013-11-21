@@ -7,10 +7,9 @@
 #include "board.h"
 #include "notify.h"
 #include "mersenne.h"
-#include "balloon.h"
 
 /* helpers */
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, State *reg, int *isOnBoard, int *boardIndex_ret);
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int xOrigin, int yOrigin, int zOrigin, unsigned int shift, State mask, int *reg, int *isOnBoard, int *boardIndex_ret);
 
 /* for attemptRule() debugging: max rule depth, and rule trace */
 #define MaxRuleDepth 100
@@ -28,10 +27,6 @@ Board* newBoard (int size, int depth) {
   board->watcher = SafeCalloc (size * size * depth, sizeof(CellWatcher*));
   board->syncWrite = SafeCalloc (size * size * depth, sizeof(unsigned char));
   board->meta = SafeCalloc (size * size * depth, sizeof(char*));
-  board->lastModified = SafeCalloc (size * size * depth, sizeof(int64_Microticks));
-  board->previousState = SafeCalloc (size * size * depth, sizeof(State));
-  board->lastModifyType = SafeCalloc (size * size * depth, sizeof(enum ModifyRuleType));
-  board->lastSource = SafeCalloc (size * size * depth, sizeof(LocalOffset));
   board->syncBin = newBinTree (size * size * depth);
   board->asyncBin = newBinTree (size * size * depth);
   board->syncUpdateBin = newBinTree (size * size * depth);
@@ -45,7 +40,6 @@ Board* newBoard (int size, int depth) {
   board->logRules = 0;
 #endif /* PIXELZOO_DEBUG */
   board->syncUpdates = 0;
-  board->balloon = newVector (AbortCopyFunction, deleteBalloon, NullPrintFunction);
   board->rng = newRNG();
   board->rngReleased = 1;
   board->sampledNextAsyncEventTime = board->sampledNextSyncEventTime = 0;
@@ -69,17 +63,12 @@ void deleteBoard (Board* board) {
   if (board->moveLog)
     deleteMoveList (board->moveLog);
   deleteRNG (board->rng);
-  deleteVector (board->balloon);
   deleteBinTree (board->syncUpdateBin);
   deleteBinTree (board->syncBin);
   deleteBinTree (board->asyncBin);
   SafeFree(board->cell);
   SafeFree(board->sync);
   SafeFree(board->syncWrite);
-  SafeFree(board->lastModified);
-  SafeFree(board->previousState);
-  SafeFree(board->lastModifyType);
-  SafeFree(board->lastSource);
   for (i = 0; i < board->size * board->size * board->depth; ++i)
     SafeFreeOrNull (board->meta[i]);
   SafeFree(board->meta);
@@ -333,7 +322,7 @@ void syncBoard (Board* board) {
   ++board->updateCount;
 }
 
-State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, State *reg, int *isOnBoard, int *boardIndex_ret) {
+State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *loc, int x, int y, int z, unsigned int shift, State mask, int *reg, int *isOnBoard, int *boardIndex_ret) {
   State state, var;
   Type type;
   int xLoc, yLoc, zLoc;
@@ -341,9 +330,9 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
 
   var = 0;
   if (loc->xyzAreRegisters) {
-    xLoc = x + (Int64) reg[loc->x];
-    yLoc = y + (Int64) reg[loc->y];
-    zLoc = z + (Int64) reg[loc->z];
+    xLoc = x + reg[loc->x];
+    yLoc = y + reg[loc->y];
+    zLoc = z + reg[loc->z];
   } else {
     xLoc = x + loc->x;
     yLoc = y + loc->y;
@@ -385,14 +374,14 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   StateMapNode *lookupNode;
   MessageRuleMapNode *dispatchNode;
   ParticleRule *ruleTrace[MaxRuleDepth];
-  State reg[NumberOfRegisters + 1], regVal;
+  int reg[NumberOfRegisters + 1], regVal;
 
 #ifdef PIXELZOO_DEBUG
   if (board->logRules)
     Warn ("attemptRule @(%d,%d,%d)", x, y, z);
 #endif
 
-  reg[NumberOfRegisters] = 0;  /* this allows us to use register -1 as a default zero */
+  reg[NumberOfRegisters] = 0;  /* this allows us to use register #NumberOfRegisters as a default zero */
   tracePos = 0;
   while (rule != NULL) {
 
@@ -448,9 +437,9 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case ModifyRule:
       modify = &rule->param.modify;
       if (modify->dest.xyzAreRegisters) {
-	xDest = x + (Int64) reg[modify->dest.x];
-	yDest = y + (Int64) reg[modify->dest.y];
-	zDest = z + (Int64) reg[modify->dest.z];
+	xDest = x + reg[modify->dest.x];
+	yDest = y + reg[modify->dest.y];
+	zDest = z + reg[modify->dest.z];
       } else {
 	xDest = x + modify->dest.x;
 	yDest = y + modify->dest.y;
@@ -465,7 +454,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 #ifdef PIXELZOO_DEBUG
 	  if (board->logRules) {
 	    if (modify->offsetIsRegister)
-	      Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +reg[%d]=%llx <<%d &%llx %s(%d,%d,%d)",
+	      Warn ("Modify @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d +reg[%d]=%d <<%d &%llx %s(%d,%d,%d)",
 		    x, y, z,
 		    modify->src.xyzAreRegisters ? "*" : "",
 		    modify->src.x, modify->src.y, modify->src.z,
@@ -507,15 +496,6 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  default:
 	    break;
 	  }
-
-	  if ((oldDestState ^ newDestState) & TypeMask) {
-	      board->lastModified[destBoardIndex] = board->microticks;
-	      board->previousState[destBoardIndex] = oldDestState;
-	      board->lastModifyType[destBoardIndex] = modify->modifyType;
-	      board->lastSource[destBoardIndex].x = x;
-	      board->lastSource[destBoardIndex].y = y;
-	      board->lastSource[destBoardIndex].z = z;
-	  }
 	}
       }
       rule = modify->nextRule;
@@ -525,9 +505,9 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       deliver = &rule->param.deliver;
       /* DeliverRule hands over control: update x, y, z, ruleOwner and rule */
       if (deliver->recipient.xyzAreRegisters) {
-	x += (Int64) reg[deliver->recipient.x];
-	y += (Int64) reg[deliver->recipient.y];
-	z += (Int64) reg[deliver->recipient.z];
+	x += reg[deliver->recipient.x];
+	y += reg[deliver->recipient.y];
+	z += reg[deliver->recipient.z];
       } else {
 	xDest = x + deliver->recipient.x;
 	yDest = y + deliver->recipient.y;
@@ -566,10 +546,10 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     case LoadRule:
       load = &rule->param.load;
       for (r = 0; r < load->n; ++r) {
-	reg[load->reg[r]] = load->state[r];
+	reg[load->reg[r]] = load->val[r];
 #ifdef PIXELZOO_DEBUG
 	if (board->logRules)
-	  Warn ("Load reg[%d] = %llx", load->reg[r], load->state[r]);
+	  Warn ("Load reg[%d] = %d", load->reg[r], load->val[r]);
 #endif /* PIXELZOO_DEBUG */
       }
       rule = load->nextRule;
@@ -784,25 +764,6 @@ void evolveBoard (Board* board, int64_Microticks targetElapsedMicroticks, double
     *cellUpdates_ret = cellUpdates;
   if (elapsedTimeInSeconds_ret)
     *elapsedTimeInSeconds_ret = elapsedClockTime;
-}
-
-void updateBalloons (Board *board, double duration) {
-  void **ptr, **write;
-  Balloon *b;
-  for (write = ptr = board->balloon->begin; ptr != board->balloon->end; ++ptr) {
-    b = (Balloon*) *ptr;
-    if ((b->timeToLive -= duration) > 0) {
-      *(write++) = b;
-      b->z += b->zInc * duration;
-      b->size *= pow (b->sizeMul, duration);
-      b->opacity *= pow (b->opacityMul, duration);
-    } else if (resetBalloon (b))
-      *(write++) = b;
-    else
-      deleteBalloon (b);
-  }
-  board->balloon->end = write;
-  qsort (board->balloon->begin, VectorSize(board->balloon), sizeof (void*), BalloonCompare);
 }
 
 void boardReleaseRandomNumbers (Board *board) {

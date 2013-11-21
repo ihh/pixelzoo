@@ -83,19 +83,11 @@
 -(int)cellNameRgbAtX:(int)x y:(int)y z:(int)z;
 
 -(const char*)cellSpriteAtX:(int)x y:(int)y z:(int)z;
--(long long)cellLastModifiedTimeAtX:(int)x y:(int)y z:(int)z;
 
 -(int)toolRgbByNumber:(int)n;
 -(const char*)toolNameByNumber:(int)n;
 -(const char*)toolIconByNumber:(int)n;
 -(CGFloat)toolReserveByNumber:(int)n;
-
--(int)numberOfConsoleLines;
--(const char*)consoleText:(int)line;
-
--(int)numberOfBalloons;
--(pzBalloon)balloonNumber:(int)n;
--(int)textRgbForBalloon:(pzBalloon)b;
 
 -(int)incumbentCount;
 -(int)challengerCount;

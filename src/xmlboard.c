@@ -493,17 +493,20 @@ void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, Board 
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {
   int n;
   xmlNode *child;
+  State s;
   for (n = 0, child = node->children; child; child = child->next)
     if (MATCHES(child,REGISTER))
       ++n;
   load->n = n;
   load->reg = SafeCalloc (n, sizeof(unsigned char));
-  load->state = SafeCalloc (n, sizeof(State));
+  load->val = SafeCalloc (n, sizeof(int));
   for (n = 0, child = node->children; child; child = child->next)
     if (MATCHES(child,REGISTER)) {
       load->reg[n] = (unsigned char) CHILDINT(child,INDEX);
-      load->state[n] = getStateFromNode (child, protoTable, 0);
       Assert (load->reg[n] < NumberOfRegisters, "Register index %d is out of range", load->reg[n]);
+      s = getGTypeOrStateFromNode (child, protoTable);
+      Assert (s == (int) s, "Value %lld does not fit into register", s);
+      load->val[n] = (int) s;
       ++n;
     }
 

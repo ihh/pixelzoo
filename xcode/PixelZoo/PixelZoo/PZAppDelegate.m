@@ -24,7 +24,14 @@ char* sexp_pixelzoo_module_path = "";  // empty for now
 @synthesize window;
 @synthesize loginValidated;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+// for playing with ARM ASM...
+/*
+void sum7(int a,int b,int c,int d,int e,int f,int g,int* ret) {
+    *ret = a+b+c+d+e+f+g;
+}
+*/
+ 
+- (BOOL )application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
 
@@ -45,6 +52,13 @@ char* sexp_pixelzoo_module_path = "";  // empty for now
     if ([self gotDefaultUser])
         [self loginUser:[self getDefaultUser] withPass:[self getDefaultPass]];
 
+    // for playing with ARM ASM...
+    /*
+    int x;
+    sum7(1,2,3,4,5,6,7,&x);
+    NSLog(@"%d",x);
+    */
+     
     // return
     return YES;
 }

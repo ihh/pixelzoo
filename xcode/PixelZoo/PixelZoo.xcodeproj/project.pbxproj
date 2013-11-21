@@ -25,7 +25,6 @@
 		2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28217FFBACB00093CEC /* PZWorldsViewController.m */; };
 		2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28517FFBB7500093CEC /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2818E28817FFBC3100093CEC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2818E28717FFBC3100093CEC /* libxml2.dylib */; };
-		2818E2C417FFBD7500093CEC /* balloon.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28A17FFBD7500093CEC /* balloon.c */; };
 		2818E2C517FFBD7500093CEC /* bintree.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28C17FFBD7500093CEC /* bintree.c */; };
 		2818E2C617FFBD7500093CEC /* board.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E28E17FFBD7500093CEC /* board.c */; };
 		2818E2C717FFBD7500093CEC /* color.c in Sources */ = {isa = PBXBuildFile; fileRef = 2818E29017FFBD7500093CEC /* color.c */; };
@@ -102,8 +101,6 @@
 		2818E28417FFBB7500093CEC /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		2818E28517FFBB7500093CEC /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 		2818E28717FFBC3100093CEC /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		2818E28A17FFBD7500093CEC /* balloon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = balloon.c; path = ../../../src/balloon.c; sourceTree = "<group>"; };
-		2818E28B17FFBD7500093CEC /* balloon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = balloon.h; path = ../../../src/balloon.h; sourceTree = "<group>"; };
 		2818E28C17FFBD7500093CEC /* bintree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bintree.c; path = ../../../src/bintree.c; sourceTree = "<group>"; };
 		2818E28D17FFBD7500093CEC /* bintree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bintree.h; path = ../../../src/bintree.h; sourceTree = "<group>"; };
 		2818E28E17FFBD7500093CEC /* board.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = board.c; path = ../../../src/board.c; sourceTree = "<group>"; };
@@ -168,7 +165,7 @@
 		283C0F5E18075F8C0056492E /* PZLockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZLockViewController.m; sourceTree = "<group>"; };
 		283C0F60180770D30056492E /* PZGameWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZGameWrapper.h; sourceTree = "<group>"; };
 		283C0F61180770D30056492E /* PZGameWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZGameWrapper.m; sourceTree = "<group>"; };
-		2840439B183D6963007B403F /* Rock wall.png */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Rock wall.png"; path = "../sprites/64x64.atlas/Rock wall.png"; sourceTree = "<group>"; };
+		2840439B183D6963007B403F /* Rock wall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Rock wall.png"; path = "../sprites/64x64.atlas/Rock wall.png"; sourceTree = "<group>"; };
 		285106451801F1B900AA3254 /* PZWorldDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZWorldDescriptor.h; sourceTree = "<group>"; };
 		285106461801F1B900AA3254 /* PZWorldDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PZWorldDescriptor.m; sourceTree = "<group>"; };
 		285230B3180F37F0006E7FBF /* PZLockDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PZLockDescriptor.h; sourceTree = "<group>"; };
@@ -311,8 +308,6 @@
 			children = (
 				2818E2A317FFBD7500093CEC /* pixelzoo.h */,
 				28A996DF18107D2100681777 /* chibi */,
-				2818E28A17FFBD7500093CEC /* balloon.c */,
-				2818E28B17FFBD7500093CEC /* balloon.h */,
 				2818E28C17FFBD7500093CEC /* bintree.c */,
 				2818E28D17FFBD7500093CEC /* bintree.h */,
 				2818E28E17FFBD7500093CEC /* board.c */,
@@ -413,6 +408,11 @@
 				CLASSPREFIX = PZ;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Holmesian Software";
+				TargetAttributes = {
+					2818E25717FFB6DB00093CEC = {
+						DevelopmentTeam = A922JXYDRA;
+					};
+				};
 			};
 			buildConfigurationList = 2818E25317FFB6DB00093CEC /* Build configuration list for PBXProject "PixelZoo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -462,7 +462,6 @@
 				2818E26C17FFB6DB00093CEC /* PZAppDelegate.m in Sources */,
 				2818E28317FFBACB00093CEC /* PZWorldsViewController.m in Sources */,
 				2818E28617FFBB7500093CEC /* GDataXMLNode.m in Sources */,
-				2818E2C417FFBD7500093CEC /* balloon.c in Sources */,
 				2818E2C517FFBD7500093CEC /* bintree.c in Sources */,
 				2818DEE1183803F0000EB483 /* PZToolbarNode.m in Sources */,
 				2818E2C617FFBD7500093CEC /* board.c in Sources */,
@@ -592,6 +591,8 @@
 		2818E27F17FFB6DB00093CEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PixelZoo/PixelZoo-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -604,8 +605,10 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
+					"-mapcs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -615,6 +618,8 @@
 		2818E28017FFB6DB00093CEC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PixelZoo/PixelZoo-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -627,8 +632,10 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
+					"-mapcs",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;

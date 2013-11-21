@@ -21,10 +21,6 @@ typedef struct Board {
   State *cell, *sync;   /* cell[boardIndex(size,x,y,z)] is the current state at (x,y,z); sync[boardIndex(size,x,y,z)] is the state pending the next board synchronization */
   unsigned char *syncWrite;  /* syncWrite[boardIndex(size,x,y,z)] is true if sync[boardIndex(size,x,y,z)] should be written to cell[boardIndex(size,x,y,z)] at next board sync */
   char **meta;  /* meta[boardIndex(size,x,y,z)] is NULL or a C string */
-  int64_Microticks *lastModified;  /* updated only when type field changes */
-  State *previousState;  /* updated only when type field changes */
-  enum ModifyRuleType *lastModifyType;  /* updated only when type field changes */
-  LocalOffset* lastSource;  /* updated only when type field changes */
   CellWatcher **watcher;  /* notify[boardIndex(size,x,y,z)] is pointer to CellWatcher object that intercepts & potentially modifies writes to cell (x,y,z) */
   BinTree *asyncBin, *syncBin, *syncUpdateBin;  /* asyncBin = stochastic update rates AND queue, syncBin = sync update rates, syncUpdateBin = sync update queue */
   int syncParticles, lastSyncParticles;  /* number of synchronous particles on the board now, and after last board sync */
@@ -39,7 +35,6 @@ typedef struct Board {
   int logRules;  /* set to nonzero to log all rule applications */
 #endif /* PIXELZOO_DEBUG */
   int syncUpdates;  /* number of board synchronizations */
-  Vector *balloon;  /* container & owner of Balloon's */
   RandomNumberGenerator *rng;  /* the Board's random number generator. Drives all random simulation events */
   char rngReleased;  /* if true, then the Board has no cached random samples from the random number generator: the RNG's state can be saved or restored. Call boardReleaseRandomNumbers() to set this flag */
   MoveList *moveLog, *moveQueue; /* log of past user moves, and queue of simulated upcoming user moves */
@@ -60,9 +55,6 @@ void writeBoardMove (Board* board, int x, int y, int z, State state);
 void replayBoardMove (Board* board);
 
 void boardReleaseRandomNumbers (Board* board);   /* causes the Board to forget any random numbers (i.e. upcoming event times) that it has sampled */
-
-void updateBalloons (Board *board, double duration);  /* duration is measured in real time, i.e. seconds */
-#define addBalloon(BOARD_PTR,BALLOON_PTR,X,Y) { VectorPushBack ((BOARD_PTR)->balloon, newPlacedBalloon (BALLOON_PTR, X, Y, (1. - IntMillionthsToFloat((BOARD_PTR)->microticks % PowerOfTwoClosestToOneMillion)))); }
 
 /* macros to access board without bounds overrun errors.
    Note: to ensure moves are logged, use writeBoardMove function, rather than writeBoardState macro.

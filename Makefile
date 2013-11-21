@@ -136,7 +136,7 @@ eloise-sdl-test: targets
 	diff t/eloise_board.xml t/eloise_copy_board.xml
 
 eloise-pztest: targets
-	bin/pztest $(ELOISE_TEST_ARGS)
+	time bin/pztest $(ELOISE_TEST_ARGS)
 	diff t/eloise_movelog.xml t/eloise_copy_movelog.xml
 	diff t/eloise_board.xml t/eloise_copy_board.xml
 
