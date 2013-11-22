@@ -1,13 +1,33 @@
 Molecular evolution level
 
+RPS = RockPaperScissors
+
 CELLS
 Polymers
-- Free radical polymer units spontaneously fuse together
-Keep a cell alive with an RPS (RockPaperScissors) reaction going inside it
+- Free radical monomer units spontaneously fuse together into polymers
+Water
+- these diffuse fast
+- other particles can't move through vacuum, can only switch places with water molecules
+Ownership goal: create some quantum dots (these just go around in circles), keep them alive.
+Goal #1: create a temporary enclosure, seed it with monomers, allow some bubbles to form.
+Goal #2: create a bubble with a self-sustaining RPS reaction inside.
+- R's make bubbles contract, G's make them expand, B's make them porous
 Hierarchical arrangement of organelles - each level emits some vital ingredient to its enclosing cell
+- e.g. when RGB pass through cell walls, they become Magenta/Yellow/Cyan
+Goal #3: sustain a CYM reaction inside a cell.
+
+Challenger goal: destroy quantum dots.
 Viruses attack cells. Subvert a cell, turn it over to production of the virus.
+- Virus consumes RGB; at some low rate, virus lyses cell
+- Virus consumes quantum dots
 Generic & specific antivirals.
-Diffusion-limited aggregation leads to growth of dendrite crystals.
+Directionally flowing acid (limited ration per day)
+- Buffer solution neutralizes acid
+Decaying walls
+Harder walls built by diffusion-limited aggregation of cell-emitted lava particles
+(limited ration of lava per day)
+Guns, bombs (limited ration per day)
+- Potassium particles that react with water
 
 
 
