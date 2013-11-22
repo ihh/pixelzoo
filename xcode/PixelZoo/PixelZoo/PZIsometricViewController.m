@@ -38,6 +38,8 @@
     [super viewDidLoad];
 
 	// Do any additional setup after loading the view.
+    [[self navigationController] interactivePopGestureRecognizer].enabled = NO;
+    
     skview.showsDrawCount = YES;
     skview.showsNodeCount = YES;
     skview.showsFPS = YES;

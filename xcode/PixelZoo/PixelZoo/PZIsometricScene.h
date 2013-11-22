@@ -28,7 +28,6 @@
     CGPoint viewOffsetAtStartOfZoom;
     
     // pan
-    bool panning;
     CGPoint currentViewOffset, viewOffsetAtStartOfPan;
 
     // UIViewController (solely so we can call the navigation controller & pop when turn ends)

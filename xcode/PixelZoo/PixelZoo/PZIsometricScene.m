@@ -145,24 +145,47 @@
 /* Gesture recognizers */
 - (void)handlePan:(UIPanGestureRecognizer *)recognizer {
     
-    if ([self moveToolSelected]) {
-        if (recognizer.state == UIGestureRecognizerStateBegan) {
+    [game untouchCell];
+    CGPoint loc = [recognizer locationInView:self.view];
+    CGSize frameSize = [self.view frame].size;
+    const bool
+        inLeftMargin = loc.x < PAN_MARGIN,
+        inRightMargin = loc.x >= frameSize.width - PAN_MARGIN,
+        inTopMargin = loc.y < PAN_MARGIN,
+        inBottomMargin = loc.y >= frameSize.height - PAN_MARGIN;
+    switch (recognizer.state) {
+
+        case UIGestureRecognizerStateBegan:
             viewOffsetAtStartOfPan = currentViewOffset;
-        }
-        
-        if (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateChanged) {
-            CGPoint trans = [recognizer translationInView:self.view];
+            break;
+
+        case UIGestureRecognizerStateChanged:
+            if ([self moveToolSelected]) {
+                CGPoint trans = [recognizer translationInView:self.view];
             
-            CGPoint mvo = [self maxViewOffset];
-            currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, viewOffsetAtStartOfPan.x - trans.x));
-            currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, viewOffsetAtStartOfPan.y - trans.y));
-            
-            panning = 1;
-            [game untouchCell];
-        } else {
-            panning = 0;
-        }
+                currentViewOffset.x = viewOffsetAtStartOfPan.x - trans.x;
+                currentViewOffset.y = viewOffsetAtStartOfPan.y - trans.y;
+
+            } else if (inLeftMargin || inRightMargin || inTopMargin || inBottomMargin) {
+                if (inLeftMargin)
+                    currentViewOffset.x -= PAN_RATE;
+                else if (inRightMargin)
+                    currentViewOffset.x += PAN_RATE;
+
+                if (inTopMargin)
+                    currentViewOffset.y -= PAN_RATE;
+                else if (inBottomMargin)
+                    currentViewOffset.y += PAN_RATE;
+
+            }
+            break;
+
+        default:
+            break;
     }
+    CGPoint mvo = [self maxViewOffset];
+    currentViewOffset.x = MAX (-mvo.x, MIN (mvo.x, currentViewOffset.x));
+    currentViewOffset.y = MAX (-mvo.y, MIN (mvo.y, currentViewOffset.y));
 }
 
 - (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {

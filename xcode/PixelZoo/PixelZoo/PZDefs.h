@@ -28,6 +28,9 @@
 #define MAX_NATURAL_TILE_HEIGHT 32 /* max scale at which board image will actually be rendered */
 #define MAX_TILE_HEIGHT 32  /* max scale at which board image will be shown */
 
+#define PAN_MARGIN 20
+#define PAN_RATE 5
+
 #define TUTORIAL_WORLD_NAME "Tutorial"
 
 #endif

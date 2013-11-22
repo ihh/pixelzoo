@@ -1,6 +1,8 @@
 Molecular evolution level
 
 CELLS
+Polymers
+- Free radical polymer units spontaneously fuse together
 Keep a cell alive with an RPS (RockPaperScissors) reaction going inside it
 Hierarchical arrangement of organelles - each level emits some vital ingredient to its enclosing cell
 Viruses attack cells. Subvert a cell, turn it over to production of the virus.
