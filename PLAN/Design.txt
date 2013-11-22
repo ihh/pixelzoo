@@ -1,0 +1,21 @@
+Molecular evolution level
+
+CELLS
+Keep a cell alive with an RPS (RockPaperScissors) reaction going inside it
+Hierarchical arrangement of organelles - each level emits some vital ingredient to its enclosing cell
+Viruses attack cells. Subvert a cell, turn it over to production of the virus.
+Generic & specific antivirals.
+Diffusion-limited aggregation leads to growth of dendrite crystals.
+
+
+
+FOREST
+Grow a complex balanced ecosystem of plants & animals (Quince et al)
+Rare creatures that must be kept safe from predators.
+
+
+CITY
+House builders.
+Roads. Road builders.
+Diseases. Zombie infections.
+
