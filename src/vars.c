@@ -8,6 +8,7 @@ VarsDescriptor *newVarsDescriptor (const char* name, unsigned char offset, unsig
   vd->name = StringCopy ((void*) name);
   vd->offset = offset;
   vd->width = width;
+  Assert (((int) (offset/32)) == ((int) ((offset+width-1)/32)), "Bitfields cannot straddle a 32-bit boundary");
   return vd;
 }
 
