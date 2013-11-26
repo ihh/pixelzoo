@@ -3,10 +3,10 @@ Then, a realistic (slow but steady) progress rate.
 
 
 Multiscale cellular automata using a quadtree-type structure with Z indicating scale (quadtree level), rather than vertical dimension.
-Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (0<=Z<=depth<=lg(Size), level=Z)
+Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (0<=Z<=depth, Z=level, depth=lg(Size))
 ...small things go on top
 ...surface (1x1 tiles) is layer depth, 2x2 tiles is layer depth-1, etc
-...draw them stacked: surface tiles are 16x32, layer depth-1 is 32x64 and drawn so its top face aligns with 2x2 bottom faces pn the bottom of the surface, layer depth-2 is 64x128 and its top face aligns with layer depth-1's bottom face, etc
+...draw them as cubes with top faces aligned & centered... OR stacked... could be an option?
 
 boardIndex(Size,X,Y,Z)  c.f. quadNodeIndex & totalQuadTreeNodes in quadtree.c (Z = level - K), except you specify msbX & msbY directly
 LocalOffset(DeltaX,DeltaY,DeltaZ)  first applies Delta(X,Y), then DeltaZ; for zoom-out (DeltaZ>0), just truncate bits; zoom-in (DeltaZ<0), use random bits
