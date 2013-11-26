@@ -2,10 +2,14 @@ Kids are getting bored, no way this ship runs without fuel. Clear breathing come
 Then, a realistic (slow but steady) progress rate.
 
 
-Multiscale cellular automata using a quadtree-type structure at each Z-layer.
-Effectively a new dimension, Scale, that runs from 0 (finest resolution) up to lg(Size) (one cell per layer)
-boardIndex(Size,X,Y,Z,Scale)  c.f. quadNodeIndex & totalQuadTreeNodes in quadtree.c (Scale = K - level)
-LocalOffset(DeltaX,DeltaY,DeltaZ,DeltaScale)  first applies Delta(X,Y,Z), then DeltaScale; for zoom-out (DeltaScale>0), just truncate bits; zoom-in (DeltaScale<0), use random bits
+Multiscale cellular automata using a quadtree-type structure with Z indicating scale (quadtree level), rather than vertical dimension.
+Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (Z=level), with Z running from 0 (one solitary cell) to depth<=lg(Size) (finest resolution)
+...small things go on top
+...surface (1x1 tiles) is layer depth, 2x2 tiles is layer depth-1, etc
+...draw them stacked: surface tiles are 16x32, layer depth-1 is 32x64 and drawn so its top face aligns with 2x2 bottom faces pn the bottom of the surface, layer depth-2 is 64x128 and its top face aligns with layer depth-1's bottom face, etc
+
+boardIndex(Size,X,Y,Z)  c.f. quadNodeIndex & totalQuadTreeNodes in quadtree.c (Z = level - K), except you specify msbX & msbY directly
+LocalOffset(DeltaX,DeltaY,DeltaZ)  first applies Delta(X,Y), then DeltaZ; for zoom-out (DeltaZ>0), just truncate bits; zoom-in (DeltaZ<0), use random bits
 
 
 
