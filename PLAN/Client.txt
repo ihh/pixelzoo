@@ -3,7 +3,7 @@ Then, a realistic (slow but steady) progress rate.
 
 
 Multiscale cellular automata using a quadtree-type structure with Z indicating scale (quadtree level), rather than vertical dimension.
-Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (Z=level), with Z running from 0 (one solitary cell) to depth<=lg(Size) (finest resolution)
+Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (0<=Z<=depth, level=K-depth+Z, Z=level-K+depth)
 ...small things go on top
 ...surface (1x1 tiles) is layer depth, 2x2 tiles is layer depth-1, etc
 ...draw them stacked: surface tiles are 16x32, layer depth-1 is 32x64 and drawn so its top face aligns with 2x2 bottom faces pn the bottom of the surface, layer depth-2 is 64x128 and its top face aligns with layer depth-1's bottom face, etc
