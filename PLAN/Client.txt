@@ -2,6 +2,13 @@ Kids are getting bored, no way this ship runs without fuel. Clear breathing come
 Then, a realistic (slow but steady) progress rate.
 
 
+Multiscale cellular automata using a quadtree-type structure at each Z-layer.
+Effectively a new dimension, Scale, that runs from 0 (finest resolution) up to lg(Size) (one cell per layer)
+boardIndex(Size,X,Y,Z,Scale)  c.f. quadNodeIndex & totalQuadTreeNodes in quadtree.c (Scale = K - level)
+LocalOffset(DeltaX,DeltaY,DeltaZ,DeltaScale)  first applies Delta(X,Y,Z), then DeltaScale; for zoom-out (DeltaScale>0), just truncate bits; zoom-in (DeltaScale<0), use random bits
+
+
+
 
 Show tool name when tool selected
 Scheme functions for generating sprite names (from vars & SXML blob)
