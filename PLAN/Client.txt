@@ -2,18 +2,6 @@ Kids are getting bored, no way this ship runs without fuel. Clear breathing come
 Then, a realistic (slow but steady) progress rate.
 
 
-Multiscale cellular automata using a quadtree-type structure with Z indicating scale (quadtree level), rather than vertical dimension.
-Effectively a new interpretation of Z as Zoom, a version of quadtree.c's "level" (0<=Z<=depth, Z=level, depth=lg(Size))
-...small things go on top
-...surface (1x1 tiles) is layer depth, 2x2 tiles is layer depth-1, etc
-...draw them as cubes with top faces aligned & centered... OR stacked... could be an option?
-
-boardIndex(Size,X,Y,Z)  c.f. quadNodeIndex & totalQuadTreeNodes in quadtree.c (Z = level - K), except you specify msbX & msbY directly
-LocalOffset(DeltaX,DeltaY,DeltaZ)  first applies Delta(X,Y), then DeltaZ; for zoom-out (DeltaZ>0), just truncate bits; zoom-in (DeltaZ<0), use random bits
-
-
-
-
 Show tool name when tool selected
 Scheme functions for generating sprite names (from vars & SXML blob)
 Scheme function returning "examine" text
@@ -57,6 +45,9 @@ Tool rationing:
 - PROTECTED WORLDS: worldmeta setting allowing incumbent to revert challengers' moves. For social play.
 
 TEMPORAL ZOOMING MECHANIC: at zoomed-in scales, animations & sound FX play, board runs slower
+
+MULTISCALE CA using a quadtree-type structure with a new dimension MAG, indicating magnification level?
+...question: is it a 2D quadtree (easier to maintain board as a thin slice) or a 3D quadtree (more isotropic)?
 
 
 Allow Particle rates to be influenced by state of var (e.g. as a generalization of a fixed rate/asyncFiringRate, offer a C array of such rates, indexed by a named var; or use linear scaling (var+1)/(1<<width) .. log scaling is easy to create with a macro)
