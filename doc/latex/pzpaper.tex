@@ -127,13 +127,13 @@ Code written for the low-level state machine cannot reflect on or modify its own
 Instruction set.
 Load and Store allow access to bitfields (i.e. masking, shifting and bit-twiddling appropriately).
 \\
-{\bf Load-Compare-Branch} This operation essentially encapsulates memory reads. Reads a bitfield from an address, compares it to an operand, executes different code based on the result.
+{\bf Load-Compare-Branch} This operation encapsulates memory reads. Reads from a local bitfield address, compares value to an operand, executes different code based on the result.
 \\
-{\bf Load-Add-Store} This operation encapsulates writes: loads a bitfield from a source address, adds an operand to it, stores in a destination address. Can optionally move or destroy the opaque storage.
+{\bf Load-Add-Store} This operation encapsulates writes: loads a value from a source bitfield address, adds an operand to it, stores result in a destination bitfield address. Can optionally move or destroy the opaque storage.
 \\
 {\bf Random-Branch} Branches with some random probability. Random number generator replayable.
 \\
-{\bf Load-Switch} Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be implemented using Load-Compare-Branch, or internally as a jump table.
+{\bf Load-Switch} Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be internally implemented using Load-Compare-Branch, or a jump table.
 \\
 {\bf Load-Register} Places a numeric constant into a register. Used in combination with indirect addressing modes of other instructions.
 \\
