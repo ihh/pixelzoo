@@ -25,7 +25,7 @@ Ian Holmes\\
 \maketitle
 \begin{abstract}
 A turn-based multiplayer game platform has been developed for mobile devices.
-The platform uses cellular automata to implement a broad range of models
+The platform uses cellular automata to implement models
 from condensed-matter physics, mathematical biology,
 and artificial life research.
 \end{abstract}
@@ -49,7 +49,8 @@ mathematical biology,
 Artificial Life ({\em A-Life})
 
 Progress report, describing general structure of platform,
-and several models including a simulation of RNA folding kinetics.
+and several models from stochastic biophysics
+including simulations of polymer and RNA folding kinetics.
 
 \subsection{Cellular Automata}
 
@@ -71,7 +72,7 @@ Biological
 Kinematic
 \cite{Stevens2011}
 
-\subsection{RNA Folding Models}
+\subsection{Molecular Evolution Models}
 
 RNA World
 \cite{Woese1967}
@@ -85,21 +86,40 @@ RNA ALife
 RNA Folding on Lattice
 \cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
 
+Protein folding on the lattice. HP model \cite{Dill1985,PandeRokhsar1999}
+
 \section{Simulation}
 
 \subsection{Virtual Machine}
 
 Low-level (machine code):
 state machines.
-Bitfields: fixed amount of dynamic storage, 16 bits given over to a type field that selects from a global program.
+
+Addressing: local neighborhood.
+Memory structure: bitfields. Fixed amount of dynamic storage, 16 bits given over to a type field that selects from a global program.
 Remaining dynamic storage 48 bits, plus effectively unlimited read-only global storage.
-Minimal generalization of lookup table, to facilitate partial matching of neighborhoods:
-bitfield access, load-add-store, load-switch.
+
+Instruction set that minimally generalizes the concept of the lookup table, to facilitate partial matching of neighborhoods:
+load-add-store, load-switch, load-compare, random-branch.
+(Load and Store allow bitfield access.)
+
+Control flow: goto, no loops, no gosub. Program is a Directed Acyclic Graph (DAG) of finite maximum length.
+Facilitates analysis and prediction of resource usage---requirements for user-uploaded programs.
+
+In principle do not need indirect addressing: can explicitly enumerate all cases.
+In practice, useful to allow some indirect addressing, to reduce program sizes.
 
 Low-level (assembly language):
 Scheme. Generates (assembles) instructions for state machine.
 Large built-in library for replicating patterns over Moore or von Neumann neighborhoods,
 implementing reaction-diffusion models, implementing turtle-type agents, etc.
+
+Observations on model scaling:
+Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
+Only 52k gzipped (still vicious to expand).
+With indirect addressing: down to 127k (gzipped: 3k).
+Scheme generator is 5k (gzipped: 1k).
+
 
 Higher-level (path-finding, goal-satisfaction, and other agent-level scripting):
 Scheme. S-expression dynamic storage associated with each cell.
@@ -143,8 +163,6 @@ A sample case in the explicit automata-theoretic enumeration of RNA folding.
 }
 \end{figure}
 
-Protein folding \cite{PandeRokhsar1999}
-
 \subsection{Agent Patterns}
 
 Tumble-run: {\em E.coli}.
@@ -171,6 +189,7 @@ Population dynamics and spatial versions of the Wright-Fisher model \cite{Mathie
 
 \subsection{Basic Play}
 
+Terraforming simulation.
 Isometric PAINT with live pixels.
 
 Game goal: maintain dynamic equilibrium between three RPS species within a vesicle.
