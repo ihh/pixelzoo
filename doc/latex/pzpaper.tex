@@ -27,7 +27,7 @@ Ian Holmes\\
 A turn-based multiplayer game platform has been developed for mobile devices.
 The platform uses cellular automata to implement models
 from condensed-matter physics, mathematical biology,
-and artificial life research.
+and the computational study of artificial life.
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -46,7 +46,7 @@ featuring models from
 condensed-matter physics,
 mathematical biology,
  and
-Artificial Life ({\em A-Life})
+the computational study of Artificial Life ({\em A-Life})
 
 Progress report, describing general structure of platform,
 and several models from stochastic biophysics
@@ -104,7 +104,7 @@ load-add-store, load-switch, load-compare, random-branch.
 (Load and Store allow bitfield access.)
 
 Control flow: goto, no loops, no gosub. Program is a Directed Acyclic Graph (DAG) of finite maximum length.
-Facilitates analysis and prediction of resource usage---requirements for user-uploaded programs.
+Facilitates analysis and prediction of resource usage---requirements for player-uploaded programs.
 
 In principle do not need indirect addressing: can explicitly enumerate all cases.
 In practice, useful to allow some indirect addressing, to reduce program sizes.
@@ -125,7 +125,7 @@ Higher-level (path-finding, goal-satisfaction, and other agent-level scripting):
 Scheme. S-expression dynamic storage associated with each cell.
 
 Low-level state machine can move or destroy higher-level S-expression storage, but not copy or increase it.
-The stringent constraints on the low-level state machine mean that it is safe to open up the space of programs to the user,
+The stringent constraints on the low-level state machine mean that it is safe to open up some of the space of programs to the player,
 while maintaining strong performance guarantees on the worst-case simulation rate.
 
 Board:
@@ -143,7 +143,7 @@ As shown in Figure~\ref{fig:polymer}.
 \fbox{\includegraphics[width=\columnwidth]{Polymer.png}}
 \caption{
 \label{fig:polymer}
-A few cases in the explicit automata-theoretic enumeration of polymer diffusion.
+A few cases in the explicit automata-theoretic enumeration of polymer diffusion on the square lattice.
 }
 \end{figure}
 
@@ -159,7 +159,7 @@ As shown in Figure~\ref{fig:rna}.
 \fbox{\includegraphics[width=\columnwidth]{RNA.png}}
 \caption{
 \label{fig:rna}
-A sample case in the explicit automata-theoretic enumeration of RNA folding.
+A sample case in the explicit automata-theoretic enumeration of RNA folding on the square lattice.
 }
 \end{figure}
 
@@ -194,6 +194,8 @@ Isometric PAINT with live pixels.
 
 Game goal: maintain dynamic equilibrium between three RPS species within a vesicle.
 
+\subsection{Network Play}
+
 Multiplayer implementation: RESTful server \cite{rest}.
 Post lock, check board out/in.
 
@@ -203,7 +205,11 @@ Multiplayer goal: keep your population alive under attack.
 
 Earn money from your population.
 
+Client: log in/out, browse worlds, pick a world, select terraforming tools...
+
 \subsection{Creating New Tools}
+
+Planned: HTML controls.
 
 Spend money creating and using new reaction-diffusion particles and spray-tools.
 
