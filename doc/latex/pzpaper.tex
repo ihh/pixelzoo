@@ -4,14 +4,14 @@
 \begin{document}
 
 \title{Cellular Automata for Artificial Life Games}
-\numberofauthors{2}
+\numberofauthors{1}
 \author{
 % 1st. author
-\alignauthor
-Alan S. Wang\\
-       \affaddr{Department of Bioengineering}\\
-       \affaddr{University of California}\\
-       \affaddr{California, Berkeley}\\
+%\alignauthor
+%Alan S. Wang\\
+%       \affaddr{Department of Bioengineering}\\
+%       \affaddr{University of California}\\
+%       \affaddr{California, Berkeley}\\
 % 2nd. author
 \alignauthor
 Ian Holmes\\
@@ -87,7 +87,7 @@ Life within vesicles.  % define 'vesicle', 'micelle'
 Synthetic RNA World
 \cite{PaulJoyce2002}
 
-RNA ALife
+RNA A-Life
 \cite{journals/alife/Schuster94}
 
 RNA Folding on Lattice
@@ -118,27 +118,37 @@ Supplemented by larger amount of read-only global storage (including global prog
 The 16-bit type field selects the global program to update the cell and its neighborhood,
 and also specifies a naming and sizing scheme for bitfields associated with that type's use of the dynamic storage in that cell.
 
-The global program for a state machine is an ultra-minimal CISC architecture that generalizes the concept of the state lookup table, to facilitate partial matching and rewriting of neighborhoods and bitfields.
+The global program for a state machine mimics an ultra-minimal subset of a typical CISC architecture, generalizing the concept of the state lookup table to facilitate partial matching and rewriting of local bitfields.
 The instruction set for the global program is a recognizable subset of (or easily implemented on) well-known RISC architectures, e.g. ARM\cite{seal00} and virtual game architectures, like Core War's RedCode\cite{CoreWarGuidelines84}.
 The instruction set can also be quickly interpreted or implemented in C, and optimized well by C compilers.
 Such details of the implementation are left opaque by design.
 Code written for the low-level state machine cannot reflect on or modify its own global program.
 
 Instruction set.
-Load and Store allow access to (named) bitfields.
-Load-Compare-Branch. This operation essentially encapsulateds memory reads. Reads a bitfield from an address, compares it to an operand, executes different code based on the result.
-Load-Add-Store. This operation encapsulates writes: loads a bitfield from a source address, adds an operand to it, stores in a destination address. Can optionally move or destroy the opaque storage.
-Random-Branch. Branches with some random probability. Random number generator replayable.
-Load-Switch. Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be implemented using Load-Compare-Branch, or internally as a jump table.
-Load-Register. Places a numeric constant into a register. Used in combination with indirect addressing modes of other instructions.
-Goto. Branch to named subroutine.
-Goto-Neighbor. Branch to named subroutine in neighbor's program (restricted).
-Execute Scheme function (restricted).
+Load and Store allow access to bitfields (i.e. masking, shifting and bit-twiddling appropriately).
+\\
+{\bf Load-Compare-Branch} This operation essentially encapsulates memory reads. Reads a bitfield from an address, compares it to an operand, executes different code based on the result.
+\\
+{\bf Load-Add-Store} This operation encapsulates writes: loads a bitfield from a source address, adds an operand to it, stores in a destination address. Can optionally move or destroy the opaque storage.
+\\
+{\bf Random-Branch} Branches with some random probability. Random number generator replayable.
+\\
+{\bf Load-Switch} Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be implemented using Load-Compare-Branch, or internally as a jump table.
+\\
+{\bf Load-Register} Places a numeric constant into a register. Used in combination with indirect addressing modes of other instructions.
+\\
+{\bf Goto} Forward-branch to labeled routine (no backward loops).
+\\
+{\bf Goto-Neighbor} Branch to labeled entry point in neighbor's program (restricted to supervisor).
+\\
+{\bf Execute Scheme function} (restricted to supervisor).
 
 Control flow: goto, no stack, no gosub or return.
 Branches always go one way, so loops explicitly prohibited.
-Program is a Directed Acyclic Graph (DAG) of finite maximum length.
-Facilitates analysis and prediction of resource usage---requirements for player-uploaded programs.
+Program is a Directed Acyclic Graph (DAG) of finite determinable length.
+Easy for server to analyze player-designed programs and maintain strong performance guarantees.
+Enough flexibility for players to implement novel material properties,
+as well as more sophisticated computational behaviors in the context of the grid (e.g. Turing machines, Langton ants, Wireworld-type circuits, etc.).
 
 \subsubsection{Addressing Modes}
 
@@ -215,6 +225,8 @@ A sample case in the explicit automata-theoretic enumeration of RNA folding on t
 
 \subsection{Agent State Machines}
 
+Various agent models from above molecular length scale, used in game design.
+
 Tumble-run: {\em E.coli}.
 \cite{RosserEtAl2013}
 
@@ -228,10 +240,12 @@ Diffusion-limited aggregation.
 
 Two-dimensional square-lattice Ising model \cite{Onsager1944}.
 
-Lotka-Volterra (predator-prey) \cite{LotkaVolterra,SpatialLotkaVolterra}.
+Lotka-Volterra (predator-prey) \cite{Lotka1910,Hirota199739}.
 Rock-paper-scissors games in ecology \cite{Tainaka2000}.
 
 Ecosystem balancing and stability of food webs \cite{quince2005topological}.
+
+Forest fires \cite{Karafyllidis1997}.
 
 Population dynamics and spatial versions of the Wright-Fisher model \cite{MathiesonMcVean2013}.
 
