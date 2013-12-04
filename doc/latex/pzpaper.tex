@@ -118,7 +118,7 @@ Supplemented by larger amount of read-only global storage (including global prog
 The 16-bit type field selects the global program to update the cell and its neighborhood,
 and also specifies a naming and sizing scheme for bitfields associated with that type's use of the dynamic storage in that cell.
 
-The global program for a state machine is a minimal CISC architecture generalizes the concept of the state lookup table, to facilitate partial matching of neighborhoods and bitfields.
+The global program for a state machine is an ultra-minimal CISC architecture that generalizes the concept of the state lookup table, to facilitate partial matching and rewriting of neighborhoods and bitfields.
 The instruction set for the global program is a recognizable subset of (or easily implemented on) well-known RISC architectures, e.g. ARM\cite{seal00} and virtual game architectures, like Core War's RedCode\cite{CoreWarGuidelines84}.
 The instruction set can also be quickly interpreted or implemented in C, and optimized well by C compilers.
 Such details of the implementation are left opaque by design.
@@ -126,29 +126,34 @@ Code written for the low-level state machine cannot reflect on or modify its own
 
 Instruction set.
 Load and Store allow access to (named) bitfields.
-Load-Compare-Branch.
-Load-Add-Store (this operation also move or destroy the opaque storage).
-Random-Branch (random number generator replayable).
-Load-Switch (can be implemented as a tree of Load-Compare-Branch, or internally as a jump table).
-Goto.
-Execute Scheme function (access restricted).
+Load-Compare-Branch. This operation essentially encapsulateds memory reads. Reads a bitfield from an address, compares it to an operand, executes different code based on the result.
+Load-Add-Store. This operation encapsulates writes: loads a bitfield from a source address, adds an operand to it, stores in a destination address. Can optionally move or destroy the opaque storage.
+Random-Branch. Branches with some random probability. Random number generator replayable.
+Load-Switch. Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be implemented using Load-Compare-Branch, or internally as a jump table.
+Load-Register. Places a numeric constant into a register. Used in combination with indirect addressing modes of other instructions.
+Goto. Branch to named subroutine.
+Goto-Neighbor. Branch to named subroutine in neighbor's program (restricted).
+Execute Scheme function (restricted).
 
-Control flow: goto, no loops, no gosub. Program is a Directed Acyclic Graph (DAG) of finite maximum length.
+Control flow: goto, no stack, no gosub or return.
+Branches always go one way, so loops explicitly prohibited.
+Program is a Directed Acyclic Graph (DAG) of finite maximum length.
 Facilitates analysis and prediction of resource usage---requirements for player-uploaded programs.
 
 \subsubsection{Addressing Modes}
 
-Several addressing modes.
+Several addressing modes for memory locations and operands.
 
-Immediate vs register addressing.
+Immediate vs register addressing (operands).
 
-Indirect addressing (registers specify cell offset, bitfield sub-address).
+Indirect addressing (memory access). Registers specify cell offset, bitfield sub-address.
 
 In principle do not need indirect or register addressing: can explicitly enumerate all cases via immediate addressing.
 In practice, useful to allow some indirect and register addressing, to reduce program sizes via re-use of subroutine code.
 
-Goto label in neighbor's program: effectively a primitive message delivery mechanism,
-but must be restricted as it can create loops.
+Indirect addressing (code execution).
+Goto label in neighbor's program: effectively a primitive message delivery mechanism.
+Must be restricted as it can create loops.
 
 \subsubsection{Assembly Language}
 
