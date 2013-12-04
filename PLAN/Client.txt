@@ -2,6 +2,15 @@ Kids are getting bored, no way this ship runs without fuel. Clear breathing come
 Then, a realistic (slow but steady) progress rate.
 
 
+Sprite Kit FX:
+ You are looking down at the planet through open bay doors of a ship facing down, through clouds
+ Map is tesselated, with added noise past the (0,0) square
+ Laser-type FX for "terraforming beam"
+
+
+COMMISSION SPRITES
+
+
 Show tool name when tool selected
 Scheme functions for generating sprite names (from vars & SXML blob)
 Scheme function returning "examine" text
@@ -70,7 +79,7 @@ Automatically create one new world per player, at registration time
 Add an accomplishments table, also player_accomplishments and worldmeta_required_accomplishments (which determines which worlds you can create)
 Add Scheme functions for awarding accomplishments, cash, world creation credits (need to figure out generic but simple reward structure here)
 
-Add (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
+Add integer (x,y) coordinates for each world, and table of inter-world links (or travel radius?)
 Add Galaxy Map view to world info screen; can use this to select neighbors of worlds you control, changing world info view to those neighbors (alternative to selecting via Worlds menu)
 
 Replace current 2D (X*Y) board with 3D slab of height 2 (X*Y*2), allowing for "ground".

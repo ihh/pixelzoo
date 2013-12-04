@@ -24,9 +24,9 @@ Ian Holmes\\
 
 \maketitle
 \begin{abstract}
-A turn-based multiplayer game platform has been developed for mobile devices.
-The platform uses cellular automata to implement models
-from condensed-matter physics, mathematical biology,
+An experimental turn-based multiplayer game framework for mobile devices is described.
+Using cellular automata, the framework implements models
+of condensed-matter physics, mathematical biology,
 and the computational study of artificial life.
 \end{abstract}
 
@@ -43,10 +43,10 @@ build simulation game for mobile devices,
 set in a persistent, multiplayer, computationally-dense world
 using cellular automata ({\em CA}),
 featuring models from
-condensed-matter physics,
+stochastic physics,
 mathematical biology,
  and
-the computational study of Artificial Life ({\em A-Life})
+artificial computational life ({\em A-Life})
 
 Progress report, describing general structure of platform,
 and several models from stochastic biophysics
@@ -66,16 +66,23 @@ and electronic toys or art \cite{RuckerCAPOW,PowderToy}
 Electronic
 \cite{VonNeumannBook,Wireworld}
 
-Biological
+Macro-biological
 \cite{ConwaysLife,Langton1986}
 
 Kinematic
 \cite{Stevens2011}
 
+Genetic algorithms
+\cite{Tierra,Avida}
+
+Core War
+\cite{CoreWarGuidelines84,CoreWarDewdney85,BarkleyWaitSchmidtCoreWar2004}
+
 \subsection{Molecular Evolution Models}
 
 RNA World
 \cite{Woese1967}
+Life within vesicles.  % define 'vesicle', 'micelle'
 
 Synthetic RNA World
 \cite{PaulJoyce2002}
@@ -90,50 +97,82 @@ Protein folding on the lattice. HP model \cite{Dill1985,PandeRokhsar1999}
 
 \section{Simulation}
 
-\subsection{Virtual Machine}
+Architecture of Cellular Automata platform.
+
+\subsection{Low-Level Instruction Set}
 
 Low-level (machine code):
 state machines.
 
-Addressing: local neighborhood.
-Memory structure: bitfields. Fixed amount of dynamic storage, 16 bits given over to a type field that selects from a global program.
-Remaining dynamic storage 48 bits, plus effectively unlimited read-only global storage.
+Synchronized and asynchronous callback.
+Asynchronous guarantees callback with an exponentially-distributed wait time, scaled by particle's update rate.
+Random number generator is Mersenne twister, built into board, and is replayable.
 
-Instruction set that minimally generalizes the concept of the lookup table, to facilitate partial matching of neighborhoods:
-load-add-store, load-switch, load-compare, random-branch.
-(Load and Store allow bitfield access.)
+Addressing: local neighborhood.
+Memory structure: 64 bits of state per cell, plus a pointer to opaque storage (can only be accessed via the supervisor scripting language).
+
+Main 64-bit state divided into bitfields. 16 bits given over to a type field, determining how cell will be updated.
+Remaining 48 bits used as dynamic storage; division into bitfields depends on the type, with some universal restrictions (e.g. bitfields cannot straddle a 32-bit boundary).
+Supplemented by larger amount of read-only global storage (including global program).
+
+The 16-bit type field selects the global program to update the cell and its neighborhood,
+and also specifies a naming and sizing scheme for bitfields associated with that type's use of the dynamic storage in that cell.
+
+The global program for a state machine is a minimal CISC architecture generalizes the concept of the state lookup table, to facilitate partial matching of neighborhoods and bitfields.
+The instruction set for the global program is a recognizable subset of (or easily implemented on) well-known RISC architectures, e.g. ARM\cite{seal00} and virtual game architectures, like Core War's RedCode\cite{CoreWarGuidelines84}.
+The instruction set can also be quickly interpreted or implemented in C, and optimized well by C compilers.
+Such details of the implementation are left opaque by design.
+Code written for the low-level state machine cannot reflect on or modify its own global program.
+
+Instruction set.
+Load and Store allow access to (named) bitfields.
+Load-Compare-Branch.
+Load-Add-Store (this operation also move or destroy the opaque storage).
+Random-Branch (random number generator replayable).
+Load-Switch (can be implemented as a tree of Load-Compare-Branch, or internally as a jump table).
+Goto.
+Execute Scheme function (access restricted).
 
 Control flow: goto, no loops, no gosub. Program is a Directed Acyclic Graph (DAG) of finite maximum length.
 Facilitates analysis and prediction of resource usage---requirements for player-uploaded programs.
 
-In principle do not need indirect addressing: can explicitly enumerate all cases.
-In practice, useful to allow some indirect addressing, to reduce program sizes.
+\subsubsection{Addressing Modes}
+
+Several addressing modes.
+
+Immediate vs register addressing.
+
+Indirect addressing (registers specify cell offset, bitfield sub-address).
+
+In principle do not need indirect or register addressing: can explicitly enumerate all cases via immediate addressing.
+In practice, useful to allow some indirect and register addressing, to reduce program sizes via re-use of subroutine code.
+
+Goto label in neighbor's program: effectively a primitive message delivery mechanism,
+but must be restricted as it can create loops.
+
+\subsubsection{Assembly Language}
 
 Low-level (assembly language):
 Scheme. Generates (assembles) instructions for state machine.
 Large built-in library for replicating patterns over Moore or von Neumann neighborhoods,
 implementing reaction-diffusion models, implementing turtle-type agents, etc.
 
-Observations on model scaling:
-Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
-Only 52k gzipped (still vicious to expand).
-With indirect addressing: down to 127k (gzipped: 3k).
-Scheme generator is 5k (gzipped: 1k).
+\subsection{Higher-Level Functions}
 
+Scheme is used at a higher (supervisory) level for path-finding, goal-satisfaction, and other agent-level scripting by designers.
+S-expression dynamic storage associated with each cell.
 
-Higher-level (path-finding, goal-satisfaction, and other agent-level scripting):
-Scheme. S-expression dynamic storage associated with each cell.
-
-Low-level state machine can move or destroy higher-level S-expression storage, but not copy or increase it.
-The stringent constraints on the low-level state machine mean that it is safe to open up some of the space of programs to the player,
-while maintaining strong performance guarantees on the worst-case simulation rate.
+Low-level state machine can move or destroy higher-level S-expression storage, but not copy or increase it, nor read or modify its contents.
 
 Board:
 Cubic lattice.
 Square slab, $S \times S \times D$.
+Assuming 64-bit architecture (128 bits/cell), requires $16S^2 D$ bytes.
 
+\subsection{Polymer State Machines}
 
-\subsection{Polymers}
+Polymers fundamental to modeling thermodynamically fluctuating enclosures like micelles.
+Also to modeling biological polymers: RNA and proteins.
 
 Doi-Edwards theory \cite{DoiEdwards1988}
 
@@ -147,8 +186,14 @@ A few cases in the explicit automata-theoretic enumeration of polymer diffusion 
 }
 \end{figure}
 
+Observations on model scaling:
+Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
+Only 52k gzipped (still vicious to expand).
+With indirect addressing: down to 127k (gzipped: 3k).
+Scheme generator is 5k (gzipped: 1k).
 
-\subsection{RNA Folding}
+
+\subsection{RNA State Machines}
 
 RNA on a lattice \cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
 
@@ -163,7 +208,7 @@ A sample case in the explicit automata-theoretic enumeration of RNA folding on t
 }
 \end{figure}
 
-\subsection{Agent Patterns}
+\subsection{Agent State Machines}
 
 Tumble-run: {\em E.coli}.
 \cite{RosserEtAl2013}
@@ -203,19 +248,24 @@ Time-limited turns, minimum time between turns, max tool recharge per day.
 
 Multiplayer goal: keep your population alive under attack.
 
-Earn money from your population.
+Earn game-money from your population.
 
 Client: log in/out, browse worlds, pick a world, select terraforming tools...
 
 \subsection{Creating New Tools}
 
-Planned: HTML controls.
+Player can POST XML to server describing new particles and tools
+(with restrictions, e.g. no Scheme code at present, due partly to prohibitions on Turing-complete code transfer by App Store owners).
 
-Spend money creating and using new reaction-diffusion particles and spray-tools.
+Spend game-money creating and using new reaction-diffusion particles and spray-tools.
+
+Earn game-money when others buy your tools.
 
 \subsection{Implementation}
 
 Gnu C, libXML, GDataXML, ChibiScheme, XCode, Catalyst (Perl).
+
+RNA state machines implemented in Java prototype.
 
 \section{Discussion}
 
