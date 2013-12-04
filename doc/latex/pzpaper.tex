@@ -4,9 +4,15 @@
 \begin{document}
 
 \title{Cellular Automata for Artificial Life Games}
-\numberofauthors{1}
+\numberofauthors{2}
 \author{
 % 1st. author
+\alignauthor
+Alan S. Wang\\
+       \affaddr{Department of Bioengineering}\\
+       \affaddr{University of California}\\
+       \affaddr{California, Berkeley}\\
+% 2nd. author
 \alignauthor
 Ian Holmes\\
        \affaddr{Department of Bioengineering}\\
@@ -18,10 +24,10 @@ Ian Holmes\\
 
 \maketitle
 \begin{abstract}
-Experimental turn-based multiplayer on mobile devices,
-using cellular automata to implement models
+A turn-based multiplayer game platform has been developed for mobile devices.
+The platform uses cellular automata to implement a broad range of models
 from condensed-matter physics, mathematical biology,
-and artificial life research
+and artificial life research.
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -33,24 +39,51 @@ and artificial life research
 \section{Introduction}
 
 Goal: 
-build platform for experimental gameplay
-using cellular automata to implement models
-from condensed-matter physics, mathematical biology,
-and Artificial Life ({\em A-Life})
+build simulation game for mobile devices,
+set in a persistent, multiplayer, computationally-dense world
+using cellular automata ({\em CA}),
+featuring models from
+condensed-matter physics,
+mathematical biology,
+ and
+Artificial Life ({\em A-Life})
+
+Progress report, describing general structure of platform,
+and several models including a simulation of RNA folding kinetics.
 
 \subsection{Cellular Automata}
 
+CA as a platform for stochastic condensed-matter physics and biophysics
 \cite{Schiff2007}
+
+CA as a general platform for games
+\cite{SimCity,DwarfFortress,Minecraft}
+and electronic toys or art \cite{RuckerCAPOW,PowderToy}
 
 \subsection{Artificial Life Models}
 
-\cite{VonNeumannBook}
+Electronic
+\cite{VonNeumannBook,Wireworld}
 
-\cite{Conway}
+Biological
+\cite{ConwaysLife,Langton1986}
 
-\cite{Wireworld}
+Kinematic
+\cite{Stevens2011}
 
-\cite{Langton}
+\subsection{RNA Folding Models}
+
+RNA World
+\cite{Woese1967}
+
+Synthetic RNA World
+\cite{PaulJoyce2002}
+
+RNA ALife
+\cite{journals/alife/Schuster94}
+
+RNA Folding on Lattice
+\cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
 
 \section{Simulation}
 
@@ -68,8 +101,12 @@ Scheme. Generates (assembles) instructions for state machine.
 Large built-in library for replicating patterns over Moore or von Neumann neighborhoods,
 implementing reaction-diffusion models, implementing turtle-type agents, etc.
 
-Higher-level (complex agent scripting):
-Scheme. S-expression dynamic storage.
+Higher-level (path-finding, goal-satisfaction, and other agent-level scripting):
+Scheme. S-expression dynamic storage associated with each cell.
+
+Low-level state machine can move or destroy higher-level S-expression storage, but not copy or increase it.
+The stringent constraints on the low-level state machine mean that it is safe to open up the space of programs to the user,
+while maintaining strong performance guarantees on the worst-case simulation rate.
 
 Board:
 Cubic lattice.
@@ -78,7 +115,7 @@ Square slab, $S \times S \times D$.
 
 \subsection{Polymers}
 
-\cite{DoiEdwards}
+Doi-Edwards theory \cite{DoiEdwards1988}
 
 As shown in Figure~\ref{fig:polymer}.
 
@@ -93,7 +130,7 @@ A few cases in the explicit automata-theoretic enumeration of polymer diffusion.
 
 \subsection{RNA Folding}
 
-\cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
+RNA on a lattice \cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
 
 
 As shown in Figure~\ref{fig:rna}.
@@ -106,25 +143,29 @@ A sample case in the explicit automata-theoretic enumeration of RNA folding.
 }
 \end{figure}
 
-\cite{Durbin98}
+Protein folding \cite{PandeRokhsar1999}
 
 \subsection{Agent Patterns}
 
-Tumble-swim: {\em E.coli}.
-\cite{EcoliTumbleRoll}
+Tumble-run: {\em E.coli}.
+\cite{RosserEtAl2013}
 
-Sudoku ant: push obstacle a random number of blocks before changing direction.
-\cite{AntBehaviorNature}
+%Sudoku ant: push obstacle a random number of blocks before changing direction.
+%\cite{AntBehaviorNature}
 
 Reaction-diffusion.
 Directed diffusion.
 Diffusion-limited aggregation.
 \cite{DLA}
 
-Lotka-Volterra (predator-prey) \cite{LotkaVolterra,SpatialLotkaVolterra}. RPS.
-Ecosystem stability \cite{Quince}.
+Two-dimensional square-lattice Ising model \cite{Onsager1944}.
 
-Population dynamics. \cite{WrightFisher}
+Lotka-Volterra (predator-prey) \cite{LotkaVolterra,SpatialLotkaVolterra}.
+Rock-paper-scissors games in ecology \cite{Tainaka2000}.
+
+Ecosystem balancing and stability of food webs \cite{quince2005topological}.
+
+Population dynamics and spatial versions of the Wright-Fisher model \cite{MathiesonMcVean2013}.
 
 \section{Game Design}
 
@@ -134,7 +175,8 @@ Isometric PAINT with live pixels.
 
 Game goal: maintain dynamic equilibrium between three RPS species within a vesicle.
 
-Multiplayer operation: RESTful server \cite{RESTthesis}, post lock, check board out/in.
+Multiplayer implementation: RESTful server \cite{rest}.
+Post lock, check board out/in.
 
 Time-limited turns, minimum time between turns, max tool recharge per day.
 
