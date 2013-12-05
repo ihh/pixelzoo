@@ -135,28 +135,29 @@ The instructions can be quickly interpreted from or implemented in C, and will b
 Such details of the implementation are left opaque by design.
 Code written for the low-level state machine cannot reflect on or modify its own global program.
 
-{\bf INSTRUCTION SET} The following minimalistic operations may be easily interpreted
-or compiled to C (using {\tt switch}, {\tt if}, {\tt goto})
-or directly to a RISC instruction set like ARM\cite{seal00}
-(using {\bf LDR}, {\bf STR}, {\bf ADD}, {\bf SUB}, {\bf B}).
-Operands and bitfield addresses may be specified as literal constants (immediate addressing mode), or by registers (indirect addressing mode).
-The available instructions are
+{\bf INSTRUCTION SET}
+The following minimalistic operations were designed with the goal of fast simulation of particles and polymers
+(the latter represented as bidirectionally linked lists on the square lattice).
+Aside from the calls to Scheme, the core state-machine instruction set may be easily interpreted or compiled to C (via {\tt switch}, {\tt if}, {\tt goto}, and integer arithmetic)
+or directly to a RISC instruction set like ARM\cite{seal00} (via {\bf LDR}/{\bf STR} (load/store registers), {\bf ADD}/{\bf SUB}tract, and {\bf B}ranch).
+Operands and bitfield addresses are specified as literal constants (immediate addressing mode), or by registers (indirect addressing mode).
+The core instructions are
 \\
-{\bf Load-Add-Store} This operation encapsulates writes: loads a value from a source bitfield address, adds an operand to it, stores result in a destination bitfield address. Can optionally move or destroy the opaque storage.
+{\bf Load-Add-Store} (loads value from local source bitfield address, adds an operand, and stores the result in local destination bitfield address: can optionally move or destroy the opaque S-expression storage),
 \\
-{\bf Load-Compare-Branch} This op encapsulates memory reads. Reads from a local bitfield address, compares value to an operand, branches conditionally based on comparison.
+{\bf Load-Compare-Branch} (reads value from local bitfield address, compares to operand, branches conditionally based on comparison),
 \\
-{\bf Load-Switch} Analogous to C's {\tt switch}: loads a bitfield from memory, dispatches based on value. Can be implemented using {\bf Load-Compare-Branch}, or a jump table.
+{\bf Load-Switch} (analogous to C's {\tt switch}: reads local bitfield address, dispatches based on value. Can be implemented using {\bf Load-Compare-Branch}, or a jump table),
 \\
-{\bf Load-Register} Places a numeric constant into a temporary register. Used in combination with indirect addressing modes of other instructions.
+{\bf Load-Register} (places a numeric constant into a temporary read-only ``register''. Used in combination with indirect addressing modes of other instructions),
 \\
-{\bf Branch-Goto} Forward-branch to labeled routine.
+{\bf Branch-Goto} (forward-branch to labeled routine in global program),
 \\
-{\bf Branch-Random} Forward-branch conditional on a bit from the random number generator.
+{\bf Branch-Random} (forward-branch conditional on a bit from the random number generator),
 \\
-{\bf Branch-Neighbor} Branch to labeled entry point in neighbor's program (restricted to supervisor).
+{\bf Branch-Neighbor} (deliver control to labeled entry point in local neighbor's global program),
 \\
-{\bf Call-Script} calls a Scheme function (restricted to supervisor).
+{\bf Call-Script} (calls arbitrary Scheme function; restricted to supervisor).
 
 Control flow is monotonic: goto is one-way, there is no stack, no gosub or return keywords.
 Branches always go forward, so loops are explicitly prohibited.
@@ -198,7 +199,7 @@ Scheme functions can be invoked dynamically by the virtual state machine for hig
 These features are restricted to game designers.
 
 An optional S-expression can be associated with any cell for dynamic storage associated with the agent scripts.
-This storage is opaque to state machine: there is one instruction ({\bf Load-Add-Store}) that, when rewriting the type field, is allowed to destroy the S-expression associated with a cell, or it can move it to a neighboring cell.
+This storage is opaque to the state machine: there is one instruction ({\bf Load-Add-Store}) that, when rewriting the type field, is allowed to destroy the S-expression associated with a cell, or it can move it to a neighboring cell.
 Other than this, the low-level machine may not copy, create, read or modify cell S-expressions.
 In contrast, the Scheme supervisor has access to the state machine environment, board API, and multiplayer client API.
 
