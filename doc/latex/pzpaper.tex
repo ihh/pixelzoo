@@ -227,12 +227,12 @@ Total 60 neighborhood configurations.
 
 Number of states, theoretical.
 
-Real-world implementation.
+Actual implementation requires several steps (e.g. verify bond integrities, check target cell is clear).
 Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
 Only 52k gzipped (still vicious to expand).
 With indirect addressing: down to 127k (gzipped: 3k).
-Scheme generator is 5k (gzipped: 1k).
-
+Using Scheme generator: 5k (gzipped: 1k).
+Thus Scheme assembler is, first and foremost, a straightforward compression strategy.
 
 \subsection{RNA State Machines}
 
