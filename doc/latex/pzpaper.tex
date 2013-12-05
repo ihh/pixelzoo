@@ -80,11 +80,13 @@ Core War
 
 \subsection{Molecular Evolution Models}
 
-RNA World
-\cite{Woese1967}
-Life within vesicles.  % define 'vesicle', 'micelle'
+One of the best-studied models of the origin of life is the ``RNA World''
+\cite{Woese1967}.
+Life within vesicles, or concentrated in favorable environments such as hydrothermal vents.  % define 'vesicle', 'micelle'
+Spatial concentration of polymer information tapes whose chemistry naturally favors self-replication.
+Micelles.
 
-Synthetic RNA World
+Synthetic RNA World systems
 \cite{PaulJoyce2002}
 
 RNA A-Life
@@ -97,9 +99,17 @@ Protein folding on the lattice. HP model \cite{Dill1985,PandeRokhsar1999}
 
 \section{Simulation}
 
-Architecture of Cellular Automata platform.
+Pixel Zoo.
+Architecture of underlying Cellular Automata platform, called ``Zoo Gas''.
 
-\subsection{Low-Level Instruction Set}
+Board:
+Square slab of cubic lattice, dimensions $S \times S \times D$.
+Assuming 64-bit architecture (upper limit of 128 bits/cell, ignoring rare scripted agent cells), requires $16S^2 D$ bytes.
+
+General idea is to expose a low-level fast machine for majority usage during play,
+with high-level functional language (Scheme) available for occasional in-game scripting usage.
+
+\subsection{Low-Level Virtual State Machine}
 
 Low-level (machine code):
 state machines.
@@ -118,37 +128,42 @@ Supplemented by larger amount of read-only global storage (including global prog
 The 16-bit type field selects the global program to update the cell and its neighborhood,
 and also specifies a naming and sizing scheme for bitfields associated with that type's use of the dynamic storage in that cell.
 
-The global program for a state machine mimics an ultra-minimal subset of a typical CISC architecture, generalizing the concept of the state lookup table to facilitate partial matching and rewriting of local bitfields.
-The instruction set for the global program is a recognizable subset of (or easily implemented on) well-known RISC architectures, e.g. ARM\cite{seal00} and virtual game architectures, like Core War's RedCode\cite{CoreWarGuidelines84}.
-The instruction set can also be quickly interpreted or implemented in C, and optimized well by C compilers.
+The global program for a state machine generalizes the concept of the state lookup table to facilitate partial matching and rewriting of bitfields in the local lattice neighborhood.
+The virtual machine resembles an ultra-minimal subset of a typical CISC register-machine architecture.
+The instruction set is low-level, recognizably close to ARM\cite{seal00} and not too far from Core War's RedCode\cite{CoreWarGuidelines84}.
+The instructions can be quickly interpreted from or implemented in C, and will be optimized reasonably well by C compilers.
 Such details of the implementation are left opaque by design.
 Code written for the low-level state machine cannot reflect on or modify its own global program.
 
-Instruction set.
-Load and Store allow access to bitfields (i.e. masking, shifting and bit-twiddling appropriately).
-\\
-{\bf Load-Compare-Branch} This operation encapsulates memory reads. Reads from a local bitfield address, compares value to an operand, executes different code based on the result.
+{\bf INSTRUCTION SET} The following minimalistic operations may be easily interpreted
+or compiled to C (using {\tt switch}, {\tt if}, {\tt goto})
+or directly to a RISC instruction set like ARM\cite{seal00}
+(using {\bf LDR}, {\bf STR}, {\bf ADD}, {\bf SUB}, {\bf B}).
+Operands and bitfield addresses may be specified as literal constants (immediate addressing mode), or by registers (indirect addressing mode).
+The available instructions are
 \\
 {\bf Load-Add-Store} This operation encapsulates writes: loads a value from a source bitfield address, adds an operand to it, stores result in a destination bitfield address. Can optionally move or destroy the opaque storage.
 \\
-{\bf Random-Branch} Branches with some random probability. Random number generator replayable.
+{\bf Load-Compare-Branch} This op encapsulates memory reads. Reads from a local bitfield address, compares value to an operand, branches conditionally based on comparison.
 \\
-{\bf Load-Switch} Analogous to C's {\tt switch} instruction: loads a bitfield from memory, and executes code based on the result. Can be internally implemented using Load-Compare-Branch, or a jump table.
+{\bf Load-Switch} Analogous to C's {\tt switch}: loads a bitfield from memory, dispatches based on value. Can be implemented using {\bf Load-Compare-Branch}, or a jump table.
 \\
-{\bf Load-Register} Places a numeric constant into a register. Used in combination with indirect addressing modes of other instructions.
+{\bf Load-Register} Places a numeric constant into a temporary register. Used in combination with indirect addressing modes of other instructions.
 \\
-{\bf Goto} Forward-branch to labeled routine (no backward loops).
+{\bf Branch-Goto} Forward-branch to labeled routine.
 \\
-{\bf Goto-Neighbor} Branch to labeled entry point in neighbor's program (restricted to supervisor).
+{\bf Branch-Random} Forward-branch conditional on a bit from the random number generator.
 \\
-{\bf Execute Scheme function} (restricted to supervisor).
+{\bf Branch-Neighbor} Branch to labeled entry point in neighbor's program (restricted to supervisor).
+\\
+{\bf Call-Script} calls a Scheme function (restricted to supervisor).
 
-Control flow: goto, no stack, no gosub or return.
-Branches always go one way, so loops explicitly prohibited.
-Program is a Directed Acyclic Graph (DAG) of finite determinable length.
-Easy for server to analyze player-designed programs and maintain strong performance guarantees.
-Enough flexibility for players to implement novel material properties,
-as well as more sophisticated computational behaviors in the context of the grid (e.g. Turing machines, Langton ants, Wireworld-type circuits, etc.).
+Control flow is monotonic: goto is one-way, there is no stack, no gosub or return keywords.
+Branches always go forward, so loops are explicitly prohibited.
+Any program is a Directed Acyclic Graph (DAG) of finite determinable length.
+It is easy for a server to analyze player-designed programs and maintain strong performance guarantees.
+There is enough flexibility for players to implement novel material properties in the CA,
+as well as more sophisticated computational behaviors (e.g. Turing machines, Langton ants, Wireworld-type circuits).
 
 \subsubsection{Addressing Modes}
 
@@ -162,34 +177,39 @@ In principle do not need indirect or register addressing: can explicitly enumera
 In practice, useful to allow some indirect and register addressing, to reduce program sizes via re-use of subroutine code.
 
 Indirect addressing (code execution).
-Goto label in neighbor's program: effectively a primitive message delivery mechanism.
+{\bf Branch-neighbor}: effectively a primitive message delivery mechanism.
 Must be restricted as it can create loops.
 
 \subsubsection{Assembly Language}
 
 Low-level (assembly language):
 Scheme. Generates (assembles) instructions for state machine.
+
 Large built-in library for replicating patterns over Moore or von Neumann neighborhoods,
 implementing reaction-diffusion models, implementing turtle-type agents, etc.
 
+Selected functions from this library are exposed to the player,
+to facilitate game design (e.g. diffusions, turtles) and reduce program sizes.
+
 \subsection{Higher-Level Functions}
 
-Scheme is used at a higher (supervisory) level for path-finding, goal-satisfaction, and other agent-level scripting by designers.
-S-expression dynamic storage associated with each cell.
+As well as being used at assembly time to specify macros,
+Scheme functions can be invoked dynamically by the virtual state machine for higher (supervisory-level) functions involving path-finding, goal-satisfaction, and other agent- and game-level scripting.
+These features are restricted to game designers.
 
-Low-level state machine can move or destroy higher-level S-expression storage, but not copy or increase it, nor read or modify its contents.
+An optional S-expression can be associated with any cell for dynamic storage associated with the agent scripts.
+This storage is opaque to state machine: there is one instruction ({\bf Load-Add-Store}) that, when rewriting the type field, is allowed to destroy the S-expression associated with a cell, or it can move it to a neighboring cell.
+Other than this, the low-level machine may not copy, create, read or modify cell S-expressions.
+In contrast, the Scheme supervisor has access to the state machine environment, board API, and multiplayer client API.
 
-Board:
-Cubic lattice.
-Square slab, $S \times S \times D$.
-Assuming 64-bit architecture (128 bits/cell), requires $16S^2 D$ bytes.
+The polymers, RNA molecules, and other models described here (including ``Agent State Machines'') do not require Scheme scripting, only Scheme assembly language generation (which is a one-time cost).
 
 \subsection{Polymer State Machines}
 
 Polymers fundamental to modeling thermodynamically fluctuating enclosures like micelles.
 Also to modeling biological polymers: RNA and proteins.
 
-Doi-Edwards theory \cite{DoiEdwards1988}
+Theoretical physics \cite{DoiEdwards1988} and CA simulation of polymers \cite{PhysRevLett.64.1915,journals/pc/OstrovskyCSB01}
 
 As shown in Figure~\ref{fig:polymer}.
 
@@ -201,7 +221,9 @@ A few cases in the explicit automata-theoretic enumeration of polymer diffusion 
 }
 \end{figure}
 
-Observations on model scaling:
+Number of states, theoretical.
+
+Real-world implementation.
 Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
 Only 52k gzipped (still vicious to expand).
 With indirect addressing: down to 127k (gzipped: 3k).
@@ -223,9 +245,12 @@ A sample case in the explicit automata-theoretic enumeration of RNA folding on t
 }
 \end{figure}
 
+Number of states, theoretical.
+
+
 \subsection{Agent State Machines}
 
-Various agent models from above molecular length scale, used in game design.
+Pixel Zoo also implements various agent models from above molecular length scale, used in game design.
 
 Tumble-run: {\em E.coli}.
 \cite{RosserEtAl2013}
@@ -248,6 +273,11 @@ Ecosystem balancing and stability of food webs \cite{quince2005topological}.
 Forest fires \cite{Karafyllidis1997}.
 
 Population dynamics and spatial versions of the Wright-Fisher model \cite{MathiesonMcVean2013}.
+
+\subsection{Rendering}
+
+Isometric view.
+Sprites, tiles.
 
 \section{Game Design}
 
