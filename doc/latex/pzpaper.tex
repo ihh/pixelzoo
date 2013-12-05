@@ -105,6 +105,7 @@ Architecture of underlying Cellular Automata platform, called ``Zoo Gas''.
 Board:
 Square slab of cubic lattice, dimensions $S \times S \times D$.
 Assuming 64-bit architecture (upper limit of 128 bits/cell, ignoring rare scripted agent cells), requires $16S^2 D$ bytes.
+Generally restrict operations to a 2D slice, e.g. $D=1$.
 
 General idea is to expose a low-level fast machine for majority usage during play,
 with high-level functional language (Scheme) available for occasional in-game scripting usage.
@@ -218,7 +219,9 @@ As shown in Figure~\ref{fig:polymer}.
 \fbox{\includegraphics[width=\columnwidth]{Polymer.png}}
 \caption{
 \label{fig:polymer}
-A few cases in the explicit automata-theoretic enumeration of polymer diffusion on the square lattice.
+Configurations of upstream (brown) and downstream (orange) neighbors adjacent to a central cell (purple) and a mutually-adjacent neighbor (green) on a 2D lattice.
+Numbers indicate the degeneracy of each configuration (via rotations and reflection).
+Total 60 neighborhood configurations.
 }
 \end{figure}
 
@@ -242,7 +245,12 @@ As shown in Figure~\ref{fig:rna}.
 \fbox{\includegraphics[width=\columnwidth]{RNA.png}}
 \caption{
 \label{fig:rna}
-A sample case in the explicit automata-theoretic enumeration of RNA folding on the square lattice.
+RNA basepair models require up to 4 bond directions and two base values to be stored in each cell.
+The full range of bond configurations can be encoded in 16 bits/cell on the 2D lattice (23 bits/cell on the 3D lattice).
+In practice it is convenient, albeit slightly more wasteful of bits,
+to use distinct bitfields to encode the bond directions, presence/absence flags, and bases.
+This requires 21 bits/cell on the 2D lattice, and 25 bits/cell on the 3D lattice.
+Activated phosphorylation states for each base can be recorded with another 2-4 bits.
 }
 \end{figure}
 
