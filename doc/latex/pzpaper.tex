@@ -38,157 +38,142 @@ and the computational study of artificial life.
 
 \section{Introduction}
 
-Goal: 
-build simulation game for mobile devices,
-set in a persistent, multiplayer, computationally-dense world
-using cellular automata ({\em CA}),
-featuring models from
-stochastic physics,
-mathematical biology,
- and
-artificial computational life ({\em A-Life})
+Cellular automata ({\em CA}) are a versatile platform for a wide
+range of models from physics, biology and chemistry\cite{Schiff2007}.
+They are also widely employed in the study of artificial computational life ({\em A-Life}).
+CAs have supported diverse A-Life designs,
+whether inspired by electronic circuits\cite{VonNeumannBook,Wireworld},
+cells, insects, or other macro-biological systems\cite{ConwaysLife,Langton1986},
+or kinematic systems\cite{Stevens2011}.
 
-Progress report, describing general structure of platform,
-and several models from stochastic biophysics
-including simulations of polymer and RNA folding kinetics.
+Another type of A-Life involves code that is placed under direct pressure to evolve.
+The ancestor of all these is the competitive programming game CoreWar
+\cite{CoreWarGuidelines84,BarkleyWaitSchmidtCoreWar2004}.
+Successors Tierra\cite{Tierra} and Avida\cite{Avida} more directly investigate the
+behavior of genetic algorithms.
 
-\subsection{Cellular Automata}
+With the goal of investigating systems such as this and developing associated game mechanics,
+the PixelZoo game engine has been designed to support
+a persistent, multiplayer, computationally-dense world using CA.
+This paper reviews the design and progress of PixelZoo,
+including implementation of several biophysically-inspired models
+simulating polymer and RNA folding kinetics.
 
-CA as a platform for stochastic condensed-matter physics and biophysics
-\cite{Schiff2007}
-
-CA as a general platform for games
-\cite{SimCity,DwarfFortress,Minecraft}
-and electronic toys or art \cite{RuckerCAPOW,PowderToy}
-
-\subsection{Artificial Life Models}
-
-Electronic
-\cite{VonNeumannBook,Wireworld}
-
-Macro-biological
-\cite{ConwaysLife,Langton1986}
-
-Kinematic
-\cite{Stevens2011}
-
-Genetic algorithms
-\cite{Tierra,Avida}
-
-Core War
-\cite{CoreWarGuidelines84,CoreWarDewdney85,BarkleyWaitSchmidtCoreWar2004}
+CAs have been used as game devices before,
+as in Sim City, %\cite{SimCity},
+Dwarf Fortress, %\cite{DwarfFortress},
+and Minecraft. %\cite{Minecraft}.
+They have also been used in software toys and art such as
+PowderToy %\cite{PowderToy}
+and CAPOW. %\cite{RuckerCAPOW}.
+There are many freely available engines to simulate various kinds of CA, such as Golly. %\cite{Golly}.
+In relation to such prior efforts, PixelZoo
+(i) is more focused on molecular biophysics and evolution,
+(ii) is intended to be a game rather than a simulator.
 
 \subsection{Molecular Evolution Models}
 
-One of the best-studied models of the origin of life is the ``RNA World''
-\cite{Woese1967}.
-Life within vesicles, or concentrated in favorable environments such as hydrothermal vents.  % define 'vesicle', 'micelle'
-Spatial concentration of polymer information tapes whose chemistry naturally favors self-replication.
-Micelles.
+One of the best-studied models of the origin of life is the ``RNA World'' hypothesis,
+which posits that RNA molecules were the first self-replicating entities\cite{Woese1967}.
+The chemistry of RNA naturally favors self-replication under favorable conditions,
+such as spatial concentration of the necessary ingredients.
+Early life has been conjectured to involve concentration of RNA precursors within {\em micelles}:
+essentially, spontaneously-forming bubbles of amphiphilic (detergent) molecules.
 
-Synthetic RNA World systems
-\cite{PaulJoyce2002}
-
-RNA A-Life
-\cite{journals/alife/Schuster94}
-
-RNA Folding on Lattice
-\cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
-
-Protein folding on the lattice. HP model \cite{Dill1985,PandeRokhsar1999}
+Testing hypotheses about the distant past is difficult, but synthetic life experiments
+have lent plausibility to the RNA World\cite{PaulJoyce2002}.
+RNA has been discussed in the context of A-Life models\cite{journals/alife/Schuster94}.
+Biophysicists have devoted considerable attention to CA-like lattice models of RNA folding
+\cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009},
+following earlier studies of protein folding on the lattice \cite{Dill1985,PandeRokhsar1999}.
 
 \section{Simulation}
 
-Pixel Zoo.
-Architecture of underlying Cellular Automata platform, called ``Zoo Gas''.
+The PixelZoo board is
+an $S \times S \times D$ slab of the cubic lattice,
+requiring $16S^2 D$ bytes on a 64-bit architecture (128 bits/cell),
+plus any Scheme programs that are attached.
+Gameplay is generally restricted to a thin 2D slab, with low $D$ (e.g. $D=1$).
 
-Board:
-Square slab of cubic lattice, dimensions $S \times S \times D$.
-Assuming 64-bit architecture (upper limit of 128 bits/cell, ignoring rare scripted agent cells), requires $16S^2 D$ bytes.
-Generally restrict operations to a 2D slice, e.g. $D=1$.
-
-General idea is to expose a low-level fast machine for majority usage during play,
-with high-level functional language (Scheme) available for occasional in-game scripting usage.
+The overall idea is to expose a fast low-level state machine for majority usage during play,
+with a high-level functional language (Scheme) available for occasional in-game scripting usage.
 
 \subsection{Low-Level Virtual State Machine}
 
-Low-level (machine code):
-state machines.
+The low-level state machine supports two alternatives for periodic updates:
+synchronous (fixed time interval between calls)
+and asynchronous (exponentially-distributed time between calls, scaled by particle's update rate).
+The random number generator is a Mersenne twister, and supports replay.
 
-Synchronized and asynchronous callback.
-Asynchronous guarantees callback with an exponentially-distributed wait time, scaled by particle's update rate.
-Random number generator is Mersenne twister, built into board, and is replayable.
+Cells can address their local neighborhood.
+There are 64 bits of state per cell,
+plus a pointer to opaque storage that can only be accessed via the higher-level scripting language.
 
-Addressing: local neighborhood.
-Memory structure: 64 bits of state per cell, plus a pointer to opaque storage (can only be accessed via the supervisor scripting language).
-
-Main 64-bit state divided into bitfields. 16 bits given over to a type field, determining how cell will be updated.
-Remaining 48 bits used as dynamic storage; division into bitfields depends on the type, with some universal restrictions (e.g. bitfields cannot straddle a 32-bit boundary).
-Supplemented by larger amount of read-only global storage (including global program).
+The 64 bits of state are divided into bitfields.
+16 bits are given over to a type field, determining how the cell will be updated.
+The remaining 48 bits are used as dynamic storage; the division into bitfields depends on the type,
+with some universal restrictions (e.g. bitfields cannot straddle a 32-bit boundary).
 
 The 16-bit type field selects the global program to update the cell and its neighborhood,
-and also specifies a naming and sizing scheme for bitfields associated with that type's use of the dynamic storage in that cell.
+and specifies the naming and sizing scheme for dynamic bitfields.
 
 The global program for a state machine generalizes the concept of the state lookup table to facilitate partial matching and rewriting of bitfields in the local lattice neighborhood.
 The virtual machine resembles an ultra-minimal subset of a typical CISC register-machine architecture.
-The instruction set is low-level, recognizably close to ARM\cite{seal00} and not too far from Core War's RedCode\cite{CoreWarGuidelines84}.
+The instruction set is low-level, recognizably close to ARM\cite{seal00} and not too far from CoreWar's RedCode\cite{CoreWarGuidelines84}.
 The instructions can be quickly interpreted from or implemented in C, and will be optimized reasonably well by C compilers.
 Such details of the implementation are left opaque by design.
 Code written for the low-level state machine cannot reflect on or modify its own global program.
 
-{\bf INSTRUCTION SET}
-The following minimalistic operations were designed with the goal of fast simulation of particles and polymers
-(the latter represented as bidirectionally linked lists on the square lattice).
+{\bf INSTRUCTION SET.}
+The following minimalistic operations were designed with the goal of fast simulation of particles and polymers.
 Aside from the calls to Scheme, the core state-machine instruction set may be easily interpreted or compiled to C (via {\tt switch}, {\tt if}, {\tt goto}, and integer arithmetic)
 or directly to a RISC instruction set like ARM\cite{seal00} (via {\bf LDR}/{\bf STR} (load/store registers), {\bf ADD}/{\bf SUB}tract, and {\bf B}ranch).
-Operands and bitfield addresses are specified as literal constants (immediate addressing mode), or by registers (indirect addressing mode).
 The core instructions are
 \\
 {\bf Load-Add-Store} (loads value from local source bitfield address, adds an operand, and stores the result in local destination bitfield address: can optionally move or destroy the opaque S-expression storage),
 \\
-{\bf Load-Compare-Branch} (reads value from local bitfield address, compares to operand, branches conditionally based on comparison),
+{\bf Load-Compare-Branch} (reads value from local bitfield address, compares to operand, branches conditionally),
 \\
-{\bf Load-Switch} (analogous to C's {\tt switch}: reads local bitfield address, dispatches based on value. Can be implemented using {\bf Load-Compare-Branch}, or a jump table),
+{\bf Load-Switch} (analogous to C's {\tt switch}: reads local bitfield address, dispatches based on value),
 \\
 {\bf Load-Register} (places a numeric constant into a temporary read-only ``register''. Used in combination with indirect addressing modes of other instructions),
 \\
-{\bf Branch-Goto} (forward-branch to labeled routine in global program),
+{\bf Branch-Goto} (forward-branch to labeled routine),
 \\
-{\bf Branch-Random} (forward-branch conditional on a bit from the random number generator),
+{\bf Branch-Random} (branch conditional on random bit),
 \\
-{\bf Branch-Neighbor} (deliver control to labeled entry point in local neighbor's global program),
+{\bf Branch-Neighbor} (yield control to neighbor's program),
 \\
-{\bf Call-Script} (calls arbitrary Scheme function; restricted to supervisor).
+{\bf Call-Script} (yield to arbitrary Scheme function).
 
-Control flow is monotonic: goto is one-way, there is no stack, no gosub or return keywords.
+Control flow is monotonic: there is no stack, and no gosub or return keywords.
 Branches always go forward, so loops are explicitly prohibited.
 Any program is a Directed Acyclic Graph (DAG) of finite determinable length.
-It is easy for a server to analyze player-designed programs and maintain strong performance guarantees.
+It is thus easy for a server to analyze player-designed programs and maintain strong performance guarantees.
 There is enough flexibility for players to implement novel material properties in the CA,
 as well as more sophisticated computational behaviors (e.g. Turing machines, Langton ants, Wireworld-type circuits).
 
 \subsubsection{Addressing Modes}
 
-Several addressing modes for memory locations and operands.
+The machine supports several addressing modes for memory locations and operands.
+{\em Immediate operands} allows specification of constants within the code,
+while {\em register operands} allows these constants to be loaded into registers first (enabling some code re-use).
 
-Immediate vs register addressing (operands).
+Similarly, {\em direct addressing} allows cell and bitfield addresses to be hardwired into the code,
+while {\em indirect addressing} allows these addresses to be specified by registers.
 
-Indirect addressing (memory access). Registers specify cell offset, bitfield sub-address.
-
-In principle do not need indirect or register addressing: can explicitly enumerate all cases via immediate addressing.
-In practice, useful to allow some indirect and register addressing, to reduce program sizes via re-use of subroutine code.
-
-Indirect addressing (code execution).
-{\bf Branch-neighbor}: effectively a primitive message delivery mechanism.
-Must be restricted as it can create loops.
+In principle, indirect or register addressing are not necessary to implement polymers:
+we can explicitly enumerate all cases via immediate and direct addressing.
+In practice, it's useful to allow some indirect/register addressing, to reduce program sizes via re-use of subroutine code.
 
 \subsubsection{Assembly Language}
 
-Low-level (assembly language):
-Scheme. Generates (assembles) instructions for state machine.
+The virtual machine may be programmed directly in XML, but this XML is more usually generated using
+a Scheme-based assembly language.
 
-Large built-in library for replicating patterns over Moore or von Neumann neighborhoods,
-implementing reaction-diffusion models, implementing turtle-type agents, etc.
+The assembler has a built-in library for programming CAs on the square lattice:
+replicating patterns over Moore or von Neumann neighborhoods,
+implementing reaction-diffusion models, implementing turtle-type agents, and so on.
 
 Selected functions from this library are exposed to the player,
 to facilitate game design (e.g. diffusions, turtles) and reduce program sizes.
@@ -196,24 +181,30 @@ to facilitate game design (e.g. diffusions, turtles) and reduce program sizes.
 \subsection{Higher-Level Functions}
 
 As well as being used at assembly time to specify macros,
-Scheme functions can be invoked dynamically by the virtual state machine for higher (supervisory-level) functions involving path-finding, goal-satisfaction, and other agent- and game-level scripting.
+Scheme functions can be invoked dynamically by {\bf Call-Script} instruction
+for higher (supervisory-level) functions involving path-finding, goal-satisfaction, and other agent- and game-level scripting.
 These features are restricted to game designers.
 
 An optional S-expression can be associated with any cell for dynamic storage associated with the agent scripts.
-This storage is opaque to the state machine: there is one instruction ({\bf Load-Add-Store}) that, when rewriting the type field, is allowed to destroy the S-expression associated with a cell, or it can move it to a neighboring cell.
+This storage is opaque to the state machine: there is one instruction ({\bf Load-Add-Store}) that, when rewriting the type field, is allowed to relocate or destroy the S-expression associated with a cell.
 Other than this, the low-level machine may not copy, create, read or modify cell S-expressions.
 In contrast, the Scheme supervisor has access to the state machine environment, board API, and multiplayer client API.
 
-The polymers, RNA molecules, and other models described here (including ``Agent State Machines'') do not require Scheme scripting, only Scheme assembly language generation (which is a one-time cost).
+The polymers, RNA molecules, and other models described here
+ (Sections~\ref{sec:PolymerStateMachines} through~\ref{sec:AgentStateMachines})
+ do not require Scheme scripting, only Scheme assembly language generation (which is a one-time cost).
 
 \subsection{Polymer State Machines}
+\label{sec:PolymerStateMachines}
 
-Polymers fundamental to modeling thermodynamically fluctuating enclosures like micelles.
-Also to modeling biological polymers: RNA and proteins.
+The fundamental biological molecules (DNA, RNA and proteins) are all polymers.
+In 2D, closed-loop polymers can also represent thermodynamically fluctuating enclosures like micelles.
 
-Theoretical physics \cite{DoiEdwards1988} and CA simulation of polymers \cite{PhysRevLett.64.1915,journals/pc/OstrovskyCSB01}
-
-As shown in Figure~\ref{fig:polymer}.
+Drawing on the stochastic physics of polymers \cite{DoiEdwards1988}
+and their simulation on lattices \cite{PhysRevLett.64.1915,journals/pc/OstrovskyCSB01},
+PixelZoo uses a bidirectionally-linked list model.
+The possible configurations of a cell, its neighbors, and adjacent empty spaces must
+be explicitly enumerated, as shown in Figure~\ref{fig:polymer}.
 
 \begin{figure}
 \fbox{\includegraphics[width=\columnwidth]{Polymer.png}}
@@ -221,113 +212,107 @@ As shown in Figure~\ref{fig:polymer}.
 \label{fig:polymer}
 Configurations of upstream (brown) and downstream (orange) neighbors adjacent to a central cell (purple) and a mutually-adjacent neighbor (green) on a 2D lattice.
 Numbers indicate the degeneracy of each configuration (via rotations and reflection).
-Total 60 neighborhood configurations.
+There are 60 configurations in total.
 }
 \end{figure}
 
-Number of states, theoretical.
-
-Actual implementation requires several steps (e.g. verify bond integrities, check target cell is clear).
-Lookup/modify, no indirect addressing (closest thing to state tables): 2.3Mb.
-Only 52k gzipped (still vicious to expand).
-With indirect addressing: down to 127k (gzipped: 3k).
-Using Scheme generator: 5k (gzipped: 1k).
-Thus Scheme assembler is, first and foremost, a straightforward compression strategy.
+The implementation of each case requires several steps (including verifying the bidirectional bond integrities,
+and checking the target cell is empty).
+To illustrate the need for some of the ``frills'' in the core CA
+(specifically indirect addressing and a Scheme-based assembler),
+we observe that when using {\bf Load-Switch} and {\bf Load-Add-Store}
+with no indirect addressing (the closest thing to lookup tables), the program XML was 2.3Mb (52k gzipped).
+With indirect addressing, this reduces to 127k (gzipped: 3k);
+using the Scheme assembler, it is just 5k (gzipped: 1k).
+Thus the Scheme assembler is, first and foremost, a straightforward compression strategy.
 
 \subsection{RNA State Machines}
 
-RNA on a lattice \cite{LeoniVanderzande2003,JostEveraers2010,ZaraPretti2007,GillespieMayneJiang2009}
-
-
-As shown in Figure~\ref{fig:rna}.
+We model RNA as a two-tolerant random walk on the lattice\cite{LeoniVanderzande2003};
+that is, up to two nucleotides can occupy a single cell, as long as they are base-paired
+(Figure~\ref{fig:rna}).
+In biochemistry, base-pairing is the mechanism whereby a nucleotide polymer pairs up to
+a complementary version of itself, which e.g. leads to the double-stranded DNA molecule.
+It is fundamental to the self-replicating ability of nucleotide sequences.
 
 \begin{figure}
 \fbox{\includegraphics[width=\columnwidth]{RNA.png}}
 \caption{
 \label{fig:rna}
+Base-pairing in the RNA model involves two nucleotides occupying the same cell, which then has up to four outgoing bonds.
+}
+\end{figure}
+
 RNA basepair models require up to 4 bond directions and two base values to be stored in each cell.
 The full range of bond configurations can be encoded in 16 bits/cell on the 2D lattice (23 bits/cell on the 3D lattice).
 In practice it is convenient, albeit slightly more wasteful of bits,
 to use distinct bitfields to encode the bond directions, presence/absence flags, and bases.
 This requires 21 bits/cell on the 2D lattice, and 25 bits/cell on the 3D lattice.
-Activated phosphorylation states for each base can be recorded with another 2-4 bits.
-}
-\end{figure}
-
-Number of states, theoretical.
+% Activated phosphorylation states for each base can be recorded with another 2-4 bits.
 
 
 \subsection{Agent State Machines}
+\label{sec:AgentStateMachines}
 
-Pixel Zoo also implements various agent models from above molecular length scale, used in game design.
+PixelZoo also implements various agent models inspired by natural systems at longer-than-molecular length scales.
+These include the bacterial tumble-run model of directed motion alternating with random walks\cite{RosserEtAl2013},
+various forms of reaction-diffusion, directed diffusion, and diffusion-limited aggregation \cite{DLA},
+the two-dimensional Ising model of magnetic spins \cite{Onsager1944},
+the Lotka-Volterra predator-prey systems \cite{Lotka1910,Hirota199739},
+ecological rock-paper-scissors games \cite{Tainaka2000},
+forest fires \cite{Karafyllidis1997},
+and lattice versions of the Wright-Fisher model of genetic drift \cite{MathiesonMcVean2013}.
 
-Tumble-run: {\em E.coli}.
-\cite{RosserEtAl2013}
+% Ecosystem balancing and stability of food webs \cite{quince2005topological}.
 
-%Sudoku ant: push obstacle a random number of blocks before changing direction.
-%\cite{AntBehaviorNature}
-
-Reaction-diffusion.
-Directed diffusion.
-Diffusion-limited aggregation.
-\cite{DLA}
-
-Two-dimensional square-lattice Ising model \cite{Onsager1944}.
-
-Lotka-Volterra (predator-prey) \cite{Lotka1910,Hirota199739}.
-Rock-paper-scissors games in ecology \cite{Tainaka2000}.
-
-Ecosystem balancing and stability of food webs \cite{quince2005topological}.
-
-Forest fires \cite{Karafyllidis1997}.
-
-Population dynamics and spatial versions of the Wright-Fisher model \cite{MathiesonMcVean2013}.
-
-\subsection{Rendering}
-
-Isometric view.
-Sprites, tiles.
 
 \section{Game Design}
 
+Rendering of the board uses an isometric view switching from monochromatic tiles (at distant zooms)
+to sprites (at close zooms).
+
 \subsection{Basic Play}
 
-Terraforming simulation.
-Isometric PAINT with live pixels.
+The background story involves terraforming planets from an orbital craft.
+The game plays like an isometric painting program, but with live pixels.
 
-Game goal: maintain dynamic equilibrium between three RPS species within a vesicle.
+The primary game goal is to maintain dynamic equilibrium inside a micelle
+among a population of three chemical species in a rock-paper-scissors ecology.
 
 \subsection{Network Play}
 
-Multiplayer implementation: RESTful server \cite{rest}.
-Post lock, check board out/in.
+The multiplayer game is implemented using a RESTful server \cite{rest}.
+The client posts a temporary lock on a board at the start of the player's turn,
+and can then ``check out'' the board, saving it periodically during the turn.
+Locks (and hence turns) are time-limited, and there is a minimum time between turns by the same player.
+There are also daily limits on the particles that players can place on a board.
 
-Time-limited turns, minimum time between turns, max tool recharge per day.
+The competitive multiplayer goal is to keep your population alive under attack.
+Keeping the population alive earns in-game money which can be spent designing new particles.
 
-Multiplayer goal: keep your population alive under attack.
-
-Earn game-money from your population.
-
-Client: log in/out, browse worlds, pick a world, select terraforming tools...
+The mobile game client presents an interface for the player to
+log in and out, browse worlds, pick a world, select terraforming tools, and play.
 
 \subsection{Creating New Tools}
 
-Player can POST XML to server describing new particles and tools
-(with restrictions, e.g. no Scheme code at present, due partly to prohibitions on Turing-complete code transfer by App Store owners).
+A player can post XML to server describing new particles and tools
+(with restrictions; e.g. no Scheme code is allowed at present,
+due partly to App Store prohibitions on downloaded code).
 
-Spend game-money creating and using new reaction-diffusion particles and spray-tools.
-
-Earn game-money when others buy your tools.
+Creating and using new reaction-diffusion particles and spray-tools costs in-game money,
+which can be earned by playing, or when others buy a player's tools.
 
 \subsection{Implementation}
 
-Gnu C, libXML, GDataXML, ChibiScheme, XCode, Catalyst (Perl).
-
-RNA state machines implemented in Java prototype.
+PixelZoo is implemented in Gnu C, libXML, GDataXML, ChibiScheme, XCode, and Perl Catalyst.
+The prototype RNA CA was implemented in Java.
 
 \section{Discussion}
 
-Work in progress.
+PixelZoo implements polymers and RNA molecules,
+and several other biologically-inspired agents, along with a mobile client prototype and multiplayer server infrastructure.
+Planned work mostly involves creating new particle behaviors,
+and adding game polish.
 
 \subsection{Acknowledgements}
 
