@@ -3,7 +3,7 @@
 
 \begin{document}
 
-\title{Cellular Automata for Artificial Life Games}
+\title{Cellular Automata for Molecular Life Games}
 \numberofauthors{1}
 \author{
 % 1st. author
@@ -168,12 +168,14 @@ The machine supports several addressing modes for memory locations and operands.
 {\em Immediate operands} allows specification of constants within the code,
 while {\em register operands} allows these constants to be loaded into registers first (enabling some code re-use).
 
-Similarly, {\em direct addressing} allows cell and bitfield addresses to be hardwired into the code,
-while {\em indirect addressing} allows these addresses to be specified by registers.
+Memory addressing is local to the neighborhood cell.
+{\em Direct addressing} requires bitfield addresses and relative cell co-ordinates to be hardwired into the code,
+while in {\em indirect addressing} these are specified by register values at run time.
 
 In principle, indirect or register addressing are not necessary to implement polymers:
 we can explicitly enumerate all cases via immediate and direct addressing.
-In practice, it's useful to allow some indirect/register addressing, to reduce program sizes via re-use of subroutine code.
+In practice, it's useful to allow some indirect/register addressing,
+to reduce program sizes via re-use of subroutine-like code.
 
 \subsubsection{Assembly Language}
 
@@ -190,8 +192,9 @@ to facilitate game design (e.g. diffusions, turtles) and reduce program sizes.
 \subsection{Higher-Level Functions}
 
 As well as being used at assembly time to specify macros,
-Scheme functions can be invoked dynamically by {\tt Call-Script} instruction
-for higher (supervisory-level) functions involving path-finding, goal-satisfaction, and other agent- and game-level scripting.
+Scheme functions can be invoked dynamically by {\tt Call-Script}
+for higher-level supervisory functions of an occasional nature,
+such as path-finding or goal-directed planning.
 These features are restricted to game designers.
 
 An optional S-expression can be associated with any cell for dynamic storage associated with the agent scripts.
