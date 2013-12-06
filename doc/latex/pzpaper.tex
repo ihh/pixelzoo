@@ -98,7 +98,7 @@ Gameplay is generally restricted to a thin 2D slab ($D \leq 2$).
 In a diffusion-based simulation, speed is paramount.
 The PixelZoo language exposes a fast low-level state machine for majority usage during play,
 generalizing the concept of the CA state lookup table to allow partial matching
-and rewriting of bitfields in the local lattice neighborhood.
+and rewriting of bitfields in the local lattice neighborhood (but not much else).
 There is also a high-level functional language (Scheme) available both for generation of low-level instructions,
 and for occasional in-game scripting usage.
 
@@ -131,9 +131,9 @@ Code written for the low-level state machine cannot reflect on or modify its own
 {\bf INSTRUCTION SET.}
 The following minimalistic operations were designed with the goal of fast simulation of particles and polymers.
 Excluding random numbers and Scheme,
-the core instructions are readily interpreted or compiled to C
-(via {\tt switch}, {\tt if}, {\tt goto}, and integer math)
-or directly to a RISC instruction set like ARM\cite{seal00} (via {\tt LDR}, {\tt STR}, {\tt ADD}, {\tt CMP}, {\tt B}).
+the core instructions are readily compiled to C
+({\tt switch}, {\tt if}, {\tt goto}, integer math)
+or directly to a RISC instruction set like ARM\cite{seal00} ({\tt LDR}, {\tt STR}, {\tt ADD}, {\tt CMP}, {\tt B}).
 \\
 {\tt Load-Add-Store}: loads value from source bitfield, adds operand, and stores result in destination bitfield: can optionally move or destroy the opaque S-expression storage.
 \\
@@ -153,6 +153,8 @@ instructions.
 {\tt Call-Script}: yields to arbitrary Scheme function.
 } }
 \end{center}
+It bears re-emphasis that the prime design criterion of this instruction set is to {\em limit} the expressive power of programs
+to something comparable to state lookup tables.
 Control flow is monotonic: there is no stack, and no gosub or return keywords.
 Branches always go forward, so loops are explicitly prohibited.
 Any program is a Directed Acyclic Graph (DAG) of finite determinable length.
