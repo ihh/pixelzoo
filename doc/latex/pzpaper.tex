@@ -116,39 +116,37 @@ There are 64 bits of state per cell (of which 16 are reserved).
 There is also a pointer to dynamic storage that can only be accessed from Scheme.
 
 The 64 bits of state are divided into bitfields.
-16 bits are given over to a type field, determining how the cell will be updated.
+16 bits are reserved for a type field, indexing a global program table that determines how the cell will be updated.
 The remaining 48 bits are used as dynamic storage; the division into bitfields depends on the type,
 with some universal restrictions (e.g. bitfields cannot straddle a 32-bit boundary).
 
 The 16-bit type field selects the global program to update the cell and its neighborhood,
 and specifies the naming and sizing scheme for dynamic bitfields.
 
-The virtual machine resembles an ultra-minimal subset of a typical CISC register-machine architecture.
+The virtual machine resembles an ultra-minimal subset of a typical RISC register-machine architecture.
 The instruction set is low-level, recognizably close to ARM\cite{seal00} and not too far from CoreWar's RedCode\cite{CoreWarGuidelines84}.
 The instructions can be quickly interpreted from or implemented in C, and will be optimized reasonably well by C compilers.
 Such details of the implementation are left opaque by design.
-Code written for the low-level state machine cannot reflect on or modify its own global program.
+Code written for the low-level state machine cannot reflect on or modify its own program.
 \begin{center}
 \fbox{ \parbox{.9\columnwidth}{
 {\bf INSTRUCTION SET.}
-The following minimalistic operations were designed with the goal of fast simulation of particles and polymers.
+The following minimalistic operations were selected with the goal of fast simulation of particles and polymers.
 Excluding random numbers and Scheme,
 the core instructions are readily compiled to C
 ({\tt switch}, {\tt if}, {\tt goto}, integer math)
-or directly to a RISC instruction set like ARM\cite{seal00} ({\tt LDR}, {\tt STR},
-{\tt ADD}, {\tt SUB}, {\tt CMP}, {\tt B}).
+or directly to a RISC instruction set like ARM\cite{seal00}.
 \\
-{\tt Load}: load register from neighborhood bitfield ({\tt LDR}).
-{\tt Store} is the analogous store instruction ({\tt STR}).
+{\tt Load}, {\tt Store}: read and write neighborhood bitfields.
 \\
-{\tt Add, Subtract}: register arithmetic ({\tt ADD}, {\tt SUB}).
+{\tt Add, Subtract}: register arithmetic.
 \\
 {\tt Compare, Switch}: arithmetic comparison, or C-like {\tt switch}, dispatching control based on register value.
 \\
-{\tt Copy-Program}: copy a program to a target cell from a source cell, or from a global program list.
-Can optionally copy (or destroy) the S-expression storage associated with the target cell.
+{\tt Copy-Program}: copy a program unmodified to a target cell; either from a source cell, or from a global program list.
+Can optionally copy (or destroy) the associated S-expression storage.
 \\
-{\tt Branch-Goto}: forward branch to labeled routine.
+{\tt Branch}: forward branch to labeled routine.
 \\
 {\tt Branch-Random}: branches conditional on random bit.
 \\
@@ -159,9 +157,10 @@ Can optionally copy (or destroy) the S-expression storage associated with the ta
 \end{center}
 It bears re-emphasis that this choice of instruction set is intended to {\em limit} the expressive power of programs
 to something comparable to state lookup tables.
-Control flow is monotonic: there is no stack, and no gosub or return keywords.
+Excluding the {\tt Call-Script} and {\tt Branch-Neighbor} instructions,
+control flow is monotonic: there is no stack, and no gosub or return keywords.
 Branches always go forward, so loops are explicitly prohibited.
-Any program is a Directed Acyclic Graph (DAG) of finite determinable length.
+Each program is a Directed Acyclic Graph (DAG) of finite determinable length.
 It is thus easy for a server to reason about programs,
 i.e. to analyze player-uploaded code and maintain strong performance guarantees
 while running thousands of player programs effectively in parallel.
@@ -180,6 +179,7 @@ while {\em register operands} allows these constants to be loaded into registers
 Memory addressing is local to the neighborhood cell.
 {\em Direct addressing} requires bitfield addresses and relative cell co-ordinates to be hardwired into the code,
 while in {\em indirect addressing} these are specified by register values at run time.
+A relative address {\em (x-offset,y-offset,bitfield-shift,bitfield-width)} is encoded in 32 bits.
 
 In principle, indirect or register addressing are not necessary to implement polymers:
 we can explicitly enumerate all cases via immediate and direct addressing.
@@ -241,8 +241,8 @@ The implementation of each case requires several steps (including verifying the 
 and checking the target cell is empty).
 To illustrate the need for some of the ``frills'' in the core CA
 (specifically indirect addressing and a Scheme-based assembler),
-we observe that when using no indirect addressing
-(the closest thing to lookup tables), the polymer program XML was 2.3Mb (52k gzipped).
+we observe that when using {\tt Load}, {\tt Switch}, and {\tt Store} with no indirect addressing
+(essentially explicit lookup tables), the polymer program XML was 2.3Mb (52k gzipped).
 With indirect addressing, this reduces to 127k (gzipped: 3k);
 using the Scheme assembler, it is just 5k (gzipped: 1k).
 Thus the Scheme assembler is, first and foremost, a compression strategy.
@@ -253,8 +253,8 @@ We model RNA as a two-tolerant random walk on the lattice\cite{LeoniVanderzande2
 that is, up to two nucleotides can occupy a single cell, as long as they are base-paired
 (Figure~\ref{fig:rna}).
 In biochemistry, base-pairing is the mechanism whereby a nucleotide polymer pairs up to
-a complementary version of itself, generating folded structures such as DNA's double-stranded helix.
-It is fundamental to the self-replicating ability of nucleotide sequences.
+its complementary partner, generating folded structures such as DNA's double-stranded helix.
+It is fundamental to the self-replication of nucleotide sequences.
 
 \begin{figure}
 \fbox{\includegraphics[width=\columnwidth]{RNA.png}}
