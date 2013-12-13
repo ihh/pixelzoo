@@ -110,8 +110,10 @@ and asynchronous (exponentially-distributed time between calls, scaled by partic
 The random number generator is a Mersenne twister, and supports replay.
 
 Cells can address their local neighborhood.
-There are 64 bits of state per cell,
-plus a pointer to opaque storage that can only be accessed via the higher-level scripting language.
+Each cell has a program that can be copied from neighboring cells, or re-initialized from a global program list,
+but cannot be otherwise modified.
+There are 64 bits of state per cell (of which 16 are reserved).
+There is also a pointer to dynamic storage that can only be accessed from Scheme.
 
 The 64 bits of state are divided into bitfields.
 16 bits are given over to a type field, determining how the cell will be updated.
@@ -133,19 +135,20 @@ The following minimalistic operations were designed with the goal of fast simula
 Excluding random numbers and Scheme,
 the core instructions are readily compiled to C
 ({\tt switch}, {\tt if}, {\tt goto}, integer math)
-or directly to a RISC instruction set like ARM\cite{seal00} ({\tt LDR}, {\tt STR}, {\tt ADD}, {\tt CMP}, {\tt B}).
+or directly to a RISC instruction set like ARM\cite{seal00} ({\tt LDR}, {\tt STR},
+{\tt ADD}, {\tt SUB}, {\tt CMP}, {\tt B}).
 \\
-{\tt Load-Add-Store}: loads value from source bitfield, adds operand, and stores result in destination bitfield:
-can optionally move or destroy the opaque S-expression storage.
+{\tt Load}: load register from neighborhood bitfield ({\tt LDR}).
+{\tt Store} is the analogous store instruction ({\tt STR}).
 \\
-{\tt Load-Compare-Branch}: reads value from bitfield, compares to operand, branches conditionally.
+{\tt Add, Subtract}: register arithmetic ({\tt ADD}, {\tt SUB}).
 \\
-{\tt Load-Switch}: analogous to C's {\tt switch}: reads bitfield, then dispatches control based on bitfield value.
+{\tt Compare, Switch}: arithmetic comparison, or C-like {\tt switch}, dispatching control based on register value.
 \\
-{\tt Load-Register}: places a numeric constant into a register. Used in combination with indirect addressing modes of other
-instructions.
+{\tt Copy-Program}: copy a program to a target cell from a source cell, or from a global program list.
+Can optionally copy (or destroy) the S-expression storage associated with the target cell.
 \\
-{\tt Branch-Goto}: branches to labeled routine.
+{\tt Branch-Goto}: forward branch to labeled routine.
 \\
 {\tt Branch-Random}: branches conditional on random bit.
 \\
@@ -204,7 +207,7 @@ such as path-finding or goal-directed planning.
 These features are restricted to game designers.
 
 An optional S-expression can be associated with any cell for dynamic storage associated with the agent scripts.
-This storage is opaque to the state machine: there is one instruction ({\tt Load-Add-Store}) that, when rewriting the type field of a cell, is allowed to relocate or destroy the S-expression associated with it.
+This storage is opaque to the state machine: there is one instruction ({\tt Copy-Program}) that, when rewriting the type field of a cell, is allowed to relocate or destroy the S-expression associated with it.
 Other than this, the low-level machine may not copy, create, read or modify cell S-expressions.
 In contrast, the Scheme supervisor has access to the state machine environment, board API, and multiplayer client API.
 
@@ -238,8 +241,8 @@ The implementation of each case requires several steps (including verifying the 
 and checking the target cell is empty).
 To illustrate the need for some of the ``frills'' in the core CA
 (specifically indirect addressing and a Scheme-based assembler),
-we observe that when using {\tt Load-Switch} and {\tt Load-Add-Store}
-with no indirect addressing (the closest thing to lookup tables), the polymer program XML was 2.3Mb (52k gzipped).
+we observe that when using no indirect addressing
+(the closest thing to lookup tables), the polymer program XML was 2.3Mb (52k gzipped).
 With indirect addressing, this reduces to 127k (gzipped: 3k);
 using the Scheme assembler, it is just 5k (gzipped: 1k).
 Thus the Scheme assembler is, first and foremost, a compression strategy.
