@@ -135,7 +135,8 @@ the core instructions are readily compiled to C
 ({\tt switch}, {\tt if}, {\tt goto}, integer math)
 or directly to a RISC instruction set like ARM\cite{seal00} ({\tt LDR}, {\tt STR}, {\tt ADD}, {\tt CMP}, {\tt B}).
 \\
-{\tt Load-Add-Store}: loads value from source bitfield, adds operand, and stores result in destination bitfield: can optionally move or destroy the opaque S-expression storage.
+{\tt Load-Add-Store}: loads value from source bitfield, adds operand, and stores result in destination bitfield:
+can optionally move or destroy the opaque S-expression storage.
 \\
 {\tt Load-Compare-Branch}: reads value from bitfield, compares to operand, branches conditionally.
 \\
@@ -153,14 +154,19 @@ instructions.
 {\tt Call-Script}: yields to arbitrary Scheme function.
 } }
 \end{center}
-It bears re-emphasis that the prime design criterion of this instruction set is to {\em limit} the expressive power of programs
+It bears re-emphasis that this choice of instruction set is intended to {\em limit} the expressive power of programs
 to something comparable to state lookup tables.
 Control flow is monotonic: there is no stack, and no gosub or return keywords.
 Branches always go forward, so loops are explicitly prohibited.
 Any program is a Directed Acyclic Graph (DAG) of finite determinable length.
-It is thus easy for a server to analyze player-designed programs and maintain strong performance guarantees.
-There is enough flexibility for players to implement novel material properties in the CA,
-as well as more sophisticated computational behaviors (e.g. Turing machines, Langton ants, Wireworld-type circuits).
+It is thus easy for a server to reason about programs,
+i.e. to analyze player-uploaded code and maintain strong performance guarantees
+while running thousands of player programs effectively in parallel.
+The constraints do not prevent players from implementing
+more sophisticated computational behaviors within the CA,
+such as Turing machines, Langton ants, and Wireworld-type circuits.
+However, the constraints do help ensure that such user-uploaded programs
+multi-task co-operatively and do not hog resources, or hang.
 
 \subsubsection{Addressing Modes}
 
@@ -319,14 +325,7 @@ which can be earned by playing, or when others buy a player's tools.
 PixelZoo is implemented in Gnu C, libXML, GDataXML, ChibiScheme, XCode, and Perl Catalyst.
 The prototype RNA CA was implemented in Java.
 
-\section{Discussion}
-
-PixelZoo implements polymers and RNA molecules,
-and several other biologically-inspired agents, along with a mobile client prototype and multiplayer server infrastructure.
-Planned work mostly involves creating new particle behaviors,
-and adding game polish.
-
-\subsection{Acknowledgements}
+\section{Acknowledgements}
 
 Many thanks are due Alex Shinn, Richard Evans, Michael Mateas, Sean Eddy, Gerald Joyce, Chris Quince,
 and Rudy Rucker for help and inspiration.
