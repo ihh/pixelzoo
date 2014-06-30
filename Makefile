@@ -38,7 +38,9 @@ CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIB
 CHIBI_CODE   := -Ichibi/lib -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
 CHIBI_HDRS   := -Ichibi/include -Dsexp_default_module_path=\"$(CURDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(CURDIR)/scheme/zoo.scm\"
 
-all: libtargets targets
+SCHEME_FILES := util.scm general.scm poly.scm rna.scm
+
+all: libtargets targets scheme/zoo.scm
 
 clean:
 	rm -rf obj/* bin/* lib/* *~ *.dSYM chibi/obj/*
@@ -90,6 +92,11 @@ bin/pzchibi: $(LIBTARGET)
 # this will hang...
 pzchibi-bug: bin/pzchibi
 	cat scheme/pzchibi-bug.scm | bin/pzchibi
+
+# Scheme code
+SCHEME_FILES_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES))
+scheme/zoo.scm: $(SCHEME_FILES_WITH_PREFIX)
+	(echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX); echo ")") >$@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
