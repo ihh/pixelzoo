@@ -36,9 +36,9 @@ XFILES  := $(addprefix bin/,$(TARGETS))
 CHIBI_CFILES := chibi/sexp.c chibi/eval.c
 CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIBI_CFILES)))))
 CHIBI_CODE   := -Ichibi/lib -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
-CHIBI_HDRS   := -Ichibi/include -Dsexp_default_module_path=\"$(CURDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(CURDIR)/scheme/zoo.scm\"
+CHIBI_HDRS   := -Ichibi/include -DSEXP_64_BIT -Dsexp_default_module_path=\"$(CURDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(CURDIR)/scheme/zoo.scm\"
 
-SCHEME_FILES := util.scm general.scm poly.scm rna.scm
+SCHEME_FILES := general.scm poly.scm rna.scm util.scm
 
 all: libtargets targets scheme/zoo.scm
 

@@ -597,6 +597,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PixelZoo/PixelZoo-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -609,6 +610,7 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
+					"-DSEXP_64_BIT",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -635,6 +637,7 @@
 				OTHER_CFLAGS = (
 					"-DSEXP_USE_DL=0",
 					"-DSEXP_USE_STATIC_LIBS",
+					"-DSEXP_64_BIT",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
