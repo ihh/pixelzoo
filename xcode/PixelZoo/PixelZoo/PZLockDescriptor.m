@@ -45,7 +45,7 @@
 
 -(void)deleteLock {
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/lock/%@",@SERVER_URL_PREFIX,[worldDescriptor identifier],[self identifier]]];
+    request.URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/lock/%@",SERVER_URL_PREFIX,[worldDescriptor identifier],[self identifier]]];
     request.HTTPMethod = @"DELETE";
     PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate addStoredBasicAuthHeader:request];

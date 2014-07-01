@@ -9,7 +9,10 @@
 #define pixelzoo_PZDefs_h
 
 // PixelZoo server
-#define SERVER_URL_PREFIX "http://localhost:3000"
+#ifndef SERVER_URL_PREFIX
+#define SERVER_URL_PREFIX [NSString stringWithFormat:@"http://%@:%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SERVER_HOST"], [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SERVER_PORT"]]
+#endif
+
 
 // PixelZoo game constants
 // #define GAME_XML_FILENAME "testgame"

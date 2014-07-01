@@ -97,7 +97,7 @@
 
 
 - (NSMutableURLRequest*)getRequest:(NSString *)controllerSuffix {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",@SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/world/%@/%@",SERVER_URL_PREFIX,[self identifier],controllerSuffix]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                        timeoutInterval:60.0];

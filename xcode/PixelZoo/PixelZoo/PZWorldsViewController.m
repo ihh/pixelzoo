@@ -44,7 +44,7 @@
 
     // get world list, to populate Worlds controller
     // Send an asynchronous request
-    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/",@SERVER_URL_PREFIX]]];
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/world/",SERVER_URL_PREFIX]]];
     
     // add authentication header
     PZAppDelegate *appDelegate = (PZAppDelegate *)[[UIApplication sharedApplication] delegate];

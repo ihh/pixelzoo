@@ -24,6 +24,10 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>SERVER_HOST</key>
+	<string>harvey-2.local</string>
+	<key>SERVER_PORT</key>
+	<string>3000</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard_iPhone</string>
 	<key>UIMainStoryboardFile~ipad</key>

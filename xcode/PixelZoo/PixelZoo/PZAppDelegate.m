@@ -115,7 +115,7 @@ void sum7(int a,int b,int c,int d,int e,int f,int g,int* ret) {
 
 - (bool) loginUser:(NSString*)user withPass:(NSString*)pass {
     // create request
-    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/login",@SERVER_URL_PREFIX]]
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/login",SERVER_URL_PREFIX]]
                                                         cachePolicy: NSURLRequestReloadIgnoringCacheData
                                                         timeoutInterval: 3];
 
@@ -140,7 +140,7 @@ void sum7(int a,int b,int c,int d,int e,int f,int g,int* ret) {
 
 - (NSInteger) createUser:(NSString*)user withPass:(NSString*)pass {
     // create request
-    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/status",@SERVER_URL_PREFIX]]
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/user/status",SERVER_URL_PREFIX]]
                                                                cachePolicy: NSURLRequestReloadIgnoringCacheData
                                                            timeoutInterval: 3];
     
