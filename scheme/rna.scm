@@ -55,68 +55,76 @@
 ;      (rule (scheme "(rna-move-rule)"))
 ))
 
-  ;; rna-move-rule:
-  ;;  if (has-fwd-sense-bond)
-  ;;   verify-fwd-sense
-  ;;   if (has-rev-sense-bond)
-  ;;    verify-rev-sense
-  ;;    if (has-fwd-anti-bond)
-  ;;      verify-fwd-anti
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-fs-rs-fa-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-fs-rs-fa
-  ;;    else (!has-fwd-anti-bond)
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-fs-rs-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-fs-rs
-  ;;  else (!has-rev-sense-bond)
-  ;;    if (has-fwd-anti-bond)
-  ;;      verify-fwd-anti
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-fs-fa-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-fs-fa
-  ;;    else (!has-fwd-anti-bond)
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-fs-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-fs
-  ;; else (!has-fwd-sense-bond)
-  ;;   if (has-rev-sense-bond)
-  ;;    verify-rev-sense
-  ;;    if (has-fwd-anti-bond)
-  ;;      verify-fwd-anti
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-rs-fa-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-rs-fa
-  ;;    else (!has-fwd-anti-bond)
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-rs-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-rs
-  ;;  else (!has-rev-sense-bond)
-  ;;    if (has-fwd-anti-bond)
-  ;;      verify-fwd-anti
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-fa-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step-fa
-  ;;    else (!has-fwd-anti-bond)
-  ;;      if (has-rev-anti-bond)
-  ;;       verify-rev-anti
-  ;;       random-step-ra
-  ;;      else (!has-rev-anti-bond)
-  ;;       random-step
+  (define (rna-move-subrule)
+    (subrule
+     "rna-move-subrule"
+     (apply
+      (rna-bond-cascade
+       (rna-has-rev-anti-bond-var
+	rna-rev-anti-bond-dir-var
+	rna-has-fwd-anti-bond-var
+	rna-fwd-anti-bond-dir-var
+	12
+	(rna-bond-cascade
+	 (rna-has-fwd-anti-bond-var
+	  rna-fwd-anti-bond-dir-var
+	  rna-has-rev-anti-bond-var
+	  rna-rev-anti-bond-dir-var
+	  8
+	  (rna-bond-cascade
+	   (rna-has-rev-sense-bond-var
+	    rna-rev-sense-bond-dir-var
+	    rna-has-fwd-sense-bond-var
+	    rna-fwd-sense-bond-dir-var
+	    4
+	    (rna-bond-cascade
+	     (rna-has-fwd-sense-bond-var
+	      rna-fwd-sense-bond-dir-var
+	      rna-has-rev-sense-bond-var
+	      rna-rev-sense-bond-dir-var
+	      0
+	      rna-drift-rule))))))))
+      '() moore-dirs)))
+
+  (define (rna-bond-cascade
+	   has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-in-cascade)
+    (lambda (confirmed-bond-list candidate-nbr-dirs)
+      (switch-var
+       origin self-type bond-var
+       `((0 ,(next-in-cascade confirmed-bond-list candidate-nbr-dirs))
+	 (1 ,(bind-moore-dir
+	      bond-dir-var
+	      (lambda (loc dir)
+		(let* ((inv-dir (moore-back dir)))
+		  ;; bond verification goes here
+		  (next-in-cascade
+		   (cons (list bond-dir-var loc dir inv-dir) confirmed-bond-list)
+		   (grep
+		    (lambda (nbr-dir)
+		      (moore-neighbor? (loc-minus loc (moore-loc nbr-dir)))) candidate-nbr-dirs))))))))))
+
+  ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs):
+  ;;  select random neighbor, load registers, jump to appropriate random-step-XX subrule
+
+
+  ;; random-step-XX: (where XX is a name derived from which bonds are present, e.g. random-step-fs-rs)
+  ;;   Switch on move target:
+  ;;    (empty) move into it
+  ;;    (contains RNA with no anti) merge with probability (complementary ? p_attach_match : p_attach_mismatch)
+
+  ;; We also need a top-level test of the form:
+  ;; If (has-anti)
+  ;;  ...with probability (complementary ? p_detach_match : p_detach_mismatch)...
+  ;;    ...select sense/antisense at random...
+  ;;    ...do an rna-bond-cascade *exclusively for sense or antisense*, creating a candidate-nbr-dirs for that side...
+  ;;    ...attempt detach, moving into target cell if it is empty.
+  ;;  else (regular sense+antisense rna-bond-cascade)
+  ;; else (sense-only rna-bond-cascade)
+
+
+  ;; Once this is working, need to add phosphorylation state & allow formation/destruction of bonds......
+
+
 
 
 )

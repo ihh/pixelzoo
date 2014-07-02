@@ -35,9 +35,6 @@
   (define (iota n)
     (if (= n 0) '() (append (iota (- n 1)) (list (- n 1)))))
 
-  (define neumann-dirs (iota (length neumann-neighborhood)))
-  (define moore-dirs (iota (length moore-neighborhood)))
-
   ;; (eval-or-return f)  ... if f is a function, evaluate; otherwise, return
   (define (eval-or-return f)
     (if (procedure? f) (f) f))

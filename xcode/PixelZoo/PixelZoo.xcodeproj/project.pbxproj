@@ -389,6 +389,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2818E27E17FFB6DB00093CEC /* Build configuration list for PBXNativeTarget "PixelZoo" */;
 			buildPhases = (
+				288FE64F1963DD7500B2D9C9 /* ShellScript */,
 				288FE64E1962984A00B2D9C9 /* ShellScript */,
 				2818E25417FFB6DB00093CEC /* Sources */,
 				2818E25517FFB6DB00093CEC /* Frameworks */,
@@ -469,6 +470,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "${PROJECT_DIR}/tools/set_hostname.sh ${PROJECT_DIR}/${INFOPLIST_FILE}";
+		};
+		288FE64F1963DD7500B2D9C9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${PROJECT_DIR}/../..; make scheme/zoo.scm";
 		};
 /* End PBXShellScriptBuildPhase section */
 
