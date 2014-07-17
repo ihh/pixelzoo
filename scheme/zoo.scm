@@ -303,6 +303,7 @@
       (vsrcmask (type ,src-type) (var ,src-var))
       (vrshift (type ,src-type) (var ,src-var))
       (inc ,inc)
+      ,(xy 'dest dest-loc)
       (vlshift (type ,dest-type) (var ,dest-var))
       (vdestmask (type ,dest-type) (var ,dest-var))
       ,@(listform-opt-rule 'next next)))
@@ -343,6 +344,18 @@
   ;; set self var
   (define (set-self-var var val . next)
     (apply set-var (append (list origin self-type var val) next)))
+
+  ;; indirect copy var
+  (define (copy-self-var-to-indirect src-type src-var dest-loc dest-type dest-var . next)
+    `(modify
+      ,(xy 'src '(0 0))
+      (vsrcmask (type ,src-type) (var ,src-var))
+      (vrshift (type ,src-type) (var ,src-var))
+      (inc 0)
+      ,(xy-indirect 'dest dest-loc)
+      (vlshift (type ,dest-type) (var ,dest-var))
+      (vdestmask (type ,dest-type) (var ,dest-var))
+      ,@(listform-opt-rule 'next next)))
 
   ;; indirect set rule
   (define (indirect-set-rule loc type . rest)
