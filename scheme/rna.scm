@@ -88,15 +88,21 @@
       "-ra"
       rna-has-rev-anti-bond-var
       rna-rev-anti-bond-dir-var
+      rna-has-fwd-sense-bond-var
+      rna-fwd-sense-bond-dir-var
       rna-has-fwd-anti-bond-var
       rna-fwd-anti-bond-dir-var
+      2
       18
       (cascade-func
        "-fa"
        rna-has-fwd-anti-bond-var
        rna-fwd-anti-bond-dir-var
+       rna-has-rev-sense-bond-var
+       rna-rev-sense-bond-dir-var
        rna-has-rev-anti-bond-var
        rna-rev-anti-bond-dir-var
+       1
        12
        (cascade-func
 	"-rs"
@@ -104,6 +110,9 @@
 	rna-rev-sense-bond-dir-var
 	rna-has-fwd-sense-bond-var
 	rna-fwd-sense-bond-dir-var
+	rna-has-fwd-anti-bond-var
+	rna-fwd-anti-bond-dir-var
+	2
 	6
 	(cascade-func
 	 "-fs"
@@ -111,6 +120,9 @@
 	 rna-fwd-sense-bond-dir-var
 	 rna-has-rev-sense-bond-var
 	 rna-rev-sense-bond-dir-var
+	 rna-has-rev-anti-bond-var
+	 rna-rev-anti-bond-dir-var
+	 1
 	 0
 	 final-func))))
      init-args))
@@ -125,23 +137,40 @@
   ;; if has-bond-var is TRUE, verify that the bond is mutual, and add to confirmed-bond-list
   ;; then pass control to next-in-cascade
   (define (rna-bond-cascade
-	   tag has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-in-cascade)
+	   tag
+	   has-bond-var bond-dir-var
+	   sense-partner-has-bond-var sense-partner-bond-dir-var
+	   anti-partner-has-bond-var anti-partner-bond-dir-var
+	   expected-partner-has bond-base-reg next-in-cascade)
     (lambda (subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
       (switch-var
        origin self-type bond-var
        `((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	 (1 ,(bind-moore-dir
-	      bond-dir-var
-	      (lambda (loc dir)
-		(let* ((inv-dir (moore-back dir)))
-		  ;; bond verification goes here
-		  (next-in-cascade
-		   subrule-prefix
-		   (string-append subrule-suffix tag)
-		   (cons (list bond-dir-var loc dir inv-dir bond-base-reg) confirmed-bond-list)
-		   (grep
-		    (lambda (nbr-dir)
-		      (moore-neighbor? (loc-minus loc (moore-loc nbr-dir)))) candidate-nbr-dirs))))))))))
+	 (1 ,(bind-and-verify tag bond-dir-var
+			      sense-partner-has-bond-var sense-partner-bond-dir-var
+			      expected-partner-has bond-base-reg next-in-cascade
+			      subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
+	 (2 ,(bind-and-verify tag bond-dir-var
+			      anti-partner-has-bond-var anti-partner-bond-dir-var
+			      expected-partner-has bond-base-reg next-in-cascade
+			      subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))))))
+
+  (define (bind-and-verify tag bond-dir-var partner-has-bond-var partner-bond-dir-var
+			   expected-partner-has-bond-var bond-base-reg next-in-cascade
+			   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
+    (bind-moore-dir
+     bond-dir-var
+     (lambda (loc dir)
+       (let* ((inv-dir (moore-back dir)))
+	 ;; bond verification goes here
+	 (next-in-cascade
+	  subrule-prefix
+	  (string-append subrule-suffix tag)
+	  (cons (list bond-dir-var loc dir inv-dir bond-base-reg partner-has-bond-var partner-bond-dir-var)
+		confirmed-bond-list)
+	  (grep
+	   (lambda (nbr-dir)
+	     (moore-neighbor? (loc-minus loc (moore-loc nbr-dir)))) candidate-nbr-dirs))))))
 
 
   ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs): the rule at the bottom of the bond verification cascade
@@ -156,12 +185,14 @@
 		      (append
 		       `(24 ,(car move-loc))
 		       `(25 ,(cadr move-loc))
-		       (map (lambda (dirvar-loc-dir-invdir-reg)
-			      (let* ((bond-dir-var (car dirvar-loc-dir-invdir))
-				     (loc (cadr dirvar-loc-dir-invdir))
-				     (dir (caddr dirvar-loc-dir-invdir))
-				     (inv-dir (cadddr dirvar-loc-dir-invdir))
-				     (bond-base-reg (caddddr dirvar-loc-dir-invdir))
+		       (map (lambda (dirvar-loc-dir-invdir)
+			      (let* ((bond-dir-var (car dirvar-loc-dir-invdir)) ;0 bond-dir-var
+				     (loc (cadr dirvar-loc-dir-invdir)) ;1 loc
+				     (dir (caddr dirvar-loc-dir-invdir)) ;2 dir
+				     (inv-dir (cadddr dirvar-loc-dir-invdir)) ;3 inv-dir
+				     (bond-base-reg (caddddr dirvar-loc-dir-invdir)) ;4 bond-base-reg
+				     ;5 partner-has-bond-var
+				     ;6 partner-bond-dir-var
 				     (new-dir (moore-dir (loc-minus move-loc loc)))
 				     (new-inv-dir (moore-back new-dir)))
 				`((,bond-base-reg ,(car loc))
@@ -184,7 +215,9 @@
 
   ;; random-step-subrule-cascade: the function for creating the various drift rules
   (define (random-step-subrule-cascade
-	   tag has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-in-cascade)
+	   tag has-bond-var bond-dir-var
+	   partner-has-bond-var partner-bond-dir-var
+	   expected-partner-has-bond-var bond-base-reg next-in-cascade)
     (lambda (subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
       (begin
 	(next-in-cascade
@@ -247,6 +280,7 @@
 ;; i think we in fact need to expand has-fwd-sense, has-rev-sense, has-fwd-anti & has-rev-anti to 2-bit vars
 ;;  0 for no bond, 1 for bond-to-sense, 2 for bond-to-anti
 ;; need to update do-cascade to pass in vars for both possibilities
+;; single stranded always uses the sense bonds
 
   ;; function to update bond vars in a drift move
   (define (update-registers confirmed-bond-reg-list next-rule)
