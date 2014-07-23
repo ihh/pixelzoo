@@ -36,6 +36,7 @@
   (define rna-has-anti-var "has-anti")
 
   (define rna-merge-mismatch-prob .01)
+  (define rna-detach-prob .01)
 
   (define (rna-particle name)
     `(particle
@@ -82,37 +83,63 @@
   ;;  (cascade-func tag has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-func)
   ;; returns a function that takes arg list similar to init-args
   ;; final-func also takes arg list similar to init-args
-  (define (ds-cascade cascade-func final-func init-args)
+  ;; antisense-func-maker takes a function of type cascade-func for the antisense part of the cascade,
+  ;; and returns a similar function that can optionally stop at antisense (e.g. to do a detach move)
+  (define (ds-or-as-cascade cascade-func final-func antisense-func-maker init-args)
     (apply
-     (cascade-func
-      "-ra"
-      rna-has-ra-bond-var
-      rna-ra-bond-dir-var
-      rna-has-fs-bond-var
-      rna-fs-bond-dir-var
-      rna-has-fa-bond-var
-      rna-fa-bond-dir-var
-      "!ra-bond-already-antisense"  ;; error
-      2
-      18
-      (cascade-func
-       "-fa"
-       rna-has-fa-bond-var
-       rna-fa-bond-dir-var
-       rna-has-rs-bond-var
-       rna-rs-bond-dir-var
-       rna-has-ra-bond-var
-       rna-ra-bond-dir-var
-       "!fa-bond-already-antisense"  ;; error
-       1
-       12
+     (as-cascade-func
+      cascade-func
+      (antisense-func-maker
        (ss-cascade-func cascade-func final-func)))
      init-args))
 
-  (define (ss-cascade cascade-func final-func init-args)
+  (define (ds-cascade cascade-func final-func init-args)
+    (ds-or-as-cascade cascade-func final-func (lambda (ss-cascade) ss-cascade) init-args))
+
+  (define (diverted-ds-cascade cascade-func final-ds-func final-antisense-func antisense-prob init-args)
+    (ds-or-as-cascade
+     cascade-func final-ds-func
+     (lambda (ss-cascade-func)
+       (lambda args
+	 (apply-random-switch
+	  `((,antisense-prob ,(apply final-antisense-func args))
+	    (,(- 1 antisense-prob) ,(apply ss-cascade-func args))))))
+     init-args))
+
+  (define (sense-cascade cascade-func final-func init-args)
     (apply
      (ss-cascade-func cascade-func final-func)
      init-args))
+
+  (define (antisense-cascade cascade-func final-func init-args)
+    (apply
+     (as-cascade-func cascade-func final-func)
+     init-args))
+
+  (define (as-cascade-func cascade-func final-func)
+    (cascade-func
+     "-ra"
+     rna-has-ra-bond-var
+     rna-ra-bond-dir-var
+     rna-has-fs-bond-var
+     rna-fs-bond-dir-var
+     rna-has-fa-bond-var
+     rna-fa-bond-dir-var
+     rna-rs-bond-dir-var
+     2
+     18
+     (cascade-func
+      "-fa"
+      rna-has-fa-bond-var
+      rna-fa-bond-dir-var
+      rna-has-rs-bond-var
+      rna-rs-bond-dir-var
+      rna-has-ra-bond-var
+      rna-ra-bond-dir-var
+      rna-fs-bond-dir-var
+      1
+      12
+      final-func)))
 
   (define (ss-cascade-func cascade-func final-func)
     (cascade-func
@@ -137,13 +164,32 @@
       rna-fa-bond-dir-var
       1
       0
-      final-func))))
+      final-func)))
 
-  ;; create the cascade for the top-level switch that tests existence & integrity of bonds
+  ;; create the cascade for the top-level rule
   (define (rna-move-subrule)
-    (subrule
-     "rna-move-subrule"
-     (ds-cascade rna-bond-cascade rna-drift-rule `("try-random-step-with-anti" "" () ,moore-dirs))))
+    (let ((init-args `("try-random-step" "" () ,moore-dirs)))
+      (subrule
+       "rna-move-subrule"
+       (switch-var
+	self self-type rna-has-anti-var
+	`((0 
+	   ,(ss-cascade
+	     rna-bond-cascade rna-drift-rule init-args))
+	  (1
+	   ,(switch-var
+	     self self-type rna-sense-base-var
+	     (map
+	      (lambda (sense-base)
+		(load-rule
+		 `((26 ,(- 3 sense-base)))
+		 (goto "rna-ds-move-subrule")))))))))
+      (subrule
+       "rna-ds-move-subrule"
+       (diverted-ds-cascade
+	rna-bond-cascade rna-drift-rule rna-detach-rule rna-detach-prob init-args))))
+
+  ;; TODO: write rna-detach-rule
 
   ;; rna-bond-cascade: the function for creating the bond verification cascade
   ;; if has-bond-var is TRUE, verify that the bond is mutual, and add to confirmed-bond-list
@@ -179,7 +225,7 @@
        bond-dir-var
        (lambda (loc dir)
 	 (let* ((inv-dir (moore-back dir)))
-	   ;; bond verification goes here
+	   ;; TODO: bond verification goes here
 	   (next-in-cascade
 	    subrule-prefix
 	    (string-append subrule-suffix tag goes-to-anti-tag)
@@ -197,32 +243,35 @@
      (map
       (lambda (move-dir)
 	(let* ((move-loc (moore-loc move-dir)))
-	  ((list 1 (lambda ()
-		     (load-rule
-		      (append
-		       `(24 ,(car move-loc))
-		       `(25 ,(cadr move-loc))
-		       (map (lambda (dirvar-loc-dir-invdir)
-			      (let* ((bond-dir-var (car dirvar-loc-dir-invdir)) ;0 bond-dir-var
-				     (loc (cadr dirvar-loc-dir-invdir)) ;1 loc
-				     (dir (caddr dirvar-loc-dir-invdir)) ;2 dir
-				     (inv-dir (cadddr dirvar-loc-dir-invdir)) ;3 inv-dir
-				     (bond-base-reg (caddddr dirvar-loc-dir-invdir)) ;4 bond-base-reg
-				     ;5 partner-has-bond-var
-				     ;6 partner-bond-dir-var
-				     (new-dir (moore-dir (loc-minus move-loc loc)))
-				     (new-inv-dir (moore-back new-dir)))
-				`((,bond-base-reg ,(car loc))
-				  (,(+ bond-base-reg 1) ,(cadr loc))
-				  (,(+ bond-base-reg 2) ,dir)
-				  (,(+ bond-base-reg 3) ,inv-dir)
-				  (,(+ bond-base-reg 4) ,new-dir)
-				  (,(+ bond-base-reg 5) ,new-inv-dir))))
-			    candidate-nbr-dirs))
-		      `(goto
-			,(string-concatenate
-			  subrule-prefix
-			  subrule-suffix)))))))))))
+	  `((1 ,(load-bond-and-target-registers
+		 candidate-nbr-dirs
+		 ,(string-concatenate
+		   subrule-prefix
+		   subrule-suffix)))))))))
+
+  (define (load-bond-and-target-registers candidate-nbr-dirs rule-name)
+    (load-rule
+     (append
+      `(24 ,(car move-loc))
+      `(25 ,(cadr move-loc))
+      (map (lambda (dirvar-loc-dir-invdir)
+	     (let* ((bond-dir-var (car dirvar-loc-dir-invdir)) ;0 bond-dir-var
+		    (loc (cadr dirvar-loc-dir-invdir)) ;1 loc
+		    (dir (caddr dirvar-loc-dir-invdir)) ;2 dir
+		    (inv-dir (cadddr dirvar-loc-dir-invdir)) ;3 inv-dir
+		    (bond-base-reg (caddddr dirvar-loc-dir-invdir)) ;4 bond-base-reg
+					;5 partner-has-bond-var
+					;6 partner-bond-dir-var
+		    (new-dir (moore-dir (loc-minus move-loc loc)))
+		    (new-inv-dir (moore-back new-dir)))
+	       `((,bond-base-reg ,(car loc))
+		 (,(+ bond-base-reg 1) ,(cadr loc))
+		 (,(+ bond-base-reg 2) ,dir)
+		 (,(+ bond-base-reg 3) ,inv-dir)
+		 (,(+ bond-base-reg 4) ,new-dir)
+		 (,(+ bond-base-reg 5) ,new-inv-dir))))
+	   candidate-nbr-dirs))
+     `(goto rule-name)))
 
 
   ;; random-step-XX: (where XX is concatenation of all dir-vars for which bonds are present)
@@ -258,7 +307,7 @@
 
   ;; cascade to define drift rules & associated subrules
   (ds-cascade random-step-subrule-cascade make-random-step-rule `("try-random-step-ds" "" 1 ()))  ;; double-stranded
-  (ss-cascade random-step-subrule-cascade make-random-step-rule `("try-random-step-ss" "" 0 ()))  ;; single-stranded
+  (sense-cascade random-step-subrule-cascade make-random-step-rule `("try-random-step-ss" "" 0 ()))  ;; single-stranded
 
   ;; the function at the bottom of the drift rule cascade
   (define rna-merge-subrule-name "rna-merge-subrule")
@@ -285,7 +334,7 @@
 
   (define (make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
-	   (qualified-rna-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
+	   (qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
       (begin
 	(subrule
 	 subrule-name
@@ -297,19 +346,20 @@
 	     ,(if
 	       ,self-has-anti
 	       nop-rule
+	       ;; TODO: allow unbonded particles to form new bonds
 	       (indirect-switch-var
 		'(24 25) self-type rna-has-anti-var
 		`(0   ;; (no antisense base in source or target cell)
 		  ,(indirect-compare-var-to-register
 		    '(24 25) self-type rna-sense-base 26
-		    `(eq ,qualified-rna-merge-subrule-name)  ;; complementary: merge
+		    `(eq ,qualified-merge-subrule-name)  ;; complementary: merge
 		    `(neq  ;; non-complementary: merge with probability rna-merge-mismatch-prob
 		      ,(random-rule
 			rna-merge-mismatch-prob
-			qualified-rna-merge-subrule-name))))))))))
+			qualified-merge-subrule-name))))))))))
 	;; merge subrule
 	(subrule
-	 qualified-rna-merge-subrule-name
+	 qualified-merge-subrule-name
 	 (copy-self-var-to-indirect
 	  self-type rna-sense-base-var '(24 25) self-type rna-anti-base-var
 	  (copy-self-var-to-indirect
@@ -338,10 +388,4 @@
 	  (list bond-base-reg (+ bond-base-reg 1))
 	  self-type partner-bond-dir-var (+ bond-base-reg 5)
 	  next-rule))))))
-
-  ;; Once this is working, need to add phosphorylation state & allow formation/destruction of bonds......
-  
-
-
-
 )
