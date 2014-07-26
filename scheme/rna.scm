@@ -67,25 +67,6 @@
       (colrule (var ,rna-anti-base-var) (hexmul "80000") (hexinc "14ffff"))
       (rule (scheme "(rna-move-rule)"))))
 
-
-  ;; Top level:
-  ;; Load register 26 with complement of sense base
-  ;; Goto attempt-move
-
-  ;; attempt-move:
-  ;; If (has-anti)
-  ;;  ...with probability (complementary ? p_split_match : p_split_mismatch)...
-  ;;    ...select sense/antisense at random...
-  ;;    ...call attempt-split with appropriate var labels
-  ;;  else (regular sense+antisense rna-bond-cascade)
-  ;; else (sense-only rna-bond-cascade)
-
-
-  ;; (attempt-split has-fwd fwd-dir has-rev rev-dir base has-fwd-other fwd-dir-other has-rev-other rev-dir-other base-other)
-  ;; ...do an rna-bond-cascade *exclusively for sense or antisense*, creating a candidate-nbr-dirs for that side...
-  ;; ...attempt split, moving into target cell if it is empty.
-
-
   ;; helper functions for iterating over all possible combinations of bonds (a "cascade")
   ;; argument list of cascade-func is as follows:
   ;;  (cascade-func tag has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-func)
@@ -93,38 +74,38 @@
   ;; final-func also takes arg list similar to init-args
   ;; antisense-func-maker takes a function of type cascade-func for the antisense part of the cascade,
   ;; and returns a similar function that can optionally stop at antisense (e.g. to do a split move)
-  (define (ds-or-as-cascade cascade-func final-func antisense-func-maker init-args)
+  (define (rna-ds-or-as-cascade cascade-func final-func antisense-func-maker init-args)
     (apply
-     (as-cascade-func
+     (rna-as-cascade-func
       cascade-func
       (antisense-func-maker
-       (ss-cascade-func cascade-func final-func)))
+       (rna-ss-cascade-func cascade-func final-func)))
      init-args))
 
-  (define (ds-cascade cascade-func final-func init-args)
-    (ds-or-as-cascade cascade-func final-func (lambda (ss-cascade) ss-cascade) init-args))
+  (define (rna-ds-cascade cascade-func final-func init-args)
+    (rna-ds-or-as-cascade cascade-func final-func (lambda (ss-cascade) ss-cascade) init-args))
 
-  (define (diverted-ds-cascade cascade-func final-func divert-prob divert-args init-args)
-    (ds-or-as-cascade
+  (define (rna-diverted-ds-cascade cascade-func final-func divert-prob divert-args init-args)
+    (rna-ds-or-as-cascade
      cascade-func final-func
-     (lambda (ss-cascade-func)
+     (lambda (rna-ss-cascade-func)
        (lambda args
 	 (apply-random-switch
 	  `((,divert-prob ,(apply final-func divert-args))
-	    (,(- 1 divert-prob) ,(apply ss-cascade-func args))))))
+	    (,(- 1 divert-prob) ,(apply rna-ss-cascade-func args))))))
      init-args))
 
-  (define (sense-cascade cascade-func final-func init-args)
+  (define (rna-sense-cascade cascade-func final-func init-args)
     (apply
-     (ss-cascade-func cascade-func final-func)
+     (rna-ss-cascade-func cascade-func final-func)
      init-args))
 
-  (define (antisense-cascade cascade-func final-func init-args)
+  (define (rna-antisense-cascade cascade-func final-func init-args)
     (apply
-     (as-cascade-func cascade-func final-func)
+     (rna-as-cascade-func cascade-func final-func)
      init-args))
 
-  (define (as-cascade-func cascade-func final-func)
+  (define (rna-as-cascade-func cascade-func final-func)
     (cascade-func
      "-ra"
      rna-has-ra-bond-var
@@ -149,7 +130,7 @@
       12
       final-func)))
 
-  (define (ss-cascade-func cascade-func final-func)
+  (define (rna-ss-cascade-func cascade-func final-func)
     (cascade-func
      "-rs"
      rna-has-rs-bond-var
@@ -193,7 +174,7 @@
 	       (goto ,rna-ds-move-subrule-name)))))))))
     (subrule
      rna-ds-move-subrule-name
-     (diverted-ds-cascade
+     (rna-diverted-ds-cascade
       rna-bond-cascade rna-drift-rule rna-split-prob
       `(,rna-split-subrule-prefix "" () ,moore-dirs)
       `(,rna-step-ds-subrule-prefix "" () ,moore-dirs))))
@@ -212,22 +193,22 @@
       (switch-var
        origin self-type has-bond-var
        `((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	 (1 ,(bind-and-verify tag 0 has-bond-var bond-dir-var
-			      sense-partner-has-bond-var sense-partner-bond-dir-var
-			      expected-partner-has bond-base-reg next-in-cascade
-			      subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	 (2 ,(bind-and-verify tag 1 has-bond-var bond-dir-var
-			      anti-partner-has-bond-var anti-partner-bond-dir-var
-			      expected-partner-has bond-base-reg next-in-cascade
-			      subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))))))
+	 (1 ,(rna-bind-and-verify tag 0 has-bond-var bond-dir-var
+				  sense-partner-has-bond-var sense-partner-bond-dir-var
+				  expected-partner-has bond-base-reg next-in-cascade
+				  subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
+	 (2 ,(rna-bind-and-verify tag 1 has-bond-var bond-dir-var
+				  anti-partner-has-bond-var anti-partner-bond-dir-var
+				  expected-partner-has bond-base-reg next-in-cascade
+				  subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))))))
 
-  (define (make-connect-tag goes-to-anti)
-    (if (goes-to-anti) "2a" "2s"))
+  (define (rna-make-connect-tag goes-to-anti)
+    (if goes-to-anti "2a" "2s"))
 
-  (define (bind-and-verify tag goes-to-anti has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var
-			   expected-partner-has-bond-var bond-base-reg next-in-cascade
-			   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-    (let ((goes-to-anti-tag (make-connect-tag goes-to-anti)))
+  (define (rna-bind-and-verify tag goes-to-anti has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var
+			       expected-partner-has-bond-var bond-base-reg next-in-cascade
+			       subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
+    (let ((goes-to-anti-tag (rna-make-connect-tag goes-to-anti)))
       (bind-moore-dir
        bond-dir-var
        (lambda (loc dir)
@@ -274,13 +255,13 @@
      (map
       (lambda (move-dir)
 	(let* ((move-loc (moore-loc move-dir)))
-	  `((1 ,(load-bond-and-target-registers
+	  `((1 ,(rna-load-bond-and-target-registers
 		 candidate-nbr-dirs
 		 ,(string-concatenate
 		   subrule-prefix
 		   subrule-suffix)))))))))
 
-  (define (load-bond-and-target-registers candidate-nbr-dirs rule-name)
+  (define (rna-load-bond-and-target-registers candidate-nbr-dirs rule-name)
     (load-rule
      (append
       `(24 ,(car move-loc))
@@ -310,16 +291,16 @@
   ;;    (empty) move into it
   ;;    (contains RNA with no anti) merge with probability (complementary ? 1 : p_merge_mismatch)
 
-  ;; random-step-subrule-cascade: the function for creating the various drift rules
-  (define (random-step-subrule-cascade
+  ;; rna-random-step-subrule-cascade: the function for creating the various drift rules
+  (define (rna-random-step-subrule-cascade
 	   tag
 	   has-bond-var bond-dir-var
 	   sense-partner-has-bond-var sense-partner-bond-dir-var
 	   anti-partner-has-bond-var anti-partner-bond-dir-var
 	   merged-bond-dir-var
 	   expected-partner-has-bond-var bond-base-reg next-in-cascade)
-    (let ((goes-to-anti-tag (make-connect-tag 1))
-	  (goes-to-sense-tag (make-connect-tag 0)))
+    (let ((goes-to-anti-tag (rna-make-connect-tag 1))
+	  (goes-to-sense-tag (rna-make-connect-tag 0)))
       (lambda (subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
 	(begin
 	  (next-in-cascade
@@ -337,23 +318,23 @@
 	  (next-in-cascade subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)))))
 
   ;; cascades to define drift rules & associated subrules
-  (ds-cascade
-   random-step-subrule-cascade
-   make-random-step-rule
+  (rna-ds-cascade
+   rna-random-step-subrule-cascade
+   rna-make-random-step-rule
    `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
 
-  (sense-cascade
-   random-step-subrule-cascade
-   make-random-step-rule
+  (rna-sense-cascade
+   rna-random-step-subrule-cascade
+   rna-make-random-step-rule
    `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
 
-  (antisense-cascade
-   random-step-subrule-cascade
-   make-split-rule
+  (rna-antisense-cascade
+   rna-random-step-subrule-cascade
+   rna-make-split-rule
    `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
   ;; the function at the bottom of the drift rule cascade
-  (define (make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
+  (define (rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
 	   (qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
       (begin
@@ -362,7 +343,7 @@
 	 (indirect-switch-type  ;; Switch on move target
 	  '(24 25)
 	  `((,empty-type   ;; (empty) move into it
-	     (reorient-bonds confirmed-bond-reg-list (,indirect-move-self '(24 25))))
+	     (rna-reorient-bonds confirmed-bond-reg-list (,indirect-move-self '(24 25))))
 	    (,self-type    ;; (contains RNA)
 	     ,(if
 	       ,self-has-anti
@@ -387,10 +368,10 @@
 	   self-type rna-has-fs-bond-var '(24 25) self-type rna-has-fa-bond-var
 	   (copy-self-var-to-indirect
 	    self-type rna-has-rs-bond-var '(24 25) self-type rna-has-ra-bond-var
-	    (merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))
+	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))
 
   ;; the function at the antisense diversion point. Generates a split rule
-  (define (make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
+  (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (indirect-switch-type  ;; Switch on move target
      '(24 25)
      `((,empty-type   ;; (empty) split into it
@@ -403,10 +384,10 @@
 	   self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
 	   (copy-self-var-to-indirect
 	    self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-	    (merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))
+	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))
 
   ;; helper to update bond vars in a drift move
-  (define (reorient-bonds confirmed-bond-reg-list next-rule)
+  (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)
     (if
      (null? confirmed-bond-reg-list)
      next-rule
@@ -418,7 +399,7 @@
 	    (merged-bond-dir-var (caddddr confirmed-bond))
 	    (bond-base-reg (cadddddr confirmed-bond))
 	    (rest-of-confirmed-bond-reg-list (cdr confirmed-bond-reg-list)))
-       (reorient-bonds
+       (rna-reorient-bonds
 	rest-of-confirmed-bond-reg-list
 	(set-var-from-register
 	 origin self-type bond-dir-var (+ bond-base-reg 4)
@@ -428,7 +409,7 @@
 	  next-rule))))))
 
   ;; helper to merge/split bonds in a merge/split move
-  (define (merge-or-split-bonds confirmed-bond-reg-list next-rule)
+  (define (rna-merge-or-split-bonds confirmed-bond-reg-list next-rule)
     (if
      (null? confirmed-bond-reg-list)
      next-rule
@@ -440,7 +421,7 @@
 	    (merged-or-split-bond-dir-var (caddddr confirmed-bond-reg))
 	    (bond-base-reg (cadddddr confirmed-bond-reg))
 	    (rest-of-confirmed-bond-reg-list (cdr confirmed-bond-reg-list))
-	    (merge-remaining-bonds (merge-or-split-bonds rest-of-confirmed-bond-reg-list next-rule)))
+	    (merge-remaining-bonds (rna-merge-or-split-bonds rest-of-confirmed-bond-reg-list next-rule)))
        (indirect-set-var-from-register
 	'(24 25)
 	self-type merged-or-split-bond-dir-var (+ bond-base-reg 4)
