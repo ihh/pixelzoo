@@ -88,11 +88,11 @@
   (define (rna-diverted-ds-cascade cascade-func final-func divert-prob divert-args init-args)
     (rna-ds-or-as-cascade
      cascade-func final-func
-     (lambda (rna-ss-cascade-func)
+     (lambda (ss-cascade-func)
        (lambda args
 	 (apply-random-switch
 	  `((,divert-prob ,(apply final-func divert-args))
-	    (,(- 1 divert-prob) ,(apply rna-ss-cascade-func args))))))
+	    (,(- 1 divert-prob) ,(apply ss-cascade-func args))))))
      init-args))
 
   (define (rna-sense-cascade cascade-func final-func init-args)
@@ -265,7 +265,7 @@
 		  (string-concatenate
 		   subrule-prefix
 		   subrule-suffix))))))
-       candidate-nbr-dirs))))
+       confirmed-bond-list))))
 
   (define (rna-load-bond-and-target-registers move-loc candidate-nbr-dirs rule-name)
     (load-rule
