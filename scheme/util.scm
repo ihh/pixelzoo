@@ -1,5 +1,8 @@
 (begin
   ;; Utility functions.
+  (define (caddddr lst) (cadddr (cdr lst)))
+  (define (cadddddr lst) (caddddr (cdr lst)))
+
   ;; Optional arguments
   (define (opt-arg args n default)
     (if (< n (length args))

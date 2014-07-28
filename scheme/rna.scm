@@ -160,18 +160,19 @@
     (subrule
      rna-move-subrule-name
      (switch-var
-      self self-type rna-has-anti-var
+      origin self-type rna-has-anti-var
       `((0 
-	 ,(ss-cascade
+	 ,(rna-sense-cascade
 	   rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" () ,moore-dirs)))
 	(1
 	 ,(switch-var
-	   self self-type rna-sense-base-var
+	   origin self-type rna-sense-base-var
 	   (map
 	    (lambda (sense-base)
 	      (load-rule
 	       `((26 ,(- 3 sense-base)))
-	       `(goto ,rna-ds-move-subrule-name)))))))))
+	       `(goto ,rna-ds-move-subrule-name)))
+	    (iota 4)))))))
     (subrule
      rna-ds-move-subrule-name
      (rna-diverted-ds-cascade
@@ -251,17 +252,22 @@
   ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs): the rule at the bottom of the bond verification cascade
   ;;  select random neighbor, load registers, jump to appropriate subrule
   (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-    (apply-random-switch
-     (map
-      (lambda (move-dir)
-	(let* ((move-loc (moore-loc move-dir)))
-	  `((1 ,(rna-load-bond-and-target-registers
-		 candidate-nbr-dirs
-		 (string-concatenate
-		  subrule-prefix
-		  subrule-suffix)))))))))
+    (if
+     (null? candidate-nbr-dirs)
+     nop-rule
+     (apply-random-switch
+      (map
+       (lambda (move-dir)
+	 (let* ((move-loc (moore-loc move-dir)))
+	   `((1 ,(rna-load-bond-and-target-registers
+		  move-loc
+		  candidate-nbr-dirs
+		  (string-concatenate
+		   subrule-prefix
+		   subrule-suffix))))))
+       candidate-nbr-dirs))))
 
-  (define (rna-load-bond-and-target-registers candidate-nbr-dirs rule-name)
+  (define (rna-load-bond-and-target-registers move-loc candidate-nbr-dirs rule-name)
     (load-rule
      (append
       `(24 ,(car move-loc))
@@ -317,22 +323,6 @@
 		 confirmed-bond-reg-list))
 	  (next-in-cascade subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)))))
 
-  ;; cascades to define drift rules & associated subrules
-  (rna-ds-cascade
-   rna-random-step-subrule-cascade
-   rna-make-random-step-rule
-   `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
-
-  (rna-sense-cascade
-   rna-random-step-subrule-cascade
-   rna-make-random-step-rule
-   `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
-
-  (rna-antisense-cascade
-   rna-random-step-subrule-cascade
-   rna-make-split-rule
-   `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
-
   ;; the function at the bottom of the drift rule cascade
   (define (rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
@@ -353,7 +343,7 @@
 		'(24 25) self-type rna-has-anti-var
 		`((0   ;; (no antisense base in source or target cell)
 		   ,(indirect-compare-var-to-register
-		     '(24 25) self-type rna-sense-base 26
+		     '(24 25) self-type rna-sense-base-var 26
 		     `(eq ,qualified-merge-subrule-name)  ;; complementary: merge
 		     `(neq  ;; non-complementary: merge with probability rna-merge-mismatch-prob
 		       ,(random-rule
@@ -429,5 +419,21 @@
 	 (list bond-base-reg (+ bond-base-reg 1))
 	 self-type partner-bond-dir-var (+ bond-base-reg 5))
 	merge-remaining-bonds))))
+
+  ;; cascades to define drift rules & associated subrules
+  (rna-ds-cascade
+   rna-random-step-subrule-cascade
+   rna-make-random-step-rule
+   `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
+
+  (rna-sense-cascade
+   rna-random-step-subrule-cascade
+   rna-make-random-step-rule
+   `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
+
+  (rna-antisense-cascade
+   rna-random-step-subrule-cascade
+   rna-make-split-rule
+   `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
   ) ;; end
