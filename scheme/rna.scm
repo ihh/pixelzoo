@@ -251,15 +251,18 @@
 
   ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs): the rule at the bottom of the bond verification cascade
   ;;  select random neighbor, load registers, jump to appropriate subrule
+  (set! rna-drift-rule-debug-count 0)
   (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-    (display "rna-drift-rule ")
-    (display subrule-prefix)
-    (display subrule-suffix)
-    (display " ")
-    (display confirmed-bond-list)
-    (display "\n")
-    (display candidate-nbr-dirs)
-    (display "\n")
+    (set! rna-drift-rule-debug-count (+ rna-drift-rule-debug-count 1))
+    (if (= (modulo rna-drift-rule-debug-count 1000) 0)
+	(begin
+	  (display rna-drift-rule-debug-count)
+	  (display " rna-drift-rule ")
+	  (display subrule-prefix)
+	  (display subrule-suffix)
+	  (display " ")
+	  (display candidate-nbr-dirs)
+	  (display "\n")))
     (if
      (null? candidate-nbr-dirs)
      nop-rule
