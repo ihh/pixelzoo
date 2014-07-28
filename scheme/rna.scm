@@ -204,7 +204,7 @@
 				  subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))))))
 
   (define (rna-make-connect-tag goes-to-anti)
-    (if goes-to-anti "2a" "2s"))
+    (if (= goes-to-anti 1) "2a" "2s"))
 
   (define (rna-bind-and-verify tag goes-to-anti has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var
 			       expected-partner-has-bond-var bond-base-reg next-in-cascade
