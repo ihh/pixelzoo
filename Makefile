@@ -99,6 +99,12 @@ SCHEME_FILES_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES))
 scheme/zoo.scm: $(SCHEME_FILES_WITH_PREFIX)
 	(echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX); echo ")") >$@
 
+testrna: scheme/testrna.scm
+	cat $< | bin/pzchibi
+
+scheme/testrna.scm: $(SCHEME_FILES_WITH_PREFIX) scheme/rna.scm
+	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(rna-particle "RNA")'; echo ")") >$@
+
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
 	@test -e lib || mkdir lib

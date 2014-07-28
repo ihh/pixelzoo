@@ -171,7 +171,7 @@
 	    (lambda (sense-base)
 	      (load-rule
 	       `((26 ,(- 3 sense-base)))
-	       (goto ,rna-ds-move-subrule-name)))))))))
+	       `(goto ,rna-ds-move-subrule-name)))))))))
     (subrule
      rna-ds-move-subrule-name
      (rna-diverted-ds-cascade
@@ -237,12 +237,12 @@
 		      `((,inv-dir
 			 ,(if
 			   goes-to-anti
-			   ,(switch-var
-			     loc self-type
-			     rna-has-anti-var
-			     `((1 ,add-bond-and-proceed))
-			     erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
-			   ,add-bond-and-proceed)))
+			   (switch-var
+			    loc self-type
+			    rna-has-anti-var
+			    `((1 ,add-bond-and-proceed))
+			    erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
+			   add-bond-and-proceed)))
 		      erase-bond)))  ;; called if partner bond direction doesn't point back to us
 		 erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
 	    erase-bond))))))  ;; called if partner is not a polymer
@@ -257,9 +257,9 @@
 	(let* ((move-loc (moore-loc move-dir)))
 	  `((1 ,(rna-load-bond-and-target-registers
 		 candidate-nbr-dirs
-		 ,(string-concatenate
-		   subrule-prefix
-		   subrule-suffix)))))))))
+		 (string-concatenate
+		  subrule-prefix
+		  subrule-suffix)))))))))
 
   (define (rna-load-bond-and-target-registers candidate-nbr-dirs rule-name)
     (load-rule
@@ -346,7 +346,7 @@
 	     (rna-reorient-bonds confirmed-bond-reg-list (,indirect-move-self '(24 25))))
 	    (,self-type    ;; (contains RNA)
 	     ,(if
-	       ,self-has-anti
+	       self-has-anti
 	       nop-rule
 	       ;; TODO: allow unbonded particles to form new bonds
 	       (indirect-switch-var
