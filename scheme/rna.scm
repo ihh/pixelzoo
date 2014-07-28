@@ -252,6 +252,14 @@
   ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs): the rule at the bottom of the bond verification cascade
   ;;  select random neighbor, load registers, jump to appropriate subrule
   (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
+    (display "rna-drift-rule ")
+    (display subrule-prefix)
+    (display subrule-suffix)
+    (display " ")
+    (display confirmed-bond-list)
+    (display "\n")
+    (display candidate-nbr-dirs)
+    (display "\n")
     (if
      (null? candidate-nbr-dirs)
      nop-rule
@@ -259,19 +267,19 @@
       (map
        (lambda (move-dir)
 	 (let* ((move-loc (moore-loc move-dir)))
-	   `((1 ,(rna-load-bond-and-target-registers
+	   `(1 ,(rna-load-bond-and-target-registers
 		  move-loc
-		  candidate-nbr-dirs
-		  (string-concatenate
+		  confirmed-bond-list
+		  (string-append
 		   subrule-prefix
-		   subrule-suffix))))))
-       confirmed-bond-list))))
+		   subrule-suffix)))))
+       candidate-nbr-dirs))))
 
   (define (rna-load-bond-and-target-registers move-loc candidate-nbr-dirs rule-name)
     (load-rule
      (append
-      `(24 ,(car move-loc))
-      `(25 ,(cadr move-loc))
+      `((24 ,(car move-loc))
+	(25 ,(cadr move-loc)))
       (map (lambda (dirvar-loc-dir-invdir)
 	     (let* ((bond-dir-var (car dirvar-loc-dir-invdir)) ;0 bond-dir-var
 		    (loc (cadr dirvar-loc-dir-invdir)) ;1 loc
