@@ -362,7 +362,7 @@ State readVarFromLoc (Board *board, BoardReadFunction read, const LocalOffset *l
 }
 
 void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, int y, int z, BoardReadFunction read, BoardWriteFunction write) {
-  int xDest, yDest, zDest, tracePos, r, isOnBoard, srcBoardIndex, destBoardIndex;
+  int xDest, yDest, zDest, tracePos, r, n, rn, totalAccessible, isOnBoard, srcBoardIndex, destBoardIndex;
   State currentSrcState, oldDestState, newDestState, offset, var;
   Type type;
   LookupRuleParams *lookup;
@@ -371,8 +371,12 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
   LoadRuleParams *load;
+  VectorRuleParams *vector;
+  NeighborRuleParams *neighbor;
   StateMapNode *lookupNode;
   MessageRuleMapNode *dispatchNode;
+  Neighborhood *hood;
+  unsigned char *inaccessible;
   ParticleRule *ruleTrace[MaxRuleDepth];
   int reg[NumberOfRegisters + 1], regVal;
 
@@ -401,6 +405,8 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	      lookup->loc.x, lookup->loc.y, lookup->loc.z,
 	      lookup->mask, lookup->shift, var);
 #endif /* PIXELZOO_DEBUG */
+      if (lookup->matchRegister < NumberOfRegisters)
+	reg[lookup->matchRegister] = var;
       if (isOnBoard) {
 	lookupNode = StateMapFind (lookup->matchRule, var);
 	rule = lookupNode
@@ -554,6 +560,74 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       }
       rule = load->nextRule;
       break;
+
+  case VectorRule:
+    vector = &rule->param.vector;
+    rule = NULL;
+    if ((hood = ruleOwner->hood)) {
+      xDest = yDest = zDest = 0;
+      for (r = 0; r < vector->n; ++r) {
+	n = vector->nbr[r];
+	if (n < hood->size) {
+	  xDest += hood->x[n];
+	  yDest += hood->y[n];
+	  zDest += hood->z[n];
+	}
+      }
+      if ((n = getNeighborIndex (hood, xDest, yDest, zDest)) >= 0) {
+	rule = vector->nextRule;
+	if (vector->x < NumberOfRegisters)
+	  reg[vector->x] = xDest;
+	if (vector->y < NumberOfRegisters)
+	  reg[vector->y] = yDest;
+	if (vector->z < NumberOfRegisters)
+	  reg[vector->z] = zDest;
+	if (vector->dir < NumberOfRegisters)
+	  reg[vector->dir] = n;
+	if (vector->inv < NumberOfRegisters) {
+	  n = getNeighborIndex (hood, -xDest, -yDest, -zDest);
+	  if (n >= 0)
+	    reg[vector->inv] = n;
+	  else
+	    rule = NULL;
+	}
+      }
+    }
+    break;
+
+  case NeighborRule:
+    neighbor = &rule->param.neighbor;
+    rule = NULL;
+    if ((hood = ruleOwner->hood)) {
+      inaccessible = SafeCalloc (hood->size, sizeof(unsigned char));
+      totalAccessible = hood->size;
+      for (r = 0; r < neighbor->n && totalAccessible > 0; ++r) {
+	if (neighbor->nbr[r] >= NumberOfRegisters
+	    || (rn = reg[neighbor->nbr[r]]) >= hood->size) {
+	  rule = NULL;
+	  break;
+	}
+	for (n = 0; n < hood->size; ++n)
+	  if (!inaccessible[n])
+	    if (getNeighborIndex (hood,
+				  hood->x[n] - hood->x[rn],
+				  hood->y[n] - hood->y[rn],
+				  hood->z[n] - hood->z[rn]) < 0) {
+	      inaccessible[n] = 1;
+	      --totalAccessible;
+	    }
+      }
+      if (totalAccessible > 0) {
+	n = boardRandomInt32(board) % totalAccessible;
+	for (rn = 0; rn < hood->size; ++rn)
+	  if (!inaccessible[rn])
+	    if (n-- == 0)
+	      break;
+	reg[neighbor->dir] = rn;
+	rule = neighbor->nextRule;
+      }
+    }
+    break;
 
     case FunctionRule:
       rule = boardAttemptFunctionRule (board, x, y, z, rule->param.function.schemeExpr)

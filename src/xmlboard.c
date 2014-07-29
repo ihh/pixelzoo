@@ -21,6 +21,8 @@ void initModifyRuleFromXmlNode (ModifyRuleParams* op, xmlNode* node, Board *boar
 void initDeliverRuleFromXmlNode (DeliverRuleParams* deliver, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
+void initVectorRuleFromXmlNode (VectorRuleParams* vector, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
+void initNeighborRuleFromXmlNode (NeighborRuleParams* neighbor, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 void initFunctionRuleFromXmlNode (FunctionRuleParams* function, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule);
 
 void initLocalOffsetFromXmlNode (LocalOffset* loc, int xDefault, int yDefault, int zDefault, xmlNode* node);
@@ -143,8 +145,9 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   Particle* p;
   Message message;
   int nColorRules, readOnlyIndex;
-  xmlNode *curNode, *syncNode, *childNode, *schemeNode, *spriteNode;
+  xmlNode *curNode, *syncNode, *hoodNode, *childNode, *schemeNode, *spriteNode;
   Proto *proto;
+  int hoodSize;
 
   p = newParticle ((const char*) CHILDSTRING(node,NAME));
 
@@ -155,6 +158,23 @@ Particle* newParticleFromXmlNode (Board *board, xmlNode* node, ProtoTable *proto
   }
 
   protoTableSetSelfType (protoTable, p->name);
+
+  /* get neighborhood */
+  if ((hoodNode = CHILD(node,HOOD))) {
+    hoodSize = 0;
+    for (childNode = hoodNode->children; childNode; childNode = childNode->next)
+      if (MATCHES(childNode,NEIGHBOR))
+	++hoodSize;
+    p->hood = newNeighborhood (hoodSize);
+    hoodSize = 0;
+    for (childNode = hoodNode->children; childNode; childNode = childNode->next)
+      if (MATCHES(childNode,NEIGHBOR)) {
+	p->hood->x[hoodSize] = OPTCHILDINT(childNode,X,0);
+	p->hood->y[hoodSize] = OPTCHILDINT(childNode,Y,0);
+	p->hood->z[hoodSize] = OPTCHILDINT(childNode,Z,0);
+	++hoodSize;
+      }
+  }
 
   /* create subrules local to this Particle */
   for (childNode = node->children; childNode; childNode = childNode->next)
@@ -280,6 +300,8 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
   DeliverRuleParams *deliver;
   RandomRuleParams *random;
   LoadRuleParams *load;
+  VectorRuleParams *vector;
+  NeighborRuleParams *neighbor;
   FunctionRuleParams *function;
   const char *evalResult;
   xmlNode *evalNode;
@@ -322,6 +344,16 @@ ParticleRule* newRuleFromXmlNode (Board *board, xmlNode *ruleNode, ProtoTable *p
     rule = newLoadRule();
     load = &rule->param.load;
     initLoadRuleFromXmlNode (load, ruleNode, board, protoTable, localSubRule);
+
+  } else if (MATCHES (ruleNode, VECTOR)) {
+    rule = newVectorRule();
+    vector = &rule->param.vector;
+    initVectorRuleFromXmlNode (vector, ruleNode, board, protoTable, localSubRule);
+
+  } else if (MATCHES (ruleNode, ADJACENT)) {
+    rule = newNeighborRule();
+    neighbor = &rule->param.neighbor;
+    initNeighborRuleFromXmlNode (neighbor, ruleNode, board, protoTable, localSubRule);
 
   } else if (MATCHES (ruleNode, DYNAMIC)) {
     rule = newFunctionRule();
@@ -392,6 +424,8 @@ void initLookupRuleFromXmlNode (LookupRuleParams* lookup, xmlNode* node, Board *
       Assert (StateMapFind (lookup->matchRule, state) == NULL, "Duplicate key in lookup, or more than one key unassigned/zero");
       (void) StateMapInsert (lookup->matchRule, state, rule);
     }
+
+  lookup->matchRegister = OPTCHILDINT(node,INDEX,NumberOfRegisters);
 
   lookup->lowRule = newRuleFromXmlGrandparentNode (board, CHILD (node, LOW), protoTable, localSubRule);
   lookup->highRule = newRuleFromXmlGrandparentNode (board, CHILD (node, HIGH), protoTable, localSubRule);
@@ -511,6 +545,40 @@ void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board,
     }
 
   load->nextRule = newRuleFromXmlGrandparentNode (board, CHILD (node, NEXT), protoTable, localSubRule);
+}
+
+void initVectorRuleFromXmlNode (VectorRuleParams* vector, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {
+  int n;
+  xmlNode *child;
+  for (n = 0, child = node->children; child; child = child->next)
+    if (MATCHES(child,INDEX))
+      ++n;
+  vector->n = n;
+  vector->nbr = SafeCalloc (n, sizeof (unsigned char));
+  for (n = 0, child = node->children; child; child = child->next)
+    if (MATCHES(child,INDEX))
+      vector->nbr[n++] = NODEINTVAL(child);
+  vector->x = OPTCHILDINT(node,X,NumberOfRegisters);
+  vector->y = OPTCHILDINT(node,Y,NumberOfRegisters);
+  vector->z = OPTCHILDINT(node,Z,NumberOfRegisters);
+  vector->dir = OPTCHILDINT(node,DIR,NumberOfRegisters);
+  vector->inv = OPTCHILDINT(node,INV,NumberOfRegisters);
+  vector->nextRule = newRuleFromXmlGrandparentNode (board, CHILD (node, NEXT), protoTable, localSubRule);
+}
+
+void initNeighborRuleFromXmlNode (NeighborRuleParams* neighbor, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {
+  int n;
+  xmlNode *child;
+  for (n = 0, child = node->children; child; child = child->next)
+    if (MATCHES(child,INDEX))
+      ++n;
+  neighbor->n = n;
+  neighbor->nbr = SafeCalloc (n, sizeof (unsigned char));
+  for (n = 0, child = node->children; child; child = child->next)
+    if (MATCHES(child,INDEX))
+      neighbor->nbr[n++] = NODEINTVAL(child);
+  neighbor->dir = CHILDINT(node,DIR);
+  neighbor->nextRule = newRuleFromXmlGrandparentNode (board, CHILD (node, NEXT), protoTable, localSubRule);
 }
 
 void initFunctionRuleFromXmlNode (FunctionRuleParams *function, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {

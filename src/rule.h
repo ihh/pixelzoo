@@ -18,18 +18,24 @@ typedef struct LocalOffset {
   unsigned char xyzAreRegisters;
 } LocalOffset;
 
+/* Neighborhood */
+typedef struct Neighborhood {
+  unsigned int size;
+  signed char *x, *y, *z;
+} Neighborhood;
+
 /* Types of rule */
 typedef struct ParticleRule ParticleRule;
 
-enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule, FunctionRule };
+enum RuleType { LookupRule, CompareRule, ModifyRule, DeliverRule, RandomRule, GotoRule, LoadRule, VectorRule, NeighborRule,FunctionRule };
 enum ModifyRuleType { ConserveModify, KillModify, EatModify };
 
-typedef struct LookupRuleParams {
+typedef struct LookupRuleParams {  /* NB LookupRule can also be used to read a var into a register */
   LocalOffset loc;
   unsigned int shift;
   State mask;
   StateMap *matchRule;
-  unsigned char matchRegister, useMatchRegister;
+  unsigned char matchRegister;  /* if matchRegister is a valid register index, var value is placed in that register */
   ParticleRule *defaultRule, *lowRule, *highRule;
 } LookupRuleParams;
 
@@ -41,7 +47,7 @@ typedef struct CompareRuleParams {
   ParticleRule *eqRule, *ltRule, *gtRule;
 } CompareRuleParams;
 
-typedef struct ModifyRuleParams {
+typedef struct ModifyRuleParams {  /* NB ModifyRule can also be used to write a register to a var */
   LocalOffset src, dest;
   unsigned int rightShift, leftShift;
   State srcMask, destMask, offset;
@@ -67,6 +73,20 @@ typedef struct LoadRuleParams {
   ParticleRule *nextRule;
 } LoadRuleParams;
 
+typedef struct VectorRuleParams {
+  int n;
+  unsigned char *nbr;
+  unsigned char x, y, z, dir, inv;
+  ParticleRule *nextRule;
+} VectorRuleParams;
+
+typedef struct NeighborRuleParams {
+  int n;
+  unsigned char *nbr;
+  unsigned char dir;
+  ParticleRule *nextRule;
+} NeighborRuleParams;
+
 typedef struct FunctionRuleParams {
   char *schemeExpr;
   ParticleRule *passRule, *failRule;
@@ -79,6 +99,8 @@ typedef union RuleParams {
   DeliverRuleParams deliver;
   RandomRuleParams random;
   LoadRuleParams load;
+  VectorRuleParams vector;
+  NeighborRuleParams neighbor;
   FunctionRuleParams function;
   ParticleRule *gotoLabel;
 } RuleParams;
@@ -97,6 +119,8 @@ ParticleRule* newDeliverRule();
 ParticleRule* newRandomRule();
 ParticleRule* newGotoRule();
 ParticleRule* newLoadRule();
+ParticleRule* newVectorRule();
+ParticleRule* newNeighborRule();
 ParticleRule* newFunctionRule();
 
 ParticleRule* newGotoRuleTo(ParticleRule* label);
@@ -104,5 +128,10 @@ ParticleRule* newGotoRuleTo(ParticleRule* label);
 void deleteParticleRule (void *rule);
 
 void defineSubRule (StringMap **subRuleIndex, const char* name, ParticleRule *rule, StringMap *globalSubRuleIndex);
+
+Neighborhood* newNeighborhood (int size);
+void deleteNeighborhood (Neighborhood* hood);
+
+int getNeighborIndex (Neighborhood* hood, signed char x, signed char y, signed char z);
 
 #endif /* RULE_INCLUDED */

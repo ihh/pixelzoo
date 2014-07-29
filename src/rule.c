@@ -73,6 +73,31 @@ ParticleRule* newLoadRule() {
   rule->param.load.n = 0;
   rule->param.load.reg = NULL;
   rule->param.load.val = NULL;
+  rule->param.load.nextRule = NULL;
+  return rule;
+}
+
+ParticleRule* newVectorRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (VectorRule);
+  rule->param.vector.n = 0;
+  rule->param.vector.nbr = NULL;
+  rule->param.vector.x = NumberOfRegisters;
+  rule->param.vector.y = NumberOfRegisters;
+  rule->param.vector.z = NumberOfRegisters;
+  rule->param.vector.dir = NumberOfRegisters;
+  rule->param.vector.inv = NumberOfRegisters;
+  rule->param.vector.nextRule = NULL;
+  return rule;
+}
+
+ParticleRule* newNeighborRule() {
+  ParticleRule* rule;
+  rule = newParticleRule (NeighborRule);
+  rule->param.neighbor.n = 0;
+  rule->param.neighbor.nbr = NULL;
+  rule->param.neighbor.dir = NumberOfRegisters;
+  rule->param.neighbor.nextRule = NULL;
   return rule;
 }
 
@@ -92,6 +117,8 @@ void deleteParticleRule (void *voidRule) {
   ModifyRuleParams *modify;
   RandomRuleParams *random;
   LoadRuleParams *load;
+  VectorRuleParams *vector;
+  NeighborRuleParams *neighbor;
   FunctionRuleParams *function;
 
   rule = (ParticleRule*) voidRule;
@@ -145,6 +172,20 @@ void deleteParticleRule (void *voidRule) {
       deleteParticleRule (load->nextRule);
     break;
 
+  case VectorRule:
+    vector = &rule->param.vector;
+    SafeFree (vector->nbr);
+    if (vector->nextRule)
+      deleteParticleRule (vector->nextRule);
+    break;
+
+  case NeighborRule:
+    neighbor = &rule->param.neighbor;
+    SafeFree (neighbor->nbr);
+    if (neighbor->nextRule)
+      deleteParticleRule (neighbor->nextRule);
+    break;
+
   case FunctionRule:
     function = &rule->param.function;
     SafeFreeOrNull (function->schemeExpr);
@@ -170,3 +211,29 @@ void defineSubRule (StringMap **subRuleIndex, const char* name, ParticleRule *ru
     Warn ("Local subrule name %s masks definition for pseudonymous global subrule", name);
   (void) StringMapInsert (*subRuleIndex, name, rule);
 }
+
+Neighborhood* newNeighborhood (int size) {
+  Neighborhood* hood;
+  hood = SafeCalloc (1, sizeof(Neighborhood));
+  hood->size = size;
+  hood->x = SafeCalloc (size, sizeof(signed char));
+  hood->y = SafeCalloc (size, sizeof(signed char));
+  hood->z = SafeCalloc (size, sizeof(signed char));
+  return hood;
+}
+
+void deleteNeighborhood (Neighborhood* hood) {
+  SafeFree (hood->x);
+  SafeFree (hood->y);
+  SafeFree (hood->z);
+  SafeFree (hood);
+}
+
+int getNeighborIndex (Neighborhood* hood, signed char x, signed char y, signed char z) {
+  int n;
+  for (n = 0; n < hood->size; ++n)
+    if (hood->x[n] == x && hood->y[n] == y && hood->z[n] == z)
+      return n;
+  return -1;
+}
+

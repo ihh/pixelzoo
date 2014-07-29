@@ -33,6 +33,9 @@ typedef struct Particle {
   /*  evolution rule */
   ParticleRule* rule;
 
+  /* Neighborhood */
+  Neighborhood* hood;
+
   /* Read-only bits */
   State readOnly[ReadOnlyStates];
 

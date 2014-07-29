@@ -3,7 +3,7 @@ Neighborhood-Oriented VM Extensions
 All these require a neighborhood (simply a list of XYZ coords) defined at the particle level
 
 VECSUM:
-Load registers (X,Y,Z,DIR,INVDIR) with vector-sum of one or more neighbors (NBR1,NBR2...) and goto NEXT (or stop if not in neighborhood)
+Load registers (X,Y,Z,DIR,INVDIR) with vector-sum of one or two neighbors (NBR1,NBR2) and goto NEXT (or stop if not in neighborhood)
 ...NB if there is just one neighbor, this can be used to get INVDIR, or (X,Y,Z)
 ...Any of the result registers can be omitted
 

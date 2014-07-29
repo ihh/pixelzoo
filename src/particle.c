@@ -23,6 +23,7 @@ Particle* newParticle (const char* name) {
   p->colorRule[0].offset = HSB24White;  /* this ensures that the default ColorRule's generate a white particle */
   p->synchronous = p->syncPeriod = p->syncPhase = 0;
   p->rule = NULL;
+  p->hood = NULL;
   p->rate = p->asyncFiringRate = p->syncFiringRate = 0.;
   p->dispatch = NULL;
   p->subRule = NULL;
@@ -37,6 +38,8 @@ void deleteParticle (Particle* p) {
     deleteStringMap (p->subRule);
   if (p->rule)
     deleteParticleRule (p->rule);
+  if (p->hood)
+    deleteNeighborhood (p->hood);
   deleteList (p->vars);
   SafeFreeOrNull(p->sprite);
   StringDelete(p->name);
