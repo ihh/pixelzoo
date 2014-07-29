@@ -1145,17 +1145,20 @@
 	   merged-bond-dir-var
 	   expected-partner-has bond-base-reg next-in-cascade)
     (lambda (subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-      (switch-var
-       origin self-type has-bond-var
-       `((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	 (1 ,(rna-bind-and-verify tag 0 has-bond-var bond-dir-var
-				  sense-partner-has-bond-var sense-partner-bond-dir-var
-				  expected-partner-has bond-base-reg next-in-cascade
-				  subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	 (2 ,(rna-bind-and-verify tag 1 has-bond-var bond-dir-var
-				  anti-partner-has-bond-var anti-partner-bond-dir-var
-				  expected-partner-has bond-base-reg next-in-cascade
-				  subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))))))
+      (if
+       (null? candidate-nbr-dirs)
+       nop-rule
+       (switch-var
+	origin self-type has-bond-var
+	`((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
+	  (1 ,(rna-bind-and-verify tag 0 has-bond-var bond-dir-var
+				   sense-partner-has-bond-var sense-partner-bond-dir-var
+				   expected-partner-has bond-base-reg next-in-cascade
+				   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
+	  (2 ,(rna-bind-and-verify tag 1 has-bond-var bond-dir-var
+				   anti-partner-has-bond-var anti-partner-bond-dir-var
+				   expected-partner-has bond-base-reg next-in-cascade
+				   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)))))))
 
   (define (rna-make-connect-tag goes-to-anti)
     (if (= goes-to-anti 1) "2a" "2s"))
@@ -1401,6 +1404,7 @@
    rna-make-split-rule
    `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
+; Uncomment to test memory limitations of RNA program...
   (define dummy (rna-move-rule))
 
   ) ;; end
