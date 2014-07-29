@@ -447,4 +447,7 @@
    rna-make-split-rule
    `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
+; Uncomment to test memory limitations of RNA program...
+;  (define dummy (rna-move-rule))
+
   ) ;; end
