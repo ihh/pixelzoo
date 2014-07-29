@@ -626,6 +626,7 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	reg[neighbor->dir] = rn;
 	rule = neighbor->nextRule;
       }
+      SafeFree (inaccessible);
     }
     break;
 
