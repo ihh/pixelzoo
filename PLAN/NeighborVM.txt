@@ -1,0 +1,14 @@
+Neighborhood-Oriented VM Extensions
+
+All these require a neighborhood (simply a list of XYZ coords) defined at the particle level
+
+INVDIR:
+Load register INVDIR with inverse of DIR, and goto NEXT
+...inverse of DIR is assumed to be (DIR + TOTAL_CELLS_IN_NEIGHBORHOOD/2) % TOTAL_CELLS_IN_NEIGHBORHOOD
+...could be implemented more generically by simply adding a MODULUS field to ModifyRule (at cost of bloat)
+
+VECSUM:
+Load registers (X,Y,Z,DIR,INVDIR) with vector-sum of DIR1 and DIR2, and goto NEXT (or fail if not in neighborhood)
+
+RNDNBR:
+Load registers (X,Y,Z,DIR) with a random direction adjacent to zero or more neighbors (NBR1,NBR2,NBR3,NBR4...) and goto NEXT (or fail if no mutually adjacent neighbors)
