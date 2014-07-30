@@ -161,13 +161,31 @@
 
   ;; create the cascade for the top-level rule
   (define (rna-move-rule)
+
+    ;; cascades to define drift rules & associated subrules
+    (rna-ds-cascade
+     rna-random-step-subrule-cascade
+     rna-make-random-step-rule
+     `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
+
+    (rna-sense-cascade
+     rna-random-step-subrule-cascade
+     rna-make-random-step-rule
+     `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
+
+    (rna-antisense-cascade
+     rna-random-step-subrule-cascade
+     rna-make-split-rule
+     `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
+
+    ;; main rule
     (subrule
      rna-move-subrule-name
      (switch-var
       origin self-type rna-has-anti-var
       `((0 
 	 ,(rna-sense-cascade
-	   rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" () ,moore-dirs)))
+	   rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" ())))
 	(1
 	 ,(switch-var
 	   origin self-type rna-sense-base-var
@@ -177,12 +195,14 @@
 	       `((26 ,(- 3 sense-base)))
 	       `(goto ,rna-ds-move-subrule-name)))
 	    (iota 4)))))))
+
+    ;; latter part of main rule
     (subrule
      rna-ds-move-subrule-name
      (rna-diverted-ds-cascade
       rna-bond-cascade rna-drift-rule rna-split-prob
-      `(,rna-split-subrule-prefix "" () ,moore-dirs)
-      `(,rna-step-ds-subrule-prefix "" () ,moore-dirs))))
+      `(,rna-split-subrule-prefix "" ())
+      `(,rna-step-ds-subrule-prefix "" ()))))
 
   ;; rna-bond-cascade: the function for creating the bond verification cascade
   ;; if has-bond-var is TRUE, verify that the bond is mutual, and add to confirmed-bond-list
@@ -213,20 +233,20 @@
   (define (rna-bind-and-verify tag goes-to-anti has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var
 			       expected-partner-has-bond-var bond-base-reg next-in-cascade
 			       subrule-prefix subrule-suffix confirmed-bond-list)
-    (let ((goes-to-anti-tag (rna-make-connect-tag goes-to-anti))
-	  (x-reg bond-base-reg)
-	  (y-reg (+ bond-base-reg 1))
-	  (dir-reg (+ bond-base-reg 2))
-	  (invdir-reg (+ bond-base-reg 3))
-	  (loc-reg (list x-reg y-reg))
-	  (erase-bond (set-self-var has-bond-var 0))
-	  (add-bond-and-proceed
-	   (next-in-cascade
-	    subrule-prefix
-	    (string-append subrule-suffix tag goes-to-anti-tag)
-	    (cons bond-base-reg confirmed-bond-list))))
+    (let* ((goes-to-anti-tag (rna-make-connect-tag goes-to-anti))
+	   (x-reg bond-base-reg)
+	   (y-reg (+ bond-base-reg 1))
+	   (dir-reg (+ bond-base-reg 2))
+	   (invdir-reg (+ bond-base-reg 3))
+	   (loc-reg (list x-reg y-reg))
+	   (erase-bond (set-self-var has-bond-var 0))
+	   (add-bond-and-proceed
+	    (next-in-cascade
+	     subrule-prefix
+	     (string-append subrule-suffix tag goes-to-anti-tag)
+	     (cons bond-base-reg confirmed-bond-list))))
       (get-register-from-var
-       origin self bond-dir-var dir-reg
+       origin self-type bond-dir-var dir-reg
        `(vector
 	 (index ,dir-reg)
 	 (x ,x-reg)
@@ -241,16 +261,16 @@
 		 partner-has-bond-var
 		 `((,expected-partner-has-bond-var
 		    ,(indirect-compare-var-to-register
-		      loc self-type partner-bond-dir-var invdir-reg
+		      loc-reg self-type partner-bond-dir-var invdir-reg
 		      `(eq
-			 ,(if
-			   goes-to-anti
-			   (switch-var
-			    loc self-type
-			    rna-has-anti-var
-			    `((1 ,add-bond-and-proceed))
-			    erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
-			   add-bond-and-proceed))
+			,(if
+			  goes-to-anti
+			  (indirect-switch-var
+			   loc-reg self-type
+			   rna-has-anti-var
+			   `((1 ,add-bond-and-proceed))
+			   erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
+			  add-bond-and-proceed))
 		      `(neq ,erase-bond))))  ;; called if partner bond direction doesn't point back to us
 		 erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
 	    erase-bond))))))  ;; called if partner is not a polymer
@@ -258,18 +278,15 @@
 
   ;; rna-drift-rule(confirmed-bond-list): the rule at the bottom of the bond verification cascade
   ;;  select random neighbor, load registers, jump to appropriate subrule
-  (set! rna-drift-rule-debug-count 0)
   (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list)
     (let* ((rule-name (string-append
 		       subrule-prefix
 		       subrule-suffix)))
-      (set! rna-drift-rule-debug-count (+ rna-drift-rule-debug-count 1))
-      (if (= (modulo rna-drift-rule-debug-count 1000) 0)
-	  (begin
-	    (display rna-drift-rule-debug-count)
-	    (display " rna-drift-rule ")
-	    (display rule-name)
-	    (display "\n")))
+
+      (display "rna-drift-rule ")
+      (display rule-name)
+      (display "\n")
+
       `(adjacent
 	,@(map
 	   (lambda (bond-base-reg)
@@ -430,22 +447,6 @@
 	 (list bond-base-reg (+ bond-base-reg 1))
 	 self-type partner-bond-dir-var (+ bond-base-reg 5))
 	merge-remaining-bonds))))
-
-  ;; cascades to define drift rules & associated subrules
-  (rna-ds-cascade
-   rna-random-step-subrule-cascade
-   rna-make-random-step-rule
-   `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
-
-  (rna-sense-cascade
-   rna-random-step-subrule-cascade
-   rna-make-random-step-rule
-   `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
-
-  (rna-antisense-cascade
-   rna-random-step-subrule-cascade
-   rna-make-split-rule
-   `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
 ; Uncomment to test memory limitations of RNA program...
 ;  (define dummy (rna-move-rule))

@@ -103,7 +103,7 @@ testrna: scheme/testrna.scm
 	cat $< | bin/pzchibi
 
 scheme/testrna.scm: $(SCHEME_FILES_WITH_PREFIX) scheme/rna.scm
-	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); echo '(define self-type "RNA")'; echo '(string-length (sxml->string (rna-move-rule)))'; echo ")") >$@
+	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); echo '(define self-type "RNA")'; echo '(rna-move-rule)'; echo ")") >$@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)
