@@ -20,6 +20,7 @@
   ;; (22,23) direction & inverse-direction from target cell to ra-bond cell
   ;; (24,25) location of target cell for move
   ;;  26     complement of sense base
+  ;;  27     direction from origin to target cell
 
   (define rna-has-fs-bond-var "has-fs-bond")
   (define rna-has-rs-bond-var "has-rs-bond")
@@ -63,8 +64,11 @@
        (varsize (name ,rna-anti-base-var) (size 2))
        (varsize (name ,rna-has-anti-var) (size 1)))
 
+      ,moore-particle-neighborhood
+
       (colrule (var ,rna-sense-base-var) (hexmul "20000"))
       (colrule (var ,rna-anti-base-var) (hexmul "80000") (hexinc "14ffff"))
+
       (rule (scheme "(rna-move-rule)"))))
 
   ;; helper functions for iterating over all possible combinations of bonds (a "cascade")
@@ -190,55 +194,55 @@
 	   anti-partner-has-bond-var anti-partner-bond-dir-var
 	   merged-bond-dir-var
 	   expected-partner-has bond-base-reg next-in-cascade)
-    (lambda (subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-      (if
-       (null? candidate-nbr-dirs)
-       nop-rule
-       (switch-var
-	origin self-type has-bond-var
-	`((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	  (1 ,(rna-bind-and-verify tag 0 has-bond-var bond-dir-var
-				   sense-partner-has-bond-var sense-partner-bond-dir-var
-				   expected-partner-has bond-base-reg next-in-cascade
-				   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs))
-	  (2 ,(rna-bind-and-verify tag 1 has-bond-var bond-dir-var
-				   anti-partner-has-bond-var anti-partner-bond-dir-var
-				   expected-partner-has bond-base-reg next-in-cascade
-				   subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)))))))
+    (lambda (subrule-prefix subrule-suffix confirmed-bond-list)
+      (switch-var
+       origin self-type has-bond-var
+       `((0 ,(next-in-cascade subrule-prefix subrule-suffix confirmed-bond-list))
+	 (1 ,(rna-bind-and-verify tag 0 has-bond-var bond-dir-var
+				  sense-partner-has-bond-var sense-partner-bond-dir-var
+				  expected-partner-has bond-base-reg next-in-cascade
+				  subrule-prefix subrule-suffix confirmed-bond-list))
+	 (2 ,(rna-bind-and-verify tag 1 has-bond-var bond-dir-var
+				  anti-partner-has-bond-var anti-partner-bond-dir-var
+				  expected-partner-has bond-base-reg next-in-cascade
+				  subrule-prefix subrule-suffix confirmed-bond-list))))))
 
   (define (rna-make-connect-tag goes-to-anti)
     (if (= goes-to-anti 1) "2a" "2s"))
 
   (define (rna-bind-and-verify tag goes-to-anti has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var
 			       expected-partner-has-bond-var bond-base-reg next-in-cascade
-			       subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-    (let ((goes-to-anti-tag (rna-make-connect-tag goes-to-anti)))
-      (bind-moore-dir
-       bond-dir-var
-       (lambda (loc dir)
-	 (let* ((inv-dir (moore-back dir))
-		(erase-bond (set-self-var has-bond-var 0))
-		(add-bond-and-proceed
-		 (next-in-cascade
-		  subrule-prefix
-		  (string-append subrule-suffix tag goes-to-anti-tag)
-		  (cons (list
-			 bond-dir-var loc dir inv-dir bond-base-reg partner-has-bond-var partner-bond-dir-var)
-			confirmed-bond-list)
-		  (grep
-		   (lambda (nbr-dir)
-		     (moore-neighbor? (loc-minus loc (moore-loc nbr-dir)))) candidate-nbr-dirs))))
-	   (switch-type
-	    loc
+			       subrule-prefix subrule-suffix confirmed-bond-list)
+    (let ((goes-to-anti-tag (rna-make-connect-tag goes-to-anti))
+	  (x-reg bond-base-reg)
+	  (y-reg (+ bond-base-reg 1))
+	  (dir-reg (+ bond-base-reg 2))
+	  (invdir-reg (+ bond-base-reg 3))
+	  (loc-reg (list x-reg y-reg))
+	  (erase-bond (set-self-var has-bond-var 0))
+	  (add-bond-and-proceed
+	   (next-in-cascade
+	    subrule-prefix
+	    (string-append subrule-suffix tag goes-to-anti-tag)
+	    (cons bond-base-reg confirmed-bond-list))))
+      (get-register-from-var
+       origin self bond-dir-var dir-reg
+       `(vector
+	 (index ,dir-reg)
+	 (x ,x-reg)
+	 (y ,y-reg)
+	 (inv ,invdir-reg)
+	 (next
+	  ,(indirect-switch-type
+	    loc-reg
 	    `((,self-type
-	       ,(switch-var
-		 loc self-type
+	       ,(indirect-switch-var
+		 loc-reg self-type
 		 partner-has-bond-var
 		 `((,expected-partner-has-bond-var
-		    ,(switch-var
-		      loc self-type
-		      partner-bond-dir-var
-		      `((,inv-dir
+		    ,(indirect-compare-var-to-register
+		      loc self-type partner-bond-dir-var invdir-reg
+		      `(eq
 			 ,(if
 			   goes-to-anti
 			   (switch-var
@@ -246,65 +250,58 @@
 			    rna-has-anti-var
 			    `((1 ,add-bond-and-proceed))
 			    erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
-			   add-bond-and-proceed)))
-		      erase-bond)))  ;; called if partner bond direction doesn't point back to us
+			   add-bond-and-proceed))
+		      `(neq ,erase-bond))))  ;; called if partner bond direction doesn't point back to us
 		 erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
 	    erase-bond))))))  ;; called if partner is not a polymer
 
 
-  ;; rna-drift-rule(confirmed-bond-list,candidate-nbr-dirs): the rule at the bottom of the bond verification cascade
+  ;; rna-drift-rule(confirmed-bond-list): the rule at the bottom of the bond verification cascade
   ;;  select random neighbor, load registers, jump to appropriate subrule
   (set! rna-drift-rule-debug-count 0)
-  (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list candidate-nbr-dirs)
-    (set! rna-drift-rule-debug-count (+ rna-drift-rule-debug-count 1))
-    (if (= (modulo rna-drift-rule-debug-count 1000) 0)
-	(begin
-	  (display rna-drift-rule-debug-count)
-	  (display " rna-drift-rule ")
-	  (display subrule-prefix)
-	  (display subrule-suffix)
-	  (display " ")
-	  (display candidate-nbr-dirs)
-	  (display "\n")))
+  (define (rna-drift-rule subrule-prefix subrule-suffix confirmed-bond-list)
+    (let* ((rule-name (string-append
+		       subrule-prefix
+		       subrule-suffix)))
+      (set! rna-drift-rule-debug-count (+ rna-drift-rule-debug-count 1))
+      (if (= (modulo rna-drift-rule-debug-count 1000) 0)
+	  (begin
+	    (display rna-drift-rule-debug-count)
+	    (display " rna-drift-rule ")
+	    (display rule-name)
+	    (display "\n")))
+      `(adjacent
+	,@(map
+	   (lambda (bond-base-reg)
+	     (let* ((bond-dir-reg (+ bond-base-reg 2)))
+	       `(index ,bond-dir-reg)))
+	   confirmed-bond-list)
+	(dir 27)
+	(next
+	 (vector
+	  (index 27)
+	  (x 24)
+	  (y 25)
+	  (next
+	   ,(rna-compute-angles
+	     confirmed-bond-list
+	     `(goto ,rule-name))))))))
+
+  (define (rna-compute-angles confirmed-bond-list next-rule)
     (if
-     (null? candidate-nbr-dirs)
-     nop-rule
-     (apply-random-switch
-      (map
-       (lambda (move-dir)
-	 (let* ((move-loc (moore-loc move-dir)))
-	   `(1 ,(rna-load-bond-and-target-registers
-		  move-loc
-		  confirmed-bond-list
-		  (string-append
-		   subrule-prefix
-		   subrule-suffix)))))
-       candidate-nbr-dirs))))
-
-  (define (rna-load-bond-and-target-registers move-loc candidate-nbr-dirs rule-name)
-    (load-rule
-     (append
-      `((24 ,(car move-loc))
-	(25 ,(cadr move-loc)))
-      (map (lambda (dirvar-loc-dir-invdir)
-	     (let* ((bond-dir-var (car dirvar-loc-dir-invdir)) ;0 bond-dir-var
-		    (loc (cadr dirvar-loc-dir-invdir)) ;1 loc
-		    (dir (caddr dirvar-loc-dir-invdir)) ;2 dir
-		    (inv-dir (cadddr dirvar-loc-dir-invdir)) ;3 inv-dir
-		    (bond-base-reg (caddddr dirvar-loc-dir-invdir)) ;4 bond-base-reg
-					;5 partner-has-bond-var
-					;6 partner-bond-dir-var
-		    (new-dir (moore-dir (loc-minus move-loc loc)))
-		    (new-inv-dir (moore-back new-dir)))
-	       `((,bond-base-reg ,(car loc))
-		 (,(+ bond-base-reg 1) ,(cadr loc))
-		 (,(+ bond-base-reg 2) ,dir)
-		 (,(+ bond-base-reg 3) ,inv-dir)
-		 (,(+ bond-base-reg 4) ,new-dir)
-		 (,(+ bond-base-reg 5) ,new-inv-dir))))
-	   candidate-nbr-dirs))
-     `(goto rule-name)))
-
+     (null? confirmed-bond-list)
+     next-rule
+     (let* ((bond-base-reg (car confirmed-bond-list))
+	    (neighbor-to-origin (+ 3 bond-base-reg))
+	    (target-to-neighbor (+ 4 bond-base-reg))
+	    (neighbor-to-target (+ 5 bond-base-reg))
+	    (rest-of-confirmed-bond-list (cdr confirmed-bond-list)))
+       `(vector
+	 (index ,neighbor-to-origin)
+	 (index 27)  ;; origin-to-target
+	 (dir ,neighbor-to-target)
+	 (inv ,target-to-neighbor)
+	 (next ,(rna-compute-angles rest-of-confirmed-bond-list next-rule))))))
 
   ;; random-step-XX: (where XX is concatenation of all dir-vars for which bonds are present)
   ;;   Switch on move target:
