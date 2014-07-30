@@ -162,47 +162,52 @@
   ;; create the cascade for the top-level rule
   (define (rna-move-rule)
 
-    ;; cascades to define drift rules & associated subrules
-    (rna-ds-cascade
-     rna-random-step-subrule-cascade
-     rna-make-random-step-rule
-     `(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
+    `(rule
 
-    (rna-sense-cascade
-     rna-random-step-subrule-cascade
-     rna-make-random-step-rule
-     `(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
+      ;; cascades to define drift rules & associated subrules
+      ,(rna-ds-cascade
+	rna-random-step-subrule-cascade
+	rna-make-random-step-rule
+	`(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
 
-    (rna-antisense-cascade
-     rna-random-step-subrule-cascade
-     rna-make-split-rule
-     `(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
+      ,(rna-sense-cascade
+	rna-random-step-subrule-cascade
+	rna-make-random-step-rule
+	`(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
 
-    ;; main rule
-    (subrule
-     rna-move-subrule-name
-     (switch-var
-      origin self-type rna-has-anti-var
-      `((0 
-	 ,(rna-sense-cascade
-	   rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" ())))
-	(1
-	 ,(switch-var
-	   origin self-type rna-sense-base-var
-	   (map
-	    (lambda (sense-base)
-	      (load-rule
-	       `((26 ,(- 3 sense-base)))
-	       `(goto ,rna-ds-move-subrule-name)))
-	    (iota 4)))))))
+      ,(rna-antisense-cascade
+	rna-random-step-subrule-cascade
+	rna-make-split-rule
+	`(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
-    ;; latter part of main rule
-    (subrule
-     rna-ds-move-subrule-name
-     (rna-diverted-ds-cascade
-      rna-bond-cascade rna-drift-rule rna-split-prob
-      `(,rna-split-subrule-prefix "" ())
-      `(,rna-step-ds-subrule-prefix "" ()))))
+      ;; main rule
+      ,(subrule
+	rna-move-subrule-name
+	(switch-var
+	 origin self-type rna-has-anti-var
+	 `((0 
+	    ,(rna-sense-cascade
+	      rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" ())))
+	   (1
+	    ,(switch-var
+	      origin self-type rna-sense-base-var
+	      (map
+	       (lambda (sense-base)
+		 (load-rule
+		  `((26 ,(- 3 sense-base)))
+		  `(goto ,rna-ds-move-subrule-name)))
+	       (iota 4)))))))
+
+      ;; latter part of main rule
+      ,(subrule
+	rna-ds-move-subrule-name
+	(rna-diverted-ds-cascade
+	 rna-bond-cascade rna-drift-rule rna-split-prob
+	 `(,rna-split-subrule-prefix "" ())
+	 `(,rna-step-ds-subrule-prefix "" ())))
+
+      ;; main goto
+      (goto ,rna-move-subrule-name)))
 
   ;; rna-bond-cascade: the function for creating the bond verification cascade
   ;; if has-bond-var is TRUE, verify that the bond is mutual, and add to confirmed-bond-list
@@ -282,10 +287,6 @@
     (let* ((rule-name (string-append
 		       subrule-prefix
 		       subrule-suffix)))
-
-      (display "rna-drift-rule ")
-      (display rule-name)
-      (display "\n")
 
       `(adjacent
 	,@(map
