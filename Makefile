@@ -38,8 +38,8 @@ CHIBI_OFILES := $(addprefix chibi/obj/,$(addsuffix .o,$(basename $(notdir $(CHIB
 CHIBI_CODE   := -Ichibi/lib -DSEXP_USE_DL=0 -DSEXP_USE_STATIC_LIBS
 CHIBI_HDRS   := -Ichibi/include -DSEXP_64_BIT -Dsexp_default_module_path=\"$(CURDIR)/chibi/lib\" -Dsexp_pixelzoo_module_path=\"$(CURDIR)/scheme/zoo.scm\"
 
-SCHEME_FILES := util.scm general.scm poly.scm rna.scm
-# SCHEME_FILES := util.scm general.scm poly.scm
+# SCHEME_FILES := util.scm general.scm poly.scm rna.scm
+SCHEME_FILES := util.scm general.scm poly.scm
 
 all: libtargets targets scheme/zoo.scm
 
@@ -103,7 +103,8 @@ testrna: scheme/testrna.scm
 	cat $< | bin/pzchibi
 
 scheme/testrna.scm: $(SCHEME_FILES_WITH_PREFIX) scheme/rna.scm
-	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); echo '(define self-type "RNA")'; echo '(rna-move-rule)'; echo ")") >$@
+#	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(string-length (sxml->string (rna-move-rule)))'; echo ")") >$@
+	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule))'; echo ")") >$@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)

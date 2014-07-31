@@ -172,7 +172,7 @@
 
       ,(rna-sense-cascade
 	rna-random-step-subrule-cascade
-	rna-make-random-step-rule
+	rna-make-step-or-merge-rule
 	`(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
 
       ,(rna-antisense-cascade
@@ -252,33 +252,34 @@
 	     (cons bond-base-reg confirmed-bond-list))))
       (get-register-from-var
        origin self-type bond-dir-var dir-reg
-       `(vector
-	 (index ,dir-reg)
-	 (x ,x-reg)
-	 (y ,y-reg)
-	 (inv ,invdir-reg)
-	 (next
-	  ,(indirect-switch-type
-	    loc-reg
-	    `((,self-type
-	       ,(indirect-switch-var
-		 loc-reg self-type
-		 partner-has-bond-var
-		 `((,expected-partner-has-bond-var
-		    ,(indirect-compare-var-to-register
-		      loc-reg self-type partner-bond-dir-var invdir-reg
-		      `(eq
-			,(if
-			  goes-to-anti
-			  (indirect-switch-var
-			   loc-reg self-type
-			   rna-has-anti-var
-			   `((1 ,add-bond-and-proceed))
-			   erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
-			  add-bond-and-proceed))
-		      `(neq ,erase-bond))))  ;; called if partner bond direction doesn't point back to us
-		 erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
-	    erase-bond))))))  ;; called if partner is not a polymer
+       `(rule
+	 (vector
+	  (index ,dir-reg)
+	  (x ,x-reg)
+	  (y ,y-reg)
+	  (inv ,invdir-reg)
+	  (next
+	   ,(indirect-switch-type
+	     loc-reg
+	     `((,self-type
+		,(indirect-switch-var
+		  loc-reg self-type
+		  partner-has-bond-var
+		  `((,expected-partner-has-bond-var
+		     ,(indirect-compare-var-to-register
+		       loc-reg self-type partner-bond-dir-var invdir-reg
+		       `(eq
+			 ,(if
+			   goes-to-anti
+			   (indirect-switch-var
+			    loc-reg self-type
+			    rna-has-anti-var
+			    `((1 ,add-bond-and-proceed))
+			    erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
+			   add-bond-and-proceed))
+		       `(neq ,erase-bond))))  ;; called if partner bond direction doesn't point back to us
+		  erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
+	     erase-bond)))))))  ;; called if partner is not a polymer
 
 
   ;; rna-drift-rule(confirmed-bond-list): the rule at the bottom of the bond verification cascade
@@ -288,22 +289,25 @@
 		       subrule-prefix
 		       subrule-suffix)))
 
-      `(adjacent
-	,@(map
-	   (lambda (bond-base-reg)
-	     (let* ((bond-dir-reg (+ bond-base-reg 2)))
-	       `(index ,bond-dir-reg)))
-	   confirmed-bond-list)
-	(dir 27)
-	(next
-	 (vector
-	  (index 27)
-	  (x 24)
-	  (y 25)
-	  (next
-	   ,(rna-compute-angles
-	     confirmed-bond-list
-	     `(goto ,rule-name))))))))
+      `(rule
+	(adjacent
+	 ,@(map
+	    (lambda (bond-base-reg)
+	      (let* ((bond-dir-reg (+ bond-base-reg 2)))
+		`(index ,bond-dir-reg)))
+	    confirmed-bond-list)
+	 (dir 27)
+	 (next
+	  (rule
+	   (vector
+	    (index 27)
+	    (x 24)
+	    (y 25)
+	    (next
+	     (rule
+	      ,(rna-compute-angles
+		confirmed-bond-list
+		`(goto ,rule-name)))))))))))
 
   (define (rna-compute-angles confirmed-bond-list next-rule)
     (if
@@ -319,9 +323,9 @@
 	 (index 27)  ;; origin-to-target
 	 (dir ,neighbor-to-target)
 	 (inv ,target-to-neighbor)
-	 (next ,(rna-compute-angles rest-of-confirmed-bond-list next-rule))))))
+	 (next (rule ,(rna-compute-angles rest-of-confirmed-bond-list next-rule)))))))
 
-  ;; random-step-XX: (where XX is concatenation of all dir-vars for which bonds are present)
+;; random-step-XX: (where XX is concatenation of all dir-vars for which bonds are present)
   ;;   Switch on move target:
   ;;    (empty) move into it
   ;;    (contains RNA with no anti) merge with probability (complementary ? 1 : p_merge_mismatch)
@@ -337,32 +341,31 @@
     (let ((goes-to-anti-tag (rna-make-connect-tag 1))
 	  (goes-to-sense-tag (rna-make-connect-tag 0)))
       (lambda (subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
-	(begin
-	  (next-in-cascade
-	   subrule-prefix
-	   (string-append subrule-suffix tag goes-to-sense-tag)
-	   self-has-anti
-	   (cons (list has-bond-var bond-dir-var sense-partner-has-bond-var sense-partner-bond-dir-var merged-bond-dir-var bond-base-reg)
-		 confirmed-bond-reg-list))
-	  (next-in-cascade
-	   subrule-prefix
-	   (string-append subrule-suffix tag goes-to-anti-tag)
-	   self-has-anti
-	   (cons (list has-bond-var bond-dir-var anti-partner-has-bond-var anti-partner-bond-dir-var merged-bond-dir-var bond-base-reg)
-		 confirmed-bond-reg-list))
-	  (next-in-cascade subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)))))
+	`(,@(next-in-cascade
+	     subrule-prefix
+	     (string-append subrule-suffix tag goes-to-sense-tag)
+	     self-has-anti
+	     (cons (list has-bond-var bond-dir-var sense-partner-has-bond-var sense-partner-bond-dir-var merged-bond-dir-var bond-base-reg)
+		   confirmed-bond-reg-list))
+	  ,@(next-in-cascade
+	     subrule-prefix
+	     (string-append subrule-suffix tag goes-to-anti-tag)
+	     self-has-anti
+	     (cons (list has-bond-var bond-dir-var anti-partner-has-bond-var anti-partner-bond-dir-var merged-bond-dir-var bond-base-reg)
+		   confirmed-bond-reg-list))
+	  ,@(next-in-cascade subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)))))
 
   ;; the function at the bottom of the drift rule cascade
   (define (rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
 	   (qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
-      (begin
+      (list
 	(subrule
 	 subrule-name
 	 (indirect-switch-type  ;; Switch on move target
 	  '(24 25)
 	  `((,empty-type   ;; (empty) move into it
-	     (rna-reorient-bonds confirmed-bond-reg-list (,indirect-move-self '(24 25))))
+	     ,(rna-reorient-bonds confirmed-bond-reg-list (indirect-move-self '(24 25))))
 	    (,self-type    ;; (contains RNA)
 	     ,(if
 	       self-has-anti
@@ -377,8 +380,13 @@
 		     `(neq  ;; non-complementary: merge with probability rna-merge-mismatch-prob
 		       ,(random-rule
 			 rna-merge-mismatch-prob
-			 qualified-merge-subrule-name)))))))))))
-	;; merge subrule
+			 qualified-merge-subrule-name))))))))))))))
+
+  (define (rna-make-step-or-merge-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
+    (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
+	   (qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
+      (cons
+       	;; merge subrule
 	(subrule
 	 qualified-merge-subrule-name
 	 (copy-self-var-to-indirect
@@ -387,23 +395,24 @@
 	   self-type rna-has-fs-bond-var '(24 25) self-type rna-has-fa-bond-var
 	   (copy-self-var-to-indirect
 	    self-type rna-has-rs-bond-var '(24 25) self-type rna-has-ra-bond-var
-	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))
+	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))
+	(rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list))))
 
   ;; the function at the antisense diversion point. Generates a split rule
   (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (indirect-switch-type  ;; Switch on move target
      '(24 25)
      `((,empty-type   ;; (empty) split into it
-	(indirect-set-rule
-	 '(24 25) self-type
-	 '((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
-	 (copy-self-var-to-indirect
-	  self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
+	,(indirect-set-rule
+	  '(24 25) self-type
+	  `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
 	  (copy-self-var-to-indirect
-	   self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+	   self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
 	   (copy-self-var-to-indirect
-	    self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))
+	    self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+	    (copy-self-var-to-indirect
+	     self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
+	     (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)
@@ -448,8 +457,5 @@
 	 (list bond-base-reg (+ bond-base-reg 1))
 	 self-type partner-bond-dir-var (+ bond-base-reg 5))
 	merge-remaining-bonds))))
-
-; Uncomment to test memory limitations of RNA program...
-;  (define dummy (rna-move-rule))
 
   ) ;; end
