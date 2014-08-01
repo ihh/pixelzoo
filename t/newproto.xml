@@ -3,6 +3,7 @@
     <size>128</size>
     <grammar>
       <particle><scheme>(polymer-particle "polymer")</scheme></particle>
+      <particle><scheme>(rna-particle "RNA")</scheme></particle>
       <particle>
         <name>empty</name>
         <type>0</type>
@@ -7392,6 +7393,7 @@ The following DO seem to work...
     </init>
   </board>
   <rate>240</rate>
+  <tool><scheme>(rna-tool "RNA" "acgu")</scheme></tool>
   <tool>
     <name>little polymer loops</name>
     <size>4</size>
