@@ -8,6 +8,8 @@
 #define DefaultToolOldState EmptyState
 #define DefaultToolNewState EmptyState
 
+int toolPosAllowed (Tool*, Board*, int, int, int, State);
+
 Tool* newTool (char *name, int size) {
   Tool *tool;
   int x, y;
@@ -28,6 +30,7 @@ Tool* newTool (char *name, int size) {
   tool->overwriteMask = TypeMask;
 
   tool->sprayRate = tool->rechargeRate = tool->reserve = tool->maxReserve = 1.;
+  tool->isStamp = 0;
 
   return tool;
 }
@@ -47,11 +50,27 @@ void deleteTool (void *voidTool) {
   SafeFree (tool);
 }
 
+int toolPosAllowed (Tool *tool, Board *board, int xPaint, int yPaint, int zPaint, State newState) {
+  State oldState, maskedOldState;
+  XYCoord xyTmp;
+  if (onBoard (board, xPaint, yPaint, zPaint)) {
+    if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
+      oldState = readBoardStateUnguarded(board,xPaint,yPaint,zPaint);
+      if (oldState != newState) {
+	maskedOldState = oldState & tool->overwriteMask;
+	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState))
+	  return 1;
+      }
+    }
+  }
+  return 0;
+}
+
 void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int yEnd, double duration) {
   Game *game;
   Board *board;
-  int particles, xOffset, yOffset, xPaint, yPaint, zPaint;
-  State oldState, maskedOldState, newState;
+  int particles, xOffset, yOffset, xPaint, yPaint, zPaint, allClear;
+  State newState;
   XYCoord xyTmp;
   XYMapNode *xyNode;
   double linePos, linePosDelta, xDelta, yDelta;
@@ -64,27 +83,50 @@ void useTool (Tool *tool, void *voidGame, int xStart, int yStart, int xEnd, int 
   linePosDelta = 1. / (double) particles;
   xDelta = xEnd - xStart;
   yDelta = yEnd - yStart;
-  while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
-    sampleQuadLeaf (tool->brushIntensity, game->rng, &xOffset, &yOffset);   /* NB this must *not* use the Board's RNG, as it is a user event, not a simulation event */
-    newState = tool->defaultBrushState;
-    if (tool->brushState)
-      if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))
-	newState = *(State*)xyNode->value;
-    xPaint = xStart + xOffset - tool->brushCenter.x + (int) (.5 + linePos * xDelta);
-    yPaint = yStart + yOffset - tool->brushCenter.y + (int) (.5 + linePos * yDelta);
-    linePos += linePosDelta;
-    if (onBoard (board, xPaint, yPaint, zPaint)) {
-      if (tool->overwriteDisallowLoc == NULL || XYSetFind (tool->overwriteDisallowLoc, xPaint, yPaint, xyTmp) == NULL) {
-	oldState = readBoardStateUnguarded(board,xPaint,yPaint,zPaint);
-	maskedOldState = oldState & tool->overwriteMask;
-	if (tool->overwriteStates == NULL || StateSetFind (tool->overwriteStates, maskedOldState)) {
-	  writeBoardMove (board, xPaint, yPaint, zPaint, newState);
-	  if (oldState != newState)
-	    tool->reserve = MAX (tool->reserve - 1, 0.);
+
+  if (tool->isStamp) {
+    if (tool->reserve >= RBTreeSize(tool->brushState)) {
+	allClear = 1;
+	xStart += -tool->brushCenter.x + (int) (.5 + .5 * xDelta);
+	yStart += -tool->brushCenter.y + (int) (.5 + .5 * yDelta);
+
+	for (xyNode = RBTreeFirst(tool->brushState);
+	     allClear && !RBTreeIteratorFinished(tool->brushState,xyNode);
+	     xyNode = RBTreeSuccessor(tool->brushState,xyNode)) {
+	  xPaint = xStart + ((XYCoord*) xyNode->key)->x;
+	  yPaint = yStart + ((XYCoord*) xyNode->key)->y;
+	  newState = *(State*) xyNode->value;
+	  if (!toolPosAllowed (tool, board, xPaint, yPaint, zPaint, newState))
+	    allClear = 0;
 	}
+
+	if (allClear)
+	  for (xyNode = RBTreeFirst(tool->brushState);
+	       !RBTreeIteratorFinished(tool->brushState,xyNode);
+	       xyNode = RBTreeSuccessor(tool->brushState,xyNode)) {
+	    xPaint = xStart + ((XYCoord*) xyNode->key)->x;
+	    yPaint = yStart + ((XYCoord*) xyNode->key)->y;
+	    newState = *(State*) xyNode->value;
+	    writeBoardMove (board, xPaint, yPaint, zPaint, newState);
+	    tool->reserve = MAX (tool->reserve - 1, 0.);
+	  }
+      }
+
+  } else
+    while (particles-- > 0 && topQuadRate(tool->brushIntensity) > 0. && tool->reserve > 0.) {
+      sampleQuadLeaf (tool->brushIntensity, game->rng, &xOffset, &yOffset);   /* NB this must *not* use the Board's RNG, as it is a user event, not a simulation event */
+      newState = tool->defaultBrushState;
+      if (tool->brushState)
+	if ((xyNode = XYMapFind(tool->brushState,xOffset,yOffset,xyTmp)))
+	  newState = *(State*)xyNode->value;
+      xPaint = xStart + xOffset - tool->brushCenter.x + (int) (.5 + linePos * xDelta);
+      yPaint = yStart + yOffset - tool->brushCenter.y + (int) (.5 + linePos * yDelta);
+      linePos += linePosDelta;
+      if (toolPosAllowed (tool, board, xPaint, yPaint, zPaint, newState)) {
+	writeBoardMove (board, xPaint, yPaint, zPaint, newState);
+	tool->reserve = MAX (tool->reserve - 1, 0.);
       }
     }
-  }
 }
 
 void rechargeTool (Tool *tool, double duration) {

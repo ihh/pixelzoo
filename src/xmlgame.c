@@ -97,6 +97,7 @@ Tool* newToolFromXmlNode (xmlNode* toolNode, int defaultZ, xmlNode* globalOverwr
       tool->icon = StringNew((const char*)NODESTRINGVAL(iconNode));
     tool->z = OPTCHILDINT(toolNode,Z,defaultZ);
     if ((brushNode = CHILD(toolNode,BRUSH))) {
+      tool->isStamp = OPTCHILDINT(brushNode,STAMP,0);
       if ((node = CHILD(brushNode,CENTER))) {
 	tool->brushCenter.x = CHILDINT(node,X);
 	tool->brushCenter.y = CHILDINT(node,Y);

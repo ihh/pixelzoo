@@ -55,6 +55,7 @@ RBNode* RBTreePredecessor(RBTree*,RBNode*);
 RBNode* RBTreeSuccessor(RBTree*,RBNode*);
 RBNode* RBTreeFirst(RBTree*);
 RBNode* RBTreeLast(RBTree*);
+int RBTreeIteratorFinished(RBTree*,RBNode*);
 int RBTreeIsBeforeFirst(RBTree*, void* key);
 int RBTreeIsAfterLast(RBTree*, void* key);
 void RBTreePrint(RBTree*);  /* debug */

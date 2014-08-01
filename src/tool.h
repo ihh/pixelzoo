@@ -30,6 +30,7 @@ typedef struct Tool {
   double reserve;  /* number of particles left that can be deposited */
   double rechargeRate;  /* particle recharge rate, i.e. rate per second at which reserve is replenished */
   double maxReserve;  /* max value of reserve */
+  unsigned char isStamp;  /* if true, then brush is "all-or-nothing" */
 
 } Tool;
 

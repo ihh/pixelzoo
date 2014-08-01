@@ -11,6 +11,7 @@
 #define XMLZOO_TOOL       "tool"
 #define XMLZOO_ICON       "icon"
 #define XMLZOO_BRUSH      "brush"
+#define XMLZOO_STAMP      "stamp"
 #define XMLZOO_CENTER     "center"
 #define XMLZOO_INTENSITY  "intensity"
 #define XMLZOO_SPOT       "spot"

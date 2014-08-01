@@ -466,21 +466,41 @@
 
   (define (rna-tool particle str)
     (let* ((seq (rna-string-to-list str))
-	   (len (length seq)))
+	   (len (length seq))
+	   (se-dir (moore-dir southeast))
+	   (nw-dir (moore-dir northwest)))
     `(tool
       (name ,str)
       (size ,(ceiling-power-of-2 len))
-      (reserve 1)
-      (recharge 1)
+      (reserve ,len)
+      (recharge ,len)
       ,(if
 	(> len 1)
 	`(brush
+	  (stamp 1)
 	  (center
 	   (x ,(/ len 2))
-	   (y 0))
+	   (y ,(/ len 2)))
 	  (pattern
-	   ;; write me
-	   ))
+	   ,(map
+	     (lambda (pos)
+	       `(pixel
+		 (x ,pos)
+		 (y ,pos)
+		 ,(gvars
+		   particle
+		   `((,rna-sense-base-var ,(list-ref seq pos))
+		     ,@(if
+			(> pos 0)
+			`((,rna-has-fs-bond-var 1)
+			  (,rna-fs-bond-dir-var ,se-dir))
+			'())
+		     ,@(if
+			(< pos (- len 1))
+			`((,rna-has-rs-bond-var 1)
+			  (,rna-rs-bond-dir-var ,nw-dir))
+			'())))))
+	     (iota len))))
 	(gvars particle `(,rna-sense-base-var ,(car seq)))))))
 
   ) ;; end

@@ -776,3 +776,7 @@ void RBTreeRemove(RBTree* t, RBTree* u) {
   }
   deleteStack (stack);
 }
+
+int RBTreeIteratorFinished(RBTree* t,RBNode* n) {
+  return n == t->nilt;
+}
