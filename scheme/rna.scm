@@ -194,7 +194,7 @@
 	      (map
 	       (lambda (sense-base)
 		 (load-rule
-		  `((26 ,(- 3 sense-base)))
+		  `((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
 		  `(goto ,rna-ds-move-subrule-name)))
 	       (iota 4)))))))
 
@@ -457,5 +457,27 @@
 	 (list bond-base-reg (+ bond-base-reg 1))
 	 self-type partner-bond-dir-var (+ bond-base-reg 5))
 	merge-remaining-bonds))))
+
+  ;; RNA tool
+  (define rna-alphabet (string->list "acgt"))
+  (define (rna-alphabet-index c) (list-index c rna-alphabet))
+  (define (rna-string-to-list str)
+    (map rna-alphabet-index (string->list str)))
+
+  (define (rna-tool particle str)
+    (let* ((seq (rna-string-to-list str))
+	   (len (length seq)))
+    `(tool
+      (name ,str)
+      (size ,(ceiling-power-of-2 len))
+      (reserve 1)
+      (recharge 1)
+      ,(if
+	(> len 1)
+	`(brush
+	  (pattern
+	   ;; write me
+	   ))
+	(gvars particle `(,rna-sense-base-var ,(car seq)))))))
 
   ) ;; end

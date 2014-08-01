@@ -3,6 +3,13 @@
   (define (caddddr lst) (cadddr (cdr lst)))
   (define (cadddddr lst) (caddddr (cdr lst)))
 
+  ;; Numerics
+  (define (ceiling-power-of-2 n)
+    (if
+     (> n 1)
+     (+ 1 (ceiling-power-of-2 (/ n 2)))
+     1))
+
   ;; Optional arguments
   (define (opt-arg args n default)
     (if (< n (length args))
