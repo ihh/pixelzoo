@@ -475,6 +475,9 @@
       ,(if
 	(> len 1)
 	`(brush
+	  (center
+	   (x ,(/ len 2))
+	   (y 0))
 	  (pattern
 	   ;; write me
 	   ))
