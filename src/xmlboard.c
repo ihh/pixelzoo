@@ -262,12 +262,14 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
   rule = NULL;
   if (ruleParentNode != NULL) {
 
+    Assert (ruleParentNode->children != NULL, "Empty <%s> node", (const char*) ruleParentNode->name);
+
     ruleNode = NULL;
     for (childNode = ruleParentNode->children; childNode; childNode = childNode->next)
       if (MATCHES (childNode, SUBRULE))
 	(void) newRuleFromXmlParentNode (board, childNode, protoTable, localSubRule);
 
-      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,DYNAMIC) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP)) {
+      else if (MATCHES(childNode,SWITCH) || MATCHES(childNode,COMPARE) || MATCHES(childNode,MODIFY) || MATCHES(childNode,GOTO) || MATCHES(childNode,DELIVER) || MATCHES(childNode,RANDOM) || MATCHES(childNode,LOAD) || MATCHES(childNode,VECTOR) || MATCHES(childNode,ADJACENT) || MATCHES(childNode,DYNAMIC) || MATCHES(childNode,SCHEME) || MATCHES(childNode,NOP)) {
 	if (ruleNode) {
 	  dump = xmlTreeToString (ruleParentNode);
 	  Warn ("Ignoring <%s> child of <%s> node, in favor of older sibling <%s>\nIn %s\n", (const char*) childNode->name, (const char*) ruleParentNode->name, (const char*) ruleNode->name, dump);
@@ -276,7 +278,7 @@ ParticleRule* newRuleFromXmlParentNode (Board *board, xmlNode *ruleParentNode, P
 	  ruleNode = childNode;
       }
 
-    Assert (ruleNode != NULL, "Missing rule node");
+    Assert (ruleNode != NULL, "Missing rule node in <%s>; first child is <%s>", (const char*) ruleParentNode->name, (const char*) ruleParentNode->children->name);
 
     rule = newRuleFromXmlNode (board, ruleNode, protoTable, localSubRule);
 

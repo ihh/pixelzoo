@@ -1185,9 +1185,10 @@
 	      origin self-type rna-sense-base-var
 	      (map
 	       (lambda (sense-base)
-		 (load-rule
-		  `((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
-		  `(goto ,rna-ds-move-subrule-name)))
+		 `(,sense-base
+		   ,(load-rule
+		     `((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
+		     `(goto ,rna-ds-move-subrule-name))))
 	       (iota 4)))))))
 
       ;; latter part of main rule
