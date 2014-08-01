@@ -400,21 +400,22 @@
   ;; the function at the antisense diversion point. Generates a split rule
   (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix)))
-      (subrule
-       subrule-name
-       (indirect-switch-type  ;; Switch on move target
-	'(24 25)
-	`((,empty-type   ;; (empty) split into it
-	   ,(indirect-set-rule
-	     '(24 25) self-type
-	     `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
-	     (copy-self-var-to-indirect
-	      self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
+      (list
+       (subrule
+	subrule-name
+	(indirect-switch-type  ;; Switch on move target
+	 '(24 25)
+	 `((,empty-type   ;; (empty) split into it
+	    ,(indirect-set-rule
+	      '(24 25) self-type
+	      `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
 	      (copy-self-var-to-indirect
-	       self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+	       self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
 	       (copy-self-var-to-indirect
-		self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-		(rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))))
+		self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+		(copy-self-var-to-indirect
+		 self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
+		 (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)

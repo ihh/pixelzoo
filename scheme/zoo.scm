@@ -8,7 +8,7 @@
   (define (ceiling-power-of-2 n)
     (if
      (> n 1)
-     (+ 1 (ceiling-power-of-2 (/ n 2)))
+     (* 2 (ceiling-power-of-2 (/ n 2)))
      1))
 
   ;; Optional arguments
@@ -267,7 +267,7 @@
   (define
     (make-hood map-func)
     `(hood
-      ,(map-func make-hood-loc)))
+      ,@(map-func make-hood-loc)))
 
   (define moore-particle-neighborhood (make-hood map-moore))
   (define neumann-particle-neighborhood (make-hood map-neumann))
@@ -283,7 +283,7 @@
 	`(gstate ,type)
 	`(gvars
 	  (type ,type)
-	  ,@(list (map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list)))))
+	  ,@(map (lambda (var-val) `(val (@ (var ,(car var-val))) ,(cadr var-val))) var-val-list))))
 
   ;; color rule
   ;; (hsb hue saturation brightness)
@@ -316,7 +316,7 @@
   ;; load rules
   (define (load-rule reg-val-list next)
     `(load
-      ,(map (lambda (reg-val) `(register (index ,(car reg-val)) (state ,(cadr reg-val)))) reg-val-list)
+      ,@(map (lambda (reg-val) `(register (index ,(car reg-val)) (state ,(cadr reg-val)))) reg-val-list)
       (next ,(rule-eval-or-return next))))
 
   ;; modify rule
@@ -435,7 +435,7 @@
       ,(xy 'pos loc)
       (mask ,type-mask)
       (rshift ,type-shift)
-      ,(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
+      ,@(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
       ,@(listform-opt-rule 'default default)))
 
   ;; switch rule for vars
@@ -444,7 +444,7 @@
       ,(xy 'pos loc)
       (vmask (type ,type) (var ,var))
       (vrshift (type ,type) (var ,var))
-      ,(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
+      ,@(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
       ,@(listform-opt-rule 'default default)))
 
   ;; indirect switch rule for types
@@ -453,7 +453,7 @@
       ,(xy-indirect 'pos loc)
       (mask ,type-mask)
       (rshift ,type-shift)
-      ,(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
+      ,@(map (lambda (type-case) `(case (gtype ,(car type-case)) ,(rule-eval-or-return (cadr type-case)))) type-case-list)
       ,@(listform-opt-rule 'default default)))
 
   ;; indirect switch rule for vars
@@ -462,7 +462,7 @@
       ,(xy-indirect 'pos loc)
       (vmask (type ,type) (var ,var))
       (vrshift (type ,type) (var ,var))
-      ,(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
+      ,@(map (lambda (val-case) `(case (state ,(car val-case)) ,(rule-eval-or-return (cadr val-case)))) val-case-list)
       ,@(listform-opt-rule 'default default)))
 
   ;; indirect compare var to register
@@ -1392,21 +1392,22 @@
   ;; the function at the antisense diversion point. Generates a split rule
   (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix)))
-      (subrule
-       subrule-name
-       (indirect-switch-type  ;; Switch on move target
-	'(24 25)
-	`((,empty-type   ;; (empty) split into it
-	   ,(indirect-set-rule
-	     '(24 25) self-type
-	     `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
-	     (copy-self-var-to-indirect
-	      self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
+      (list
+       (subrule
+	subrule-name
+	(indirect-switch-type  ;; Switch on move target
+	 '(24 25)
+	 `((,empty-type   ;; (empty) split into it
+	    ,(indirect-set-rule
+	      '(24 25) self-type
+	      `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
 	      (copy-self-var-to-indirect
-	       self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+	       self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
 	       (copy-self-var-to-indirect
-		self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-		(rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))))
+		self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+		(copy-self-var-to-indirect
+		 self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
+		 (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)

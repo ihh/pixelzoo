@@ -18,7 +18,7 @@ QuadTree* newQuadTree (int size) {
   tmp = size;
   for (quad->K = 0; tmp > 1; ) {
     if ((tmp & 1) != 0) {
-      Abort ("While building quad tree: dataset size is not a power of 2");
+      Abort ("While building quad tree: size (%d) is not a power of 2", size);
     }
     tmp = tmp >> 1;
     ++quad->K;
