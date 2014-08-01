@@ -1043,17 +1043,17 @@
     `(particle
       (name ,name)
       (vars
-       (varsize (name ,rna-has-fs-bond-var) (size 2))
-       (varsize (name ,rna-fs-bond-dir-var) (size 3))
-       (varsize (name ,rna-has-rs-bond-var) (size 2))
-       (varsize (name ,rna-rs-bond-dir-var) (size 3))
-       (varsize (name ,rna-has-fa-bond-var) (size 2))
-       (varsize (name ,rna-fa-bond-dir-var) (size 3))
-       (varsize (name ,rna-has-ra-bond-var) (size 2))
-       (varsize (name ,rna-ra-bond-dir-var) (size 3))
-       (varsize (name ,rna-sense-base-var) (size 2))
-       (varsize (name ,rna-anti-base-var) (size 2))
-       (varsize (name ,rna-has-anti-var) (size 1)))
+       (varsize (name ,rna-has-fs-bond-var) (size 2))  ;; offset: 0
+       (varsize (name ,rna-fs-bond-dir-var) (size 3))  ;; offset: 2
+       (varsize (name ,rna-has-rs-bond-var) (size 2))  ;; offset: 5
+       (varsize (name ,rna-rs-bond-dir-var) (size 3))  ;; offset: 7
+       (varsize (name ,rna-has-fa-bond-var) (size 2))  ;; offset: 10
+       (varsize (name ,rna-fa-bond-dir-var) (size 3))  ;; offset: 13
+       (varsize (name ,rna-has-ra-bond-var) (size 2))  ;; offset: 15
+       (varsize (name ,rna-ra-bond-dir-var) (size 3))  ;; offset: 18
+       (varsize (name ,rna-sense-base-var) (size 2))   ;; offset: 20
+       (varsize (name ,rna-anti-base-var) (size 2))    ;; offset: 22
+       (varsize (name ,rna-has-anti-var) (size 1)))    ;; offset: 24
 
       ,moore-particle-neighborhood
 
@@ -1251,27 +1251,29 @@
 	  (y ,y-reg)
 	  (inv ,invdir-reg)
 	  (next
-	   ,(indirect-switch-type
-	     loc-reg
-	     `((,self-type
-		,(indirect-switch-var
-		  loc-reg self-type
-		  partner-has-bond-var
-		  `((,expected-partner-has-bond-var
-		     ,(indirect-compare-var-to-register
-		       loc-reg self-type partner-bond-dir-var invdir-reg
-		       `(eq
-			 ,(if
-			   goes-to-anti
-			   (indirect-switch-var
-			    loc-reg self-type
-			    rna-has-anti-var
-			    `((1 ,add-bond-and-proceed))
-			    erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
-			   add-bond-and-proceed))
-		       `(neq ,erase-bond))))  ;; called if partner bond direction doesn't point back to us
-		  erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
-	     erase-bond)))))))  ;; called if partner is not a polymer
+	   (rule
+	    ,(indirect-switch-type
+	      loc-reg
+	      `((,self-type
+		 ,(indirect-switch-var
+		   loc-reg self-type
+		   partner-has-bond-var
+		   `((,expected-partner-has-bond-var
+		      ,(indirect-compare-var-to-register
+			loc-reg self-type partner-bond-dir-var invdir-reg
+			`(eq
+			  (rule
+			   ,(if
+			     goes-to-anti
+			     (indirect-switch-var
+			      loc-reg self-type
+			      rna-has-anti-var
+			      `((1 ,add-bond-and-proceed))
+			      erase-bond)  ;; called if partner has-anti-var is 0 and we're an anti slot
+			     add-bond-and-proceed)))
+			`(neq (rule ,erase-bond)))))  ;; called if partner bond direction doesn't point back to us
+		   erase-bond)))  ;; called if partner has-bond-var doesn't point to our s/a slot
+	      erase-bond))))))))  ;; called if partner is not a polymer
 
 
   ;; rna-drift-rule(confirmed-bond-list): the rule at the bottom of the bond verification cascade

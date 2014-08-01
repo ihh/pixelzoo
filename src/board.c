@@ -398,12 +398,20 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       lookup = &rule->param.lookup;
       var = readVarFromLoc (board, read, &lookup->loc, x, y, z, lookup->shift, lookup->mask, reg, &isOnBoard, NULL);
 #ifdef PIXELZOO_DEBUG
-      if (board->logRules)
-	Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
-	      x, y, z,
-	      lookup->loc.xyzAreRegisters ? "*" : "",
-	      lookup->loc.x, lookup->loc.y, lookup->loc.z,
-	      lookup->mask, lookup->shift, var);
+      if (board->logRules) {
+	if (lookup->matchRegister < NumberOfRegisters)
+	  Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d => reg[%d]",
+		x, y, z,
+		lookup->loc.xyzAreRegisters ? "*" : "",
+		lookup->loc.x, lookup->loc.y, lookup->loc.z,
+		lookup->mask, lookup->shift, var, lookup->matchRegister);
+	else
+	  Warn ("Lookup @(%d,%d,%d) %s(%d,%d,%d) &%llx >>%d = %d",
+		x, y, z,
+		lookup->loc.xyzAreRegisters ? "*" : "",
+		lookup->loc.x, lookup->loc.y, lookup->loc.z,
+		lookup->mask, lookup->shift, var);
+      }
 #endif /* PIXELZOO_DEBUG */
       if (lookup->matchRegister < NumberOfRegisters)
 	reg[lookup->matchRegister] = var;
@@ -568,13 +576,26 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
       xDest = yDest = zDest = 0;
       for (r = 0; r < vector->n; ++r) {
 	n = vector->nbr[r];
-	if (n < hood->size) {
-	  xDest += hood->x[n];
-	  yDest += hood->y[n];
-	  zDest += hood->z[n];
+	if ((rn = reg[n]) < hood->size) {
+	  xDest += hood->x[rn];
+	  yDest += hood->y[rn];
+	  zDest += hood->z[rn];
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Vector @(%d,%d,%d) adding (%d,%d,%d) direction %d from reg[%d]",
+	      x, y, z,
+	      hood->x[rn], hood->y[rn], hood->z[rn], rn, n);
+#endif /* PIXELZOO_DEBUG */
 	}
       }
-      if ((n = getNeighborIndex (hood, xDest, yDest, zDest)) >= 0) {
+      n = getNeighborIndex (hood, xDest, yDest, zDest);
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Vector @(%d,%d,%d) net (%d,%d,%d) direction is %d",
+	      x, y, z,
+	      xDest, yDest, zDest, n);
+#endif /* PIXELZOO_DEBUG */
+      if (n >= 0) {
 	rule = vector->nextRule;
 	if (vector->x < NumberOfRegisters)
 	  reg[vector->x] = xDest;
@@ -586,6 +607,12 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	  reg[vector->dir] = n;
 	if (vector->inv < NumberOfRegisters) {
 	  n = getNeighborIndex (hood, -xDest, -yDest, -zDest);
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Vector @(%d,%d,%d) inverse (%d,%d,%d) direction is %d",
+	      x, y, z,
+	      -xDest, -yDest, -zDest, n);
+#endif /* PIXELZOO_DEBUG */
 	  if (n >= 0)
 	    reg[vector->inv] = n;
 	  else
@@ -593,6 +620,15 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	}
       }
     }
+#ifdef PIXELZOO_DEBUG
+    if (board->logRules) {
+      if (rule == NULL)
+	Warn ("Vector @(%d,%d,%d) ... stopping",
+	      x, y, z);
+      if (vector->nextRule == NULL)
+	Warn ("Vector: nextRule was null!");
+    }
+#endif /* PIXELZOO_DEBUG */
     break;
 
   case NeighborRule:
@@ -601,12 +637,29 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
     if ((hood = ruleOwner->hood)) {
       inaccessible = SafeCalloc (hood->size, sizeof(unsigned char));
       totalAccessible = hood->size;
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+	Warn ("Adjacent starting...");
+#endif /* PIXELZOO_DEBUG */
       for (r = 0; r < neighbor->n && totalAccessible > 0; ++r) {
 	if (neighbor->nbr[r] >= NumberOfRegisters
 	    || (rn = reg[neighbor->nbr[r]]) >= hood->size) {
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Adjacent @(%d,%d,%d) reg[%d] = %d, stopping",
+	      x, y, z,
+	      neighbor->nbr[r],
+	      (neighbor->nbr[r] >= NumberOfRegisters ? -1 : rn));
+#endif /* PIXELZOO_DEBUG */
 	  rule = NULL;
 	  break;
 	}
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Adjacent @(%d,%d,%d) including (%d,%d,%d) direction %d from reg[%d]",
+	      x, y, z,
+	      hood->x[rn], hood->y[rn], hood->z[rn], rn, n);
+#endif /* PIXELZOO_DEBUG */
 	for (n = 0; n < hood->size; ++n)
 	  if (!inaccessible[n])
 	    if (getNeighborIndex (hood,
@@ -625,7 +678,17 @@ void attemptRule (Particle* ruleOwner, ParticleRule* rule, Board* board, int x, 
 	      break;
 	reg[neighbor->dir] = rn;
 	rule = neighbor->nextRule;
+#ifdef PIXELZOO_DEBUG
+      if (board->logRules)
+        Warn ("Adjacent @(%d,%d,%d) sampled direction %d (of %d available directions)",
+	      x, y, z, rn, totalAccessible);
+#endif /* PIXELZOO_DEBUG */
       }
+#ifdef PIXELZOO_DEBUG
+      else
+        Warn ("Adjacent @(%d,%d,%d): no available directions",
+	      x, y, z);
+#endif /* PIXELZOO_DEBUG */
       SafeFree (inaccessible);
     }
     break;

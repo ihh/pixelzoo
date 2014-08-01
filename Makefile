@@ -99,7 +99,7 @@ SCHEME_FILES_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES))
 scheme/zoo.scm: $(SCHEME_FILES_WITH_PREFIX)
 	(echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX); echo ")") >$@
 
-testrna: scheme/testrna.scm
+testrna: scheme/testrna.scm bin/pzchibi
 	cat $< | bin/pzchibi
 
 SCHEME_FILES_NO_RNA_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES_NO_RNA))
