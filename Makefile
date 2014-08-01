@@ -104,7 +104,7 @@ testrna: scheme/testrna.scm
 
 scheme/testrna.scm: $(SCHEME_FILES_WITH_PREFIX) scheme/rna.scm
 #	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(string-length (sxml->string (rna-move-rule)))'; echo ")") >$@
-	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule))'; echo ")") >$@
+	(((echo "(begin"; cat $(SCHEME_FILES_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-tool "RNA" "aacguu")'; echo ")") >$@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)

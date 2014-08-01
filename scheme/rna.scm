@@ -459,8 +459,8 @@
 	merge-remaining-bonds))))
 
   ;; RNA tool
-  (define rna-alphabet (string->list "acgt"))
-  (define (rna-alphabet-index c) (list-index c rna-alphabet))
+  (define rna-alphabet (string->list "acgu"))
+  (define (rna-alphabet-index c) (list-index (char-downcase c) rna-alphabet))
   (define (rna-string-to-list str)
     (map rna-alphabet-index (string->list str)))
 
@@ -487,16 +487,16 @@
 	       `(pixel
 		 (x ,pos)
 		 (y ,pos)
-		 ,(gvars
+		 ,(gvars-list
 		   particle
 		   `((,rna-sense-base-var ,(list-ref seq pos))
 		     ,@(if
-			(> pos 0)
+			(< pos (- len 1))
 			`((,rna-has-fs-bond-var 1)
 			  (,rna-fs-bond-dir-var ,se-dir))
 			'())
 		     ,@(if
-			(< pos (- len 1))
+			(> pos 0)
 			`((,rna-has-rs-bond-var 1)
 			  (,rna-rs-bond-dir-var ,nw-dir))
 			'())))))
