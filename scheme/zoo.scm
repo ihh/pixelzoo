@@ -1031,14 +1031,13 @@
   (define rna-merge-mismatch-prob .01)
   (define rna-split-prob .01)
 
-  (define rna-merge-subrule-name "rna-merge-subrule")
-  (define rna-move-subrule-name "rna-move-subrule")
-  (define rna-ds-move-subrule-name "rna-ds-move-subrule")
-  (define rna-ss-move-subrule-name "rna-ss-move-subrule")
-
-  (define rna-step-ss-subrule-prefix "rna-step-ss")
-  (define rna-step-ds-subrule-prefix "rna-step-ds")
+  (define rna-merge-subrule-name "rna-merge")
   (define rna-split-subrule-prefix "rna-split")
+  (define rna-move-subrule-name "rna-move")
+  (define rna-ds-move-subrule-name "rna-ds-move")
+  (define rna-ss-move-subrule-name "rna-ss-move")
+  (define rna-step-ss-subrule-prefix "rna-ss-step")
+  (define rna-step-ds-subrule-prefix "rna-ds-step")
 
   (define (rna-particle name)
     `(particle
@@ -1081,13 +1080,13 @@
   (define (rna-ds-cascade cascade-func final-func init-args)
     (rna-ds-or-as-cascade cascade-func final-func (lambda (ss-cascade) ss-cascade) init-args))
 
-  (define (rna-diverted-ds-cascade cascade-func final-func divert-prob divert-args init-args)
+  (define (rna-diverted-ds-cascade cascade-func final-func divert-prob divert-arg0 init-args)
     (rna-ds-or-as-cascade
      cascade-func final-func
      (lambda (ss-cascade-func)
        (lambda args
 	 (apply-random-switch
-	  `((,divert-prob ,(apply final-func divert-args))
+	  `((,divert-prob ,(apply final-func (cons divert-arg0 (cdr args))))
 	    (,(- 1 divert-prob) ,(apply ss-cascade-func args))))))
      init-args))
 
@@ -1176,8 +1175,8 @@
       ,(subrule
 	rna-ds-move-subrule-name
 	(rna-diverted-ds-cascade
-	 rna-bond-cascade rna-drift-rule rna-split-prob
-	 `(,rna-split-subrule-prefix "" ())
+	 rna-bond-cascade rna-drift-rule
+	 rna-split-prob rna-split-subrule-prefix
 	 `(,rna-step-ds-subrule-prefix "" ())))
 
       ;; main rule
@@ -1392,19 +1391,22 @@
 
   ;; the function at the antisense diversion point. Generates a split rule
   (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
-    (indirect-switch-type  ;; Switch on move target
-     '(24 25)
-     `((,empty-type   ;; (empty) split into it
-	,(indirect-set-rule
-	  '(24 25) self-type
-	  `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
-	  (copy-self-var-to-indirect
-	   self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
-	   (copy-self-var-to-indirect
-	    self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
-	    (copy-self-var-to-indirect
-	     self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-	     (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))
+    (let* ((subrule-name (string-append subrule-prefix subrule-suffix)))
+      (subrule
+       subrule-name
+       (indirect-switch-type  ;; Switch on move target
+	'(24 25)
+	`((,empty-type   ;; (empty) split into it
+	   ,(indirect-set-rule
+	     '(24 25) self-type
+	     `((,rna-has-anti-var 0) (,rna-has-fa-bond-var 0) (,rna-has-ra-bond-var 0))
+	     (copy-self-var-to-indirect
+	      self-type rna-anti-base-var '(24 25) self-type rna-sense-base-var
+	      (copy-self-var-to-indirect
+	       self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
+	       (copy-self-var-to-indirect
+		self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
+		(rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)
