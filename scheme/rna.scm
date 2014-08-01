@@ -39,14 +39,13 @@
   (define rna-merge-mismatch-prob .01)
   (define rna-split-prob .01)
 
-  (define rna-merge-subrule-name "rna-merge-subrule")
-  (define rna-move-subrule-name "rna-move-subrule")
-  (define rna-ds-move-subrule-name "rna-ds-move-subrule")
-  (define rna-ss-move-subrule-name "rna-ss-move-subrule")
-
-  (define rna-step-ss-subrule-prefix "rna-step-ss")
-  (define rna-step-ds-subrule-prefix "rna-step-ds")
+  (define rna-merge-subrule-name "rna-merge")
   (define rna-split-subrule-prefix "rna-split")
+  (define rna-move-subrule-name "rna-move")
+  (define rna-ds-move-subrule-name "rna-ds-move")
+  (define rna-ss-move-subrule-name "rna-ss-move")
+  (define rna-step-ss-subrule-prefix "rna-ss-step")
+  (define rna-step-ds-subrule-prefix "rna-ds-step")
 
   (define (rna-particle name)
     `(particle
@@ -95,7 +94,7 @@
      (lambda (ss-cascade-func)
        (lambda args
 	 (apply-random-switch
-	  `((,divert-prob ,(apply final-func (cons divert-arg0 (cdr init-args))))
+	  `((,divert-prob ,(apply final-func (cons divert-arg0 (cdr args))))
 	    (,(- 1 divert-prob) ,(apply ss-cascade-func args))))))
      init-args))
 
@@ -184,8 +183,8 @@
       ,(subrule
 	rna-ds-move-subrule-name
 	(rna-diverted-ds-cascade
-	 rna-bond-cascade rna-drift-rule rna-split-prob
-	 rna-split-subrule-prefix
+	 rna-bond-cascade rna-drift-rule
+	 rna-split-prob rna-split-subrule-prefix
 	 `(,rna-step-ds-subrule-prefix "" ())))
 
       ;; main rule
