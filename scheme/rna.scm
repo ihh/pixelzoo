@@ -165,17 +165,17 @@
     `(rule
 
       ;; cascades to define drift rules & associated subrules
-      ,(rna-ds-cascade
+      ,@(rna-ds-cascade
 	rna-random-step-subrule-cascade
 	rna-make-random-step-rule
 	`(,rna-step-ds-subrule-prefix "" 1 ()))  ;; double-stranded drift
 
-      ,(rna-sense-cascade
+      ,@(rna-sense-cascade
 	rna-random-step-subrule-cascade
 	rna-make-step-or-merge-rule
 	`(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
 
-      ,(rna-antisense-cascade
+      ,@(rna-antisense-cascade
 	rna-random-step-subrule-cascade
 	rna-make-split-rule
 	`(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
@@ -289,25 +289,24 @@
 		       subrule-prefix
 		       subrule-suffix)))
 
-      `(rule
-	(adjacent
-	 ,@(map
-	    (lambda (bond-base-reg)
-	      (let* ((bond-dir-reg (+ bond-base-reg 2)))
-		`(index ,bond-dir-reg)))
-	    confirmed-bond-list)
-	 (dir 27)
-	 (next
-	  (rule
-	   (vector
-	    (index 27)
-	    (x 24)
-	    (y 25)
-	    (next
-	     (rule
-	      ,(rna-compute-angles
-		confirmed-bond-list
-		`(goto ,rule-name)))))))))))
+      `(adjacent
+	,@(map
+	   (lambda (bond-base-reg)
+	     (let* ((bond-dir-reg (+ bond-base-reg 2)))
+	       `(index ,bond-dir-reg)))
+	   confirmed-bond-list)
+	(dir 27)
+	(next
+	 (rule
+	  (vector
+	   (index 27)
+	   (x 24)
+	   (y 25)
+	   (next
+	    (rule
+	     ,(rna-compute-angles
+	       confirmed-bond-list
+	       `(goto ,rule-name))))))))))
 
   (define (rna-compute-angles confirmed-bond-list next-rule)
     (if
