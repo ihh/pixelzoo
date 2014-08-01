@@ -520,10 +520,8 @@ void initGotoRuleFromXmlNode (ParticleRule** gotoLabelRef, xmlNode* node, Board 
   if (!subRuleNode)
     subRuleNode = StringMapFind (board->subRule, label);
   *gotoLabelRef = subRuleNode ? ((ParticleRule*) (subRuleNode->value)) : ((ParticleRule*) NULL);
-  if (*gotoLabelRef == NULL) {
-    fprintf (stderr, "Unresolved goto label: %s\n", label);
-    Abort ("Couldn't find goto label");
-  }
+  if (*gotoLabelRef == NULL)
+    Abort ("Couldn't find goto label: %s", label);
 }
 
 void initLoadRuleFromXmlNode (LoadRuleParams* load, xmlNode* node, Board *board, ProtoTable *protoTable, StringMap **localSubRule) {

@@ -1172,6 +1172,14 @@
 	rna-make-split-rule
 	`(,rna-split-subrule-prefix "" 1 ()))  ;; double-stranded split
 
+      ;; latter part of main rule
+      ,(subrule
+	rna-ds-move-subrule-name
+	(rna-diverted-ds-cascade
+	 rna-bond-cascade rna-drift-rule rna-split-prob
+	 `(,rna-split-subrule-prefix "" ())
+	 `(,rna-step-ds-subrule-prefix "" ())))
+
       ;; main rule
       ,(subrule
 	rna-move-subrule-name
@@ -1190,14 +1198,6 @@
 		     `((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
 		     `(goto ,rna-ds-move-subrule-name))))
 	       (iota 4)))))))
-
-      ;; latter part of main rule
-      ,(subrule
-	rna-ds-move-subrule-name
-	(rna-diverted-ds-cascade
-	 rna-bond-cascade rna-drift-rule rna-split-prob
-	 `(,rna-split-subrule-prefix "" ())
-	 `(,rna-step-ds-subrule-prefix "" ())))
 
       ;; main goto
       (goto ,rna-move-subrule-name)))
