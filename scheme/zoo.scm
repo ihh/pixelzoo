@@ -1518,7 +1518,9 @@
 	      (iota len))))
 	(gvars particle `(,rna-sense-base-var ,(car seq)))))))
 
-  (define (rna-sandwich-tool particle str)
+  ;; For debugging: RNA folded back on itself, confined in a wall sandwich
+  ;; Forces quick merging
+  (define (rna-sandwich-tool particle str)  ;; str must have EVEN length
     (let* ((seq (rna-string-to-list str))
 	   (len (length seq))
 	   (e-dir (moore-dir east))
@@ -1530,50 +1532,100 @@
 	(size ,(ceiling-power-of-2 len))
 	(reserve ,(* len 2))
 	(recharge ,(* len 2))
-	,(if
-	  (> len 1)
-	  `(brush
-	    (stamp 1)
-	    (center
-	     (x ,(/ len 2))
-	     (y ,(/ len 2)))
-	    (pattern
-	     ,@(map
-		(lambda (pos)
-		  `(pixel (x ,pos) (y 0) ,(gvars "wall")))
-		(iota (/ len 2)))
-	     ,@(map
-		(lambda (pos)
-		  `(pixel (x ,pos) (y 3) ,(gvars "wall")))
-		(iota (/ len 2)))
-	     ,@(map
-		(lambda (pos)
-		  `(pixel
-		    (x ,(if (>= pos (/ len 2)) (- (- len pos) 1) pos))
-		    (y ,(if (>= pos (/ len 2)) 2 1))
-		    ,(gvars-list
-		      particle
-		      `((,rna-sense-base-var ,(list-ref seq pos))
-			,@(if
-			   (< pos (- len 1))
-			   `((,rna-has-fs-bond-var 1)
-			     (,rna-fs-bond-dir-var
-			      ,(cond
-				((< pos (- (/ len 2) 1)) e-dir)
-				((= pos (- (/ len 2) 1)) s-dir)
-				(else w-dir))))
-			   '())
-			,@(if
-			   (> pos 0)
-			   `((,rna-has-rs-bond-var 1)
-			     (,rna-rs-bond-dir-var
-			      ,(cond
-				((< pos (/ len 2)) w-dir)
-				((= pos (/ len 2)) n-dir)
-				(else e-dir))))
-			   '())))))
-		(iota len))))
-	  (gvars particle `(,rna-sense-base-var ,(car seq)))))))
+	(brush
+	 (stamp 1)
+	 (center
+	  (x ,(/ len 4))
+	  (y ,(/ len 4)))
+	 (pattern
+	  ,@(map
+	     (lambda (pos)
+	       `(pixel (x ,pos) (y 0) ,(gvars "wall")))
+	     (iota (/ len 2)))
+	  ,@(map
+	     (lambda (pos)
+	       `(pixel (x ,pos) (y 3) ,(gvars "wall")))
+	     (iota (/ len 2)))
+	  ,@(map
+	     (lambda (pos)
+	       `(pixel
+		 (x ,(if (>= pos (/ len 2)) (- (- len pos) 1) pos))
+		 (y ,(if (>= pos (/ len 2)) 2 1))
+		 ,(gvars-list
+		   particle
+		   `((,rna-sense-base-var ,(list-ref seq pos))
+		     ,@(if
+			(< pos (- len 1))
+			`((,rna-has-fs-bond-var 1)
+			  (,rna-fs-bond-dir-var
+			   ,(cond
+			     ((< pos (- (/ len 2) 1)) e-dir)
+			     ((= pos (- (/ len 2) 1)) s-dir)
+			     (else w-dir))))
+			'())
+		     ,@(if
+			(> pos 0)
+			`((,rna-has-rs-bond-var 1)
+			  (,rna-rs-bond-dir-var
+			   ,(cond
+			     ((< pos (/ len 2)) w-dir)
+			     ((= pos (/ len 2)) n-dir)
+			     (else e-dir))))
+			'())))))
+	     (iota len)))))))
+
+  ;; For debugging: double-stranded RNA
+  ;; Forces quick splitting
+  (define (dsrna-tool particle str)  ;; str must have ODD length
+    (let* ((seq (rna-string-to-list str))
+	   (len (length seq))
+	   (stem-len (/ (- len 1) 2))
+	   (e-dir (moore-dir east))
+	   (w-dir (moore-dir west))
+	   (n-dir (moore-dir north))
+	   (s-dir (moore-dir south)))
+      `(tool
+	(name ,str)
+	(size ,(ceiling-power-of-2 len))
+	(reserve ,len)
+	(recharge ,len)
+	(brush
+	 (stamp 1)
+	 (center
+	  (x ,(/ len 4))
+	  (y ,(/ len 4)))
+	 (pattern
+	  ,@(map
+	     (lambda (pos)
+	       `(pixel
+		 (x ,pos)
+		 (y 0)
+		 ,(gvars-list
+		   particle
+		   `((,rna-sense-base-var ,(list-ref seq pos))
+		     (,rna-anti-base-var ,(list-ref seq (- (- len pos) 1)))
+		     (,rna-has-anti-var 1)
+		     (,rna-has-fs-bond-var 1)
+		     (,rna-fs-bond-dir-var ,e-dir)
+		     (,rna-has-ra-bond-var 2)
+		     (,rna-ra-bond-dir-var ,e-dir)
+		     ,@(if
+			(> pos 0)
+			`((,rna-has-rs-bond-var 1)
+			  (,rna-rs-bond-dir-var ,w-dir)
+			  (,rna-has-fa-bond-var 2)
+			  (,rna-fa-bond-dir-var ,w-dir))))))
+	       (iota stem-len)))
+	  (pixel
+	   (x ,stem-len)
+	   (y 0)
+	   ,(gvars-list
+	     particle
+	     `((,rna-sense-base-var ,(list-ref seq stem-len))
+	       (,rna-has-fs-bond-var 2)
+	       (,rna-fs-bond-dir-var ,w-dir)
+	       (,rna-has-rs-bond-var 1)
+	       (,rna-rs-bond-dir-var ,w-dir)))))))))
 
   ) ;; end
 )
