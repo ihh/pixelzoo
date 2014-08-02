@@ -1063,12 +1063,6 @@
       (rule (scheme "(rna-move-rule)"))))
 
   ;; helper functions for iterating over all possible combinations of bonds (a "cascade")
-  ;; argument list of cascade-func is as follows:
-  ;;  (cascade-func tag has-bond-var bond-dir-var partner-has-bond-var partner-bond-dir-var bond-base-reg next-func)
-  ;; returns a function that takes arg list similar to init-args
-  ;; final-func also takes arg list similar to init-args
-  ;; antisense-func-maker takes a function of type cascade-func for the antisense part of the cascade,
-  ;; and returns a similar function that can optionally stop at antisense (e.g. to do a split move)
   (define (rna-ds-or-as-cascade cascade-func final-func antisense-func-maker init-args)
     (apply
      (rna-as-cascade-func
@@ -1121,7 +1115,7 @@
       rna-has-ra-bond-var
       rna-ra-bond-dir-var
       rna-fs-bond-dir-var
-      1
+      2
       12
       final-func)))
 
@@ -1135,7 +1129,7 @@
      rna-has-fa-bond-var
      rna-fa-bond-dir-var
      rna-ra-bond-dir-var
-     2
+     1
      6
      (cascade-func
       "-fs"
@@ -1264,7 +1258,7 @@
 			`(eq
 			  (rule
 			   ,(if
-			     goes-to-anti
+			     (= goes-to-anti 1)
 			     (indirect-switch-var
 			      loc-reg self-type
 			      rna-has-anti-var
