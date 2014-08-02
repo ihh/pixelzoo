@@ -179,7 +179,7 @@ void writeBoardStateUnguardedFunction (Board* board, int x, int y, int z, State 
 #ifdef PIXELZOO_DEBUG
   if (board->logRules) {
     const char* debugStr = boardTypeVarsDebugString(board,state);
-    Warn ("Write: %d %d %d %llx  %s", x, y, z, state, debugStr);
+    Warn ("Write: @(%d,%d,%d) %llx  %s", x, y, z, state, debugStr);
     SafeFree ((char*) debugStr);
   }
 #endif /* PIXELZOO_DEBUG */

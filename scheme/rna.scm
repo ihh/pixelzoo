@@ -39,13 +39,12 @@
   (define rna-merge-mismatch-prob .01)
   (define rna-split-prob .01)
 
+  (define rna-got-complement-subrule-name "rna-got-complement")
   (define rna-merge-subrule-name "rna-merge")
   (define rna-split-subrule-prefix "rna-split")
-  (define rna-move-subrule-name "rna-move")
-  (define rna-ds-move-subrule-name "rna-ds-move")
-  (define rna-ss-move-subrule-name "rna-ss-move")
   (define rna-step-ss-subrule-prefix "rna-ss-step")
   (define rna-step-ds-subrule-prefix "rna-ds-step")
+  (define rna-move-subrule-name "rna-move")
 
   (define (rna-particle name)
     `(particle
@@ -56,17 +55,17 @@
        (varsize (name ,rna-has-rs-bond-var) (size 2))  ;; offset: 5
        (varsize (name ,rna-rs-bond-dir-var) (size 3))  ;; offset: 7
        (varsize (name ,rna-has-fa-bond-var) (size 2))  ;; offset: 10
-       (varsize (name ,rna-fa-bond-dir-var) (size 3))  ;; offset: 13
+       (varsize (name ,rna-fa-bond-dir-var) (size 3))  ;; offset: 12
        (varsize (name ,rna-has-ra-bond-var) (size 2))  ;; offset: 15
-       (varsize (name ,rna-ra-bond-dir-var) (size 3))  ;; offset: 18
+       (varsize (name ,rna-ra-bond-dir-var) (size 3))  ;; offset: 17
        (varsize (name ,rna-sense-base-var) (size 2))   ;; offset: 20
        (varsize (name ,rna-anti-base-var) (size 2))    ;; offset: 22
        (varsize (name ,rna-has-anti-var) (size 1)))    ;; offset: 24
 
-      ,moore-particle-neighborhood
+      (colrule (var ,rna-anti-base-var) (hexmul "e0000"))
+      (colrule (var ,rna-sense-base-var) (hexmul "500000") (hexinc "147fff"))
 
-      (colrule (var ,rna-sense-base-var) (hexmul "20000"))
-      (colrule (var ,rna-anti-base-var) (hexmul "80000") (hexinc "14ffff"))
+      ,moore-particle-neighborhood
 
       (rule (scheme "(rna-move-rule)"))))
 
@@ -165,7 +164,7 @@
 
       ,@(rna-sense-cascade
 	rna-random-step-subrule-cascade
-	rna-make-step-or-merge-rule
+	rna-make-step-and-merge-rules
 	`(,rna-step-ss-subrule-prefix "" 0 ()))  ;; single-stranded drift or merge
 
       ,@(rna-antisense-cascade
@@ -175,30 +174,30 @@
 
       ;; latter part of main rule
       ,(subrule
-	rna-ds-move-subrule-name
-	(rna-diverted-ds-cascade
-	 rna-bond-cascade rna-drift-rule
-	 rna-split-prob rna-split-subrule-prefix
-	 `(,rna-step-ds-subrule-prefix "" ())))
-
-      ;; main rule
-      ,(subrule
-	rna-move-subrule-name
+	rna-got-complement-subrule-name
 	(switch-var
 	 origin self-type rna-has-anti-var
 	 `((0 
 	    ,(rna-sense-cascade
 	      rna-bond-cascade rna-drift-rule `(,rna-step-ss-subrule-prefix "" ())))
 	   (1
-	    ,(switch-var
-	      origin self-type rna-sense-base-var
-	      (map
-	       (lambda (sense-base)
-		 `(,sense-base
-		   ,(load-rule
-		     `((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
-		     `(goto ,rna-ds-move-subrule-name))))
-	       (iota 4)))))))
+	    ,(rna-diverted-ds-cascade
+	      rna-bond-cascade rna-drift-rule
+	      rna-split-prob rna-split-subrule-prefix
+	      `(,rna-step-ds-subrule-prefix "" ()))))))
+
+      ;; main rule
+      ,(subrule
+	rna-move-subrule-name
+	(switch-var
+	 origin self-type rna-sense-base-var
+	 (map
+	  (lambda (sense-base)
+	    `(,sense-base
+	      ,(load-rule
+		`((26 ,(- 3 sense-base)))  ;; complement of BASE is 3-BASE
+		`(goto ,rna-got-complement-subrule-name))))
+	  (iota 4))))
 
       ;; main goto
       (goto ,rna-move-subrule-name)))
@@ -363,7 +362,7 @@
 	     ,(rna-reorient-bonds confirmed-bond-reg-list (indirect-move-self '(24 25))))
 	    (,self-type    ;; (contains RNA)
 	     ,(if
-	       self-has-anti
+	       (= self-has-anti 1)
 	       nop-rule
 	       ;; TODO: allow unbonded particles to form new bonds
 	       (indirect-switch-var
@@ -371,15 +370,15 @@
 		`((0   ;; (no antisense base in source or target cell)
 		   ,(indirect-compare-var-to-register
 		     '(24 25) self-type rna-sense-base-var 26
-		     `(eq ,qualified-merge-subrule-name)  ;; complementary: merge
+		     `(eq (rule (goto ,qualified-merge-subrule-name)))  ;; complementary: merge
 		     `(neq  ;; non-complementary: merge with probability rna-merge-mismatch-prob
-		       ,(random-rule
-			 rna-merge-mismatch-prob
-			 qualified-merge-subrule-name))))))))))))))
+		       (rule
+			,(random-rule
+			  rna-merge-mismatch-prob
+			  `(goto ,qualified-merge-subrule-name))))))))))))))))
 
-  (define (rna-make-step-or-merge-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
-    (let* ((subrule-name (string-append subrule-prefix subrule-suffix))
-	   (qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
+  (define (rna-make-step-and-merge-rules subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
+    (let* ((qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
       (cons
        	;; merge subrule
 	(subrule
@@ -390,7 +389,9 @@
 	   self-type rna-has-fs-bond-var '(24 25) self-type rna-has-fa-bond-var
 	   (copy-self-var-to-indirect
 	    self-type rna-has-rs-bond-var '(24 25) self-type rna-has-ra-bond-var
-	    (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule)))))
+	    (indirect-set-var
+	     '(24 25) self-type rna-has-anti-var 1
+	     (rna-merge-or-split-bonds confirmed-bond-reg-list 2 kill-self))))))
 	(rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list))))
 
   ;; the function at the antisense diversion point. Generates a split rule
@@ -411,7 +412,15 @@
 		self-type rna-has-fa-bond-var '(24 25) self-type rna-has-fs-bond-var
 		(copy-self-var-to-indirect
 		 self-type rna-has-ra-bond-var '(24 25) self-type rna-has-rs-bond-var
-		 (rna-merge-or-split-bonds confirmed-bond-reg-list nop-rule))))))))))))
+		 (rna-merge-or-split-bonds
+		  confirmed-bond-reg-list
+		  1
+		  (set-rule
+		   origin self-type
+		   `((,rna-anti-base-var 0)
+		     (,rna-has-anti-var 0)
+		     (,rna-has-fa-bond-var 0)
+		     (,rna-has-ra-bond-var 0)))))))))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)
@@ -436,7 +445,7 @@
 	  next-rule))))))
 
   ;; helper to merge/split bonds in a merge/split move
-  (define (rna-merge-or-split-bonds confirmed-bond-reg-list next-rule)
+  (define (rna-merge-or-split-bonds confirmed-bond-reg-list partner-has-bond-val next-rule)
     (if
      (null? confirmed-bond-reg-list)
      next-rule
@@ -448,14 +457,19 @@
 	    (merged-or-split-bond-dir-var (caddddr confirmed-bond-reg))
 	    (bond-base-reg (cadddddr confirmed-bond-reg))
 	    (rest-of-confirmed-bond-reg-list (cdr confirmed-bond-reg-list))
-	    (merge-remaining-bonds (rna-merge-or-split-bonds rest-of-confirmed-bond-reg-list next-rule)))
+	    (partner-loc (list bond-base-reg (+ bond-base-reg 1)))
+	    (merge-remaining-bonds
+	     (rna-merge-or-split-bonds rest-of-confirmed-bond-reg-list partner-has-bond-val next-rule)))
        (indirect-set-var-from-register
 	'(24 25)
 	self-type merged-or-split-bond-dir-var (+ bond-base-reg 4)
 	(indirect-set-var-from-register
-	 (list bond-base-reg (+ bond-base-reg 1))
-	 self-type partner-bond-dir-var (+ bond-base-reg 5))
-	merge-remaining-bonds))))
+	 partner-loc
+	 self-type partner-bond-dir-var (+ bond-base-reg 5)
+	 (indirect-set-var
+	  partner-loc self-type
+	  partner-has-bond-var partner-has-bond-val
+	  merge-remaining-bonds))))))
 
   ;; RNA tool
   (define rna-alphabet (string->list "acgu"))
@@ -481,25 +495,82 @@
 	   (x ,(/ len 2))
 	   (y ,(/ len 2)))
 	  (pattern
-	   ,(map
-	     (lambda (pos)
-	       `(pixel
-		 (x ,pos)
-		 (y ,pos)
-		 ,(gvars-list
-		   particle
-		   `((,rna-sense-base-var ,(list-ref seq pos))
-		     ,@(if
-			(< pos (- len 1))
-			`((,rna-has-fs-bond-var 1)
-			  (,rna-fs-bond-dir-var ,se-dir))
-			'())
-		     ,@(if
-			(> pos 0)
-			`((,rna-has-rs-bond-var 1)
-			  (,rna-rs-bond-dir-var ,nw-dir))
-			'())))))
-	     (iota len))))
+	   ,@(map
+	      (lambda (pos)
+		`(pixel
+		  (x ,pos)
+		  (y ,pos)
+		  ,(gvars-list
+		    particle
+		    `((,rna-sense-base-var ,(list-ref seq pos))
+		      ,@(if
+			 (< pos (- len 1))
+			 `((,rna-has-fs-bond-var 1)
+			   (,rna-fs-bond-dir-var ,se-dir))
+			 '())
+		      ,@(if
+			 (> pos 0)
+			 `((,rna-has-rs-bond-var 1)
+			   (,rna-rs-bond-dir-var ,nw-dir))
+			 '())))))
+	      (iota len))))
 	(gvars particle `(,rna-sense-base-var ,(car seq)))))))
+
+  (define (rna-sandwich-tool particle str)
+    (let* ((seq (rna-string-to-list str))
+	   (len (length seq))
+	   (e-dir (moore-dir east))
+	   (w-dir (moore-dir west))
+	   (n-dir (moore-dir north))
+	   (s-dir (moore-dir south)))
+      `(tool
+	(name ,str)
+	(size ,(ceiling-power-of-2 len))
+	(reserve ,(* len 2))
+	(recharge ,(* len 2))
+	,(if
+	  (> len 1)
+	  `(brush
+	    (stamp 1)
+	    (center
+	     (x ,(/ len 2))
+	     (y ,(/ len 2)))
+	    (pattern
+	     ,@(map
+		(lambda (pos)
+		  `(pixel (x ,pos) (y 0) ,(gvars "wall")))
+		(iota (/ len 2)))
+	     ,@(map
+		(lambda (pos)
+		  `(pixel (x ,pos) (y 3) ,(gvars "wall")))
+		(iota (/ len 2)))
+	     ,@(map
+		(lambda (pos)
+		  `(pixel
+		    (x ,(if (>= pos (/ len 2)) (- (- len pos) 1) pos))
+		    (y ,(if (>= pos (/ len 2)) 2 1))
+		    ,(gvars-list
+		      particle
+		      `((,rna-sense-base-var ,(list-ref seq pos))
+			,@(if
+			   (< pos (- len 1))
+			   `((,rna-has-fs-bond-var 1)
+			     (,rna-fs-bond-dir-var
+			      ,(cond
+				((< pos (- (/ len 2) 1)) e-dir)
+				((= pos (- (/ len 2) 1)) s-dir)
+				(else w-dir))))
+			   '())
+			,@(if
+			   (> pos 0)
+			   `((,rna-has-rs-bond-var 1)
+			     (,rna-rs-bond-dir-var
+			      ,(cond
+				((< pos (/ len 2)) w-dir)
+				((= pos (/ len 2)) n-dir)
+				(else e-dir))))
+			   '())))))
+		(iota len))))
+	  (gvars particle `(,rna-sense-base-var ,(car seq)))))))
 
   ) ;; end
