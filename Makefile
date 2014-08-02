@@ -105,7 +105,7 @@ testrna: scheme/testrna.scm bin/pzchibi
 SCHEME_FILES_NO_RNA_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES_NO_RNA))
 scheme/testrna.scm: $(SCHEME_FILES_NO_RNA_WITH_PREFIX) scheme/rna.scm
 #	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(string-length (sxml->string (rna-move-rule)))'; echo ")") >$@
-	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-sandwich-tool "RNA" "aaaauuuu")'; echo ")") >$@
+	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(dsrna-tool "RNA" "aaaaguuuu")'; echo ")") >$@
 #	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule)'; echo ")") >$@
 
 # pixelzoo core library

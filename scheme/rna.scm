@@ -527,7 +527,7 @@
 	   (s-dir (moore-dir south)))
       `(tool
 	(name ,str)
-	(size ,(ceiling-power-of-2 len))
+	(size ,(max 4 (ceiling-power-of-2 (/ len 2))))
 	(reserve ,(* len 2))
 	(recharge ,(* len 2))
 	(brush
@@ -580,18 +580,17 @@
 	   (stem-len (/ (- len 1) 2))
 	   (e-dir (moore-dir east))
 	   (w-dir (moore-dir west))
-	   (n-dir (moore-dir north))
-	   (s-dir (moore-dir south)))
+	   (n-dir (moore-dir north)))
       `(tool
 	(name ,str)
-	(size ,(ceiling-power-of-2 len))
-	(reserve ,len)
-	(recharge ,len)
+	(size ,(ceiling-power-of-2 (+ stem-len 1)))
+	(reserve ,(+ stem-len 1))
+	(recharge ,(+ stem-len 1))
 	(brush
 	 (stamp 1)
 	 (center
-	  (x ,(/ len 4))
-	  (y ,(/ len 4)))
+	  (x ,(/ stem-len 2))
+	  (y ,(/ stem-len 2)))
 	 (pattern
 	  ,@(map
 	     (lambda (pos)
@@ -612,8 +611,8 @@
 			`((,rna-has-rs-bond-var 1)
 			  (,rna-rs-bond-dir-var ,w-dir)
 			  (,rna-has-fa-bond-var 2)
-			  (,rna-fa-bond-dir-var ,w-dir))))))
-	       (iota stem-len)))
+			  (,rna-fa-bond-dir-var ,w-dir)))))))
+	     (iota stem-len))
 	  (pixel
 	   (x ,stem-len)
 	   (y 0)
