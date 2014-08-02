@@ -7393,8 +7393,8 @@ The following DO seem to work...
     </init>
   </board>
   <rate>240</rate>
-  <!-- tool><scheme>(rna-tool "RNA" "aaaauuuu")</scheme></tool -->
-  <!-- tool><scheme>(rna-sandwich-tool "RNA" "aaaauuuu")</scheme></tool -->
+  <tool><scheme>(rna-tool "RNA" "aaaauuuu")</scheme></tool>
+  <tool><scheme>(rna-sandwich-tool "RNA" "aaaauuuu")</scheme></tool>
   <tool><scheme>(dsrna-tool "RNA" "aaaaguuuu")</scheme></tool>
   <tool>
     <name>little polymer loops</name>

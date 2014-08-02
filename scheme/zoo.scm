@@ -1039,7 +1039,7 @@
   (define rna-has-anti-var "has-anti")
 
   (define rna-merge-mismatch-prob .01)
-  (define rna-split-prob .01)
+  (define rna-split-prob .1)
 
   (define rna-got-complement-subrule-name "rna-got-complement")
   (define rna-merge-subrule-name "rna-merge")
@@ -1417,12 +1417,14 @@
 		 (rna-merge-or-split-bonds
 		  confirmed-bond-reg-list
 		  1
-		  (set-rule
-		   origin self-type
-		   `((,rna-anti-base-var 0)
-		     (,rna-has-anti-var 0)
-		     (,rna-has-fa-bond-var 0)
-		     (,rna-has-ra-bond-var 0)))))))))))))))
+		  (set-self-var
+		   rna-anti-base-var 0
+		   (set-self-var
+		    rna-has-anti-var 0
+		    (set-self-var
+		     rna-has-fa-bond-var 0
+		     (set-self-var
+		      rna-has-ra-bond-var 0))))))))))))))))
 
   ;; helper to update bond vars in a drift move
   (define (rna-reorient-bonds confirmed-bond-reg-list next-rule)
@@ -1485,10 +1487,11 @@
 	   (se-dir (moore-dir southeast))
 	   (nw-dir (moore-dir northwest)))
     `(tool
-      (name ,str)
+      (name ,(string-append "RNA " str))
       (size ,(ceiling-power-of-2 len))
       (reserve ,len)
       (recharge ,len)
+      (overwrite (tmask) (gstate "empty"))
       ,(if
 	(> len 1)
 	`(brush
@@ -1528,10 +1531,11 @@
 	   (n-dir (moore-dir north))
 	   (s-dir (moore-dir south)))
       `(tool
-	(name ,str)
+	(name ,(string-append "Confined " str))
 	(size ,(max 4 (ceiling-power-of-2 (/ len 2))))
 	(reserve ,(* len 2))
 	(recharge ,(* len 2))
+	(overwrite (tmask) (gstate "empty"))
 	(brush
 	 (stamp 1)
 	 (center
@@ -1584,10 +1588,11 @@
 	   (w-dir (moore-dir west))
 	   (n-dir (moore-dir north)))
       `(tool
-	(name ,str)
+	(name ,(string-append "dsRNA " str))
 	(size ,(ceiling-power-of-2 (+ stem-len 1)))
 	(reserve ,(+ stem-len 1))
 	(recharge ,(+ stem-len 1))
+	(overwrite (tmask) (gstate "empty"))
 	(brush
 	 (stamp 1)
 	 (center
@@ -1606,7 +1611,7 @@
 		     (,rna-has-anti-var 1)
 		     (,rna-has-fs-bond-var 1)
 		     (,rna-fs-bond-dir-var ,e-dir)
-		     (,rna-has-ra-bond-var 2)
+		     (,rna-has-ra-bond-var ,(if (= pos (- stem-len 1)) 1 2))
 		     (,rna-ra-bond-dir-var ,e-dir)
 		     ,@(if
 			(> pos 0)
