@@ -484,6 +484,15 @@
       (regindex ,reg)
       ,@rest))
 
+  ;; compare var to register
+  (define (compare-var-to-register loc type var reg . rest)
+    `(compare
+      ,(xy 'pos loc)
+      (vmask (type ,type) (var ,var))
+      (vrshift (type ,type) (var ,var))
+      (regindex ,reg)
+      ,@rest))
+
   ;; random rule
   ;; (random-rule prob pass fail)
   (define (random-rule prob pass . fail)
@@ -1042,6 +1051,9 @@
   (define rna-split-prob .1)
 
   (define rna-got-complement-subrule-name "rna-got-complement")
+  (define rna-fwd-antiparallel-suffix "-fap")
+  (define rna-rev-antiparallel-suffix "-rap")
+  (define rna-min-loop-suffix "-loop")
   (define rna-merge-subrule-name "rna-merge")
   (define rna-split-subrule-prefix "rna-split")
   (define rna-step-ss-subrule-prefix "rna-ss-step")
@@ -1065,7 +1077,8 @@
        (varsize (name ,rna-has-anti-var) (size 1)))    ;; offset: 24
 
       (colrule (var ,rna-anti-base-var) (hexmul "e0000"))
-      (colrule (var ,rna-sense-base-var) (hexmul "500000") (hexinc "147fff"))
+      (colrule (var ,rna-sense-base-var) (hexmul "500000"))
+      (colrule (var ,rna-has-anti-var) (hexmul "ff7fffff") (hexinc "14bfff"))
 
       ,moore-particle-neighborhood
 
@@ -1380,11 +1393,19 @@
 			  `(goto ,qualified-merge-subrule-name))))))))))))))))
 
   (define (rna-make-step-and-merge-rules subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
-    (let* ((qualified-merge-subrule-name (string-append rna-merge-subrule-name subrule-suffix)))
-      (cons
-       	;; merge subrule
+    (let* ((merge-subrule (string-append rna-merge-subrule-name subrule-suffix))
+	   (merge-subrule-fwd-antiparallel (string-append merge-subrule rna-fwd-antiparallel-suffix))
+	   (merge-subrule-rev-antiparallel (string-append merge-subrule rna-rev-antiparallel-suffix))
+	   (has-bond
+	    (lambda (has-bond-var)
+	      (not (null? (grep (lambda (bond) (string=? (car bond) has-bond-var)) confirmed-bond-reg-list)))))
+	   (self-has-rs (has-bond rna-has-rs-bond-var))
+	   (self-has-fs (has-bond rna-has-fs-bond-var)))
+      (append
+       (list
+       	;; final merge subrule
 	(subrule
-	 qualified-merge-subrule-name
+	 merge-subrule-rev-antiparallel  ;; we get here after checking that rev bonds are antiparallel
 	 (copy-self-var-to-indirect
 	  self-type rna-sense-base-var '(24 25) self-type rna-anti-base-var
 	  (copy-self-var-to-indirect
@@ -1394,8 +1415,38 @@
 	    (indirect-set-var
 	     '(24 25) self-type rna-has-anti-var 1
 	     (rna-merge-or-split-bonds confirmed-bond-reg-list 2 kill-self))))))
-	(rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list))))
 
+	;; subrule to check rev bonds are antiparallel
+	(subrule
+	 merge-subrule-fwd-antiparallel  ;; we get here after checking that fwd bonds are antiparallel
+	 (if
+	  self-has-rs
+	  (indirect-switch-var
+	   '(24 25) self-type
+	   rna-has-rs-bond-var
+	   `((0 (goto ,merge-subrule-rev-antiparallel)))
+	   (indirect-compare-var-to-register
+	    '(24 25) self-type rna-rs-bond-dir-var 10 ;; don't merge if target-rs-dir == new-target-ra-dir
+	    `(neq (rule (goto ,merge-subrule-rev-antiparallel)))))
+	  `(goto ,merge-subrule-rev-antiparallel)))
+
+	;; subrule to check fwd bonds are antiparallel
+	(subrule
+	 merge-subrule  ;; this is the main entry point
+	 (if
+	  self-has-fs
+	  (indirect-switch-var
+	   '(24 25) self-type
+	   rna-has-fs-bond-var
+	   `((0 (goto ,merge-subrule-fwd-antiparallel)))
+	   (indirect-compare-var-to-register
+	    '(24 25) self-type rna-fs-bond-dir-var 4 ;; don't merge if target-fs-dir == new-target-fa-dir
+	    `(neq (rule (goto ,merge-subrule-fwd-antiparallel)))))
+	  `(goto ,merge-subrule-fwd-antiparallel))))
+
+       ;; random step subrule
+       (rna-make-random-step-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list))))
+    
   ;; the function at the antisense diversion point. Generates a split rule
   (define (rna-make-split-rule subrule-prefix subrule-suffix self-has-anti confirmed-bond-reg-list)
     (let* ((subrule-name (string-append subrule-prefix subrule-suffix)))
