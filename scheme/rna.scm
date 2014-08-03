@@ -537,8 +537,8 @@
 	`(brush
 	  (stamp 1)
 	  (center
-	   (x ,(/ len 2))
-	   (y ,(/ len 2)))
+	   (x ,(floor (/ len 2)))
+	   (y ,(floor (/ len 2))))
 	  (pattern
 	   ,@(map
 	      (lambda (pos)

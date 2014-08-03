@@ -4,6 +4,7 @@
     <depth>2</depth>
     <grammar>
       <particle><scheme>(polymer-particle "polymer")</scheme></particle>
+      <particle><scheme>(rna-particle "RNA")</scheme></particle>
       <particle>
         <name>empty</name>
         <type>0</type>
@@ -7514,6 +7515,7 @@ The following DO seem to work...
     <reserve>1000</reserve>
     <recharge>100</recharge>
   </tool>
+  <tool><scheme>(rna-tool "RNA" "aaaaguuuu")</scheme></tool>
   <!-- toolset>
     <scheme>`(toolset ,(map (lambda (x) (map (lambda (y) `(disallow (x ,x) (y ,y))) (iota 30))) (iota 20)))</scheme>
   </toolset -->
