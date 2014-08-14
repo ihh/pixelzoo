@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>SERVER_HOST</key>
-	<string>harvey-2.local</string>
+	<string>rosebud-4.local</string>
 	<key>SERVER_PORT</key>
 	<string>3000</string>
 	<key>UIMainStoryboardFile</key>

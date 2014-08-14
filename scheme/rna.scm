@@ -36,6 +36,10 @@
   (define rna-anti-base-var "anti-base")
   (define rna-has-anti-var "has-anti")
 
+  (define rna-fwd-antiparallel-suffix "-fap")
+  (define rna-rev-antiparallel-suffix "-rap")
+  (define rna-min-loop-suffix "-loop")
+
   (define rna-merge-mismatch-prob .01)
   (define rna-split-prob .1)
 
@@ -50,28 +54,42 @@
   (define rna-move-subrule-name "rna-move")
 
   (define (rna-particle name)
-    `(particle
-      (name ,name)
-      (vars
-       (varsize (name ,rna-has-fs-bond-var) (size 2))  ;; offset: 0
-       (varsize (name ,rna-fs-bond-dir-var) (size 3))  ;; offset: 2
-       (varsize (name ,rna-has-rs-bond-var) (size 2))  ;; offset: 5
-       (varsize (name ,rna-rs-bond-dir-var) (size 3))  ;; offset: 7
-       (varsize (name ,rna-has-fa-bond-var) (size 2))  ;; offset: 10
-       (varsize (name ,rna-fa-bond-dir-var) (size 3))  ;; offset: 12
-       (varsize (name ,rna-has-ra-bond-var) (size 2))  ;; offset: 15
-       (varsize (name ,rna-ra-bond-dir-var) (size 3))  ;; offset: 17
-       (varsize (name ,rna-sense-base-var) (size 2))   ;; offset: 20
-       (varsize (name ,rna-anti-base-var) (size 2))    ;; offset: 22
-       (varsize (name ,rna-has-anti-var) (size 1)))    ;; offset: 24
+    (rna-param-particle name .01 .1))
 
-      (colrule (var ,rna-anti-base-var) (hexmul "e0000"))
-      (colrule (var ,rna-sense-base-var) (hexmul "500000"))
-      (colrule (var ,rna-has-anti-var) (hexmul "ff7fffff") (hexinc "14bfff"))
+  (define (rna-param-particle name merge-mismatch-prob split-prob)
+    (begin
+      (set! rna-got-complement-subrule-name (string-append name "-got-complement"))
+      (set! rna-merge-subrule-name (string-append name "-merge"))
+      (set! rna-split-subrule-prefix (string-append name "-split"))
+      (set! rna-step-ss-subrule-prefix (string-append name "-ss-step"))
+      (set! rna-step-ds-subrule-prefix (string-append name "-ds-step"))
+      (set! rna-move-subrule-name (string-append name "-move"))
 
-      ,moore-particle-neighborhood
+      (set! rna-merge-mismatch-prob merge-mismatch-prob)
+      (set! rna-split-prob split-prob)
 
-      (rule (scheme "(rna-move-rule)"))))
+      `(particle
+	(name ,name)
+	(vars
+	 (varsize (name ,rna-has-fs-bond-var) (size 2))  ;; offset: 0
+	 (varsize (name ,rna-fs-bond-dir-var) (size 3))  ;; offset: 2
+	 (varsize (name ,rna-has-rs-bond-var) (size 2))  ;; offset: 5
+	 (varsize (name ,rna-rs-bond-dir-var) (size 3))  ;; offset: 7
+	 (varsize (name ,rna-has-fa-bond-var) (size 2))  ;; offset: 10
+	 (varsize (name ,rna-fa-bond-dir-var) (size 3))  ;; offset: 12
+	 (varsize (name ,rna-has-ra-bond-var) (size 2))  ;; offset: 15
+	 (varsize (name ,rna-ra-bond-dir-var) (size 3))  ;; offset: 17
+	 (varsize (name ,rna-sense-base-var) (size 2))   ;; offset: 20
+	 (varsize (name ,rna-anti-base-var) (size 2))    ;; offset: 22
+	 (varsize (name ,rna-has-anti-var) (size 1)))    ;; offset: 24
+
+	(colrule (var ,rna-anti-base-var) (hexmul "e0000"))
+	(colrule (var ,rna-sense-base-var) (hexmul "500000"))
+	(colrule (var ,rna-has-anti-var) (hexmul "ff7fffff") (hexinc "14bfff"))
+
+	,moore-particle-neighborhood
+
+	(rule (scheme "(rna-move-rule)")))))
 
   ;; helper functions for iterating over all possible combinations of bonds (a "cascade")
   (define (rna-ds-or-as-cascade cascade-func final-func antisense-func-maker init-args)
