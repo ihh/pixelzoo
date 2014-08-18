@@ -18,6 +18,11 @@
   (define south '(0 1))
   (define west '(-1 0))
 
+  (define north2 '(0 -2))
+  (define east2 '(2 0))
+  (define south2 '(0 2))
+  (define west2 '(-2 0))
+
   (define northeast '(1 -1))
   (define southeast '(1 1))
   (define southwest '(-1 1))
@@ -36,6 +41,16 @@
   ;; neighborhood iterators & functions
   (define neumann-neighborhood (list north east south west))
   (define moore-neighborhood (list north northeast east southeast south southwest west northwest))
+
+  (define hex-neighborhood (list southwest west north northeast east south))
+  (define vhex-neighborhood (list northwest north east southeast south west))
+  (define diag-neighborhood (list northwest northeast southeast southwest))
+
+  (define neumann2-neighborhood
+    (list
+     north2 east2 south2 west2
+     northwest northeast southeast southwest
+     north east south west))
 
   (define (map-neumann f) (map f neumann-neighborhood))
   (define (map-moore f) (map f moore-neighborhood))
