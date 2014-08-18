@@ -126,15 +126,17 @@
 	(name ,astr)
 	,(apply
 	  hsb
-	  (if
-	   (hash-table-exists? astr)
-	   (hash-table-ref astr)
-	   (list
-	    (modulo
-	     (foldr + 0 (map char->integer (string->list astr))) ;; hash hue from name
-	     256))))
+	   (hash-table-ref
+	    turing-hsb-hash
+	    astr
+	    (lambda ()
+	      (list
+	       (modulo
+		(foldr + 0 (map char->integer (string->list astr))) ;; hash hue from name
+		256)))))
 	,(make-particle-neighborhood
 	  (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
+	(rate ,max-rate)
 	(rule ,(turing-update-rule a)))))
 
   )
