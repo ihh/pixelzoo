@@ -2,9 +2,18 @@
 (begin
   (import (srfi 69))
 
-  (define turing-reaction-hash (make-hash-table))
-  (define turing-hsb-hash (make-hash-table))
-  (define turing-neighborhood-hash (make-hash-table))
+  (define (turing-reset)
+    (set! turing-reaction-hash (make-hash-table))
+    (set! turing-hsb-hash (make-hash-table))
+    (set! turing-neighborhood-hash (make-hash-table)))
+
+  (turing-reset)
+
+  (define (turing-delete-key)
+    (begin
+      (hash-table-delete! turing-reaction-hash key)
+      (hash-table-delete! turing-hsb-hash key)
+      (hash-table-delete! turing-neighborhood-hash key)))
 
   (define (turing-key x)
     (if
@@ -45,9 +54,6 @@
 	     (lambda () (list cstr dstr 0))))
 	  make-hash-table))
        make-hash-table)))
-
-  (define (turing-grammar abcdr-list)
-    (map turing-rule abcdr-list))
 
   (define (turing-max-rate a)
     (let ((astr (turing-key a)))
@@ -138,5 +144,14 @@
 	  (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
 	(rate ,max-rate)
 	(rule ,(turing-update-rule a)))))
+
+  (define (turing-grammar abcdr-list)
+    (begin
+      (map turing-rule abcdr-list)
+      (let* ((turing-keys (hash-table-keys turing-reaction-hash))
+	     ((turing-particles (map turing-particle turing-keys))))
+	(begin
+	  (map turing-delete turing-keys)
+	  turing-particles))))
 
   )
