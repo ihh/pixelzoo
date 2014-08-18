@@ -125,7 +125,7 @@
 		      case-list))
 		   '())))))))))))
 
-  (define (turing-particle a)
+  (define (turing-particle a . abcdr-list)
     (let* ((astr (turing-key a))
 	   (max-rate (turing-max-rate astr)))
       `(particle
