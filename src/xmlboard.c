@@ -65,6 +65,8 @@ Board* newBoardFromXmlRoot (xmlNode *root) {
   for (node = grammarNode->children; node; node = node->next)
     if (MATCHES(node,SCHEMEDEF))
       protoTableEval (protoTable, (const char*) getNodeContent (node));
+    else if (MATCHES(node,SPLICE))
+      node = protoTableSpliceExpandSchemeNode (protoTable, node, grammarNode);
 
   /* expand any Particle-level Scheme blocks */
   for (node = grammarNode->children; node; node = node->next)
@@ -971,4 +973,36 @@ xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode
   }
 
   return evalNode;
+}
+
+xmlNode* protoTableSpliceExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *parentNode) {
+  const char *evalResult;
+  xmlNode *evalNode, *prevSibling, *firstChild, *lastChild;
+
+  evalNode = firstChild = NULL;
+  evalResult = protoTableEvalSxml (protoTable, (const char*) getNodeContent(schemeNode));
+  if (evalResult) {
+    evalNode = xmlTreeFromString (evalResult);
+    firstChild = evalNode->children;
+    for (lastChild = firstChild; lastChild && lastChild->next; lastChild = lastChild->next) { }
+
+    /* splice evalNode children into parentNode */
+    if (parentNode) {
+      if (parentNode->children == schemeNode)
+	parentNode->children = firstChild;
+      else {
+	for (prevSibling = parentNode->children; prevSibling && prevSibling->next != schemeNode; prevSibling = prevSibling->next) { }
+	Assert (prevSibling && prevSibling->next == schemeNode, "Can't find older sibling of Scheme node to be replaced in <%s>", parentNode->name);
+	prevSibling->next = firstChild;
+      }
+      lastChild->next = schemeNode->next;
+      evalNode->children = schemeNode->next = NULL;
+      deleteXmlTree (schemeNode);
+      deleteXmlTree (evalNode);
+    }
+
+    StringDelete ((void*) evalResult);
+  }
+
+  return firstChild;
 }

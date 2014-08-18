@@ -152,6 +152,6 @@
 	     ((turing-particles (map turing-particle turing-keys))))
 	(begin
 	  (map turing-delete-key turing-keys)
-	  turing-particles))))
+	  `(turing-grammar ,@turing-particles)))))
 
   )
