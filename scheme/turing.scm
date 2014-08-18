@@ -129,9 +129,8 @@
     (let* ((hsb (opt-arg rest 0 0))
 	   (neighborhood (opt-arg rest 1 neumann-neighborhood))
 	   (abcdr-list (opt-arg rest 2 '()))
-	   (dummy (map turing-rule abcdr-list))
 	   (astr (turing-key a))
-	   (max-rate (turing-max-rate astr)))
+	   (dummy (map turing-rule abcdr-list)))
       `(particle
 	(name ,astr)
 	,(apply
@@ -146,8 +145,8 @@
 	       256)))))
 	,(make-particle-neighborhood
 	  (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
-	(rate ,max-rate)
-	(rule ,(turing-update-rule a)))))
+	(rate ,(turing-max-rate astr))
+	(rule ,(turing-update-rule astr)))))
 
   (define (turing-grammar abcdr-list)
     (begin
