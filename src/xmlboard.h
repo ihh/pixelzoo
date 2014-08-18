@@ -13,6 +13,7 @@
 #define XMLZOO_GRAMMAR     "grammar"
 #define XMLZOO_SCHEME      "scheme"
 #define XMLZOO_SCHEMEDEF   "schemedef"
+#define XMLZOO_SPLICE      "splice"
 #define XMLZOO_VALUE       "value"
 #define XMLZOO_PARTICLE    "particle"
 #define XMLZOO_SPRITE      "sprite"
@@ -124,6 +125,9 @@ void writeGVarsXml (Board* board, State s, xmlTextWriterPtr writer);
 
 /* protoTableExpandSchemeNode returns expanded node, or NULL for failure */
 xmlNode* protoTableExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *replaceNode, xmlNode *replaceParent);
+
+/* protoTableExpandSchemeNode returns expanded node, or NULL for failure */
+xmlNode* protoTableSpliceExpandSchemeNode (ProtoTable *protoTable, xmlNode *schemeNode, xmlNode *parentNode);
 
 /* private builder methods */
 

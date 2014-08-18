@@ -129,26 +129,25 @@
     (let* ((hsb (opt-arg rest 0 0))
 	   (neighborhood (opt-arg rest 1 neumann-neighborhood))
 	   (abcdr-list (opt-arg rest 2 '()))
+	   (dummy (map turing-rule abcdr-list))
 	   (astr (turing-key a))
 	   (max-rate (turing-max-rate astr)))
-      (begin
-	(map turing-rule abcdr-list)
-	`(particle
-	  (name ,astr)
-	  ,(apply
-	    hsb
-	    (hash-table-ref
-	     turing-hsb-hash
-	     astr
-	     (lambda ()
-	       (list
-		(modulo
-		 (foldr + 0 (map char->integer (string->list astr))) ;; hash hue from name
-		 256)))))
-	  ,(make-particle-neighborhood
-	    (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
-	  (rate ,max-rate)
-	  (rule ,(turing-update-rule a))))))
+      `(particle
+	(name ,astr)
+	,(apply
+	  hsb
+	  (hash-table-ref
+	   turing-hsb-hash
+	   astr
+	   (lambda ()
+	     (list
+	      (modulo
+	       (foldr + 0 (map char->integer (string->list astr))) ;; hash hue from name
+	       256)))))
+	,(make-particle-neighborhood
+	  (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
+	(rate ,max-rate)
+	(rule ,(turing-update-rule a)))))
 
   (define (turing-grammar abcdr-list)
     (begin
@@ -157,6 +156,6 @@
 	     ((turing-particles (map turing-particle turing-keys))))
 	(begin
 	  (map turing-delete-key turing-keys)
-	  turing-particles))))
+	  `(turing-grammar ,@turing-particles)))))
 
   )
