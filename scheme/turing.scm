@@ -3,12 +3,22 @@
   (import (srfi 69))
 
   (define turing-reaction-hash (make-hash-table))
+  (define turing-hsb-hash (make-hash-table))
+  (define turing-neighborhood-hash (make-hash-table))
 
   (define (turing-key x)
     (if
      (string? x)
      x
      (symbol->string x)))
+
+  (define (turing-hsb a . rest)
+    (let ((astr (turing-key (car abcdr))))
+      (hash-table-set! turing-hsb-hash astr rest)))
+
+  (define (turing-neighborhood a hood)
+    (let ((astr (turing-key (car abcdr))))
+      (hash-table-set! turing-neighborhood-hash astr hood)))
 
   (define (turing-rule abcdr)
     (let ((astr (turing-key (car abcdr)))
@@ -32,7 +42,7 @@
 	       (let* ((oldrate (caddr cdrate))
 		      (newrate (+ oldrate rate)))
 		 (list cstr dstr newrate)))
-	     (list cstr dstr 0)))
+	     (lambda () (list cstr dstr 0))))
 	  make-hash-table))
        make-hash-table)))
 
@@ -109,5 +119,22 @@
 		      case-list))
 		   '())))))))))))
 
+  (define (turing-particle a)
+    (let* ((astr (turing-key a))
+	   (max-rate (turing-max-rate astr)))
+      `(particle
+	(name ,astr)
+	,(apply
+	  hsb
+	  (if
+	   (hash-table-exists? astr)
+	   (hash-table-ref astr)
+	   (list
+	    (modulo
+	     (foldr + 0 (map char->integer (string->list astr))) ;; hash hue from name
+	     256))))
+	,(make-particle-neighborhood
+	  (hash-table-ref/default turing-neighborhood-hash astr neumann-neighborhood))
+	(rule ,(turing-update-rule a)))))
 
   )

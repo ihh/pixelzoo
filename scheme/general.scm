@@ -93,16 +93,16 @@
 
   ;; particle neighborhoods
   (define
-    (make-hood-loc loc)
+    (make-particle-neighborhood-loc loc)
     (xy 'neighbor loc))
 
   (define
-    (make-hood map-func)
+    (make-particle-neighborhood neighborhood)
     `(hood
-      ,@(map-func make-hood-loc)))
+      ,@(map make-particle-neighborhood-loc neighborhood)))
 
-  (define moore-particle-neighborhood (make-hood map-moore))
-  (define neumann-particle-neighborhood (make-hood map-neumann))
+  (define moore-particle-neighborhood (make-particle-neighborhood moore-neighborhood))
+  (define neumann-particle-neighborhood (make-particle-neighborhood neumann-neighborhood))
 
   ;; gvars
   (define (gvars . args)
