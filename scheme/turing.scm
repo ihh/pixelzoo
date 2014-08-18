@@ -151,7 +151,7 @@
       (let* ((turing-keys (hash-table-keys turing-reaction-hash))
 	     ((turing-particles (map turing-particle turing-keys))))
 	(begin
-	  (map turing-delete turing-keys)
+	  (map turing-delete-key turing-keys)
 	  turing-particles))))
 
   )
