@@ -32,17 +32,41 @@
     (let ((astr (turing-key a)))
       (hash-table-set! turing-neighborhood-hash astr hood)))
 
-  (define (turing-vars a . vars)
+  (define (turing-var a var size)
     (let ((astr (turing-key a)))
-      (hash-table-set! turing-vars-hash astr vars)))
+      (hash-table-update!
+       turing-vars-hash
+       astr
+       (lambda (ahash)
+	 (hash-table-set!
+	  ahash
+	  var
+	  size))
+       make-hash-table)))
+
+  (define (turing-var-exists? a var)
+    (let ((astr (turing-key a)))
+      (and
+       (hash-table-exists? turing-vars-hash astr)
+       (hash-table-exists? (hash-table-ref turing-vars-hash astr) var))))
+
+  (define turing-dir-var "dir")
+  (define (turing-self-turn delta) (modify-self-var turing-dir-var delta turing-dir-var))
+
+  (define (turing-directed-neighborhood a hood)
+    (begin
+      (turing-neighborhood a hood)
+      (turing-var a turing-dir-var (ceiling-lg2 (length hood)))))
 
   (define (turing-rule abcdr)
-    (let ((astr (turing-key (car abcdr)))
-	  (bstr (turing-key (cadr abcdr)))
-	  (cstr (turing-key (caddr abcdr)))
-	  (dstr (turing-key (cadddr abcdr)))
-	  (rate (caddddr abcdr))
-	  (cdstr (string-append cstr " " dstr)))
+    (let* ((astr (turing-key (car abcdr)))
+	   (bstr (turing-key (cadr abcdr)))
+	   (cdrate-rest (cddr abcdr))
+	   (cstr (turing-key (car cdrate-rest)))
+	   (dstr (turing-key (cadr cdrate-rest)))
+	   (rate (caddr cdrate-rest))
+	   (rest (cdddr cdrate-rest))
+	   (cdstr (string-append cstr " " dstr)))
       (hash-table-update!
        turing-reaction-hash
        astr
@@ -54,11 +78,12 @@
 	    (hash-table-update!/default
 	     bhash
 	     cdstr
-	     (lambda (cdrate)
-	       (let* ((oldrate (caddr cdrate))
-		      (newrate (+ oldrate rate)))
-		 (list cstr dstr newrate)))
-	     (lambda () (list cstr dstr 0))))
+	     (lambda (old-cdrate-rest)
+	       (let* ((oldrate (caddr old-cdrate-rest))
+		      (newrate (+ oldrate rate))
+		      (oldrest (cdddr old-cdrate-rest)))
+		 (append (list cstr dstr newrate) oldrest rest)))
+	     cdrate-rest)))
 	  make-hash-table))
        make-hash-table)))
 
@@ -76,81 +101,98 @@
 	   0)))
        0)))
 
+  (define (turing-adjacent-selector next)
+    `(adjacent
+      (dir 0)
+      (next
+       (rule
+	,next)))
+
+  (define (turing-dir-selector next)
+    (get-register-from-var origin self-type turing-dir-var 0 next))
+
   (define (turing-update-rule a)
     (let* ((astr (turing-key a))
+	   (neighbor-selector
+	    (if
+	     (turing-has-var? a turing-dir-var)
+	     turing-dir-selector
+	     turing-adjacent-selector))
 	   (max-rate (turing-max-rate astr)))
-      `(adjacent
-	(dir 0)
-	(next
-	 (rule
-	  (vector
-	   (index 0)
-	   (x 1)
-	   (y 2)
-	   (next
-	    (rule
-	     ,(indirect-switch-type
-	       '(1 2)
-	       `(,(hash-table-fold
-		   (hash-table-ref turing-reaction-hash astr)
-		   (lambda (bstr bhash case-list)
-		     (cons
-		      `(,bstr
-			,(apply-random-switch
-			  ,(let* ((rhs-list-and-total-prob
-				  (hash-table-fold
-				   bhash
-				   (lambda (cdstr cdrate accum)
-				     (let* ((cstr (car cdrate))
-					    (dstr (cadr cdrate))
-					    (rate (caddr cdrate))
-					    (rhs-list (car accum))
-					    (total-prob (cdr accum))
-					    (prob (exact->inexact (/ cdrate max-rate))))
-				       `(,(cons
-					   (list
-					    prob
-					    (let ((drule
-						   (cond
-						    ((equal? dstr bstr) nop-rule)
-						    ((equal? dstr ".") nop-rule)
-						    (else (indirect-set-rule
-							   '(1 2)
-							   dstr)))))
-					      (cond
-					       ((equal? cstr astr) drule)
-					       ((equal? cstr ".") drule)
-					       ((equal? cstr "<") (modify-self-var "dir" -1 "dir"))
-					       ((equal? cstr "<<") (modify-self-var "dir" -2 "dir"))
-					       ((equal? cstr "<<<") (modify-self-var "dir" -3 "dir"))
-					       ((equal? cstr "<<<<") (modify-self-var "dir" -4 "dir"))
-					       ((equal? cstr ">") (modify-self-var "dir" +1 "dir"))
-					       ((equal? cstr ">>") (modify-self-var "dir" +2 "dir"))
-					       ((equal? cstr ">>>") (modify-self-var "dir" +3 "dir"))
-					       ((equal? cstr ">>>>") (modify-self-var "dir" +4 "dir"))
-					       (else (set-rule
-						      '(0 0)
-						      cstr
-						      drule)))))
-					   rhs-list) ,(+ total-prob prob))))
-				   '(() 1)))
-				  (rhs-list (car rhs-list-and-total-prob))
-				  (total-prob (cdr rhs-list-and-total-prob)))
-			     (cons (list (- 1 total-prob) nop-rule) rhs-list))))
-		      case-list))
-		   '())))))))))))
+      (neighbor-selector
+       `(vector
+	 (index 0)
+	 (x 1)
+	 (y 2)
+	 (next
+	  (rule
+	   ,(indirect-switch-type
+	     '(1 2)
+	     `(,(hash-table-fold
+		 (hash-table-ref turing-reaction-hash astr)
+		 (lambda (bstr bhash case-list)
+		   (cons
+		    `(,bstr
+		      ,(apply-random-switch
+			,(let* ((rhs-list-and-total-prob
+				 (hash-table-fold
+				  bhash
+				  (lambda (cdstr cdrate-rest accum)
+				    (let* ((cstr (car cdrate-rest))
+					   (dstr (cadr cdrate-rest))
+					   (rate (caddr cdrate-rest))
+					   (rest (cdddr cdrate-rest))
+					   (post-rule (opt-arg rest 0 nop-rule))
+					   (rhs-list (car accum))
+					   (total-prob (cdr accum))
+					   (prob (exact->inexact (/ rate max-rate))))
+				      `(,(cons
+					  (list
+					   prob
+					   (let ((drule
+						  (cond
+						   ((equal? dstr bstr) post-rule)
+						   ((equal? dstr ".") post-rule)
+						   (else (indirect-set-rule
+							  '(1 2)
+							  dstr
+							  '()
+							  post-rule)))))
+					     (cond
+					      ((equal? cstr astr) drule)
+					      ((equal? cstr ".") drule)
+					      ((equal? cstr "<") (turing-self-turn -1))
+					      ((equal? cstr "<<") (turing-self-turn -2))
+					      ((equal? cstr "<<<") (turing-self-turn -3))
+					      ((equal? cstr "<<<<") (turing-self-turn -4))
+					      ((equal? cstr ">") (turing-self-turn +1))
+					      ((equal? cstr ">>") (turing-self-turn +2))
+					      ((equal? cstr ">>>") (turing-self-turn +3))
+					      ((equal? cstr ">>>>") (turing-self-turn +4))
+					      (else (set-rule
+						     '(0 0)
+						     cstr
+						     drule)))))
+					  rhs-list) ,(+ total-prob prob))))
+				  '(() 1)))
+				(rhs-list (car rhs-list-and-total-prob))
+				(total-prob (cdr rhs-list-and-total-prob)))
+			   (cons (list (- 1 total-prob) nop-rule) rhs-list))))
+		    case-list))
+		 '()))))))))))
 
   (define (turing-particle a)
     (let ((astr (turing-key a)))
       `(particle
 	(name ,astr)
 	(vars
-	 ,@(map
-	    (lambda (varname-varbits)
-	      (let ((varname (car varname-varbits))
-		    (varbits (cadr varname-varbits)))
-		`(varsize (name ,varname) (size ,varbits))))
-	    (hash-table-ref/default turing-vars-hash astr '())))
+	 ,@(hash-table-fold
+	    (hash-table-ref turing-vars-hash astr make-hash-table)
+	    (lambda (varname varbits vars-list)
+		(cons
+		 `(varsize (name ,varname) (size ,varbits))
+		 vars-list))
+	    '()))
 	,(apply
 	  hsb
 	  (hash-table-ref

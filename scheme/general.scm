@@ -134,10 +134,11 @@
 
   ;; color rule
   ;; (hsb hue saturation brightness)
-  (define (hsb hue . rest)
+  (define (make-hsb-colrule hue . rest)
     (let ((sat (opt-arg rest 0 255))
 	  (bri (opt-arg rest 1 255)))
       `(colrule (mask 0) (inc ,(+ (* 256 (+ (* 256 hue) sat)) bri)))))
+  (define hsb make-hsb-colrule)
 
   ;; helpers for optional rule chains
   (define (opt-rule tag arg-or-false)

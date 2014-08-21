@@ -10,6 +10,12 @@
      (* 2 (ceiling-power-of-2 (/ n 2)))
      1))
 
+  (define (ceiling-log2 n)
+    (if
+     (> n 1)
+     (+ 1 (ceiling-log2 (/ n 2)))
+     0))
+
   ;; Optional arguments
   (define (opt-arg args n default)
     (if (< n (length args))
