@@ -111,13 +111,15 @@
   (define (turing-dir-selector next)
     (get-register-from-var origin self-type turing-dir-var 0 next))
 
-  (define (turing-update-rule a)
+  (define (turing-update-rule a . rest)
     (let* ((astr (turing-key a))
 	   (neighbor-selector
-	    (if
-	     (turing-has-var? a turing-dir-var)
-	     turing-dir-selector
-	     turing-adjacent-selector))
+	    (opt-arg
+	     rest 0
+	     (if
+	      (turing-has-var? a turing-dir-var)
+	      turing-dir-selector
+	      turing-adjacent-selector)))
 	   (max-rate (turing-max-rate astr)))
       (neighbor-selector
        `(vector
@@ -181,7 +183,7 @@
 		    case-list))
 		 '()))))))))))
 
-  (define (turing-particle a)
+  (define (turing-particle a . rest)
     (let ((astr (turing-key a)))
       `(particle
 	(name ,astr)
@@ -206,7 +208,7 @@
 	,(make-particle-neighborhood
 	  (hash-table-ref/default turing-neighborhood-hash astr neighborhood))
 	(rate ,(turing-max-rate astr))
-	(rule ,(turing-update-rule astr)))))
+	(rule ,(turing-update-rule (cons astr rest))))))
 
   (define (turing-grammar abcdr-list)
     (begin
