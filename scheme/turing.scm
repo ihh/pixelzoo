@@ -51,7 +51,9 @@
        (hash-table-exists? (hash-table-ref turing-vars-hash astr) var))))
 
   (define turing-dir-var "dir")
-  (define (turing-self-turn delta) (modify-self-var turing-dir-var delta turing-dir-var))
+  (define (turing-self-turn delta . rest)
+    (apply modify-self-var (append (list turing-dir-var delta turing-dir-var) rest)))
+  (define (turing-has-dir? a) (turing-var-exists? a turing-dir-var))
 
   (define (turing-directed-neighborhood a hood)
     (begin
@@ -117,7 +119,7 @@
 	    (opt-arg
 	     rest 0
 	     (if
-	      (turing-has-var? a turing-dir-var)
+	      (turing-has-dir? a)
 	      turing-dir-selector
 	      turing-adjacent-selector)))
 	   (max-rate (turing-max-rate astr)))
@@ -159,22 +161,29 @@
 							  '(1 2)
 							  dstr
 							  '()
-							  post-rule)))))
+							  (if
+							   (turing-has-dir? dstr)
+							   (indirect-set-var-from-register '(1 2) dstr turing-dir-var 0 post-rule)
+							   post-rule))))))
 					     (cond
 					      ((equal? cstr astr) drule)
 					      ((equal? cstr ".") drule)
-					      ((equal? cstr "<") (turing-self-turn -1))
-					      ((equal? cstr "<<") (turing-self-turn -2))
-					      ((equal? cstr "<<<") (turing-self-turn -3))
-					      ((equal? cstr "<<<<") (turing-self-turn -4))
-					      ((equal? cstr ">") (turing-self-turn +1))
-					      ((equal? cstr ">>") (turing-self-turn +2))
-					      ((equal? cstr ">>>") (turing-self-turn +3))
-					      ((equal? cstr ">>>>") (turing-self-turn +4))
-					      (else (set-rule
-						     '(0 0)
-						     cstr
-						     drule)))))
+					      ((equal? cstr "<") (turing-self-turn -1 drule))
+					      ((equal? cstr "<<") (turing-self-turn -2 drule))
+					      ((equal? cstr "<<<") (turing-self-turn -3 drule))
+					      ((equal? cstr "<<<<") (turing-self-turn -4 drule))
+					      ((equal? cstr ">") (turing-self-turn +1 drule))
+					      ((equal? cstr ">>") (turing-self-turn +2 drule))
+					      ((equal? cstr ">>>") (turing-self-turn +3 drule))
+					      ((equal? cstr ">>>>") (turing-self-turn +4 drule))
+					      (else
+					       (set-rule
+						origin
+						cstr
+						(if
+						 (turing-has-dir? dstr)
+						 (set-var-from-register origin cstr turing-dir-var 0 drule)
+						 drule))))))
 					  rhs-list) ,(+ total-prob prob))))
 				  '(() 1)))
 				(rhs-list (car rhs-list-and-total-prob))
