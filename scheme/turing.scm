@@ -6,7 +6,9 @@
     (set! turing-reaction-hash (make-hash-table))
     (set! turing-hsb-hash (make-hash-table))
     (set! turing-neighborhood-hash (make-hash-table))
-    (set! turing-vars-hash (make-hash-table)))
+    (set! turing-vars-hash (make-hash-table))
+    (set! turing-default-hash (make-hash-table))
+    (set! turing-wildcard-hash (make-hash-table)))
 
   (turing-reset)
 
@@ -15,7 +17,9 @@
       (hash-table-delete! turing-reaction-hash key)
       (hash-table-delete! turing-hsb-hash key)
       (hash-table-delete! turing-neighborhood-hash key)
-      (hash-table-delete! turing-vars-hash key)))
+      (hash-table-delete! turing-vars-hash key)
+      (hash-table-delete! turing-default-hash key)
+      (hash-table-delete! turing-wildcard-hash key)))
 
   (define (turing-key x)
     (let ((xstr (if
@@ -68,40 +72,66 @@
 	   (dstr (turing-key (cadr cdrate-rest)))
 	   (rate (caddr cdrate-rest))
 	   (rest (cdddr cdrate-rest))
-	   (cdstr (string-append cstr " " dstr)))
-      (hash-table-update!
-       turing-reaction-hash
-       astr
-       (lambda (ahash)
-	 (hash-table-update!
-	  ahash
-	  bstr
-	  (lambda (bhash)
-	    (hash-table-update!/default
-	     bhash
-	     cdstr
-	     (lambda (old-cdrate-rest)
-	       (let* ((oldrate (caddr old-cdrate-rest))
-		      (newrate (+ oldrate rate))
-		      (oldrest (cdddr old-cdrate-rest)))
-		 (append (list cstr dstr newrate) oldrest rest)))
-	     cdrate-rest)))
-	  make-hash-table))
-       make-hash-table)))
+	   (cdstr (string-append cstr " " dstr))
+	   (update-cdrate-rest
+	    (lambda (old-cdrate-rest)
+	      (let* ((oldrate (caddr old-cdrate-rest))
+		     (newrate (+ oldrate rate))
+		     (oldrest (cdddr old-cdrate-rest)))
+		(append (list cstr dstr newrate) oldrest rest))))
+	   (update-rhs-hash
+	    (lambda (rhs-hash)
+	      (hash-table-update!/default
+	       rhs-hash
+	       cdstr
+	       update-cdrate-rest
+	       cdrate-rest))))
+      (cond
+       ((equal? bstr "!")
+	(hash-table-update!
+	 turing-default-hash
+	 astr
+	 update-rhs-hash
+	 make-hash-table))
+       ((equal? bstr "*")
+	(hash-table-update!
+	 turing-wildcard-hash
+	 astr
+	 update-rhs-hash
+	 make-hash-table))
+       (else
+	(hash-table-update!
+	 turing-reaction-hash
+	 astr
+	 (lambda (ahash)
+	   (hash-table-update!
+	    ahash
+	    bstr
+	    update-rhs-hash
+	    make-hash-table))
+	 make-hash-table)))))
+
+  (define (turing-lookup-rate cdrate-hash astr)
+    (caddr (hash-table-ref/default cdrate-hash astr '(0 0 0))))
+
+  (define (turing-wild-rate a)
+    (turing-lookup-rate turing-wildcard-hash (turing-key a)))
 
   (define (turing-max-rate a)
-    (let ((astr (turing-key a)))
-      (hash-table-fold
-       turing-reaction-hash
-       (lambda (bstr bhash amax)
-	 (max
-	  amax
-	  (hash-table-fold
-	   bhash
-	   (lambda (cdstr cdrate abtotal)
-	     (+ abtotal (caddr cdrate)))
-	   0)))
-       0)))
+    (let* ((astr (turing-key a)))
+      (max
+       (turing-lookup-rate turing-default-hash astr)
+       (hash-table-fold
+	turing-reaction-hash
+	(lambda (bstr bhash amax)
+	  (max
+	   amax
+	   (hash-table-fold
+	    bhash
+	    (lambda (cdstr cdrate abtotal)
+	      (+ abtotal (caddr cdrate)))
+	    0)))
+	0))))
 
   (define (turing-adjacent-selector next)
     `(adjacent
@@ -122,7 +152,8 @@
 	      (turing-has-dir? a)
 	      turing-dir-selector
 	      turing-adjacent-selector)))
-	   (max-rate (turing-max-rate astr)))
+	   (max-rate (turing-max-rate astr))
+	   (wild-rate (turing-wild-rate astr)))
       (neighbor-selector
        `(vector
 	 (index 0)
@@ -138,7 +169,41 @@
 		   (cons
 		    `(,bstr
 		      ,(apply-random-switch
-			,(let* ((rhs-list-and-total-prob
+			,(let* ((make-cdrule
+				 (lambda (astr bstr cstr dstr post-rule)
+				   (let ((drule
+					  (cond
+					   ((equal? dstr bstr) post-rule)
+					   ((equal? dstr ".") post-rule)
+					   (else (indirect-set-rule
+						  '(1 2)
+						  dstr
+						  '()
+						  (if
+						   (turing-has-dir? dstr)
+						   (indirect-set-var-from-register '(1 2) dstr turing-dir-var 0 post-rule)
+						   post-rule))))))
+				     (cond
+				      ((equal? cstr astr) drule)
+				      ((equal? cstr ".") drule)
+				      ((equal? cstr "<") (turing-self-turn -1 drule))
+				      ((equal? cstr "<<") (turing-self-turn -2 drule))
+				      ((equal? cstr "<<<") (turing-self-turn -3 drule))
+				      ((equal? cstr "<<<<") (turing-self-turn -4 drule))
+				      ((equal? cstr ">") (turing-self-turn +1 drule))
+				      ((equal? cstr ">>") (turing-self-turn +2 drule))
+				      ((equal? cstr ">>>") (turing-self-turn +3 drule))
+				      ((equal? cstr ">>>>") (turing-self-turn +4 drule))
+				      (else
+				       (set-rule
+					origin
+					cstr
+					(if
+					 (turing-has-dir? dstr)
+					 (set-var-from-register origin cstr turing-dir-var 0 drule)
+					 drule)))))))
+
+				(rhs-list-and-total-prob
 				 (hash-table-fold
 				  bhash
 				  (lambda (cdstr cdrate-rest accum)
@@ -153,39 +218,9 @@
 				      `(,(cons
 					  (list
 					   prob
-					   (let ((drule
-						  (cond
-						   ((equal? dstr bstr) post-rule)
-						   ((equal? dstr ".") post-rule)
-						   (else (indirect-set-rule
-							  '(1 2)
-							  dstr
-							  '()
-							  (if
-							   (turing-has-dir? dstr)
-							   (indirect-set-var-from-register '(1 2) dstr turing-dir-var 0 post-rule)
-							   post-rule))))))
-					     (cond
-					      ((equal? cstr astr) drule)
-					      ((equal? cstr ".") drule)
-					      ((equal? cstr "<") (turing-self-turn -1 drule))
-					      ((equal? cstr "<<") (turing-self-turn -2 drule))
-					      ((equal? cstr "<<<") (turing-self-turn -3 drule))
-					      ((equal? cstr "<<<<") (turing-self-turn -4 drule))
-					      ((equal? cstr ">") (turing-self-turn +1 drule))
-					      ((equal? cstr ">>") (turing-self-turn +2 drule))
-					      ((equal? cstr ">>>") (turing-self-turn +3 drule))
-					      ((equal? cstr ">>>>") (turing-self-turn +4 drule))
-					      (else
-					       (set-rule
-						origin
-						cstr
-						(if
-						 (turing-has-dir? dstr)
-						 (set-var-from-register origin cstr turing-dir-var 0 drule)
-						 drule))))))
+					   (make-cdrule astr bstr cstr dstr post-rule))
 					  rhs-list) ,(+ total-prob prob))))
-				  '(() 1)))
+				  '(() 0)))
 				(rhs-list (car rhs-list-and-total-prob))
 				(total-prob (cdr rhs-list-and-total-prob)))
 			   (cons (list (- 1 total-prob) nop-rule) rhs-list))))
@@ -216,7 +251,7 @@
 	       256)))))
 	,(make-particle-neighborhood
 	  (hash-table-ref/default turing-neighborhood-hash astr neighborhood))
-	(rate ,(turing-max-rate astr))
+	(rate ,(+ (turing-wild-rate astr) (turing-max-rate astr)))
 	(rule ,(turing-update-rule (cons astr rest))))))
 
   (define (turing-grammar abcdr-list)
