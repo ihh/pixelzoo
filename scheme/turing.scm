@@ -153,7 +153,70 @@
 	      turing-dir-selector
 	      turing-adjacent-selector)))
 	   (max-rate (turing-max-rate astr))
-	   (wild-rate (turing-wild-rate astr)))
+	   (wild-rate (turing-wild-rate astr))
+
+	   ;; function to make one rule RHS
+	   (make-cdrule
+	    (lambda (astr bstr cstr dstr post-rule)
+	      (let ((drule
+		     (cond
+		      ((equal? dstr bstr) post-rule)
+		      ((equal? dstr ".") post-rule)
+		      (else (indirect-set-rule
+			     '(1 2)
+			     dstr
+			     '()
+			     (if
+			      (turing-has-dir? dstr)
+			      (indirect-set-var-from-register '(1 2) dstr turing-dir-var 0 post-rule)
+			      post-rule))))))
+		(cond
+		 ((equal? cstr astr) drule)
+		 ((equal? cstr ".") drule)
+		 ((equal? cstr "<") (turing-self-turn -1 drule))
+		 ((equal? cstr "<<") (turing-self-turn -2 drule))
+		 ((equal? cstr "<<<") (turing-self-turn -3 drule))
+		 ((equal? cstr "<<<<") (turing-self-turn -4 drule))
+		 ((equal? cstr ">") (turing-self-turn +1 drule))
+		 ((equal? cstr ">>") (turing-self-turn +2 drule))
+		 ((equal? cstr ">>>") (turing-self-turn +3 drule))
+		 ((equal? cstr ">>>>") (turing-self-turn +4 drule))
+		 (else
+		  (set-rule
+		   origin
+		   cstr
+		   (if
+		    (turing-has-dir? dstr)
+		    (set-var-from-register origin cstr turing-dir-var 0 drule)
+		    drule)))))))
+
+	   ;; function to make all RHS options
+	   (make-rhs-rule
+	    (lambda (astr bstr bhash norm-rate fail-rule)
+	      (apply-random-switch
+	       ,(let* ((rhs-list-and-total-prob
+			(hash-table-fold
+			 bhash
+			 (lambda (cdstr cdrate-rest accum)
+			   (let* ((cstr (car cdrate-rest))
+				  (dstr (cadr cdrate-rest))
+				  (rate (caddr cdrate-rest))
+				  (rest (cdddr cdrate-rest))
+				  (post-rule (opt-arg rest 0 nop-rule))
+				  (rhs-list (car accum))
+				  (total-prob (cdr accum))
+				  (prob (exact->inexact (/ rate norm-rate))))
+			     `(,(cons
+				 (list
+				  prob
+				  (make-cdrule astr bstr cstr dstr post-rule))
+				 rhs-list) ,(+ total-prob prob))))
+			 '(() 0)))
+		       (rhs-list (car rhs-list-and-total-prob))
+		       (total-prob (cdr rhs-list-and-total-prob)))
+		  (cons (list (- 1 total-prob) fail-rule) rhs-list))))))
+
+      ;; the main program
       (neighbor-selector
        `(vector
 	 (index 0)
@@ -168,62 +231,7 @@
 		 (lambda (bstr bhash case-list)
 		   (cons
 		    `(,bstr
-		      ,(apply-random-switch
-			,(let* ((make-cdrule
-				 (lambda (astr bstr cstr dstr post-rule)
-				   (let ((drule
-					  (cond
-					   ((equal? dstr bstr) post-rule)
-					   ((equal? dstr ".") post-rule)
-					   (else (indirect-set-rule
-						  '(1 2)
-						  dstr
-						  '()
-						  (if
-						   (turing-has-dir? dstr)
-						   (indirect-set-var-from-register '(1 2) dstr turing-dir-var 0 post-rule)
-						   post-rule))))))
-				     (cond
-				      ((equal? cstr astr) drule)
-				      ((equal? cstr ".") drule)
-				      ((equal? cstr "<") (turing-self-turn -1 drule))
-				      ((equal? cstr "<<") (turing-self-turn -2 drule))
-				      ((equal? cstr "<<<") (turing-self-turn -3 drule))
-				      ((equal? cstr "<<<<") (turing-self-turn -4 drule))
-				      ((equal? cstr ">") (turing-self-turn +1 drule))
-				      ((equal? cstr ">>") (turing-self-turn +2 drule))
-				      ((equal? cstr ">>>") (turing-self-turn +3 drule))
-				      ((equal? cstr ">>>>") (turing-self-turn +4 drule))
-				      (else
-				       (set-rule
-					origin
-					cstr
-					(if
-					 (turing-has-dir? dstr)
-					 (set-var-from-register origin cstr turing-dir-var 0 drule)
-					 drule)))))))
-
-				(rhs-list-and-total-prob
-				 (hash-table-fold
-				  bhash
-				  (lambda (cdstr cdrate-rest accum)
-				    (let* ((cstr (car cdrate-rest))
-					   (dstr (cadr cdrate-rest))
-					   (rate (caddr cdrate-rest))
-					   (rest (cdddr cdrate-rest))
-					   (post-rule (opt-arg rest 0 nop-rule))
-					   (rhs-list (car accum))
-					   (total-prob (cdr accum))
-					   (prob (exact->inexact (/ rate max-rate))))
-				      `(,(cons
-					  (list
-					   prob
-					   (make-cdrule astr bstr cstr dstr post-rule))
-					  rhs-list) ,(+ total-prob prob))))
-				  '(() 0)))
-				(rhs-list (car rhs-list-and-total-prob))
-				(total-prob (cdr rhs-list-and-total-prob)))
-			   (cons (list (- 1 total-prob) nop-rule) rhs-list))))
+		      ,(make-rhs-rule astr bstr bhash max-rate nop-rule))
 		    case-list))
 		 '()))))))))))
 
