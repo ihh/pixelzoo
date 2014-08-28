@@ -173,14 +173,14 @@
 		(cond
 		 ((equal? cstr astr) drule)
 		 ((equal? cstr ".") drule)
-		 ((equal? cstr "<") (turing-self-turn -1 drule))
-		 ((equal? cstr "<<") (turing-self-turn -2 drule))
-		 ((equal? cstr "<<<") (turing-self-turn -3 drule))
-		 ((equal? cstr "<<<<") (turing-self-turn -4 drule))
-		 ((equal? cstr ">") (turing-self-turn +1 drule))
-		 ((equal? cstr ">>") (turing-self-turn +2 drule))
-		 ((equal? cstr ">>>") (turing-self-turn +3 drule))
-		 ((equal? cstr ">>>>") (turing-self-turn +4 drule))
+		 ((equal? cstr ".f") drule)
+		 ((equal? cstr ".l") (turing-self-turn -1 drule))
+		 ((equal? cstr ".ll") (turing-self-turn -2 drule))
+		 ((equal? cstr ".lll") (turing-self-turn -3 drule))
+		 ((equal? cstr ".r") (turing-self-turn +1 drule))
+		 ((equal? cstr ".rr") (turing-self-turn +2 drule))
+		 ((equal? cstr ".rrr") (turing-self-turn +3 drule))
+		 ((equal? cstr ".b") (turing-self-turn +4 drule))
 		 (else
 		  (set-rule
 		   origin
