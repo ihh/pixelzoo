@@ -243,8 +243,7 @@
 	  (rule
 	   ,(if
 	     (hash-table-exists? turing-wildcard-hash astr)
-	     (make-rhs-rule
-	      astr "*" (hash-table-ref turing-wildcard-hash astr) wild-rate inner-switch-rule)
+	     (make-rhs-rule astr "*" (hash-table-ref turing-wildcard-hash astr) wild-rate inner-switch-rule)
 	     inner-switch-rule))))))))
 
   (define (turing-particle a . rest)
