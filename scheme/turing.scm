@@ -214,17 +214,11 @@
 			 '(() 0)))
 		       (rhs-list (car rhs-list-and-total-prob))
 		       (total-prob (cdr rhs-list-and-total-prob)))
-		  (cons (list (- 1 total-prob) fail-rule) rhs-list))))))
-
-      ;; the main program
-      (neighbor-selector
-       `(vector
-	 (index 0)
-	 (x 1)
-	 (y 2)
-	 (next
-	  (rule
-	   ,(indirect-switch-type
+		  (cons (list (- 1 total-prob) fail-rule) rhs-list)))))
+	   
+	   ;; inner switch rule
+	   (inner-switch-rule
+	    (indirect-switch-type ;; switch based on type of neighboring cell
 	     '(1 2)
 	     `(,(hash-table-fold
 		 (hash-table-ref turing-reaction-hash astr)
@@ -233,7 +227,25 @@
 		    `(,bstr
 		      ,(make-rhs-rule astr bstr bhash max-rate nop-rule))
 		    case-list))
-		 '()))))))))))
+		 '()))
+	     (if
+	      (hash-table-exists? turing-default-hash astr)
+	      (make-rhs-rule astr "!" (hash-table-ref turing-default-hash astr) max-rate nop-rule)
+	      nop-rule))))
+
+      ;; the main program
+      (neighbor-selector  ;; load register 0 with a neighbor direction
+       `(vector  ;; look up the coords of the direction in register 0
+	 (index 0)
+	 (x 1)
+	 (y 2)
+	 (next
+	  (rule
+	   ,(if
+	     (hash-table-exists? turing-wildcard-hash astr)
+	     (make-rhs-rule
+	      astr "*" (hash-table-ref turing-wildcard-hash astr) wild-rate inner-switch-rule)
+	     inner-switch-rule))))))))
 
   (define (turing-particle a . rest)
     (let ((astr (turing-key a)))
