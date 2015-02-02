@@ -221,6 +221,8 @@ void xmlTextWriterVWriteFormat (xmlTextWriterPtr writer, const char* fmt, va_lis
 
   vsnprintf ((char*) writer->cur, bufSize - bufUsed, fmt, argCopy);
   writer->cur += length;
+
+  va_end (argCopy);
 }
 
 void xmlTextWriterWriteFormatCDATA (xmlTextWriterPtr writer, const char* fmt, ...) {
