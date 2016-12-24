@@ -106,7 +106,8 @@ SCHEME_FILES_NO_RNA_WITH_PREFIX := $(addprefix scheme/,$(SCHEME_FILES_NO_RNA))
 scheme/testrna.scm: $(SCHEME_FILES_NO_RNA_WITH_PREFIX) scheme/rna.scm Makefile
 #	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(string-length (sxml->string (rna-move-rule)))'; echo ")") >$@
 #	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-tool "RNA" "aaaaguuuu")'; echo ")") >$@
-	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule "RNA" .01 .1)'; echo ")") >$@
+#	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule "RNA" .01 .1)'; echo ")") >$@
+	(((echo "(begin"; cat $(SCHEME_FILES_NO_RNA_WITH_PREFIX)) | perl -pe 's/;.*//g;s/\n/ /g'); cat scheme/rna.scm; echo '(define self-type "RNA")'; echo '(rna-move-rule)'; echo ")") >$@
 
 # pixelzoo core library
 $(LIBTARGET): $(OFILES) $(CHIBI_OFILES)

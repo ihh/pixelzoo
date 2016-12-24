@@ -18,12 +18,16 @@ GREP      ?= grep
 FIND      ?= find
 SYMLINK   ?= ln -s
 
-PREFIX    ?= /usr/local
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKEFILE_DIR := $(dir $(MAKEFILE_PATH))
+
+PREFIX    ?= $(MAKEFILE_DIR)
 BINDIR    ?= $(PREFIX)/bin
 LIBDIR    ?= $(PREFIX)/lib
 SOLIBDIR  ?= $(PREFIX)/lib
 INCDIR    ?= $(PREFIX)/include/chibi
-MODDIR    ?= $(PREFIX)/share/chibi
+#MODDIR    ?= $(PREFIX)/share/chibi
+MODDIR    ?= $(PREFIX)/lib
 BINMODDIR ?= $(PREFIX)/lib/chibi
 MANDIR    ?= $(PREFIX)/share/man/man1
 
@@ -127,6 +131,8 @@ else
 XLDFLAGS  := $(LDFLAGS) $(RLDFLAGS) $(GCLDFLAGS) $(LIBDL) -lm
 XCFLAGS   := -Wall -g -g3 -Os $(CFLAGS)
 endif
+
+XCFLAGS += -Dsexp_default_module_path=lib/chibi
 
 ########################################################################
 
