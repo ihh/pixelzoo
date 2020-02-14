@@ -7,7 +7,7 @@ Move* newMoveFromXmlNode (xmlNode *moveNode, ProtoTable *protoTable) {
 		  OPTCHILDINT(moveNode,UPDATE,-1),
 		  CHILDINT(moveNode,X),
 		  CHILDINT(moveNode,Y),
-		  CHILDINT(moveNode,Z),
+		  OPTCHILDINT(moveNode,Z,0),
 		  getStateFromNode(moveNode,protoTable,0));
 }
 
